@@ -1337,6 +1337,345 @@
   }
   .ob-complete h2 { font-size: 24px; margin-bottom: 10px; }
   .ob-complete p { font-size: 14.5px; color: var(--text-body-muted); line-height: 1.6; margin-bottom: 28px; }
+
+  /* =========================================================
+     PM DASHBOARD
+  ========================================================== */
+  .pm-dashboard {
+    position: fixed;
+    inset: 0;
+    background: var(--app-bg, #f8f8f8);
+    z-index: 300;
+    display: none;
+    opacity: 0;
+    transition: opacity 220ms ease-out;
+  }
+  .pm-dashboard.active { display: flex; }
+  .pm-dashboard.visible { opacity: 1; }
+
+  /* ---- Sidebar ---- */
+  .dash-sidebar {
+    width: 258px;
+    flex-shrink: 0;
+    background: var(--sidebar-bg, #f8f8f8);
+    border-right: 1px solid var(--border-subtle);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    transition: width 220ms ease-out;
+  }
+  .dash-sidebar.collapsed { width: 76px; }
+  .dash-sidebar-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 20px 14px;
+    flex-shrink: 0;
+  }
+  .dash-sidebar-head .logo svg { height: 18px; color: var(--text-heading); }
+  .dash-sidebar.collapsed .dash-sidebar-head .logo { display: none; }
+  .sidebar-collapse-btn {
+    width: 28px; height: 28px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-body-muted); flex-shrink: 0;
+    transition: background-color 150ms ease-out, transform 220ms ease-out;
+  }
+  .sidebar-collapse-btn:hover { background: #eef1f5; }
+  .dash-sidebar.collapsed .sidebar-collapse-btn { transform: rotate(180deg); margin: 0 auto; }
+
+  .dash-nav-scroll { flex: 1; overflow-y: auto; padding: 6px 14px; }
+  .dash-nav-group { margin-bottom: 18px; }
+  .dash-nav-group-label {
+    font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    color: #94a3b8; padding: 0 10px; margin-bottom: 6px;
+  }
+  .dash-sidebar.collapsed .dash-nav-group-label { display: none; }
+  .dash-nav-item {
+    display: flex; align-items: center; gap: 11px;
+    padding: 9px 10px; border-radius: 9px;
+    font-size: 13.5px; font-weight: 500; color: #334155;
+    cursor: pointer; position: relative;
+    transition: background-color 150ms ease-out, color 150ms ease-out;
+  }
+  .dash-nav-item:hover:not(.active) { background: #eef1f5; }
+  .dash-nav-item.active { background: var(--sidebar-active-bg, #183060); color: #fff; font-weight: 600; }
+  .dash-nav-item svg { flex-shrink: 0; width: 17px; height: 17px; }
+  .dash-nav-item .nav-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dash-sidebar.collapsed .dash-nav-item .nav-label { display: none; }
+  .dash-sidebar.collapsed .dash-nav-item { justify-content: center; }
+  .dash-nav-badge {
+    margin-left: auto; background: #e8482c; color: #fff;
+    font-size: 10.5px; font-weight: 700; border-radius: 999px;
+    min-width: 18px; height: 18px; display: flex; align-items: center; justify-content: center;
+    padding: 0 5px;
+  }
+  .dash-nav-badge[hidden] { display: none; }
+  .dash-sidebar.collapsed .dash-nav-badge { display: none; }
+
+  .dash-sidebar-footer {
+    flex-shrink: 0; border-top: 1px solid var(--border-subtle);
+    padding: 14px; display: flex; align-items: center; gap: 10px;
+  }
+  .dash-logout-btn {
+    width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-body-muted);
+    transition: background-color 150ms ease-out, color 150ms ease-out;
+  }
+  .dash-logout-btn:hover { background: #f8e8e8; color: #b5424a; }
+  .dash-sidebar.collapsed .dash-logout-btn { display: none; }
+  .dash-account-avatar {
+    position: relative; width: 38px; height: 38px; flex-shrink: 0;
+  }
+  .dash-account-avatar svg.ring { position: absolute; inset: 0; transform: rotate(-90deg); }
+  .dash-account-avatar .initials {
+    position: absolute; inset: 4px; border-radius: 50%;
+    background: var(--accent-blue); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+  }
+  .dash-account-info { min-width: 0; flex: 1; }
+  .dash-sidebar.collapsed .dash-account-info { display: none; }
+  .dash-account-info .acc-name { font-size: 13px; font-weight: 700; color: var(--text-heading); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dash-account-info .acc-email { font-size: 11.5px; color: var(--text-body-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* ---- Main content: fixed top bar (persists across all modules) + scrollable area ---- */
+  .dash-main { flex: 1; height: 100vh; display: flex; flex-direction: column; min-width: 0; }
+
+  .dash-topbar {
+    flex-shrink: 0;
+    height: 72px;
+    background: #fff;
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 0 32px;
+  }
+  .dash-topbar h1 { font-size: 18.5px; font-weight: 800; color: var(--text-heading); }
+  .dash-topbar .bell-btn { margin-left: auto; }
+
+  .dash-scroll-area { flex: 1; overflow-y: auto; }
+  .dash-content { max-width: 1240px; margin: 0 auto; padding: 24px 32px 60px; }
+  .dash-content-sub { font-size: 13.5px; color: var(--text-body-muted); margin-top: 4px; }
+
+  .dash-header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 20px; flex-wrap: wrap;
+  }
+  .dash-header h2 { font-size: 22px; font-weight: 800; color: var(--text-heading); }
+  .dash-header-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+
+  /* ---- Attention banners ---- */
+  .dash-banner {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  }
+  .dash-banner .banner-icon {
+    width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+    background: #fde68a; color: #92620a;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .dash-banner .banner-text { flex: 1; min-width: 220px; }
+  .dash-banner .banner-title { font-size: 14.5px; font-weight: 700; color: #7a5c10; margin-bottom: 3px; }
+  .dash-banner .banner-desc { font-size: 13px; color: #8a6d1a; line-height: 1.5; }
+  .dash-banner .banner-progress-wrap { flex: 1 1 100%; margin-top: 4px; }
+  .dash-banner .banner-progress-track { height: 6px; background: #fde68a; border-radius: 999px; overflow: hidden; }
+  .dash-banner .banner-progress-fill { height: 100%; background: #b5891a; border-radius: 999px; transition: width 400ms ease-out; }
+  .dash-banner .banner-progress-label { font-size: 12px; color: #8a6d1a; font-weight: 600; margin-top: 6px; }
+  .btn-amber-solid {
+    background: var(--cta-amber-solid, #b05008);
+    color: #fff; white-space: nowrap;
+    transition: filter 150ms ease-out, transform 150ms ease-out;
+  }
+  .btn-amber-solid:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+  .btn-outline-amber {
+    background: #fff;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-heading);
+    white-space: nowrap;
+    transition: border-color 150ms ease-out, background-color 150ms ease-out, transform 150ms ease-out;
+  }
+  .btn-outline-amber:hover { border-color: #d0a24a; background: #fffbeb; transform: translateY(-1px); }
+
+  .btn-sm { padding: 8px 14px; font-size: 13px; border-radius: 9px; }
+
+  .btn-secondary-light {
+    background: #fff; border: 1px solid var(--border-subtle); color: var(--text-heading);
+    transition: background-color 150ms ease-out, border-color 150ms ease-out;
+  }
+  .btn-secondary-light:hover { background: var(--surface-soft); border-color: #c7d0dc; }
+  .bell-btn {
+    width: 38px; height: 38px; border-radius: 10px;
+    border: 1px solid var(--border-subtle); background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-body-muted); position: relative; flex-shrink: 0;
+    transition: background-color 150ms ease-out;
+  }
+  .bell-btn:hover { background: var(--surface-soft); }
+  .bell-btn .bell-dot {
+    position: absolute; top: 7px; right: 8px;
+    width: 7px; height: 7px; border-radius: 50%; background: #e8482c;
+    border: 1.5px solid #fff;
+  }
+
+  /* ---- Section rhythm: consistent spacing for every dashboard block ---- */
+  .dash-section { margin-bottom: 20px; }
+  .dash-section:last-child { margin-bottom: 0; }
+
+  /* ---- Stat card row ---- */
+  .stat-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+  @media (max-width: 1024px) { .stat-row { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 640px) { .stat-row { grid-template-columns: repeat(2, 1fr); } }
+  .stat-card {
+    background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px;
+    padding: 18px; transition: box-shadow 200ms ease-out, transform 200ms ease-out;
+  }
+  .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(16,24,40,0.08); }
+  .stat-card .stat-icon {
+    width: 34px; height: 34px; border-radius: 9px; margin-bottom: 14px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .stat-card .stat-number { font-size: 22px; font-weight: 800; color: var(--text-heading); line-height: 1.1; }
+  .stat-card .stat-label { font-size: 12.5px; font-weight: 600; color: var(--text-heading); margin-top: 6px; }
+  .stat-card .stat-sublabel { font-size: 11.5px; color: var(--text-body-muted); margin-top: 2px; }
+  .stat-card.dark {
+    background: var(--stat-card-dark, #183060); border-color: transparent;
+  }
+  .stat-card.dark .stat-number, .stat-card.dark .stat-label { color: #fff; }
+  .stat-card.dark .stat-sublabel { color: #a8bcdd; }
+  .stat-card.dark .stat-icon { background: rgba(255,255,255,0.12); color: #fff; }
+
+  /* ---- Card shell (reused by fee tier, certs, chart, pipeline, quick book) ---- */
+  .dash-card {
+    background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px;
+    padding: 22px;
+  }
+  .dash-card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  .dash-card-head h3 { font-size: 15px; font-weight: 700; color: var(--text-heading); }
+  .dash-card-head .view-all { font-size: 13px; font-weight: 600; color: var(--accent-blue); }
+  .dash-card-head .view-all:hover { text-decoration: underline; }
+  .dash-card-sub { font-size: 12.5px; color: var(--text-body-muted); margin-bottom: 16px; }
+
+  /* ---- Fee tier progress ---- */
+  .fee-tier-stepper { display: flex; align-items: center; gap: 8px; margin: 14px 0 16px; flex-wrap: wrap; }
+  .fee-tier-step {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 14px; border-radius: 999px; font-size: 12.5px; font-weight: 600;
+    background: #f1f3f6; color: #94a3b8;
+  }
+  .fee-tier-step.current { background: #fef3c7; color: #92620a; }
+  .fee-tier-step .fee-pct { font-weight: 800; }
+  .fee-tier-chevron { color: #cbd5e1; flex-shrink: 0; }
+  .fee-tier-progress-track { height: 8px; background: #eef1f5; border-radius: 999px; overflow: hidden; margin-top: 6px; }
+  .fee-tier-progress-fill { height: 100%; background: linear-gradient(90deg, #204078, #102048); border-radius: 999px; transition: width 500ms ease-out; }
+  .fee-tier-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-body-muted); margin-top: 8px; }
+  .fee-tier-togo { display: inline-flex; font-size: 12px; font-weight: 700; color: var(--text-heading); background: var(--surface-soft); padding: 4px 10px; border-radius: 999px; margin-left: 8px; }
+
+  /* ---- Two-column: certs + chart ---- */
+  .dash-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 900px) { .dash-two-col { grid-template-columns: 1fr; } }
+
+  /* ---- Empty state ---- */
+  .dash-empty { text-align: center; padding: 28px 10px 10px; }
+  .dash-empty .empty-icon {
+    width: 46px; height: 46px; border-radius: 12px; background: var(--surface-soft); color: #94a3b8;
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;
+  }
+  .dash-empty .empty-title { font-size: 14px; font-weight: 700; color: var(--text-heading); margin-bottom: 6px; }
+  .dash-empty .empty-sub { font-size: 12.5px; color: var(--text-body-muted); line-height: 1.55; max-width: 260px; margin: 0 auto; }
+
+  /* ---- Mini chart placeholder ---- */
+  .mini-chart-empty {
+    height: 140px; border-radius: 10px; background: var(--surface-soft);
+    display: flex; align-items: center; justify-content: center;
+    color: #c7d0dc; margin-top: 4px;
+  }
+
+  /* ---- Job pipeline ---- */
+  .pipeline-row { display: flex; align-items: center; gap: 14px; padding: 10px 0; }
+  .pipeline-row .pl-label { width: 100px; flex-shrink: 0; font-size: 12.5px; font-weight: 600; color: var(--text-heading); }
+  .pipeline-row .pl-track { flex: 1; height: 8px; background: var(--surface-soft); border-radius: 999px; overflow: hidden; }
+  .pipeline-row .pl-fill { height: 100%; border-radius: 999px; width: 0%; transition: width 500ms ease-out; }
+  .pipeline-row .pl-count { width: 30px; text-align: right; font-size: 12.5px; font-weight: 700; color: var(--text-heading); flex-shrink: 0; }
+  .pl-pending .pl-fill { background: #f59e0b; }
+  .pl-quoted .pl-fill { background: #f97316; }
+  .pl-scheduled .pl-fill { background: #3b82f6; }
+  .pl-inprogress .pl-fill { background: #8b5cf6; }
+  .pl-completed .pl-fill { background: #22c55e; }
+
+  /* ---- Quick book tiles ---- */
+  .quick-book-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  @media (max-width: 560px) { .quick-book-grid { grid-template-columns: 1fr; } }
+  .quick-book-tile {
+    display: flex; align-items: center; gap: 12px;
+    border: 1px solid var(--border-subtle); border-radius: 12px; padding: 14px;
+    cursor: pointer; transition: border-color 150ms ease-out, box-shadow 150ms ease-out, transform 150ms ease-out;
+  }
+  .quick-book-tile:hover { border-color: #90a8c8; box-shadow: 0 6px 16px rgba(16,24,40,0.08); transform: translateY(-1px); }
+  .quick-book-tile .qb-icon {
+    width: 36px; height: 36px; border-radius: 9px; background: var(--icon-tint-bg); color: var(--accent-blue);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .quick-book-tile .qb-title { font-size: 13px; font-weight: 600; color: var(--text-heading); line-height: 1.35; }
+  .quick-book-tile .qb-count { font-size: 12px; color: var(--text-body-muted); margin-top: 2px; }
+  .quick-book-tile .qb-count[hidden] { display: none; }
+
+  /* ---- Ring / donut chart (Spend by Category) ---- */
+  .ring-chart-wrap { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+  .ring-chart-svg { flex-shrink: 0; }
+  .ring-chart-center-value { font-size: 19px; font-weight: 800; color: var(--text-heading); }
+  .ring-chart-center-label { font-size: 11px; color: var(--text-body-muted); }
+  .ring-legend { flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 11px; }
+  .ring-legend-row { display: flex; align-items: center; gap: 9px; font-size: 13px; }
+  .ring-legend-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .ring-legend-name { color: var(--text-heading); flex: 1; }
+  .ring-legend-value { font-weight: 700; color: var(--text-heading); }
+
+  /* ---- Spend Over Time: header, stat boxes, line chart ---- */
+  .sot-headline { display: flex; align-items: center; gap: 10px; margin: 6px 0 4px; flex-wrap: wrap; }
+  .sot-headline .sot-value { font-size: 26px; font-weight: 800; color: var(--text-heading); }
+  .sot-sub { font-size: 12.5px; color: var(--text-body-muted); margin-bottom: 18px; }
+  .sot-stat-row { display: flex; gap: 12px; margin-bottom: 22px; flex-wrap: wrap; }
+  .sot-stat-box { flex: 1; min-width: 120px; background: var(--surface-soft); border-radius: 10px; padding: 12px 14px; }
+  .sot-stat-box .ssb-value { font-size: 16px; font-weight: 800; color: var(--text-heading); }
+  .sot-stat-box .ssb-label { font-size: 11.5px; color: var(--text-body-muted); margin-top: 3px; }
+  .sot-chart-svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .sot-chart-svg .sot-month-label { font-size: 10.5px; fill: var(--text-body-muted); font-family: inherit; }
+
+  /* ---- Dashboard toast (bottom-right, distinct from center toast) ---- */
+  .dash-toast {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    max-width: 340px;
+    background: #10a048;
+    color: #fff;
+    border-radius: 12px;
+    padding: 16px 18px;
+    display: flex; gap: 12px; align-items: flex-start;
+    box-shadow: 0 16px 36px rgba(0,0,0,0.25);
+    opacity: 0; transform: translateY(16px);
+    pointer-events: none;
+    transition: opacity 250ms ease-out, transform 250ms ease-out;
+    z-index: 320;
+  }
+  .dash-toast.show { opacity: 1; transform: none; pointer-events: auto; }
+  .dash-toast .dt-icon {
+    width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
+  }
+  .dash-toast .dt-title { font-size: 13.5px; font-weight: 700; margin-bottom: 3px; }
+  .dash-toast .dt-body { font-size: 12.5px; color: #d8f8e0; line-height: 1.45; }
+  .dash-toast .dt-close { color: rgba(255,255,255,0.8); flex-shrink: 0; margin-left: auto; }
+  .dash-toast .dt-close:hover { color: #fff; }
+
+  @media (max-width: 860px) {
+    .dash-sidebar { position: fixed; z-index: 310; box-shadow: 0 0 0 9999px rgba(0,0,0,0); }
+    .dash-content { padding: 20px 16px 50px; }
+  }
 </style>
 </head>
 <body>
@@ -2444,17 +2783,369 @@
 
           <p class="ob-subtext" style="margin-bottom:0;">By submitting, you confirm that all information provided is accurate. Keylr will review your account and contact you within 1-2 business days. You can explore the platform in the meantime.</p>
         </section>
-
-        <!-- Completion screen -->
-        <section class="ob-step" data-step="complete">
-          <div class="ob-complete">
-            <div class="oc-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
-            <h2>You're all set!</h2>
-            <p>Your application has been submitted for approval. Keylr will review your account and contact you within 1-2 business days — you can start exploring the platform in the meantime.</p>
-            <button type="button" class="btn btn-primary" id="obReturnHome">Return to homepage</button>
-          </div>
-        </section>
       </div>
+    </div>
+  </div>
+
+  <!-- ============ PM DASHBOARD ============ -->
+  <div class="pm-dashboard" id="pmDashboard">
+
+    <aside class="dash-sidebar" id="dashSidebar">
+      <div class="dash-sidebar-head">
+        <div class="logo">
+          <svg viewBox="0 0 852 151" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Keylr">
+            <path d="M0.160002 144.91C0.0400018 141.58 0 107.67 0 69.5298L0.0799999 0.209765L18.62 0.0897655L37.12 0.00976562V75.4698V150.93H18.74H0.360001L0.160002 144.91Z"/>
+            <path d="M111.001 148.19C108.621 145.58 63.5807 96.97 50.7507 83.19C46.9907 79.15 43.5407 75.35 43.0707 74.75C42.2007 73.64 42.2007 73.64 42.9507 72.77C43.3907 72.29 47.5507 67.78 52.2207 62.79C56.8907 57.76 62.4807 51.7 64.6607 49.32C66.8407 46.94 75.2407 37.83 83.2807 29.12C91.3607 20.37 100.671 10.26 104.041 6.62L110.141 0H134.111H158.121L156.541 1.7C155.671 2.61 151.031 7.64 146.241 12.87C135.701 24.4 122.201 39.09 110.981 51.29C90.9007 73.12 86.6607 77.83 86.7407 78.11C86.8207 78.27 90.7007 82.39 95.3807 87.22C104.021 96.21 146.921 140.58 153.371 147.27L156.941 150.91L135.151 150.87L113.401 150.83L111.021 148.18L111.001 148.19Z"/>
+            <path d="M190.031 133.889V116.859H257.171H324.311V133.889V150.919H257.171H190.031V133.889Z"/>
+            <path d="M415.029 121.65V92.38L413.519 90.44C412.689 89.41 405.439 79.82 397.399 69.13C389.359 58.47 374.459 38.63 364.239 25.08C354.059 11.53 345.699 0.360001 345.699 0.240001C345.699 0.120001 354.139 0 364.479 0H383.259L407.539 32.48C420.929 50.31 432.059 64.88 432.259 64.8C432.699 64.68 438.239 57.08 466.879 17.03C473.059 8.43 478.409 1.07 478.759 0.67C479.389 0.0400001 480.699 -7.45058e-08 497.729 0.0799999L516.029 0.200001L512.499 4.95C510.599 7.56 501.369 20.08 492.019 32.72C482.669 45.4 472.449 59.3 469.279 63.58C466.109 67.9 459.849 76.37 455.339 82.48L447.099 93.53V122.21V150.93H431.059H415.019V121.66L415.029 121.65Z"/>
+            <path d="M566.75 150.17C556.77 148.03 548.49 141.61 544.53 132.86C541.84 126.92 541.99 131.67 541.99 62.59V0.200001L558.94 0.0799999L575.85 0V50.39C575.85 80.22 576.05 102.01 576.25 103.75C577.08 110.05 580.29 114.01 586.35 116.23C587.18 116.51 600.77 116.71 630.91 116.86L674.29 117.06L674.41 134.01L674.49 150.92L622.32 150.88C573.6 150.88 569.87 150.8 566.74 150.17H566.75Z"/>
+            <path d="M699.651 150.45C699.531 150.17 699.491 132.31 699.531 110.72L699.651 71.4999L748.181 71.2999C787.041 71.1399 797.021 70.9799 798.291 70.5499C801.301 69.5599 804.631 67.5399 806.811 65.3599C817.701 54.4299 811.561 35.8099 796.111 33.0399C793.731 32.5999 783.751 32.5299 746.281 32.4899H699.461L699.541 16.3699L699.661 0.209891L741.451 0.0898911C794.171 -0.0301089 799.961 0.209892 809.111 3.21989C813.351 4.56989 820.161 8.08989 824.241 10.9799C828.911 14.3099 835.691 20.9999 838.381 24.9599C846.901 37.5199 849.631 53.3199 845.871 68.2999C843.731 76.5799 840.051 82.8799 833.391 89.5699C827.651 95.2699 821.391 99.2799 814.531 101.65C812.791 102.24 811.201 102.84 811.041 103C810.681 103.32 814.211 107.52 832.151 128.15C837.061 133.81 843.201 140.94 845.781 144C848.391 147.05 850.771 149.86 851.091 150.26C851.641 150.89 850.651 150.93 830.851 150.93H809.971L807.631 148.08C806.361 146.5 798.121 136.35 789.371 125.58C780.581 114.81 772.971 105.5 772.421 104.86L771.391 103.79L753.961 103.87L736.491 103.99V127.48V150.93H718.151C703.851 150.93 699.771 150.81 699.651 150.45Z"/>
+            <path d="M190.031 74.8698V57.8398H248.661H307.291V74.8698V91.8998H248.661H190.031V74.8698Z"/>
+            <path d="M190.031 17.0398V0.00976562L257.091 0.0897655L324.111 0.209765L324.231 17.1598L324.311 34.0698H257.171H190.031V17.0398Z"/>
+          </svg>
+        </div>
+        <button type="button" class="sidebar-collapse-btn" id="sidebarCollapseBtn" aria-label="Collapse sidebar">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+      </div>
+
+      <nav class="dash-nav-scroll">
+        <div class="dash-nav-group">
+          <div class="dash-nav-group-label">Overview</div>
+          <div class="dash-nav-item active" data-nav="home">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg>
+            <span class="nav-label">Home</span>
+          </div>
+          <div class="dash-nav-item" data-nav="inbox">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z"/></svg>
+            <span class="nav-label">Inbox</span>
+            <span class="dash-nav-badge" id="badgeInbox" hidden></span>
+          </div>
+          <div class="dash-nav-item" data-nav="tickets">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12v-2a2 2 0 012-2h14a2 2 0 012 2v2a2 2 0 000 4v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2a2 2 0 000-4z"/></svg>
+            <span class="nav-label">Tickets</span>
+          </div>
+        </div>
+
+        <div class="dash-nav-group">
+          <div class="dash-nav-group-label">Jobs</div>
+          <div class="dash-nav-item" data-nav="explore">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <span class="nav-label">Explore Services</span>
+          </div>
+          <div class="dash-nav-item" data-nav="bookings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            <span class="nav-label">Job Bookings</span>
+          </div>
+          <div class="dash-nav-item" data-nav="newbooking">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+            <span class="nav-label">New Booking</span>
+          </div>
+          <div class="dash-nav-item" data-nav="responses">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            <span class="nav-label">Job Responses</span>
+            <span class="dash-nav-badge" id="badgeResponses" hidden></span>
+          </div>
+          <div class="dash-nav-item" data-nav="quotes">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 15h6M9 11h3"/></svg>
+            <span class="nav-label">Quotes</span>
+            <span class="dash-nav-badge" id="badgeQuotes" hidden></span>
+          </div>
+        </div>
+
+        <div class="dash-nav-group">
+          <div class="dash-nav-group-label">Properties &amp; Suppliers</div>
+          <div class="dash-nav-item" data-nav="properties">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>
+            <span class="nav-label">Properties</span>
+          </div>
+          <div class="dash-nav-item" data-nav="suppliers">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+            <span class="nav-label">Preferred Suppliers</span>
+          </div>
+        </div>
+
+        <div class="dash-nav-group">
+          <div class="dash-nav-group-label">Library</div>
+          <div class="dash-nav-item" data-nav="templates">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+            <span class="nav-label">Job Templates</span>
+          </div>
+          <div class="dash-nav-item" data-nav="checklists">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12l2.5 2.5L16 9"/></svg>
+            <span class="nav-label">Service Checklists</span>
+          </div>
+        </div>
+
+        <div class="dash-nav-group">
+          <div class="dash-nav-group-label">Finance</div>
+          <div class="dash-nav-item" data-nav="invoices">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M9 15h6M9 11h6"/></svg>
+            <span class="nav-label">Invoices</span>
+          </div>
+          <div class="dash-nav-item" data-nav="billing">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+            <span class="nav-label">Billing &amp; Payments</span>
+          </div>
+          <div class="dash-nav-item" data-nav="disputes">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+            <span class="nav-label">Disputes</span>
+          </div>
+          <div class="dash-nav-item" data-nav="creditnotes">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 10-3.5 6.6"/><path d="M20 8v4h-4"/></svg>
+            <span class="nav-label">Credit Notes</span>
+          </div>
+        </div>
+
+        <div class="dash-nav-group">
+          <div class="dash-nav-group-label">Contracts</div>
+          <div class="dash-nav-item" data-nav="contracts">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg>
+            <span class="nav-label">Contracts</span>
+          </div>
+        </div>
+      </nav>
+
+      <div class="dash-sidebar-footer">
+        <div class="dash-account-avatar">
+          <svg class="ring" viewBox="0 0 38 38" width="38" height="38">
+            <circle cx="19" cy="19" r="16" fill="none" stroke="#e2e8f0" stroke-width="3"/>
+            <circle id="acctProgressRing" cx="19" cy="19" r="16" fill="none" stroke="#284890" stroke-width="3" stroke-linecap="round" stroke-dasharray="100.5" stroke-dashoffset="18"/>
+          </svg>
+          <div class="initials" id="acctInitials">JB</div>
+        </div>
+        <div class="dash-account-info">
+          <div class="acc-name" id="acctName">Jordan Blake</div>
+          <div class="acc-email" id="acctEmail">jordan@thameshouse.co.uk</div>
+        </div>
+        <button type="button" class="dash-logout-btn" id="dashLogoutBtn" aria-label="Log out">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        </button>
+      </div>
+    </aside>
+
+    <div class="dash-main">
+
+      <!-- Fixed top bar — persists across every module, not just Home -->
+      <div class="dash-topbar">
+        <h1 id="dashGreeting">Good afternoon, Jordan 👋</h1>
+        <button type="button" class="bell-btn" aria-label="Notifications">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <span class="bell-dot"></span>
+        </button>
+      </div>
+
+      <div class="dash-scroll-area">
+        <div class="dash-content">
+
+          <div class="dash-section" id="pendingBanners">
+            <div class="dash-banner">
+              <div class="banner-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></div>
+              <div class="banner-text">
+                <div class="banner-title">Add the card details</div>
+                <div class="banner-desc">On Pay-upfront, each job is charged to your card at booking. Add one to start booking.</div>
+              </div>
+              <button type="button" class="btn btn-amber-solid btn-sm" id="addPaymentCardBtn">Add payment card</button>
+            </div>
+
+            <div class="dash-banner" style="margin-bottom:0;">
+              <div class="banner-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div>
+              <div class="banner-text">
+                <div class="banner-title">Complete Your Onboarding Details</div>
+                <div class="banner-desc">Your account can't be reviewed until all verification details are submitted.</div>
+              </div>
+              <div class="banner-progress-wrap">
+                <div class="banner-progress-track"><div class="banner-progress-fill" style="width:82%;"></div></div>
+                <div class="banner-progress-label">82% verified</div>
+              </div>
+              <div style="flex:1 1 100%;">
+                <button type="button" class="btn btn-outline-amber btn-sm" id="completeOnboardingBtn">Complete Onboarding <span class="arrow">→</span></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="dash-section">
+            <div class="dash-header">
+              <div>
+                <h2>Home</h2>
+                <div class="dash-content-sub">Here's what's happening with your properties today.</div>
+              </div>
+              <div class="dash-header-actions">
+                <button type="button" class="btn btn-secondary-light" id="managePropertiesBtn">Manage Properties</button>
+                <button type="button" class="btn btn-primary" id="bookServiceBtn">+ Book a Service</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="dash-section">
+            <div class="stat-row">
+              <div class="stat-card">
+                <div class="stat-icon" style="background:var(--stat-icon-tint-blue,#e8f0f8);color:#284890;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+                <div class="stat-number" id="statActiveJobs">0</div>
+                <div class="stat-label">Active Jobs</div>
+                <div class="stat-sublabel">In progress</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon" style="background:var(--stat-icon-tint-green,#f0f8f0);color:#1a7a3e;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                <div class="stat-number" id="statCompleted">0</div>
+                <div class="stat-label">Completed</div>
+                <div class="stat-sublabel">All-time</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon" style="background:var(--stat-icon-tint-purple,#e8e8f8);color:#4c3f9c;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></div>
+                <div class="stat-number" id="statProperties">8</div>
+                <div class="stat-label">Properties</div>
+                <div class="stat-sublabel">In your portfolio</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon" style="background:var(--stat-icon-tint-amber,#f8f8e8);color:#92620a;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+                <div class="stat-number" id="statUpcomingJobs">0</div>
+                <div class="stat-label">Upcoming Jobs</div>
+                <div class="stat-sublabel">Awarded — awaiting start</div>
+              </div>
+              <div class="stat-card dark">
+                <div class="stat-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+                <div class="stat-number" id="statAwaitingPayment">£0.00</div>
+                <div class="stat-label">Awaiting Payment</div>
+                <div class="stat-sublabel" id="statInvoicesPending">0 invoices pending</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dash-section">
+            <div class="dash-card">
+              <div class="dash-card-head"><h3>Keylr Fee Tier</h3><span class="fee-tier-togo" id="feeTierTogo">£15,000.01 to go</span></div>
+              <div class="dash-card-sub">Progress to £15,001–£35,000 — unlock 17% fee</div>
+              <div class="fee-tier-stepper">
+                <div class="fee-tier-step current">£0 – £15,000 <span class="fee-pct">20%</span></div>
+                <svg class="fee-tier-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                <div class="fee-tier-step">£15,001 – £35,000 <span class="fee-pct">17%</span></div>
+              </div>
+              <div class="fee-tier-progress-track"><div class="fee-tier-progress-fill" id="feeTierProgressFill" style="width:0%;"></div></div>
+              <div class="fee-tier-labels">
+                <span id="feeTierSpent">£0.00 spent</span>
+                <span>£15,000.00 threshold</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="dash-section">
+            <div class="dash-two-col">
+              <div class="dash-card">
+                <div class="dash-card-head"><h3>Certificates Expiring</h3><span class="view-all">View all →</span></div>
+                <div id="certificatesContent">
+                  <div class="dash-empty">
+                    <div class="empty-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 15h6M9 11h6"/></svg></div>
+                    <div class="empty-title">No certificates expiring soon</div>
+                    <div class="empty-sub">Anything within 60 days of expiry will surface here as soon as it's logged against a property.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="dash-card">
+                <div class="dash-card-head"><h3>Spend Over Time</h3></div>
+                <div id="spendOverTimeContent">
+                  <div class="mini-chart-empty">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dash-section">
+            <div class="dash-two-col">
+              <div class="dash-card">
+                <div class="dash-card-head"><h3>Spend by Category</h3></div>
+                <div id="spendCategoryContent">
+                  <div class="mini-chart-empty">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 019 9h-9z"/></svg>
+                  </div>
+                </div>
+              </div>
+              <div class="dash-card">
+                <div class="dash-card-head"><h3>Job Pipeline</h3></div>
+                <div id="jobPipelineContent">
+                  <div class="dash-empty" style="padding-top:8px;">
+                    <div class="empty-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+                    <div class="empty-title">No jobs in the pipeline yet</div>
+                    <div class="empty-sub">Once you start booking services, each stage of the process will track here.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dash-section">
+            <div class="dash-card">
+              <div class="dash-card-head"><h3>Active Jobs</h3><span class="view-all">View all →</span></div>
+              <div id="activeJobsContent">
+                <div class="dash-empty" style="padding-top:8px;">
+                  <div class="empty-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+                  <div class="empty-title">No active jobs</div>
+                  <div class="empty-sub">Jobs you've awarded — that haven't been completed yet — will appear here.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dash-section">
+            <div class="dash-two-col">
+              <div class="dash-card">
+                <div class="dash-card-head"><h3>Upcoming Jobs</h3><span class="view-all">View all →</span></div>
+                <div id="upcomingJobsContent">
+                  <div class="dash-empty">
+                    <div class="empty-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+                    <div class="empty-title">No jobs scheduled in the next 7 days</div>
+                    <div class="empty-sub">Once you award + schedule a booking, it'll appear here with its supplier and time.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="dash-card">
+                <div class="dash-card-head"><h3>Quick Book</h3></div>
+                <div class="dash-card-sub">Jump straight into booking a common service type.</div>
+                <div class="quick-book-grid">
+                  <div class="quick-book-tile" data-service="Airbnb Turnover Clean">
+                    <div class="qb-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l2-7h14l2 7M5 12v7h14v-7M9 19v-4h6v4"/></svg></div>
+                    <div><div class="qb-title">Airbnb Turnover Clean</div><div class="qb-count" data-count="22" hidden></div></div>
+                  </div>
+                  <div class="quick-book-tile" data-service="End of Tenancy / Deep / Regular / Communal">
+                    <div class="qb-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 3l2.5 2.5M12 3L9.5 5.5"/><path d="M5 12a7 7 0 0114 0c0 4-3 6-3 8H8c0-2-3-4-3-8z"/><path d="M9 20h6"/></svg></div>
+                    <div><div class="qb-title">End of Tenancy / Deep / Regular / Communal</div><div class="qb-count" data-count="20" hidden></div></div>
+                  </div>
+                  <div class="quick-book-tile" data-service="Carpet / Stair Carpet Steam Clean">
+                    <div class="qb-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></div>
+                    <div><div class="qb-title">Carpet / Stair Carpet Steam Clean</div><div class="qb-count" data-count="16" hidden></div></div>
+                  </div>
+                  <div class="quick-book-tile" data-service="Door Entry / Intercom / Smart Doorbell">
+                    <div class="qb-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div>
+                    <div><div class="qb-title">Door Entry / Intercom / Smart Doorbell</div><div class="qb-count" data-count="9" hidden></div></div>
+                  </div>
+                  <div class="quick-book-tile" data-service="Boiler Service (Annual)">
+                    <div class="qb-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 2.5c1 2-1.5 3-1.5 5.5a4 4 0 108 0c0-1.5-1-2-1.5-3 0 1.5-1 2-1.5 1.5.5-2-1-3-2-4.5-.5 1.5-1.5 1-1.5.5z"/></svg></div>
+                    <div><div class="qb-title">Boiler Service (Annual)</div><div class="qb-count" data-count="11" hidden></div></div>
+                  </div>
+                  <div class="quick-book-tile" data-service="Boiler Repair / No Hot Water / Gas Leak Emergency">
+                    <div class="qb-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg></div>
+                    <div><div class="qb-title">Boiler Repair / No Hot Water / Gas Leak Emergency</div><div class="qb-count" data-count="6" hidden></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-toast" id="dashToast">
+      <div class="dt-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <div>
+        <div class="dt-title">Profile submitted</div>
+        <div class="dt-body">Your account is being reviewed — we'll be in touch within 1-2 business days.</div>
+      </div>
+      <button type="button" class="dt-close" id="dashToastClose" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
     </div>
   </div>
 
@@ -3052,9 +3743,16 @@
     var role = loginPicker.getRole();
     loginResend.stop();
     loginModal.close();
-    setTimeout(function () {
-      showToast(role === 'pm' ? 'Welcome back!' : 'Welcome back — you\'re logged in.');
-    }, 300);
+
+    if (role === 'pm') {
+      setTimeout(function () {
+        showPMDashboard({ fullName: 'Thomas Davies', email: 'thomas.davies@keylr-demo.co.uk' }, 'populated');
+      }, 300);
+    } else {
+      setTimeout(function () {
+        showToast('Welcome back — you\'re logged in.');
+      }, 300);
+    }
   }
   document.getElementById('loginOtpConfirmBtn').addEventListener('click', handleLoginOtpConfirm);
   document.getElementById('otpForm').addEventListener('keydown', function (e) {
@@ -3093,13 +3791,6 @@
     if (target) target.classList.add('active');
     obContent.scrollTop = 0;
 
-    if (step === 'complete') {
-      obBackBtn.hidden = true;
-      obNextBtn.hidden = true;
-      obStepLabel.textContent = 'Complete';
-      obProgressFill.style.width = '100%';
-      return;
-    }
     obNextBtn.hidden = false;
     var meta = obStepMeta[step];
     obStepLabel.textContent = meta.label;
@@ -3121,17 +3812,14 @@
     if (obCurrentStep < TOTAL_OB_STEPS) {
       goToObStep(obCurrentStep + 1);
     } else {
-      // Step 5 submit
-      goToObStep('complete');
+      // Step 5 submit — go straight to the dashboard, no intermediate confirmation screen
+      obApp.classList.remove('visible');
+      setTimeout(function () {
+        obApp.classList.remove('active');
+        document.body.style.overflow = '';
+        showPMDashboard(signupCapturedData, 'new');
+      }, 200);
     }
-  });
-
-  document.getElementById('obReturnHome').addEventListener('click', function () {
-    obApp.classList.remove('visible');
-    setTimeout(function () {
-      obApp.classList.remove('active');
-      document.body.style.overflow = '';
-    }, 200);
   });
 
   /* ---- Generic tile group helpers ---- */
@@ -3353,6 +4041,334 @@
     });
     goToObStep(1);
   }
+
+  /* =========================================================
+     PM DASHBOARD
+  ========================================================== */
+  var pmDashboard = document.getElementById('pmDashboard');
+
+  function initials(name) {
+    var parts = name.trim().split(/\s+/);
+    var out = parts[0] ? parts[0][0] : '';
+    if (parts.length > 1) out += parts[parts.length - 1][0];
+    return out.toUpperCase() || 'JB';
+  }
+
+  function timeGreeting() {
+    var hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 18) return 'Good afternoon';
+    return 'Good evening';
+  }
+
+  /* ---------------------------------------------------------------
+     Dashboard state rendering — 'new' (fresh account, just onboarded,
+     matches Dashboard_After_Onboarding_Submission.png) vs 'populated'
+     (established returning user, matches the fuller Dashboard.png)
+  --------------------------------------------------------------- */
+  function buildRingChart(segments, centerValue, centerLabel) {
+    var total = segments.reduce(function (sum, s) { return sum + s.value; }, 0);
+    var r = 40, cx = 50, cy = 50;
+    var circumference = 2 * Math.PI * r;
+    var offset = 0;
+    var circles = '';
+    segments.forEach(function (s) {
+      var frac = total > 0 ? s.value / total : 0;
+      var len = frac * circumference;
+      circles += '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="' + s.color + '" ' +
+        'stroke-width="14" stroke-dasharray="' + len + ' ' + (circumference - len) + '" ' +
+        'stroke-dashoffset="' + (-offset) + '" transform="rotate(-90 ' + cx + ' ' + cy + ')"></circle>';
+      offset += len;
+    });
+    var svg = '<svg class="ring-chart-svg" width="120" height="120" viewBox="0 0 100 100">' + circles + '</svg>';
+    var center = '<div class="ring-chart-center-value">' + centerValue + '</div><div class="ring-chart-center-label">' + centerLabel + '</div>';
+    var legend = '<div class="ring-legend">';
+    segments.forEach(function (s) {
+      legend += '<div class="ring-legend-row">' +
+        '<span class="ring-legend-dot" style="background:' + s.color + ';"></span>' +
+        '<span class="ring-legend-name">' + s.name + '</span>' +
+        '<span class="ring-legend-value">' + s.valueLabel + '</span>' +
+      '</div>';
+    });
+    legend += '</div>';
+    return '<div class="ring-chart-wrap">' +
+      '<div style="position:relative;width:120px;height:120px;flex-shrink:0;">' + svg +
+        '<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">' + center + '</div>' +
+      '</div>' + legend + '</div>';
+  }
+
+  function buildSpendOverTimeChart(opts) {
+    var months = opts.months;          // e.g. ['Aug','Sept',...,'Jul']
+    var values = opts.values;          // fractional 0..1, same length as months; null = no data yet
+    var w = 600, h = 170, padTop = 14, padBottom = 26, padX = 10;
+    var chartH = h - padTop - padBottom;
+    var step = (w - padX * 2) / (months.length - 1);
+
+    var pts = [];
+    values.forEach(function (v, i) {
+      if (v === null) return;
+      pts.push({ x: padX + i * step, y: padTop + (1 - v) * chartH });
+    });
+
+    var linePath = pts.map(function (p, i) { return (i === 0 ? 'M' : 'L') + p.x.toFixed(1) + ' ' + p.y.toFixed(1); }).join(' ');
+    var areaPath = linePath + ' L' + pts[pts.length - 1].x.toFixed(1) + ' ' + (h - padBottom) +
+      ' L' + pts[0].x.toFixed(1) + ' ' + (h - padBottom) + ' Z';
+
+    var last = pts[pts.length - 1];
+    var gradId = 'sotGrad' + Math.round(Math.random() * 100000);
+
+    var labels = months.map(function (m, i) {
+      var x = padX + i * step;
+      var anchor = i === 0 ? 'start' : (i === months.length - 1 ? 'end' : 'middle');
+      return '<text class="sot-month-label" x="' + x.toFixed(1) + '" y="' + (h - 6) + '" text-anchor="' + anchor + '">' + m + '</text>';
+    }).join('');
+
+    var svg =
+      '<svg class="sot-chart-svg" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none">' +
+        '<defs><linearGradient id="' + gradId + '" x1="0" y1="0" x2="0" y2="1">' +
+          '<stop offset="0%" stop-color="#284890" stop-opacity="0.28"/>' +
+          '<stop offset="100%" stop-color="#284890" stop-opacity="0"/>' +
+        '</linearGradient></defs>' +
+        '<path d="' + areaPath + '" fill="url(#' + gradId + ')" stroke="none"></path>' +
+        '<path d="' + linePath + '" fill="none" stroke="#284890" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>' +
+        '<circle cx="' + last.x.toFixed(1) + '" cy="' + last.y.toFixed(1) + '" r="5" fill="#fff" stroke="#284890" stroke-width="2.5"></circle>' +
+        labels +
+      '</svg>';
+
+    return '<div class="sot-headline"><span class="sot-value">' + opts.value + '</span>' +
+        '<span class="meta-badge default" style="text-transform:none;">↑ ' + opts.change + '</span></div>' +
+      '<div class="sot-sub">' + opts.period + '</div>' +
+      '<div class="sot-stat-row">' +
+        '<div class="sot-stat-box"><div class="ssb-value">' + opts.last90 + '</div><div class="ssb-label">Last 90 Days</div></div>' +
+        '<div class="sot-stat-box"><div class="ssb-value">' + opts.jobsCompleted + '</div><div class="ssb-label">Jobs Completed</div></div>' +
+        '<div class="sot-stat-box"><div class="ssb-value">' + opts.avgPerJob + '</div><div class="ssb-label">Avg per Job</div></div>' +
+      '</div>' +
+      svg;
+  }
+
+  function renderDashboardState(mode) {
+    var populated = mode === 'populated';
+
+    // Pending-approval banners only make sense for a brand-new account
+    document.getElementById('pendingBanners').style.display = populated ? 'none' : '';
+
+    // Sidebar notification badges
+    var badgeMap = { badgeInbox: 15, badgeResponses: 7, badgeQuotes: 10 };
+    Object.keys(badgeMap).forEach(function (id) {
+      var el = document.getElementById(id);
+      el.textContent = badgeMap[id];
+      el.hidden = !populated;
+    });
+
+    // Account progress ring — full for an established, verified account
+    document.getElementById('acctProgressRing').setAttribute('stroke-dashoffset', populated ? '0' : '18');
+
+    // Quick Book booking counts only make sense once there's booking history
+    document.querySelectorAll('.qb-count').forEach(function (el) {
+      el.textContent = el.getAttribute('data-count') + ' bookings';
+      el.hidden = !populated;
+    });
+
+    if (!populated) {
+      document.getElementById('statActiveJobs').textContent = '0';
+      document.getElementById('statCompleted').textContent = '0';
+      document.getElementById('statProperties').textContent = '8';
+      document.getElementById('statUpcomingJobs').textContent = '0';
+      document.getElementById('statAwaitingPayment').textContent = '£0.00';
+      document.getElementById('statInvoicesPending').textContent = '0 invoices pending';
+
+      document.getElementById('feeTierTogo').textContent = '£15,000.01 to go';
+      document.getElementById('feeTierProgressFill').style.width = '0%';
+      document.getElementById('feeTierSpent').textContent = '£0.00 spent';
+
+      document.getElementById('certificatesContent').innerHTML =
+        '<div class="dash-empty">' +
+          '<div class="empty-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 15h6M9 11h6"/></svg></div>' +
+          '<div class="empty-title">No certificates expiring soon</div>' +
+          '<div class="empty-sub">Anything within 60 days of expiry will surface here as soon as it\'s logged against a property.</div>' +
+        '</div>';
+
+      document.getElementById('spendOverTimeContent').innerHTML =
+        '<div class="mini-chart-empty"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg></div>';
+
+      document.getElementById('spendCategoryContent').innerHTML =
+        '<div class="mini-chart-empty"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 019 9h-9z"/></svg></div>';
+
+      document.getElementById('jobPipelineContent').innerHTML =
+        '<div class="dash-empty" style="padding-top:8px;">' +
+          '<div class="empty-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>' +
+          '<div class="empty-title">No jobs in the pipeline yet</div>' +
+          '<div class="empty-sub">Once you start booking services, each stage of the process will track here.</div>' +
+        '</div>';
+
+      // Active Jobs and Upcoming Jobs stay in their static empty state regardless of
+      // mode — per the reference, these track a narrow live condition (something
+      // currently awarded-but-unfinished / scheduled in the next 7 days) that can
+      // be empty even on an account with plenty of pipeline history elsewhere.
+      return;
+    }
+
+    // ---- Populated / returning-user state (Thomas Davies reference data) ----
+    document.getElementById('statActiveJobs').textContent = '8';
+    document.getElementById('statCompleted').textContent = '47';
+    document.getElementById('statProperties').textContent = '21';
+    document.getElementById('statUpcomingJobs').textContent = '1';
+    document.getElementById('statAwaitingPayment').textContent = '£2,344.08';
+    document.getElementById('statInvoicesPending').textContent = '8 invoices pending';
+
+    document.getElementById('feeTierTogo').textContent = '£11,659.21 to go';
+    document.getElementById('feeTierProgressFill').style.width = '22.3%';
+    document.getElementById('feeTierSpent').textContent = '£3,340.80 spent';
+
+    var certs = [
+      { name: 'Homeland Heights', type: 'Gas Safety Certificate (CP12)', date: '31 Mar 2026', status: 'Expired' },
+      { name: 'Flat 27, 151 High Street', type: 'Gas Safety Certificate (CP12)', date: '8 Apr 2026', status: 'Expired' },
+      { name: 'Homeland Heights', type: 'EICR — Electrical Inspection Report', date: '31 Oct 2026', status: 'Compliant' },
+      { name: 'Flat 27, 151 High Street', type: 'EICR — Electrical Inspection Report', date: '27 Oct 2027', status: 'Compliant' },
+      { name: 'Flat 27, 151 High Street', type: 'EPC — Energy Performance Certificate', date: '13 Feb 2028', status: 'Compliant' }
+    ];
+    var expiredCount = certs.filter(function (c) { return c.status === 'Expired'; }).length;
+    var certsHtml = '<div style="margin-bottom:12px;"><span class="meta-badge required-badge" style="text-transform:none;">' + expiredCount + ' expired</span></div>';
+    certs.forEach(function (c) {
+      var isExpired = c.status === 'Expired';
+      certsHtml +=
+        '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0;border-top:1px solid var(--border-subtle);border-left:3px solid ' + (isExpired ? '#e8482c' : '#22c55e') + ';padding-left:10px;">' +
+          '<div style="min-width:0;">' +
+            '<div style="font-size:13px;font-weight:600;color:var(--text-heading);">' + c.name + '</div>' +
+            '<div style="font-size:12px;color:var(--text-body-muted);">' + c.type + '</div>' +
+          '</div>' +
+          '<div style="text-align:right;flex-shrink:0;">' +
+            '<div style="font-size:12px;color:var(--text-body-muted);margin-bottom:3px;">' + c.date + '</div>' +
+            '<span class="meta-badge" style="text-transform:none;background:' + (isExpired ? '#f8e8e8' : '#d8f8e0') + ';color:' + (isExpired ? '#b5424a' : '#1a7a3e') + ';">' + c.status + '</span>' +
+          '</div>' +
+        '</div>';
+    });
+    document.getElementById('certificatesContent').innerHTML = certsHtml;
+
+    document.getElementById('spendOverTimeContent').innerHTML = buildSpendOverTimeChart({
+      value: '£3,340.80',
+      change: '+283%',
+      period: 'Last 12 months',
+      last90: '£3,340.80',
+      jobsCompleted: '12',
+      avgPerJob: '£278.40',
+      months: ['Aug', 'Sept', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+      values: [0.03, 0.03, 0.05, 0.05, 0.05, 0.07, 0.07, 0.08, 0.22, 1.0, null, null]
+    });
+
+    var categories = [
+      { name: 'Cleaning', color: '#284890', value: 1552.80, valueLabel: '£1,552.80' },
+      { name: 'Appliances', color: '#22c55e', value: 1091.98, valueLabel: '£1,091.98' },
+      { name: 'Electrical', color: '#f59e0b', value: 276.02, valueLabel: '£276.02' },
+      { name: 'Gas & Heating + compliance & legal', color: '#e8482c', value: 240.00, valueLabel: '£240.00' },
+      { name: 'Gas & Heating', color: '#8b5cf6', value: 180.00, valueLabel: '£180.00' }
+    ];
+    document.getElementById('spendCategoryContent').innerHTML = buildRingChart(categories, '£3,340.80', 'Total');
+
+    var stages = [
+      { label: 'Pending', cls: 'pl-pending', count: 7 },
+      { label: 'Quoted', cls: 'pl-quoted', count: 10 },
+      { label: 'Scheduled', cls: 'pl-scheduled', count: 1 },
+      { label: 'In Progress', cls: 'pl-inprogress', count: 7 },
+      { label: 'Completed', cls: 'pl-completed', count: 15 }
+    ];
+    var maxCount = Math.max.apply(null, stages.map(function (s) { return s.count; }));
+    var pipelineHtml = '';
+    stages.forEach(function (s) {
+      var pct = Math.round((s.count / maxCount) * 100);
+      pipelineHtml +=
+        '<div class="pipeline-row ' + s.cls + '">' +
+          '<div class="pl-label">' + s.label + '</div>' +
+          '<div class="pl-track"><div class="pl-fill" style="width:' + pct + '%;"></div></div>' +
+          '<div class="pl-count">' + s.count + '</div>' +
+        '</div>';
+    });
+    document.getElementById('jobPipelineContent').innerHTML = pipelineHtml;
+
+    // Active Jobs and Upcoming Jobs stay in their static empty state — see note above.
+  }
+
+  function showPMDashboard(signupData, mode) {
+    signupData = signupData || {};
+    var fullName = signupData.fullName || 'Jordan Blake';
+    var firstName = fullName.trim().split(/\s+/)[0];
+    var email = signupData.email || 'jordan@thameshouse.co.uk';
+
+    document.getElementById('acctName').textContent = fullName;
+    document.getElementById('acctEmail').textContent = email;
+    document.getElementById('acctInitials').textContent = initials(fullName);
+    document.getElementById('dashGreeting').textContent = timeGreeting() + ', ' + firstName + ' \uD83D\uDC4B';
+
+    renderDashboardState(mode || 'new');
+
+    pmDashboard.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(function () {
+      pmDashboard.classList.add('visible');
+    });
+
+    if (mode !== 'populated') {
+      // Show the post-submission confirmation toast shortly after landing (new-account flow only)
+      setTimeout(function () {
+        document.getElementById('dashToast').classList.add('show');
+      }, 500);
+      clearTimeout(window.__dashToastTimer);
+      window.__dashToastTimer = setTimeout(function () {
+        document.getElementById('dashToast').classList.remove('show');
+      }, 8000);
+    }
+  }
+
+  document.getElementById('dashToastClose').addEventListener('click', function () {
+    document.getElementById('dashToast').classList.remove('show');
+    clearTimeout(window.__dashToastTimer);
+  });
+
+  /* Sidebar collapse */
+  var dashSidebar = document.getElementById('dashSidebar');
+  document.getElementById('sidebarCollapseBtn').addEventListener('click', function () {
+    dashSidebar.classList.toggle('collapsed');
+  });
+
+  /* Sidebar nav item selection (single active item; most routes are stubs in this prototype) */
+  document.querySelectorAll('.dash-nav-item').forEach(function (item) {
+    item.addEventListener('click', function () {
+      document.querySelectorAll('.dash-nav-item').forEach(function (i) { i.classList.remove('active'); });
+      item.classList.add('active');
+      if (item.getAttribute('data-nav') !== 'home') {
+        showToast(item.querySelector('.nav-label').textContent + ' isn\u2019t wired up in this prototype yet.');
+      }
+    });
+  });
+
+  /* Logout */
+  document.getElementById('dashLogoutBtn').addEventListener('click', function () {
+    pmDashboard.classList.remove('visible');
+    setTimeout(function () {
+      pmDashboard.classList.remove('active');
+      document.body.style.overflow = '';
+      showToast('You\u2019ve been logged out.');
+    }, 200);
+  });
+
+  /* Banner actions */
+  document.getElementById('addPaymentCardBtn').addEventListener('click', function () {
+    showToast('This would redirect to a secure Stripe payment setup page.');
+  });
+  document.getElementById('completeOnboardingBtn').addEventListener('click', function () {
+    showToast('You\u2019ve already submitted your onboarding details \u2014 verification is in progress.');
+  });
+  document.getElementById('managePropertiesBtn').addEventListener('click', function () {
+    showToast('Manage Properties isn\u2019t wired up in this prototype yet.');
+  });
+  document.getElementById('bookServiceBtn').addEventListener('click', function () {
+    showToast('Booking flow isn\u2019t wired up in this prototype yet.');
+  });
+  document.querySelectorAll('.quick-book-tile').forEach(function (tile) {
+    tile.addEventListener('click', function () {
+      showToast('Quick-booking "' + tile.getAttribute('data-service') + '" isn\u2019t wired up in this prototype yet.');
+    });
+  });
 })();
 </script>
 
