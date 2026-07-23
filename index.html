@@ -2224,6 +2224,146 @@
   .preferred-status-badge { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #92620a; background: #fef3c7; padding: 8px 14px; border-radius: 10px; margin-bottom: 4px; }
 
   /* =========================================================
+     ADMIN DASHBOARD
+  ========================================================== */
+  .admin-sidebar-brand { display: flex; align-items: center; gap: 10px; }
+  .admin-sidebar-brand .asb-avatar {
+    width: 36px; height: 36px; border-radius: 50%; background: var(--surface-soft);
+    border: 1px solid var(--border-subtle); flex-shrink: 0;
+  }
+  .admin-sidebar-brand .asb-name { font-size: 15px; font-weight: 800; color: var(--text-heading); line-height: 1.2; }
+  .admin-sidebar-brand .asb-sub { font-size: 9.5px; font-weight: 700; letter-spacing: 0.08em; color: var(--text-body-muted); text-transform: uppercase; }
+
+  .admin-header-actions { display: flex; align-items: center; gap: 10px; }
+  .admin-icon-btn {
+    width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    color: var(--text-body-muted); position: relative; flex-shrink: 0;
+    transition: background-color 150ms ease-out;
+  }
+  .admin-icon-btn:hover { background: var(--surface-soft); }
+  .admin-icon-btn .aib-dot { position: absolute; top: 6px; right: 7px; width: 8px; height: 8px; border-radius: 50%; background: #e8482c; border: 2px solid #fff; }
+  .admin-avatar-btn {
+    width: 36px; height: 36px; border-radius: 50%; background: var(--navy-900, #101828); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0;
+  }
+
+  /* Pipeline banner */
+  .pipeline-banner { display: flex; align-items: center; gap: 16px; }
+  .pipeline-banner .pb-star {
+    width: 40px; height: 40px; border-radius: 10px; background: #fef3c7; color: #b5891a;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .pipeline-banner .pb-body { flex: 1; min-width: 0; }
+  .pipeline-banner .pb-label { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; color: var(--text-body-muted); text-transform: uppercase; margin-bottom: 8px; display: flex; justify-content: space-between; }
+  .pipeline-banner .pb-track { height: 8px; border-radius: 999px; overflow: hidden; display: flex; background: var(--surface-soft); margin-bottom: 8px; }
+  .pipeline-banner .pb-seg { height: 100%; }
+  .pipeline-banner .pb-legend { display: flex; gap: 18px; font-size: 12px; color: var(--text-body-muted); }
+  .pipeline-banner .pb-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .pipeline-banner .pb-legend .dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* Earnings card */
+  .earnings-card-head { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 18px; }
+  .earnings-card-head .ech-bar { width: 4px; align-self: stretch; border-radius: 4px; background: #22c55e; flex-shrink: 0; }
+  .earnings-mini-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+  @media (max-width: 1100px) { .earnings-mini-row { grid-template-columns: repeat(3, 1fr); } }
+  .earnings-mini-box { border-radius: 10px; padding: 12px 14px; }
+  .earnings-mini-box .emb-value { font-size: 16px; font-weight: 800; }
+  .earnings-mini-box .emb-label { font-size: 11px; color: var(--text-body-muted); margin-top: 3px; }
+  .earnings-mini-box.tint-green { background: #d8f8e0; } .earnings-mini-box.tint-green .emb-value { color: #1a7a3e; }
+  .earnings-mini-box.tint-gray { background: var(--surface-soft); } .earnings-mini-box.tint-gray .emb-value { color: var(--text-heading); }
+  .earnings-mini-box.tint-amber { background: #fef3c7; } .earnings-mini-box.tint-amber .emb-value { color: #92620a; }
+  .earnings-mini-box.tint-blue { background: #e8f0f8; } .earnings-mini-box.tint-blue .emb-value { color: #284890; }
+
+  /* Card head with accent bar (Verification Queue, Jobs Over Time, etc.) */
+  .accent-card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .accent-card-head .ach-left { display: flex; align-items: center; gap: 10px; }
+  .accent-card-head .ach-bar { width: 3px; height: 20px; border-radius: 3px; flex-shrink: 0; }
+  .accent-card-head h3 { font-size: 15px; font-weight: 700; color: var(--text-heading); }
+  .accent-card-head .ach-sub { font-size: 12px; color: var(--text-body-muted); margin-top: 2px; }
+
+  /* Verification queue list */
+  .verif-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--border-subtle); }
+  .verif-row:first-child { border-top: none; }
+  .verif-row .vr-avatar { width: 34px; height: 34px; border-radius: 50%; background: #b05008; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+  .verif-row .vr-name { font-size: 13.5px; font-weight: 700; color: var(--text-heading); }
+  .verif-row .vr-sub { font-size: 11.5px; color: var(--text-body-muted); }
+  .verif-row .vr-badge { margin-left: auto; font-size: 11px; font-weight: 700; background: #fef3c7; color: #92620a; padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+
+  /* Donut legend rows with counts */
+  .donut-legend-row { display: flex; align-items: center; gap: 9px; font-size: 13px; padding: 6px 0; }
+  .donut-legend-row .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .donut-legend-row .dl-name { color: var(--text-heading); flex: 1; }
+  .donut-legend-row .dl-value { font-weight: 700; color: var(--text-heading); }
+
+  /* Generic data table */
+  .admin-table { width: 100%; border-collapse: collapse; }
+  .admin-table thead th {
+    text-align: left; font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+    color: #94a3b8; padding: 0 12px 10px; border-bottom: 1px solid var(--border-subtle);
+  }
+  .admin-table tbody td { padding: 12px; border-bottom: 1px solid var(--border-subtle); font-size: 13px; color: var(--text-heading); vertical-align: middle; }
+  .admin-table tbody tr:last-child td { border-bottom: none; }
+  .admin-table .at-link { color: var(--accent-blue); font-weight: 700; }
+  .admin-table .at-person { display: flex; align-items: center; gap: 10px; }
+  .admin-table .at-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--icon-tint-bg); color: var(--accent-blue); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+  .admin-table .at-name { font-weight: 700; }
+  .admin-table .at-email { font-size: 11.5px; color: var(--text-body-muted); }
+  .status-pill { display: inline-flex; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+  .status-pill.amber { background: #fef3c7; color: #92620a; }
+  .status-pill.blue { background: #e8f0f8; color: #284890; }
+  .status-pill.green { background: #d8f8e0; color: #1a7a3e; }
+  .status-pill.gray { background: var(--surface-soft); color: var(--text-body-muted); }
+
+  .pm-summary-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .pm-summary-chip { font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 999px; }
+  .pm-summary-chip.plain { background: var(--surface-soft); color: var(--text-heading); }
+  .pm-summary-chip.green { background: #d8f8e0; color: #1a7a3e; }
+  .pm-summary-chip.amber { background: #fef3c7; color: #92620a; }
+  .pm-summary-chip.gray { background: #eef1f5; color: #64748b; }
+
+  /* Quick actions grid */
+  .quick-actions-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .quick-action-item {
+    display: flex; align-items: center; gap: 12px;
+    border: 1px solid var(--border-subtle); border-radius: 10px; padding: 12px 14px;
+    cursor: pointer; transition: border-color 150ms ease-out, box-shadow 150ms ease-out;
+  }
+  .quick-action-item:hover { border-color: #90a8c8; box-shadow: 0 4px 12px rgba(16,24,40,0.06); }
+  .quick-action-item .qai-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--icon-tint-bg); color: var(--accent-blue); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .quick-action-item .qai-title { font-size: 13px; font-weight: 700; color: var(--text-heading); }
+  .quick-action-item .qai-sub { font-size: 11.5px; color: var(--text-body-muted); }
+
+  /* Notifications dropdown panel */
+  .notif-panel {
+    position: absolute; top: calc(100% + 10px); right: 0;
+    width: 380px; max-height: 560px; overflow-y: auto;
+    background: #fff; border-radius: 16px; box-shadow: 0 20px 50px rgba(16,24,40,0.18);
+    opacity: 0; visibility: hidden; transform: translateY(-8px);
+    transition: opacity 180ms ease-out, transform 180ms ease-out, visibility 180ms ease-out;
+    z-index: 500;
+  }
+  .notif-panel.open { opacity: 1; visibility: visible; transform: none; }
+  .notif-panel-head {
+    position: sticky; top: 0; background: #fff; z-index: 1;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 20px; border-bottom: 1px solid var(--border-subtle);
+  }
+  .notif-panel-head h3 { font-size: 17px; font-weight: 800; color: var(--text-heading); }
+  .notif-panel-head button { font-size: 13px; font-weight: 700; color: var(--accent-blue); background: none; border: none; cursor: pointer; font-family: inherit; }
+  .notif-panel-head button:hover { text-decoration: underline; }
+  .notif-row { display: flex; gap: 12px; padding: 16px 20px; cursor: pointer; transition: background-color 150ms ease-out; }
+  .notif-row.unread { background: var(--icon-tint-bg); }
+  .notif-row:hover { background: var(--surface-soft); }
+  .notif-row .nr-icon { width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .notif-row .nr-icon.type-job { background: var(--icon-tint-bg); color: var(--accent-blue); }
+  .notif-row .nr-icon.type-alert { background: #f8e0e0; color: #d82020; }
+  .notif-row .nr-body { flex: 1; min-width: 0; }
+  .notif-row .nr-title { font-size: 13.5px; font-weight: 700; color: var(--text-heading); line-height: 1.4; }
+  .notif-row .nr-desc { font-size: 12.5px; color: var(--text-body-muted); line-height: 1.4; margin-top: 2px; }
+  .notif-row .nr-date { font-size: 11px; color: #94a3b8; margin-top: 6px; }
+  .notif-row .nr-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-blue); flex-shrink: 0; margin-top: 4px; }
+
+  /* =========================================================
      ADMIN LOGIN + FORGOT PASSWORD
   ========================================================== */
   .admin-login-app {
@@ -4903,6 +5043,382 @@
     </div>
   </div>
 
+  <!-- ============ ADMIN DASHBOARD ============ -->
+  <div class="pm-dashboard" id="adminDashboard">
+
+    <aside class="dash-sidebar" id="adminDashSidebar">
+      <div class="dash-sidebar-head">
+        <div class="admin-sidebar-brand">
+          <div class="asb-avatar"></div>
+          <div>
+            <div class="asb-name">Keylr</div>
+            <div class="asb-sub">Admin Console</div>
+          </div>
+        </div>
+        <button type="button" class="sidebar-collapse-btn" id="adminSidebarCollapseBtn" aria-label="Collapse sidebar">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+      </div>
+
+      <nav class="dash-nav-scroll">
+        <div class="dash-nav-group">
+          <div class="dash-nav-group-label">Overview</div>
+          <div class="dash-nav-item active" data-nav="overview">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+            <span class="nav-label">Overview</span>
+          </div>
+        </div>
+
+        <div class="dash-nav-group">
+          <div class="dash-nav-group-label">Network</div>
+          <div class="dash-nav-item" data-nav="property-manager">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>
+            <span class="nav-label">Property Manager</span>
+          </div>
+          <div class="dash-nav-item" data-nav="pm-applicants">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            <span class="nav-label">PM Applicants</span>
+          </div>
+          <div class="dash-nav-item" data-nav="active-suppliers">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <span class="nav-label">Active Suppliers</span>
+          </div>
+          <div class="dash-nav-item" data-nav="supplier-applicants">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+            <span class="nav-label">Supplier Applicants</span>
+          </div>
+        </div>
+
+        <div class="dash-nav-group">
+          <div class="dash-nav-group-label">Operations</div>
+          <div class="dash-nav-item" data-nav="jobs">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+            <span class="nav-label">Jobs</span>
+          </div>
+          <div class="dash-nav-item" data-nav="quotes">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 15h6M9 11h3"/></svg>
+            <span class="nav-label">Quotes</span>
+          </div>
+          <div class="dash-nav-item" data-nav="disputes">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+            <span class="nav-label">Disputes</span>
+          </div>
+          <div class="dash-nav-item" data-nav="services">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+            <span class="nav-label">Services</span>
+          </div>
+        </div>
+
+        <div class="dash-nav-group">
+          <div class="dash-nav-group-label">Finance</div>
+          <div class="dash-nav-item" data-nav="invoices">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg>
+            <span class="nav-label">Invoices</span>
+          </div>
+          <div class="dash-nav-item" data-nav="keylr-earnings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+            <span class="nav-label">Keylr Earnings</span>
+          </div>
+          <div class="dash-nav-item" data-nav="markup-tiers">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5L5 19M6.5 9a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM17.5 20a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"/></svg>
+            <span class="nav-label">Markup Tiers</span>
+          </div>
+        </div>
+
+        <div class="dash-nav-group">
+          <div class="dash-nav-group-label">System</div>
+          <div class="dash-nav-item" data-nav="messages">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            <span class="nav-label">Messages</span>
+          </div>
+          <div class="dash-nav-item" data-nav="activity-logs">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+            <span class="nav-label">Activity Logs</span>
+          </div>
+        </div>
+      </nav>
+
+      <div class="dash-sidebar-footer" style="display:flex;flex-direction:column;gap:2px;padding:14px 12px;">
+        <button type="button" class="dash-nav-item" id="adminCollapseFooterBtn" style="width:100%;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l-6-6 6-6M15 18l6-6-6-6"/></svg>
+          <span class="nav-label">Collapse</span>
+        </button>
+        <button type="button" class="dash-nav-item" id="adminSignOutBtn" style="width:100%;color:#e8482c;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+          <span class="nav-label">Sign Out</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="dash-main">
+      <div class="dash-topbar">
+        <div>
+          <h1 id="adminDashGreeting">Good evening, Admin 👋</h1>
+          <div class="dash-content-sub" id="adminDashDate" style="margin-top:2px;">Tuesday, July 14, 2026</div>
+        </div>
+        <div class="admin-header-actions" style="position:relative;">
+          <button type="button" class="admin-icon-btn" aria-label="Search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          </button>
+          <button type="button" class="admin-icon-btn" id="adminBellBtn" aria-label="Notifications">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+            <span class="aib-dot"></span>
+          </button>
+          <button type="button" class="admin-avatar-btn" id="adminAvatarBtn">A</button>
+
+          <div class="notif-panel" id="notifPanel">
+            <div class="notif-panel-head">
+              <h3>Notifications</h3>
+              <button type="button" id="markAllReadBtn">Mark All Read</button>
+            </div>
+            <div id="notifListContent"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dash-scroll-area">
+        <div class="dash-content">
+          <div class="dash-section">
+            <div class="dash-header">
+              <div><h2>Overview</h2><div class="dash-content-sub">Here's what is happening across Keylr today.</div></div>
+              <div class="dash-header-actions">
+                <button type="button" class="btn btn-outline-full" style="width:auto;padding:10px 18px;" id="adminManageServicesBtn">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>Manage Services
+                </button>
+                <button type="button" class="btn btn-primary" id="adminReviewApplicantsBtn">Review Applicants <span class="arrow">→</span></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="dash-section">
+            <div class="stat-row">
+              <div class="stat-card">
+                <div class="stat-icon" style="background:#e8f0f8;color:#284890;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div>
+                <div class="stat-number">39</div>
+                <div class="stat-label">Active Jobs</div>
+                <div class="stat-sublabel">live across platform</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon" style="background:#d8f8e0;color:#1a7a3e;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                <div class="stat-number">21</div>
+                <div class="stat-label">Completed</div>
+                <div class="stat-sublabel">all time</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon" style="background:#eef0f8;color:#5b4fc4;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+                <div class="stat-number">105</div>
+                <div class="stat-label">Verified Suppliers</div>
+                <div class="stat-sublabel">5 awaiting review</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon" style="background:#e8f0f8;color:#284890;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></div>
+                <div class="stat-number">47</div>
+                <div class="stat-label">Active Clients</div>
+                <div class="stat-sublabel">property managers</div>
+              </div>
+              <div class="stat-card dark">
+                <div class="stat-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+                <div class="stat-number">£671</div>
+                <div class="stat-label">Revenue MTD</div>
+                <div class="stat-sublabel">£671 billed</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dash-section">
+            <div class="dash-card pipeline-banner">
+              <div class="pb-star"><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.5L22 9.3l-5 4.9L18.2 21 12 17.6 5.8 21 7 14.2l-5-4.9 7.1-.8z"/></svg></div>
+              <div class="pb-body">
+                <div class="pb-label"><span>Supplier Onboarding Pipeline</span><span style="color:var(--text-heading);">99% approval rate</span></div>
+                <div class="pb-track">
+                  <div class="pb-seg" style="width:23%;background:#284890;"></div>
+                  <div class="pb-seg" style="width:3%;background:#f59e0b;"></div>
+                  <div class="pb-seg" style="width:74%;background:#22c55e;"></div>
+                </div>
+                <div class="pb-legend">
+                  <span><span class="dot" style="background:#284890;"></span>New 33</span>
+                  <span><span class="dot" style="background:#f59e0b;"></span>Verifying 5</span>
+                  <span><span class="dot" style="background:#22c55e;"></span>Approved 105</span>
+                </div>
+              </div>
+              <button type="button" class="btn btn-outline-full" style="width:auto;padding:10px 18px;flex-shrink:0;" id="viewPipelineBtn">View Pipeline <span class="arrow">→</span></button>
+            </div>
+          </div>
+
+          <div class="dash-section">
+            <div class="dash-card">
+              <div class="earnings-card-head">
+                <div class="ech-bar"></div>
+                <div style="flex:1;">
+                  <h3 style="font-size:15px;">Keylr Earnings</h3>
+                  <div class="dash-content-sub">Net handling fees Keylr earned this month</div>
+                </div>
+                <span class="view-all">View Earnings →</span>
+              </div>
+              <div class="earnings-mini-row">
+                <div class="earnings-mini-box tint-green"><div class="emb-value">£671</div><div class="emb-label">Collected (Net)</div></div>
+                <div class="earnings-mini-box tint-gray"><div class="emb-value">£671</div><div class="emb-label">Billed</div></div>
+                <div class="earnings-mini-box tint-amber"><div class="emb-value">£134</div><div class="emb-label">Markup VAT</div></div>
+                <div class="earnings-mini-box tint-blue"><div class="emb-value">£4,829</div><div class="emb-label">Gross Processed</div></div>
+                <div class="earnings-mini-box tint-blue"><div class="emb-value">13.9%</div><div class="emb-label">Take Rate</div></div>
+                <div class="earnings-mini-box tint-gray"><div class="emb-value">8</div><div class="emb-label">Fee Invoices</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dash-section">
+            <div class="dash-two-col">
+              <div class="dash-card">
+                <div class="accent-card-head">
+                  <div class="ach-left">
+                    <div class="ach-bar" style="background:#b05008;"></div>
+                    <div>
+                      <h3>Verification Queue</h3>
+                      <div class="ach-sub">Applicants awaiting review</div>
+                    </div>
+                  </div>
+                  <span class="view-all">View All →</span>
+                </div>
+                <div id="verifQueueList">
+                  <div class="verif-row"><div class="vr-avatar">T</div><div><div class="vr-name">Test supplier</div><div class="vr-sub">— · General</div></div><span class="vr-badge">● Verifying</span></div>
+                  <div class="verif-row"><div class="vr-avatar">D</div><div><div class="vr-name">daney</div><div class="vr-sub">— · General</div></div><span class="vr-badge">● Verifying</span></div>
+                  <div class="verif-row"><div class="vr-avatar">J</div><div><div class="vr-name">jakson</div><div class="vr-sub">— · General</div></div><span class="vr-badge">● Verifying</span></div>
+                  <div class="verif-row"><div class="vr-avatar">K</div><div><div class="vr-name">key test</div><div class="vr-sub">— · General</div></div><span class="vr-badge">● Verifying</span></div>
+                  <div class="verif-row"><div class="vr-avatar">J</div><div><div class="vr-name">Joe</div><div class="vr-sub">— · General</div></div><span class="vr-badge">● Verifying</span></div>
+                </div>
+              </div>
+
+              <div class="dash-card">
+                <div class="dash-card-head" style="align-items:flex-start;">
+                  <div class="accent-card-head" style="margin-bottom:0;">
+                    <div class="ach-left"><div class="ach-bar" style="background:#284890;"></div><h3>Jobs Over Time</h3></div>
+                  </div>
+                  <select class="ob-select" style="width:auto;font-size:12.5px;padding:8px 32px 8px 12px;"><option>Last 12 Months</option></select>
+                </div>
+                <div id="jobsOverTimeContent"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dash-section">
+            <div class="dash-two-col">
+              <div class="dash-card">
+                <div class="accent-card-head">
+                  <div class="ach-left"><div class="ach-bar" style="background:#5b4fc4;"></div><div><h3>Supplier network</h3><div class="ach-sub">By verification status</div></div></div>
+                </div>
+                <div id="supplierNetworkContent"></div>
+              </div>
+
+              <div class="dash-card">
+                <div class="accent-card-head">
+                  <div class="ach-left"><div class="ach-bar" style="background:#284890;"></div><div><h3>Job Pipeline</h3><div class="ach-sub">Current status across all jobs</div></div></div>
+                  <span class="view-all">View Jobs →</span>
+                </div>
+                <div>
+                  <div class="pipeline-row pl-pending"><div class="pl-label">Pending</div><div class="pl-track"><div class="pl-fill" style="width:48%;"></div></div><div class="pl-count">10</div></div>
+                  <div class="pipeline-row pl-quoted"><div class="pl-label">Quoted</div><div class="pl-track"><div class="pl-fill" style="width:90%;"></div></div><div class="pl-count">19</div></div>
+                  <div class="pipeline-row pl-scheduled"><div class="pl-label">Scheduled</div><div class="pl-track"><div class="pl-fill" style="width:5%;"></div></div><div class="pl-count">1</div></div>
+                  <div class="pipeline-row pl-inprogress"><div class="pl-label">In Progress</div><div class="pl-track"><div class="pl-fill" style="width:43%;"></div></div><div class="pl-count">9</div></div>
+                  <div class="pipeline-row pl-completed"><div class="pl-label">Completed</div><div class="pl-track"><div class="pl-fill" style="width:100%;"></div></div><div class="pl-count">21</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dash-section">
+            <div class="dash-card">
+              <div class="accent-card-head">
+                <div class="ach-left"><div class="ach-bar" style="background:#284890;"></div><div><h3>Recent Jobs</h3><div class="ach-sub">Latest activity across the platform</div></div></div>
+                <span class="view-all">View All →</span>
+              </div>
+              <div style="overflow-x:auto;">
+                <table class="admin-table">
+                  <thead><tr><th>Job ID</th><th>Client</th><th>Service</th><th>Supplier</th><th>Status</th><th>Date</th></tr></thead>
+                  <tbody>
+                    <tr><td class="at-link">#K-2735</td><td>Thomas Davies</td><td>Biohazard / Trauma Clean</td><td>—</td><td><span class="status-pill amber">Awaiting Quotes</span></td><td>16 Jul 2026</td></tr>
+                    <tr><td class="at-link">#K-2779</td><td>Thomas Davies</td><td>End of Tenancy / Deep / Regular / Communal</td><td>—</td><td><span class="status-pill amber">Awaiting Acceptance</span></td><td>08 Jul 2026</td></tr>
+                    <tr><td class="at-link">#K-2778</td><td>Thomas Davies</td><td>End of Tenancy / Deep / Regular / Communal</td><td>—</td><td><span class="status-pill amber">Awaiting Acceptance</span></td><td>08 Jul 2026</td></tr>
+                    <tr><td class="at-link">#K-2777</td><td>Thomas Davies</td><td>EICR — Electrical Installation Condition Report</td><td>—</td><td><span class="status-pill amber">Awaiting Acceptance</span></td><td>06 Jul 2026</td></tr>
+                    <tr><td class="at-link">#K-2776</td><td>Thomas Davies</td><td>EICR — Electrical Installation Condition Report</td><td>Liam Greenwood</td><td><span class="status-pill blue">Pending</span></td><td>06 Jul 2026</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="dash-section">
+            <div class="dash-card">
+              <div class="accent-card-head">
+                <div class="ach-left"><div class="ach-bar" style="background:#284890;"></div><div><h3>Property Managers</h3><div class="ach-sub">Newest clients on the platform</div></div></div>
+                <span class="view-all">View All →</span>
+              </div>
+              <div class="pm-summary-chips">
+                <span class="pm-summary-chip plain">47 Total</span>
+                <span class="pm-summary-chip green">12 New This Month</span>
+                <span class="pm-summary-chip green">10 Approved</span>
+                <span class="pm-summary-chip amber">8 Pending</span>
+                <span class="pm-summary-chip gray">10 Incomplete</span>
+              </div>
+              <div style="overflow-x:auto;">
+                <table class="admin-table">
+                  <thead><tr><th>Client</th><th>Company</th><th>Properties</th><th>Status</th><th>Joined</th></tr></thead>
+                  <tbody>
+                    <tr><td><div class="at-person"><div class="at-avatar">T</div><div><div class="at-name">Tester</div><div class="at-email">test123@gmail.com</div></div></div></td><td>Test</td><td>—</td><td><span class="status-pill amber">Pending review</span></td><td>14 Jul 2026</td></tr>
+                    <tr><td><div class="at-person"><div class="at-avatar">J</div><div><div class="at-name">john john</div><div class="at-email">johnjohn@house.com</div></div></div></td><td>john house Ltd</td><td>—</td><td><span class="status-pill amber">Pending review</span></td><td>07 Jul 2026</td></tr>
+                    <tr><td><div class="at-person"><div class="at-avatar">J</div><div><div class="at-name">John John</div><div class="at-email">john@house.com</div></div></div></td><td>johnhouseltd</td><td>—</td><td><span class="status-pill gray">Incomplete</span></td><td>07 Jul 2026</td></tr>
+                    <tr><td><div class="at-person"><div class="at-avatar">F</div><div><div class="at-name">fotatap</div><div class="at-email">fotatap118@asitrai.com</div></div></div></td><td>New Services ltd.</td><td>—</td><td><span class="status-pill green">Approved</span></td><td>03 Jul 2026</td></tr>
+                    <tr><td><div class="at-person"><div class="at-avatar">R</div><div><div class="at-name">raman</div><div class="at-email">naman@gmail.com</div></div></div></td><td>raman ltd</td><td>—</td><td><span class="status-pill gray">Incomplete</span></td><td>03 Jul 2026</td></tr>
+                    <tr><td><div class="at-person"><div class="at-avatar">F</div><div><div class="at-name">firom</div><div class="at-email">firom65741@icotz.com</div></div></div></td><td>firom ltd</td><td>—</td><td><span class="status-pill amber">Pending review</span></td><td>03 Jul 2026</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="dash-section">
+            <div class="dash-two-col">
+              <div class="dash-card">
+                <div class="accent-card-head">
+                  <div class="ach-left"><div class="ach-bar" style="background:#284890;"></div><div><h3>Recent Activity</h3><div class="ach-sub">Platform timeline</div></div></div>
+                </div>
+                <div class="activity-timeline">
+                  <div class="activity-row"><div class="activity-icon positive"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><div><div class="activity-text"><strong>rajat</strong> approved as supplier</div><div class="activity-date">Trade · recently</div></div></div>
+                  <div class="activity-row"><div class="activity-icon positive"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><div><div class="activity-text"><strong>Nadia Reid</strong> approved as supplier</div><div class="activity-date">Trade · recently</div></div></div>
+                  <div class="activity-row"><div class="activity-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div><div><div class="activity-text">Job <strong>#K-2735</strong> — Thomas Davies</div><div class="activity-date">Biohazard / Trauma Clean · 16 Jul</div></div></div>
+                  <div class="activity-row"><div class="activity-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div><div><div class="activity-text">Job <strong>#K-2779</strong> — Thomas Davies</div><div class="activity-date">End of Tenancy / Deep / Regular / Communal · 8 Jul</div></div></div>
+                  <div class="activity-row"><div class="activity-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 15h6M9 11h3"/></svg></div><div><div class="activity-text"><strong>Tester</strong> joined as a client</div><div class="activity-date">Test · 14 Jul</div></div></div>
+                </div>
+              </div>
+
+              <div class="dash-card">
+                <div class="accent-card-head">
+                  <div class="ach-left"><div class="ach-bar" style="background:#284890;"></div><div><h3>Quick Actions</h3><div class="ach-sub">Jump to the tools you use most</div></div></div>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><path d="M13 2L3 14h7l-1 8 11-14h-8l1-6z"/></svg>
+                </div>
+                <div class="quick-actions-grid">
+                  <div class="quick-action-item" data-action="review-applicants"><div class="qai-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div><div><div class="qai-title">Review Applicants</div><div class="qai-sub">5 pending</div></div></div>
+                  <div class="quick-action-item" data-action="suppliers"><div class="qai-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div><div><div class="qai-title">Suppliers</div><div class="qai-sub">105 verified</div></div></div>
+                  <div class="quick-action-item" data-action="manage-services"><div class="qai-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div><div><div class="qai-title">Manage Services</div><div class="qai-sub">Taxonomy</div></div></div>
+                  <div class="quick-action-item" data-action="clients"><div class="qai-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></div><div><div class="qai-title">Clients</div><div class="qai-sub">47 active</div></div></div>
+                  <div class="quick-action-item" data-action="jobs"><div class="qai-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div><div><div class="qai-title">Jobs</div><div class="qai-sub">39 active</div></div></div>
+                  <div class="quick-action-item" data-action="messages"><div class="qai-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><div><div class="qai-title">Messages</div><div class="qai-sub">Inbox</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
 <script>
 (function () {
   "use strict";
@@ -5061,7 +5577,7 @@
       showToast('Please enter your email and password.');
       return;
     }
-    showToast('Admin dashboard isn\u2019t built in this prototype yet.');
+    showAdminDashboard();
   }
   document.getElementById('adminSignInBtn').addEventListener('click', handleAdminSignIn);
   document.getElementById('adminLoginForm').addEventListener('keydown', function (e) {
@@ -6470,9 +6986,9 @@
         '<span class="meta-badge default" style="text-transform:none;">↑ ' + opts.change + '</span></div>' +
       '<div class="sot-sub">' + opts.period + '</div>' +
       '<div class="sot-stat-row">' +
-        '<div class="sot-stat-box"><div class="ssb-value">' + opts.last90 + '</div><div class="ssb-label">Last 90 Days</div></div>' +
-        '<div class="sot-stat-box"><div class="ssb-value">' + opts.jobsCompleted + '</div><div class="ssb-label">Jobs Completed</div></div>' +
-        '<div class="sot-stat-box"><div class="ssb-value">' + opts.avgPerJob + '</div><div class="ssb-label">Avg per Job</div></div>' +
+        '<div class="sot-stat-box"><div class="ssb-value">' + opts.last90 + '</div><div class="ssb-label">' + (opts.stat1Label || 'Last 90 Days') + '</div></div>' +
+        '<div class="sot-stat-box"><div class="ssb-value">' + opts.jobsCompleted + '</div><div class="ssb-label">' + (opts.stat2Label || 'Jobs Completed') + '</div></div>' +
+        '<div class="sot-stat-box"><div class="ssb-value">' + opts.avgPerJob + '</div><div class="ssb-label">' + (opts.stat3Label || 'Avg per Job') + '</div></div>' +
       '</div>' +
       svg;
   }
@@ -6862,6 +7378,140 @@
   });
   document.getElementById('supNotifCard').addEventListener('click', function () {
     showToast('Job Requests isn\u2019t wired up in this prototype yet.');
+  });
+
+  /* =========================================================
+     ADMIN DASHBOARD
+  ========================================================== */
+  var adminDashboard = document.getElementById('adminDashboard');
+  var adminDashboardRendered = false;
+
+  function renderJobsOverTime() {
+    document.getElementById('jobsOverTimeContent').innerHTML = buildSpendOverTimeChart({
+      value: '134',
+      change: '+0%',
+      period: 'Total jobs booked across the platform',
+      last90: '71',
+      jobsCompleted: '50',
+      avgPerJob: '35%',
+      stat1Label: 'This Month',
+      stat2Label: 'Avg / Month',
+      stat3Label: 'Completion',
+      months: ['Aug', 'Sept', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+      values: [0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.05, 0.35, 0.62, 1.0]
+    });
+  }
+
+  function renderSupplierNetwork() {
+    var segments = [
+      { name: 'Verified', color: '#284890', value: 105, valueLabel: '105' },
+      { name: 'Pending review', color: '#22c55e', value: 5, valueLabel: '5' },
+      { name: 'Incomplete', color: '#f59e0b', value: 33, valueLabel: '33' },
+      { name: 'Rejected', color: '#e8482c', value: 1, valueLabel: '1' }
+    ];
+    document.getElementById('supplierNetworkContent').innerHTML = buildRingChart(segments, '144', 'suppliers');
+  }
+
+  var adminNotifications = [
+    { type: 'job', title: 'Supplier raised a ticket', desc: 'Liam Greenwood: Found work larger than agreed', date: '7 Jul, 16:43', unread: true },
+    { type: 'job', title: 'Supplier raised a ticket', desc: 'Liam Greenwood: Light is not working', date: '27 Jun, 8:39', unread: true },
+    { type: 'job', title: 'Supplier raised a ticket', desc: 'Liam Greenwood: Pipe leakage at Washroom', date: '27 Jun, 7:37', unread: true },
+    { type: 'alert', title: 'Supplier raised a ticket', desc: 'Liam Greenwood: Pipe problem', date: '26 Jun, 22:40', unread: true },
+    { type: 'alert', title: 'Supplier raised a ticket', desc: 'Liam Greenwood: There is an issue with Pipe', date: '26 Jun, 22:38', unread: true },
+    { type: 'alert', title: 'Dispute raised: Appliance Installation (all white goods)', desc: 'A property manager raised a dispute on Appliance Installation (all white goods).', date: '26 Jun, 21:50', unread: true }
+  ];
+
+  var jobIcon = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>';
+  var alertIcon = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>';
+
+  function renderNotifications() {
+    var list = document.getElementById('notifListContent');
+    list.innerHTML = adminNotifications.map(function (n) {
+      return '<div class="notif-row' + (n.unread ? ' unread' : '') + '">' +
+        '<div class="nr-icon type-' + n.type + '">' + (n.type === 'job' ? jobIcon : alertIcon) + '</div>' +
+        '<div class="nr-body"><div class="nr-title">' + n.title + '</div><div class="nr-desc">' + n.desc + '</div><div class="nr-date">' + n.date + '</div></div>' +
+        (n.unread ? '<div class="nr-dot"></div>' : '') +
+      '</div>';
+    }).join('');
+    var unreadCount = adminNotifications.filter(function (n) { return n.unread; }).length;
+    document.querySelector('#adminBellBtn .aib-dot').style.display = unreadCount > 0 ? '' : 'none';
+  }
+
+  var notifPanel = document.getElementById('notifPanel');
+  document.getElementById('adminBellBtn').addEventListener('click', function (e) {
+    e.stopPropagation();
+    notifPanel.classList.toggle('open');
+  });
+  document.addEventListener('click', function (e) {
+    if (notifPanel.classList.contains('open') && !notifPanel.contains(e.target) && e.target.id !== 'adminBellBtn') {
+      notifPanel.classList.remove('open');
+    }
+  });
+  document.getElementById('markAllReadBtn').addEventListener('click', function () {
+    adminNotifications.forEach(function (n) { n.unread = false; });
+    renderNotifications();
+    showToast('All notifications marked as read.');
+  });
+
+  function showAdminDashboard() {
+    if (!adminDashboardRendered) {
+      renderJobsOverTime();
+      renderSupplierNetwork();
+      renderNotifications();
+      adminDashboardRendered = true;
+    }
+    var hour = new Date().getHours();
+    var greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+    document.getElementById('adminDashGreeting').textContent = greeting + ', Admin \uD83D\uDC4B';
+    var d = new Date();
+    var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    document.getElementById('adminDashDate').textContent = days[d.getDay()] + ', ' + months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+
+    closeAdminLogin(function () {
+      adminDashboard.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      requestAnimationFrame(function () { adminDashboard.classList.add('visible'); });
+    });
+  }
+
+  document.getElementById('adminSidebarCollapseBtn').addEventListener('click', function () {
+    document.getElementById('adminDashSidebar').classList.toggle('collapsed');
+  });
+  document.getElementById('adminCollapseFooterBtn').addEventListener('click', function () {
+    document.getElementById('adminDashSidebar').classList.toggle('collapsed');
+  });
+  document.getElementById('adminSignOutBtn').addEventListener('click', function () {
+    adminDashboard.classList.remove('visible');
+    setTimeout(function () {
+      adminDashboard.classList.remove('active');
+      document.body.style.overflow = '';
+      showToast('You\u2019ve been signed out.');
+    }, 200);
+  });
+
+  document.querySelectorAll('#adminDashboard .dash-nav-item[data-nav]').forEach(function (item) {
+    item.addEventListener('click', function () {
+      document.querySelectorAll('#adminDashboard .dash-nav-item[data-nav]').forEach(function (i) { i.classList.remove('active'); });
+      item.classList.add('active');
+      if (item.getAttribute('data-nav') !== 'overview') {
+        showToast(item.querySelector('.nav-label').textContent + ' isn\u2019t wired up in this prototype yet.');
+      }
+    });
+  });
+
+  document.querySelectorAll('.quick-action-item').forEach(function (item) {
+    item.addEventListener('click', function () {
+      showToast(item.querySelector('.qai-title').textContent + ' isn\u2019t wired up in this prototype yet.');
+    });
+  });
+
+  ['adminManageServicesBtn', 'adminReviewApplicantsBtn', 'viewPipelineBtn'].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('click', function () { showToast('This isn\u2019t wired up in this prototype yet.'); });
+  });
+  document.querySelectorAll('#adminDashboard .view-all').forEach(function (el) {
+    el.addEventListener('click', function () { showToast('This isn\u2019t wired up in this prototype yet.'); });
   });
 })();
 </script>
