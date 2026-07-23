@@ -363,12 +363,12 @@
     border-radius: var(--radius-card);
     padding: 26px;
     box-shadow: var(--shadow-card);
-    transition: transform 200ms ease-out, box-shadow 200ms ease-out, border-color 200ms ease-out;
+    transition: transform 280ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 280ms ease-out;
   }
-  .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 28px rgba(16, 24, 40, 0.12);
-    border-color: var(--accent-blue);
+  .card:hover, body .card.reveal.visible:hover {
+    transform: translateY(-8px) scale(1.035);
+    box-shadow: 0 24px 48px rgba(16, 24, 40, 0.18);
+    z-index: 1;
   }
   .icon-box {
     width: 42px; height: 42px;
@@ -377,9 +377,13 @@
     color: var(--accent-blue);
     display: flex; align-items: center; justify-content: center;
     margin-bottom: 18px;
-    transition: background-color 200ms ease-out, color 200ms ease-out;
+    transition: background 280ms ease-out, color 280ms ease-out, transform 280ms cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .card:hover .icon-box { background: var(--navy-900, #101828); color: #fff; }
+  .card:hover .icon-box {
+    background: linear-gradient(135deg, #3a5aa8 0%, #182c58 100%);
+    color: #fff;
+    transform: rotate(-10deg) scale(1.08);
+  }
   .card h3 {
     font-size: 16.5px;
     font-weight: 700;
@@ -458,10 +462,15 @@
     border-radius: var(--radius-card);
     padding: 24px;
     box-shadow: var(--shadow-card);
-    transition: transform 200ms ease-out, box-shadow 200ms ease-out;
+    transition: transform 280ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 280ms ease-out;
   }
-  .feature-row-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(16,24,40,0.1); border-color: var(--accent-blue); }
+  .feature-row-card:hover, body .feature-row-card.reveal.visible:hover { transform: translateY(-6px) scale(1.025); box-shadow: 0 22px 44px rgba(16,24,40,0.16); z-index: 1; }
   .feature-row-card .icon-box { margin-bottom: 0; flex-shrink: 0; }
+  .feature-row-card:hover .icon-box {
+    background: linear-gradient(135deg, #3a5aa8 0%, #182c58 100%);
+    color: #fff;
+    transform: rotate(-10deg) scale(1.08);
+  }
   .feature-row-card h3 { font-size: 15.5px; font-weight: 700; margin-bottom: 6px; }
   .feature-row-card p { font-size: 13.5px; color: var(--text-body-muted); line-height: 1.55; }
 
@@ -478,6 +487,12 @@
     border-radius: var(--radius-card);
     padding: 26px;
     overflow: hidden;
+    transition: transform 280ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 280ms ease-out;
+  }
+  .t-card:hover, body .t-card.reveal.visible:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 24px 50px rgba(0,0,0,0.4);
+    z-index: 1;
   }
   .t-card .quote-mark {
     position: absolute;
@@ -671,7 +686,10 @@
 
   .modal-side {
     position: relative;
-    background: radial-gradient(420px 320px at 78% 8%, #223151 0%, #16213a 45%, #101828 100%);
+    background:
+      radial-gradient(650px 520px at 68% 42%, rgba(70,100,165,0.38) 0%, transparent 62%),
+      radial-gradient(520px 420px at 18% 96%, rgba(50,80,145,0.28) 0%, transparent 60%),
+      linear-gradient(165deg, #17223d 0%, #101a2e 60%, #0c1425 100%);
     padding: 32px 26px;
     width: 352px;
     max-height: 90vh;
