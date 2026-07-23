@@ -194,7 +194,7 @@
   /* ---------- Hero ---------- */
   .hero {
     position: relative;
-    background: radial-gradient(1100px 600px at 50% 0%, #16213a 0%, #101828 55%, #0c1420 100%);
+    background: radial-gradient(1200px 700px at 50% 50%, #141f34 0%, #131d30 50%, #101927 100%);
     overflow: hidden;
     padding: 170px 0 120px;
   }
@@ -1129,9 +1129,13 @@
     display: flex;
     align-items: center;
     gap: 16px;
+    position: relative;
   }
   .ob-topbar .logo svg { height: 19px; color: var(--text-heading); }
-  .ob-step-label { font-size: 14px; font-weight: 700; color: var(--text-heading); }
+  .ob-step-label { font-size: 14px; font-weight: 700; color: var(--text-heading); white-space: nowrap; }
+  #obStepLabel {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  }
   .ob-actions { display: flex; align-items: center; gap: 10px; margin-left: auto; }
   .ob-back-btn {
     display: inline-flex; align-items: center; gap: 6px;
@@ -1307,14 +1311,14 @@
     width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
     display: flex; align-items: center; justify-content: center; margin-top: 1px;
   }
-  .callout-info { background: var(--callout-info-bg, #e8f0f8); }
-  .callout-info .callout-icon { background: #284890; color: #fff; }
+  .callout-info { background: #eef2fa; border: 1px solid #c7d4ed; }
+  .callout-info .callout-icon { background: #dbe4f5; color: #284890; }
   .callout-info .callout-title { color: #1c3a6b; }
   .callout-warning { background: var(--callout-warning-bg, #f8f0c0); }
   .callout-warning .callout-icon { background: #b5891a; color: #fff; }
   .callout-warning .callout-title { color: #7a5c10; }
-  .callout-success { background: var(--callout-success-bg, #d8f8e0); }
-  .callout-success .callout-icon { background: #1a7a3e; color: #fff; }
+  .callout-success { background: #f0fdf4; border: 1px solid #c0f5d4; }
+  .callout-success .callout-icon { background: #d6f5e0; color: #1a7a3e; }
   .callout-success .callout-title { color: #145c2e; }
   .callout-neutral { background: #f8f9fb; border: 1px solid var(--border-subtle); }
   .callout-neutral .callout-icon { background: #64748b; color: #fff; }
@@ -1351,7 +1355,7 @@
   /* Day-of-week pill row */
   .day-pill-row { display: flex; gap: 8px; flex-wrap: wrap; }
   .day-pill {
-    width: 46px; height: 38px; border-radius: 999px;
+    width: 46px; height: 38px; border-radius: 10px;
     border: 1px solid var(--border-subtle); background: #fff;
     display: flex; align-items: center; justify-content: center;
     font-size: 12.5px; font-weight: 600; color: var(--text-body-muted); cursor: pointer;
@@ -1489,9 +1493,10 @@
 
   /* Plain warning bar (no icon circle) — pale amber background, used under an Insurance-style header */
   .plain-warning-bar {
-    background: var(--callout-warning-bg, #f8f0c0);
+    background: #fffbeb;
+    border: 1px solid #f5b342;
     border-radius: 10px; padding: 12px 16px;
-    font-size: 12px; color: #7a5c10; line-height: 1.5;
+    font-size: 12px; color: #8a6416; line-height: 1.5;
     margin-bottom: 16px;
   }
 
@@ -1518,17 +1523,17 @@
   .radio-row .rr-title { font-size: 13px; font-weight: 700; color: var(--text-heading); }
   .radio-row .rr-sub { font-size: 11.5px; color: var(--text-body-muted); margin-top: 2px; line-height: 1.4; }
   /* The "has unspent convictions" option uses an amber highlight instead of the default blue */
-  .radio-row[data-value="has-convictions"].selected { background: var(--callout-warning-bg, #f8f0c0); border-color: #e0c060; }
-  .radio-row[data-value="has-convictions"].selected .rr-circle { border-color: #b5891a; }
-  .radio-row[data-value="has-convictions"].selected .rr-circle::after { background: #b5891a; }
+  .radio-row[data-value="has-convictions"].selected { background: #fffbeb; border-color: #f5b342; }
+  .radio-row[data-value="has-convictions"].selected .rr-circle { border-color: #d99a2b; }
+  .radio-row[data-value="has-convictions"].selected .rr-circle::after { background: #d99a2b; }
   .radio-row-fields {
-    background: var(--callout-warning-bg, #f8f0c0); border-radius: 10px; padding: 16px;
+    background: #fffbeb; border-radius: 10px; padding: 16px;
     margin-top: -2px; margin-bottom: 14px;
   }
-  .radio-row-fields .rrf-label { font-size: 12.5px; font-weight: 700; color: #7a5c10; margin-bottom: 8px; }
-  .radio-row-fields textarea { border-color: #e0c060; }
-  .radio-row-fields .helper { color: #8a6d1a; font-size: 11px; }
-  .radio-row-fields .helper a { color: #7a5c10; text-decoration: underline; font-weight: 700; }
+  .radio-row-fields .rrf-label { font-size: 12.5px; font-weight: 700; color: #8a6416; margin-bottom: 8px; }
+  .radio-row-fields textarea { border-color: #f5b342; }
+  .radio-row-fields .helper { color: #9c8143; font-size: 11px; }
+  .radio-row-fields .helper a { color: #8a6416; text-decoration: underline; font-weight: 700; }
 
   /* Bordered info box (bank account note, VAT verify pairing) — lighter than a full callout */
   .bordered-info-box {
@@ -1636,24 +1641,24 @@
 
   /* Attention banner with jump-to pills */
   .attention-banner {
-    background: var(--callout-warning-bg, #f8f0c0);
-    border: 1px solid #e0c060;
+    background: #fffbeb;
+    border: 1px solid #f5b342;
     border-radius: 12px;
     padding: 14px 18px;
     margin-bottom: 22px;
   }
   .attention-banner .ab-head { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
-  .attention-banner .ab-head svg { color: #b5891a; flex-shrink: 0; }
-  .attention-banner .ab-title { font-size: 13.5px; font-weight: 700; color: #7a5c10; margin-bottom: 0; }
-  .attention-banner .ab-sub { font-size: 12.5px; color: #8a6d1a; margin-bottom: 12px; margin-left: 24px; }
+  .attention-banner .ab-head svg { color: #d99a2b; flex-shrink: 0; }
+  .attention-banner .ab-title { font-size: 13.5px; font-weight: 700; color: #8a6416; margin-bottom: 0; }
+  .attention-banner .ab-sub { font-size: 12.5px; color: #9c8143; margin-bottom: 12px; margin-left: 24px; }
   .attention-jump-row { display: flex; flex-wrap: wrap; gap: 8px; margin-left: 24px; }
   .attention-jump-pill {
-    background: rgba(255,255,255,0.6); border: 1px solid rgba(122,92,16,0.25);
-    color: #7a5c10; font-size: 12px; font-weight: 600;
+    background: #ffffff; border: 1px solid #f0c979;
+    color: #8a6416; font-size: 12px; font-weight: 600;
     padding: 6px 12px; border-radius: 999px; cursor: pointer;
     transition: background-color 150ms ease-out;
   }
-  .attention-jump-pill:hover { background: #fff; }
+  .attention-jump-pill:hover { background: #fffbeb; }
   .attention-jump-pill.done { text-decoration: line-through; opacity: 0.55; cursor: default; }
 
   /* Field required flash (jump-to target highlight) */
@@ -3270,9 +3275,10 @@
             <div class="ob-field" style="margin-bottom:0;">
               <label for="agentCount">How many agents / property managers will use the platform?</label>
               <select class="ob-select" id="agentCount">
+                <option value="" selected disabled>Select...</option>
                 <option value="1">1</option>
                 <option value="2-5">2–5</option>
-                <option value="6-10" selected>6–10</option>
+                <option value="6-10">6–10</option>
                 <option value="11-25">11–25</option>
                 <option value="26-50">26–50</option>
                 <option value="50+">50+</option>
@@ -3347,6 +3353,8 @@
               <input class="field-input" type="text" placeholder="Start typing a postcode or address">
             </div>
           </div>
+
+          <div class="ob-section-heading" style="margin-bottom:14px;">Operating address</div>
 
           <div class="ob-field">
             <label>Operating address</label>
@@ -3430,7 +3438,7 @@
             <div class="ob-section-title">Where are your properties located?</div>
             <div class="ob-section-subtext">London — select the zones you cover</div>
             <div class="simple-chip-row" id="londonZones" style="margin-bottom:22px;">
-              <div class="simple-chip selected" data-value="central">Central</div>
+              <div class="simple-chip" data-value="central">Central</div>
               <div class="simple-chip" data-value="north">North</div>
               <div class="simple-chip" data-value="north-west">North West</div>
               <div class="simple-chip" data-value="north-east">North East</div>
@@ -3716,7 +3724,7 @@
           <div class="ob-section">
             <div class="ob-section-title">What sectors do you serve?</div>
             <div class="tile-row-2" id="sectorTypeTiles">
-              <div class="choice-tile selected" data-value="residential" tabindex="0" role="checkbox" aria-checked="true">
+              <div class="choice-tile" data-value="residential" tabindex="0" role="checkbox" aria-checked="false">
                 <div class="tile-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></div>
                                 <div class="tile-body">
                 <div class="tile-title">Residential</div>
@@ -4004,7 +4012,7 @@
             <div class="ocs-desc">Covers unspent offences only, under the Rehabilitation of Offenders Act 1974.</div>
 
             <div class="radio-row-list" id="convictionTiles">
-              <div class="radio-row selected" data-value="none">
+              <div class="radio-row" data-value="none">
                 <div class="rr-circle"></div>
                 <div>
                   <div class="rr-title">I have no unspent criminal convictions</div>
@@ -4038,7 +4046,7 @@
 
             <div class="ob-field-label-plain">Do you have the right to work in the UK?</div>
             <div class="radio-tile-row cols-2" id="rightToWorkTiles">
-              <div class="radio-tile selected" data-value="yes">
+              <div class="radio-tile" data-value="yes">
                 <div class="rt-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
                 <div class="rt-body">
                   <div class="rt-title">Yes</div>
@@ -4070,7 +4078,7 @@
             <div class="ocs-desc">If yes, VAT will be added to your invoices and we'll verify your number with HMRC.</div>
 
             <div class="radio-tile-row cols-2" id="vatTiles">
-              <div class="radio-tile selected vat-yes-tile" data-value="yes">
+              <div class="radio-tile vat-yes-tile" data-value="yes">
                 <div class="rt-body">
                   <div class="rt-title">Yes, VAT registered</div>
                   <div class="rt-sub">I charge VAT on my invoices</div>
@@ -4083,7 +4091,7 @@
                 </div>
               </div>
             </div>
-            <div class="field-collapsible open" id="vatNumberField">
+            <div class="field-collapsible" id="vatNumberField">
               <div class="vat-verify-row">
                 <input class="field-input" type="text" id="vatNumberInput" placeholder="GB 123 4567 89">
                 <button type="button" class="btn btn-muted-action" id="verifyHmrcBtn" disabled>Verify with HMRC</button>
@@ -4109,7 +4117,7 @@
             </div>
 
             <div class="check-row" id="selfBillingRow" style="margin-top:16px;">
-              <input type="checkbox" id="selfBillingAgree" checked>
+              <input type="checkbox" id="selfBillingAgree">
               <label for="selfBillingAgree">I agree to the <a href="#">self-billing agreement</a> as <strong id="selfBillingName">fern</strong>. This authorises Keylr to issue invoices on my behalf for each period's completed jobs.</label>
             </div>
             <button type="button" class="btn btn-primary" id="signAgreementBtn">Sign agreement</button>
@@ -4190,7 +4198,7 @@
             <div class="ob-row-2">
               <div class="ob-field">
                 <label>How many years of experience do you have?</label>
-                <select class="ob-select"><option>Less than 1 year</option><option selected>1–3 years</option><option>4–7 years</option><option>8–15 years</option><option>15+ years</option></select>
+                <select class="ob-select"><option>Select...</option><option>Less than 1 year</option><option>1–3 years</option><option>4–7 years</option><option>8–15 years</option><option>15+ years</option></select>
               </div>
               <div class="ob-field">
                 <label>How many jobs have you completed?</label>
@@ -4277,7 +4285,7 @@
               <label>Minimum notice for a booking</label>
               <div class="notice-grid" id="noticeTiles">
                 <div class="count-tile" data-value="same-day"><div class="range" style="font-size:13px;">Same day</div><div class="cat-label">No notice</div></div>
-                <div class="count-tile selected" data-value="24h"><div class="range" style="font-size:13px;">24 hours</div><div class="cat-label">Next day</div></div>
+                <div class="count-tile" data-value="24h"><div class="range" style="font-size:13px;">24 hours</div><div class="cat-label">Next day</div></div>
                 <div class="count-tile" data-value="48h"><div class="range" style="font-size:13px;">48 hours</div><div class="cat-label">2 days</div></div>
                 <div class="count-tile" data-value="72h"><div class="range" style="font-size:13px;">72 hours</div><div class="cat-label">3 days</div></div>
                 <div class="count-tile" data-value="1week"><div class="range" style="font-size:13px;">1 week</div><div class="cat-label">Weekly</div></div>
@@ -4304,7 +4312,7 @@
                   <div class="otc-title">I accept emergency call-outs</div>
                   <div class="otc-desc">Rapid response — typically within 1-2 hours</div>
                 </div>
-                <button type="button" class="toggle-switch on" role="switch" aria-checked="true"><span class="thumb"></span></button>
+                <button type="button" class="toggle-switch" role="switch" aria-checked="false"><span class="thumb"></span></button>
               </div>
             </div>
             <div class="ob-toggle-card" style="border:1px solid var(--border-subtle);">
@@ -4313,7 +4321,7 @@
                   <div class="otc-title">I accept urgent same-day jobs</div>
                   <div class="otc-desc">Less than 4 hours' notice</div>
                 </div>
-                <button type="button" class="toggle-switch on" role="switch" aria-checked="true"><span class="thumb"></span></button>
+                <button type="button" class="toggle-switch" role="switch" aria-checked="false"><span class="thumb"></span></button>
               </div>
             </div>
             <div class="callout callout-info" style="padding:12px 16px;margin-bottom:0;">
@@ -4330,7 +4338,7 @@
             <div class="ob-field">
               <label>London zones</label>
               <div class="simple-chip-row" id="supLondonZones">
-                <div class="simple-chip selected" data-value="central">Central</div>
+                <div class="simple-chip" data-value="central">Central</div>
                 <div class="simple-chip" data-value="north">North</div>
                 <div class="simple-chip" data-value="west">West</div>
                 <div class="simple-chip" data-value="northeast">North East</div>
@@ -4338,7 +4346,7 @@
                 <div class="simple-chip" data-value="southeast">South East</div>
                 <div class="simple-chip" data-value="south">South</div>
                 <div class="simple-chip" data-value="southwest">South West</div>
-                <div class="simple-chip" data-value="all-london">All London</div>
+                <div class="simple-chip simple-chip-action" data-value="all-london">All London</div>
               </div>
             </div>
             <div class="ob-field" style="margin-bottom:0;">
@@ -6875,6 +6883,16 @@
   initSingleSelectTiles(document.getElementById('noticeTiles'));
   initMultiSelectTiles(document.getElementById('supLondonZones'));
   initMultiSelectTiles(document.getElementById('supOtherCities'));
+
+  var supAllLondonChip = document.querySelector('#supLondonZones .simple-chip-action');
+  if (supAllLondonChip) {
+    supAllLondonChip.addEventListener('click', function () {
+      var zoneChips = document.querySelectorAll('#supLondonZones .simple-chip:not(.simple-chip-action)');
+      var allSelected = Array.prototype.every.call(zoneChips, function (c) { return c.classList.contains('selected'); });
+      zoneChips.forEach(function (c) { c.classList.toggle('selected', !allSelected); });
+    });
+  }
+
   document.querySelectorAll('#supObApp .toggle-switch').forEach(function (toggle) {
     if (toggle.id) return; // already wired individually above
     toggle.addEventListener('click', function () {
