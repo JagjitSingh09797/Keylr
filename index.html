@@ -1170,7 +1170,8 @@
     line-height: 1.7;
   }
   .meta-badge.optional { background: #eef1f5; color: #64748b; }
-  .meta-badge.auto { background: #f0f0f8; color: #4c4c9c; }
+  .meta-badge.auto { background: #f0fcf2; color: #3a7646; }
+  .meta-badge.dac7 { background: #f0f0f8; color: #4c4c9c; }
   .meta-badge.approval { background: #f8f0c0; color: #8a6d1a; }
   .meta-badge.default { background: #d8f8e0; color: #1a7a3e; }
   .meta-badge.required-badge { background: #f8e8e8; color: #b5424a; }
@@ -1182,8 +1183,7 @@
   }
 
   /* Choice tiles (sector picker, single/multi) */
-  .tile-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-  @media (max-width: 640px) { .tile-grid { grid-template-columns: 1fr; } }
+  .tile-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
   .choice-tile {
     position: relative;
     background: #ffffff;
@@ -1242,10 +1242,13 @@
 
   /* Select input styled like field-input */
   .ob-select {
-    width: 100%; padding: 12px 14px; border-radius: 11px;
+    width: 100%; padding: 12px 38px 12px 14px; border-radius: 11px;
     border: 1px solid var(--border-subtle); font-size: 14.5px; font-family: inherit;
     color: var(--text-heading); background: #fff; cursor: pointer;
     transition: border-color 150ms ease-out, box-shadow 150ms ease-out;
+    appearance: none; -webkit-appearance: none; -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 12px center; background-size: 16px;
   }
   .ob-select:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(40,72,144,0.15); outline: none; }
 
@@ -1284,7 +1287,7 @@
   .callout-success { background: var(--callout-success-bg, #d8f8e0); }
   .callout-success .callout-icon { background: #1a7a3e; color: #fff; }
   .callout-success .callout-title { color: #145c2e; }
-  .callout-neutral { background: #f1f3f6; }
+  .callout-neutral { background: #f8f9fb; border: 1px solid var(--border-subtle); }
   .callout-neutral .callout-icon { background: #64748b; color: #fff; }
   .callout-neutral .callout-title { color: #334155; }
   .callout .callout-title { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
@@ -1328,8 +1331,8 @@
   .day-pill:hover:not(.selected) { border-color: #90a8c8; }
   .day-pill.selected { background: var(--tile-selected-bg, #e8f0f8); border-color: var(--tile-selected-border, #284890); color: var(--accent-blue); }
   .time-row { display: flex; align-items: center; gap: 12px; margin-top: 14px; }
-  .time-row .ob-select { width: auto; min-width: 110px; }
-  .time-row .time-sep { font-size: 13px; color: var(--text-body-muted); }
+  .time-row .ob-select { width: auto; flex: 1; min-width: 0; }
+  .time-row .time-sep { font-size: 13px; color: var(--text-body-muted); flex-shrink: 0; }
 
   /* File upload dropzone */
   .file-dropzone {
@@ -1392,6 +1395,8 @@
     transition: background-color 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out;
   }
   .simple-chip:hover:not(.selected) { border-color: #90a8c8; }
+  .simple-chip-action { border-style: dashed; color: var(--accent-blue); font-weight: 700; }
+  .simple-chip-action:hover { border-color: var(--accent-blue); background: var(--icon-tint-bg); }
   .simple-chip.selected { background: var(--tile-selected-bg, #e8f0f8); border-color: var(--accent-blue); color: var(--accent-blue); }
 
   /* Contact card (Step 5) */
@@ -2964,8 +2969,7 @@
           <p class="ob-subtext">Help us understand your business so we can match you with the right service providers.</p>
 
           <div class="ob-section">
-            <div class="ob-section-title">What sectors do you manage properties in?</div>
-            <div class="ob-section-subtext">SELECT ALL THAT APPLY</div>
+            <div class="ob-section-title">What sectors do you manage properties in? <span class="meta-badge optional">Select all that apply</span></div>
             <div class="tile-grid" id="sectorTiles">
               <div class="choice-tile" data-value="estate-agent" tabindex="0" role="checkbox" aria-checked="false">
                 <div class="tile-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></div>
@@ -3030,8 +3034,8 @@
           <div class="ob-field">
             <label for="tradingName">Commercial / trading name<span class="req">*</span></label>
             <input class="field-input" type="text" id="tradingName" value="Thames House Properties">
-            <div class="prefilled-badge">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            <div class="ai-hint-pill">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg>
               Pre-filled from sign up — editable
             </div>
           </div>
@@ -3062,7 +3066,7 @@
             <div class="ob-field">
               <label for="companyRegNo">Company registration number</label>
               <input class="field-input" type="text" id="companyRegNo" placeholder="e.g. 12345678">
-              <div class="helper">Auto-fills company name &amp; registered address</div>
+              <div class="ai-hint-pill"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg>Auto-fills company name &amp; registered address</div>
             </div>
             <div class="ob-field">
               <label for="legalCompanyName">Legal company name <span class="meta-badge auto">Auto</span></label>
@@ -3086,25 +3090,29 @@
               <label>Trading address</label>
               <input class="field-input" type="text" placeholder="Start typing a postcode or address">
             </div>
-            <div class="ob-field">
-              <label>Operating address</label>
-              <input class="field-input" type="text" placeholder="Start typing a postcode or address">
-            </div>
           </div>
-
-          <div class="ob-section-heading">&nbsp;</div>
 
           <div class="ob-field">
-            <div class="toggle-row">
-              <span class="toggle-label">Are you VAT registered?</span>
+            <label>Operating address</label>
+            <input class="field-input" type="text" placeholder="Start typing a postcode or address">
+          </div>
+
+          <div class="ob-toggle-card">
+            <div class="otc-top">
+              <div>
+                <div class="otc-title">Are you VAT registered?</div>
+                <div class="otc-desc">Your VAT number will be added to all invoices</div>
+              </div>
               <button type="button" class="toggle-switch" id="vatToggle" role="switch" aria-checked="false"><span class="thumb"></span></button>
             </div>
-          </div>
-          <div class="field-collapsible" id="vatField">
-            <div class="ob-field">
-              <label for="vatNumber">VAT number</label>
-              <input class="field-input" type="text" id="vatNumber" placeholder="GB 123 456 789">
-              <div class="helper">Format: GB followed by 9 digits. Your VAT number will be added to all invoices.</div>
+            <div class="field-collapsible" id="vatField">
+              <div class="otc-body">
+                <div class="ob-field" style="margin-bottom:0;">
+                  <label for="vatNumber">VAT number</label>
+                  <input class="field-input" type="text" id="vatNumber" placeholder="GB 123 456 789">
+                  <div class="helper">Format: GB followed by 9 digits.</div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -3168,19 +3176,22 @@
             <div class="simple-chip-row" id="londonZones" style="margin-bottom:22px;">
               <div class="simple-chip selected" data-value="central">Central</div>
               <div class="simple-chip" data-value="north">North</div>
-              <div class="simple-chip" data-value="south">South</div>
+              <div class="simple-chip" data-value="north-west">North West</div>
+              <div class="simple-chip" data-value="north-east">North East</div>
               <div class="simple-chip" data-value="east">East</div>
+              <div class="simple-chip" data-value="south-east">South East</div>
+              <div class="simple-chip" data-value="south">South</div>
+              <div class="simple-chip" data-value="south-west">South West</div>
               <div class="simple-chip" data-value="west">West</div>
+              <div class="simple-chip simple-chip-action" data-value="all-london">All London</div>
             </div>
 
             <div class="ob-section-title" style="font-size:13.5px;">Other cities / regions <span class="meta-badge optional">Optional</span></div>
             <div class="simple-chip-row" id="otherRegions" style="margin-bottom:12px;">
-              <div class="simple-chip" data-value="north-east">North East</div>
-              <div class="simple-chip" data-value="east-region">East</div>
-              <div class="simple-chip" data-value="south-east">South East</div>
-              <div class="simple-chip" data-value="south-region">South</div>
               <div class="simple-chip" data-value="manchester">Manchester</div>
+              <div class="simple-chip" data-value="birmingham">Birmingham</div>
               <div class="simple-chip" data-value="bristol">Bristol</div>
+              <div class="simple-chip" data-value="leeds">Leeds</div>
               <div class="simple-chip" data-value="liverpool">Liverpool</div>
               <div class="simple-chip" data-value="cambridge">Cambridge</div>
               <div class="simple-chip" data-value="oxford">Oxford</div>
@@ -3212,7 +3223,7 @@
                 <span class="sel-chip" data-value="Dezrez">Dezrez <button type="button" aria-label="Remove Dezrez"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>
                 <span class="sel-chip" data-value="Agent Pro">Agent Pro <button type="button" aria-label="Remove Agent Pro"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>
               </div>
-              <div class="helper">e.g. Fixflo, Arthur Online, Re-Leased, Yardi, MRI, Hostaway, Guesty. Helps us understand integrations you may need.</div>
+              <div class="helper" style="font-size:10.5px;padding-top:6px;">e.g. Fixflo, Arthur Online, Re-Leased, Yardi, MRI, Hostaway, Guesty. Helps us understand integrations you may need.</div>
             </div>
           </div>
         </section>
@@ -3270,14 +3281,13 @@
           </div>
 
           <div class="callout callout-neutral" id="depositsCallout">
-            <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg></div>
             <div>
               <div class="callout-title">About Supplier Deposits</div>
               <div class="callout-body">Some suppliers may request a deposit for certain jobs. In these cases Keylr generates an option to pay the deposit upfront and leaves the remaining amount for your billing cycle. This is always shown clearly before you confirm a job.</div>
             </div>
           </div>
 
-          <div class="callout callout-warning" id="approvalProcessCallout" style="display:none;">
+          <div class="callout callout-warning" id="approvalProcessCallout">
             <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg></div>
             <div style="width:100%;">
               <div class="callout-title">Billing Cycle Approval Process</div>
@@ -3326,8 +3336,8 @@
                 <div class="ob-field"><label>Email</label><input class="field-input" type="email" id="supportEmail" value="jordan@thameshouse.co.uk"></div>
               </div>
             </div>
-            <div class="prefilled-badge">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            <div class="ai-hint-pill">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg>
               Pre-filled from sign up — untick to enter a different person
             </div>
           </div>
@@ -3376,7 +3386,9 @@
             </div>
           </div>
 
-          <p class="ob-subtext" style="margin-bottom:0;">By submitting, you confirm that all information provided is accurate. Keylr will review your account and contact you within 1-2 business days. You can explore the platform in the meantime.</p>
+          <div class="callout callout-neutral" style="margin-bottom:0;">
+            <div class="callout-body">By submitting, you confirm that all information provided is accurate. Keylr will review your account and contact you within 1-2 business days. You can explore the platform in the meantime.</div>
+          </div>
         </section>
       </div>
     </div>
@@ -3507,7 +3519,7 @@
           </div>
 
           <div class="ob-field">
-            <label for="supFullName">Full legal name <span class="req-text">Required</span> <span class="meta-badge auto">DAC7</span></label>
+            <label for="supFullName">Full legal name <span class="req-text">Required</span> <span class="meta-badge dac7">DAC7</span></label>
             <input class="field-input" type="text" id="supFullName" placeholder="Fern Whitfield">
           </div>
 
@@ -3527,7 +3539,7 @@
 
           <div class="ob-row-2">
             <div class="ob-field">
-              <label for="supDob">Date of birth <span class="req-text">Required</span> <span class="meta-badge auto">DAC7</span></label>
+              <label for="supDob">Date of birth <span class="req-text">Required</span> <span class="meta-badge dac7">DAC7</span></label>
               <input class="field-input" type="date" id="supDob">
             </div>
             <div class="ob-field">
@@ -3539,7 +3551,7 @@
           </div>
 
           <div class="ob-field">
-            <label for="supNiNumber">NI number <span class="req-text">Required</span> <span class="meta-badge auto">DAC7</span></label>
+            <label for="supNiNumber">NI number <span class="req-text">Required</span> <span class="meta-badge dac7">DAC7</span></label>
             <input class="field-input" type="text" id="supNiNumber" placeholder="QQ 12 34 56 C">
           </div>
 
@@ -3562,7 +3574,7 @@
             </div>
           </div>
 
-          <div class="ob-section-heading">Proof of Address <span class="meta-badge auto" style="text-transform:none;">DAC7</span></div>
+          <div class="ob-section-heading">Proof of Address <span class="meta-badge dac7" style="text-transform:none;">DAC7</span></div>
           <div class="ob-row-2">
             <div class="ob-field">
               <label>Upload Proof of Address <span class="req-text">Required</span></label>
@@ -5485,7 +5497,7 @@
   /* ---- Generic tile group helpers ---- */
   function initMultiSelectTiles(container) {
     if (!container) return;
-    container.querySelectorAll('.choice-tile, .count-tile, .simple-chip').forEach(function (tile) {
+    container.querySelectorAll('.choice-tile, .count-tile, .simple-chip:not(.simple-chip-action)').forEach(function (tile) {
       tile.addEventListener('click', function () {
         var isSelected = tile.classList.toggle('selected');
         if (tile.hasAttribute('aria-checked')) tile.setAttribute('aria-checked', isSelected ? 'true' : 'false');
@@ -5563,6 +5575,15 @@
   // Step 3
   initMultiSelectTiles(document.getElementById('londonZones'));
   initMultiSelectTiles(document.getElementById('otherRegions'));
+
+  var allLondonChip = document.querySelector('#londonZones .simple-chip-action');
+  if (allLondonChip) {
+    allLondonChip.addEventListener('click', function () {
+      var zoneChips = document.querySelectorAll('#londonZones .simple-chip:not(.simple-chip-action)');
+      var allSelected = Array.prototype.every.call(zoneChips, function (c) { return c.classList.contains('selected'); });
+      zoneChips.forEach(function (c) { c.classList.toggle('selected', !allSelected); });
+    });
+  }
 
   var customRegionInput = document.getElementById('customRegionInput');
   customRegionInput.addEventListener('keydown', function (e) {
@@ -5657,11 +5678,7 @@
 
   // Step 4
   var depositsCallout = document.getElementById('depositsCallout');
-  var approvalProcessCallout = document.getElementById('approvalProcessCallout');
-  initSingleSelectTiles(document.getElementById('billingCycleCards'), function (value) {
-    var needsApproval = value === 'fortnightly' || value === 'monthly';
-    approvalProcessCallout.style.display = needsApproval ? 'flex' : 'none';
-  });
+  initSingleSelectTiles(document.getElementById('billingCycleCards'));
 
   // Step 5: "same as onboarding contact" pre-fill behavior
   function initSameAsContact(checkboxId, fieldsId) {
