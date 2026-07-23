@@ -175,6 +175,20 @@
   }
   .btn-login:hover { background: rgba(255,255,255,0.1); }
 
+  .btn-admin {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: #e2e8f0;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 10px 16px;
+    border-radius: var(--radius-input);
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.15);
+    transition: background-color 150ms ease-out, border-color 150ms ease-out;
+  }
+  .btn-admin:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.28); }
+  .btn-admin svg { flex-shrink: 0; }
+
   /* ---------- Hero ---------- */
   .hero {
     position: relative;
@@ -801,7 +815,7 @@
     max-height: 0;
     opacity: 0;
     overflow: hidden;
-    transition: max-height 260ms ease-out, opacity 200ms ease-out, margin 260ms ease-out;
+    transition: max-height 320ms cubic-bezier(0.4, 0, 0.2, 1), opacity 260ms ease-out, margin 320ms cubic-bezier(0.4, 0, 0.2, 1);
     margin-bottom: 0;
   }
   .field-collapsible.open {
@@ -1060,7 +1074,7 @@
   .ob-app {
     position: fixed;
     inset: 0;
-    background: var(--app-bg, #f8f8f8);
+    background: var(--app-bg, #eeeff2);
     z-index: 300;
     display: none;
     flex-direction: column;
@@ -1077,12 +1091,19 @@
     flex-shrink: 0;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0 28px;
+  }
+  .ob-topbar-inner {
+    width: 100%;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
   }
   .ob-topbar .logo svg { height: 19px; color: var(--text-heading); }
   .ob-step-label { font-size: 14px; font-weight: 700; color: var(--text-heading); }
-  .ob-actions { display: flex; align-items: center; gap: 10px; }
+  .ob-actions { display: flex; align-items: center; gap: 10px; margin-left: auto; }
   .ob-back-btn {
     display: inline-flex; align-items: center; gap: 6px;
     font-size: 14px; font-weight: 600; color: var(--text-body-muted);
@@ -1093,10 +1114,19 @@
   .ob-back-btn[hidden] { display: none; }
 
   .ob-progress-track { height: 3px; background: #e2e8f0; flex-shrink: 0; }
+  .ob-topbar-logo-group { display: flex; align-items: center; gap: 16px; }
+  .ob-inline-progress-track { width: 90px; height: 4px; border-radius: 999px; background: #e2e8f0; overflow: hidden; flex-shrink: 0; }
+  .ob-inline-progress-fill { height: 100%; background: var(--accent-blue); border-radius: 999px; transition: width 320ms ease-out; }
+  .profile-dot-stepper { display: none; justify-content: center; align-items: center; gap: 6px; padding: 10px 0; flex-shrink: 0; }
+  .profile-dot-stepper.show { display: flex; }
+  .stepper-dot { height: 6px; border-radius: 999px; background: #cbd5e1; transition: width 250ms ease-out, background-color 250ms ease-out; }
+  .stepper-dot.done { width: 6px; background: var(--accent-blue); }
+  .stepper-dot.current { width: 28px; background: var(--accent-blue); }
+  .stepper-dot.upcoming { width: 6px; background: #cbd5e1; }
   .ob-progress-fill { height: 100%; background: #102048; width: 20%; transition: width 320ms ease-out; }
 
   .ob-content { flex: 1; overflow-y: auto; padding: 44px 0 80px; }
-  .ob-container { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+  .ob-container { max-width: 980px; margin: 0 auto; padding: 0 24px; }
 
   .ob-step { display: none; }
   .ob-step.active { display: block; animation: ob-step-in 320ms cubic-bezier(0.16,1,0.3,1); }
@@ -1108,28 +1138,28 @@
     .ob-step.active { animation: none; }
   }
 
-  .ob-step h2 { font-size: 26px; font-weight: 800; color: var(--text-heading); margin-bottom: 8px; letter-spacing: -0.01em; }
-  .ob-step > .ob-subtext { font-size: 14.5px; color: var(--text-body-muted); line-height: 1.6; margin-bottom: 36px; max-width: 620px; }
+  .ob-step h2 { font-size: 22px; font-weight: 800; color: var(--text-heading); margin-bottom: 6px; letter-spacing: -0.01em; }
+  .ob-step > .ob-subtext { font-size: 13px; color: var(--text-body-muted); line-height: 1.55; margin-bottom: 24px; max-width: 640px; }
 
-  .ob-section { margin-bottom: 36px; }
+  .ob-section { margin-bottom: 24px; }
   .ob-section-title {
-    font-size: 15px; font-weight: 700; color: var(--text-heading);
+    font-size: 13.5px; font-weight: 700; color: var(--text-heading);
     display: flex; align-items: center; gap: 10px; margin-bottom: 6px;
   }
-  .ob-section-subtext { font-size: 13px; color: var(--text-body-muted); margin-bottom: 16px; }
+  .ob-section-subtext { font-size: 11.5px; color: var(--text-body-muted); margin-bottom: 14px; }
   .ob-section-heading {
-    font-size: 17px; font-weight: 700; color: var(--text-heading);
-    margin: 8px 0 4px; padding-top: 20px; border-top: 1px solid var(--border-subtle);
+    font-size: 15px; font-weight: 700; color: var(--text-heading);
+    margin: 6px 0 3px; padding-top: 16px; border-top: 1px solid var(--border-subtle);
   }
   .ob-section-heading:first-child { border-top: none; padding-top: 0; }
 
-  .ob-field { margin-bottom: 18px; }
+  .ob-field { margin-bottom: 16px; }
   .ob-field label {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 13.5px; font-weight: 600; color: var(--text-heading); margin-bottom: 6px;
+    display: flex; align-items: center; gap: 7px;
+    font-size: 12.5px; font-weight: 600; color: var(--text-heading); margin-bottom: 5px;
   }
-  .ob-field .helper { font-size: 12.5px; color: var(--text-body-muted); margin-top: 5px; line-height: 1.5; }
-  .ob-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .ob-field .helper { font-size: 11.5px; color: var(--text-body-muted); margin-top: 4px; line-height: 1.45; }
+  .ob-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   @media (max-width: 640px) { .ob-row-2 { grid-template-columns: 1fr; } }
 
   /* Metadata badges */
@@ -1159,8 +1189,11 @@
     background: #ffffff;
     border: 1px solid var(--border-subtle);
     border-radius: 12px;
-    padding: 16px;
+    padding: 13px 16px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
     transition: background-color 180ms ease-out, border-color 180ms ease-out,
                 box-shadow 180ms ease-out, transform 150ms ease-out;
   }
@@ -1174,10 +1207,11 @@
     width: 34px; height: 34px; border-radius: 9px;
     background: var(--icon-tint-bg); color: var(--accent-blue);
     display: flex; align-items: center; justify-content: center;
-    margin-bottom: 12px;
+    flex-shrink: 0;
   }
-  .choice-tile .tile-title { font-size: 14.5px; font-weight: 700; color: var(--text-heading); margin-bottom: 5px; }
-  .choice-tile .tile-desc { font-size: 12.5px; color: var(--text-body-muted); line-height: 1.5; }
+  .choice-tile .tile-body { padding-right: 20px; min-width: 0; }
+  .choice-tile .tile-title { font-size: 13.5px; font-weight: 700; color: var(--text-heading); margin-bottom: 3px; }
+  .choice-tile .tile-desc { font-size: 12px; color: var(--text-body-muted); line-height: 1.45; }
   .choice-tile .tile-check {
     position: absolute; top: 12px; right: 12px;
     width: 20px; height: 20px; border-radius: 50%;
@@ -1285,31 +1319,33 @@
   /* Day-of-week pill row */
   .day-pill-row { display: flex; gap: 8px; flex-wrap: wrap; }
   .day-pill {
-    width: 46px; height: 38px; border-radius: 9px;
+    width: 46px; height: 38px; border-radius: 999px;
     border: 1px solid var(--border-subtle); background: #fff;
     display: flex; align-items: center; justify-content: center;
     font-size: 12.5px; font-weight: 600; color: var(--text-body-muted); cursor: pointer;
     transition: background-color 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out;
   }
   .day-pill:hover:not(.selected) { border-color: #90a8c8; }
-  .day-pill.selected { background: var(--accent-blue); border-color: var(--accent-blue); color: #fff; }
+  .day-pill.selected { background: var(--tile-selected-bg, #e8f0f8); border-color: var(--tile-selected-border, #284890); color: var(--accent-blue); }
   .time-row { display: flex; align-items: center; gap: 12px; margin-top: 14px; }
   .time-row .ob-select { width: auto; min-width: 110px; }
   .time-row .time-sep { font-size: 13px; color: var(--text-body-muted); }
 
   /* File upload dropzone */
   .file-dropzone {
-    border: 1.5px dashed var(--border-subtle); border-radius: 12px;
-    padding: 26px; text-align: center; cursor: pointer;
+    border: 1.5px dashed var(--border-subtle); border-radius: 11px;
+    padding: 12px 14px; cursor: pointer; background: #fff;
+    display: flex; align-items: center; gap: 10px;
     transition: border-color 150ms ease-out, background-color 150ms ease-out;
   }
   .file-dropzone:hover, .file-dropzone.dragover { border-color: var(--accent-blue); background: #f8faff; }
   .file-dropzone .fd-icon {
-    width: 40px; height: 40px; border-radius: 10px; background: var(--icon-tint-bg); color: var(--accent-blue);
-    display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;
+    color: var(--accent-blue);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
-  .file-dropzone .fd-label { font-size: 13.5px; font-weight: 600; color: var(--accent-blue); }
-  .file-dropzone .fd-filename { font-size: 13px; color: var(--text-heading); font-weight: 600; margin-top: 6px; }
+  .file-dropzone .fd-label { font-size: 13px; font-weight: 600; color: var(--accent-blue); white-space: nowrap; }
+  .file-dropzone .fd-label .fd-sub { font-weight: 400; color: var(--text-body-muted); margin-left: 4px; }
+  .file-dropzone .fd-filename { font-size: 12px; color: var(--text-heading); font-weight: 600; margin-left: auto; }
 
   /* Chip multiselect with search */
   .chip-multiselect { position: relative; }
@@ -1356,7 +1392,7 @@
     transition: background-color 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out;
   }
   .simple-chip:hover:not(.selected) { border-color: #90a8c8; }
-  .simple-chip.selected { background: var(--accent-blue); border-color: var(--accent-blue); color: #fff; }
+  .simple-chip.selected { background: var(--tile-selected-bg, #e8f0f8); border-color: var(--accent-blue); color: var(--accent-blue); }
 
   /* Contact card (Step 5) */
   .contact-card {
@@ -1391,6 +1427,117 @@
   /* =========================================================
      SUPPLIER ONBOARDING — additional components
   ========================================================== */
+
+  /* "Required" as plain red text (not a pill) next to a field label */
+  .req-text {
+    display: inline-flex; align-items: center;
+    background: #fce8e8; color: var(--required-red);
+    font-weight: 700; font-size: 10.5px; text-transform: none;
+    padding: 2px 8px; border-radius: 999px;
+  }
+  .ob-field-label-plain { font-size: 12.5px; font-weight: 600; color: var(--text-heading); margin-bottom: 8px; }
+
+  /* Card-wrapped section: icon + title + optional badge header, description, then body content —
+     used for Insurance, DBS, Criminal Record, Right to Work, and each Setup Profile section */
+  .ob-card-section {
+    background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px;
+    padding: 20px 22px; margin-bottom: 16px;
+  }
+  .ocs-head { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .ocs-icon {
+    width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0;
+    background: var(--icon-tint-bg); color: var(--accent-blue);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ocs-title { font-size: 14px; font-weight: 700; color: var(--text-heading); }
+  .ocs-desc { font-size: 12px; color: var(--text-body-muted); line-height: 1.5; margin: 6px 0 16px; }
+  .ob-card-section .ocs-divider { border-top: 1px solid var(--border-subtle); margin: 0 -22px 16px; }
+
+  /* Plain warning bar (no icon circle) — pale amber background, used under an Insurance-style header */
+  .plain-warning-bar {
+    background: var(--callout-warning-bg, #f8f0c0);
+    border-radius: 10px; padding: 12px 16px;
+    font-size: 12px; color: #7a5c10; line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  /* Radio-row list (Criminal Record Declaration style) */
+  .radio-row-list { display: flex; flex-direction: column; gap: 0; }
+  .radio-row {
+    display: flex; align-items: flex-start; gap: 12px;
+    border: 1px solid var(--border-subtle); border-radius: 10px;
+    padding: 14px 16px; cursor: pointer; margin-bottom: 10px;
+    transition: border-color 150ms ease-out, background-color 150ms ease-out;
+  }
+  .radio-row:hover:not(.selected) { border-color: #90a8c8; }
+  .radio-row.selected { background: var(--tile-selected-bg, #e8f0f8); border-color: var(--tile-selected-border, #284890); }
+  .radio-row .rr-circle {
+    width: 18px; height: 18px; border-radius: 50%; border: 2px solid #cbd5e1; flex-shrink: 0; margin-top: 1px;
+    display: flex; align-items: center; justify-content: center; transition: border-color 150ms ease-out;
+  }
+  .radio-row.selected .rr-circle { border-color: var(--accent-blue); }
+  .radio-row .rr-circle::after {
+    content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--accent-blue);
+    transform: scale(0); transition: transform 150ms ease-out;
+  }
+  .radio-row.selected .rr-circle::after { transform: scale(1); }
+  .radio-row .rr-title { font-size: 13px; font-weight: 700; color: var(--text-heading); }
+  .radio-row .rr-sub { font-size: 11.5px; color: var(--text-body-muted); margin-top: 2px; line-height: 1.4; }
+  /* The "has unspent convictions" option uses an amber highlight instead of the default blue */
+  .radio-row[data-value="has-convictions"].selected { background: var(--callout-warning-bg, #f8f0c0); border-color: #e0c060; }
+  .radio-row[data-value="has-convictions"].selected .rr-circle { border-color: #b5891a; }
+  .radio-row[data-value="has-convictions"].selected .rr-circle::after { background: #b5891a; }
+  .radio-row-fields {
+    background: var(--callout-warning-bg, #f8f0c0); border-radius: 10px; padding: 16px;
+    margin-top: -2px; margin-bottom: 14px;
+  }
+  .radio-row-fields .rrf-label { font-size: 12.5px; font-weight: 700; color: #7a5c10; margin-bottom: 8px; }
+  .radio-row-fields textarea { border-color: #e0c060; }
+  .radio-row-fields .helper { color: #8a6d1a; font-size: 11px; }
+  .radio-row-fields .helper a { color: #7a5c10; text-decoration: underline; font-weight: 700; }
+
+  /* Bordered info box (bank account note, VAT verify pairing) — lighter than a full callout */
+  .bordered-info-box {
+    border: 1px solid var(--border-subtle); background: var(--icon-tint-bg);
+    border-radius: 10px; padding: 14px 16px; font-size: 12px; color: #3a5a8a; line-height: 1.55; margin-bottom: 14px;
+  }
+  .bordered-info-box strong { color: var(--text-heading); }
+  .bordered-fee-box {
+    border: 1px solid var(--border-subtle); background: var(--icon-tint-bg);
+    border-radius: 10px; padding: 14px 16px; display: flex; gap: 10px; align-items: flex-start;
+  }
+  .bordered-fee-box .bfb-icon { color: var(--accent-blue); flex-shrink: 0; margin-top: 1px; }
+  .bordered-fee-box .bfb-text { font-size: 12px; color: #3a5a8a; line-height: 1.5; }
+  .bordered-fee-box .bfb-text strong { color: var(--text-heading); }
+
+  /* Clickable agreement-link card row */
+  .agreement-link-row {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--surface-soft); border-radius: 10px; padding: 12px 16px;
+    cursor: pointer; transition: background-color 150ms ease-out;
+  }
+  .agreement-link-row:hover { background: #eef1f5; }
+  .agreement-link-row .alr-icon { width: 26px; height: 26px; border-radius: 7px; background: #fff; border: 1px solid var(--border-subtle); color: var(--text-body-muted); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .agreement-link-row .alr-title { font-size: 13px; font-weight: 700; color: var(--text-heading); }
+  .agreement-link-row .alr-sub { font-size: 11px; color: var(--text-body-muted); margin-top: 1px; }
+  .agreement-link-row .alr-chevron { margin-left: auto; color: var(--text-body-muted); flex-shrink: 0; }
+  .version-badge { font-size: 11px; color: var(--text-body-muted); font-weight: 600; }
+
+  /* VAT "Yes" tile uses a green highlight instead of the usual blue when selected */
+  .radio-tile.vat-yes-tile.selected { background: #d8f8e0; border-color: #22c55e; }
+  .radio-tile.vat-yes-tile.selected .rt-title { color: #14532d; }
+  .vat-verify-row { display: flex; gap: 10px; margin-top: 14px; }
+  .vat-verify-row input { flex: 1; min-width: 0; }
+  .vat-verify-row .btn-muted-action { flex-shrink: 0; white-space: nowrap; }
+
+  /* AI auto-fill hint pill (sparkle + text, pale lavender) */
+  .ai-hint-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--icon-tint-bg); color: #3a5a8a;
+    font-size: 11px; font-weight: 600; padding: 6px 12px; border-radius: 999px;
+    margin-top: 8px;
+  }
+  .ai-hint-pill svg { flex-shrink: 0; color: var(--accent-blue); }
 
   /* ---- Shared upload popups (method choice + QR code) ---- */
   .upload-method-overlay, .qr-upload-overlay {
@@ -1451,18 +1598,21 @@
   @media (prefers-reduced-motion: reduce) { .qr-waiting-pill svg { animation: none; } }
 
   .file-dropzone.uploaded { border-style: solid; border-color: #22c55e; background: #f0fdf4; }
-  .file-dropzone .fd-uploaded-name { font-size: 12.5px; font-weight: 600; color: #1a7a3e; margin-top: 4px; display: flex; align-items: center; gap: 6px; justify-content: center; }
+  .file-dropzone .fd-uploaded-name { font-size: 12px; font-weight: 600; color: #1a7a3e; display: flex; align-items: center; gap: 5px; margin-left: auto; }
 
   /* Attention banner with jump-to pills */
   .attention-banner {
     background: var(--callout-warning-bg, #f8f0c0);
+    border: 1px solid #e0c060;
     border-radius: 12px;
     padding: 14px 18px;
     margin-bottom: 22px;
   }
-  .attention-banner .ab-title { font-size: 13.5px; font-weight: 700; color: #7a5c10; margin-bottom: 3px; }
-  .attention-banner .ab-sub { font-size: 12.5px; color: #8a6d1a; margin-bottom: 12px; }
-  .attention-jump-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .attention-banner .ab-head { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
+  .attention-banner .ab-head svg { color: #b5891a; flex-shrink: 0; }
+  .attention-banner .ab-title { font-size: 13.5px; font-weight: 700; color: #7a5c10; margin-bottom: 0; }
+  .attention-banner .ab-sub { font-size: 12.5px; color: #8a6d1a; margin-bottom: 12px; margin-left: 24px; }
+  .attention-jump-row { display: flex; flex-wrap: wrap; gap: 8px; margin-left: 24px; }
   .attention-jump-pill {
     background: rgba(255,255,255,0.6); border: 1px solid rgba(122,92,16,0.25);
     color: #7a5c10; font-size: 12px; font-weight: 600;
@@ -1482,6 +1632,7 @@
   /* Toggle row inside a card (label + description + switch) */
   .ob-toggle-card {
     border: 1px solid var(--border-subtle); border-radius: 12px; padding: 16px 18px; margin-bottom: 16px;
+    background: #fff;
   }
   .ob-toggle-card .otc-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
   .ob-toggle-card .otc-title { font-size: 14px; font-weight: 700; color: var(--text-heading); display: flex; align-items: center; gap: 8px; }
@@ -1495,23 +1646,37 @@
   @media (max-width: 640px) { .radio-tile-row.cols-2, .radio-tile-row.cols-3 { grid-template-columns: 1fr; } }
   .radio-tile {
     border: 1px solid var(--border-subtle); border-radius: 12px; padding: 14px 16px;
-    cursor: pointer; text-align: center;
+    cursor: pointer; text-align: left;
+    display: flex; align-items: center; gap: 12px;
     transition: background-color 180ms ease-out, border-color 180ms ease-out, transform 150ms ease-out;
   }
   .radio-tile:hover:not(.selected) { border-color: #90a8c8; transform: translateY(-1px); }
   .radio-tile.selected { background: var(--tile-selected-bg, #e8f0f8); border-color: var(--tile-selected-border, #284890); }
-  .radio-tile .rt-title { font-size: 13.5px; font-weight: 700; color: var(--text-heading); }
-  .radio-tile .rt-sub { font-size: 11.5px; color: var(--text-body-muted); margin-top: 3px; }
+  .radio-tile .rt-icon {
+    width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+    background: var(--surface-soft); color: var(--text-body-muted);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .radio-tile.selected .rt-icon { background: #fff; color: var(--accent-blue); }
+  .radio-tile .rt-body { min-width: 0; }
+  .radio-tile .rt-title { font-size: 13.5px; font-weight: 700; color: var(--text-heading); display: flex; align-items: center; }
+  .radio-tile .rt-sub { font-size: 11px; color: var(--text-body-muted); margin-top: 3px; }
   .radio-tile.selected .rt-title { color: var(--accent-blue); }
 
   /* Minimum-notice 3-col grid (reuses count-tile look at smaller size) */
   .notice-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
   @media (max-width: 560px) { .notice-grid { grid-template-columns: repeat(2, 1fr); } }
+  .notice-grid .count-tile { text-align: left; }
 
   /* Category / role two-column picker */
-  .cat-role-picker { display: grid; grid-template-columns: 260px 1fr; border: 1px solid var(--border-subtle); border-radius: 12px; overflow: hidden; }
+  .cat-role-picker { display: grid; grid-template-columns: 260px 1fr; border: 1px solid var(--border-subtle); border-radius: 12px; overflow: hidden; background: #fff; }
   @media (max-width: 700px) { .cat-role-picker { grid-template-columns: 1fr; } }
-  .cat-role-picker .crp-cats { border-right: 1px solid var(--border-subtle); max-height: 360px; overflow-y: auto; }
+  .cat-role-picker .crp-cats { border-right: 1px solid var(--border-subtle); max-height: 480px; overflow-y: auto; }
+  .cat-role-picker .crp-cats-label {
+    font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    color: #94a3b8; padding: 12px 14px 4px;
+  }
+  .crp-cats-total { color: #cbd5e1; font-weight: 700; }
   .cat-role-picker .crp-search { padding: 10px; border-bottom: 1px solid var(--border-subtle); }
   .cat-role-picker .crp-cat-row {
     display: flex; align-items: center; justify-content: space-between; gap: 8px;
@@ -1522,6 +1687,13 @@
   .cat-role-picker .crp-cat-row:hover { background: var(--surface-soft); }
   .cat-role-picker .crp-cat-row.active { background: var(--icon-tint-bg); border-left-color: var(--accent-blue); font-weight: 700; color: var(--accent-blue); }
   .cat-role-picker .crp-count { font-size: 11px; font-weight: 700; color: #fff; background: var(--accent-blue); border-radius: 999px; min-width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; padding: 0 5px; }
+  .crp-checkbox {
+    width: 15px; height: 15px; border-radius: 4px; border: 1.5px solid #cbd5e1; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; color: #fff;
+    transition: background-color 150ms ease-out, border-color 150ms ease-out;
+  }
+  .crp-cat-row.has-selection .crp-checkbox { background: var(--accent-blue); border-color: var(--accent-blue); }
+  .crp-cat-name { flex: 1; min-width: 0; }
   .cat-role-picker .crp-cat-row:not(.active) .crp-count { background: #cbd5e1; }
   .cat-role-picker .crp-roles { padding: 16px; }
   .cat-role-picker .crp-roles-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
@@ -1551,11 +1723,27 @@
   }
   .cert-required-card .crc-header .crc-title { font-size: 14px; font-weight: 700; color: #b5424a; }
   .cert-required-card .crc-header .crc-sub { font-size: 12px; color: #8a5252; margin-top: 2px; }
-  .cert-required-card .crc-body { padding: 18px; }
+  .cert-required-card .crc-body { padding: 18px; background: #fff; }
   .crp-role-chip.selected .rc-box { background: var(--accent-blue); border-color: var(--accent-blue); }
-  .selected-cat-chips-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+  .selected-cat-chips-row {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px;
+    padding: 16px 18px; margin-bottom: 18px;
+  }
   .cat-summary-chip { font-size: 12.5px; font-weight: 600; color: var(--text-heading); background: var(--surface-soft); border: 1px solid var(--border-subtle); border-radius: 999px; padding: 6px 12px; }
   .cat-summary-chip strong { color: var(--accent-blue); }
+  .cat-selected-chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 12.5px; font-weight: 600; color: var(--text-heading);
+    background: var(--tile-selected-bg, #e8f0f8); border-radius: 999px; padding: 6px 8px 6px 14px;
+  }
+  .cat-selected-chip strong { color: var(--accent-blue); font-weight: 700; }
+  .cat-selected-chip .csc-remove {
+    display: flex; align-items: center; justify-content: center;
+    width: 18px; height: 18px; border-radius: 50%; color: var(--accent-blue);
+    transition: background-color 150ms ease-out;
+  }
+  .cat-selected-chip .csc-remove:hover { background: rgba(40,72,144,0.15); }
 
   /* Portfolio photo grid upload */
   .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; }
@@ -2050,6 +2238,10 @@
         </svg>
       </div>
       <div class="nav-actions">
+        <button type="button" class="btn-admin" id="adminNavBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Admin
+        </button>
         <button type="button" class="btn-login" data-open-login="pm">Log In</button>
         <button type="button" class="btn btn-primary" data-open-signup="pm">Sign Up <span class="arrow">→</span></button>
       </div>
@@ -2627,7 +2819,27 @@
           <form id="loginForm" novalidate>
             <div class="field-group">
               <label for="loginIdentifier">Email or mobile number<span class="req">*</span></label>
-              <input class="field-input" type="text" id="loginIdentifier" name="loginIdentifier" placeholder="you@email.com or 7700 900123" required>
+              <div class="phone-row">
+                <div class="phone-code-wrap" id="loginCountryCodeWrap" style="display:none;">
+                  <select class="phone-code" id="loginCountryCode" aria-label="Country code">
+                    <option value="+44" selected>🇬🇧 +44</option>
+                    <option value="+1">🇺🇸 +1</option>
+                    <option value="+353">🇮🇪 +353</option>
+                    <option value="+61">🇦🇺 +61</option>
+                    <option value="+64">🇳🇿 +64</option>
+                    <option value="+91">🇮🇳 +91</option>
+                    <option value="+49">🇩🇪 +49</option>
+                    <option value="+33">🇫🇷 +33</option>
+                    <option value="+34">🇪🇸 +34</option>
+                    <option value="+39">🇮🇹 +39</option>
+                    <option value="+31">🇳🇱 +31</option>
+                    <option value="+971">🇦🇪 +971</option>
+                    <option value="+27">🇿🇦 +27</option>
+                    <option value="+65">🇸🇬 +65</option>
+                  </select>
+                </div>
+                <input class="field-input" type="text" id="loginIdentifier" name="loginIdentifier" placeholder="you@email.com or 7700 900123" required style="flex:1;">
+              </div>
               <div class="field-error-text" id="loginIdentifierError">Please enter your email or mobile number.</div>
             </div>
 
@@ -2718,6 +2930,7 @@
   <!-- ============ PM ONBOARDING WIZARD ============ -->
   <div class="ob-app" id="obApp">
     <div class="ob-topbar">
+      <div class="ob-topbar-inner">
       <div class="logo">
         <svg viewBox="0 0 852 151" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Keylr">
           <path d="M0.160002 144.91C0.0400018 141.58 0 107.67 0 69.5298L0.0799999 0.209765L18.62 0.0897655L37.12 0.00976562V75.4698V150.93H18.74H0.360001L0.160002 144.91Z"/>
@@ -2738,6 +2951,7 @@
         </button>
         <button type="button" class="btn btn-primary" id="obNextBtn">Continue <span class="arrow">→</span></button>
       </div>
+      </div>
     </div>
     <div class="ob-progress-track"><div class="ob-progress-fill" id="obProgressFill"></div></div>
 
@@ -2755,20 +2969,26 @@
             <div class="tile-grid" id="sectorTiles">
               <div class="choice-tile" data-value="estate-agent" tabindex="0" role="checkbox" aria-checked="false">
                 <div class="tile-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></div>
+                                <div class="tile-body">
                 <div class="tile-title">Estate Agent</div>
                 <div class="tile-desc">Residential letting and sales agents managing properties on behalf of landlords.</div>
+                </div>
                 <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
               </div>
               <div class="choice-tile" data-value="str-operator" tabindex="0" role="checkbox" aria-checked="false">
                 <div class="tile-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></div>
+                                <div class="tile-body">
                 <div class="tile-title">Short-Term Rental Operator</div>
                 <div class="tile-desc">Serviced apartments, holiday lets, Airbnb-style rentals and STR management companies.</div>
+                </div>
                 <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
               </div>
               <div class="choice-tile" data-value="hotels-hostels" tabindex="0" role="checkbox" aria-checked="false">
                 <div class="tile-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M4 21V9l5-4 5 4v12M9 21v-4h4v4M14 12h5v9"/></svg></div>
+                                <div class="tile-body">
                 <div class="tile-title">Hotels &amp; Hostels</div>
                 <div class="tile-desc">Commercial hospitality — hotels, boutique hotels, hostels and serviced accommodation.</div>
+                </div>
                 <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
               </div>
             </div>
@@ -2820,13 +3040,17 @@
             <div class="ob-section-title">Is this your only location or part of a wider group?</div>
             <div class="tile-row-2" id="locationTypeTiles">
               <div class="choice-tile" data-value="single" tabindex="0" role="radio" aria-checked="true">
+                <div class="tile-body">
                 <div class="tile-title">Single location</div>
                 <div class="tile-desc">One office or operating location</div>
+                </div>
                 <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
               </div>
               <div class="choice-tile" data-value="branch" tabindex="0" role="radio" aria-checked="false">
+                <div class="tile-body">
                 <div class="tile-title">Branch / part of a group</div>
                 <div class="tile-desc">One of multiple offices or franchises</div>
+                </div>
                 <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
               </div>
             </div>
@@ -3161,17 +3385,21 @@
   <!-- ============ SUPPLIER ONBOARDING WIZARD ============ -->
   <div class="ob-app" id="supObApp">
     <div class="ob-topbar">
-      <div class="logo">
-        <svg viewBox="0 0 852 151" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Keylr">
-          <path d="M0.160002 144.91C0.0400018 141.58 0 107.67 0 69.5298L0.0799999 0.209765L18.62 0.0897655L37.12 0.00976562V75.4698V150.93H18.74H0.360001L0.160002 144.91Z"/>
-          <path d="M111.001 148.19C108.621 145.58 63.5807 96.97 50.7507 83.19C46.9907 79.15 43.5407 75.35 43.0707 74.75C42.2007 73.64 42.2007 73.64 42.9507 72.77C43.3907 72.29 47.5507 67.78 52.2207 62.79C56.8907 57.76 62.4807 51.7 64.6607 49.32C66.8407 46.94 75.2407 37.83 83.2807 29.12C91.3607 20.37 100.671 10.26 104.041 6.62L110.141 0H134.111H158.121L156.541 1.7C155.671 2.61 151.031 7.64 146.241 12.87C135.701 24.4 122.201 39.09 110.981 51.29C90.9007 73.12 86.6607 77.83 86.7407 78.11C86.8207 78.27 90.7007 82.39 95.3807 87.22C104.021 96.21 146.921 140.58 153.371 147.27L156.941 150.91L135.151 150.87L113.401 150.83L111.021 148.18L111.001 148.19Z"/>
-          <path d="M190.031 133.889V116.859H257.171H324.311V133.889V150.919H257.171H190.031V133.889Z"/>
-          <path d="M415.029 121.65V92.38L413.519 90.44C412.689 89.41 405.439 79.82 397.399 69.13C389.359 58.47 374.459 38.63 364.239 25.08C354.059 11.53 345.699 0.360001 345.699 0.240001C345.699 0.120001 354.139 0 364.479 0H383.259L407.539 32.48C420.929 50.31 432.059 64.88 432.259 64.8C432.699 64.68 438.239 57.08 466.879 17.03C473.059 8.43 478.409 1.07 478.759 0.67C479.389 0.0400001 480.699 -7.45058e-08 497.729 0.0799999L516.029 0.200001L512.499 4.95C510.599 7.56 501.369 20.08 492.019 32.72C482.669 45.4 472.449 59.3 469.279 63.58C466.109 67.9 459.849 76.37 455.339 82.48L447.099 93.53V122.21V150.93H431.059H415.019V121.66L415.029 121.65Z"/>
-          <path d="M566.75 150.17C556.77 148.03 548.49 141.61 544.53 132.86C541.84 126.92 541.99 131.67 541.99 62.59V0.200001L558.94 0.0799999L575.85 0V50.39C575.85 80.22 576.05 102.01 576.25 103.75C577.08 110.05 580.29 114.01 586.35 116.23C587.18 116.51 600.77 116.71 630.91 116.86L674.29 117.06L674.41 134.01L674.49 150.92L622.32 150.88C573.6 150.88 569.87 150.8 566.74 150.17H566.75Z"/>
-          <path d="M699.651 150.45C699.531 150.17 699.491 132.31 699.531 110.72L699.651 71.4999L748.181 71.2999C787.041 71.1399 797.021 70.9799 798.291 70.5499C801.301 69.5599 804.631 67.5399 806.811 65.3599C817.701 54.4299 811.561 35.8099 796.111 33.0399C793.731 32.5999 783.751 32.5299 746.281 32.4899H699.461L699.541 16.3699L699.661 0.209891L741.451 0.0898911C794.171 -0.0301089 799.961 0.209892 809.111 3.21989C813.351 4.56989 820.161 8.08989 824.241 10.9799C828.911 14.3099 835.691 20.9999 838.381 24.9599C846.901 37.5199 849.631 53.3199 845.871 68.2999C843.731 76.5799 840.051 82.8799 833.391 89.5699C827.651 95.2699 821.391 99.2799 814.531 101.65C812.791 102.24 811.201 102.84 811.041 103C810.681 103.32 814.211 107.52 832.151 128.15C837.061 133.81 843.201 140.94 845.781 144C848.391 147.05 850.771 149.86 851.091 150.26C851.641 150.89 850.651 150.93 830.851 150.93H809.971L807.631 148.08C806.361 146.5 798.121 136.35 789.371 125.58C780.581 114.81 772.971 105.5 772.421 104.86L771.391 103.79L753.961 103.87L736.491 103.99V127.48V150.93H718.151C703.851 150.93 699.771 150.81 699.651 150.45Z"/>
-          <path d="M190.031 74.8698V57.8398H248.661H307.291V74.8698V91.8998H248.661H190.031V74.8698Z"/>
-          <path d="M190.031 17.0398V0.00976562L257.091 0.0897655L324.111 0.209765L324.231 17.1598L324.311 34.0698H257.171H190.031V17.0398Z"/>
-        </svg>
+      <div class="ob-topbar-inner">
+      <div class="ob-topbar-logo-group">
+        <div class="logo">
+          <svg viewBox="0 0 852 151" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Keylr">
+            <path d="M0.160002 144.91C0.0400018 141.58 0 107.67 0 69.5298L0.0799999 0.209765L18.62 0.0897655L37.12 0.00976562V75.4698V150.93H18.74H0.360001L0.160002 144.91Z"/>
+            <path d="M111.001 148.19C108.621 145.58 63.5807 96.97 50.7507 83.19C46.9907 79.15 43.5407 75.35 43.0707 74.75C42.2007 73.64 42.2007 73.64 42.9507 72.77C43.3907 72.29 47.5507 67.78 52.2207 62.79C56.8907 57.76 62.4807 51.7 64.6607 49.32C66.8407 46.94 75.2407 37.83 83.2807 29.12C91.3607 20.37 100.671 10.26 104.041 6.62L110.141 0H134.111H158.121L156.541 1.7C155.671 2.61 151.031 7.64 146.241 12.87C135.701 24.4 122.201 39.09 110.981 51.29C90.9007 73.12 86.6607 77.83 86.7407 78.11C86.8207 78.27 90.7007 82.39 95.3807 87.22C104.021 96.21 146.921 140.58 153.371 147.27L156.941 150.91L135.151 150.87L113.401 150.83L111.021 148.18L111.001 148.19Z"/>
+            <path d="M190.031 133.889V116.859H257.171H324.311V133.889V150.919H257.171H190.031V133.889Z"/>
+            <path d="M415.029 121.65V92.38L413.519 90.44C412.689 89.41 405.439 79.82 397.399 69.13C389.359 58.47 374.459 38.63 364.239 25.08C354.059 11.53 345.699 0.360001 345.699 0.240001C345.699 0.120001 354.139 0 364.479 0H383.259L407.539 32.48C420.929 50.31 432.059 64.88 432.259 64.8C432.699 64.68 438.239 57.08 466.879 17.03C473.059 8.43 478.409 1.07 478.759 0.67C479.389 0.0400001 480.699 -7.45058e-08 497.729 0.0799999L516.029 0.200001L512.499 4.95C510.599 7.56 501.369 20.08 492.019 32.72C482.669 45.4 472.449 59.3 469.279 63.58C466.109 67.9 459.849 76.37 455.339 82.48L447.099 93.53V122.21V150.93H431.059H415.019V121.66L415.029 121.65Z"/>
+            <path d="M566.75 150.17C556.77 148.03 548.49 141.61 544.53 132.86C541.84 126.92 541.99 131.67 541.99 62.59V0.200001L558.94 0.0799999L575.85 0V50.39C575.85 80.22 576.05 102.01 576.25 103.75C577.08 110.05 580.29 114.01 586.35 116.23C587.18 116.51 600.77 116.71 630.91 116.86L674.29 117.06L674.41 134.01L674.49 150.92L622.32 150.88C573.6 150.88 569.87 150.8 566.74 150.17H566.75Z"/>
+            <path d="M699.651 150.45C699.531 150.17 699.491 132.31 699.531 110.72L699.651 71.4999L748.181 71.2999C787.041 71.1399 797.021 70.9799 798.291 70.5499C801.301 69.5599 804.631 67.5399 806.811 65.3599C817.701 54.4299 811.561 35.8099 796.111 33.0399C793.731 32.5999 783.751 32.5299 746.281 32.4899H699.461L699.541 16.3699L699.661 0.209891L741.451 0.0898911C794.171 -0.0301089 799.961 0.209892 809.111 3.21989C813.351 4.56989 820.161 8.08989 824.241 10.9799C828.911 14.3099 835.691 20.9999 838.381 24.9599C846.901 37.5199 849.631 53.3199 845.871 68.2999C843.731 76.5799 840.051 82.8799 833.391 89.5699C827.651 95.2699 821.391 99.2799 814.531 101.65C812.791 102.24 811.201 102.84 811.041 103C810.681 103.32 814.211 107.52 832.151 128.15C837.061 133.81 843.201 140.94 845.781 144C848.391 147.05 850.771 149.86 851.091 150.26C851.641 150.89 850.651 150.93 830.851 150.93H809.971L807.631 148.08C806.361 146.5 798.121 136.35 789.371 125.58C780.581 114.81 772.971 105.5 772.421 104.86L771.391 103.79L753.961 103.87L736.491 103.99V127.48V150.93H718.151C703.851 150.93 699.771 150.81 699.651 150.45Z"/>
+            <path d="M190.031 74.8698V57.8398H248.661H307.291V74.8698V91.8998H248.661H190.031V74.8698Z"/>
+            <path d="M190.031 17.0398V0.00976562L257.091 0.0897655L324.111 0.209765L324.231 17.1598L324.311 34.0698H257.171H190.031V17.0398Z"/>
+          </svg>
+        </div>
+        <div class="ob-inline-progress-track"><div class="ob-inline-progress-fill" id="supObProgressFill"></div></div>
       </div>
       <div class="ob-step-label" id="supObStepLabel">Setup</div>
       <div class="ob-actions">
@@ -3181,8 +3409,11 @@
         </button>
         <button type="button" class="btn btn-primary" id="supObNextBtn">Continue <span class="arrow">→</span></button>
       </div>
+      </div>
     </div>
-    <div class="ob-progress-track"><div class="ob-progress-fill" id="supObProgressFill"></div></div>
+    <div class="profile-dot-stepper" id="supProfileDotStepper">
+      <span class="stepper-dot"></span><span class="stepper-dot"></span><span class="stepper-dot"></span>
+    </div>
 
     <div class="ob-content">
       <div class="ob-container">
@@ -3197,14 +3428,18 @@
             <div class="tile-row-2" id="businessTypeTiles">
               <div class="choice-tile" data-value="sole-trader" tabindex="0" role="radio" aria-checked="true">
                 <div class="tile-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0112 0v1"/></svg></div>
+                                <div class="tile-body">
                 <div class="tile-title">Sole Trader</div>
                 <div class="tile-desc">You are the business — personal ID verification, individual insurance and DBS.</div>
+                </div>
                 <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
               </div>
               <div class="choice-tile" data-value="company" tabindex="0" role="radio" aria-checked="false">
                 <div class="tile-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></div>
+                                <div class="tile-body">
                 <div class="tile-title">Company</div>
                 <div class="tile-desc">Registered at Companies House — company-level verification, director ID checks.</div>
+                </div>
                 <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
               </div>
             </div>
@@ -3215,12 +3450,16 @@
             <div class="tile-row-2" id="sectorTypeTiles">
               <div class="choice-tile selected" data-value="residential" tabindex="0" role="checkbox" aria-checked="true">
                 <div class="tile-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></div>
+                                <div class="tile-body">
                 <div class="tile-title">Residential</div>
+                </div>
                 <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
               </div>
               <div class="choice-tile" data-value="commercial" tabindex="0" role="checkbox" aria-checked="false">
                 <div class="tile-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></div>
+                                <div class="tile-body">
                 <div class="tile-title">Commercial</div>
+                </div>
                 <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
               </div>
             </div>
@@ -3229,8 +3468,8 @@
           <div class="ob-section" id="residentialSubTypes">
             <div class="ob-section-title" style="font-size:13.5px;">Residential Sub-Types <span class="meta-badge optional">Optional</span></div>
             <div class="simple-chip-row">
-              <div class="simple-chip" data-value="estate-agent">Estate Agent</div>
-              <div class="simple-chip" data-value="str">STR - Short Term Rentals</div>
+              <div class="simple-chip" data-value="str">STR – Short Term Rentals</div>
+              <div class="simple-chip" data-value="estate-agent">Estate Agents</div>
             </div>
           </div>
 
@@ -3248,7 +3487,7 @@
           <p class="ob-subtext">As a sole trader, you are the business. We verify your personal identity to comply with UK marketplace regulations and HMRC DAC7 reporting.</p>
 
           <div class="attention-banner" id="identityAttentionBanner">
-            <div class="ab-title">4 details still needed to finish this step</div>
+            <div class="ab-head"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg><div class="ab-title">4 details still needed to finish this step</div></div>
             <div class="ab-sub">The highlighted fields below are required. Tap one to jump to it.</div>
             <div class="attention-jump-row">
               <div class="attention-jump-pill" data-jump="supDob">Date of birth</div>
@@ -3259,32 +3498,36 @@
           </div>
 
           <div class="callout callout-info">
-            <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg></div>
+            <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M12 11v5"/></svg></div>
             <div class="callout-body">Your full legal name, date of birth, and NI number are required by HMRC under DAC7 regulations for annual tax reporting. This data is encrypted and never shared with clients.</div>
           </div>
 
+          <div class="callout callout-success">
+            <div class="callout-body" style="color:#145c2e;">After you submit your profile, our team reviews your details and emails you a secure digital identity-verification link via our partner <strong>TrustID</strong>.</div>
+          </div>
+
           <div class="ob-field">
-            <label for="supFullName">Full legal name<span class="req">*</span> <span class="meta-badge auto">DAC7</span></label>
+            <label for="supFullName">Full legal name <span class="req-text">Required</span> <span class="meta-badge auto">DAC7</span></label>
             <input class="field-input" type="text" id="supFullName" placeholder="Fern Whitfield">
           </div>
 
           <div class="ob-row-2">
             <div class="ob-field">
-              <label for="supPhone">Phone number<span class="req">*</span></label>
+              <label for="supPhone">Phone number <span class="req-text">Required</span></label>
               <div class="phone-row">
                 <div class="phone-code-wrap"><select class="phone-code"><option>🇬🇧 +44</option></select></div>
                 <input class="field-input" type="tel" id="supPhone" placeholder="1234 589844" style="flex:1;">
               </div>
             </div>
             <div class="ob-field">
-              <label for="supEmail">Email address<span class="req">*</span></label>
+              <label for="supEmail">Email address <span class="req-text">Required</span></label>
               <input class="field-input" type="email" id="supEmail" placeholder="fern@gmail.com">
             </div>
           </div>
 
           <div class="ob-row-2">
             <div class="ob-field">
-              <label for="supDob">Date of birth<span class="req">*</span> <span class="meta-badge auto">DAC7</span></label>
+              <label for="supDob">Date of birth <span class="req-text">Required</span> <span class="meta-badge auto">DAC7</span></label>
               <input class="field-input" type="date" id="supDob">
             </div>
             <div class="ob-field">
@@ -3296,7 +3539,7 @@
           </div>
 
           <div class="ob-field">
-            <label for="supNiNumber">NI number<span class="req">*</span> <span class="meta-badge auto">DAC7</span></label>
+            <label for="supNiNumber">NI number <span class="req-text">Required</span> <span class="meta-badge auto">DAC7</span></label>
             <input class="field-input" type="text" id="supNiNumber" placeholder="QQ 12 34 56 C">
           </div>
 
@@ -3322,23 +3565,18 @@
           <div class="ob-section-heading">Proof of Address <span class="meta-badge auto" style="text-transform:none;">DAC7</span></div>
           <div class="ob-row-2">
             <div class="ob-field">
-              <label>Upload Proof of Address<span class="req">*</span></label>
+              <label>Upload Proof of Address <span class="req-text">Required</span></label>
               <div class="file-dropzone" id="supProofAddress">
                 <input type="file" style="display:none;">
                 <div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>
                 <div class="fd-label">Click to Upload</div>
-                <div class="helper" style="margin-top:2px;">Utility bill or bank statement (last 3 months) — auto-fills your home address.</div>
               </div>
+              <div class="ai-hint-pill"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg>Utility bill or bank statement (last 3 months) — auto-fills your home address.</div>
             </div>
             <div class="ob-field">
-              <label for="supHomeAddress">Home address<span class="req">*</span></label>
+              <label for="supHomeAddress">Home address <span class="req-text">Required</span></label>
               <input class="field-input" type="text" id="supHomeAddress" placeholder="Start typing your address...">
             </div>
-          </div>
-
-          <div class="callout callout-neutral" style="margin-top:8px;">
-            <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg></div>
-            <div class="callout-body">After you submit your profile, our team reviews your details and emails you a secure digital identity-verification link via our partner TrustID.</div>
           </div>
         </section>
 
@@ -3348,7 +3586,7 @@
           <p class="ob-subtext">Your insurance and certifications are displayed on your marketplace profile as trust badges. Verified credentials increase your visibility and booking rate.</p>
 
           <div class="attention-banner" id="insuranceAttentionBanner">
-            <div class="ab-title">5 details still needed to finish this step</div>
+            <div class="ab-head"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg><div class="ab-title">5 details still needed to finish this step</div></div>
             <div class="ab-sub">The highlighted fields below are required. Tap one to jump to it.</div>
             <div class="attention-jump-row">
               <div class="attention-jump-pill" data-jump="insProvider">Insurance provider</div>
@@ -3359,38 +3597,40 @@
             </div>
           </div>
 
-          <div class="callout callout-info">
-            <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg></div>
-            <div class="callout-body">Certain job types require mandatory insurance. If insurance is not in place your account cannot be activated for those categories.</div>
+          <div class="ocs-head" style="margin-bottom:10px;">
+            <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <div class="ocs-title">Insurance</div>
           </div>
+
+          <div class="plain-warning-bar">Certain job types require mandatory insurance. If insurance is not in place your account cannot be activated for those categories.</div>
 
           <div class="ob-toggle-card">
             <div class="otc-top">
               <div>
-                <div class="otc-title">Do you have Public Liability Insurance? <span class="meta-badge required-badge" style="text-transform:none;">Required</span></div>
+                <div class="otc-title">Do you have Public Liability Insurance?</div>
                 <div class="otc-desc">Minimum £1,000,000 cover required.</div>
               </div>
               <button type="button" class="toggle-switch on" id="publicLiabilityToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
             </div>
             <div class="field-collapsible open" id="publicLiabilityFields">
               <div class="otc-body">
-                <div class="ob-field" id="insUpload">
-                  <label>Upload Insurance Certificate</label>
-                  <div class="file-dropzone" id="insUploadZone" data-title="Upload Insurance Certificate">
-                    <input type="file" style="display:none;">
-                    <div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>
-                    <div class="fd-label">Click to Upload PDF or image</div>
+                <div class="ob-row-2">
+                  <div class="ob-field" id="insUpload">
+                    <label>Upload Insurance Certificate</label>
+                    <div class="file-dropzone" id="insUploadZone" data-title="Upload Insurance Certificate">
+                      <input type="file" style="display:none;">
+                      <div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>
+                      <div class="fd-label">Click to Upload<span class="fd-sub">PDF or image</span></div>
+                    </div>
                   </div>
-                </div>
-                <div class="ob-row-2">
                   <div class="ob-field"><label for="insProvider">Insurance provider</label><input class="field-input" type="text" id="insProvider" placeholder="e.g. Hiscox, Simply Business"></div>
-                  <div class="ob-field"><label for="insPolicyNumber">Policy number</label><input class="field-input" type="text" id="insPolicyNumber" placeholder="e.g. POL-12345"></div>
                 </div>
                 <div class="ob-row-2">
+                  <div class="ob-field"><label for="insPolicyNumber">Policy number</label><input class="field-input" type="text" id="insPolicyNumber" placeholder="e.g. POL-12345"></div>
                   <div class="ob-field"><label for="insCoverage">Public liability coverage</label><input class="field-input" type="text" id="insCoverage" placeholder="Min £1,000,000"></div>
-                  <div class="ob-field"><label for="insExpiry">Expiry date</label><input class="field-input" type="date" id="insExpiry"></div>
                 </div>
-                <div class="helper">Upload will auto-fill the provider, policy number, coverage &amp; expiry date.</div>
+                <div class="ob-field" style="max-width:calc(50% - 7px);"><label for="insExpiry">Expiry date</label><input class="field-input" type="date" id="insExpiry"></div>
+                <div class="ai-hint-pill"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg>Upload will auto-fill the provider, policy number, coverage &amp; expiry date</div>
               </div>
             </div>
           </div>
@@ -3405,23 +3645,23 @@
             </div>
             <div class="field-collapsible" id="profIndemnityFields">
               <div class="otc-body">
-                <div class="ob-field">
-                  <label>Upload PI Insurance Certificate</label>
-                  <div class="file-dropzone" id="piUploadZone" data-title="Upload PI Insurance Certificate">
-                    <input type="file" style="display:none;">
-                    <div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>
-                    <div class="fd-label">Click to Upload PDF or image</div>
+                <div class="ob-row-2">
+                  <div class="ob-field">
+                    <label>Upload PI Insurance Certificate</label>
+                    <div class="file-dropzone" id="piUploadZone" data-title="Upload PI Insurance Certificate">
+                      <input type="file" style="display:none;">
+                      <div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>
+                      <div class="fd-label">Click to Upload<span class="fd-sub">PDF or image</span></div>
+                    </div>
                   </div>
-                </div>
-                <div class="ob-row-2">
                   <div class="ob-field"><label>PI insurance provider</label><input class="field-input" type="text" placeholder="e.g. Hiscox, AXA"></div>
-                  <div class="ob-field"><label>PI policy number</label><input class="field-input" type="text" placeholder="e.g. PI-12345"></div>
                 </div>
                 <div class="ob-row-2">
+                  <div class="ob-field"><label>PI policy number</label><input class="field-input" type="text" placeholder="e.g. PI-12345"></div>
                   <div class="ob-field"><label>PI coverage amount</label><input class="field-input" type="text" placeholder="e.g. £500,000"></div>
-                  <div class="ob-field"><label>PI expiry date</label><input class="field-input" type="date"></div>
                 </div>
-                <div class="helper">Upload will auto-fill the provider, policy number, coverage &amp; expiry date.</div>
+                <div class="ob-field" style="max-width:calc(50% - 7px);"><label>PI expiry date</label><input class="field-input" type="date"></div>
+                <div class="ai-hint-pill"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg>Upload will auto-fill the provider, policy number, coverage &amp; expiry date</div>
               </div>
             </div>
           </div>
@@ -3430,10 +3670,9 @@
         <!-- Step 4: Background Checks & Right to Work -->
         <section class="ob-step" data-step="4">
           <h2>Background checks &amp; right to work</h2>
-          <p class="ob-subtext">Confirms you have no unspent criminal convictions and that you're legally able to work in the UK.</p>
 
           <div class="attention-banner" id="bgCheckAttentionBanner">
-            <div class="ab-title">2 details still needed to finish this step</div>
+            <div class="ab-head"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg><div class="ab-title">2 details still needed to finish this step</div></div>
             <div class="ab-sub">The highlighted fields below are required. Tap one to jump to it.</div>
             <div class="attention-jump-row">
               <div class="attention-jump-pill" data-jump="rightToWorkTiles">Right to work</div>
@@ -3441,87 +3680,113 @@
             </div>
           </div>
 
-          <div class="ob-section-title" style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
-            <span class="icon-box" style="width:32px;height:32px;margin-bottom:0;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span>
-            <span style="color:var(--text-heading);font-size:15px;">Basic DBS Check</span>
-            <span class="meta-badge required-badge" style="text-transform:none;">Required</span>
-          </div>
-          <p class="ob-section-subtext" style="margin-top:-2px;margin-left:42px;">Confirms you have no unspent criminal convictions — mandatory for all sole traders. An Enhanced DBS isn't needed at sign-up; it's only triggered when a client flags a sensitive environment (schools, care homes, hospitals).</p>
-
-          <div class="ob-toggle-card">
-            <div class="otc-top">
-              <div>
-                <div class="otc-title">Do you have a DBS certificate?</div>
-                <div class="otc-desc">Basic DBS mandatory for all · Enhanced only triggered by client environment flag.</div>
-              </div>
-              <button type="button" class="toggle-switch on" id="dbsToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
+          <div class="ob-card-section">
+            <div class="ocs-head">
+              <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+              <div class="ocs-title">Basic DBS Check</div>
+              <span class="meta-badge required-badge" style="text-transform:none;">Required</span>
             </div>
-            <div class="field-collapsible open" id="dbsFields">
-              <div class="otc-body">
-                <div class="ob-row-2">
-                  <div class="ob-field" id="dbsUpload">
-                    <label>Upload Basic DBS Certificate</label>
-                    <div class="file-dropzone" id="dbsUploadZone" data-title="Upload Basic DBS Certificate">
-                      <input type="file" style="display:none;">
-                      <div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>
-                      <div class="fd-label">Click to Upload PDF or image</div>
+            <div class="ocs-desc">Confirms you have no unspent criminal convictions — mandatory for all sole traders. An Enhanced DBS isn't needed at sign-up; it's only triggered when a client flags a sensitive environment (schools, care homes, hospitals).</div>
+
+            <div class="ob-toggle-card" style="border:1px solid var(--border-subtle);">
+              <div class="otc-top">
+                <div>
+                  <div class="otc-title">Do you have a DBS certificate?</div>
+                  <div class="otc-desc">Basic DBS mandatory for all · Enhanced only triggered by client environment flag.</div>
+                </div>
+                <button type="button" class="toggle-switch on" id="dbsToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
+              </div>
+              <div class="field-collapsible open" id="dbsFields">
+                <div class="otc-body">
+                  <div class="ob-row-2">
+                    <div class="ob-field" id="dbsUpload">
+                      <label>Upload Basic DBS Certificate</label>
+                      <div class="file-dropzone" id="dbsUploadZone" data-title="Upload Basic DBS Certificate">
+                        <input type="file" style="display:none;">
+                        <div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>
+                        <div class="fd-label">Click to Upload<span class="fd-sub">PDF or image</span></div>
+                      </div>
+                    </div>
+                    <div class="ob-field"><label>Certificate number</label><input class="field-input" type="text" placeholder="12-digit number"></div>
+                  </div>
+                  <div class="ob-row-2">
+                    <div class="ob-field"><label>DBS level</label><select class="ob-select"><option>Basic</option><option>Standard</option><option>Enhanced</option></select></div>
+                    <div class="ob-field"><label>Issue date</label><input class="field-input" type="date"></div>
+                  </div>
+                  <div class="ai-hint-pill"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg>Upload will auto-fill the certificate number, level &amp; issue date</div>
+
+                  <div class="callout callout-neutral" style="margin-top:14px;margin-bottom:0;">
+                    <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg></div>
+                    <div>
+                      <div class="callout-title">Don't have a DBS certificate yet?</div>
+                      <div class="callout-body">Apply online via the official DBS website — it costs £18 and typically arrives within 14 days. You can continue onboarding and upload it later.</div>
+                      <div class="callout-sub"><a href="#" style="color:var(--accent-blue);font-weight:600;">Apply for a Basic DBS check on GOV.UK ↗</a></div>
                     </div>
                   </div>
-                  <div class="ob-field"><label>Certificate number</label><input class="field-input" type="text" placeholder="12-digit number"></div>
                 </div>
-                <div class="ob-row-2">
-                  <div class="ob-field"><label>DBS level</label><select class="ob-select"><option>Basic</option><option>Standard</option><option>Enhanced</option></select></div>
-                  <div class="ob-field"><label>Issue date</label><input class="field-input" type="date"></div>
-                </div>
-                <div class="helper">Upload will auto-fill the certificate number, level &amp; issue date.</div>
               </div>
             </div>
           </div>
 
-          <div class="callout callout-neutral">
-            <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg></div>
-            <div>
-              <div class="callout-title">Don't have a DBS certificate yet?</div>
-              <div class="callout-body">Apply online via the official DBS website — it costs £18 and typically arrives within 14 days. You can continue onboarding and upload it later.</div>
-              <div class="callout-sub"><a href="#" style="color:var(--accent-blue);font-weight:600;">Apply for a Basic DBS check on GOV.UK ↗</a></div>
+          <div class="ob-card-section">
+            <div class="ocs-head">
+              <div class="ocs-icon" style="background:#eef0f8;color:#5b4fc4;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"/><path d="M12 6v6l3 6M12 12l-3 6M9 10l3-2 3 2"/></svg></div>
+              <div class="ocs-title">Criminal Record Declaration</div>
+            </div>
+            <div class="ocs-desc">Covers unspent offences only, under the Rehabilitation of Offenders Act 1974.</div>
+
+            <div class="radio-row-list" id="convictionTiles">
+              <div class="radio-row selected" data-value="none">
+                <div class="rr-circle"></div>
+                <div>
+                  <div class="rr-title">I have no unspent criminal convictions</div>
+                  <div class="rr-sub">This declaration covers unspent offences only.</div>
+                </div>
+              </div>
+              <div class="radio-row" data-value="has-convictions">
+                <div class="rr-circle"></div>
+                <div>
+                  <div class="rr-title">I have unspent convictions to declare</div>
+                  <div class="rr-sub">Having a record doesn't automatically disqualify you — we review each case individually.</div>
+                </div>
+              </div>
+            </div>
+            <div class="field-collapsible" id="convictionDetailsField">
+              <div class="radio-row-fields">
+                <div class="rrf-label">Please describe your unspent convictions</div>
+                <textarea class="ob-textarea" placeholder="Provide details including dates, offences, and outcomes. This information is kept confidential and reviewed by our compliance team."></textarea>
+                <div class="helper">Check the <a href="#">DBS filtering rules</a> if unsure what must be disclosed. Only unspent convictions need to be declared.</div>
+              </div>
             </div>
           </div>
 
-          <div class="ob-section-heading">Criminal Record Declaration</div>
-          <p class="ob-section-subtext" style="margin-top:-2px;">Covers unspent offences only, under the Rehabilitation of Offenders Act 1974.</p>
+          <div class="ob-card-section" style="margin-bottom:0;">
+            <div class="ocs-head">
+              <div class="ocs-icon" style="background:#eef0f8;color:#5b4fc4;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg></div>
+              <div class="ocs-title">Right to Work</div>
+              <span class="meta-badge required-badge" style="text-transform:none;">Required</span>
+            </div>
+            <div class="ocs-desc">Required by UK law before anyone can be dispatched on the platform.</div>
 
-          <div class="radio-tile-row cols-2" id="convictionTiles">
-            <div class="radio-tile selected" data-value="none">
-              <div class="rt-title">I have no unspent criminal convictions</div>
-              <div class="rt-sub">This declaration covers unspent offences only.</div>
+            <div class="ob-field-label-plain">Do you have the right to work in the UK?</div>
+            <div class="radio-tile-row cols-2" id="rightToWorkTiles">
+              <div class="radio-tile selected" data-value="yes">
+                <div class="rt-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                <div class="rt-body">
+                  <div class="rt-title">Yes</div>
+                  <div class="rt-sub">I have the right to work in the UK</div>
+                </div>
+              </div>
+              <div class="radio-tile" data-value="no">
+                <div class="rt-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+                <div class="rt-body">
+                  <div class="rt-title">No</div>
+                  <div class="rt-sub">I do not currently have right to work</div>
+                </div>
+              </div>
             </div>
-            <div class="radio-tile" data-value="has-convictions">
-              <div class="rt-title">I have unspent convictions to declare</div>
-              <div class="rt-sub">Having a record doesn't automatically disqualify you — we review each case individually.</div>
-            </div>
+            <p class="helper" style="margin-top:12px;margin-bottom:0;font-size:11px;">If a client requires document verification, you can provide your UKVI share code later — verified via the Home Office API.</p>
           </div>
-          <div class="field-collapsible" id="convictionDetailsField">
-            <div class="ob-field" style="margin-top:16px;">
-              <label>Please describe your unspent convictions</label>
-              <textarea class="ob-textarea" placeholder="Provide details including dates, offences, and outcomes. This information is kept confidential and reviewed by our compliance team."></textarea>
-              <div class="helper">Check the DBS filtering rules if unsure what must be disclosed. Only unspent convictions need to be declared.</div>
-            </div>
-          </div>
-
-          <div class="ob-section-heading">Right to Work <span class="meta-badge required-badge" style="text-transform:none;">Required</span></div>
-          <p class="ob-section-subtext" style="margin-top:-2px;">Required by UK law before anyone can be dispatched on the platform.</p>
-
-          <div class="radio-tile-row cols-2" id="rightToWorkTiles">
-            <div class="radio-tile selected" data-value="yes">
-              <div class="rt-title">✓ Yes</div>
-              <div class="rt-sub">I have the right to work in the UK</div>
-            </div>
-            <div class="radio-tile" data-value="no">
-              <div class="rt-title">✕ No</div>
-              <div class="rt-sub">I do not currently have right to work</div>
-            </div>
-          </div>
-          <p class="helper" style="margin-top:12px;">If a client requires document verification, you can provide your UKVI share code later — verified via the Home Office API.</p>
         </section>
 
         <!-- Step 5: Payment setup -->
@@ -3529,51 +3794,64 @@
           <h2>Payment setup</h2>
           <p class="ob-subtext">Confirm your VAT status and accept the self-billing agreement so we can pay you out. You can also do this later from your earnings page.</p>
 
-          <div class="ob-section-heading" style="border-top:none;padding-top:0;">Are you VAT registered?</div>
-          <p class="ob-section-subtext" style="margin-top:-2px;">If yes, VAT will be added to your invoices and we'll verify your number with HMRC.</p>
+          <div class="ob-card-section">
+            <div class="ocs-head">
+              <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5L5 19M6.5 9a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM17.5 20a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"/></svg></div>
+              <div class="ocs-title">Are you VAT registered?</div>
+            </div>
+            <div class="ocs-desc">If yes, VAT will be added to your invoices and we'll verify your number with HMRC.</div>
 
-          <div class="radio-tile-row cols-2" id="vatTiles">
-            <div class="radio-tile selected" data-value="no">
-              <div class="rt-title">No, not registered</div>
-              <div class="rt-sub">Below the VAT threshold or exempt</div>
-            </div>
-            <div class="radio-tile" data-value="yes">
-              <div class="rt-title">Yes, VAT registered</div>
-              <div class="rt-sub">I charge VAT on my invoices</div>
-            </div>
-          </div>
-          <div class="field-collapsible" id="vatNumberField">
-            <div class="ob-row-2" style="margin-top:16px;align-items:flex-end;">
-              <div class="ob-field" style="margin-bottom:0;">
-                <label for="vatNumberInput">VAT number</label>
-                <input class="field-input" type="text" id="vatNumberInput" placeholder="GB 123 4567 89">
+            <div class="radio-tile-row cols-2" id="vatTiles">
+              <div class="radio-tile selected vat-yes-tile" data-value="yes">
+                <div class="rt-body">
+                  <div class="rt-title">Yes, VAT registered</div>
+                  <div class="rt-sub">I charge VAT on my invoices</div>
+                </div>
               </div>
-              <div class="ob-field" style="margin-bottom:0;">
+              <div class="radio-tile" data-value="no">
+                <div class="rt-body">
+                  <div class="rt-title">No, not registered</div>
+                  <div class="rt-sub">Below the VAT threshold or exempt</div>
+                </div>
+              </div>
+            </div>
+            <div class="field-collapsible open" id="vatNumberField">
+              <div class="vat-verify-row">
+                <input class="field-input" type="text" id="vatNumberInput" placeholder="GB 123 4567 89">
                 <button type="button" class="btn btn-muted-action" id="verifyHmrcBtn" disabled>Verify with HMRC</button>
               </div>
             </div>
           </div>
 
-          <div class="ob-section-heading">Self-Billing Agreement</div>
-          <div class="callout callout-info">
-            <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg></div>
-            <div>
-              <div class="callout-body">So we can pay you, Keylr issues VAT invoices on your behalf for each period's completed jobs. Read the full terms before you sign.</div>
-              <div class="callout-sub"><a href="#" style="color:var(--accent-blue);font-weight:600;">Read the full self-billing agreement ↗</a></div>
+          <div class="ob-card-section" style="margin-bottom:0;">
+            <div class="ocs-head">
+              <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 15h6M9 11h3"/></svg></div>
+              <div class="ocs-title">Self-billing agreement</div>
+              <span class="version-badge" style="margin-left:auto;">v1 · Current</span>
             </div>
+            <div class="ocs-desc">So we can pay you, Keylr issues VAT invoices on your behalf for each period's completed jobs. Read the full terms before you sign.</div>
+
+            <div class="agreement-link-row" id="readAgreementRow">
+              <div class="alr-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 15h6M9 11h3"/></svg></div>
+              <div>
+                <div class="alr-title">Read the full self-billing agreement</div>
+                <div class="alr-sub">Opens in a new tab</div>
+              </div>
+              <span class="alr-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></span>
+            </div>
+
+            <div class="check-row" id="selfBillingRow" style="margin-top:16px;">
+              <input type="checkbox" id="selfBillingAgree" checked>
+              <label for="selfBillingAgree">I agree to the <a href="#">self-billing agreement</a> as <strong id="selfBillingName">fern</strong>. This authorises Keylr to issue invoices on my behalf for each period's completed jobs.</label>
+            </div>
+            <button type="button" class="btn btn-primary" id="signAgreementBtn">Sign agreement</button>
           </div>
 
-          <div class="check-row" id="selfBillingRow">
-            <input type="checkbox" id="selfBillingAgree" checked>
-            <label for="selfBillingAgree">I agree to the self-billing agreement. This authorises Keylr to issue invoices on my behalf for each period's completed jobs.</label>
-          </div>
-          <button type="button" class="btn btn-primary" id="signAgreementBtn" style="margin-bottom:22px;">Sign Agreement</button>
+          <div class="bordered-info-box" style="margin-top:16px;">Your bank account will be set up via <strong>Stripe</strong> once your account is approved and activated. You will receive a link to complete Stripe onboarding at that point. Account holder name must match your registered company name.</div>
 
-          <p class="helper" style="margin-bottom:20px;">Your bank account will be set up via Stripe once your account is approved and activated. You will receive a link to complete Stripe onboarding at that point. Account holder name must match your registered company name.</p>
-
-          <div class="callout callout-warning" style="margin-bottom:0;">
-            <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg></div>
-            <div class="callout-body">£2.50/month active-account fee — Keylr automatically deducts this from your payouts each month to keep your account active.</div>
+          <div class="bordered-fee-box">
+            <div class="bfb-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg></div>
+            <div class="bfb-text"><strong>£2.50/month active-account fee</strong> — Keylr automatically deducts this from your payouts each month to keep your account active.</div>
           </div>
         </section>
 
@@ -3582,21 +3860,20 @@
           <h2>Categories &amp; roles</h2>
           <p class="ob-subtext">Pick the categories you work in and the specific roles within each. We route matching jobs to you and decide which certificates to verify based on your role choices.</p>
 
-          <div class="selected-cat-chips-row" id="selectedCatChipsRow">
-            <span class="cat-summary-chip"><strong id="catRoleSummaryCount">0 categories · 0 roles</strong></span>
-          </div>
+          <div class="selected-cat-chips-row" id="selectedCatChipsRow"></div>
 
           <div class="cat-role-picker">
             <div class="crp-cats">
+              <div class="crp-cats-label">CATEGORIES <span class="crp-cats-total">7</span></div>
               <div class="crp-search"><input class="field-input" type="text" id="categorySearchInput" placeholder="Search categories..."></div>
               <div id="categoryList">
-                <div class="crp-cat-row active" data-cat="Appliances"><span>Appliances</span><span class="crp-count" data-role-count="0">0</span></div>
-                <div class="crp-cat-row" data-cat="Cleaning"><span>Cleaning</span><span class="crp-count" data-role-count="0">0</span></div>
-                <div class="crp-cat-row" data-cat="Compliance & Legal"><span>Compliance &amp; Legal</span><span class="crp-count" data-role-count="0">0</span></div>
-                <div class="crp-cat-row" data-cat="Damp, Mould & Structural"><span>Damp, Mould &amp; Structural</span><span class="crp-count" data-role-count="0">0</span></div>
-                <div class="crp-cat-row" data-cat="Electrical"><span>Electrical</span><span class="crp-count" data-role-count="0">0</span></div>
-                <div class="crp-cat-row" data-cat="Fire Safety"><span>Fire Safety</span><span class="crp-count" data-role-count="0">0</span></div>
-                <div class="crp-cat-row" data-cat="Gas & Heating"><span>Gas &amp; Heating</span><span class="crp-count" data-role-count="0">0</span></div>
+                <div class="crp-cat-row active" data-cat="Appliances"><span class="crp-checkbox"></span><span class="crp-cat-name">Appliances</span><span class="crp-count" data-role-count="0">0</span></div>
+                <div class="crp-cat-row" data-cat="Cleaning"><span class="crp-checkbox"></span><span class="crp-cat-name">Cleaning</span><span class="crp-count" data-role-count="0">0</span></div>
+                <div class="crp-cat-row" data-cat="Compliance & Legal"><span class="crp-checkbox"></span><span class="crp-cat-name">Compliance &amp; Legal</span><span class="crp-count" data-role-count="0">0</span></div>
+                <div class="crp-cat-row" data-cat="Damp, Mould & Structural"><span class="crp-checkbox"></span><span class="crp-cat-name">Damp, Mould &amp; Structural</span><span class="crp-count" data-role-count="0">0</span></div>
+                <div class="crp-cat-row" data-cat="Electrical"><span class="crp-checkbox"></span><span class="crp-cat-name">Electrical</span><span class="crp-count" data-role-count="0">0</span></div>
+                <div class="crp-cat-row" data-cat="Fire Safety"><span class="crp-checkbox"></span><span class="crp-cat-name">Fire Safety</span><span class="crp-count" data-role-count="0">0</span></div>
+                <div class="crp-cat-row" data-cat="Gas & Heating"><span class="crp-checkbox"></span><span class="crp-cat-name">Gas &amp; Heating</span><span class="crp-count" data-role-count="0">0</span></div>
               </div>
             </div>
             <div class="crp-roles">
@@ -3622,158 +3899,192 @@
           <h2>Setup profile</h2>
           <p class="ob-subtext">Set your availability, share your experience, and tell clients about yourself.</p>
 
-          <div class="ob-section-heading" style="border-top:none;padding-top:0;">Profile Photo <span class="meta-badge optional">Optional</span></div>
-          <p class="ob-section-subtext" style="margin-top:-2px;">A clear photo of yourself shown on your public profile and job notifications.</p>
-          <div class="file-dropzone" style="max-width:280px;">
-            <input type="file" style="display:none;">
-            <div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0112 0v1"/></svg></div>
-            <div class="fd-label">Upload Profile Photo</div>
+          <div class="ob-card-section">
+            <div class="ocs-head">
+              <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+              <div class="ocs-title">Profile photo</div>
+              <span class="meta-badge optional">Optional</span>
+            </div>
+            <div class="ocs-desc">A clear photo of yourself shown on your public profile and job notifications.</div>
+            <div class="file-dropzone" style="max-width:280px;">
+              <input type="file" style="display:none;">
+              <div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0112 0v1"/></svg></div>
+              <div class="fd-label">Upload Profile Photo</div>
+            </div>
           </div>
 
-          <div class="ob-section-heading">Experience &amp; Track Record</div>
-          <p class="ob-section-subtext" style="margin-top:-2px;">Clients often filter by experience and completed jobs — these appear on your marketplace profile.</p>
-          <div class="ob-row-2">
+          <div class="ob-card-section">
+            <div class="ocs-head">
+              <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M9 14l-2 7 5-3 5 3-2-7"/></svg></div>
+              <div class="ocs-title">Experience &amp; track record</div>
+            </div>
+            <div class="ocs-desc">Clients often filter by experience and completed jobs — these appear on your marketplace profile.</div>
+            <div class="ob-row-2">
+              <div class="ob-field">
+                <label>How many years of experience do you have?</label>
+                <select class="ob-select"><option>Less than 1 year</option><option selected>1–3 years</option><option>4–7 years</option><option>8–15 years</option><option>15+ years</option></select>
+              </div>
+              <div class="ob-field">
+                <label>How many jobs have you completed?</label>
+                <select class="ob-select"><option>Select...</option><option>1–10</option><option>11–50</option><option>51–200</option><option>200+</option></select>
+              </div>
+            </div>
+          </div>
+
+          <div class="ob-card-section">
+            <div class="ocs-head">
+              <div class="ocs-icon" style="background:#fef3c7;color:#92620a;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 6 6 1-4.5 4.5 1 6.5-5.5-3-5.5 3 1-6.5L3 9l6-1z"/></svg></div>
+              <div class="ocs-title">Job references &amp; portfolio</div>
+              <span class="meta-badge optional" style="text-transform:none;">Recommended</span>
+            </div>
+            <div class="ocs-desc">References and portfolio photos are displayed on your marketplace profile. They help build trust and improve your search ranking significantly.</div>
             <div class="ob-field">
-              <label>How many years of experience do you have?</label>
-              <select class="ob-select"><option>Less than 1 year</option><option selected>1–3 years</option><option>4–7 years</option><option>8–15 years</option><option>15+ years</option></select>
+              <textarea class="ob-textarea" style="min-height:70px;">References available on request from managing agents.</textarea>
             </div>
+            <div class="ob-field" style="margin-bottom:0;">
+              <label>Portfolio Photos</label>
+              <div class="portfolio-grid">
+                <div class="portfolio-add-tile" id="portfolioAddTile">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                  Add Photo
+                </div>
+              </div>
+              <div class="helper">Upload photos of completed work — kitchens, bathrooms, electrical panels, before/after shots. High-quality images increase booking rates by up to 40%. <span id="portfolioCount">0</span> / 10 photos.</div>
+            </div>
+          </div>
+
+          <div class="ob-card-section">
+            <div class="ocs-head">
+              <div class="ocs-icon" style="background:#eef0f8;color:#5b4fc4;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0112 0v1"/></svg></div>
+              <div class="ocs-title">Describe yourself to clients</div>
+            </div>
+            <div class="ocs-desc">Write a short bio for your marketplace profile — your chance to make a great first impression, or let AI help.</div>
+            <div class="ob-field" style="margin-bottom:14px;">
+              <textarea class="ob-textarea" placeholder="Reliable, fully-insured appliances team based in Manchester. Sole trader with 15 years experience.">Reliable, fully-insured appliances team based in Manchester. Sole trader with 15 years experience.</textarea>
+            </div>
+            <div class="callout callout-info" style="margin-bottom:0;">
+              <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg></div>
+              <div>
+                <div class="callout-title">Tips for a Great Bio:</div>
+                <ul class="callout-bullet-list">
+                  <li>Mention your primary trade and years of experience</li>
+                  <li>Highlight what makes you different (response time, speciality, reliability)</li>
+                  <li>Keep it professional but personable — 2-4 sentences is ideal</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="ob-card-section">
+            <div class="ocs-head">
+              <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+              <div class="ocs-title">Standard availability</div>
+            </div>
+            <div class="ocs-desc">Set the days and hours you're available. You can fine-tune per-week availability later from your Schedule.</div>
+
             <div class="ob-field">
-              <label>How many jobs have you completed?</label>
-              <select class="ob-select"><option>Select...</option><option>1–10</option><option>11–50</option><option>51–200</option><option>200+</option></select>
-            </div>
-          </div>
-
-          <div class="ob-section-heading">Job References &amp; Portfolio <span class="meta-badge optional" style="text-transform:none;">Recommended</span></div>
-          <p class="ob-section-subtext" style="margin-top:-2px;">References and portfolio photos are displayed on your marketplace profile. They help build trust and improve your search ranking significantly.</p>
-          <div class="ob-field">
-            <textarea class="ob-textarea" style="min-height:70px;">References available on request from managing agents.</textarea>
-          </div>
-          <div class="ob-field">
-            <label>Portfolio Photos</label>
-            <div class="portfolio-grid">
-              <div class="portfolio-add-tile" id="portfolioAddTile">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-                Add Photo
+              <label>Days available</label>
+              <div class="day-pill-row" id="supDayPills">
+                <div class="day-pill selected" data-value="mon">Mon</div>
+                <div class="day-pill selected" data-value="tue">Tue</div>
+                <div class="day-pill selected" data-value="wed">Wed</div>
+                <div class="day-pill selected" data-value="thu">Thu</div>
+                <div class="day-pill selected" data-value="fri">Fri</div>
+                <div class="day-pill" data-value="sat">Sat</div>
+                <div class="day-pill" data-value="sun">Sun</div>
               </div>
             </div>
-            <div class="helper">Upload photos of completed work — kitchens, bathrooms, electrical panels, before/after shots. High-quality images increase booking rates by up to 40%. <span id="portfolioCount">0</span> / 10 photos.</div>
-          </div>
-
-          <div class="ob-section-heading">Describe Yourself to Clients</div>
-          <p class="ob-section-subtext" style="margin-top:-2px;">Write a short bio for your marketplace profile — your chance to make a great first impression.</p>
-          <div class="ob-field">
-            <textarea class="ob-textarea" placeholder="Reliable, fully-insured appliances team based in Manchester. Sole trader with 15 years experience.">Reliable, fully-insured appliances team based in Manchester. Sole trader with 15 years experience.</textarea>
-          </div>
-          <div class="callout callout-info" style="margin-bottom:0;">
-            <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg></div>
-            <div>
-              <div class="callout-title">Tips for a Great Bio:</div>
-              <ul class="callout-bullet-list">
-                <li>Mention your primary trade and years of experience</li>
-                <li>Highlight what makes you different (response time, speciality, reliability)</li>
-                <li>Keep it professional but personable — 2-4 sentences is ideal</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="ob-section-heading">Standard Availability</div>
-          <p class="ob-section-subtext" style="margin-top:-2px;">Set the days and hours you're available. You can fine-tune per-week availability later from your Schedule.</p>
-          <div class="ob-field">
-            <label>Days available</label>
-            <div class="day-pill-row" id="supDayPills">
-              <div class="day-pill selected" data-value="mon">Mon</div>
-              <div class="day-pill selected" data-value="tue">Tue</div>
-              <div class="day-pill selected" data-value="wed">Wed</div>
-              <div class="day-pill selected" data-value="thu">Thu</div>
-              <div class="day-pill selected" data-value="fri">Fri</div>
-              <div class="day-pill" data-value="sat">Sat</div>
-              <div class="day-pill" data-value="sun">Sun</div>
-            </div>
-          </div>
-          <div class="ob-field">
-            <label>Standard hours</label>
-            <div class="time-row">
-              <span class="time-sep">Start</span>
-              <select class="ob-select"><option>07:00 AM</option><option selected>09:00 AM</option><option>10:00 AM</option></select>
-              <span class="time-sep">End</span>
-              <select class="ob-select"><option>05:00 PM</option><option selected>06:00 PM</option><option>07:00 PM</option></select>
-            </div>
-          </div>
-
-          <div class="ob-field">
-            <label>Minimum notice for a booking</label>
-            <div class="notice-grid" id="noticeTiles">
-              <div class="count-tile" data-value="same-day"><div class="range" style="font-size:13px;">Same day</div><div class="cat-label">No notice</div></div>
-              <div class="count-tile selected" data-value="24h"><div class="range" style="font-size:13px;">24 hours</div><div class="cat-label">Next day</div></div>
-              <div class="count-tile" data-value="48h"><div class="range" style="font-size:13px;">48 hours</div><div class="cat-label">2 days</div></div>
-              <div class="count-tile" data-value="72h"><div class="range" style="font-size:13px;">72 hours</div><div class="cat-label">3 days</div></div>
-              <div class="count-tile" data-value="1week"><div class="range" style="font-size:13px;">1 week</div><div class="cat-label">Weekly</div></div>
-              <div class="count-tile" data-value="2weeks"><div class="range" style="font-size:13px;">2+ weeks</div><div class="cat-label">Forward</div></div>
-            </div>
-            <div class="helper">You may still receive shorter-notice requests — you're never obliged to accept them. This is a preference shown to clients.</div>
-          </div>
-
-          <div class="ob-toggle-card" style="margin-bottom:0;">
-            <div class="otc-top">
-              <div>
-                <div class="otc-title">I am available for out-of-hours jobs</div>
-                <div class="otc-desc">Evenings · early mornings · weekends · bank holidays</div>
+            <div class="ob-row-2">
+              <div class="ob-field">
+                <label>Start time</label>
+                <select class="ob-select"><option>07:00 AM</option><option selected>09:00 AM</option><option>10:00 AM</option></select>
               </div>
-              <button type="button" class="toggle-switch" role="switch" aria-checked="false"><span class="thumb"></span></button>
-            </div>
-          </div>
-          <div class="callout callout-info" style="padding:12px 16px;margin:12px 0;">
-            <div class="callout-body" style="font-size:12.5px;">Configure hours and surcharges in full from your <strong style="color:var(--text-heading);">Pricing</strong> settings once your account is active.</div>
-          </div>
-          <div class="ob-toggle-card">
-            <div class="otc-top">
-              <div>
-                <div class="otc-title">I accept emergency call-outs</div>
-                <div class="otc-desc">Rapid response — typically within 1-2 hours</div>
+              <div class="ob-field">
+                <label>End time</label>
+                <select class="ob-select"><option>05:00 PM</option><option selected>06:00 PM</option><option>07:00 PM</option></select>
               </div>
-              <button type="button" class="toggle-switch on" role="switch" aria-checked="true"><span class="thumb"></span></button>
             </div>
-          </div>
-          <div class="ob-toggle-card">
-            <div class="otc-top">
-              <div>
-                <div class="otc-title">I accept urgent same-day jobs</div>
-                <div class="otc-desc">Less than 4 hours' notice</div>
+
+            <div class="ob-field">
+              <label>Minimum notice for a booking</label>
+              <div class="notice-grid" id="noticeTiles">
+                <div class="count-tile" data-value="same-day"><div class="range" style="font-size:13px;">Same day</div><div class="cat-label">No notice</div></div>
+                <div class="count-tile selected" data-value="24h"><div class="range" style="font-size:13px;">24 hours</div><div class="cat-label">Next day</div></div>
+                <div class="count-tile" data-value="48h"><div class="range" style="font-size:13px;">48 hours</div><div class="cat-label">2 days</div></div>
+                <div class="count-tile" data-value="72h"><div class="range" style="font-size:13px;">72 hours</div><div class="cat-label">3 days</div></div>
+                <div class="count-tile" data-value="1week"><div class="range" style="font-size:13px;">1 week</div><div class="cat-label">Weekly</div></div>
+                <div class="count-tile" data-value="2weeks"><div class="range" style="font-size:13px;">2+ weeks</div><div class="cat-label">Forward</div></div>
               </div>
-              <button type="button" class="toggle-switch on" role="switch" aria-checked="true"><span class="thumb"></span></button>
+              <div class="helper">You may still receive shorter-notice requests — you're never obliged to accept them. This is a preference shown to clients.</div>
             </div>
-          </div>
-          <div class="callout callout-info" style="padding:12px 16px;margin-bottom:20px;">
-            <div class="callout-body" style="font-size:12.5px;">Response SLAs and surcharges configured from <strong style="color:var(--text-heading);">Pricing</strong> settings post-activation.</div>
+
+            <div class="ob-toggle-card" style="border:1px solid var(--border-subtle);">
+              <div class="otc-top">
+                <div>
+                  <div class="otc-title">I am available for out-of-hours jobs</div>
+                  <div class="otc-desc">Evenings · early mornings · weekends · bank holidays</div>
+                </div>
+                <button type="button" class="toggle-switch" role="switch" aria-checked="false"><span class="thumb"></span></button>
+              </div>
+            </div>
+            <div class="callout callout-info" style="padding:12px 16px;margin:12px 0;">
+              <div class="callout-body" style="font-size:12.5px;">Configure hours and surcharges in full from your <strong style="color:var(--text-heading);">Pricing</strong> settings once your account is active.</div>
+            </div>
+            <div class="ob-toggle-card" style="border:1px solid var(--border-subtle);">
+              <div class="otc-top">
+                <div>
+                  <div class="otc-title">I accept emergency call-outs</div>
+                  <div class="otc-desc">Rapid response — typically within 1-2 hours</div>
+                </div>
+                <button type="button" class="toggle-switch on" role="switch" aria-checked="true"><span class="thumb"></span></button>
+              </div>
+            </div>
+            <div class="ob-toggle-card" style="border:1px solid var(--border-subtle);">
+              <div class="otc-top">
+                <div>
+                  <div class="otc-title">I accept urgent same-day jobs</div>
+                  <div class="otc-desc">Less than 4 hours' notice</div>
+                </div>
+                <button type="button" class="toggle-switch on" role="switch" aria-checked="true"><span class="thumb"></span></button>
+              </div>
+            </div>
+            <div class="callout callout-info" style="padding:12px 16px;margin-bottom:0;">
+              <div class="callout-body" style="font-size:12.5px;">Response SLAs and surcharges configured from <strong style="color:var(--text-heading);">Pricing</strong> settings post-activation.</div>
+            </div>
           </div>
 
-          <div class="ob-section-heading">Service Region</div>
-          <p class="ob-section-subtext" style="margin-top:-2px;">Choose where you want to receive jobs. You'll only get requests from the areas you select.</p>
-          <div class="ob-field">
-            <label>London zones</label>
-            <div class="simple-chip-row" id="supLondonZones">
-              <div class="simple-chip selected" data-value="central">Central</div>
-              <div class="simple-chip" data-value="north">North</div>
-              <div class="simple-chip" data-value="west">West</div>
-              <div class="simple-chip" data-value="northeast">North East</div>
-              <div class="simple-chip" data-value="east">East</div>
-              <div class="simple-chip" data-value="southeast">South East</div>
-              <div class="simple-chip" data-value="south">South</div>
-              <div class="simple-chip" data-value="southwest">South West</div>
-              <div class="simple-chip" data-value="all-london">All London</div>
+          <div class="ob-card-section" style="margin-bottom:0;">
+            <div class="ocs-head">
+              <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+              <div class="ocs-title">Service region</div>
             </div>
-          </div>
-          <div class="ob-field" style="margin-bottom:0;">
-            <label>Other cities <span class="meta-badge optional">Optional</span></label>
-            <div class="simple-chip-row" id="supOtherCities" style="margin-bottom:12px;">
-              <div class="simple-chip" data-value="manchester">Manchester</div>
-              <div class="simple-chip" data-value="birmingham">Birmingham</div>
-              <div class="simple-chip" data-value="leeds">Leeds</div>
-              <div class="simple-chip" data-value="liverpool">Liverpool</div>
-              <div class="simple-chip" data-value="cambridge">Cambridge</div>
-              <div class="simple-chip" data-value="oxford">Oxford</div>
+            <div class="ocs-desc">Choose where you want to receive jobs. You'll only get requests from the areas you select.</div>
+            <div class="ob-field">
+              <label>London zones</label>
+              <div class="simple-chip-row" id="supLondonZones">
+                <div class="simple-chip selected" data-value="central">Central</div>
+                <div class="simple-chip" data-value="north">North</div>
+                <div class="simple-chip" data-value="west">West</div>
+                <div class="simple-chip" data-value="northeast">North East</div>
+                <div class="simple-chip" data-value="east">East</div>
+                <div class="simple-chip" data-value="southeast">South East</div>
+                <div class="simple-chip" data-value="south">South</div>
+                <div class="simple-chip" data-value="southwest">South West</div>
+                <div class="simple-chip" data-value="all-london">All London</div>
+              </div>
             </div>
-            <input class="field-input" type="text" id="supCustomCityInput" placeholder="Add a city or region, then press Enter">
+            <div class="ob-field" style="margin-bottom:0;">
+              <label>Other cities <span class="meta-badge optional">Optional</span></label>
+              <div class="simple-chip-row" id="supOtherCities" style="margin-bottom:12px;">
+                <div class="simple-chip" data-value="manchester">Manchester</div>
+                <div class="simple-chip" data-value="birmingham">Birmingham</div>
+                <div class="simple-chip" data-value="leeds">Leeds</div>
+                <div class="simple-chip" data-value="liverpool">Liverpool</div>
+                <div class="simple-chip" data-value="cambridge">Cambridge</div>
+                <div class="simple-chip" data-value="oxford">Oxford</div>
+              </div>
+              <input class="field-input" type="text" id="supCustomCityInput" placeholder="Add a city or region, then press Enter">
+            </div>
           </div>
         </section>
       </div>
@@ -4491,6 +4802,28 @@
     toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 4500);
   }
 
+  /* Smooth, exact-height expand/collapse for .field-collapsible elements.
+     Using the element's real scrollHeight (instead of a large fixed max-height)
+     keeps the transition timing accurate regardless of content length. */
+  function setCollapsibleOpen(el, isOpen) {
+    if (!el) return;
+    if (isOpen) {
+      el.style.maxHeight = el.scrollHeight + 'px';
+      el.classList.add('open');
+    } else {
+      el.style.maxHeight = el.scrollHeight + 'px';
+      void el.offsetHeight;
+      el.classList.remove('open');
+      requestAnimationFrame(function () {
+        el.style.maxHeight = '0px';
+      });
+    }
+  }
+
+  document.getElementById('adminNavBtn').addEventListener('click', function () {
+    showToast('Admin panel isn\u2019t built in this prototype yet.');
+  });
+
   var openModals = [];
 
   function initPersonaPicker(overlay, onChange) {
@@ -4842,8 +5175,8 @@
     signupHeading.textContent = signupCopy[role].heading;
     signupSubtitle.textContent = signupCopy[role].subtitle;
     var showPmFields = role === 'pm';
-    companyField.classList.toggle('open', showPmFields);
-    roleField.classList.toggle('open', showPmFields);
+    setCollapsibleOpen(companyField, showPmFields);
+    setCollapsibleOpen(roleField, showPmFields);
     companyInput.required = showPmFields;
     jobTitleInput.required = showPmFields;
   });
@@ -5016,6 +5349,7 @@
   function openLogin(role) {
     loginPicker.setRole(role || 'pm');
     loginIdentifier.value = '';
+    document.getElementById('loginCountryCodeWrap').style.display = 'none';
     loginModal.open();
     focusFirstField(loginOverlay);
   }
@@ -5074,9 +5408,16 @@
     if (e.key === 'Enter') { e.preventDefault(); handleLoginContinue(e); }
   });
   document.getElementById('loginForm').addEventListener('submit', function (e) { e.preventDefault(); });
+  var loginCountryCodeWrap = document.getElementById('loginCountryCodeWrap');
   loginIdentifier.addEventListener('input', function () {
     loginIdentifier.classList.remove('error');
     document.getElementById('loginIdentifierError').classList.remove('show');
+
+    // Show the country code dropdown only once it looks like a phone number is being
+    // typed (starts with a digit or +) — hide it for email entry.
+    var val = loginIdentifier.value.trim();
+    var looksLikePhone = /^[0-9+]/.test(val);
+    loginCountryCodeWrap.style.display = looksLikePhone ? '' : 'none';
   });
 
   /* =========================================================
@@ -5157,7 +5498,7 @@
 
   function initSingleSelectTiles(container, onChange) {
     if (!container) return;
-    var tiles = container.querySelectorAll('.choice-tile, .count-tile, .billing-card, .radio-tile');
+    var tiles = container.querySelectorAll('.choice-tile, .count-tile, .billing-card, .radio-tile, .radio-row');
     tiles.forEach(function (tile) {
       tile.addEventListener('click', function () {
         tiles.forEach(function (t) {
@@ -5193,7 +5534,7 @@
   vatToggle.addEventListener('click', function () {
     var isOn = vatToggle.classList.toggle('on');
     vatToggle.setAttribute('aria-checked', isOn ? 'true' : 'false');
-    vatField.classList.toggle('open', isOn);
+    setCollapsibleOpen(vatField, isOn);
   });
 
   document.querySelectorAll('#dayPills .day-pill').forEach(function (pill) {
@@ -5378,11 +5719,12 @@
     1: { label: 'Setup', next: 'Continue' },
     2: { label: 'Verification', next: 'Continue' },
     3: { label: 'Verification', next: 'Continue' },
-    4: { label: 'Verification', next: 'Continue' },
-    5: { label: 'Payment', next: 'Continue' },
-    6: { label: 'Categories', next: 'Continue' },
-    7: { label: 'Profile', next: 'Submit for Review' }
+    4: { label: 'Verification', next: 'Submit for Review' },
+    5: { label: 'Profile', next: 'Continue' },
+    6: { label: 'Profile', next: 'Continue' },
+    7: { label: 'Profile', next: 'Finish' }
   };
+  var PROFILE_PHASE_STEPS = { 5: 1, 6: 2, 7: 3 }; // step -> sub-step index (1-3)
 
   function findSupStepEl(step) {
     return supObApp.querySelector('.ob-step[data-step="' + step + '"]');
@@ -5400,6 +5742,19 @@
     supObNextBtn.innerHTML = meta.next + ' <span class="arrow">→</span>';
     supObBackBtn.hidden = step === 1;
     supObProgressFill.style.width = ((step / TOTAL_SUP_OB_STEPS) * 100) + '%';
+
+    var stepper = document.getElementById('supProfileDotStepper');
+    var subStep = PROFILE_PHASE_STEPS[step];
+    if (subStep) {
+      stepper.classList.add('show');
+      var dots = stepper.querySelectorAll('.stepper-dot');
+      dots.forEach(function (dot, i) {
+        var idx = i + 1;
+        dot.className = 'stepper-dot ' + (idx < subStep ? 'done' : idx === subStep ? 'current' : 'upcoming');
+      });
+    } else {
+      stepper.classList.remove('show');
+    }
   }
 
   function goToSupObStep(step) {
@@ -5433,7 +5788,7 @@
     toggle.addEventListener('click', function () {
       var isOn = toggle.classList.toggle('on');
       toggle.setAttribute('aria-checked', isOn ? 'true' : 'false');
-      if (field) field.classList.toggle('open', isOn);
+      if (field) setCollapsibleOpen(field, isOn);
     });
   }
 
@@ -5488,7 +5843,7 @@
   /* ---- Step 4: Background Checks ---- */
   initObToggle('dbsToggle', 'dbsFields');
   initSingleSelectTiles(document.getElementById('convictionTiles'), function (value) {
-    document.getElementById('convictionDetailsField').classList.toggle('open', value === 'has-convictions');
+    setCollapsibleOpen(document.getElementById('convictionDetailsField'), value === 'has-convictions');
   });
   initSingleSelectTiles(document.getElementById('rightToWorkTiles'));
 
@@ -5504,7 +5859,7 @@
 
   /* ---- Step 5: Payment ---- */
   initSingleSelectTiles(document.getElementById('vatTiles'), function (value) {
-    document.getElementById('vatNumberField').classList.toggle('open', value === 'yes');
+    setCollapsibleOpen(document.getElementById('vatNumberField'), value === 'yes');
   });
   var vatNumberInput = document.getElementById('vatNumberInput');
   var verifyHmrcBtn = document.getElementById('verifyHmrcBtn');
@@ -5528,6 +5883,9 @@
     btn.textContent = 'Agreement Signed ✓';
     btn.disabled = true;
     showToast('Self-billing agreement signed.');
+  });
+  document.getElementById('readAgreementRow').addEventListener('click', function () {
+    showToast('This would open the full self-billing agreement in a new tab.');
   });
 
   /* ---- Step 6: Categories & Roles ---- */
@@ -5584,14 +5942,37 @@
 
   function syncCategoryCounts() {
     var totalCats = 0, totalRoles = 0;
+    var selectedCats = [];
+    var checkSvg = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
     document.querySelectorAll('.crp-cat-row').forEach(function (row) {
       var cat = row.getAttribute('data-cat');
       var set = getSelectedSet(cat);
       var count = Object.keys(set).filter(function (r) { return set[r]; }).length;
       row.querySelector('.crp-count').textContent = count;
-      if (count > 0) { totalCats++; totalRoles += count; }
+      row.classList.toggle('has-selection', count > 0);
+      row.querySelector('.crp-checkbox').innerHTML = count > 0 ? checkSvg : '';
+      if (count > 0) { totalCats++; totalRoles += count; selectedCats.push({ name: cat, count: count }); }
     });
-    document.getElementById('catRoleSummaryCount').textContent = totalCats + ' categor' + (totalCats === 1 ? 'y' : 'ies') + ' · ' + totalRoles + ' role' + (totalRoles === 1 ? '' : 's');
+
+    var chipsRow = document.getElementById('selectedCatChipsRow');
+    var html = '<span class="cat-summary-chip"><strong id="catRoleSummaryCount">' +
+      totalCats + ' categor' + (totalCats === 1 ? 'y' : 'ies') + ' · ' + totalRoles + ' role' + (totalRoles === 1 ? '' : 's') + '</strong></span>';
+    selectedCats.forEach(function (c) {
+      html += '<span class="cat-selected-chip" data-cat="' + c.name + '">' + c.name +
+        ' <strong>' + c.count + '</strong> <button type="button" class="csc-remove" data-cat="' + c.name + '" aria-label="Remove ' + c.name + '">' +
+        '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>';
+    });
+    chipsRow.innerHTML = html;
+    chipsRow.querySelectorAll('.csc-remove').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var cat = btn.getAttribute('data-cat');
+        selectedRolesByCategory[cat] = {};
+        syncCategoryCounts();
+        if (activeCategory === cat) renderCrpRoles();
+        renderRoleCertifications();
+      });
+    });
   }
 
   function renderRoleCertifications() {
@@ -5617,11 +5998,11 @@
         '<div class="ob-row-2">' +
         '<div class="ob-field"><label>Upload Certificate</label><div class="file-dropzone" id="' + zoneId + '" data-title="' + cert.label + '"><input type="file" style="display:none;">' +
         '<div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>' +
-        '<div class="fd-label">Click to Upload Photo or PDF</div></div></div>' +
+        '<div class="fd-label">Click to Upload<span class="fd-sub">Photo or PDF</span></div></div></div>' +
         '<div class="ob-field"><label>Registration number</label><input class="field-input" type="text" placeholder="Enter your ' + cert.label + ' number"></div>' +
         '</div>' +
-        '<div class="ob-field" style="max-width:280px;"><label>Expiry date</label><input class="field-input" type="date"></div>' +
-        '<div class="helper">Upload will auto-fill the registration number &amp; expiry date.</div></div></div>';
+        '<div class="ob-field" style="max-width:calc(50% - 7px);"><label>Expiry date</label><input class="field-input" type="date"></div>' +
+        '<div class="ai-hint-pill"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg>Upload will auto-fill the registration number &amp; expiry date</div></div></div>';
     }).join('');
     wireUploadZonesIn(container);
   }
@@ -5698,6 +6079,9 @@
     if (signupData.phoneNumber) document.getElementById('supPhone').value = signupData.phoneNumber;
     if (signupData.email) document.getElementById('supEmail').value = signupData.email;
     identityBanner.update();
+
+    var firstNameForAgreement = (signupData.fullName || 'fern').trim().split(/\s+/)[0].toLowerCase();
+    document.getElementById('selfBillingName').textContent = firstNameForAgreement;
 
     supObApp.classList.add('active');
     document.body.style.overflow = 'hidden';
