@@ -16,6 +16,7 @@
     --navy-700: #1c2f4d;
     --accent-blue: #284890;
     --accent-blue-light: #3a5cad;
+    --fill-indigo: #364d8b; /* pixel-sampled: chat 'All messages' pill, sent-message bubble, profile-completion bar fill — distinct from --accent-blue */
     --btn-grad-start: #204078;
     --btn-grad-end: #102048;
     --surface-white: #ffffff;
@@ -121,6 +122,8 @@
   }
   .btn-primary:active { transform: translateY(0); filter: brightness(0.98); }
   .btn-primary:focus-visible { outline: 2px solid var(--accent-blue); outline-offset: 2px; }
+  .btn-primary:disabled { background: #cbd5e1; color: #94a3b8; cursor: not-allowed; box-shadow: none; transform: none; filter: none; }
+  .btn-primary:disabled:hover { filter: none; box-shadow: none; transform: none; }
 
   .btn-ghost-dark {
     background: rgba(255,255,255,0.06);
@@ -964,13 +967,13 @@
     transform: translateX(-50%) translateY(20px);
     background: #10a048;
     color: #fff;
-    padding: 14px 20px;
+    padding: 14px 18px 14px 20px;
     border-radius: 12px;
     display: flex;
     align-items: center;
     gap: 10px;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 700;
     box-shadow: 0 12px 28px rgba(0,0,0,0.25);
     opacity: 0;
     pointer-events: none;
@@ -978,6 +981,9 @@
     z-index: 200;
   }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+  .toast svg:first-child { flex-shrink: 0; }
+  .toast .toast-close { color: rgba(255,255,255,0.85); flex-shrink: 0; margin-left: 4px; cursor: pointer; }
+  .toast .toast-close:hover { color: #fff; }
 
   /* =========================================================
      LOGIN MODAL — steps, OTP boxes
@@ -2339,6 +2345,7 @@
   }
   .admin-table tbody td { padding: 12px; border-bottom: 1px solid var(--border-subtle); font-size: 13px; color: var(--text-heading); vertical-align: middle; }
   .admin-table td:last-child, .admin-table th:last-child { white-space: nowrap; }
+  #appTableViewWrap .admin-table td:nth-child(4) { white-space: nowrap; }
   .admin-table tbody tr:last-child td { border-bottom: none; }
   #pmTableBody tr { cursor: pointer; }
   .admin-table .at-link { color: var(--accent-blue); font-weight: 700; }
@@ -2434,21 +2441,21 @@
   .pm-icon-btn-sq { width: 28px; height: 28px; border: 1px solid var(--border-subtle); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--text-body-muted); flex-shrink: 0; cursor: pointer; }
   .pm-icon-btn-sq:hover { background: var(--surface-soft); }
 
-  .pm-filter-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; padding-right: 4px; }
-  @media (max-width: 1300px) { .pm-filter-row { grid-template-columns: repeat(3, 1fr); } }
-  @media (max-width: 700px) { .pm-filter-row { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 480px) { .pm-filter-row { grid-template-columns: 1fr; } }
+  /* Fixed, equal-width columns (minmax floor stops fields from ever getting squeezed
+     narrower than a native date input can render correctly) — the row simply doesn't
+     stretch to fill the card, which is what creates the reserved right-hand gap,
+     rather than padding stealing width from the columns themselves. */
+  .pm-filter-row { display: grid; grid-template-columns: repeat(5, minmax(150px, 1fr)); gap: 12px; max-width: calc(100% - 300px); }
+  @media (max-width: 1300px) { .pm-filter-row { grid-template-columns: repeat(3, minmax(150px, 1fr)); max-width: calc(100% - 150px); } }
+  @media (max-width: 700px) { .pm-filter-row { grid-template-columns: repeat(2, minmax(140px, 1fr)); max-width: calc(100% - 60px); } }
+  @media (max-width: 480px) { .pm-filter-row { grid-template-columns: 1fr; max-width: 100%; } }
   .pm-filter-field { position: relative; }
   .pm-filter-field .pff-legend-wrap { position: relative; height: 12px; margin-bottom: 6px; }
-  .pm-filter-field .pff-legend-wrap::after {
-    content: ""; position: absolute; top: 50%; left: 0; right: 0; border-top: 1px solid var(--border-subtle); z-index: 0;
-  }
   .pm-filter-field label {
     position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 5px;
     font-size: 11px; font-weight: 600; color: var(--text-body-muted);
-    background: #fff; padding-right: 8px;
+    background: #fff; padding-left: 6px; padding-right: 6px;
   }
-  .pm-filter-field label svg { width: 12px; height: 12px; flex-shrink: 0; }
   .pm-filter-field select, .pm-filter-field input {
     width: 100%; padding: 7px 26px 7px 10px; border-radius: 8px; border: 1px solid var(--border-subtle);
     font-size: 12.5px; font-family: inherit; color: var(--text-heading); background: #fff;
@@ -2457,7 +2464,37 @@
     background-repeat: no-repeat; background-position: right 7px center; background-size: 12px;
   }
   .pm-filter-field select { cursor: pointer; }
-  .pm-filter-field input[type="date"] { background-image: none; padding-right: 10px; }
+
+  /* Custom calendar date-picker (replaces native <input type="date">) */
+  .pm-cal-trigger-btn .cal-value.placeholder { color: #94a3b8; }
+  .pm-cal-popup {
+    position: absolute; top: calc(100% + 6px); left: 0; z-index: 30; width: 280px;
+    background: #fff; border-radius: 14px; box-shadow: 0 16px 40px rgba(16,24,40,0.18);
+    padding: 14px; opacity: 0; visibility: hidden; transform: translateY(-6px);
+    transition: opacity 150ms ease-out, transform 150ms ease-out, visibility 150ms ease-out;
+  }
+  .pm-cal-popup.open { opacity: 1; visibility: visible; transform: none; }
+  .pm-cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .pm-cal-month-label { display: flex; align-items: center; gap: 4px; font-size: 14.5px; font-weight: 800; color: var(--text-heading); cursor: pointer; }
+  .pm-cal-month-label svg { width: 12px; height: 12px; color: #94a3b8; }
+  .pm-cal-nav { display: flex; align-items: center; gap: 4px; }
+  .pm-cal-nav-btn { width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; border-radius: 7px; color: var(--text-body-muted); cursor: pointer; }
+  .pm-cal-nav-btn:hover { background: var(--surface-soft); }
+  .pm-cal-nav-btn svg { width: 15px; height: 15px; }
+  .pm-cal-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); margin-bottom: 4px; }
+  .pm-cal-weekdays span { text-align: center; font-size: 11px; font-weight: 700; color: #94a3b8; padding: 4px 0; }
+  .pm-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+  .pm-cal-day {
+    width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+    border-radius: 999px; font-size: 12.5px; font-weight: 600; color: var(--text-heading); cursor: pointer;
+  }
+  .pm-cal-day:hover:not(.selected) { background: var(--surface-soft); }
+  .pm-cal-day.muted { color: #cbd5e1; font-weight: 500; }
+  .pm-cal-day.today:not(.selected) { box-shadow: inset 0 0 0 1.5px var(--accent-blue); color: var(--accent-blue); font-weight: 700; }
+  .pm-cal-day.selected { background: var(--navy-900); color: #fff; font-weight: 700; }
+  .pm-cal-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-subtle); }
+  .pm-cal-link { font-size: 12.5px; font-weight: 600; color: var(--accent-blue); cursor: pointer; }
+  .pm-cal-link:hover { text-decoration: underline; }
 
   .pm-custom-dd-btn {
     width: 100%; display: flex; align-items: center; gap: 8px;
@@ -2494,27 +2531,36 @@
   .pm-card-email { font-size: 11.5px; color: var(--text-body-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
   .pm-card-active-chip { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #1a7a3e; background: #eafaf0; padding: 4px 10px; border-radius: 999px; flex-shrink: 0; white-space: nowrap; margin-top: 1px; }
   .pm-card-active-chip .dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; flex-shrink: 0; }
+  .pm-card-active-chip.inactive { color: #c0392b; background: #fdecea; }
+  .pm-card-active-chip.inactive .dot { background: #e8482c; }
   .pm-card-actions { display: flex; align-items: center; gap: 2px; flex-shrink: 0; position: relative; margin-top: 1px; }
   .pm-card-actions button { width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; color: #94a3b8; border-radius: 6px; position: relative; cursor: pointer; }
   .pm-card-actions button:hover { background: var(--surface-soft); color: var(--text-heading); }
   .pm-verified-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 600; color: #1a7a3e; background: #eafaf0; padding: 3px 9px; border-radius: 999px; margin-bottom: 10px; }
+  .pm-verified-badge.unverified { color: #64748b; background: var(--surface-soft); }
+  .pm-yes-tag.inactive { color: #c0392b; background: #fdecea; }
+  .pm-yes-tag.inactive .dot { background: #e8482c; }
+  .pm-unverified-tag { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: #64748b; background: var(--surface-soft); padding: 4px 10px; border-radius: 999px; }
+  .pm-unverified-tag svg { width: 12px; height: 12px; flex-shrink: 0; }
   .pm-verified-badge svg { width: 11px; height: 11px; }
   .pm-card-meta-row { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-body-muted); margin-bottom: 5px; }
   .pm-card-meta-row svg { color: #94a3b8; flex-shrink: 0; width: 12px; height: 12px; }
-  .pm-card-pill-row { display: flex; gap: 6px; margin: 10px 0; flex-wrap: wrap; }
-  .pm-status-pill-mini { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; }
-  .pm-status-pill-mini svg { width: 10px; height: 10px; }
+  .pm-card-pill-row { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin: 10px 0; }
+  .pm-status-pill-mini { display: inline-flex; align-items: center; gap: 6px; width: fit-content; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
+  .pm-status-pill-mini .pill-lead { display: flex; align-items: center; gap: 6px; }
+  .pm-status-pill-mini svg { width: 13px; height: 13px; flex-shrink: 0; }
+  .pm-status-pill-mini .pill-status-icon { width: 12px; height: 12px; }
   .pm-status-pill-mini.ok { color: #1a7a3e; background: #eafaf0; }
   .pm-status-pill-mini.bad { color: #c0392b; background: #fdecea; }
-  .pm-card-stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 10px 0; border-top: 1px solid var(--border-subtle); }
+  .pm-card-stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 12px; background: #f8fafc; border-radius: 12px; margin: 10px 0; }
   .pm-card-stats-row .pcs-label { font-size: 9.5px; font-weight: 700; color: #94a3b8; letter-spacing: 0.03em; display: flex; align-items: center; gap: 3px; margin-bottom: 2px; }
   .pm-card-stats-row .pcs-label svg { width: 10px; height: 10px; }
   .pm-card-stats-row .pcs-value { font-size: 12.5px; font-weight: 700; color: var(--text-heading); }
   .pm-card-stats-row .pcs-value.muted { color: #94a3b8; font-weight: 600; }
-  .pm-completion-row { padding-top: 10px; border-top: 1px solid var(--border-subtle); }
+  .pm-completion-row { padding-top: 2px; }
   .pm-completion-label-row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text-body-muted); font-weight: 600; margin-bottom: 5px; }
   .pm-completion-label-row .pct { color: var(--text-heading); font-weight: 700; }
-  .pm-completion-track { height: 5px; border-radius: 999px; background: var(--surface-soft); overflow: hidden; }
+  .pm-completion-track { height: 5px; border-radius: 999px; background: var(--icon-tint-bg); overflow: hidden; }
   .pm-completion-fill { height: 100%; border-radius: 999px; background: var(--accent-blue); }
   .pm-complete-pill { display: flex; align-items: center; justify-content: space-between; font-size: 12px; font-weight: 700; color: #1a7a3e; background: #eafaf0; padding: 7px 11px; border-radius: 8px; margin-top: 10px; }
   .pm-complete-pill svg { color: #1a7a3e; width: 13px; height: 13px; }
@@ -2532,17 +2578,17 @@
   [data-tooltip]:hover::after { opacity: 1; visibility: visible; }
 
   /* 3-dot dropdown menu */
-  .pm-dropdown-menu {
+  .pm-dropdown-menu, .app-dropdown-menu {
     position: absolute; top: 32px; right: 0; z-index: 20;
     background: #fff; border-radius: 12px; box-shadow: 0 16px 40px rgba(16,24,40,0.18);
     padding: 6px; min-width: 180px;
     opacity: 0; visibility: hidden; transform: translateY(-6px);
     transition: opacity 150ms ease-out, transform 150ms ease-out, visibility 150ms ease-out;
   }
-  .pm-dropdown-menu.open { opacity: 1; visibility: visible; transform: none; }
-  .pm-dropdown-menu button { display: flex; align-items: center; gap: 10px; width: 100%; padding: 9px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--text-heading); text-align: left; }
-  .pm-dropdown-menu button:hover { background: var(--surface-soft); }
-  .pm-dropdown-menu button svg { color: var(--text-body-muted); flex-shrink: 0; }
+  .pm-dropdown-menu.open, .app-dropdown-menu.open { opacity: 1; visibility: visible; transform: none; }
+  .pm-dropdown-menu button, .app-dropdown-menu button { display: flex; align-items: center; gap: 10px; width: 100%; padding: 9px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--text-heading); text-align: left; }
+  .pm-dropdown-menu button:hover, .app-dropdown-menu button:hover { background: var(--surface-soft); }
+  .pm-dropdown-menu button svg, .app-dropdown-menu button svg { color: var(--text-body-muted); flex-shrink: 0; }
 
   /* Table view */
   .pm-table-wrap { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; max-height: calc(100vh - 330px); min-height: 300px; }
@@ -2573,7 +2619,7 @@
   .client-name-row h1 { font-size: 22px; font-weight: 800; color: var(--text-heading); }
   .client-role-badge { font-size: 11.5px; font-weight: 700; color: #284890; background: #e8f0f8; padding: 4px 12px; border-radius: 999px; }
   .client-status-row { display: flex; align-items: center; gap: 10px; margin-top: 6px; font-size: 12.5px; color: var(--text-body-muted); }
-  .client-status-row .live-dot { display: inline-flex; align-items: center; gap: 5px; color: #1a7a3e; font-weight: 600; }
+  .client-status-row .live-dot { display: inline-flex; align-items: center; gap: 5px; color: #1a7a3e; font-weight: 600; background: #eafaf0; padding: 4px 10px; border-radius: 999px; }
   .client-status-row .live-dot .dot { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; }
   .client-pending-pill { font-size: 11px; font-weight: 700; color: #92620a; background: #fef3c7; padding: 3px 10px; border-radius: 999px; letter-spacing: 0.02em; }
   .client-header-actions { display: flex; align-items: center; gap: 10px; margin-left: auto; flex-shrink: 0; }
@@ -2585,15 +2631,36 @@
   }
   .btn-danger-outline:hover { background: #fef3f2; }
 
-  .client-stat-row { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--border-subtle); }
-  .client-stat-cell { padding: 16px 24px; border-right: 1px solid var(--border-subtle); }
-  .client-stat-cell:last-child { border-right: none; }
+  .client-stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 0 24px 22px; }
+  .client-header-actions-edit { display: flex; }
+
+  /* Edit-mode field toggling (Personal & Contact + Business Details only) */
+  #adminClientDetailView .dfr-edit-only { display: none; }
+  #adminClientDetailView.editing .dfr-view-only { display: none !important; }
+  #adminClientDetailView.editing .dfr-edit-only { display: block; }
+  #adminClientDetailView.editing .phone-row.dfr-edit-only { display: flex; }
+  #adminClientDetailView.editing #clientHeaderActionsView { display: none; }
+  #adminClientDetailView.editing #clientHeaderActionsEdit { display: flex; }
+
+  .client-edit-footer {
+    position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px);
+    display: flex; align-items: center; gap: 22px; background: #fff; border-radius: 14px;
+    box-shadow: 0 20px 50px rgba(16,24,40,0.25); padding: 14px 20px; z-index: 350;
+    opacity: 0; visibility: hidden; transition: opacity 200ms ease-out, transform 200ms ease-out, visibility 200ms ease-out;
+  }
+  .client-edit-footer.open { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+  .client-edit-footer .cef-status { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--text-body-muted); white-space: nowrap; }
+  .client-edit-footer .cef-status .dot { width: 7px; height: 7px; border-radius: 50%; background: #cbd5e1; }
+  .client-edit-footer .cef-status.dirty .dot { background: #f59e0b; }
+  .client-edit-footer .cef-status.dirty { color: #92620a; }
+  .client-edit-footer .cef-actions { display: flex; align-items: center; gap: 10px; }
+  .client-stat-cell { padding: 14px 18px; background: #f8fafc; border-radius: 12px; }
   .client-stat-cell .csc-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; color: #94a3b8; margin-bottom: 6px; }
   .client-stat-cell .csc-value { font-size: 18px; font-weight: 800; color: var(--text-heading); }
   .client-stat-cell .csc-value.amber { color: #b5891a; }
   .client-stat-cell .csc-value.green { color: #1a7a3e; }
-  .client-stat-cell .csc-bar { height: 5px; border-radius: 999px; background: var(--surface-soft); overflow: hidden; margin-top: 8px; }
-  .client-stat-cell .csc-bar-fill { height: 100%; background: var(--navy-900); border-radius: 999px; }
+  .client-stat-cell .csc-bar { height: 5px; border-radius: 999px; background: var(--icon-tint-bg); overflow: hidden; margin-top: 8px; }
+  .client-stat-cell .csc-bar-fill { height: 100%; background: var(--fill-indigo); border-radius: 999px; }
 
   .client-tabs-row { display: flex; gap: 28px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 20px; }
   .client-tab { padding: 12px 2px; font-size: 14px; font-weight: 600; color: var(--text-body-muted); border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; }
@@ -2603,8 +2670,55 @@
   .client-show-filter { display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 14px 18px; margin-bottom: 20px; }
   .client-show-filter .csf-label { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; color: #94a3b8; flex-shrink: 0; }
   .client-show-pill { font-size: 13px; font-weight: 600; color: var(--text-body-muted); padding: 8px 16px; border-radius: 999px; cursor: pointer; }
-  .client-show-pill.active { background: var(--navy-900); color: #fff; }
+  .client-show-pill.active { background: var(--accent-blue); color: #fff; }
   .client-show-pill:not(.active):hover { background: var(--surface-soft); }
+
+  /* Properties / Jobs tabs */
+  .tab-stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+  .client-empty-state { background: #fff; border: 1px solid var(--border-subtle); border-radius: 16px; padding: 70px 24px; text-align: center; }
+  .client-empty-state .ces-icon { width: 56px; height: 56px; border-radius: 50%; background: var(--surface-soft); color: #94a3b8; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; }
+  .client-empty-state .ces-icon svg { width: 24px; height: 24px; }
+  .client-empty-state h3 { font-size: 16px; font-weight: 800; color: var(--text-heading); margin-bottom: 6px; }
+  .client-empty-state p { font-size: 13.5px; color: var(--text-body-muted); max-width: 420px; margin: 0 auto 20px; line-height: 1.5; }
+  .client-empty-state .btn-outline-full { display: inline-flex; width: auto; }
+
+  /* Chat tab */
+  .chat-header-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 14px 18px; display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .chat-header-card .chat-avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0; }
+  .chat-header-info { flex: 1; min-width: 0; }
+  .chat-header-info .chi-name-row { display: flex; align-items: center; gap: 8px; font-size: 14.5px; font-weight: 700; color: var(--text-heading); }
+  .chat-header-info .chi-active { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: #1a7a3e; }
+  .chat-header-info .chi-active .dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; }
+  .chat-header-info .chi-sub { font-size: 12px; color: var(--text-body-muted); margin-top: 2px; }
+  .chat-header-search { position: relative; width: 220px; flex-shrink: 0; }
+  .chat-header-search svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: #94a3b8; width: 14px; height: 14px; }
+  .chat-header-search input { width: 100%; padding: 8px 10px 8px 32px; border-radius: 8px; border: 1px solid var(--border-subtle); font-size: 12.5px; font-family: inherit; }
+
+  .chat-filter-pills { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .chat-filter-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: var(--text-body-muted); background: #fff; border: 1px solid var(--border-subtle); padding: 7px 13px; border-radius: 999px; cursor: pointer; white-space: nowrap; }
+  .chat-filter-pill svg { width: 12px; height: 12px; }
+  .chat-filter-pill.active { background: var(--fill-indigo); color: #fff; border-color: var(--fill-indigo); }
+  .chat-filter-pill:not(.active):hover { background: var(--surface-soft); }
+
+  .chat-thread-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 20px; min-height: 320px; max-height: 420px; overflow-y: auto; margin-bottom: 12px; }
+  .chat-day-divider { text-align: center; margin-bottom: 16px; }
+  .chat-day-divider span { font-size: 11.5px; font-weight: 600; color: var(--text-body-muted); background: var(--surface-soft); padding: 4px 12px; border-radius: 999px; }
+  .chat-msg-row { display: flex; margin-bottom: 14px; }
+  .chat-msg-row.out { justify-content: flex-end; }
+  .chat-msg-bubble { max-width: 60%; }
+  .chat-msg-row.out .chat-msg-bubble { text-align: right; }
+  .chat-msg-bubble .cmb-text { display: inline-block; background: var(--fill-indigo); color: #fff; padding: 10px 14px; border-radius: 14px 14px 4px 14px; font-size: 13.5px; line-height: 1.4; text-align: left; white-space: pre-wrap; word-break: break-word; }
+  .chat-msg-bubble .cmb-meta { font-size: 11px; color: #94a3b8; margin-top: 4px; display: flex; align-items: center; gap: 4px; justify-content: flex-end; }
+  .chat-msg-bubble .cmb-meta svg { width: 12px; height: 12px; color: #94a3b8; flex-shrink: 0; }
+
+  .chat-input-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 12px 14px; }
+  .chat-input-row { display: flex; align-items: flex-end; gap: 10px; }
+  .chat-input-row .chat-icon-btn { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--text-body-muted); flex-shrink: 0; cursor: pointer; }
+  .chat-input-row .chat-icon-btn:hover { background: var(--surface-soft); }
+  .chat-input-row textarea { flex: 1; border: none; outline: none; font-family: inherit; font-size: 13.5px; color: var(--text-heading); min-width: 0; resize: none; max-height: 120px; padding: 8px 0; line-height: 1.4; }
+  .chat-input-row textarea::placeholder { color: #94a3b8; }
+  .chat-send-btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 9px; font-size: 13px; font-weight: 700; color: #fff; font-family: inherit; background: linear-gradient(180deg, var(--btn-grad-start), var(--btn-grad-end)); cursor: pointer; flex-shrink: 0; }
+  .chat-input-hint { font-size: 10.5px; color: #94a3b8; margin-top: 8px; }
 
   .detail-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 20px 22px; margin-bottom: 20px; }
   .detail-card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
@@ -2614,11 +2728,75 @@
   .detail-card-head .dch-link { font-size: 12.5px; font-weight: 600; color: var(--accent-blue); }
 
   .verif-chip-row { display: flex; flex-wrap: wrap; gap: 10px; }
-  .verif-chip { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; padding: 10px 16px; border-radius: 10px; }
+  .verif-chip-wrap { position: relative; }
+  .verif-chip { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; padding: 10px 16px; border-radius: 10px; cursor: pointer; transition: box-shadow 150ms ease-out; }
+  .verif-chip:hover { box-shadow: 0 0 0 3px rgba(16,24,40,0.06); }
   .verif-chip.ok { color: #1a7a3e; background: #eafaf0; }
   .verif-chip.warn { color: #92620a; background: #fef3c7; }
   .verif-chip.info { color: #284890; background: #e8f0f8; }
   .verif-chip .vc-sub { font-size: 10.5px; font-weight: 700; background: rgba(255,255,255,0.6); padding: 2px 7px; border-radius: 999px; margin-left: 2px; }
+
+  .verif-popover {
+    position: absolute; top: calc(100% + 8px); left: 0; z-index: 30; width: 264px;
+    background: #fff; border-radius: 14px; box-shadow: 0 16px 40px rgba(16,24,40,0.18);
+    padding: 16px; opacity: 0; visibility: hidden; transform: translateY(-6px);
+    transition: opacity 150ms ease-out, transform 150ms ease-out, visibility 150ms ease-out;
+  }
+  .verif-popover.open { opacity: 1; visibility: visible; transform: none; }
+  .verif-popover .vp-title { font-size: 14.5px; font-weight: 800; color: var(--text-heading); margin-bottom: 4px; }
+  .verif-popover .vp-sub { font-size: 12px; color: var(--text-body-muted); margin-bottom: 14px; }
+  .vp-btn-primary {
+    width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 10px; border-radius: 9px; font-size: 13px; font-weight: 700; color: #fff; font-family: inherit;
+    background: linear-gradient(180deg, var(--btn-grad-start), var(--btn-grad-end)); cursor: pointer; margin-bottom: 8px;
+    transition: opacity 150ms ease-out;
+  }
+  .vp-btn-primary:disabled { opacity: 0.4; cursor: default; }
+  .vp-btn-secondary {
+    width: 100%; padding: 10px; border-radius: 9px; font-size: 13px; font-weight: 700; color: var(--text-heading); font-family: inherit;
+    background: #fff; border: 1px solid var(--border-subtle); cursor: pointer; margin-bottom: 12px;
+    transition: background-color 150ms ease-out, opacity 150ms ease-out;
+  }
+  .vp-btn-secondary:disabled { opacity: 0.45; cursor: default; color: #94a3b8; }
+  .vp-btn-secondary:not(:disabled):hover { background: var(--surface-soft); }
+  .verif-popover .vp-footnote { font-size: 10.5px; color: #94a3b8; line-height: 1.4; }
+
+  /* Payment verification modal */
+  .payverif-overlay {
+    position: fixed; inset: 0; background: rgba(8, 13, 22, 0.55); display: flex; align-items: center; justify-content: center;
+    padding: 24px; z-index: 520; opacity: 0; visibility: hidden; transition: opacity 220ms ease-out, visibility 220ms ease-out;
+  }
+  .payverif-overlay.open { opacity: 1; visibility: visible; }
+  .payverif-card {
+    width: 100%; max-width: 420px; background: #fff; border-radius: 20px; padding: 28px 26px 24px;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.4); transform: translateY(16px) scale(0.97); opacity: 0;
+    transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1), opacity 220ms ease-out;
+  }
+  .payverif-overlay.open .payverif-card { transform: none; opacity: 1; }
+  .payverif-card h2 { font-size: 19px; font-weight: 800; color: var(--text-heading); margin-bottom: 8px; }
+  .payverif-desc { font-size: 13px; color: var(--text-body-muted); line-height: 1.5; margin-bottom: 18px; }
+  .payverif-desc strong { color: var(--text-heading); font-weight: 700; }
+  .payverif-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; font-size: 13px; }
+  .payverif-row .pv-label { color: var(--text-body-muted); }
+  .payverif-row .pv-value { font-weight: 700; color: var(--text-heading); }
+  .payverif-status-pill { font-size: 11.5px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+  .payverif-status-pill.ok { color: #1a7a3e; background: #eafaf0; }
+  .payverif-status-pill.warn { color: #92620a; background: #fef3c7; }
+  .payverif-note { font-size: 11.5px; color: #94a3b8; margin: 6px 0 16px; line-height: 1.4; }
+  .payverif-info-box { background: var(--surface-soft); border-radius: 10px; padding: 12px 14px; font-size: 12.5px; color: var(--text-body-muted); line-height: 1.5; margin-bottom: 20px; }
+  .payverif-close-btn {
+    display: block; margin-left: auto; padding: 10px 22px; border-radius: 9px; font-size: 13.5px; font-weight: 700; color: #fff; font-family: inherit;
+    background: linear-gradient(180deg, var(--btn-grad-start), var(--btn-grad-end)); cursor: pointer;
+  }
+  .deactivate-list { margin: 0 0 4px 18px; padding: 0; }
+  .deactivate-list li { font-size: 13px; color: var(--text-body-muted); line-height: 1.75; }
+  .deactivate-cancel-btn { font-size: 13.5px; font-weight: 700; color: var(--text-heading); padding: 10px 16px; cursor: pointer; }
+  .deactivate-cancel-btn:hover { color: var(--accent-blue); }
+  .deactivate-confirm-btn {
+    padding: 10px 20px; border-radius: 9px; font-size: 13.5px; font-weight: 700; color: #fff; font-family: inherit;
+    background: #d92d20; cursor: pointer; transition: opacity 150ms ease-out;
+  }
+  .deactivate-confirm-btn:disabled { background: #cbd5e1; cursor: default; }
 
   .detail-field-row { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border-subtle); }
   .detail-field-row:last-child { border-bottom: none; }
@@ -2628,7 +2806,7 @@
   .detail-field-row .dfr-value.muted { color: #94a3b8; font-weight: 500; font-style: italic; }
 
   .detail-mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .detail-mini-field .dmf-label { font-size: 11.5px; color: var(--text-body-muted); margin-bottom: 4px; }
+  .dmf-label { font-size: 11.5px; color: var(--text-body-muted); margin-bottom: 4px; }
   .detail-mini-field .dmf-value { font-size: 13.5px; font-weight: 600; color: var(--text-heading); }
   .detail-chip-tag { display: inline-flex; font-size: 12px; font-weight: 600; color: var(--text-heading); background: var(--surface-soft); padding: 5px 12px; border-radius: 999px; margin: 3px 6px 3px 0; }
 
@@ -3124,8 +3302,9 @@
 
   <!-- ============ TOAST ============ -->
   <div class="toast" id="toast">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.2l2.3 2.3 4.7-4.9"/></svg>
     <span id="toastMessage">Account created — welcome to Keylr!</span>
+    <button type="button" class="toast-close" id="toastCloseBtn" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
   </div>
 
   <!-- ============ SIGNUP MODAL ============ -->
@@ -5713,7 +5892,7 @@
               </div>
               <div class="pm-filter-row">
                 <div class="pm-filter-field">
-                  <div class="pff-legend-wrap"><label><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>Approval status</label></div>
+                  <div class="pff-legend-wrap"><label>Approval status</label></div>
                   <button type="button" class="pm-custom-dd-btn" data-dd="approval">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
                     <span class="cdd-value">All Statuses</span>
@@ -5728,7 +5907,7 @@
                   </div>
                 </div>
                 <div class="pm-filter-field">
-                  <div class="pff-legend-wrap"><label><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>Business details</label></div>
+                  <div class="pff-legend-wrap"><label>Business details</label></div>
                   <button type="button" class="pm-custom-dd-btn" data-dd="business">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>
                     <span class="cdd-value">Any</span>
@@ -5741,7 +5920,7 @@
                   </div>
                 </div>
                 <div class="pm-filter-field">
-                  <div class="pff-legend-wrap"><label><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36z"/></svg>Discovery profile</label></div>
+                  <div class="pff-legend-wrap"><label>Discovery profile</label></div>
                   <button type="button" class="pm-custom-dd-btn" data-dd="discovery">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36z"/></svg>
                     <span class="cdd-value">Any</span>
@@ -5754,12 +5933,50 @@
                   </div>
                 </div>
                 <div class="pm-filter-field">
-                  <div class="pff-legend-wrap"><label><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Joined before</label></div>
-                  <input type="date" id="pmFilterJoinedBefore">
+                  <div class="pff-legend-wrap"><label>Joined before</label></div>
+                  <button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="joinedBefore">
+                    <span class="cdd-value cal-value placeholder" data-cal-text="joinedBefore">dd/mm/yyyy</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                  </button>
+                  <div class="pm-cal-popup" data-cal-popup="joinedBefore">
+                    <div class="pm-cal-head">
+                      <button type="button" class="pm-cal-month-label" data-cal-monthlabel="joinedBefore"><span data-cal-monthtext="joinedBefore">July 2026</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                      <div class="pm-cal-nav">
+                        <button type="button" class="pm-cal-nav-btn" data-cal-prev="joinedBefore" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+                        <button type="button" class="pm-cal-nav-btn" data-cal-next="joinedBefore" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
+                      </div>
+                    </div>
+                    <div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
+                    <div class="pm-cal-grid" data-cal-grid="joinedBefore"></div>
+                    <div class="pm-cal-foot">
+                      <button type="button" class="pm-cal-link" data-cal-clear="joinedBefore">Clear</button>
+                      <button type="button" class="pm-cal-link" data-cal-today="joinedBefore">Today</button>
+                    </div>
+                  </div>
+                  <input type="hidden" id="pmFilterJoinedBefore">
                 </div>
                 <div class="pm-filter-field">
-                  <div class="pff-legend-wrap"><label><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Joined after</label></div>
-                  <input type="date" id="pmFilterJoinedAfter">
+                  <div class="pff-legend-wrap"><label>Joined after</label></div>
+                  <button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="joinedAfter">
+                    <span class="cdd-value cal-value placeholder" data-cal-text="joinedAfter">dd/mm/yyyy</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                  </button>
+                  <div class="pm-cal-popup" data-cal-popup="joinedAfter">
+                    <div class="pm-cal-head">
+                      <button type="button" class="pm-cal-month-label" data-cal-monthlabel="joinedAfter"><span data-cal-monthtext="joinedAfter">July 2026</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                      <div class="pm-cal-nav">
+                        <button type="button" class="pm-cal-nav-btn" data-cal-prev="joinedAfter" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+                        <button type="button" class="pm-cal-nav-btn" data-cal-next="joinedAfter" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
+                      </div>
+                    </div>
+                    <div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
+                    <div class="pm-cal-grid" data-cal-grid="joinedAfter"></div>
+                    <div class="pm-cal-foot">
+                      <button type="button" class="pm-cal-link" data-cal-clear="joinedAfter">Clear</button>
+                      <button type="button" class="pm-cal-link" data-cal-today="joinedAfter">Today</button>
+                    </div>
+                  </div>
+                  <input type="hidden" id="pmFilterJoinedAfter">
                 </div>
               </div>
             </div>
@@ -5789,10 +6006,149 @@
             </div>
           </div>
 
+          <!-- ============ PM_APPLICANTS_VIEW_PLACEHOLDER ============ -->
+          <div id="adminPMApplicantsView" style="display:none;">
+            <div class="pm-filter-card">
+              <div class="pm-search-row">
+                <div class="pm-search-input-wrap">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                  <input type="text" id="appSearchInput" placeholder="Search by name, email, or company">
+                  <div class="pm-search-kbd"><span>Ctrl</span><span>K</span></div>
+                </div>
+                <div class="pm-tab-pills" id="appTabPills">
+                  <div class="pm-tab-pill active" data-filter="all">All</div>
+                  <div class="pm-tab-pill" data-filter="complete">Profile Complete</div>
+                  <div class="pm-tab-pill" data-filter="incomplete">Profile Incomplete</div>
+                </div>
+                <div class="pm-count-actions">
+                  <span class="pm-count-text"><span id="appResultCount">6</span> applicants</span>
+                  <div class="pm-view-toggle" id="appViewToggle">
+                    <button type="button" class="active" data-view="grid" aria-label="Grid view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
+                    <button type="button" data-view="table" aria-label="Table view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4"/><rect x="3" y="10" width="18" height="4"/><rect x="3" y="16" width="18" height="4"/></svg></button>
+                  </div>
+                  <button type="button" class="pm-icon-btn-sq" id="appRefreshBtn" aria-label="Refresh"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/></svg></button>
+                </div>
+              </div>
+              <div class="pm-filter-row">
+                <div class="pm-filter-field">
+                  <div class="pff-legend-wrap"><label>Approval status</label></div>
+                  <button type="button" class="pm-custom-dd-btn" data-dd="appApproval">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
+                    <span class="cdd-value">All Statuses</span>
+                    <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                  </button>
+                  <div class="pm-custom-dd-menu" data-dd-menu="appApproval">
+                    <div class="cdd-item selected" data-value="All Statuses">All Statuses</div>
+                    <div class="cdd-item" data-value="Incomplete">Incomplete</div>
+                    <div class="cdd-item" data-value="Pending">Pending</div>
+                    <div class="cdd-item" data-value="Approved">Approved</div>
+                    <div class="cdd-item" data-value="Rejected">Rejected</div>
+                  </div>
+                </div>
+                <div class="pm-filter-field">
+                  <div class="pff-legend-wrap"><label>Business details</label></div>
+                  <button type="button" class="pm-custom-dd-btn" data-dd="appBusiness">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>
+                    <span class="cdd-value">Any</span>
+                    <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                  </button>
+                  <div class="pm-custom-dd-menu" data-dd-menu="appBusiness">
+                    <div class="cdd-item selected" data-value="Any">Any</div>
+                    <div class="cdd-item" data-value="Provided">Provided</div>
+                    <div class="cdd-item" data-value="Missing">Missing</div>
+                  </div>
+                </div>
+                <div class="pm-filter-field">
+                  <div class="pff-legend-wrap"><label>Discovery profile</label></div>
+                  <button type="button" class="pm-custom-dd-btn" data-dd="appDiscovery">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36z"/></svg>
+                    <span class="cdd-value">Any</span>
+                    <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                  </button>
+                  <div class="pm-custom-dd-menu" data-dd-menu="appDiscovery">
+                    <div class="cdd-item selected" data-value="Any">Any</div>
+                    <div class="cdd-item" data-value="Provided">Provided</div>
+                    <div class="cdd-item" data-value="Missing">Missing</div>
+                  </div>
+                </div>
+                <div class="pm-filter-field">
+                  <div class="pff-legend-wrap"><label>Joined before</label></div>
+                  <button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="appJoinedBefore">
+                    <span class="cdd-value cal-value placeholder" data-cal-text="appJoinedBefore">dd/mm/yyyy</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                  </button>
+                  <div class="pm-cal-popup" data-cal-popup="appJoinedBefore">
+                    <div class="pm-cal-head">
+                      <button type="button" class="pm-cal-month-label" data-cal-monthlabel="appJoinedBefore"><span data-cal-monthtext="appJoinedBefore">July 2026</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                      <div class="pm-cal-nav">
+                        <button type="button" class="pm-cal-nav-btn" data-cal-prev="appJoinedBefore" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+                        <button type="button" class="pm-cal-nav-btn" data-cal-next="appJoinedBefore" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
+                      </div>
+                    </div>
+                    <div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
+                    <div class="pm-cal-grid" data-cal-grid="appJoinedBefore"></div>
+                    <div class="pm-cal-foot">
+                      <button type="button" class="pm-cal-link" data-cal-clear="appJoinedBefore">Clear</button>
+                      <button type="button" class="pm-cal-link" data-cal-today="appJoinedBefore">Today</button>
+                    </div>
+                  </div>
+                  <input type="hidden" id="appFilterJoinedBefore">
+                </div>
+                <div class="pm-filter-field">
+                  <div class="pff-legend-wrap"><label>Joined after</label></div>
+                  <button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="appJoinedAfter">
+                    <span class="cdd-value cal-value placeholder" data-cal-text="appJoinedAfter">dd/mm/yyyy</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                  </button>
+                  <div class="pm-cal-popup" data-cal-popup="appJoinedAfter">
+                    <div class="pm-cal-head">
+                      <button type="button" class="pm-cal-month-label" data-cal-monthlabel="appJoinedAfter"><span data-cal-monthtext="appJoinedAfter">July 2026</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                      <div class="pm-cal-nav">
+                        <button type="button" class="pm-cal-nav-btn" data-cal-prev="appJoinedAfter" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+                        <button type="button" class="pm-cal-nav-btn" data-cal-next="appJoinedAfter" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
+                      </div>
+                    </div>
+                    <div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
+                    <div class="pm-cal-grid" data-cal-grid="appJoinedAfter"></div>
+                    <div class="pm-cal-foot">
+                      <button type="button" class="pm-cal-link" data-cal-clear="appJoinedAfter">Clear</button>
+                      <button type="button" class="pm-cal-link" data-cal-today="appJoinedAfter">Today</button>
+                    </div>
+                  </div>
+                  <input type="hidden" id="appFilterJoinedAfter">
+                </div>
+              </div>
+            </div>
+
+            <div id="appGridView" class="pm-card-grid"></div>
+            <div id="appTableViewWrap" class="pm-table-wrap" style="display:none;">
+              <div class="pm-table-scroll">
+                <table class="admin-table" style="min-width:1000px;">
+                  <thead><tr><th>Name</th><th>Verified</th><th>Company</th><th>Contact</th><th>Business</th><th>Discovery</th><th>Profile</th><th>Status</th><th>Joined</th></tr></thead>
+                  <tbody id="appTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="dash-header" style="margin-top:16px;">
+              <span class="pm-count-text"><span id="appResultCount2">6</span> applicants</span>
+              <div class="dash-header-actions" style="align-items:center;gap:14px;">
+                <span class="pm-count-text">Rows per page
+                  <select id="appRowsPerPage" style="border:1px solid var(--border-subtle);border-radius:8px;padding:6px 10px;font-family:inherit;font-size:13px;color:var(--text-heading);margin-left:6px;"><option>25</option><option>50</option><option>100</option></select>
+                </span>
+                <div style="display:flex;gap:6px;align-items:center;">
+                  <button type="button" class="pm-icon-btn-sq" id="appPagePrev" aria-label="Previous page"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+                  <span class="pm-count-text" id="appPageIndicator">Page 1 of 1</span>
+                  <button type="button" class="pm-icon-btn-sq" id="appPageNext" aria-label="Next page"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- ============ CLIENT_DETAIL_VIEW_PLACEHOLDER ============ -->
           <div id="adminClientDetailView" style="display:none;">
             <div class="pm-breadcrumb">
-              <button type="button" id="clientBackBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Clients</button>
+              <button type="button" id="clientBackBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg><span id="clientBackLabel">Clients</span></button>
               <span class="sep">/</span>
               <span class="current" id="clientBreadcrumbName">john john</span>
             </div>
@@ -5812,11 +6168,23 @@
                     <span>🕐 Last active —</span>
                   </div>
                 </div>
-                <div class="client-header-actions">
-                  <button type="button" class="btn btn-outline-full"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4z"/></svg>Edit Profile</button>
-                  <button type="button" class="pm-icon-btn-sq" style="width:38px;height:38px;" id="clientMoreBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>
+                <div class="client-header-actions" id="clientHeaderActionsView">
+                  <button type="button" class="btn btn-outline-full" id="clientEditProfileBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4z"/></svg>Edit Profile</button>
+                  <div style="position:relative;">
+                    <button type="button" class="pm-icon-btn-sq" style="width:38px;height:38px;" id="clientMoreBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>
+                    <div class="pm-dropdown-menu" id="clientMoreMenu">
+                      <button type="button"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>Send message</button>
+                      <button type="button"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>Reset Password</button>
+                      <button type="button"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>Export Data</button>
+                      <button type="button"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Activity Log</button>
+                    </div>
+                  </div>
                   <button type="button" class="btn btn-primary" id="clientApproveBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M20 6L9 17l-5-5"/></svg>Approve Client</button>
                   <button type="button" class="btn-danger-outline" id="clientDeactivateBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 11-12.73 0M12 2v10"/></svg>Deactivate</button>
+                </div>
+                <div class="client-header-actions" id="clientHeaderActionsEdit" style="display:none;">
+                  <button type="button" class="btn btn-outline-full" id="clientDiscardBtnTop">Discard</button>
+                  <button type="button" class="btn btn-primary" id="clientSaveBtnTop">Save Changes</button>
                 </div>
               </div>
               <div class="client-stat-row">
@@ -5837,6 +6205,14 @@
                   <div class="csc-label">DISCOVERY PROFILE</div>
                   <div class="csc-value green" id="clientDiscoverySignalsValue">4 signals</div>
                 </div>
+              </div>
+            </div>
+
+            <div class="client-edit-footer" id="clientEditFooter">
+              <span class="cef-status" id="clientEditStatus"><span class="dot"></span><span class="cef-status-text">No changes yet</span></span>
+              <div class="cef-actions">
+                <button type="button" class="btn btn-outline-full" id="clientDiscardBtnBottom">Discard</button>
+                <button type="button" class="btn btn-primary" id="clientSaveBtnBottom">Save Changes</button>
               </div>
             </div>
 
@@ -5863,10 +6239,39 @@
                   <span class="dch-link">Admin override</span>
                 </div>
                 <div class="verif-chip-row">
-                  <div class="verif-chip ok"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Account verified</div>
-                  <div class="verif-chip warn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>Email unverified</div>
-                  <div class="verif-chip ok"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Phone verified</div>
-                  <div class="verif-chip info"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20"/></svg>Payment verification<span class="vc-sub">PAY UPFRONT</span></div>
+                  <div class="verif-chip-wrap">
+                    <div class="verif-chip ok" data-verif="account"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Account verified</div>
+                    <div class="verif-popover" data-verif-popover="account">
+                      <div class="vp-title" data-vp-title="account">Account verified</div>
+                      <div class="vp-sub" data-vp-sub="account">Controls overall platform access for this client.</div>
+                      <button type="button" class="vp-btn-primary" data-vp-markverified="account"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Mark as verified</button>
+                      <button type="button" class="vp-btn-secondary" data-vp-markunverified="account">Mark as unverified</button>
+                      <div class="vp-footnote">Changing email or phone will reset the related verified flag automatically. Explicit overrides win.</div>
+                    </div>
+                  </div>
+                  <div class="verif-chip-wrap">
+                    <div class="verif-chip warn" data-verif="email"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>Email unverified</div>
+                    <div class="verif-popover" data-verif-popover="email">
+                      <div class="vp-title" data-vp-title="email">Email unverified</div>
+                      <div class="vp-sub" data-vp-sub="email">Email on file: johnjohn@house.com</div>
+                      <button type="button" class="vp-btn-primary" data-vp-markverified="email"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Mark as verified</button>
+                      <button type="button" class="vp-btn-secondary" data-vp-markunverified="email">Mark as unverified</button>
+                      <div class="vp-footnote">Changing email or phone will reset the related verified flag automatically. Explicit overrides win.</div>
+                    </div>
+                  </div>
+                  <div class="verif-chip-wrap">
+                    <div class="verif-chip ok" data-verif="phone"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Phone verified</div>
+                    <div class="verif-popover" data-verif-popover="phone">
+                      <div class="vp-title" data-vp-title="phone">Phone verified</div>
+                      <div class="vp-sub" data-vp-sub="phone">Phone on file: +4407891197253</div>
+                      <button type="button" class="vp-btn-primary" data-vp-markverified="phone"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Mark as verified</button>
+                      <button type="button" class="vp-btn-secondary" data-vp-markunverified="phone">Mark as unverified</button>
+                      <div class="vp-footnote">Changing email or phone will reset the related verified flag automatically. Explicit overrides win.</div>
+                    </div>
+                  </div>
+                  <div class="verif-chip-wrap">
+                    <div class="verif-chip ok" data-verif="payment"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20"/></svg>Payment verification<span class="vc-sub">PAY UPFRONT</span></div>
+                  </div>
                 </div>
               </div>
 
@@ -5876,35 +6281,61 @@
                     <div class="detail-card-head"><div class="dch-left"><div class="dch-bar"></div><h3>Personal &amp; Contact</h3></div></div>
                     <div class="detail-field-row">
                       <div class="dfr-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-                      <div><div class="dfr-label">Name</div><div class="dfr-value" id="clientFieldName">john john</div></div>
+                      <div style="flex:1;min-width:0;">
+                        <div class="dfr-label">Name</div>
+                        <div class="dfr-value dfr-view-only" id="clientFieldName">john john</div>
+                        <input type="text" class="field-input dfr-edit-only" id="clientFieldNameInput">
+                      </div>
                     </div>
                     <div class="detail-field-row">
                       <div class="dfr-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg></div>
-                      <div><div class="dfr-label">Email</div><div class="dfr-value" id="clientFieldEmail">johnjohn@house.com <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#d99a2b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg></div></div>
+                      <div style="flex:1;min-width:0;">
+                        <div class="dfr-label">Email</div>
+                        <div class="dfr-value dfr-view-only" id="clientFieldEmail">johnjohn@house.com <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#d99a2b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg></div>
+                        <input type="email" class="field-input dfr-edit-only" id="clientFieldEmailInput">
+                      </div>
                     </div>
                     <div class="detail-field-row">
                       <div class="dfr-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
-                      <div><div class="dfr-label">Phone</div><div class="dfr-value" id="clientFieldPhone">+4407891197253 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div></div>
+                      <div style="flex:1;min-width:0;">
+                        <div class="dfr-label">Phone</div>
+                        <div class="dfr-value dfr-view-only" id="clientFieldPhone">+4407891197253 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        <div class="phone-row dfr-edit-only">
+                          <div class="phone-code-wrap">
+                            <select class="phone-code" id="clientFieldPhoneCode" aria-label="Country code">
+                              <option value="+44" selected>🇬🇧 +44</option>
+                              <option value="+1">🇺🇸 +1</option>
+                              <option value="+353">🇮🇪 +353</option>
+                              <option value="+61">🇦🇺 +61</option>
+                              <option value="+91">🇮🇳 +91</option>
+                            </select>
+                          </div>
+                          <input type="tel" class="field-input" id="clientFieldPhoneInput" style="flex:1;">
+                        </div>
+                      </div>
                     </div>
                   </div>
 
                   <div class="detail-card" data-section="discovery">
                     <div class="detail-card-head"><div class="dch-left"><div class="dch-bar"></div><h3>Discovery Profile</h3></div></div>
-                    <div class="detail-mini-grid" style="margin-bottom:14px;">
-                      <div class="detail-mini-field"><div class="dmf-label">Properties managed</div><div class="dmf-value" id="clientPropertiesManaged">26–100 (Mid-size)</div></div>
-                      <div class="detail-mini-field"><div class="dmf-label">Team size</div><div class="dmf-value" id="clientTeamSize">Just me (1)</div></div>
+                    <div id="discoveryProfileContent">
+                      <div class="detail-mini-grid" style="margin-bottom:14px;">
+                        <div class="detail-mini-field"><div class="dmf-label">Properties managed</div><div class="dmf-value" id="clientPropertiesManaged">26–100 (Mid-size)</div></div>
+                        <div class="detail-mini-field"><div class="dmf-label">Team size</div><div class="dmf-value" id="clientTeamSize">Just me (1)</div></div>
+                      </div>
+                      <div style="margin-bottom:14px;">
+                        <div class="dmf-label" style="margin-bottom:6px;">Sectors</div>
+                        <div id="clientSectors"><span class="detail-chip-tag">Estate Agent</span></div>
+                      </div>
+                      <div style="margin-bottom:0;">
+                        <div class="dmf-label" style="margin-bottom:6px;">Locations</div>
+                        <div id="clientLocations"><span class="detail-chip-tag">North West</span><span class="detail-chip-tag">North</span><span class="detail-chip-tag">Central</span><span class="detail-chip-tag">West</span></div>
+                      </div>
+                      <div class="detail-field-row" style="border-top:1px solid var(--border-subtle);margin-top:14px;padding-top:14px;border-bottom:none;">
+                        <div><div class="dfr-label">PMS / CRM</div><div class="dfr-value muted">Not specified</div></div>
+                      </div>
                     </div>
-                    <div style="margin-bottom:14px;">
-                      <div class="dmf-label" style="margin-bottom:6px;">Sectors</div>
-                      <div id="clientSectors"><span class="detail-chip-tag">Estate Agent</span></div>
-                    </div>
-                    <div style="margin-bottom:0;">
-                      <div class="dmf-label" style="margin-bottom:6px;">Locations</div>
-                      <div id="clientLocations"><span class="detail-chip-tag">North West</span><span class="detail-chip-tag">North</span><span class="detail-chip-tag">Central</span><span class="detail-chip-tag">West</span></div>
-                    </div>
-                    <div class="detail-field-row" style="border-top:1px solid var(--border-subtle);margin-top:14px;padding-top:14px;border-bottom:none;">
-                      <div><div class="dfr-label">PMS / CRM</div><div class="dfr-value muted">Not specified</div></div>
-                    </div>
+                    <div id="discoveryProfileEmpty" style="display:none;padding:24px 0;text-align:center;color:var(--text-body-muted);font-size:13.5px;">This client hasn't completed their discovery profile yet.</div>
                   </div>
                 </div>
 
@@ -5913,54 +6344,255 @@
                     <div class="detail-card-head"><div class="dch-left"><div class="dch-bar"></div><h3>Business Details</h3></div></div>
                     <div class="detail-field-row">
                       <div class="dfr-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></div>
-                      <div><div class="dfr-label">Trading name</div><div class="dfr-value" id="clientTradingName">john house ltd</div></div>
+                      <div style="flex:1;min-width:0;">
+                        <div class="dfr-label">Trading name</div>
+                        <div class="dfr-value dfr-view-only" id="clientTradingName">john house ltd</div>
+                        <input type="text" class="field-input dfr-edit-only" id="clientTradingNameInput">
+                      </div>
                     </div>
                     <div class="detail-field-row">
                       <div class="dfr-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-3V5a2 2 0 00-2-2H9a2 2 0 00-2 2v2H4a1 1 0 00-1 1v10a2 2 0 002 2h14a2 2 0 002-2V8a1 1 0 00-1-1zM9 5h6v2H9z"/></svg></div>
-                      <div><div class="dfr-label">Legal company name</div><div class="dfr-value" id="clientLegalName">BOCIOC M LIMITED</div></div>
+                      <div style="flex:1;min-width:0;">
+                        <div class="dfr-label">Legal company name</div>
+                        <div class="dfr-value dfr-view-only" id="clientLegalName">BOCIOC M LIMITED</div>
+                        <input type="text" class="field-input dfr-edit-only" id="clientLegalNameInput">
+                      </div>
                     </div>
                     <div class="detail-field-row">
                       <div class="dfr-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg></div>
-                      <div><div class="dfr-label">Company registration number</div><div class="dfr-value" id="clientRegNumber">12345678</div></div>
+                      <div style="flex:1;min-width:0;">
+                        <div class="dfr-label">Company registration number</div>
+                        <div class="dfr-value dfr-view-only" id="clientRegNumber">12345678</div>
+                        <input type="text" class="field-input dfr-edit-only" id="clientRegNumberInput">
+                      </div>
                     </div>
                     <div class="detail-field-row">
                       <div class="dfr-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 10h20"/></svg></div>
-                      <div><div class="dfr-label">VAT number</div><div class="dfr-value muted" id="clientVatNumber">Not set</div></div>
+                      <div style="flex:1;min-width:0;">
+                        <div class="dfr-label">VAT number</div>
+                        <div class="dfr-value muted dfr-view-only" id="clientVatNumber">Not set</div>
+                        <input type="text" class="field-input dfr-edit-only" id="clientVatNumberInput" placeholder="Not set">
+                      </div>
                     </div>
                     <div class="detail-field-row">
                       <div class="dfr-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
-                      <div><div class="dfr-label">Registered address</div><div class="dfr-value" id="clientRegAddress">52 Avocet Close, Rugby, Warwickshire, CV23 0WU</div></div>
+                      <div style="flex:1;min-width:0;">
+                        <div class="dfr-label">Registered address</div>
+                        <div class="dfr-value dfr-view-only" id="clientRegAddress">52 Avocet Close, Rugby, Warwickshire, CV23 0WU</div>
+                        <input type="text" class="field-input dfr-edit-only" id="clientRegAddressInput">
+                      </div>
                     </div>
                     <div class="detail-field-row">
                       <div class="dfr-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></div>
-                      <div><div class="dfr-label">Trading address</div><div class="dfr-value" id="clientTradingAddress">4 Parkside, London, London, NW7 2LH</div></div>
+                      <div style="flex:1;min-width:0;">
+                        <div class="dfr-label">Trading address</div>
+                        <div class="dfr-value dfr-view-only" id="clientTradingAddress">4 Parkside, London, London, NW7 2LH</div>
+                        <input type="text" class="field-input dfr-edit-only" id="clientTradingAddressInput">
+                      </div>
                     </div>
 
-                    <div style="border-top:1px solid var(--border-subtle);margin:16px 0 14px;padding-top:16px;">
-                      <div class="dmf-label" style="font-size:10.5px;font-weight:700;letter-spacing:0.05em;color:#94a3b8;margin-bottom:14px;">COMPANY &amp; CONTACTS</div>
-                      <div class="detail-mini-grid" style="margin-bottom:14px;">
-                        <div class="detail-mini-field"><div class="dmf-label">Company type</div><div class="dmf-value" id="clientCompanyType">LTD</div></div>
-                        <div class="detail-mini-field"><div class="dmf-label">Incorporation date</div><div class="dmf-value" id="clientIncorpDate">2019-12-03</div></div>
+                    <div id="businessCompanyContactsSection">
+                      <div style="margin:16px 0 14px;padding-top:16px;">
+                        <div class="dmf-label" style="font-size:10.5px;font-weight:700;letter-spacing:0.05em;color:#94a3b8;margin-bottom:14px;">COMPANY &amp; CONTACTS</div>
+                        <div class="detail-mini-grid" style="margin-bottom:14px;">
+                          <div class="detail-mini-field"><div class="dmf-label">Company type</div><div class="dmf-value" id="clientCompanyType">LTD</div></div>
+                          <div class="detail-mini-field"><div class="dmf-label">Incorporation date</div><div class="dmf-value" id="clientIncorpDate">2019-12-03</div></div>
+                        </div>
+                        <div class="detail-mini-grid" style="margin-bottom:14px;">
+                          <div class="detail-mini-field"><div class="dmf-label">Branch type</div><div class="dmf-value" id="clientBranchType">Single location</div></div>
+                          <div class="detail-mini-field"><div class="dmf-label">VAT registered</div><div class="dmf-value" id="clientVatRegistered">No</div></div>
+                        </div>
+                        <div class="detail-mini-grid" style="margin-bottom:0;">
+                          <div class="detail-mini-field"><div class="dmf-label">Operating address</div><div class="dmf-value" id="clientOperatingAddress">4 Parkside, London, London, NW7 2LH</div></div>
+                          <div class="detail-mini-field"><div class="dmf-label">Operating days</div><div class="dmf-value" id="clientOperatingDays">Mon, Tue, Wed, Thu, Fri, Sat</div></div>
+                        </div>
+                        <div class="detail-mini-field" style="margin-top:14px;"><div class="dmf-label">Operating hours</div><div class="dmf-value" id="clientOperatingHours">09:00 – 18:30</div></div>
                       </div>
-                      <div class="detail-mini-grid" style="margin-bottom:14px;">
-                        <div class="detail-mini-field"><div class="dmf-label">Branch type</div><div class="dmf-value" id="clientBranchType">Single location</div></div>
-                        <div class="detail-mini-field"><div class="dmf-label">VAT registered</div><div class="dmf-value" id="clientVatRegistered">No</div></div>
-                      </div>
-                      <div class="detail-mini-grid" style="margin-bottom:0;">
-                        <div class="detail-mini-field"><div class="dmf-label">Operating address</div><div class="dmf-value" id="clientOperatingAddress">4 Parkside, London, London, NW7 2LH</div></div>
-                        <div class="detail-mini-field"><div class="dmf-label">Operating days</div><div class="dmf-value" id="clientOperatingDays">Mon, Tue, Wed, Thu, Fri, Sat</div></div>
-                      </div>
-                      <div class="detail-mini-field" style="margin-top:14px;"><div class="dmf-label">Operating hours</div><div class="dmf-value" id="clientOperatingHours">09:00 – 18:30</div></div>
-                    </div>
 
-                    <div class="support-contact-box">
-                      <div class="scb-label">SUPPORT CONTACT</div>
-                      <div class="scb-name" id="clientSupportName">john john · property manager</div>
-                      <div class="scb-detail" id="clientSupportPhone">+4407891197253</div>
-                      <div class="scb-detail" id="clientSupportEmail">johnjohn@house.com</div>
+                      <div class="support-contact-box">
+                        <div class="scb-label">SUPPORT CONTACT</div>
+                        <div class="scb-name" id="clientSupportName">john john · property manager</div>
+                        <div class="scb-detail" id="clientSupportPhone">+4407891197253</div>
+                        <div class="scb-detail" id="clientSupportEmail">johnjohn@house.com</div>
+                      </div>
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            <div id="clientTabProperties" style="display:none;">
+              <div class="tab-stat-row">
+                <div class="client-stat-cell"><div class="csc-label">TOTAL PROPERTIES</div><div class="csc-value" id="propTotalCount">0</div></div>
+                <div class="client-stat-cell"><div class="csc-label">LISTED</div><div class="csc-value green" id="propListedCount">0</div></div>
+                <div class="client-stat-cell"><div class="csc-label">VACANT</div><div class="csc-value amber" id="propVacantCount">0</div></div>
+                <div class="client-stat-cell"><div class="csc-label">OCCUPIED</div><div class="csc-value" id="propOccupiedCount">0</div></div>
+              </div>
+              <div class="pm-filter-card">
+                <div class="pm-search-row">
+                  <div class="pm-search-input-wrap" style="max-width:340px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                    <input type="text" id="propSearchInput" placeholder="Search by address, reference, or tenant">
+                  </div>
+                  <div class="pm-tab-pills" id="propTabPills">
+                    <div class="pm-tab-pill active" data-filter="all">All</div>
+                    <div class="pm-tab-pill" data-filter="listed">Listed</div>
+                    <div class="pm-tab-pill" data-filter="occupied">Occupied</div>
+                    <div class="pm-tab-pill" data-filter="vacant">Vacant</div>
+                    <div class="pm-tab-pill" data-filter="offmarket">Off-market</div>
+                  </div>
+                  <div class="pm-count-actions">
+                    <div class="pm-view-toggle" id="propViewToggle">
+                      <button type="button" class="active" data-view="grid" aria-label="Grid view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
+                      <button type="button" data-view="table" aria-label="List view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4"/><rect x="3" y="10" width="18" height="4"/><rect x="3" y="16" width="18" height="4"/></svg></button>
+                    </div>
+                  </div>
+                </div>
+                <div style="display:flex; gap:12px; margin-top:12px; flex-wrap:wrap;">
+                  <div class="pm-filter-field" style="width:180px;">
+                    <div class="pff-legend-wrap"><label>Type</label></div>
+                    <button type="button" class="pm-custom-dd-btn" data-dd="propertyType">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>
+                      <span class="cdd-value">All Types</span>
+                      <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="pm-custom-dd-menu" data-dd-menu="propertyType">
+                      <div class="cdd-item selected" data-value="All Types">All Types</div>
+                      <div class="cdd-item" data-value="Residential">Residential</div>
+                      <div class="cdd-item" data-value="Commercial">Commercial</div>
+                      <div class="cdd-item" data-value="Hotel">Hotel</div>
+                    </div>
+                  </div>
+                  <div class="pm-filter-field" style="width:220px;">
+                    <div class="pff-legend-wrap"><label>Location</label></div>
+                    <div style="position:relative;">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#94a3b8;"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                      <input type="text" id="propLocationInput" placeholder="City or postcode" style="padding-left:30px;width:100%;padding-top:7px;padding-bottom:7px;border-radius:8px;border:1px solid var(--border-subtle);font-size:12.5px;font-family:inherit;">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="client-empty-state">
+                <div class="ces-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></div>
+                <h3>No properties yet</h3>
+                <p id="propertiesEmptyText">john john has no properties on file yet. They'll appear here as soon as they're added.</p>
+                <button type="button" class="btn btn-outline-full" id="propNotifyBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>Notify me when it's ready</button>
+              </div>
+            </div>
+
+            <div id="clientTabJobs" style="display:none;">
+              <div class="tab-stat-row">
+                <div class="client-stat-cell"><div class="csc-label">TOTAL JOBS</div><div class="csc-value" id="jobsTotalCount">0</div></div>
+                <div class="client-stat-cell"><div class="csc-label">OPEN</div><div class="csc-value amber" id="jobsOpenCount">0</div></div>
+                <div class="client-stat-cell"><div class="csc-label">IN PROGRESS</div><div class="csc-value" id="jobsInProgressCount">0</div></div>
+                <div class="client-stat-cell"><div class="csc-label">LIFETIME SPEND</div><div class="csc-value green" id="jobsLifetimeSpend">£0</div></div>
+              </div>
+              <div class="pm-filter-card">
+                <div class="pm-search-row">
+                  <div class="pm-search-input-wrap" style="max-width:340px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                    <input type="text" id="jobsSearchInput" placeholder="Search by job title, reference, or supplier">
+                  </div>
+                  <div class="pm-tab-pills" id="jobsTabPills">
+                    <div class="pm-tab-pill active" data-filter="all">All</div>
+                    <div class="pm-tab-pill" data-filter="open">Open</div>
+                    <div class="pm-tab-pill" data-filter="inprogress">In Progress</div>
+                    <div class="pm-tab-pill" data-filter="completed">Completed</div>
+                    <div class="pm-tab-pill" data-filter="cancelled">Cancelled</div>
+                  </div>
+                </div>
+                <div style="display:flex; gap:12px; margin-top:12px; flex-wrap:wrap;">
+                  <div class="pm-filter-field" style="width:170px;">
+                    <div class="pff-legend-wrap"><label>From</label></div>
+                    <button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="jobsFrom">
+                      <span class="cdd-value cal-value placeholder" data-cal-text="jobsFrom">dd/mm/yyyy</span>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                    </button>
+                    <div class="pm-cal-popup" data-cal-popup="jobsFrom">
+                      <div class="pm-cal-head">
+                        <button type="button" class="pm-cal-month-label" data-cal-monthlabel="jobsFrom"><span data-cal-monthtext="jobsFrom">July 2026</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                        <div class="pm-cal-nav">
+                          <button type="button" class="pm-cal-nav-btn" data-cal-prev="jobsFrom" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+                          <button type="button" class="pm-cal-nav-btn" data-cal-next="jobsFrom" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
+                        </div>
+                      </div>
+                      <div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
+                      <div class="pm-cal-grid" data-cal-grid="jobsFrom"></div>
+                      <div class="pm-cal-foot">
+                        <button type="button" class="pm-cal-link" data-cal-clear="jobsFrom">Clear</button>
+                        <button type="button" class="pm-cal-link" data-cal-today="jobsFrom">Today</button>
+                      </div>
+                    </div>
+                    <input type="hidden" id="jobsFilterFrom">
+                  </div>
+                  <div class="pm-filter-field" style="width:170px;">
+                    <div class="pff-legend-wrap"><label>To</label></div>
+                    <button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="jobsTo">
+                      <span class="cdd-value cal-value placeholder" data-cal-text="jobsTo">dd/mm/yyyy</span>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                    </button>
+                    <div class="pm-cal-popup" data-cal-popup="jobsTo">
+                      <div class="pm-cal-head">
+                        <button type="button" class="pm-cal-month-label" data-cal-monthlabel="jobsTo"><span data-cal-monthtext="jobsTo">July 2026</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                        <div class="pm-cal-nav">
+                          <button type="button" class="pm-cal-nav-btn" data-cal-prev="jobsTo" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+                          <button type="button" class="pm-cal-nav-btn" data-cal-next="jobsTo" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
+                        </div>
+                      </div>
+                      <div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
+                      <div class="pm-cal-grid" data-cal-grid="jobsTo"></div>
+                      <div class="pm-cal-foot">
+                        <button type="button" class="pm-cal-link" data-cal-clear="jobsTo">Clear</button>
+                        <button type="button" class="pm-cal-link" data-cal-today="jobsTo">Today</button>
+                      </div>
+                    </div>
+                    <input type="hidden" id="jobsFilterTo">
+                  </div>
+                </div>
+              </div>
+              <div class="client-empty-state">
+                <div class="ces-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div>
+                <h3>No Jobs Yet</h3>
+                <p>Jobs raised by this client will appear here once they're booked.</p>
+              </div>
+            </div>
+
+            <div id="clientTabChat" style="display:none;">
+              <div class="chat-header-card">
+                <div class="chat-avatar" id="chatHeaderAvatar" style="background:#e8482c;">JJ</div>
+                <div class="chat-header-info">
+                  <div class="chi-name-row">Conversation with <span id="chatHeaderName">john john</span><span class="chi-active"><span class="dot"></span>Active</span></div>
+                  <div class="chi-sub"><span id="chatHeaderEmail">johnjohn@house.com</span> · <span id="chatHeaderPhone">+4407891197253</span></div>
+                </div>
+                <div class="chat-header-search">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                  <input type="text" placeholder="Search messages">
+                </div>
+              </div>
+              <div class="chat-filter-pills" id="chatFilterPills">
+                <div class="chat-filter-pill active" data-chatfilter="all"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>All messages</div>
+                <div class="chat-filter-pill" data-chatfilter="unread"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H8l-4 4z"/></svg>Unread</div>
+                <div class="chat-filter-pill" data-chatfilter="flagged"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22V15"/></svg>Flagged</div>
+                <div class="chat-filter-pill" data-chatfilter="attachments"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>With attachments</div>
+              </div>
+              <div class="chat-thread-card" id="chatThreadCard">
+                <div class="chat-day-divider"><span>Today</span></div>
+                <div class="chat-msg-row out">
+                  <div class="chat-msg-bubble">
+                    <div class="cmb-text">Hi</div>
+                    <div class="cmb-meta">You · 14:51 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                  </div>
+                </div>
+              </div>
+              <div class="chat-input-card">
+                <div class="chat-input-row">
+                  <button type="button" class="chat-icon-btn" aria-label="Attach file"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button>
+                  <textarea id="chatMessageInput" rows="1" placeholder="Reply to john john..."></textarea>
+                  <button type="button" class="chat-icon-btn" aria-label="Emoji"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg></button>
+                  <button type="button" class="chat-icon-btn" aria-label="GIF"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M8 9v6M8 9h3M8 12h2M14 15V9h3M14 12h2"/></svg></button>
+                  <button type="button" class="chat-send-btn" id="chatSendBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>Send</button>
+                </div>
+                <div class="chat-input-hint">Enter to send · Shift + Enter for a new line · PNG, JPEG, WEBP, PDF up to 10 MB.</div>
               </div>
             </div>
           </div>
@@ -5973,6 +6605,56 @@
 
 
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PAYMENT VERIFICATION MODAL ============ -->
+  <div class="payverif-overlay" id="payverifOverlay" role="dialog" aria-modal="true" aria-labelledby="payverifHeading">
+    <div class="payverif-card">
+      <h2 id="payverifHeading">Payment verification</h2>
+      <div class="payverif-desc">Billing cycle for <strong id="payverifClientName">john john</strong>. Fortnightly and Monthly are consolidated Direct-Debit terms and need admin approval before they take effect.</div>
+      <div class="payverif-row"><span class="pv-label">Requested cycle</span><span class="pv-value">Pay upfront</span></div>
+      <div class="payverif-row"><span class="pv-label">Billed now</span><span class="pv-value">Pay upfront</span></div>
+      <div class="payverif-row"><span class="pv-label">Status</span><span class="payverif-status-pill ok">Pay Upfront</span></div>
+      <div class="payverif-note">Per-job at booking, card on file. Instant — no approval needed.</div>
+      <div class="payverif-info-box">This client is on Pay-upfront. There's no pending billing request to action.</div>
+      <button type="button" class="payverif-close-btn" id="payverifCloseBtn">Close</button>
+    </div>
+  </div>
+
+  <!-- ============ DEACTIVATE CLIENT MODAL ============ -->
+  <div class="payverif-overlay" id="deactivateOverlay" role="dialog" aria-modal="true" aria-labelledby="deactivateHeading">
+    <div class="payverif-card" style="max-width:440px;">
+      <h2 id="deactivateHeading">Deactivate <span id="deactivateClientName">john john</span>'s account?</h2>
+      <div class="payverif-desc" style="margin-bottom:8px;">When deactivated:</div>
+      <ul class="deactivate-list">
+        <li>The user will lose access immediately.</li>
+        <li>Active jobs will be paused.</li>
+        <li>Properties will be hidden from search.</li>
+        <li>You can reactivate the account at any time.</li>
+      </ul>
+      <div class="pm-filter-field" style="margin:16px 0;">
+        <div class="pff-legend-wrap"><label>Reason</label></div>
+        <button type="button" class="pm-custom-dd-btn" data-dd="deactivateReason">
+          <span class="cdd-value">Inactive</span>
+          <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="pm-custom-dd-menu" data-dd-menu="deactivateReason">
+          <div class="cdd-item selected" data-value="Inactive">Inactive</div>
+          <div class="cdd-item" data-value="Policy violation">Policy violation</div>
+          <div class="cdd-item" data-value="Requested by client">Requested by client</div>
+          <div class="cdd-item" data-value="Fraud or suspicious activity">Fraud or suspicious activity</div>
+          <div class="cdd-item" data-value="Other">Other</div>
+        </div>
+      </div>
+      <div class="pm-filter-field">
+        <div class="pff-legend-wrap"><label>Type "DEACTIVATE" to confirm</label></div>
+        <input type="text" class="field-input" id="deactivateConfirmInput" style="margin-bottom:6px;" autocomplete="off">
+      </div>
+      <div style="display:flex; justify-content:flex-end; align-items:center; gap:10px; margin-top:14px;">
+        <button type="button" class="deactivate-cancel-btn" id="deactivateCancelBtn">Cancel</button>
+        <button type="button" class="deactivate-confirm-btn" id="deactivateConfirmBtn" disabled>Deactivate Account</button>
       </div>
     </div>
   </div>
@@ -6073,6 +6755,10 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 4500);
   }
+  document.getElementById('toastCloseBtn').addEventListener('click', function () {
+    toast.classList.remove('show');
+    clearTimeout(toastTimer);
+  });
 
   /* Smooth, exact-height expand/collapse for .field-collapsible elements.
      Using the element's real scrollHeight (instead of a large fixed max-height)
@@ -8109,6 +8795,7 @@
   function showAdminView(view) {
     document.getElementById('adminOverviewView').style.display = view === 'overview' ? '' : 'none';
     document.getElementById('adminPMListView').style.display = view === 'pm-list' ? '' : 'none';
+    document.getElementById('adminPMApplicantsView').style.display = view === 'pm-applicants-list' ? '' : 'none';
     document.getElementById('adminClientDetailView').style.display = view === 'client-detail' ? '' : 'none';
     document.querySelector('.dash-scroll-area').scrollTop = 0;
   }
@@ -8122,6 +8809,8 @@
         showAdminView('overview');
       } else if (nav === 'property-manager') {
         showAdminView('pm-list');
+      } else if (nav === 'pm-applicants') {
+        showAdminView('pm-applicants-list');
       } else {
         showAdminView('overview');
         document.querySelector('#adminDashboard .dash-nav-item[data-nav="overview"]').classList.add('active');
@@ -8175,10 +8864,28 @@
     { initials: 'SR', color: '#7c3aed', name: 'Sam R...', email: '', company: 'KEY RIDERS LTD', phone: '+447889922110', joined: '11 Jun 2026', business: true, discovery: true, properties: 'No properties yet', spend: 'No spend yet', completion: 27 }
   ];
 
+  var pmApplicants = [
+    { initials: 'JJ', color: '#2563eb', name: 'John John', email: 'john@house.com', company: 'johnhouseltd', phone: '+4407991197253', joined: '7 Jul 2026', business: true, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 25, status: 'Active' },
+    { initials: 'RA', color: '#7c3aed', name: 'raman', email: 'naman@gmail.com', company: 'raman ltd', phone: '+447999542811', joined: '3 Jul 2026', business: true, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 25, status: 'Active' },
+    { initials: 'VK', color: '#f2542d', name: 'veera kumari', email: 'veera@gmail.com', company: 'kumari pvt ltd', phone: '+447766885588', joined: '30 Jun 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 100, status: 'Active' },
+    { initials: 'TE', color: '#2563eb', name: 'Testing', email: 'tt@gmail.com', company: '', phone: '+44 7543 218992', joined: '26 Jun 2026', business: false, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 15, status: 'Active' },
+    { initials: 'GS', color: '#f2542d', name: 'Gurpreet Singh', email: 'inderbb9@gmail.com', company: '123123', phone: '', joined: '24 Jun 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 27, status: 'Active' },
+    { initials: 'PR', color: '#7c3aed', name: 'PropertiesItd', email: 'propertieslt@gg.com', company: 'KEY RIDERS LTD', phone: '', joined: '11 Jun 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 27, status: 'Inactive' }
+  ];
+
   var checkSvgSm = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
   var xSvgSm = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>';
   var menuDotsSvg = '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>';
   var arrowOpenSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>';
+
+  /* Profile-completion color scale, used everywhere a completion % renders (cards, table rows, client-detail header):
+     <40% red, <60% amber, <100% blue, =100% green (100% also gets its own "complete" pill design, handled separately). */
+  function getCompletionColor(pct) {
+    if (pct >= 100) return '#22c55e';
+    if (pct < 40) return '#e8482c';
+    if (pct < 60) return '#f59e0b';
+    return '#284890';
+  }
 
   function pmDropdownHtml(idx) {
     return '<div class="pm-dropdown-menu" data-idx="' + idx + '">' +
@@ -8191,13 +8898,15 @@
   }
 
   function renderPMCard(c, i) {
+    var businessIconSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>';
+    var discoveryIconSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36z"/></svg>';
     var pillsHtml = '<div class="pm-card-pill-row">' +
-      '<span class="pm-status-pill-mini ' + (c.business ? 'ok' : 'bad') + '">' + (c.business ? checkSvgSm : xSvgSm) + 'Business details</span>' +
-      '<span class="pm-status-pill-mini ' + (c.discovery ? 'ok' : 'bad') + '">' + (c.discovery ? checkSvgSm : xSvgSm) + 'Discovery profile</span>' +
+      '<span class="pm-status-pill-mini ' + (c.business ? 'ok' : 'bad') + '"><span class="pill-lead">' + businessIconSvg + 'Business details</span>' + (c.business ? checkSvgSm : xSvgSm).replace('width="12" height="12"', 'class="pill-status-icon"') + '</span>' +
+      '<span class="pm-status-pill-mini ' + (c.discovery ? 'ok' : 'bad') + '"><span class="pill-lead">' + discoveryIconSvg + 'Discovery profile</span>' + (c.discovery ? checkSvgSm : xSvgSm).replace('width="12" height="12"', 'class="pill-status-icon"') + '</span>' +
     '</div>';
     var completionHtml = c.completion >= 100
       ? '<div class="pm-complete-pill"><span style="display:flex;align-items:center;gap:6px;">' + checkSvgSm + 'Profile complete</span><span>100%</span></div>'
-      : '<div class="pm-completion-row"><div class="pm-completion-label-row"><span>Profile Completion</span><span class="pct">' + c.completion + '%</span></div><div class="pm-completion-track"><div class="pm-completion-fill" style="width:' + c.completion + '%;background:' + (c.completion === 0 ? '#e8482c' : c.completion < 50 ? '#e8482c' : '#f59e0b') + ';"></div></div></div>';
+      : '<div class="pm-completion-row"><div class="pm-completion-label-row"><span>Profile Completion</span><span class="pct">' + c.completion + '%</span></div><div class="pm-completion-track"><div class="pm-completion-fill" style="width:' + c.completion + '%;background:' + getCompletionColor(c.completion) + ';"></div></div></div>';
 
     return '<div class="pm-client-card" data-idx="' + i + '">' +
       '<div class="pm-card-top">' +
@@ -8227,7 +8936,7 @@
   }
 
   function renderPMTableRow(c, i) {
-    var barColor = c.completion >= 100 ? '#22c55e' : c.completion === 0 ? '#e8482c' : '#f59e0b';
+    var barColor = getCompletionColor(c.completion);
     var profileCell = c.completion >= 100
       ? '<span style="display:inline-flex;align-items:center;gap:6px;color:#1a7a3e;font-weight:700;">' + checkSvgSm + '100%</span>'
       : '<div class="pm-table-progress"><div class="tp-toprow"><span class="tp-label">' + (c.completion === 0 ? 'Not started' : 'On track') + '</span><span class="tp-pct">' + c.completion + '%</span></div><div class="tp-track"><div class="tp-fill" style="width:' + c.completion + '%;background:' + barColor + ';"></div></div></div>';
@@ -8241,6 +8950,80 @@
       '<td><span class="pm-yes-tag"><span class="dot"></span>' + (c.discovery ? 'Yes' : 'No') + '</span></td>' +
       '<td>' + profileCell + '</td>' +
       '<td><span class="pm-yes-tag"><span class="dot"></span>Active</span></td>' +
+      '<td>' + c.joined + '</td>' +
+    '</tr>';
+  }
+
+  function yesNoTag(bool) {
+    return '<span class="pm-yes-tag' + (bool ? '' : ' inactive') + '"><span class="dot"></span>' + (bool ? 'Yes' : 'No') + '</span>';
+  }
+  function activeStatusTag(status) {
+    return '<span class="pm-yes-tag' + (status === 'Active' ? '' : ' inactive') + '"><span class="dot"></span>' + status + '</span>';
+  }
+  var unverifiedIconSvg = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M4.9 4.9l14.2 14.2"/></svg>';
+
+  function appDropdownHtml(idx) {
+    return '<div class="app-dropdown-menu" data-idx="' + idx + '">' +
+      '<button type="button" data-action="view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View Profile</button>' +
+      '<button type="button" data-action="impersonate"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>Impersonate</button>' +
+      '<button type="button" data-action="newtab"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6M9 15L15 9"/></svg>Open in New Tab</button>' +
+      '<button type="button" data-action="copyemail"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy Email</button>' +
+      '<button type="button" data-action="copyphone"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy Phone</button>' +
+    '</div>';
+  }
+
+  function renderApplicantCard(c, i) {
+    var businessIconSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>';
+    var discoveryIconSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36z"/></svg>';
+    var pillsHtml = '<div class="pm-card-pill-row">' +
+      '<span class="pm-status-pill-mini ' + (c.business ? 'ok' : 'bad') + '"><span class="pill-lead">' + businessIconSvg + 'Business details</span>' + (c.business ? checkSvgSm : xSvgSm).replace('width="12" height="12"', 'class="pill-status-icon"') + '</span>' +
+      '<span class="pm-status-pill-mini ' + (c.discovery ? 'ok' : 'bad') + '"><span class="pill-lead">' + discoveryIconSvg + 'Discovery profile</span>' + (c.discovery ? checkSvgSm : xSvgSm).replace('width="12" height="12"', 'class="pill-status-icon"') + '</span>' +
+    '</div>';
+    var completionHtml = c.completion >= 100
+      ? '<div class="pm-complete-pill"><span style="display:flex;align-items:center;gap:6px;">' + checkSvgSm + 'Profile complete</span><span>100%</span></div>'
+      : '<div class="pm-completion-row"><div class="pm-completion-label-row"><span>Profile Completion</span><span class="pct">' + c.completion + '%</span></div><div class="pm-completion-track"><div class="pm-completion-fill" style="width:' + c.completion + '%;background:' + getCompletionColor(c.completion) + ';"></div></div></div>';
+
+    return '<div class="pm-client-card app-client-card" data-idx="' + i + '">' +
+      '<div class="pm-card-top">' +
+        '<div class="pm-card-avatar" style="background:' + c.color + ';">' + c.initials + '</div>' +
+        '<div class="pm-card-name-wrap">' +
+          '<div class="pm-card-name">' + c.name + '</div>' +
+          '<div class="pm-card-email">' + (c.email || '\u2014') + '</div>' +
+        '</div>' +
+        '<div class="pm-card-active-chip' + (c.status === 'Active' ? '' : ' inactive') + '"><span class="dot"></span>' + c.status + '</div>' +
+        '<div class="pm-card-actions">' +
+          '<button type="button" class="app-card-impersonate-btn" data-idx="' + i + '" data-tooltip="Impersonate">' + arrowOpenSvg + '</button>' +
+          '<button type="button" class="app-card-menu-btn" data-idx="' + i + '" data-tooltip="More actions">' + menuDotsSvg + '</button>' +
+        '</div>' +
+        appDropdownHtml(i) +
+      '</div>' +
+      '<div class="pm-verified-badge unverified">' + unverifiedIconSvg + 'Unverified</div>' +
+      (c.company ? '<div class="pm-card-meta-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>' + c.company + '</div>' : '') +
+      (c.phone ? '<div class="pm-card-meta-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>' + c.phone + '</div>' : '') +
+      '<div class="pm-card-meta-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Joined ' + c.joined + '</div>' +
+      pillsHtml +
+      '<div class="pm-card-stats-row">' +
+        '<div><div class="pcs-label"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14"/></svg>PROPERTIES</div><div class="pcs-value">' + c.properties + '</div></div>' +
+        '<div><div class="pcs-label"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>LIFETIME SPEND</div><div class="pcs-value muted">' + c.spend + '</div></div>' +
+      '</div>' +
+      completionHtml +
+    '</div>';
+  }
+
+  function renderApplicantTableRow(c, i) {
+    var profileCell = c.completion >= 100
+      ? '<span style="display:inline-flex;align-items:center;gap:6px;color:#1a7a3e;font-weight:700;">' + checkSvgSm + '100%</span>'
+      : '<div class="pm-table-progress"><div class="tp-toprow"><span class="tp-label">' + (c.completion === 0 ? 'Not started' : 'On track') + '</span><span class="tp-pct">' + c.completion + '%</span></div><div class="tp-track"><div class="tp-fill" style="width:' + c.completion + '%;background:' + getCompletionColor(c.completion) + ';"></div></div></div>';
+
+    return '<tr class="pm-table-row app-table-row" data-idx="' + i + '">' +
+      '<td><div class="pm-name-cell"><div class="pm-card-avatar" style="background:' + c.color + ';">' + c.initials + '</div><div><div class="nm-name">' + c.name + '</div><div class="nm-email">' + (c.email || '') + '</div></div></div></td>' +
+      '<td><span class="pm-unverified-tag">' + unverifiedIconSvg + 'No</span></td>' +
+      '<td>' + (c.company || '—') + '</td>' +
+      '<td>' + (c.phone || '—') + '</td>' +
+      '<td>' + yesNoTag(c.business) + '</td>' +
+      '<td>' + yesNoTag(c.discovery) + '</td>' +
+      '<td>' + profileCell + '</td>' +
+      '<td>' + activeStatusTag(c.status) + '</td>' +
       '<td>' + c.joined + '</td>' +
     '</tr>';
   }
@@ -8383,11 +9166,150 @@
     showToast('List refreshed.');
   });
 
+  /* ---- PM Applicants module (parallel to the Property Manager list above, kept separate on purpose) ---- */
+  var appCurrentPage = 1;
+  var appRowsPerPage = 25;
+  var appActiveTab = 'all';
+  var appSearchTerm = '';
+
+  function getFilteredApplicants() {
+    return pmApplicants.map(function (c, origIdx) { return { c: c, origIdx: origIdx }; }).filter(function (entry) {
+      var c = entry.c;
+      if (appActiveTab === 'complete' && c.completion < 100) return false;
+      if (appActiveTab === 'incomplete' && c.completion >= 100) return false;
+      if (appSearchTerm) {
+        var term = appSearchTerm.toLowerCase();
+        var haystack = (c.name + ' ' + (c.email || '') + ' ' + (c.company || '')).toLowerCase();
+        if (haystack.indexOf(term) === -1) return false;
+      }
+      return true;
+    });
+  }
+
+  function renderApplicantList() {
+    var filtered = getFilteredApplicants();
+    var totalPages = Math.max(1, Math.ceil(filtered.length / appRowsPerPage));
+    if (appCurrentPage > totalPages) appCurrentPage = totalPages;
+    var startIdx = (appCurrentPage - 1) * appRowsPerPage;
+    var pageEntries = filtered.slice(startIdx, startIdx + appRowsPerPage);
+
+    document.getElementById('appGridView').innerHTML = pageEntries.map(function (entry) { return renderApplicantCard(entry.c, entry.origIdx); }).join('');
+    document.getElementById('appTableBody').innerHTML = pageEntries.map(function (entry) { return renderApplicantTableRow(entry.c, entry.origIdx); }).join('');
+    document.getElementById('appResultCount').textContent = filtered.length;
+    document.getElementById('appResultCount2').textContent = filtered.length;
+    document.getElementById('appPageIndicator').textContent = 'Page ' + appCurrentPage + ' of ' + totalPages;
+    document.getElementById('appPagePrev').disabled = appCurrentPage <= 1;
+    document.getElementById('appPageNext').disabled = appCurrentPage >= totalPages;
+    document.getElementById('appPagePrev').style.opacity = appCurrentPage <= 1 ? 0.4 : 1;
+    document.getElementById('appPageNext').style.opacity = appCurrentPage >= totalPages ? 0.4 : 1;
+    wireAppCardEvents();
+  }
+
+  function closeAllAppDropdowns() {
+    document.querySelectorAll('.app-dropdown-menu.open').forEach(function (m) { m.classList.remove('open'); });
+  }
+
+  function wireAppCardEvents() {
+    document.querySelectorAll('.app-card-impersonate-btn').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        impersonateApplicant(parseInt(btn.getAttribute('data-idx'), 10));
+      });
+    });
+    document.querySelectorAll('.app-card-menu-btn').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var idx = btn.getAttribute('data-idx');
+        var menu = document.querySelector('.app-dropdown-menu[data-idx="' + idx + '"]');
+        var wasOpen = menu.classList.contains('open');
+        closeAllAppDropdowns();
+        if (!wasOpen) menu.classList.add('open');
+      });
+    });
+    document.querySelectorAll('.app-dropdown-menu button').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var action = btn.getAttribute('data-action');
+        var idx = parseInt(btn.closest('.app-dropdown-menu').getAttribute('data-idx'), 10);
+        closeAllAppDropdowns();
+        if (action === 'view') {
+          openApplicantDetail(idx);
+        } else if (action === 'impersonate') {
+          impersonateApplicant(idx);
+        } else if (action === 'copyemail') {
+          showToast('Email copied to clipboard.');
+        } else if (action === 'copyphone') {
+          showToast('Phone number copied to clipboard.');
+        } else {
+          showToast('This isn\u2019t wired up in this prototype yet.');
+        }
+      });
+    });
+    document.querySelectorAll('.app-client-card').forEach(function (card) {
+      card.addEventListener('click', function () {
+        openApplicantDetail(parseInt(card.getAttribute('data-idx'), 10));
+      });
+    });
+    document.querySelectorAll('.app-table-row').forEach(function (row) {
+      row.addEventListener('click', function () {
+        openApplicantDetail(parseInt(row.getAttribute('data-idx'), 10));
+      });
+    });
+  }
+  document.addEventListener('click', closeAllAppDropdowns);
+
+  document.getElementById('appViewToggle').addEventListener('click', function (e) {
+    var btn = e.target.closest('button[data-view]');
+    if (!btn) return;
+    var view = btn.getAttribute('data-view');
+    document.querySelectorAll('#appViewToggle button').forEach(function (b) { b.classList.toggle('active', b === btn); });
+    document.getElementById('appGridView').style.display = view === 'grid' ? '' : 'none';
+    document.getElementById('appTableViewWrap').style.display = view === 'table' ? '' : 'none';
+  });
+
+  document.querySelectorAll('#appTabPills .pm-tab-pill').forEach(function (pill) {
+    pill.addEventListener('click', function () {
+      document.querySelectorAll('#appTabPills .pm-tab-pill').forEach(function (p) { p.classList.remove('active'); });
+      pill.classList.add('active');
+      appActiveTab = pill.getAttribute('data-filter');
+      appCurrentPage = 1;
+      renderApplicantList();
+    });
+  });
+
+  document.getElementById('appSearchInput').addEventListener('input', function () {
+    appSearchTerm = this.value.trim();
+    appCurrentPage = 1;
+    renderApplicantList();
+  });
+
+  document.getElementById('appRowsPerPage').addEventListener('change', function () {
+    appRowsPerPage = parseInt(this.value, 10);
+    appCurrentPage = 1;
+    renderApplicantList();
+  });
+  document.getElementById('appPagePrev').addEventListener('click', function () {
+    if (appCurrentPage > 1) { appCurrentPage--; renderApplicantList(); }
+  });
+  document.getElementById('appPageNext').addEventListener('click', function () {
+    var totalPages = Math.max(1, Math.ceil(getFilteredApplicants().length / appRowsPerPage));
+    if (appCurrentPage < totalPages) { appCurrentPage++; renderApplicantList(); }
+  });
+  document.getElementById('appRefreshBtn').addEventListener('click', function () {
+    document.getElementById('appSearchInput').value = '';
+    appSearchTerm = '';
+    appActiveTab = 'all';
+    appCurrentPage = 1;
+    document.querySelectorAll('#appTabPills .pm-tab-pill').forEach(function (p, i) { p.classList.toggle('active', i === 0); });
+    renderApplicantList();
+    showToast('List refreshed.');
+  });
+
   function closeAllCustomDropdowns() {
     document.querySelectorAll('.pm-custom-dd-btn.open').forEach(function (b) { b.classList.remove('open'); });
     document.querySelectorAll('.pm-custom-dd-menu.open').forEach(function (m) { m.classList.remove('open'); });
   }
-  document.querySelectorAll('.pm-custom-dd-btn').forEach(function (btn) {
+  document.querySelectorAll('.pm-custom-dd-btn[data-dd]').forEach(function (btn) {
     btn.addEventListener('click', function (e) {
       e.stopPropagation();
       var key = btn.getAttribute('data-dd');
@@ -8411,6 +9333,235 @@
   });
   document.addEventListener('click', closeAllCustomDropdowns);
 
+  /* Custom calendar date-picker (Joined before / Joined after) — kept as its own
+     self-contained system, same pattern as closeAllCustomDropdowns above but not merged with it. */
+  var MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  var calState = {
+    joinedBefore: { viewYear: null, viewMonth: null, selected: null },
+    joinedAfter: { viewYear: null, viewMonth: null, selected: null },
+    jobsFrom: { viewYear: null, viewMonth: null, selected: null },
+    jobsTo: { viewYear: null, viewMonth: null, selected: null },
+    appJoinedBefore: { viewYear: null, viewMonth: null, selected: null },
+    appJoinedAfter: { viewYear: null, viewMonth: null, selected: null }
+  };
+  var calHiddenInputIds = {
+    joinedBefore: 'pmFilterJoinedBefore',
+    joinedAfter: 'pmFilterJoinedAfter',
+    jobsFrom: 'jobsFilterFrom',
+    jobsTo: 'jobsFilterTo',
+    appJoinedBefore: 'appFilterJoinedBefore',
+    appJoinedAfter: 'appFilterJoinedAfter'
+  };
+  function calPad2(n) { return n < 10 ? '0' + n : '' + n; }
+  function calFormatDMY(d) { return calPad2(d.getDate()) + '/' + calPad2(d.getMonth() + 1) + '/' + d.getFullYear(); }
+  function calFormatISO(d) { return d.getFullYear() + '-' + calPad2(d.getMonth() + 1) + '-' + calPad2(d.getDate()); }
+  function closeAllCalendarPopups() {
+    document.querySelectorAll('.pm-cal-popup.open').forEach(function (p) { p.classList.remove('open'); });
+    document.querySelectorAll('.pm-cal-trigger-btn.open').forEach(function (b) { b.classList.remove('open'); });
+  }
+  function renderCalendarGrid(key) {
+    var st = calState[key];
+    var grid = document.querySelector('.pm-cal-grid[data-cal-grid="' + key + '"]');
+    var monthText = document.querySelector('[data-cal-monthtext="' + key + '"]');
+    monthText.textContent = MONTH_NAMES[st.viewMonth] + ' ' + st.viewYear;
+    var firstOfMonth = new Date(st.viewYear, st.viewMonth, 1);
+    var startWeekday = firstOfMonth.getDay();
+    var daysInMonth = new Date(st.viewYear, st.viewMonth + 1, 0).getDate();
+    var daysInPrevMonth = new Date(st.viewYear, st.viewMonth, 0).getDate();
+    var today = new Date();
+    var cells = [];
+    for (var i = 0; i < startWeekday; i++) {
+      var pd = daysInPrevMonth - startWeekday + 1 + i;
+      cells.push(new Date(st.viewYear, st.viewMonth - 1, pd));
+    }
+    for (var d = 1; d <= daysInMonth; d++) { cells.push(new Date(st.viewYear, st.viewMonth, d)); }
+    var remainder = cells.length % 7;
+    var trailing = remainder === 0 ? 0 : 7 - remainder;
+    for (var j = 1; j <= trailing; j++) { cells.push(new Date(st.viewYear, st.viewMonth + 1, j)); }
+    grid.innerHTML = cells.map(function (dateObj) {
+      var muted = dateObj.getMonth() !== st.viewMonth;
+      var isToday = dateObj.toDateString() === today.toDateString();
+      var isSelected = st.selected && dateObj.toDateString() === st.selected.toDateString();
+      var cls = 'pm-cal-day' + (muted ? ' muted' : '') + (isToday ? ' today' : '') + (isSelected ? ' selected' : '');
+      return '<button type="button" class="' + cls + '" data-cal-daynum="' + dateObj.getFullYear() + '-' + dateObj.getMonth() + '-' + dateObj.getDate() + '">' + dateObj.getDate() + '</button>';
+    }).join('');
+  }
+  function updateCalFieldDisplay(key) {
+    var st = calState[key];
+    var textEl = document.querySelector('[data-cal-text="' + key + '"]');
+    var hiddenInput = document.getElementById(calHiddenInputIds[key]);
+    if (st.selected) {
+      textEl.textContent = calFormatDMY(st.selected);
+      textEl.classList.remove('placeholder');
+      hiddenInput.value = calFormatISO(st.selected);
+    } else {
+      textEl.textContent = 'dd/mm/yyyy';
+      textEl.classList.add('placeholder');
+      hiddenInput.value = '';
+    }
+  }
+  document.querySelectorAll('.pm-cal-trigger-btn').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var key = btn.getAttribute('data-cal');
+      var wasOpen = btn.classList.contains('open');
+      closeAllCalendarPopups();
+      closeAllCustomDropdowns();
+      if (wasOpen) return;
+      var st = calState[key];
+      var base = st.selected || new Date();
+      st.viewYear = base.getFullYear();
+      st.viewMonth = base.getMonth();
+      renderCalendarGrid(key);
+      btn.classList.add('open');
+      document.querySelector('.pm-cal-popup[data-cal-popup="' + key + '"]').classList.add('open');
+    });
+  });
+  document.querySelectorAll('[data-cal-prev]').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var key = btn.getAttribute('data-cal-prev');
+      var st = calState[key];
+      st.viewMonth -= 1;
+      if (st.viewMonth < 0) { st.viewMonth = 11; st.viewYear -= 1; }
+      renderCalendarGrid(key);
+    });
+  });
+  document.querySelectorAll('[data-cal-next]').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var key = btn.getAttribute('data-cal-next');
+      var st = calState[key];
+      st.viewMonth += 1;
+      if (st.viewMonth > 11) { st.viewMonth = 0; st.viewYear += 1; }
+      renderCalendarGrid(key);
+    });
+  });
+  document.querySelectorAll('.pm-cal-month-label').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var key = btn.getAttribute('data-cal-monthlabel');
+      var today = new Date();
+      calState[key].viewYear = today.getFullYear();
+      calState[key].viewMonth = today.getMonth();
+      renderCalendarGrid(key);
+    });
+  });
+  document.querySelectorAll('.pm-cal-grid').forEach(function (grid) {
+    grid.addEventListener('click', function (e) {
+      var dayBtn = e.target.closest('.pm-cal-day');
+      if (!dayBtn) return;
+      e.stopPropagation();
+      var key = grid.getAttribute('data-cal-grid');
+      var parts = dayBtn.getAttribute('data-cal-daynum').split('-');
+      calState[key].selected = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10), parseInt(parts[2], 10));
+      updateCalFieldDisplay(key);
+      closeAllCalendarPopups();
+    });
+  });
+  document.querySelectorAll('[data-cal-clear]').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var key = btn.getAttribute('data-cal-clear');
+      calState[key].selected = null;
+      updateCalFieldDisplay(key);
+      closeAllCalendarPopups();
+    });
+  });
+  document.querySelectorAll('[data-cal-today]').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var key = btn.getAttribute('data-cal-today');
+      calState[key].selected = new Date();
+      updateCalFieldDisplay(key);
+      closeAllCalendarPopups();
+    });
+  });
+  document.addEventListener('click', closeAllCalendarPopups);
+
+  /* Verification chip popovers (Account / Email / Phone) + Payment verification modal */
+  var verifCheckSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+  var verifWarnSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>';
+  var verifState = { account: true, email: false, phone: true };
+  var verifLabels = {
+    account: { verified: 'Account verified', unverified: 'Account unverified' },
+    email: { verified: 'Email verified', unverified: 'Email unverified' },
+    phone: { verified: 'Phone verified', unverified: 'Phone unverified' }
+  };
+  var verifFieldNames = { account: 'Account', email: 'Email', phone: 'Phone' };
+  function closeAllVerifPopovers() {
+    document.querySelectorAll('.verif-popover.open').forEach(function (p) { p.classList.remove('open'); });
+  }
+  function updateVerificationCount() {
+    var count = (verifState.account ? 1 : 0) + (verifState.email ? 1 : 0) + (verifState.phone ? 1 : 0) + 1; /* +1 for payment: Pay Upfront needs no approval, counts as satisfied */
+    var valEl = document.getElementById('clientVerificationValue');
+    if (valEl) {
+      valEl.textContent = count + ' of 4';
+      valEl.classList.remove('amber', 'green');
+      valEl.classList.add(count >= 4 ? 'green' : 'amber');
+    }
+    var approveBtn = document.getElementById('clientApproveBtn');
+    if (approveBtn) {
+      approveBtn.disabled = !(verifState.account && verifState.email && verifState.phone);
+    }
+  }
+  function renderVerifChip(key) {
+    var chip = document.querySelector('.verif-chip[data-verif="' + key + '"]');
+    var verified = verifState[key];
+    chip.className = 'verif-chip ' + (verified ? 'ok' : 'warn');
+    chip.innerHTML = (verified ? verifCheckSvg : verifWarnSvg) + verifLabels[key][verified ? 'verified' : 'unverified'];
+    var titleEl = document.querySelector('[data-vp-title="' + key + '"]');
+    if (titleEl) titleEl.textContent = verifLabels[key][verified ? 'verified' : 'unverified'];
+    var markVerifiedBtn = document.querySelector('[data-vp-markverified="' + key + '"]');
+    var markUnverifiedBtn = document.querySelector('[data-vp-markunverified="' + key + '"]');
+    if (markVerifiedBtn) markVerifiedBtn.disabled = verified;
+    if (markUnverifiedBtn) markUnverifiedBtn.disabled = !verified;
+    updateVerificationCount();
+  }
+  document.querySelectorAll('.verif-chip[data-verif]').forEach(function (chip) {
+    chip.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var key = chip.getAttribute('data-verif');
+      if (key === 'payment') { document.getElementById('payverifOverlay').classList.add('open'); return; }
+      var popover = document.querySelector('.verif-popover[data-verif-popover="' + key + '"]');
+      var wasOpen = popover.classList.contains('open');
+      closeAllVerifPopovers();
+      if (!wasOpen) popover.classList.add('open');
+    });
+  });
+  document.querySelectorAll('.verif-popover').forEach(function (pop) {
+    pop.addEventListener('click', function (e) { e.stopPropagation(); });
+  });
+  document.querySelectorAll('[data-vp-markverified]').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var key = btn.getAttribute('data-vp-markverified');
+      verifState[key] = true;
+      renderVerifChip(key);
+      showToast(verifFieldNames[key] + ' marked as verified.');
+      closeAllVerifPopovers();
+    });
+  });
+  document.querySelectorAll('[data-vp-markunverified]').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var key = btn.getAttribute('data-vp-markunverified');
+      verifState[key] = false;
+      renderVerifChip(key);
+      showToast(verifFieldNames[key] + ' marked as unverified.');
+      closeAllVerifPopovers();
+    });
+  });
+  document.addEventListener('click', closeAllVerifPopovers);
+  updateVerificationCount();
+
+  document.getElementById('payverifCloseBtn').addEventListener('click', function () {
+    document.getElementById('payverifOverlay').classList.remove('open');
+  });
+  document.getElementById('payverifOverlay').addEventListener('click', function (e) {
+    if (e.target === this) this.classList.remove('open');
+  });
+
   /* Client Detail: John John has exact reference data; others get reasonable synthesized detail fields */
   function impersonateClient(idx) {
     var c = pmClients[idx];
@@ -8419,40 +9570,199 @@
       showPMDashboard({ fullName: c.name, email: c.email || (c.name.replace(/\s+/g, '.').toLowerCase() + '@example.com') }, 'populated');
     }, 300);
   }
+  function impersonateApplicant(idx) {
+    var c = pmApplicants[idx];
+    showToast('Impersonating ' + c.name + ' \u2014 viewing their PM Dashboard.');
+    setTimeout(function () {
+      showPMDashboard({ fullName: c.name, email: c.email || (c.name.replace(/\s+/g, '.').toLowerCase() + '@example.com') }, 'populated');
+    }, 300);
+  }
 
-  function openClientDetail(idx) {
-    var c = pmClients[idx];
+  var currentDetailSource = 'pm';
+  var clientDetailStaticDefaults = {
+    legalName: document.getElementById('clientLegalName').textContent,
+    regNumber: document.getElementById('clientRegNumber').textContent,
+    vatNumber: document.getElementById('clientVatNumber').textContent,
+    vatNumberMuted: document.getElementById('clientVatNumber').classList.contains('muted'),
+    regAddress: document.getElementById('clientRegAddress').textContent,
+    tradingAddress: document.getElementById('clientTradingAddress').textContent
+  };
+  function getDefaultVerifState(source) {
+    return source === 'app' ? { account: false, email: false, phone: false } : { account: true, email: false, phone: true };
+  }
+
+  function populateClientDetailFields(c, source) {
+    currentDetailSource = source;
+    document.getElementById('clientBackLabel').textContent = source === 'app' ? 'PM Applicants' : 'Clients';
     document.getElementById('clientBreadcrumbName').textContent = c.name;
     document.getElementById('clientDetailName').textContent = c.name;
     document.getElementById('clientAvatarRing').textContent = c.initials;
     document.getElementById('clientAvatarRing').style.background = c.color;
     document.getElementById('clientProfileCompletionValue').textContent = c.completion + '%';
-    document.getElementById('clientProfileCompletionBar').style.width = c.completion + '%';
+    var bar = document.getElementById('clientProfileCompletionBar');
+    bar.style.width = c.completion + '%';
+    bar.style.background = getCompletionColor(c.completion);
     document.getElementById('clientFieldName').textContent = c.name;
     document.getElementById('clientFieldEmail').innerHTML = (c.email || 'Not provided') + (c.email ? ' <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#d99a2b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>' : '');
     document.getElementById('clientFieldPhone').innerHTML = (c.phone || 'Not provided') + (c.phone ? ' <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>' : '');
-    document.getElementById('clientTradingName').textContent = c.company || 'Not set';
     document.getElementById('clientSupportName').textContent = c.name.toLowerCase() + ' · property manager';
     document.getElementById('clientSupportPhone').textContent = c.phone || 'Not provided';
     document.getElementById('clientSupportEmail').textContent = c.email || 'Not provided';
     document.getElementById('clientPendingPill').style.display = c.completion < 100 ? '' : 'none';
+    document.getElementById('clientPendingPill').textContent = source === 'app' ? 'INCOMPLETE' : 'PENDING REVIEW';
 
+    var legalNameEl = document.getElementById('clientLegalName');
+    var regNumberEl = document.getElementById('clientRegNumber');
+    var vatNumberEl = document.getElementById('clientVatNumber');
+    var regAddressEl = document.getElementById('clientRegAddress');
+    var tradingAddressEl = document.getElementById('clientTradingAddress');
+    var tradingNameEl = document.getElementById('clientTradingName');
+    if (source === 'app') {
+      /* Applicants: only what's actually on file gets shown — everything else reads "Not set", matching the real per-applicant reference rather than the John John placeholder fallback. */
+      tradingNameEl.textContent = c.business ? (c.company || 'Not set') : 'Not set';
+      tradingNameEl.classList.toggle('muted', !c.business);
+      [legalNameEl, regNumberEl, regAddressEl, tradingAddressEl].forEach(function (el) { el.textContent = 'Not set'; el.classList.add('muted'); });
+      vatNumberEl.textContent = 'Not set';
+      vatNumberEl.classList.add('muted');
+      document.getElementById('discoveryProfileContent').style.display = c.discovery ? '' : 'none';
+      document.getElementById('discoveryProfileEmpty').style.display = c.discovery ? 'none' : '';
+      document.getElementById('businessCompanyContactsSection').style.display = 'none';
+    } else {
+      tradingNameEl.textContent = c.company || 'Not set';
+      tradingNameEl.classList.toggle('muted', !c.company);
+      legalNameEl.textContent = clientDetailStaticDefaults.legalName;
+      legalNameEl.classList.remove('muted');
+      regNumberEl.textContent = clientDetailStaticDefaults.regNumber;
+      regNumberEl.classList.remove('muted');
+      vatNumberEl.textContent = clientDetailStaticDefaults.vatNumber;
+      vatNumberEl.classList.toggle('muted', clientDetailStaticDefaults.vatNumberMuted);
+      regAddressEl.textContent = clientDetailStaticDefaults.regAddress;
+      regAddressEl.classList.remove('muted');
+      tradingAddressEl.textContent = clientDetailStaticDefaults.tradingAddress;
+      tradingAddressEl.classList.remove('muted');
+      document.getElementById('discoveryProfileContent').style.display = '';
+      document.getElementById('discoveryProfileEmpty').style.display = 'none';
+      document.getElementById('businessCompanyContactsSection').style.display = '';
+    }
+
+    var bizFieldEls = [tradingNameEl, legalNameEl, regNumberEl, vatNumberEl, regAddressEl, tradingAddressEl];
+    var bizFilledCount = bizFieldEls.filter(function (el) { return el.textContent.trim() !== 'Not set'; }).length;
+    document.getElementById('clientBusinessFieldsValue').textContent = bizFilledCount + (bizFilledCount === 1 ? ' field' : ' fields');
+
+    var defaults = getDefaultVerifState(source);
+    verifState.account = defaults.account;
+    verifState.email = defaults.email;
+    verifState.phone = defaults.phone;
+    renderVerifChip('account');
+    renderVerifChip('email');
+    renderVerifChip('phone');
+
+    exitClientEditMode();
+  }
+
+  function openClientDetail(idx) {
+    populateClientDetailFields(pmClients[idx], 'pm');
+    showAdminView('client-detail');
+  }
+  function openApplicantDetail(idx) {
+    populateClientDetailFields(pmApplicants[idx], 'app');
     showAdminView('client-detail');
   }
 
   document.getElementById('clientBackBtn').addEventListener('click', function () {
-    showAdminView('pm-list');
+    showAdminView(currentDetailSource === 'app' ? 'pm-applicants-list' : 'pm-list');
   });
 
+  var clientTabPanelIds = { profile: 'clientTabProfile', properties: 'clientTabProperties', jobs: 'clientTabJobs', chat: 'clientTabChat' };
   document.querySelectorAll('.client-tab').forEach(function (tab) {
     tab.addEventListener('click', function () {
       document.querySelectorAll('.client-tab').forEach(function (t) { t.classList.remove('active'); });
       tab.classList.add('active');
-      if (tab.getAttribute('data-tab') !== 'profile') {
-        showToast(tab.textContent + ' tab isn\u2019t wired up in this prototype yet.');
-      }
+      var key = tab.getAttribute('data-tab');
+      Object.keys(clientTabPanelIds).forEach(function (k) {
+        document.getElementById(clientTabPanelIds[k]).style.display = (k === key) ? '' : 'none';
+      });
     });
   });
+
+  /* Generic pill-group / view-toggle wiring for the new Properties & Jobs tabs
+     (kept separate from #pmTabPills / #pmViewToggle, which have their own real filtering logic) */
+  document.querySelectorAll('.pm-tab-pills').forEach(function (group) {
+    if (group.id === 'pmTabPills') return;
+    group.querySelectorAll('.pm-tab-pill').forEach(function (pill) {
+      pill.addEventListener('click', function () {
+        group.querySelectorAll('.pm-tab-pill').forEach(function (p) { p.classList.remove('active'); });
+        pill.classList.add('active');
+      });
+    });
+  });
+  document.querySelectorAll('.pm-view-toggle').forEach(function (group) {
+    if (group.id === 'pmViewToggle') return;
+    group.addEventListener('click', function (e) {
+      var btn = e.target.closest('button');
+      if (!btn) return;
+      group.querySelectorAll('button').forEach(function (b) { b.classList.toggle('active', b === btn); });
+    });
+  });
+  var propNotifyBtn = document.getElementById('propNotifyBtn');
+  if (propNotifyBtn) {
+    propNotifyBtn.addEventListener('click', function () {
+      showToast('We\u2019ll notify you when this is ready.');
+    });
+  }
+
+  /* Chat tab filter pills (cosmetic — only one seed message exists) */
+  var chatFilterPillsGroup = document.getElementById('chatFilterPills');
+  if (chatFilterPillsGroup) {
+    chatFilterPillsGroup.querySelectorAll('.chat-filter-pill').forEach(function (pill) {
+      pill.addEventListener('click', function () {
+        chatFilterPillsGroup.querySelectorAll('.chat-filter-pill').forEach(function (p) { p.classList.remove('active'); });
+        pill.classList.add('active');
+      });
+    });
+  }
+
+  /* Chat send message */
+  function chatFormatNowTime() {
+    var now = new Date();
+    var h = now.getHours(); var m = now.getMinutes();
+    return calPad2(h) + ':' + calPad2(m);
+  }
+  function sendChatMessage() {
+    var input = document.getElementById('chatMessageInput');
+    var text = input.value.trim();
+    if (!text) return;
+    var thread = document.getElementById('chatThreadCard');
+    var row = document.createElement('div');
+    row.className = 'chat-msg-row out';
+    var bubble = document.createElement('div');
+    bubble.className = 'chat-msg-bubble';
+    var textEl = document.createElement('div');
+    textEl.className = 'cmb-text';
+    textEl.textContent = text;
+    var metaEl = document.createElement('div');
+    metaEl.className = 'cmb-meta';
+    metaEl.innerHTML = 'You \u00b7 ' + chatFormatNowTime() + ' <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+    bubble.appendChild(textEl);
+    bubble.appendChild(metaEl);
+    row.appendChild(bubble);
+    thread.appendChild(row);
+    input.value = '';
+    input.style.height = 'auto';
+    thread.scrollTop = thread.scrollHeight;
+  }
+  var chatSendBtn = document.getElementById('chatSendBtn');
+  var chatMessageInput = document.getElementById('chatMessageInput');
+  if (chatSendBtn && chatMessageInput) {
+    chatSendBtn.addEventListener('click', sendChatMessage);
+    chatMessageInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); }
+    });
+    chatMessageInput.addEventListener('input', function () {
+      this.style.height = 'auto';
+      this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+    });
+  }
 
   document.querySelectorAll('.client-show-pill').forEach(function (pill) {
     pill.addEventListener('click', function () {
@@ -8465,13 +9775,143 @@
     });
   });
 
-  ['clientApproveBtn', 'clientDeactivateBtn', 'clientMoreBtn'].forEach(function (id) {
+  document.getElementById('clientApproveBtn').addEventListener('click', function () {
+    document.getElementById('clientPendingPill').style.display = 'none';
+    showToast('Client approved.');
+  });
+
+  /* ---- Client 3-dot menu ---- */
+  document.getElementById('clientMoreBtn').addEventListener('click', function (e) {
+    e.stopPropagation();
+    document.getElementById('clientMoreMenu').classList.toggle('open');
+  });
+  document.querySelectorAll('#clientMoreMenu button').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      showToast(btn.textContent + ' isn\u2019t wired up in this prototype yet.');
+      document.getElementById('clientMoreMenu').classList.remove('open');
+    });
+  });
+  document.addEventListener('click', function () {
+    document.getElementById('clientMoreMenu').classList.remove('open');
+  });
+
+  /* ---- Client Edit Profile mode ---- */
+  var clientEditOriginal = { email: '', phone: '' };
+  function setClientEditDirty(dirty) {
+    var statusEl = document.getElementById('clientEditStatus');
+    statusEl.classList.toggle('dirty', dirty);
+    statusEl.querySelector('.cef-status-text').textContent = dirty ? 'Unsaved changes' : 'No changes yet';
+  }
+  function enterClientEditMode() {
+    var nameVal = document.getElementById('clientFieldName').textContent.trim();
+    var emailVal = document.getElementById('clientFieldEmail').firstChild.textContent.trim();
+    var phoneFull = document.getElementById('clientFieldPhone').firstChild.textContent.trim();
+    document.getElementById('clientFieldNameInput').value = nameVal;
+    document.getElementById('clientFieldEmailInput').value = emailVal;
+    document.getElementById('clientFieldPhoneInput').value = phoneFull.replace(/^\+44/, '').trim();
+    document.getElementById('clientTradingNameInput').value = document.getElementById('clientTradingName').textContent.trim();
+    document.getElementById('clientLegalNameInput').value = document.getElementById('clientLegalName').textContent.trim();
+    document.getElementById('clientRegNumberInput').value = document.getElementById('clientRegNumber').textContent.trim();
+    var vatText = document.getElementById('clientVatNumber').textContent.trim();
+    document.getElementById('clientVatNumberInput').value = vatText === 'Not set' ? '' : vatText;
+    document.getElementById('clientRegAddressInput').value = document.getElementById('clientRegAddress').textContent.trim();
+    document.getElementById('clientTradingAddressInput').value = document.getElementById('clientTradingAddress').textContent.trim();
+    clientEditOriginal.email = emailVal;
+    clientEditOriginal.phone = phoneFull;
+    setClientEditDirty(false);
+    document.getElementById('adminClientDetailView').classList.add('editing');
+    document.getElementById('clientEditFooter').classList.add('open');
+  }
+  function exitClientEditMode() {
+    document.getElementById('adminClientDetailView').classList.remove('editing');
+    document.getElementById('clientEditFooter').classList.remove('open');
+  }
+  document.getElementById('clientEditProfileBtn').addEventListener('click', enterClientEditMode);
+  document.querySelectorAll('#adminClientDetailView .dfr-edit-only').forEach(function (el) {
+    el.addEventListener('input', function () { setClientEditDirty(true); });
+    el.addEventListener('change', function () { setClientEditDirty(true); });
+  });
+  ['clientDiscardBtnTop', 'clientDiscardBtnBottom'].forEach(function (id) {
     document.getElementById(id).addEventListener('click', function () {
-      showToast('This isn\u2019t wired up in this prototype yet.');
+      exitClientEditMode();
+      showToast('Changes discarded.');
+    });
+  });
+  ['clientSaveBtnTop', 'clientSaveBtnBottom'].forEach(function (id) {
+    document.getElementById(id).addEventListener('click', function () {
+      var newName = document.getElementById('clientFieldNameInput').value.trim() || document.getElementById('clientFieldName').textContent.trim();
+      var newEmail = document.getElementById('clientFieldEmailInput').value.trim();
+      var newPhoneNum = document.getElementById('clientFieldPhoneInput').value.trim();
+      var newPhoneCode = document.getElementById('clientFieldPhoneCode').value;
+      var newPhoneFull = newPhoneCode + newPhoneNum.replace(/\s+/g, '');
+
+      document.getElementById('clientFieldName').textContent = newName;
+      document.getElementById('clientDetailName').textContent = newName;
+      document.getElementById('clientBreadcrumbName').textContent = newName;
+
+      var emailWarnSvg = ' <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#d99a2b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>';
+      var phoneOkSvg = ' <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+      var emailChanged = newEmail !== clientEditOriginal.email;
+      var phoneChanged = newPhoneFull !== clientEditOriginal.phone;
+      if (emailChanged) { verifState.email = false; }
+      if (phoneChanged) { verifState.phone = false; }
+      document.getElementById('clientFieldEmail').innerHTML = newEmail + (verifState.email ? '' : emailWarnSvg);
+      document.getElementById('clientFieldPhone').innerHTML = newPhoneFull + (verifState.phone ? phoneOkSvg : '');
+      renderVerifChip('email');
+      renderVerifChip('phone');
+
+      var savedTradingName = document.getElementById('clientTradingNameInput').value.trim();
+      document.getElementById('clientTradingName').textContent = savedTradingName || 'Not set';
+      document.getElementById('clientTradingName').classList.toggle('muted', !savedTradingName);
+      var savedLegalName = document.getElementById('clientLegalNameInput').value.trim();
+      document.getElementById('clientLegalName').textContent = savedLegalName || 'Not set';
+      document.getElementById('clientLegalName').classList.toggle('muted', !savedLegalName);
+      var savedRegNumber = document.getElementById('clientRegNumberInput').value.trim();
+      document.getElementById('clientRegNumber').textContent = savedRegNumber || 'Not set';
+      document.getElementById('clientRegNumber').classList.toggle('muted', !savedRegNumber);
+      document.getElementById('clientVatNumber').textContent = document.getElementById('clientVatNumberInput').value.trim() || 'Not set';
+      document.getElementById('clientVatNumber').classList.toggle('muted', !document.getElementById('clientVatNumberInput').value.trim());
+      var savedRegAddress = document.getElementById('clientRegAddressInput').value.trim();
+      document.getElementById('clientRegAddress').textContent = savedRegAddress || 'Not set';
+      document.getElementById('clientRegAddress').classList.toggle('muted', !savedRegAddress);
+      var savedTradingAddress = document.getElementById('clientTradingAddressInput').value.trim();
+      document.getElementById('clientTradingAddress').textContent = savedTradingAddress || 'Not set';
+      document.getElementById('clientTradingAddress').classList.toggle('muted', !savedTradingAddress);
+
+      var savedBizFieldEls = ['clientTradingName', 'clientLegalName', 'clientRegNumber', 'clientVatNumber', 'clientRegAddress', 'clientTradingAddress'].map(function (id) { return document.getElementById(id); });
+      var savedBizFilledCount = savedBizFieldEls.filter(function (el) { return el.textContent.trim() !== 'Not set'; }).length;
+      document.getElementById('clientBusinessFieldsValue').textContent = savedBizFilledCount + (savedBizFilledCount === 1 ? ' field' : ' fields');
+
+      exitClientEditMode();
+      showToast('Changes saved.');
     });
   });
 
+  /* ---- Deactivate client modal ---- */
+  document.getElementById('clientDeactivateBtn').addEventListener('click', function () {
+    document.getElementById('deactivateClientName').textContent = document.getElementById('clientDetailName').textContent;
+    document.getElementById('deactivateConfirmInput').value = '';
+    document.getElementById('deactivateConfirmBtn').disabled = true;
+    document.getElementById('deactivateOverlay').classList.add('open');
+  });
+  document.getElementById('deactivateConfirmInput').addEventListener('input', function () {
+    document.getElementById('deactivateConfirmBtn').disabled = this.value.trim() !== 'DEACTIVATE';
+  });
+  document.getElementById('deactivateCancelBtn').addEventListener('click', function () {
+    document.getElementById('deactivateOverlay').classList.remove('open');
+  });
+  document.getElementById('deactivateConfirmBtn').addEventListener('click', function () {
+    if (this.disabled) return;
+    document.getElementById('deactivateOverlay').classList.remove('open');
+    showToast('Account deactivated.');
+  });
+  document.getElementById('deactivateOverlay').addEventListener('click', function (e) {
+    if (e.target === this) this.classList.remove('open');
+  });
+
   renderPMList();
+  renderApplicantList();
 
 })();
 </script>
