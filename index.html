@@ -2564,6 +2564,10 @@
   .supplier-type-pill svg { width: 12px; height: 12px; flex-shrink: 0; }
   .supplier-approved-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: #1a7a3e; background: #eafaf0; padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
   .supplier-approved-pill.suspended { color: #c0392b; background: #fdecea; }
+  .supplier-approved-pill.incomplete { color: #475569; background: var(--surface-soft); }
+  .supplier-approved-pill.pending { color: #92620a; background: #fef3c7; }
+  .supplier-approved-pill.rejected { color: #c0392b; background: #fdecea; }
+  .muted-italic { font-style: italic; color: #a6b0bf; }
   .supplier-meta-row { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-body-muted); margin-bottom: 5px; }
   .supplier-meta-row svg { color: #94a3b8; flex-shrink: 0; width: 12px; height: 12px; }
   .supplier-meta-row:last-child { margin-bottom: 0; }
@@ -6617,6 +6621,94 @@
             </div>
           </div>
 
+          <!-- ============ SUPPLIER APPLICANTS VIEW ============ -->
+          <div id="adminSupplierApplicantsView" style="display:none;">
+            <div class="pm-filter-card">
+              <div class="pm-search-row">
+                <div class="pm-search-input-wrap" style="max-width:340px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                  <input type="text" id="supAppSearchInput" placeholder="Search applicants by name, email, phone, or trade">
+                  <div class="pm-search-kbd"><span>Ctrl</span><span>K</span></div>
+                </div>
+                <div class="pm-tab-pills" id="supAppTabPills">
+                  <div class="pm-tab-pill active" data-filter="incomplete">Incomplete</div>
+                  <div class="pm-tab-pill" data-filter="pending">Pending</div>
+                  <div class="pm-tab-pill" data-filter="rejected">Rejected</div>
+                </div>
+                <div class="pm-count-actions">
+                  <span class="pm-count-text" id="supAppResultCount">Showing 25 of 33</span>
+                  <div class="pm-view-toggle" id="supAppViewToggle">
+                    <button type="button" class="active" data-view="grid" aria-label="Grid view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
+                    <button type="button" data-view="table" aria-label="Table view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4"/><rect x="3" y="10" width="18" height="4"/><rect x="3" y="16" width="18" height="4"/></svg></button>
+                  </div>
+                  <button type="button" class="pm-icon-btn-sq" id="supAppRefreshBtn" aria-label="Refresh"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/></svg></button>
+                </div>
+              </div>
+              <div style="display:flex; gap:12px; margin-top:12px; flex-wrap:wrap;">
+                <div class="pm-filter-field" style="width:190px;">
+                  <div class="pff-legend-wrap"><label>Type</label></div>
+                  <button type="button" class="pm-custom-dd-btn" data-dd="supAppType">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>
+                    <span class="cdd-value">All Types</span>
+                    <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                  </button>
+                  <div class="pm-custom-dd-menu" data-dd-menu="supAppType">
+                    <div class="cdd-item selected" data-value="All Types">All Types</div>
+                    <div class="cdd-item" data-value="Sole Trader">Sole Trader</div>
+                    <div class="cdd-item" data-value="Company">Company</div>
+                  </div>
+                </div>
+                <div class="pm-filter-field" style="width:190px;">
+                  <div class="pff-legend-wrap"><label>Active state</label></div>
+                  <button type="button" class="pm-custom-dd-btn" data-dd="supAppState">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+                    <span class="cdd-value">Any State</span>
+                    <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                  </button>
+                  <div class="pm-custom-dd-menu" data-dd-menu="supAppState">
+                    <div class="cdd-item selected" data-value="Any State">Any State</div>
+                    <div class="cdd-item" data-value="Active">Active</div>
+                    <div class="cdd-item" data-value="Inactive">Inactive</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="supAppGridView" class="pm-card-grid"></div>
+            <div id="supAppTableViewWrap" class="pm-table-wrap" style="display:none;">
+              <div class="pm-table-scroll">
+                <table class="admin-table" style="min-width:900px;">
+                  <thead><tr><th>Name</th><th>Type</th><th>Categories</th><th>Phone</th><th>Status</th><th>Active</th><th>Joined</th></tr></thead>
+                  <tbody id="supAppTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="dash-header" style="margin-top:16px;">
+              <span class="pm-count-text" id="supAppResultCount2">33 applicants</span>
+              <div class="dash-header-actions" style="align-items:center;gap:14px;">
+                <span class="pm-count-text" style="display:flex;align-items:center;gap:8px;">Rows per page
+                  <div class="pm-filter-field" style="width:76px;">
+                    <button type="button" class="pm-custom-dd-btn" data-dd="supAppRowsPerPage" style="padding:6px 10px;">
+                      <span class="cdd-value">25</span>
+                      <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="pm-custom-dd-menu drop-up" data-dd-menu="supAppRowsPerPage">
+                      <div class="cdd-item selected" data-value="25">25</div>
+                      <div class="cdd-item" data-value="50">50</div>
+                      <div class="cdd-item" data-value="100">100</div>
+                    </div>
+                  </div>
+                </span>
+                <div style="display:flex;gap:4px;align-items:center;">
+                  <button type="button" class="pm-icon-btn-sq" id="supAppPagePrev" aria-label="Previous page"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+                  <div style="display:flex;gap:4px;" id="supAppPageNumbers"></div>
+                  <button type="button" class="pm-icon-btn-sq" id="supAppPageNext" aria-label="Next page"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- ============ SUPPLIER_DETAIL_VIEW_PLACEHOLDER ============ -->
           <div id="adminSupplierDetailView" style="display:none;">
             <div class="pm-breadcrumb">
@@ -7246,9 +7338,15 @@
                   <div style="font-size:11px;color:#94a3b8;margin-top:6px;">Captured locally — backend persistence pending.</div>
                 </div>
 
-                <div class="sup-sidebar-card sup-account-box">
+                <div class="sup-sidebar-card sup-account-box" id="supDeactivateBox">
                   <div class="sab-row"><span class="dot"></span><span id="supAccountSummary">73%<span class="dot-sep"></span>0 issues</span></div>
                   <button type="button" class="sup-deactivate-btn-full" id="supDeactivateBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 11-12.73 0M12 2v10"/></svg>Deactivate</button>
+                </div>
+                <div class="sup-sidebar-card" id="supApplicantActionBox" style="display:none;">
+                  <div style="display:flex;gap:8px;">
+                    <button type="button" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:11px;border-radius:10px;background:#1a7a3e;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;" id="supApplicantApproveBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Approve</button>
+                    <button type="button" class="sup-deactivate-btn-full" style="flex:1;" id="supApplicantRejectBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>Reject</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -7256,6 +7354,10 @@
             <div class="sup-sticky-bar">
               <span class="ssb-score"><span class="dot"></span>Compliance score: <span id="supStickyScore">73%</span><span class="dot-sep"></span><span id="supStickyChecks">8/11 checks passed</span></span>
               <button type="button" class="sup-deactivate-btn-full" id="supDeactivateBtn2" style="width:auto;padding:9px 20px;">Deactivate</button>
+              <div id="supApplicantActionBtns" style="display:none;gap:10px;">
+                <button type="button" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 20px;border-radius:10px;background:#1a7a3e;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;" id="supApplicantApproveBtn2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Approve</button>
+                <button type="button" class="sup-deactivate-btn-full" style="width:auto;padding:9px 20px;" id="supApplicantRejectBtn2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>Reject</button>
+              </div>
             </div>
           </div>
 
@@ -10005,6 +10107,7 @@
     document.getElementById('adminPMListView').style.display = view === 'pm-list' ? '' : 'none';
     document.getElementById('adminPMApplicantsView').style.display = view === 'pm-applicants-list' ? '' : 'none';
     document.getElementById('adminActiveSuppliersView').style.display = view === 'active-suppliers-list' ? '' : 'none';
+    document.getElementById('adminSupplierApplicantsView').style.display = view === 'supplier-applicants-list' ? '' : 'none';
     document.getElementById('adminClientDetailView').style.display = view === 'client-detail' ? '' : 'none';
     document.getElementById('adminSupplierDetailView').style.display = view === 'supplier-detail' ? '' : 'none';
     document.querySelector('.dash-scroll-area').scrollTop = 0;
@@ -10023,6 +10126,8 @@
         showAdminView('pm-applicants-list');
       } else if (nav === 'active-suppliers') {
         showAdminView('active-suppliers-list');
+      } else if (nav === 'supplier-applicants') {
+        showAdminView('supplier-applicants-list');
       } else {
         showAdminView('overview');
         document.querySelector('#adminDashboard .dash-nav-item[data-nav="overview"]').classList.add('active');
@@ -10115,6 +10220,42 @@
 
   /* Supplier detail reference data — Nadia Reid is the fully accurate example (matches the reference screenshots);
      every other supplier reuses this as placeholder detail data, same precedent as John John in the PM module. */
+  var supplierApplicants = [
+    { initials: 'TE', color: '#f2542d', name: 'Test', email: 'test@gmail.com', type: '', phone: '+441234657982', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'FE', color: '#16a34a', name: 'Ferna', email: 'greenwood86@gmail.com', type: 'Sole Trader', phone: '+447671542225', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'FE', color: '#0ea5e9', name: 'fern', email: 'fern@gmail.com', type: 'Sole Trader', phone: '+441234589844', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'FT', color: '#ec4899', name: 'Fernando Arenas Testing', email: 'fernando@keylr.com', type: 'Sole Trader', phone: '+4407395664384', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'JJ', color: '#7c3aed', name: 'john john', email: 'johnjohn@john.com', type: 'Company', phone: '+4407124536780', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'JJ', color: '#7c3aed', name: 'jane jane', email: 'jane@trade.com', type: 'Sole Trader', phone: '+4407199237568', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'SU', color: '#f2542d', name: 'Supplier testing UK', email: 'Sptest@keylr.com', type: 'Company', phone: '+4407000000003', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'KE', color: '#ec4899', name: 'Keylr', email: 'testingkey@test.com', type: 'Company', phone: '+447777777798', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'TE', color: '#0ea5e9', name: 'Testingaccount', email: 'testinguk@keylr.com', type: 'Company', phone: '+4407000000008', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'FT', color: '#ec4899', name: 'Fernando testing', email: 'test@uktest1.com', type: 'Sole Trader', phone: '+4407997884738', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'GE', color: '#16a34a', name: 'gexeki', email: 'gexeki8305@test.com', type: 'Company', phone: '+447979797977', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'TE', color: '#16a34a', name: 'test', email: 'testing@gm.com', type: 'Sole Trader', phone: '+447654312569', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'TE', color: '#f2542d', name: 'testingun', email: 'testing@123.com', type: 'Company', phone: '+4407837434672', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'TE', color: '#7c3aed', name: 'Testeruk', email: '', type: 'Sole Trader', phone: '+4402073728888', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'UK', color: '#0ea5e9', name: 'Uktest', email: '', type: 'Sole Trader', phone: '+44800000001', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'TS', color: '#f2542d', name: 'Testing supplier', email: '', type: 'Company', phone: '+440800000000', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'SS', color: '#e8482c', name: 'Simranpreet', email: '', type: 'Sole Trader', phone: '+447788990099', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'RO', color: '#0ea5e9', name: 'rommy', email: '', type: 'Sole Trader', phone: '+447778887777', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'NS', color: '#0d9488', name: 'navneet singh', email: '', type: 'Sole Trader', phone: '+447986543244', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'JA', color: '#0ea5e9', name: 'jack', email: '', type: 'Company', phone: '+447778887778', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'TL', color: '#7c3aed', name: 'Test supplier', email: '', type: 'Company', phone: '+4407999999823', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'TU', color: '#7c3aed', name: 'Testing UK', email: '', type: 'Sole Trader', phone: '+4407837483748', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'FE', color: '#0ea5e9', name: 'Fernando', email: '', type: 'Sole Trader', phone: '+4407700000987', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'FA', color: '#f2542d', name: 'Fernando Costa', email: '', type: 'Sole Trader', phone: '+4407999999980', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'FA', color: '#f2542d', name: 'Fernando Silva', email: '', type: 'Sole Trader', phone: '+4407788888888', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'MA', color: '#16a34a', name: 'Marcus Ade', email: 'marcus.ade@test.com', type: 'Sole Trader', phone: '+447700112233', activeState: 'Active', status: 'Pending' },
+    { initials: 'RH', color: '#0ea5e9', name: 'Rhea Holt', email: 'rhea.holt@test.com', type: 'Company', phone: '+447700112234', activeState: 'Active', status: 'Pending' },
+    { initials: 'DK', color: '#7c3aed', name: 'Deepak Kumar', email: '', type: 'Sole Trader', phone: '+447700112235', activeState: 'Active', status: 'Pending' },
+    { initials: 'LW', color: '#ec4899', name: 'Lena Wood', email: 'lena.wood@test.com', type: 'Sole Trader', phone: '+447700112236', activeState: 'Active', status: 'Rejected' },
+    { initials: 'OB', color: '#f2542d', name: 'Owen Bright', email: '', type: 'Company', phone: '+447700112237', activeState: 'Inactive', status: 'Rejected' },
+    { initials: 'SA', color: '#0d9488', name: 'Sana Ahmed', email: 'sana.ahmed@test.com', type: 'Sole Trader', phone: '+447700112238', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'PK', color: '#16a34a', name: 'Priya Kaur', email: '', type: 'Sole Trader', phone: '+447700112239', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'DW', color: '#7c3aed', name: 'Dan Walsh', email: 'dan.walsh@test.com', type: 'Company', phone: '+447700112240', activeState: 'Active', status: 'Incomplete' }
+  ];
+
   function supplierComplianceTemplate() {
     return [
       { category: 'Identity & Address', items: [
@@ -11226,6 +11367,189 @@
     btn.addEventListener('click', function () { showToast(btn.getAttribute('data-comp-update') + ' updated.'); });
   });
 
+  /* ---- Supplier Applicants module ---- */
+  function supAppStatusClass(status) {
+    if (status === 'Pending') return 'pending';
+    if (status === 'Rejected') return 'rejected';
+    return 'incomplete';
+  }
+  function supAppDropdownHtml(idx) {
+    return '<div class="app-dropdown-menu" data-idx="' + idx + '">' +
+      '<button type="button" data-action="view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View Profile</button>' +
+      '<button type="button" data-action="impersonate"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>Impersonate</button>' +
+      '<button type="button" data-action="copyemail"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy Email</button>' +
+      '<button type="button" data-action="copyphone"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy Phone</button>' +
+    '</div>';
+  }
+  function renderSupAppCard(c, i) {
+    var typeIcon = c.type === 'Company' ? companyIconSvg : personIconSvg;
+    return '<div class="supplier-card" data-idx="' + i + '">' +
+      '<div class="supplier-card-top">' +
+        '<div class="pm-card-avatar" style="background:' + c.color + ';">' + c.initials + '</div>' +
+        '<div class="supplier-name-wrap">' +
+          '<div class="supplier-name">' + c.name + '</div>' +
+          '<div class="supplier-email' + (c.email ? '' : ' muted-italic') + '">' + (c.email || 'No email') + '</div>' +
+        '</div>' +
+        '<div class="pm-card-active-chip' + (c.activeState === 'Active' ? '' : ' inactive') + '"><span class="dot"></span>' + c.activeState + '</div>' +
+        '<div class="pm-card-actions">' +
+          '<button type="button" class="supplier-action-btn supplier-impersonate-btn" data-idx="' + i + '" data-tooltip="Impersonate">' + arrowOpenSvg + '</button>' +
+          '<button type="button" class="supplier-action-btn app-card-menu-btn" data-idx="' + i + '" data-tooltip="More actions">' + menuDotsSvg + '</button>' +
+        '</div>' +
+        supAppDropdownHtml(i) +
+      '</div>' +
+      '<div class="supplier-pill-row">' +
+        '<span class="supplier-approved-pill ' + supAppStatusClass(c.status) + '">' + c.status + '</span>' +
+        (c.type ? '<span class="supplier-type-pill' + (c.type === 'Sole Trader' ? ' sole-trader' : '') + '">' + typeIcon + c.type + '</span>' : '') +
+      '</div>' +
+      (c.phone ? '<div class="supplier-meta-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>' + c.phone + '</div>' : '') +
+      '<div class="supplier-meta-row muted-italic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Not submitted yet</div>' +
+    '</div>';
+  }
+  function renderSupAppTableRow(c, i) {
+    var typeIcon = c.type === 'Company' ? companyIconSvg : personIconSvg;
+    return '<tr class="pm-table-row supplier-table-row" data-idx="' + i + '">' +
+      '<td><div class="pm-name-cell"><div class="pm-card-avatar" style="background:' + c.color + ';">' + c.initials + '</div><div><div class="nm-name">' + c.name + '</div><div class="nm-email">' + (c.email || 'No email') + '</div></div></div></td>' +
+      '<td>' + (c.type ? '<span class="supplier-type-pill' + (c.type === 'Sole Trader' ? ' sole-trader' : '') + '">' + typeIcon + c.type + '</span>' : '\u2014') + '</td>' +
+      '<td>\u2014</td>' +
+      '<td>' + (c.phone || '\u2014') + '</td>' +
+      '<td><span class="supplier-approved-pill ' + supAppStatusClass(c.status) + '">' + c.status + '</span></td>' +
+      '<td>' + activeStatusTag(c.activeState) + '</td>' +
+      '<td>\u2014</td>' +
+    '</tr>';
+  }
+
+  var supAppCurrentPage = 1;
+  var supAppRowsPerPage = 25;
+  var supAppActiveTab = 'incomplete';
+  var supAppSearchTerm = '';
+  var supAppTypeFilter = 'All Types';
+  var supAppStateFilter = 'Any State';
+
+  function getFilteredSupApplicants() {
+    return supplierApplicants.map(function (c, origIdx) { return { c: c, origIdx: origIdx }; }).filter(function (entry) {
+      var c = entry.c;
+      if (supAppActiveTab === 'incomplete' && c.status !== 'Incomplete') return false;
+      if (supAppActiveTab === 'pending' && c.status !== 'Pending') return false;
+      if (supAppActiveTab === 'rejected' && c.status !== 'Rejected') return false;
+      if (supAppTypeFilter !== 'All Types' && c.type !== supAppTypeFilter) return false;
+      if (supAppStateFilter !== 'Any State' && c.activeState !== supAppStateFilter) return false;
+      if (supAppSearchTerm) {
+        var term = supAppSearchTerm.toLowerCase();
+        var haystack = (c.name + ' ' + (c.email || '') + ' ' + (c.phone || '')).toLowerCase();
+        if (haystack.indexOf(term) === -1) return false;
+      }
+      return true;
+    });
+  }
+
+  function renderSupAppList() {
+    var filtered = getFilteredSupApplicants();
+    var totalPages = Math.max(1, Math.ceil(filtered.length / supAppRowsPerPage));
+    if (supAppCurrentPage > totalPages) supAppCurrentPage = totalPages;
+    var startIdx = (supAppCurrentPage - 1) * supAppRowsPerPage;
+    var pageEntries = filtered.slice(startIdx, startIdx + supAppRowsPerPage);
+
+    document.getElementById('supAppGridView').innerHTML = pageEntries.map(function (entry) { return renderSupAppCard(entry.c, entry.origIdx); }).join('');
+    document.getElementById('supAppTableBody').innerHTML = pageEntries.map(function (entry) { return renderSupAppTableRow(entry.c, entry.origIdx); }).join('');
+    document.getElementById('supAppResultCount').textContent = 'Showing ' + pageEntries.length + ' of ' + filtered.length;
+    document.getElementById('supAppResultCount2').textContent = filtered.length + ' applicants';
+    document.getElementById('supAppPagePrev').disabled = supAppCurrentPage <= 1;
+    document.getElementById('supAppPageNext').disabled = supAppCurrentPage >= totalPages;
+    document.getElementById('supAppPagePrev').style.opacity = supAppCurrentPage <= 1 ? 0.4 : 1;
+    document.getElementById('supAppPageNext').style.opacity = supAppCurrentPage >= totalPages ? 0.4 : 1;
+    renderPageNumberButtons('supAppPageNumbers', supAppCurrentPage, totalPages, function (p) { supAppCurrentPage = p; renderSupAppList(); });
+    wireSupAppCardEvents();
+  }
+
+  function closeAllSupAppDropdowns() {
+    document.querySelectorAll('#adminSupplierApplicantsView .app-dropdown-menu.open').forEach(function (m) { m.classList.remove('open'); });
+  }
+
+  function wireSupAppCardEvents() {
+    document.querySelectorAll('#adminSupplierApplicantsView .supplier-impersonate-btn').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var c = supplierApplicants[parseInt(btn.getAttribute('data-idx'), 10)];
+        showToast('Impersonating ' + c.name + ' \u2014 viewing their Supplier Dashboard.');
+        setTimeout(function () {
+          showSupplierDashboard({ fullName: c.name, email: c.email || (c.name.replace(/\s+/g, '.').toLowerCase() + '@example.com') }, 'populated');
+        }, 300);
+      });
+    });
+    document.querySelectorAll('#adminSupplierApplicantsView .app-card-menu-btn').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var idx = btn.getAttribute('data-idx');
+        var menu = document.querySelector('#adminSupplierApplicantsView .app-dropdown-menu[data-idx="' + idx + '"]');
+        var wasOpen = menu.classList.contains('open');
+        closeAllSupAppDropdowns();
+        if (!wasOpen) menu.classList.add('open');
+      });
+    });
+    document.querySelectorAll('#adminSupplierApplicantsView .app-dropdown-menu button').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var action = btn.getAttribute('data-action');
+        var idx = parseInt(btn.closest('.app-dropdown-menu').getAttribute('data-idx'), 10);
+        var c = supplierApplicants[idx];
+        closeAllSupAppDropdowns();
+        if (action === 'view') {
+          openSupplierDetail(idx, 'app');
+        } else if (action === 'copyemail') { showToast('Email copied to clipboard.'); }
+        else if (action === 'copyphone') { showToast('Phone number copied to clipboard.'); }
+        else if (action === 'impersonate') {
+          showToast('Impersonating ' + c.name + ' \u2014 viewing their Supplier Dashboard.');
+          setTimeout(function () { showSupplierDashboard({ fullName: c.name, email: c.email || '' }, 'populated'); }, 300);
+        } else {
+          showToast('This isn\u2019t wired up in this prototype yet.');
+        }
+      });
+    });
+    document.querySelectorAll('#adminSupplierApplicantsView .supplier-card, #adminSupplierApplicantsView .supplier-table-row').forEach(function (el) {
+      el.addEventListener('click', function () {
+        openSupplierDetail(parseInt(el.getAttribute('data-idx'), 10), 'app');
+      });
+    });
+  }
+  document.addEventListener('click', closeAllSupAppDropdowns);
+
+  document.getElementById('supAppSearchInput').addEventListener('input', function () {
+    supAppSearchTerm = this.value.trim();
+    supAppCurrentPage = 1;
+    renderSupAppList();
+  });
+  document.querySelectorAll('#supAppTabPills .pm-tab-pill').forEach(function (pill) {
+    pill.addEventListener('click', function () {
+      document.querySelectorAll('#supAppTabPills .pm-tab-pill').forEach(function (p) { p.classList.remove('active'); });
+      pill.classList.add('active');
+      supAppActiveTab = pill.getAttribute('data-filter');
+      supAppCurrentPage = 1;
+      renderSupAppList();
+    });
+  });
+  document.querySelectorAll('#supAppViewToggle button').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('#supAppViewToggle button').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var view = btn.getAttribute('data-view');
+      document.getElementById('supAppGridView').style.display = view === 'grid' ? '' : 'none';
+      document.getElementById('supAppTableViewWrap').style.display = view === 'table' ? '' : 'none';
+    });
+  });
+  document.getElementById('supAppRefreshBtn').addEventListener('click', function () {
+    supAppSearchTerm = '';
+    document.getElementById('supAppSearchInput').value = '';
+    renderSupAppList();
+    showToast('List refreshed.');
+  });
+  document.getElementById('supAppPagePrev').addEventListener('click', function () {
+    if (supAppCurrentPage > 1) { supAppCurrentPage--; renderSupAppList(); }
+  });
+  document.getElementById('supAppPageNext').addEventListener('click', function () {
+    var totalPages = Math.max(1, Math.ceil(getFilteredSupApplicants().length / supAppRowsPerPage));
+    if (supAppCurrentPage < totalPages) { supAppCurrentPage++; renderSupAppList(); }
+  });
+
   function switchSupTab(key) {
     document.querySelectorAll('.sup-tabs-row .sup-tab-item').forEach(function (t) { t.classList.toggle('active', t.getAttribute('data-suptab') === key); });
     document.getElementById('supTabOverview').style.display = key === 'overview' ? '' : 'none';
@@ -11241,13 +11565,31 @@
 
   document.getElementById('supResendLinkBtn').addEventListener('click', function () { showToast('Verification link resent.'); });
   document.getElementById('supTrustIdRefresh').addEventListener('click', function () { showToast('Status refreshed.'); });
-  document.getElementById('supBackBtn').addEventListener('click', function () { showAdminView('active-suppliers-list'); });
+  document.getElementById('supBackBtn').addEventListener('click', function () { showAdminView(currentSupplierDetailSource === 'app' ? 'supplier-applicants-list' : 'active-suppliers-list'); });
   ['supDeactivateBtn', 'supDeactivateBtn2'].forEach(function (id) {
     document.getElementById(id).addEventListener('click', function () {
       document.getElementById('deactivateClientName').textContent = document.getElementById('supDetailName').textContent;
       document.getElementById('deactivateConfirmInput').value = '';
       document.getElementById('deactivateConfirmBtn').disabled = true;
       document.getElementById('deactivateOverlay').classList.add('open');
+    });
+  });
+  ['supApplicantApproveBtn', 'supApplicantApproveBtn2'].forEach(function (id) {
+    document.getElementById(id).addEventListener('click', function () {
+      var c = supDetailCurrentSupplier;
+      c.status = 'Approved';
+      showToast(c.name + ' approved as a supplier.');
+      renderSupAppList();
+      showAdminView('supplier-applicants-list');
+    });
+  });
+  ['supApplicantRejectBtn', 'supApplicantRejectBtn2'].forEach(function (id) {
+    document.getElementById(id).addEventListener('click', function () {
+      var c = supDetailCurrentSupplier;
+      c.status = 'Rejected';
+      showToast(c.name + '\u2019s application was rejected.');
+      renderSupAppList();
+      showAdminView('supplier-applicants-list');
     });
   });
 
@@ -11379,8 +11721,17 @@
     el.textContent = text;
     el.className = cls;
   }
-  function openSupplierDetail(idx) {
-    var c = activeSuppliers[idx];
+  function supStatusPillClass(status) {
+    if (status === 'Approved') return 'supplier-approved-pill';
+    if (status === 'Suspended') return 'supplier-approved-pill suspended';
+    if (status === 'Pending') return 'supplier-approved-pill pending';
+    if (status === 'Rejected') return 'supplier-approved-pill rejected';
+    return 'supplier-approved-pill incomplete';
+  }
+  var currentSupplierDetailSource = 'supplier';
+  function openSupplierDetail(idx, source) {
+    var c = source === 'app' ? supplierApplicants[idx] : activeSuppliers[idx];
+    currentSupplierDetailSource = source || 'supplier';
     supDetailCurrentSupplier = c;
     supDetailChecklist = supplierComplianceTemplate();
     supDetailDocuments = supplierDocumentsTemplate();
@@ -11390,44 +11741,51 @@
     document.querySelectorAll('#supMethodTabs button').forEach(function (p, i) { p.classList.toggle('active', i === 0); });
     document.querySelectorAll('#supFlagsTabs .sup-flag-tab-pill').forEach(function (p, i) { p.classList.toggle('active', i === 0); });
 
+    var appliedText = c.joined || 'Not submitted yet';
+    document.getElementById('supBackBtn').lastChild.textContent = source === 'app' ? 'Supplier Applicants' : 'Active Suppliers';
     document.getElementById('supDetailBreadcrumbName').textContent = c.name;
     document.getElementById('supDetailAvatar').textContent = c.initials;
     document.getElementById('supDetailAvatar').style.background = c.color;
     document.getElementById('supDetailName').textContent = c.name;
-    setPillText('supDetailStatusPill', 'supplier-approved-pill' + (c.status === 'Approved' ? '' : ' suspended'), c.status);
-    document.getElementById('supDetailEmail').textContent = c.email;
-    document.getElementById('supDetailPhone').textContent = c.phone;
-    document.getElementById('supDetailApplied').textContent = c.joined;
-    setPillText('supDetailTypePill', 'supplier-type-pill' + (c.type === 'Sole Trader' ? ' sole-trader' : ''), c.type);
+    setPillText('supDetailStatusPill', supStatusPillClass(c.status), c.status);
+    document.getElementById('supDetailEmail').textContent = c.email || 'No email';
+    document.getElementById('supDetailPhone').textContent = c.phone || '\u2014';
+    document.getElementById('supDetailApplied').textContent = appliedText;
+    setPillText('supDetailTypePill', 'supplier-type-pill' + (c.type === 'Sole Trader' ? ' sole-trader' : ''), c.type || '\u2014');
 
     document.getElementById('supSidebarAvatar').textContent = c.initials;
     document.getElementById('supSidebarAvatar').style.background = c.color;
     document.getElementById('supSidebarName').textContent = c.name;
-    setPillText('supSidebarTypePill', 'supplier-type-pill' + (c.type === 'Sole Trader' ? ' sole-trader' : ''), c.type);
+    setPillText('supSidebarTypePill', 'supplier-type-pill' + (c.type === 'Sole Trader' ? ' sole-trader' : ''), c.type || '\u2014');
     document.getElementById('supSidebarTypePill').style.fontSize = '11px';
     document.getElementById('supSidebarTypePill').style.padding = '2px 8px';
-    setPillText('supSidebarStatusPill', 'supplier-approved-pill' + (c.status === 'Approved' ? '' : ' suspended'), c.status);
+    setPillText('supSidebarStatusPill', supStatusPillClass(c.status), c.status);
     document.getElementById('supSidebarStatusPill').style.fontSize = '11px';
     document.getElementById('supSidebarStatusPill').style.padding = '2px 8px';
-    document.getElementById('supSidebarEmail').textContent = c.email;
-    document.getElementById('supSidebarPhone').textContent = c.phone;
-    document.getElementById('supSidebarApplied').textContent = c.joined;
-    document.getElementById('supSidebarJoined').textContent = '27 Dec 2025';
+    document.getElementById('supSidebarEmail').textContent = c.email || 'No email';
+    document.getElementById('supSidebarPhone').textContent = c.phone || '\u2014';
+    document.getElementById('supSidebarApplied').textContent = appliedText;
+    document.getElementById('supSidebarJoined').textContent = source === 'app' ? 'Not yet joined' : '27 Dec 2025';
 
     document.getElementById('supChatMessageInput').placeholder = 'Reply to ' + c.name + '...';
     document.getElementById('supChatFlagBanner').style.display = 'none';
     document.getElementById('supChatMessageInput').value = '';
 
     document.getElementById('supProfileName').value = c.name;
-    document.getElementById('supProfileEmail').value = c.email;
+    document.getElementById('supProfileEmail').value = c.email || '';
     document.getElementById('supProfilePhoneCode').value = '+44';
     document.getElementById('supProfilePhoneNumber').value = c.phone ? c.phone.replace(/^\+44/, '').trim() : '';
-    document.getElementById('supGlanceType').textContent = c.type;
-    setPillText('supGlanceStatus', 'supplier-approved-pill' + (c.status === 'Approved' ? '' : ' suspended'), c.status);
+    document.getElementById('supGlanceType').textContent = c.type || '\u2014';
+    setPillText('supGlanceStatus', supStatusPillClass(c.status), c.status);
     document.getElementById('supGlanceStatus').style.fontSize = '12px';
     document.getElementById('supGlanceActive').textContent = c.activeState;
     document.getElementById('supGlanceActive').style.color = c.activeState === 'Active' ? '#1a7a3e' : '#c0392b';
-    document.getElementById('supGlanceJoined').textContent = '27 Dec 2025';
+    document.getElementById('supGlanceJoined').textContent = source === 'app' ? 'Not yet joined' : '27 Dec 2025';
+
+    document.getElementById('supDeactivateBox').style.display = source === 'app' ? 'none' : '';
+    document.getElementById('supApplicantActionBox').style.display = source === 'app' ? '' : 'none';
+    document.getElementById('supDeactivateBtn2').style.display = source === 'app' ? 'none' : '';
+    document.getElementById('supApplicantActionBtns').style.display = source === 'app' ? 'flex' : 'none';
 
     supPrimaryTradeSelected = null;
     supSecondaryTradeSelected = [];
@@ -11479,7 +11837,10 @@
     supState: function (v) { supStateFilter = v; supCurrentPage = 1; renderSupplierList(); },
     pmRowsPerPage: function (v) { pmRowsPerPage = parseInt(v, 10); pmCurrentPage = 1; renderPMList(); },
     appRowsPerPage: function (v) { appRowsPerPage = parseInt(v, 10); appCurrentPage = 1; renderApplicantList(); },
-    supRowsPerPage: function (v) { supRowsPerPage = parseInt(v, 10); supCurrentPage = 1; renderSupplierList(); }
+    supRowsPerPage: function (v) { supRowsPerPage = parseInt(v, 10); supCurrentPage = 1; renderSupplierList(); },
+    supAppType: function (v) { supAppTypeFilter = v; supAppCurrentPage = 1; renderSupAppList(); },
+    supAppState: function (v) { supAppStateFilter = v; supAppCurrentPage = 1; renderSupAppList(); },
+    supAppRowsPerPage: function (v) { supAppRowsPerPage = parseInt(v, 10); supAppCurrentPage = 1; renderSupAppList(); }
   };
   document.querySelectorAll('.cdd-item[data-value]').forEach(function (item) {
     var menu = item.closest('.pm-custom-dd-menu');
@@ -12115,6 +12476,7 @@
   renderPMList();
   renderApplicantList();
   renderSupplierList();
+  renderSupAppList();
 
 })();
 </script>
