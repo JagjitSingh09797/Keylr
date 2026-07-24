@@ -1839,6 +1839,7 @@
   }
   .dash-sidebar-head .logo svg { height: 18px; color: var(--text-heading); }
   .dash-sidebar.collapsed .dash-sidebar-head .logo { display: none; }
+  .dash-sidebar.collapsed .dash-sidebar-head .admin-sidebar-brand { display: none; }
   .sidebar-collapse-btn {
     width: 28px; height: 28px; border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
@@ -1920,6 +1921,7 @@
   }
   .dash-topbar h1 { font-size: 18.5px; font-weight: 800; color: var(--text-heading); }
   .dash-topbar .bell-btn { margin-left: auto; }
+  .dash-topbar .admin-header-actions { margin-left: auto; }
 
   .dash-scroll-area { flex: 1; overflow-y: auto; }
   .dash-content { max-width: 1240px; margin: 0 auto; padding: 24px 32px 60px; }
@@ -2336,7 +2338,9 @@
     color: #94a3b8; padding: 0 12px 10px; border-bottom: 1px solid var(--border-subtle);
   }
   .admin-table tbody td { padding: 12px; border-bottom: 1px solid var(--border-subtle); font-size: 13px; color: var(--text-heading); vertical-align: middle; }
+  .admin-table td:last-child, .admin-table th:last-child { white-space: nowrap; }
   .admin-table tbody tr:last-child td { border-bottom: none; }
+  #pmTableBody tr { cursor: pointer; }
   .admin-table .at-link { color: var(--accent-blue); font-weight: 700; }
   .admin-table .at-person { display: flex; align-items: center; gap: 10px; }
   .admin-table .at-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--icon-tint-bg); color: var(--accent-blue); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
@@ -2396,6 +2400,242 @@
   .notif-row .nr-desc { font-size: 12.5px; color: var(--text-body-muted); line-height: 1.4; margin-top: 2px; }
   .notif-row .nr-date { font-size: 11px; color: #94a3b8; margin-top: 6px; }
   .notif-row .nr-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-blue); flex-shrink: 0; margin-top: 4px; }
+
+  /* =========================================================
+     ADMIN — PROPERTY MANAGER MODULE
+  ========================================================== */
+  .pm-breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-body-muted); margin-bottom: 16px; }
+  .pm-breadcrumb button { display: flex; align-items: center; gap: 6px; color: var(--text-body-muted); font-weight: 600; background: none; border: none; cursor: pointer; font-family: inherit; font-size: 13px; }
+  .pm-breadcrumb button:hover { color: var(--text-heading); }
+  .pm-breadcrumb .sep { color: #cbd5e1; }
+  .pm-breadcrumb .current { color: var(--text-heading); font-weight: 700; }
+
+  /* Filter/search bar */
+  .pm-filter-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; }
+  .pm-search-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .pm-search-input-wrap { position: relative; flex: 1 1 260px; max-width: 300px; min-width: 180px; }
+  .pm-search-input-wrap svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; width: 14px; height: 14px; }
+  .pm-search-input-wrap input {
+    width: 100%; padding: 8px 56px 8px 34px; border-radius: 8px; border: 1px solid var(--border-subtle);
+    font-size: 12.5px; font-family: inherit; color: var(--text-heading); background: var(--surface-soft);
+  }
+  .pm-search-input-wrap input::placeholder { color: #94a3b8; }
+  .pm-search-kbd { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); display: flex; gap: 3px; }
+  .pm-search-kbd span { font-size: 9.5px; font-weight: 700; color: #94a3b8; background: #fff; border: 1px solid var(--border-subtle); border-radius: 4px; padding: 1px 4px; }
+  .pm-tab-pills { display: flex; gap: 5px; flex-wrap: wrap; }
+  .pm-tab-pill { font-size: 12px; font-weight: 600; color: var(--text-body-muted); padding: 6px 13px; border-radius: 999px; border: 1px solid var(--border-subtle); white-space: nowrap; cursor: pointer; }
+  .pm-tab-pill.active { background: var(--accent-blue); color: #fff; }
+  .pm-tab-pill:not(.active):hover { background: var(--surface-soft); }
+  .pm-count-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; margin-left: auto; flex-wrap: wrap; }
+  .pm-count-text { font-size: 12.5px; color: var(--text-body-muted); white-space: nowrap; }
+  .pm-view-toggle { display: flex; border: 1px solid var(--border-subtle); border-radius: 8px; overflow: hidden; }
+  .pm-view-toggle button { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; color: #94a3b8; background: #fff; cursor: pointer; }
+  .pm-view-toggle button.active { background: var(--icon-tint-bg); color: var(--accent-blue); }
+  .pm-icon-btn-sq { width: 28px; height: 28px; border: 1px solid var(--border-subtle); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--text-body-muted); flex-shrink: 0; cursor: pointer; }
+  .pm-icon-btn-sq:hover { background: var(--surface-soft); }
+
+  .pm-filter-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; padding-right: 4px; }
+  @media (max-width: 1300px) { .pm-filter-row { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 700px) { .pm-filter-row { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .pm-filter-row { grid-template-columns: 1fr; } }
+  .pm-filter-field { position: relative; }
+  .pm-filter-field .pff-legend-wrap { position: relative; height: 12px; margin-bottom: 6px; }
+  .pm-filter-field .pff-legend-wrap::after {
+    content: ""; position: absolute; top: 50%; left: 0; right: 0; border-top: 1px solid var(--border-subtle); z-index: 0;
+  }
+  .pm-filter-field label {
+    position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11px; font-weight: 600; color: var(--text-body-muted);
+    background: #fff; padding-right: 8px;
+  }
+  .pm-filter-field label svg { width: 12px; height: 12px; flex-shrink: 0; }
+  .pm-filter-field select, .pm-filter-field input {
+    width: 100%; padding: 7px 26px 7px 10px; border-radius: 8px; border: 1px solid var(--border-subtle);
+    font-size: 12.5px; font-family: inherit; color: var(--text-heading); background: #fff;
+    appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 7px center; background-size: 12px;
+  }
+  .pm-filter-field select { cursor: pointer; }
+  .pm-filter-field input[type="date"] { background-image: none; padding-right: 10px; }
+
+  .pm-custom-dd-btn {
+    width: 100%; display: flex; align-items: center; gap: 8px;
+    padding: 7px 10px; border-radius: 8px; border: 1px solid var(--border-subtle);
+    font-size: 12.5px; font-family: inherit; color: var(--text-heading); background: #fff; cursor: pointer;
+    transition: border-color 150ms ease-out, box-shadow 150ms ease-out;
+  }
+  .pm-custom-dd-btn svg:first-child { color: #94a3b8; flex-shrink: 0; }
+  .pm-custom-dd-btn .cdd-value { flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pm-custom-dd-btn .cdd-chevron { color: #94a3b8; flex-shrink: 0; transition: transform 150ms ease-out; }
+  .pm-custom-dd-btn.open { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(40,72,144,0.12); }
+  .pm-custom-dd-btn.open .cdd-chevron { transform: rotate(180deg); }
+  .pm-custom-dd-menu {
+    position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 25;
+    background: #fff; border-radius: 10px; box-shadow: 0 16px 40px rgba(16,24,40,0.18);
+    padding: 6px; opacity: 0; visibility: hidden; transform: translateY(-6px);
+    transition: opacity 150ms ease-out, transform 150ms ease-out, visibility 150ms ease-out;
+    max-height: 240px; overflow-y: auto;
+  }
+  .pm-custom-dd-menu.open { opacity: 1; visibility: visible; transform: none; }
+  .cdd-item { padding: 9px 12px; border-radius: 7px; font-size: 13px; color: var(--text-heading); cursor: pointer; }
+  .cdd-item:hover { background: var(--surface-soft); }
+  .cdd-item.selected { background: var(--surface-soft); font-weight: 600; }
+
+  /* Card grid */
+  .pm-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .pm-client-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 16px; cursor: pointer; transition: box-shadow 150ms ease-out, border-color 150ms ease-out; position: relative; min-width: 0; }
+  .pm-client-card:hover { box-shadow: 0 8px 20px rgba(16,24,40,0.08); border-color: #c7d0dc; }
+  .pm-card-top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+  .pm-card-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0; }
+  .pm-card-name-wrap { flex: 1; min-width: 0; }
+  .pm-card-name { display: flex; align-items: center; gap: 5px; font-size: 14px; font-weight: 700; color: var(--text-heading); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pm-card-name svg { color: #22c55e; flex-shrink: 0; width: 13px; height: 13px; }
+  .pm-card-email { font-size: 11.5px; color: var(--text-body-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
+  .pm-card-active-chip { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #1a7a3e; background: #eafaf0; padding: 4px 10px; border-radius: 999px; flex-shrink: 0; white-space: nowrap; margin-top: 1px; }
+  .pm-card-active-chip .dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; flex-shrink: 0; }
+  .pm-card-actions { display: flex; align-items: center; gap: 2px; flex-shrink: 0; position: relative; margin-top: 1px; }
+  .pm-card-actions button { width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; color: #94a3b8; border-radius: 6px; position: relative; cursor: pointer; }
+  .pm-card-actions button:hover { background: var(--surface-soft); color: var(--text-heading); }
+  .pm-verified-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 600; color: #1a7a3e; background: #eafaf0; padding: 3px 9px; border-radius: 999px; margin-bottom: 10px; }
+  .pm-verified-badge svg { width: 11px; height: 11px; }
+  .pm-card-meta-row { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-body-muted); margin-bottom: 5px; }
+  .pm-card-meta-row svg { color: #94a3b8; flex-shrink: 0; width: 12px; height: 12px; }
+  .pm-card-pill-row { display: flex; gap: 6px; margin: 10px 0; flex-wrap: wrap; }
+  .pm-status-pill-mini { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; }
+  .pm-status-pill-mini svg { width: 10px; height: 10px; }
+  .pm-status-pill-mini.ok { color: #1a7a3e; background: #eafaf0; }
+  .pm-status-pill-mini.bad { color: #c0392b; background: #fdecea; }
+  .pm-card-stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 10px 0; border-top: 1px solid var(--border-subtle); }
+  .pm-card-stats-row .pcs-label { font-size: 9.5px; font-weight: 700; color: #94a3b8; letter-spacing: 0.03em; display: flex; align-items: center; gap: 3px; margin-bottom: 2px; }
+  .pm-card-stats-row .pcs-label svg { width: 10px; height: 10px; }
+  .pm-card-stats-row .pcs-value { font-size: 12.5px; font-weight: 700; color: var(--text-heading); }
+  .pm-card-stats-row .pcs-value.muted { color: #94a3b8; font-weight: 600; }
+  .pm-completion-row { padding-top: 10px; border-top: 1px solid var(--border-subtle); }
+  .pm-completion-label-row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text-body-muted); font-weight: 600; margin-bottom: 5px; }
+  .pm-completion-label-row .pct { color: var(--text-heading); font-weight: 700; }
+  .pm-completion-track { height: 5px; border-radius: 999px; background: var(--surface-soft); overflow: hidden; }
+  .pm-completion-fill { height: 100%; border-radius: 999px; background: var(--accent-blue); }
+  .pm-complete-pill { display: flex; align-items: center; justify-content: space-between; font-size: 12px; font-weight: 700; color: #1a7a3e; background: #eafaf0; padding: 7px 11px; border-radius: 8px; margin-top: 10px; }
+  .pm-complete-pill svg { color: #1a7a3e; width: 13px; height: 13px; }
+
+  /* Tooltip */
+  [data-tooltip] { position: relative; }
+  [data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute; bottom: calc(100% + 7px); left: 50%; transform: translateX(-50%);
+    background: var(--navy-900); color: #fff; font-size: 11px; font-weight: 600;
+    padding: 5px 9px; border-radius: 6px; white-space: nowrap; z-index: 30;
+    opacity: 0; visibility: hidden; transition: opacity 150ms ease-out, visibility 150ms ease-out;
+    pointer-events: none;
+  }
+  [data-tooltip]:hover::after { opacity: 1; visibility: visible; }
+
+  /* 3-dot dropdown menu */
+  .pm-dropdown-menu {
+    position: absolute; top: 32px; right: 0; z-index: 20;
+    background: #fff; border-radius: 12px; box-shadow: 0 16px 40px rgba(16,24,40,0.18);
+    padding: 6px; min-width: 180px;
+    opacity: 0; visibility: hidden; transform: translateY(-6px);
+    transition: opacity 150ms ease-out, transform 150ms ease-out, visibility 150ms ease-out;
+  }
+  .pm-dropdown-menu.open { opacity: 1; visibility: visible; transform: none; }
+  .pm-dropdown-menu button { display: flex; align-items: center; gap: 10px; width: 100%; padding: 9px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--text-heading); text-align: left; }
+  .pm-dropdown-menu button:hover { background: var(--surface-soft); }
+  .pm-dropdown-menu button svg { color: var(--text-body-muted); flex-shrink: 0; }
+
+  /* Table view */
+  .pm-table-wrap { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; max-height: calc(100vh - 330px); min-height: 300px; }
+  .pm-table-scroll { overflow: auto; flex: 1; }
+  .pm-table-wrap table thead th { position: sticky; top: 0; background: #fff; z-index: 2; padding-top: 16px !important; padding-bottom: 14px !important; }
+  .pm-name-cell { display: flex; align-items: center; gap: 10px; }
+  .pm-name-cell .pm-card-avatar { width: 34px; height: 34px; font-size: 12px; }
+  .pm-name-cell .nm-name { font-weight: 700; color: var(--text-heading); display: flex; align-items: center; gap: 5px; }
+  .pm-name-cell .nm-email { font-size: 11.5px; color: var(--text-body-muted); }
+  .pm-yes-tag { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: #1a7a3e; background: #eafaf0; padding: 4px 10px; border-radius: 999px; }
+  .pm-yes-tag .dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; flex-shrink: 0; }
+  .pm-table-progress .tp-toprow { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
+  .pm-table-progress .tp-label { font-size: 11.5px; color: var(--text-body-muted); white-space: nowrap; font-weight: 600; }
+  .pm-table-progress .tp-track { width: 100px; height: 5px; border-radius: 999px; background: var(--surface-soft); overflow: hidden; flex-shrink: 0; }
+  .pm-table-progress .tp-fill { height: 100%; border-radius: 999px; }
+  .pm-table-progress .tp-pct { font-size: 12px; font-weight: 700; color: var(--text-heading); }
+
+  /* ---- Client Detail page ---- */
+  .client-header-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 16px; overflow: hidden; margin-bottom: 20px; }
+  .client-header-gradient { height: 4px; background: linear-gradient(90deg, #a78bfa, #f472b6, #60a5fa); }
+  .client-header-top { display: flex; align-items: center; padding: 22px 24px; gap: 16px; }
+  .client-avatar-ring {
+    width: 56px; height: 56px; border-radius: 50%; padding: 2.5px; flex-shrink: 0;
+    background: conic-gradient(from 180deg, #a78bfa, #f472b6, #60a5fa, #a78bfa);
+  }
+  .client-avatar-ring .inner { width: 100%; height: 100%; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: #fff; }
+  .client-name-row { display: flex; align-items: center; gap: 10px; }
+  .client-name-row h1 { font-size: 22px; font-weight: 800; color: var(--text-heading); }
+  .client-role-badge { font-size: 11.5px; font-weight: 700; color: #284890; background: #e8f0f8; padding: 4px 12px; border-radius: 999px; }
+  .client-status-row { display: flex; align-items: center; gap: 10px; margin-top: 6px; font-size: 12.5px; color: var(--text-body-muted); }
+  .client-status-row .live-dot { display: inline-flex; align-items: center; gap: 5px; color: #1a7a3e; font-weight: 600; }
+  .client-status-row .live-dot .dot { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; }
+  .client-pending-pill { font-size: 11px; font-weight: 700; color: #92620a; background: #fef3c7; padding: 3px 10px; border-radius: 999px; letter-spacing: 0.02em; }
+  .client-header-actions { display: flex; align-items: center; gap: 10px; margin-left: auto; flex-shrink: 0; }
+  .client-header-actions .btn-outline-full { width: auto; padding: 10px 16px; }
+  .btn-danger-outline {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 600;
+    color: #d92d20; background: #fff; border: 1px solid #fda29b; border-radius: 10px; padding: 10px 16px;
+    transition: background-color 150ms ease-out;
+  }
+  .btn-danger-outline:hover { background: #fef3f2; }
+
+  .client-stat-row { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--border-subtle); }
+  .client-stat-cell { padding: 16px 24px; border-right: 1px solid var(--border-subtle); }
+  .client-stat-cell:last-child { border-right: none; }
+  .client-stat-cell .csc-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; color: #94a3b8; margin-bottom: 6px; }
+  .client-stat-cell .csc-value { font-size: 18px; font-weight: 800; color: var(--text-heading); }
+  .client-stat-cell .csc-value.amber { color: #b5891a; }
+  .client-stat-cell .csc-value.green { color: #1a7a3e; }
+  .client-stat-cell .csc-bar { height: 5px; border-radius: 999px; background: var(--surface-soft); overflow: hidden; margin-top: 8px; }
+  .client-stat-cell .csc-bar-fill { height: 100%; background: var(--navy-900); border-radius: 999px; }
+
+  .client-tabs-row { display: flex; gap: 28px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 20px; }
+  .client-tab { padding: 12px 2px; font-size: 14px; font-weight: 600; color: var(--text-body-muted); border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; }
+  .client-tab.active { color: var(--accent-blue); border-bottom-color: var(--accent-blue); font-weight: 700; }
+  .client-tab:hover:not(.active) { color: var(--text-heading); }
+
+  .client-show-filter { display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 14px 18px; margin-bottom: 20px; }
+  .client-show-filter .csf-label { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; color: #94a3b8; flex-shrink: 0; }
+  .client-show-pill { font-size: 13px; font-weight: 600; color: var(--text-body-muted); padding: 8px 16px; border-radius: 999px; cursor: pointer; }
+  .client-show-pill.active { background: var(--navy-900); color: #fff; }
+  .client-show-pill:not(.active):hover { background: var(--surface-soft); }
+
+  .detail-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 20px 22px; margin-bottom: 20px; }
+  .detail-card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .detail-card-head .dch-left { display: flex; align-items: center; gap: 10px; }
+  .detail-card-head .dch-bar { width: 3px; height: 16px; background: var(--navy-900); border-radius: 3px; }
+  .detail-card-head h3 { font-size: 12px; font-weight: 700; letter-spacing: 0.04em; color: var(--text-heading); text-transform: uppercase; }
+  .detail-card-head .dch-link { font-size: 12.5px; font-weight: 600; color: var(--accent-blue); }
+
+  .verif-chip-row { display: flex; flex-wrap: wrap; gap: 10px; }
+  .verif-chip { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; padding: 10px 16px; border-radius: 10px; }
+  .verif-chip.ok { color: #1a7a3e; background: #eafaf0; }
+  .verif-chip.warn { color: #92620a; background: #fef3c7; }
+  .verif-chip.info { color: #284890; background: #e8f0f8; }
+  .verif-chip .vc-sub { font-size: 10.5px; font-weight: 700; background: rgba(255,255,255,0.6); padding: 2px 7px; border-radius: 999px; margin-left: 2px; }
+
+  .detail-field-row { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border-subtle); }
+  .detail-field-row:last-child { border-bottom: none; }
+  .detail-field-row .dfr-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--icon-tint-bg); color: var(--accent-blue); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .detail-field-row .dfr-label { font-size: 11.5px; color: var(--text-body-muted); margin-bottom: 3px; }
+  .detail-field-row .dfr-value { font-size: 14px; font-weight: 600; color: var(--text-heading); display: flex; align-items: center; gap: 6px; }
+  .detail-field-row .dfr-value.muted { color: #94a3b8; font-weight: 500; font-style: italic; }
+
+  .detail-mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .detail-mini-field .dmf-label { font-size: 11.5px; color: var(--text-body-muted); margin-bottom: 4px; }
+  .detail-mini-field .dmf-value { font-size: 13.5px; font-weight: 600; color: var(--text-heading); }
+  .detail-chip-tag { display: inline-flex; font-size: 12px; font-weight: 600; color: var(--text-heading); background: var(--surface-soft); padding: 5px 12px; border-radius: 999px; margin: 3px 6px 3px 0; }
+
+  .support-contact-box { background: var(--surface-soft); border-radius: 10px; padding: 14px 16px; margin-top: 16px; }
+  .support-contact-box .scb-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; color: #94a3b8; margin-bottom: 6px; }
+  .support-contact-box .scb-name { font-size: 13.5px; font-weight: 700; color: var(--text-heading); }
+  .support-contact-box .scb-detail { font-size: 12.5px; color: var(--text-body-muted); margin-top: 2px; }
 
   /* =========================================================
      ADMIN LOGIN + FORGOT PASSWORD
@@ -5039,12 +5279,14 @@
         <form id="adminLoginForm" novalidate>
           <div class="field-group">
             <input class="field-input" type="email" id="adminEmail" placeholder="Email *" required>
+            <div class="field-error-text" id="adminEmailError">Please enter your @keylr.com email address.</div>
           </div>
           <div class="field-group password-wrap">
             <input class="field-input" type="password" id="adminPassword" placeholder="Password *" required>
             <button type="button" class="eye-toggle" id="adminEyeToggle" aria-label="Show password">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             </button>
+            <div class="field-error-text" id="adminPasswordError">Please enter your password.</div>
           </div>
           <div class="admin-forgot-row"><button type="button" id="adminForgotBtn">Forgot password?</button></div>
           <button type="button" class="btn btn-primary" id="adminSignInBtn" style="width:100%;">Sign In</button>
@@ -5215,6 +5457,7 @@
 
       <div class="dash-scroll-area">
         <div class="dash-content">
+          <div id="adminOverviewView">
           <div class="dash-section">
             <div class="dash-header">
               <div><h2>Overview</h2><div class="dash-content-sub">Here's what is happening across Keylr today.</div></div>
@@ -5443,6 +5686,284 @@
               </div>
             </div>
           </div>
+          </div>
+
+          <!-- ============ PM_LIST_VIEW_PLACEHOLDER ============ -->
+          <div id="adminPMListView" style="display:none;">
+            <div class="pm-filter-card">
+              <div class="pm-search-row">
+                <div class="pm-search-input-wrap">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                  <input type="text" id="pmSearchInput" placeholder="Search by name, email, or company">
+                  <div class="pm-search-kbd"><span>Ctrl</span><span>K</span></div>
+                </div>
+                <div class="pm-tab-pills" id="pmTabPills">
+                  <div class="pm-tab-pill active" data-filter="all">All</div>
+                  <div class="pm-tab-pill" data-filter="complete">Profile Complete</div>
+                  <div class="pm-tab-pill" data-filter="incomplete">Profile Incomplete</div>
+                </div>
+                <div class="pm-count-actions">
+                  <span class="pm-count-text"><span id="pmResultCount">41</span> property managers</span>
+                  <div class="pm-view-toggle" id="pmViewToggle">
+                    <button type="button" class="active" data-view="grid" aria-label="Grid view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
+                    <button type="button" data-view="table" aria-label="Table view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4"/><rect x="3" y="10" width="18" height="4"/><rect x="3" y="16" width="18" height="4"/></svg></button>
+                  </div>
+                  <button type="button" class="pm-icon-btn-sq" id="pmRefreshBtn" aria-label="Refresh"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/></svg></button>
+                </div>
+              </div>
+              <div class="pm-filter-row">
+                <div class="pm-filter-field">
+                  <div class="pff-legend-wrap"><label><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>Approval status</label></div>
+                  <button type="button" class="pm-custom-dd-btn" data-dd="approval">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
+                    <span class="cdd-value">All Statuses</span>
+                    <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                  </button>
+                  <div class="pm-custom-dd-menu" data-dd-menu="approval">
+                    <div class="cdd-item selected" data-value="All Statuses">All Statuses</div>
+                    <div class="cdd-item" data-value="Incomplete">Incomplete</div>
+                    <div class="cdd-item" data-value="Pending">Pending</div>
+                    <div class="cdd-item" data-value="Approved">Approved</div>
+                    <div class="cdd-item" data-value="Rejected">Rejected</div>
+                  </div>
+                </div>
+                <div class="pm-filter-field">
+                  <div class="pff-legend-wrap"><label><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>Business details</label></div>
+                  <button type="button" class="pm-custom-dd-btn" data-dd="business">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>
+                    <span class="cdd-value">Any</span>
+                    <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                  </button>
+                  <div class="pm-custom-dd-menu" data-dd-menu="business">
+                    <div class="cdd-item selected" data-value="Any">Any</div>
+                    <div class="cdd-item" data-value="Provided">Provided</div>
+                    <div class="cdd-item" data-value="Missing">Missing</div>
+                  </div>
+                </div>
+                <div class="pm-filter-field">
+                  <div class="pff-legend-wrap"><label><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36z"/></svg>Discovery profile</label></div>
+                  <button type="button" class="pm-custom-dd-btn" data-dd="discovery">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36z"/></svg>
+                    <span class="cdd-value">Any</span>
+                    <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                  </button>
+                  <div class="pm-custom-dd-menu" data-dd-menu="discovery">
+                    <div class="cdd-item selected" data-value="Any">Any</div>
+                    <div class="cdd-item" data-value="Provided">Provided</div>
+                    <div class="cdd-item" data-value="Missing">Missing</div>
+                  </div>
+                </div>
+                <div class="pm-filter-field">
+                  <div class="pff-legend-wrap"><label><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Joined before</label></div>
+                  <input type="date" id="pmFilterJoinedBefore">
+                </div>
+                <div class="pm-filter-field">
+                  <div class="pff-legend-wrap"><label><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Joined after</label></div>
+                  <input type="date" id="pmFilterJoinedAfter">
+                </div>
+              </div>
+            </div>
+
+            <div id="pmGridView" class="pm-card-grid"></div>
+            <div id="pmTableViewWrap" class="pm-table-wrap" style="display:none;">
+              <div class="pm-table-scroll">
+                <table class="admin-table" style="min-width:1000px;">
+                  <thead><tr><th>Name</th><th>Verified</th><th>Company</th><th>Contact</th><th>Business</th><th>Discovery</th><th>Profile</th><th>Status</th><th>Joined</th></tr></thead>
+                  <tbody id="pmTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="dash-header" style="margin-top:16px;">
+              <span class="pm-count-text"><span id="pmResultCount2">41</span> property managers</span>
+              <div class="dash-header-actions" style="align-items:center;gap:14px;">
+                <span class="pm-count-text">Rows per page
+                  <select id="pmRowsPerPage" style="border:1px solid var(--border-subtle);border-radius:8px;padding:6px 10px;font-family:inherit;font-size:13px;color:var(--text-heading);margin-left:6px;"><option>25</option><option>50</option><option>100</option></select>
+                </span>
+                <div style="display:flex;gap:6px;align-items:center;">
+                  <button type="button" class="pm-icon-btn-sq" id="pmPagePrev" aria-label="Previous page"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+                  <span class="pm-count-text" id="pmPageIndicator">Page 1 of 2</span>
+                  <button type="button" class="pm-icon-btn-sq" id="pmPageNext" aria-label="Next page"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============ CLIENT_DETAIL_VIEW_PLACEHOLDER ============ -->
+          <div id="adminClientDetailView" style="display:none;">
+            <div class="pm-breadcrumb">
+              <button type="button" id="clientBackBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Clients</button>
+              <span class="sep">/</span>
+              <span class="current" id="clientBreadcrumbName">john john</span>
+            </div>
+
+            <div class="client-header-card">
+              <div class="client-header-gradient"></div>
+              <div class="client-header-top">
+                <div class="client-avatar-ring"><div class="inner" id="clientAvatarRing">JJ</div></div>
+                <div>
+                  <div class="client-name-row">
+                    <h1 id="clientDetailName">john john</h1>
+                    <span class="client-role-badge">Property Manager</span>
+                  </div>
+                  <div class="client-status-row">
+                    <span class="live-dot"><span class="dot"></span>Active</span>
+                    <span class="client-pending-pill" id="clientPendingPill">PENDING REVIEW</span>
+                    <span>🕐 Last active —</span>
+                  </div>
+                </div>
+                <div class="client-header-actions">
+                  <button type="button" class="btn btn-outline-full"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4z"/></svg>Edit Profile</button>
+                  <button type="button" class="pm-icon-btn-sq" style="width:38px;height:38px;" id="clientMoreBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>
+                  <button type="button" class="btn btn-primary" id="clientApproveBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M20 6L9 17l-5-5"/></svg>Approve Client</button>
+                  <button type="button" class="btn-danger-outline" id="clientDeactivateBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 11-12.73 0M12 2v10"/></svg>Deactivate</button>
+                </div>
+              </div>
+              <div class="client-stat-row">
+                <div class="client-stat-cell">
+                  <div class="csc-label">PROFILE COMPLETION</div>
+                  <div class="csc-value" id="clientProfileCompletionValue">100%</div>
+                  <div class="csc-bar"><div class="csc-bar-fill" id="clientProfileCompletionBar" style="width:100%;"></div></div>
+                </div>
+                <div class="client-stat-cell">
+                  <div class="csc-label">VERIFICATION</div>
+                  <div class="csc-value amber" id="clientVerificationValue">3 of 4</div>
+                </div>
+                <div class="client-stat-cell">
+                  <div class="csc-label">BUSINESS DETAILS</div>
+                  <div class="csc-value" id="clientBusinessFieldsValue">5 fields</div>
+                </div>
+                <div class="client-stat-cell">
+                  <div class="csc-label">DISCOVERY PROFILE</div>
+                  <div class="csc-value green" id="clientDiscoverySignalsValue">4 signals</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="client-tabs-row">
+              <div class="client-tab active" data-tab="profile">Profile</div>
+              <div class="client-tab" data-tab="properties">Properties</div>
+              <div class="client-tab" data-tab="jobs">Jobs</div>
+              <div class="client-tab" data-tab="chat">Chat</div>
+            </div>
+
+            <div id="clientTabProfile">
+              <div class="client-show-filter">
+                <span class="csf-label">SHOW</span>
+                <div class="client-show-pill active" data-show="all">All Sections</div>
+                <div class="client-show-pill" data-show="verification">Verification</div>
+                <div class="client-show-pill" data-show="personal">Personal &amp; Contact</div>
+                <div class="client-show-pill" data-show="business">Business</div>
+                <div class="client-show-pill" data-show="discovery">Discovery</div>
+              </div>
+
+              <div class="detail-card" data-section="verification">
+                <div class="detail-card-head">
+                  <div class="dch-left"><div class="dch-bar"></div><h3>Verification</h3></div>
+                  <span class="dch-link">Admin override</span>
+                </div>
+                <div class="verif-chip-row">
+                  <div class="verif-chip ok"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Account verified</div>
+                  <div class="verif-chip warn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>Email unverified</div>
+                  <div class="verif-chip ok"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Phone verified</div>
+                  <div class="verif-chip info"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20"/></svg>Payment verification<span class="vc-sub">PAY UPFRONT</span></div>
+                </div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start;">
+                <div>
+                  <div class="detail-card" data-section="personal">
+                    <div class="detail-card-head"><div class="dch-left"><div class="dch-bar"></div><h3>Personal &amp; Contact</h3></div></div>
+                    <div class="detail-field-row">
+                      <div class="dfr-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+                      <div><div class="dfr-label">Name</div><div class="dfr-value" id="clientFieldName">john john</div></div>
+                    </div>
+                    <div class="detail-field-row">
+                      <div class="dfr-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg></div>
+                      <div><div class="dfr-label">Email</div><div class="dfr-value" id="clientFieldEmail">johnjohn@house.com <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#d99a2b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg></div></div>
+                    </div>
+                    <div class="detail-field-row">
+                      <div class="dfr-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+                      <div><div class="dfr-label">Phone</div><div class="dfr-value" id="clientFieldPhone">+4407891197253 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div></div>
+                    </div>
+                  </div>
+
+                  <div class="detail-card" data-section="discovery">
+                    <div class="detail-card-head"><div class="dch-left"><div class="dch-bar"></div><h3>Discovery Profile</h3></div></div>
+                    <div class="detail-mini-grid" style="margin-bottom:14px;">
+                      <div class="detail-mini-field"><div class="dmf-label">Properties managed</div><div class="dmf-value" id="clientPropertiesManaged">26–100 (Mid-size)</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label">Team size</div><div class="dmf-value" id="clientTeamSize">Just me (1)</div></div>
+                    </div>
+                    <div style="margin-bottom:14px;">
+                      <div class="dmf-label" style="margin-bottom:6px;">Sectors</div>
+                      <div id="clientSectors"><span class="detail-chip-tag">Estate Agent</span></div>
+                    </div>
+                    <div style="margin-bottom:0;">
+                      <div class="dmf-label" style="margin-bottom:6px;">Locations</div>
+                      <div id="clientLocations"><span class="detail-chip-tag">North West</span><span class="detail-chip-tag">North</span><span class="detail-chip-tag">Central</span><span class="detail-chip-tag">West</span></div>
+                    </div>
+                    <div class="detail-field-row" style="border-top:1px solid var(--border-subtle);margin-top:14px;padding-top:14px;border-bottom:none;">
+                      <div><div class="dfr-label">PMS / CRM</div><div class="dfr-value muted">Not specified</div></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="detail-card" data-section="business">
+                    <div class="detail-card-head"><div class="dch-left"><div class="dch-bar"></div><h3>Business Details</h3></div></div>
+                    <div class="detail-field-row">
+                      <div class="dfr-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></div>
+                      <div><div class="dfr-label">Trading name</div><div class="dfr-value" id="clientTradingName">john house ltd</div></div>
+                    </div>
+                    <div class="detail-field-row">
+                      <div class="dfr-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-3V5a2 2 0 00-2-2H9a2 2 0 00-2 2v2H4a1 1 0 00-1 1v10a2 2 0 002 2h14a2 2 0 002-2V8a1 1 0 00-1-1zM9 5h6v2H9z"/></svg></div>
+                      <div><div class="dfr-label">Legal company name</div><div class="dfr-value" id="clientLegalName">BOCIOC M LIMITED</div></div>
+                    </div>
+                    <div class="detail-field-row">
+                      <div class="dfr-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg></div>
+                      <div><div class="dfr-label">Company registration number</div><div class="dfr-value" id="clientRegNumber">12345678</div></div>
+                    </div>
+                    <div class="detail-field-row">
+                      <div class="dfr-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 10h20"/></svg></div>
+                      <div><div class="dfr-label">VAT number</div><div class="dfr-value muted" id="clientVatNumber">Not set</div></div>
+                    </div>
+                    <div class="detail-field-row">
+                      <div class="dfr-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+                      <div><div class="dfr-label">Registered address</div><div class="dfr-value" id="clientRegAddress">52 Avocet Close, Rugby, Warwickshire, CV23 0WU</div></div>
+                    </div>
+                    <div class="detail-field-row">
+                      <div class="dfr-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></div>
+                      <div><div class="dfr-label">Trading address</div><div class="dfr-value" id="clientTradingAddress">4 Parkside, London, London, NW7 2LH</div></div>
+                    </div>
+
+                    <div style="border-top:1px solid var(--border-subtle);margin:16px 0 14px;padding-top:16px;">
+                      <div class="dmf-label" style="font-size:10.5px;font-weight:700;letter-spacing:0.05em;color:#94a3b8;margin-bottom:14px;">COMPANY &amp; CONTACTS</div>
+                      <div class="detail-mini-grid" style="margin-bottom:14px;">
+                        <div class="detail-mini-field"><div class="dmf-label">Company type</div><div class="dmf-value" id="clientCompanyType">LTD</div></div>
+                        <div class="detail-mini-field"><div class="dmf-label">Incorporation date</div><div class="dmf-value" id="clientIncorpDate">2019-12-03</div></div>
+                      </div>
+                      <div class="detail-mini-grid" style="margin-bottom:14px;">
+                        <div class="detail-mini-field"><div class="dmf-label">Branch type</div><div class="dmf-value" id="clientBranchType">Single location</div></div>
+                        <div class="detail-mini-field"><div class="dmf-label">VAT registered</div><div class="dmf-value" id="clientVatRegistered">No</div></div>
+                      </div>
+                      <div class="detail-mini-grid" style="margin-bottom:0;">
+                        <div class="detail-mini-field"><div class="dmf-label">Operating address</div><div class="dmf-value" id="clientOperatingAddress">4 Parkside, London, London, NW7 2LH</div></div>
+                        <div class="detail-mini-field"><div class="dmf-label">Operating days</div><div class="dmf-value" id="clientOperatingDays">Mon, Tue, Wed, Thu, Fri, Sat</div></div>
+                      </div>
+                      <div class="detail-mini-field" style="margin-top:14px;"><div class="dmf-label">Operating hours</div><div class="dmf-value" id="clientOperatingHours">09:00 – 18:30</div></div>
+                    </div>
+
+                    <div class="support-contact-box">
+                      <div class="scb-label">SUPPORT CONTACT</div>
+                      <div class="scb-name" id="clientSupportName">john john · property manager</div>
+                      <div class="scb-detail" id="clientSupportPhone">+4407891197253</div>
+                      <div class="scb-detail" id="clientSupportEmail">johnjohn@house.com</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
 
 
@@ -5615,12 +6136,45 @@
 
   function handleAdminSignIn(e) {
     if (e) e.preventDefault();
-    var email = document.getElementById('adminEmail').value.trim();
-    var password = document.getElementById('adminPassword').value.trim();
-    if (!email || !password) {
-      showToast('Please enter your email and password.');
+    var emailInput = document.getElementById('adminEmail');
+    var passwordInput = document.getElementById('adminPassword');
+    var email = emailInput.value.trim();
+    var password = passwordInput.value.trim();
+    var emailErrorEl = document.getElementById('adminEmailError');
+    var passwordErrorEl = document.getElementById('adminPasswordError');
+    var invalid = false;
+    var firstInvalidField = null;
+
+    var emailValid = EMAIL_RE.test(email) && /@keylr\.com$/i.test(email);
+    if (!emailValid) {
+      emailInput.classList.add('error');
+      emailErrorEl.textContent = !email
+        ? 'Please enter your @keylr.com email address.'
+        : (EMAIL_RE.test(email) ? 'Access is restricted to @keylr.com email addresses.' : 'Please enter a valid email address.');
+      emailErrorEl.classList.add('show');
+      invalid = true;
+      firstInvalidField = firstInvalidField || emailInput;
+    } else {
+      emailInput.classList.remove('error');
+      emailErrorEl.classList.remove('show');
+    }
+
+    if (!password) {
+      passwordInput.classList.add('error');
+      passwordErrorEl.classList.add('show');
+      invalid = true;
+      firstInvalidField = firstInvalidField || passwordInput;
+    } else {
+      passwordInput.classList.remove('error');
+      passwordErrorEl.classList.remove('show');
+    }
+
+    if (invalid) {
+      firstInvalidField.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+      setTimeout(function () { firstInvalidField.focus(); }, 200);
       return;
     }
+
     showAdminDashboard();
   }
   document.getElementById('adminSignInBtn').addEventListener('click', handleAdminSignIn);
@@ -5628,6 +6182,14 @@
     if (e.key === 'Enter') { e.preventDefault(); handleAdminSignIn(e); }
   });
   document.getElementById('adminLoginForm').addEventListener('submit', function (e) { e.preventDefault(); });
+  document.querySelectorAll('#adminLoginForm .field-input').forEach(function (field) {
+    field.addEventListener('input', function () {
+      field.classList.remove('error');
+      var group = field.closest('.field-group');
+      var errorEl = group && group.querySelector('.field-error-text');
+      if (errorEl) errorEl.classList.remove('show');
+    });
+  });
 
   document.getElementById('adminForgotBtn').addEventListener('click', function () {
     closeAdminLogin(function () { openAdminForgot(); });
@@ -7544,11 +8106,26 @@
     }, 200);
   });
 
+  function showAdminView(view) {
+    document.getElementById('adminOverviewView').style.display = view === 'overview' ? '' : 'none';
+    document.getElementById('adminPMListView').style.display = view === 'pm-list' ? '' : 'none';
+    document.getElementById('adminClientDetailView').style.display = view === 'client-detail' ? '' : 'none';
+    document.querySelector('.dash-scroll-area').scrollTop = 0;
+  }
+
   document.querySelectorAll('#adminDashboard .dash-nav-item[data-nav]').forEach(function (item) {
     item.addEventListener('click', function () {
       document.querySelectorAll('#adminDashboard .dash-nav-item[data-nav]').forEach(function (i) { i.classList.remove('active'); });
       item.classList.add('active');
-      if (item.getAttribute('data-nav') !== 'overview') {
+      var nav = item.getAttribute('data-nav');
+      if (nav === 'overview') {
+        showAdminView('overview');
+      } else if (nav === 'property-manager') {
+        showAdminView('pm-list');
+      } else {
+        showAdminView('overview');
+        document.querySelector('#adminDashboard .dash-nav-item[data-nav="overview"]').classList.add('active');
+        item.classList.remove('active');
         showToast(item.querySelector('.nav-label').textContent + ' isn\u2019t wired up in this prototype yet.');
       }
     });
@@ -7567,6 +8144,335 @@
   document.querySelectorAll('#adminDashboard .view-all').forEach(function (el) {
     el.addEventListener('click', function () { showToast('This isn\u2019t wired up in this prototype yet.'); });
   });
+  /* =========================================================
+     ADMIN — PROPERTY MANAGER MODULE DATA + RENDER
+  ========================================================== */
+  var pmClients = [
+    { initials: 'TE', color: '#2563eb', name: 'Tester', email: 'test123@gmail.com', company: 'Test', phone: '+441234567984', joined: '14 Jul 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 82 },
+    { initials: 'JJ', color: '#f97316', name: 'john john', email: 'johnjohn@house.com', company: 'john house ltd', phone: '+4407891197253', joined: '7 Jul 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 100, menu: true },
+    { initials: 'FO', color: '#f59e0b', name: 'fotatap', email: 'fotatap118@asitrai.com', company: 'New Services ltd.', phone: '+447837293472', joined: '3 Jul 2026', business: true, discovery: true, properties: '1 property', spend: 'No spend yet', completion: 100 },
+    { initials: 'FI', color: '#0ea5e9', name: 'firom', email: 'firom65741@icotz.com', company: 'firom ltd', phone: '+447888542871', joined: '3 Jul 2026', business: true, discovery: true, properties: '1 property', spend: 'No spend yet', completion: 100, menu: true },
+    { initials: 'GA', color: '#ec4899', name: 'gavy', email: 'test33@test.com', company: 'gavy', phone: '+918219842443', joined: '2 Jul 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 60 },
+    { initials: 'SS', color: '#7c3aed', name: 'Simranpreet Singh', email: 'ello.simranpreet01@gmail.com', company: 'SS realtors', phone: '+919915236035', joined: '2 Jul 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 100 },
+    { initials: 'TE', color: '#8b5cf6', name: 'test', email: 'KT@test.com', company: 'Keylr', phone: '+447777777797', joined: '2 Jul 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 100 },
+    { initials: 'PK', color: '#2563eb', name: 'Property keylr', email: 'Property@test.com', company: 'Property keylr', phone: '+447654322345', joined: '2 Jul 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 100 },
+    { initials: 'BD', color: '#16a34a', name: 'Balcinder dhiman', email: 'balcinder@gmai.com', company: 'Tata pvt ltd', phone: '+447788992233', joined: '2 Jul 2026', business: true, discovery: true, properties: '2 properties', spend: 'No spend yet', completion: 100 },
+    { initials: 'TE', color: '#0d9488', name: 'testproperty', email: 'proptest@keylr.com', company: 'propertytestuk', phone: '+4407700000000', joined: '2 Jul 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 100 },
+    { initials: 'AT', color: '#f97316', name: 'Alex Turner', email: 'xasoki2585@luxudata.com', company: 'BlueStone Property Services Ltd', phone: '+447778889991', joined: '30 Jun 2026', business: true, discovery: true, properties: 'No properties yet', spend: 'No spend yet', completion: 100 },
+    { initials: 'PI', color: '#1e3a8a', name: 'pitejov', email: 'pitejov241@gmail.com', company: 'pitejov ltd', phone: '+447897897897', joined: '30 Jun 2026', business: true, discovery: true, properties: 'No properties yet', spend: 'No spend yet', completion: 100, menu: true },
+    { initials: 'RA', color: '#7c3aed', name: 'rayman', email: 'rayman@gmail.com', company: 'rayman pvt ltd', phone: '+447778889990', joined: '29 Jun 2026', business: true, discovery: true, properties: 'No properties yet', spend: 'No spend yet', completion: 100 },
+    { initials: 'CO', color: '#2563eb', name: 'comota', email: 'comota9411@gmail.com', company: 'comota ltd', phone: '+447778889997', joined: '29 Jun 2026', business: true, discovery: true, properties: 'No properties yet', spend: 'No spend yet', completion: 100 },
+    { initials: 'TE', color: '#f97316', name: 'tekor', email: 'tekor93833@gmail.com', company: 'tekor ltd', phone: '+447778887779', joined: '26 Jun 2026', business: true, discovery: true, properties: 'No properties yet', spend: 'No spend yet', completion: 100 },
+    { initials: 'JA', color: '#16a34a', name: 'jacky', email: 'loyoke5744@gmail.com', company: 'KEY RIDERS LTD', phone: '+447779997779', joined: '25 Jun 2026', business: true, discovery: true, properties: 'No properties yet', spend: 'No spend yet', completion: 42 },
+    { initials: 'RO', color: '#7c3aed', name: 'rocky', email: 'xorac78838@gmail.com', company: 'KEY RIDERS LTD', phone: '+447979797979', joined: '25 Jun 2026', business: true, discovery: true, properties: 'No properties yet', spend: 'No spend yet', completion: 42 },
+    { initials: 'TE', color: '#16a34a', name: 'Testing...', email: '', company: '', phone: '+4407889867665', joined: '24 Jun 2026', business: false, discovery: false, properties: 'No properties yet', spend: 'No spend yet', completion: 0 },
+    { initials: 'LO', color: '#f97316', name: 'London', email: '', company: '', phone: '+447938938932', joined: '19 Jun 2026', business: false, discovery: false, properties: 'No properties yet', spend: 'No spend yet', completion: 0 },
+    { initials: 'NE', color: '#7c3aed', name: 'Nest', email: '', company: '', phone: '+447777777774', joined: '19 Jun 2026', business: false, discovery: true, properties: 'No properties yet', spend: 'No spend yet', completion: 0 },
+    { initials: 'KA', color: '#7c3aed', name: 'kartik', email: 'kartik@gmail.com', company: 'KEY RIDERS LTD', phone: '+447888542812', joined: '18 Jun 2026', business: true, discovery: true, properties: 'No properties yet', spend: 'No spend yet', completion: 27 },
+    { initials: 'KE', color: '#7c3aed', name: 'keylrtest', email: '', company: '', phone: '+447777777779', joined: '16 Jun 2026', business: false, discovery: true, properties: 'No properties yet', spend: 'No spend yet', completion: 0 },
+    { initials: 'NS', color: '#ec4899', name: 'navneet...', email: 'navbaldwan...', company: '', phone: '', joined: '12 Jun 2026', business: false, discovery: false, properties: 'No properties yet', spend: 'No spend yet', completion: 0 },
+    { initials: 'FT', color: '#7c3aed', name: 'fernan...', email: '', company: 'North Hills', phone: '+447481782713', joined: '12 Jun 2026', business: true, discovery: true, properties: 'No properties yet', spend: 'No spend yet', completion: 27 },
+    { initials: 'SR', color: '#7c3aed', name: 'Sam R...', email: '', company: 'KEY RIDERS LTD', phone: '+447889922110', joined: '11 Jun 2026', business: true, discovery: true, properties: 'No properties yet', spend: 'No spend yet', completion: 27 }
+  ];
+
+  var checkSvgSm = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+  var xSvgSm = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>';
+  var menuDotsSvg = '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>';
+  var arrowOpenSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>';
+
+  function pmDropdownHtml(idx) {
+    return '<div class="pm-dropdown-menu" data-idx="' + idx + '">' +
+      '<button type="button" data-action="view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View Profile</button>' +
+      '<button type="button" data-action="impersonate"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>Impersonate</button>' +
+      '<button type="button" data-action="newtab"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6M9 15L15 9"/></svg>Open in New Tab</button>' +
+      '<button type="button" data-action="copyemail"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy Email</button>' +
+      '<button type="button" data-action="copyphone"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy Phone</button>' +
+    '</div>';
+  }
+
+  function renderPMCard(c, i) {
+    var pillsHtml = '<div class="pm-card-pill-row">' +
+      '<span class="pm-status-pill-mini ' + (c.business ? 'ok' : 'bad') + '">' + (c.business ? checkSvgSm : xSvgSm) + 'Business details</span>' +
+      '<span class="pm-status-pill-mini ' + (c.discovery ? 'ok' : 'bad') + '">' + (c.discovery ? checkSvgSm : xSvgSm) + 'Discovery profile</span>' +
+    '</div>';
+    var completionHtml = c.completion >= 100
+      ? '<div class="pm-complete-pill"><span style="display:flex;align-items:center;gap:6px;">' + checkSvgSm + 'Profile complete</span><span>100%</span></div>'
+      : '<div class="pm-completion-row"><div class="pm-completion-label-row"><span>Profile Completion</span><span class="pct">' + c.completion + '%</span></div><div class="pm-completion-track"><div class="pm-completion-fill" style="width:' + c.completion + '%;background:' + (c.completion === 0 ? '#e8482c' : c.completion < 50 ? '#e8482c' : '#f59e0b') + ';"></div></div></div>';
+
+    return '<div class="pm-client-card" data-idx="' + i + '">' +
+      '<div class="pm-card-top">' +
+        '<div class="pm-card-avatar" style="background:' + c.color + ';">' + c.initials + '</div>' +
+        '<div class="pm-card-name-wrap">' +
+          '<div class="pm-card-name">' + c.name + checkSvgSm.replace('width="12" height="12"', 'width="13" height="13"') + '</div>' +
+          '<div class="pm-card-email">' + (c.email || '\u2014') + '</div>' +
+        '</div>' +
+        '<div class="pm-card-active-chip"><span class="dot"></span>Active</div>' +
+        '<div class="pm-card-actions">' +
+          '<button type="button" class="pm-card-impersonate-btn" data-idx="' + i + '" data-tooltip="Impersonate">' + arrowOpenSvg + '</button>' +
+          '<button type="button" class="pm-card-menu-btn" data-idx="' + i + '" data-tooltip="More actions">' + menuDotsSvg + '</button>' +
+        '</div>' +
+        pmDropdownHtml(i) +
+      '</div>' +
+      '<div class="pm-verified-badge">' + checkSvgSm + 'Verified</div>' +
+      (c.company ? '<div class="pm-card-meta-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>' + c.company + '</div>' : '') +
+      (c.phone ? '<div class="pm-card-meta-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>' + c.phone + '</div>' : '') +
+      '<div class="pm-card-meta-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Joined ' + c.joined + '</div>' +
+      pillsHtml +
+      '<div class="pm-card-stats-row">' +
+        '<div><div class="pcs-label"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14"/></svg>PROPERTIES</div><div class="pcs-value">' + c.properties + '</div></div>' +
+        '<div><div class="pcs-label"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>LIFETIME SPEND</div><div class="pcs-value muted">' + c.spend + '</div></div>' +
+      '</div>' +
+      completionHtml +
+    '</div>';
+  }
+
+  function renderPMTableRow(c, i) {
+    var barColor = c.completion >= 100 ? '#22c55e' : c.completion === 0 ? '#e8482c' : '#f59e0b';
+    var profileCell = c.completion >= 100
+      ? '<span style="display:inline-flex;align-items:center;gap:6px;color:#1a7a3e;font-weight:700;">' + checkSvgSm + '100%</span>'
+      : '<div class="pm-table-progress"><div class="tp-toprow"><span class="tp-label">' + (c.completion === 0 ? 'Not started' : 'On track') + '</span><span class="tp-pct">' + c.completion + '%</span></div><div class="tp-track"><div class="tp-fill" style="width:' + c.completion + '%;background:' + barColor + ';"></div></div></div>';
+
+    return '<tr class="pm-table-row" data-idx="' + i + '">' +
+      '<td><div class="pm-name-cell"><div class="pm-card-avatar" style="background:' + c.color + ';">' + c.initials + '</div><div><div class="nm-name">' + c.name + '</div><div class="nm-email">' + (c.email || '') + '</div></div></div></td>' +
+      '<td><span class="pm-yes-tag">' + checkSvgSm + 'Yes</span></td>' +
+      '<td>' + (c.company || '—') + '</td>' +
+      '<td>' + (c.phone || '—') + '</td>' +
+      '<td><span class="pm-yes-tag"><span class="dot"></span>' + (c.business ? 'Yes' : 'No') + '</span></td>' +
+      '<td><span class="pm-yes-tag"><span class="dot"></span>' + (c.discovery ? 'Yes' : 'No') + '</span></td>' +
+      '<td>' + profileCell + '</td>' +
+      '<td><span class="pm-yes-tag"><span class="dot"></span>Active</span></td>' +
+      '<td>' + c.joined + '</td>' +
+    '</tr>';
+  }
+
+  var pmCurrentPage = 1;
+  var pmRowsPerPage = 25;
+  var pmActiveTab = 'all';
+  var pmSearchTerm = '';
+
+  function getFilteredPMClients() {
+    return pmClients.map(function (c, origIdx) { return { c: c, origIdx: origIdx }; }).filter(function (entry) {
+      var c = entry.c;
+      if (pmActiveTab === 'complete' && c.completion < 100) return false;
+      if (pmActiveTab === 'incomplete' && c.completion >= 100) return false;
+      if (pmSearchTerm) {
+        var term = pmSearchTerm.toLowerCase();
+        var haystack = (c.name + ' ' + (c.email || '') + ' ' + (c.company || '')).toLowerCase();
+        if (haystack.indexOf(term) === -1) return false;
+      }
+      return true;
+    });
+  }
+
+  function renderPMList() {
+    var filtered = getFilteredPMClients();
+    var totalPages = Math.max(1, Math.ceil(filtered.length / pmRowsPerPage));
+    if (pmCurrentPage > totalPages) pmCurrentPage = totalPages;
+    var startIdx = (pmCurrentPage - 1) * pmRowsPerPage;
+    var pageEntries = filtered.slice(startIdx, startIdx + pmRowsPerPage);
+
+    document.getElementById('pmGridView').innerHTML = pageEntries.map(function (entry) { return renderPMCard(entry.c, entry.origIdx); }).join('');
+    document.getElementById('pmTableBody').innerHTML = pageEntries.map(function (entry) { return renderPMTableRow(entry.c, entry.origIdx); }).join('');
+    document.getElementById('pmResultCount').textContent = filtered.length;
+    document.getElementById('pmResultCount2').textContent = filtered.length;
+    document.getElementById('pmPageIndicator').textContent = 'Page ' + pmCurrentPage + ' of ' + totalPages;
+    document.getElementById('pmPagePrev').disabled = pmCurrentPage <= 1;
+    document.getElementById('pmPageNext').disabled = pmCurrentPage >= totalPages;
+    document.getElementById('pmPagePrev').style.opacity = pmCurrentPage <= 1 ? 0.4 : 1;
+    document.getElementById('pmPageNext').style.opacity = pmCurrentPage >= totalPages ? 0.4 : 1;
+    wirePMCardEvents();
+  }
+
+  function closeAllPMDropdowns() {
+    document.querySelectorAll('.pm-dropdown-menu.open').forEach(function (m) { m.classList.remove('open'); });
+  }
+
+  function wirePMCardEvents() {
+    document.querySelectorAll('.pm-card-impersonate-btn').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        impersonateClient(parseInt(btn.getAttribute('data-idx'), 10));
+      });
+    });
+    document.querySelectorAll('.pm-card-menu-btn').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var idx = btn.getAttribute('data-idx');
+        var menu = document.querySelector('.pm-dropdown-menu[data-idx="' + idx + '"]');
+        var wasOpen = menu.classList.contains('open');
+        closeAllPMDropdowns();
+        if (!wasOpen) menu.classList.add('open');
+      });
+    });
+    document.querySelectorAll('.pm-dropdown-menu button').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var action = btn.getAttribute('data-action');
+        var idx = parseInt(btn.closest('.pm-dropdown-menu').getAttribute('data-idx'), 10);
+        closeAllPMDropdowns();
+        if (action === 'view') {
+          openClientDetail(idx);
+        } else if (action === 'impersonate') {
+          impersonateClient(idx);
+        } else if (action === 'copyemail') {
+          showToast('Email copied to clipboard.');
+        } else if (action === 'copyphone') {
+          showToast('Phone number copied to clipboard.');
+        } else {
+          showToast('This isn\u2019t wired up in this prototype yet.');
+        }
+      });
+    });
+    document.querySelectorAll('.pm-client-card').forEach(function (card) {
+      card.addEventListener('click', function () {
+        openClientDetail(parseInt(card.getAttribute('data-idx'), 10));
+      });
+    });
+    document.querySelectorAll('.pm-table-row').forEach(function (row) {
+      row.addEventListener('click', function () {
+        openClientDetail(parseInt(row.getAttribute('data-idx'), 10));
+      });
+    });
+  }
+  document.addEventListener('click', closeAllPMDropdowns);
+
+  document.getElementById('pmViewToggle').addEventListener('click', function (e) {
+    var btn = e.target.closest('button[data-view]');
+    if (!btn) return;
+    var view = btn.getAttribute('data-view');
+    document.querySelectorAll('#pmViewToggle button').forEach(function (b) { b.classList.toggle('active', b === btn); });
+    document.getElementById('pmGridView').style.display = view === 'grid' ? '' : 'none';
+    document.getElementById('pmTableViewWrap').style.display = view === 'table' ? '' : 'none';
+  });
+
+  document.querySelectorAll('#pmTabPills .pm-tab-pill').forEach(function (pill) {
+    pill.addEventListener('click', function () {
+      document.querySelectorAll('#pmTabPills .pm-tab-pill').forEach(function (p) { p.classList.remove('active'); });
+      pill.classList.add('active');
+      pmActiveTab = pill.getAttribute('data-filter');
+      pmCurrentPage = 1;
+      renderPMList();
+    });
+  });
+
+  document.getElementById('pmSearchInput').addEventListener('input', function () {
+    pmSearchTerm = this.value.trim();
+    pmCurrentPage = 1;
+    renderPMList();
+  });
+
+  document.getElementById('pmRowsPerPage').addEventListener('change', function () {
+    pmRowsPerPage = parseInt(this.value, 10);
+    pmCurrentPage = 1;
+    renderPMList();
+  });
+  document.getElementById('pmPagePrev').addEventListener('click', function () {
+    if (pmCurrentPage > 1) { pmCurrentPage--; renderPMList(); }
+  });
+  document.getElementById('pmPageNext').addEventListener('click', function () {
+    var totalPages = Math.max(1, Math.ceil(getFilteredPMClients().length / pmRowsPerPage));
+    if (pmCurrentPage < totalPages) { pmCurrentPage++; renderPMList(); }
+  });
+  document.getElementById('pmRefreshBtn').addEventListener('click', function () {
+    document.getElementById('pmSearchInput').value = '';
+    pmSearchTerm = '';
+    pmActiveTab = 'all';
+    pmCurrentPage = 1;
+    document.querySelectorAll('#pmTabPills .pm-tab-pill').forEach(function (p, i) { p.classList.toggle('active', i === 0); });
+    renderPMList();
+    showToast('List refreshed.');
+  });
+
+  function closeAllCustomDropdowns() {
+    document.querySelectorAll('.pm-custom-dd-btn.open').forEach(function (b) { b.classList.remove('open'); });
+    document.querySelectorAll('.pm-custom-dd-menu.open').forEach(function (m) { m.classList.remove('open'); });
+  }
+  document.querySelectorAll('.pm-custom-dd-btn').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var key = btn.getAttribute('data-dd');
+      var menu = document.querySelector('.pm-custom-dd-menu[data-dd-menu="' + key + '"]');
+      var wasOpen = btn.classList.contains('open');
+      closeAllCustomDropdowns();
+      if (!wasOpen) { btn.classList.add('open'); menu.classList.add('open'); }
+    });
+  });
+  document.querySelectorAll('.cdd-item').forEach(function (item) {
+    item.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var menu = item.closest('.pm-custom-dd-menu');
+      var key = menu.getAttribute('data-dd-menu');
+      var btn = document.querySelector('.pm-custom-dd-btn[data-dd="' + key + '"]');
+      menu.querySelectorAll('.cdd-item').forEach(function (i) { i.classList.remove('selected'); });
+      item.classList.add('selected');
+      btn.querySelector('.cdd-value').textContent = item.getAttribute('data-value');
+      closeAllCustomDropdowns();
+    });
+  });
+  document.addEventListener('click', closeAllCustomDropdowns);
+
+  /* Client Detail: John John has exact reference data; others get reasonable synthesized detail fields */
+  function impersonateClient(idx) {
+    var c = pmClients[idx];
+    showToast('Impersonating ' + c.name + ' \u2014 viewing their PM Dashboard.');
+    setTimeout(function () {
+      showPMDashboard({ fullName: c.name, email: c.email || (c.name.replace(/\s+/g, '.').toLowerCase() + '@example.com') }, 'populated');
+    }, 300);
+  }
+
+  function openClientDetail(idx) {
+    var c = pmClients[idx];
+    document.getElementById('clientBreadcrumbName').textContent = c.name;
+    document.getElementById('clientDetailName').textContent = c.name;
+    document.getElementById('clientAvatarRing').textContent = c.initials;
+    document.getElementById('clientAvatarRing').style.background = c.color;
+    document.getElementById('clientProfileCompletionValue').textContent = c.completion + '%';
+    document.getElementById('clientProfileCompletionBar').style.width = c.completion + '%';
+    document.getElementById('clientFieldName').textContent = c.name;
+    document.getElementById('clientFieldEmail').innerHTML = (c.email || 'Not provided') + (c.email ? ' <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#d99a2b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>' : '');
+    document.getElementById('clientFieldPhone').innerHTML = (c.phone || 'Not provided') + (c.phone ? ' <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>' : '');
+    document.getElementById('clientTradingName').textContent = c.company || 'Not set';
+    document.getElementById('clientSupportName').textContent = c.name.toLowerCase() + ' · property manager';
+    document.getElementById('clientSupportPhone').textContent = c.phone || 'Not provided';
+    document.getElementById('clientSupportEmail').textContent = c.email || 'Not provided';
+    document.getElementById('clientPendingPill').style.display = c.completion < 100 ? '' : 'none';
+
+    showAdminView('client-detail');
+  }
+
+  document.getElementById('clientBackBtn').addEventListener('click', function () {
+    showAdminView('pm-list');
+  });
+
+  document.querySelectorAll('.client-tab').forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      document.querySelectorAll('.client-tab').forEach(function (t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      if (tab.getAttribute('data-tab') !== 'profile') {
+        showToast(tab.textContent + ' tab isn\u2019t wired up in this prototype yet.');
+      }
+    });
+  });
+
+  document.querySelectorAll('.client-show-pill').forEach(function (pill) {
+    pill.addEventListener('click', function () {
+      document.querySelectorAll('.client-show-pill').forEach(function (p) { p.classList.remove('active'); });
+      pill.classList.add('active');
+      var show = pill.getAttribute('data-show');
+      document.querySelectorAll('.detail-card[data-section]').forEach(function (card) {
+        card.style.display = (show === 'all' || card.getAttribute('data-section') === show) ? '' : 'none';
+      });
+    });
+  });
+
+  ['clientApproveBtn', 'clientDeactivateBtn', 'clientMoreBtn'].forEach(function (id) {
+    document.getElementById(id).addEventListener('click', function () {
+      showToast('This isn\u2019t wired up in this prototype yet.');
+    });
+  });
+
+  renderPMList();
+
 })();
 </script>
 
