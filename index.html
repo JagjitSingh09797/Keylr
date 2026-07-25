@@ -825,6 +825,11 @@
   }
   .field-input::placeholder { color: #a6b0bf; }
   input.field-input[type="date"] { height: 48px; padding-top: 0; padding-bottom: 0; }
+  input.field-input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(24%) sepia(31%) saturate(1226%) hue-rotate(190deg) brightness(93%) contrast(93%);
+    cursor: pointer; padding: 4px; border-radius: 5px; opacity: 0.85;
+  }
+  input.field-input[type="date"]::-webkit-calendar-picker-indicator:hover { opacity: 1; background: var(--icon-tint-bg); }
   .field-input:hover { border-color: #c7d0dc; }
   .field-input:focus {
     border-color: var(--accent-blue);
@@ -853,6 +858,7 @@
   }
   .field-collapsible.open {
     max-height: 1200px;
+    overflow: visible;
     opacity: 1;
     margin-bottom: 16px;
   }
@@ -1188,8 +1194,9 @@
   }
   .ob-section-subtext { font-size: 11.5px; color: var(--text-body-muted); margin-bottom: 14px; }
   .ob-section-heading {
-    font-size: 15px; font-weight: 700; color: var(--text-heading);
-    margin: 6px 0 3px; padding-top: 16px; border-top: 1px solid var(--border-subtle);
+    font-size: 12.5px; font-weight: 700; color: var(--text-heading);
+    margin: 6px 0 12px; padding-top: 16px; border-top: 1px solid var(--border-subtle);
+    letter-spacing: 0.02em;
   }
   .ob-section-heading:first-child { border-top: none; padding-top: 0; }
 
@@ -1714,6 +1721,7 @@
   .radio-tile .rt-title { font-size: 13.5px; font-weight: 700; color: var(--text-heading); display: flex; align-items: center; }
   .radio-tile .rt-sub { font-size: 11px; color: var(--text-body-muted); margin-top: 3px; }
   .radio-tile.selected .rt-title { color: var(--accent-blue); }
+  #supRightToWorkTiles .rt-title, #supRightToWorkTiles .rt-body > div { justify-content: center; }
 
   /* Minimum-notice 3-col grid (reuses count-tile look at smaller size) */
   .notice-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
@@ -1915,6 +1923,7 @@
     display: flex; align-items: center; justify-content: center;
     font-size: 12px; font-weight: 700;
   }
+  .dash-account-avatar .avatar-photo { position: absolute; inset: 4px; border-radius: 50%; object-fit: cover; display: none; }
   .dash-account-info { min-width: 0; flex: 1; }
   .dash-sidebar.collapsed .dash-account-info { display: none; }
   .dash-account-info .acc-name { font-size: 13px; font-weight: 700; color: var(--text-heading); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -2820,7 +2829,7 @@
   .sup-comp-doc-row { display: flex; align-items: center; gap: 10px; border: 1px solid var(--border-subtle); border-radius: 10px; padding: 10px 12px; }
   .sup-comp-doc-row .scdr-icon { color: #94a3b8; flex-shrink: 0; }
   .sup-comp-doc-row .scdr-name { font-size: 13px; color: var(--text-heading); font-weight: 600; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .sup-comp-doc-row .scdr-badge { font-size: 10px; font-weight: 700; color: #1a7a3e; letter-spacing: 0.03em; flex-shrink: 0; }
+  .sup-comp-doc-row .scdr-badge { display: inline-flex; align-items: center; font-size: 10px; font-weight: 700; color: #1a7a3e; background: #eafaf0; letter-spacing: 0.03em; padding: 3px 9px; border-radius: 999px; flex-shrink: 0; }
   .sup-comp-doc-row .scdr-view-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 8px; background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); color: #fff; font-size: 12.5px; font-weight: 700; cursor: pointer; flex-shrink: 0; }
   .sup-comp-doc-row .scdr-upload-btn { width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: center; color: var(--text-body-muted); cursor: pointer; flex-shrink: 0; }
   .sup-comp-upload-placeholder { display: flex; align-items: center; gap: 8px; border: 1px solid var(--border-subtle); border-radius: 8px; padding: 10px 12px; font-size: 12.5px; color: var(--accent-blue); font-weight: 600; cursor: pointer; background: var(--surface-soft); }
@@ -3039,7 +3048,9 @@
   .pm-settings-tab-item { padding: 12px 2px; font-size: 14px; font-weight: 600; color: var(--text-body-muted); border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; }
   .pm-settings-tab-item.active { color: var(--accent-blue); border-bottom-color: var(--accent-blue); font-weight: 700; }
   .pm-settings-tab-item:hover:not(.active) { color: var(--text-heading); }
-  .settings-input-embed { display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid var(--border-subtle); border-radius: 11px; padding: 0 14px; height: 43px; background: var(--surface-white); }
+  .settings-input-embed { display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid var(--border-subtle); border-radius: 11px; padding: 0 14px; height: 43px; background: var(--surface-white); transition: border-color 150ms ease-out, box-shadow 150ms ease-out; }
+  .settings-input-embed:focus-within { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(40, 72, 144, 0.15); }
+  .settings-input-embed:has(.error) { border-color: var(--required-red); box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12); }
   .settings-input-embed .sie-text { font-size: 14.5px; color: var(--text-body-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .settings-input-embed .verif-chip { border-radius: 999px; font-size: 10px; gap: 4px; line-height: 1; padding-top: 4px; padding-bottom: 4px; padding-right: 6px; padding-left: 6px; }
   @keyframes pmSettingsFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
@@ -3886,9 +3897,9 @@
           <form id="loginForm" novalidate>
             <div class="field-group">
               <label for="loginIdentifier">Email or mobile number<span class="req">*</span></label>
-              <div class="phone-row">
-                <div class="phone-code-wrap" id="loginCountryCodeWrap" style="display:none;">
-                  <select class="phone-code" id="loginCountryCode" aria-label="Country code">
+              <div class="settings-input-embed" style="padding:0 14px;">
+                <div class="phone-code-wrap" id="loginCountryCodeWrap" style="display:none;padding-right:10px;border-right:1px solid var(--border-subtle);flex-shrink:0;">
+                  <select class="phone-code" id="loginCountryCode" aria-label="Country code" style="border:none;background:transparent;padding:0;width:70px;">
                     <option value="+44" selected>🇬🇧 +44</option>
                     <option value="+1">🇺🇸 +1</option>
                     <option value="+353">🇮🇪 +353</option>
@@ -3905,7 +3916,7 @@
                     <option value="+65">🇸🇬 +65</option>
                   </select>
                 </div>
-                <input class="field-input" type="text" id="loginIdentifier" name="loginIdentifier" placeholder="you@email.com or 7700 900123" required style="flex:1;">
+                <input type="text" id="loginIdentifier" name="loginIdentifier" placeholder="you@email.com or 7700 900123" required style="flex:1;min-width:0;border:none;outline:none;font-size:14.5px;color:var(--text-heading);background:transparent;">
               </div>
               <div class="field-error-text" id="loginIdentifierError">Please enter your email or mobile number.</div>
             </div>
@@ -5290,6 +5301,7 @@
             <circle id="acctProgressRing" cx="19" cy="19" r="16" fill="none" stroke="#284890" stroke-width="3" stroke-linecap="round" stroke-dasharray="100.5" stroke-dashoffset="18"/>
           </svg>
           <div class="initials" id="acctInitials">JB</div>
+          <img class="avatar-photo" id="acctAvatarPhoto" alt="">
         </div>
         <div class="dash-account-info">
           <div class="acc-name" id="acctName">Jordan Blake</div>
@@ -5541,7 +5553,7 @@
                       <div style="position:relative;">
                         <img src="https://i.pravatar.cc/80?img=12" alt="" style="width:64px;height:64px;border-radius:50%;object-fit:cover;" id="pmProfileAvatarImg">
                         <input type="file" id="pmProfileAvatarInput" accept="image/png,image/jpeg,image/webp" style="display:none;">
-                        <button type="button" style="position:absolute;bottom:-2px;right:-2px;width:24px;height:24px;border-radius:50%;background:var(--navy-900);color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid #fff;cursor:pointer;" id="pmProfileAvatarEditBtn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg></button>
+                        <button type="button" style="position:absolute;bottom:-2px;right:-2px;width:24px;height:24px;border-radius:50%;background:var(--accent-blue);color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid #fff;cursor:pointer;" id="pmProfileAvatarEditBtn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg></button>
                       </div>
                       <div>
                         <h3 style="font-size:18px;font-weight:800;color:var(--text-heading);">Thomas Davies</h3>
@@ -6117,6 +6129,7 @@
             <circle id="supAcctProgressRing" cx="19" cy="19" r="16" fill="none" stroke="#284890" stroke-width="3" stroke-linecap="round" stroke-dasharray="100.5" stroke-dashoffset="18"/>
           </svg>
           <div class="initials" id="supAcctInitials">FW</div>
+          <img class="avatar-photo" id="supAcctAvatarPhoto" alt="">
         </div>
         <div class="dash-account-info">
           <div class="acc-name" id="supAcctName">Fern Whitfield</div>
@@ -6142,7 +6155,10 @@
       </div>
 
       <div class="dash-topbar">
-        <h1 id="supDashGreeting">Good afternoon, Fern 👋</h1>
+        <div>
+          <h1 id="supDashGreeting">Good afternoon, Fern 👋</h1>
+          <div class="dash-content-sub" id="supDashTopbarSub">Tuesday, 14 July 2026</div>
+        </div>
         <button type="button" class="bell-btn" aria-label="Notifications">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
           <span class="bell-dot" id="supBellDot"></span>
@@ -6151,6 +6167,7 @@
 
       <div class="dash-scroll-area">
         <div class="dash-content">
+          <div id="supHomeView">
 
           <div class="dash-section" id="supOnboardingBanner">
             <div class="dash-banner" style="margin-bottom:0;">
@@ -6262,6 +6279,433 @@
               <div class="dash-card">
                 <div class="dash-card-head"><h3>Team Snapshot</h3><span class="view-all">Manage Team →</span></div>
                 <p class="empty-sub" style="margin-top:8px;">No team members yet. Invite your first employee.</p>
+              </div>
+            </div>
+          </div>
+
+          </div>
+          <!-- ============ SUPPLIER PROFILE SETTINGS VIEW ============ -->
+          <div id="supProfileSettingsView" style="display:none;">
+            <div class="dash-section">
+              <div class="dash-header">
+                <div><h2>Account Settings</h2><div class="dash-content-sub">Manage your profile, business &amp; subscription.</div></div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+                  <div style="position:relative;width:64px;height:64px;">
+                    <svg width="64" height="64" viewBox="0 0 64 64">
+                      <circle cx="32" cy="32" r="27" fill="none" stroke="var(--surface-soft)" stroke-width="5"/>
+                      <circle cx="32" cy="32" r="27" fill="none" stroke="#f59e0b" stroke-width="5" stroke-linecap="round" stroke-dasharray="169.6" stroke-dashoffset="0" id="supProfileCompleteRing" transform="rotate(-90 32 32)"/>
+                    </svg>
+                    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+                      <span style="font-size:13px;font-weight:800;color:#b5891a;" id="supProfileCompletePct">100%</span>
+                      <span style="font-size:8px;font-weight:700;color:#94a3b8;">done</span>
+                    </div>
+                  </div>
+                  <span style="font-size:11.5px;color:var(--text-body-muted);">Profile complete</span>
+                </div>
+              </div>
+
+              <div class="pm-settings-tabs-row" id="supSettingsTabs" style="margin-top:8px;">
+                <div class="pm-settings-tab-item active" data-supsettingstab="profile">Profile</div>
+                <div class="pm-settings-tab-item" data-supsettingstab="sectors">Sectors</div>
+                <div class="pm-settings-tab-item" data-supsettingstab="identity">Identity</div>
+                <div class="pm-settings-tab-item" data-supsettingstab="insurance">Insurance</div>
+                <div class="pm-settings-tab-item" data-supsettingstab="background">Background</div>
+                <div class="pm-settings-tab-item" data-supsettingstab="questionnaire">Questionnaire</div>
+              </div>
+
+              <!-- Profile tab -->
+              <div id="supSettingsPanelProfile">
+                <div style="margin-top:20px;">
+                  <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;">
+                    <div style="position:relative;">
+                      <img src="https://i.pravatar.cc/80?img=13" alt="" style="width:64px;height:64px;border-radius:50%;object-fit:cover;" id="supProfileAvatarImg">
+                      <input type="file" id="supProfileAvatarInput" accept="image/png,image/jpeg,image/webp" style="display:none;">
+                      <button type="button" style="position:absolute;bottom:-2px;right:-2px;width:24px;height:24px;border-radius:50%;background:var(--accent-blue);color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid #fff;cursor:pointer;" id="supProfileAvatarEditBtn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg></button>
+                    </div>
+                    <div>
+                      <h3 style="font-size:18px;font-weight:800;color:var(--text-heading);">Liam Greenwood</h3>
+                      <div style="font-size:13px;color:var(--text-body-muted);margin:2px 0 8px;">greenwood86@gmail.com</div>
+                      <span class="supplier-type-pill sole-trader" id="supProfileTypePill" style="font-size:11px;padding:2px 9px;">Sole Trader</span>
+                    </div>
+                  </div>
+                  <div class="ob-row-2">
+                    <div class="ob-field">
+                      <label>Full name</label>
+                      <input class="field-input" type="text" value="Liam Greenwood" id="supProfileFullNameInput">
+                    </div>
+                    <div class="ob-field">
+                      <label>Email address</label>
+                      <input class="field-input" type="email" value="greenwood86@gmail.com">
+                    </div>
+                  </div>
+                  <div class="ob-field" style="margin-bottom:0;max-width:50%;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;">
+                      <label style="margin-bottom:0;">Mobile number</label>
+                      <span style="font-size:12.5px;font-weight:700;color:var(--accent-blue);cursor:pointer;" id="supChangeNumberBtn">Change number</span>
+                    </div>
+                    <div class="settings-input-embed" style="margin-top:6px;" id="supMobileNumberRow">
+                      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
+                        <span style="display:flex;align-items:center;gap:4px;font-size:13px;color:var(--text-body-muted);font-weight:600;padding-right:10px;border-right:1px solid var(--border-subtle);flex-shrink:0;">GB +44</span>
+                        <span class="sie-text">7671542225</span>
+                      </div>
+                    </div>
+                    <div id="supChangeNumberForm" style="display:none;margin-top:10px;">
+                      <div class="settings-input-embed">
+                        <select class="phone-code" style="border:none;padding-right:10px;border-right:1px solid var(--border-subtle);flex-shrink:0;background:transparent;"><option>GB +44</option></select>
+                        <input type="tel" placeholder="New mobile number" id="supNewNumberInput" style="flex:1;min-width:0;border:none;outline:none;font-size:14.5px;color:var(--text-heading);background:transparent;">
+                      </div>
+                      <div style="display:flex;gap:10px;margin-top:12px;">
+                        <button type="button" class="btn btn-primary" id="supVerifyNewNumberBtn">Verify new number</button>
+                        <button type="button" class="btn btn-secondary-light" id="supCancelChangeNumberBtn">Cancel</button>
+                      </div>
+                    </div>
+                    <div class="helper">Changing your mobile number requires OTP re-verification.</div>
+                  </div>
+                  <div style="display:flex;justify-content:flex-end;margin-top:20px;"><button type="button" class="btn btn-primary" data-supsettings-save="Profile">Save Changes</button></div>
+                </div>
+              </div>
+
+              <!-- Sectors tab -->
+              <div id="supSettingsPanelSectors" style="display:none;">
+                <div style="margin-top:20px;">
+                  <div class="tile-row-2" id="supDashSectorTiles">
+                    <div class="choice-tile selected" data-value="residential" tabindex="0" role="checkbox" aria-checked="true">
+                      <div class="tile-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></div>
+                      <div class="tile-body"><div class="tile-title">Residential</div></div>
+                      <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                    </div>
+                    <div class="choice-tile selected" data-value="commercial" tabindex="0" role="checkbox" aria-checked="true">
+                      <div class="tile-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></div>
+                      <div class="tile-body"><div class="tile-title">Commercial</div></div>
+                      <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                    </div>
+                  </div>
+
+                  <div class="ob-section" id="supResidentialSubTypes" style="margin-top:22px;">
+                    <div class="ob-section-title" style="font-size:13.5px;">Residential sub-types <span class="meta-badge optional">(optional)</span></div>
+                    <div class="simple-chip-row" id="supResSubChips">
+                      <div class="simple-chip" data-value="str">STR – Short Term Rentals</div>
+                      <div class="simple-chip selected" data-value="estate-agent">Estate Agents</div>
+                    </div>
+                  </div>
+
+                  <div class="ob-section" id="supCommercialSubTypes">
+                    <div class="ob-section-title" style="font-size:13.5px;">Commercial sub-types <span class="meta-badge optional">(optional)</span></div>
+                    <div class="simple-chip-row" id="supComSubChips">
+                      <div class="simple-chip selected" data-value="hotels">Hotels &amp; Hostels</div>
+                    </div>
+                  </div>
+                  <div style="display:flex;justify-content:flex-end;margin-top:20px;"><button type="button" class="btn btn-primary" data-supsettings-save="Sectors">Save Changes</button></div>
+                </div>
+              </div>
+
+              <!-- Identity tab -->
+              <div id="supSettingsPanelIdentity" style="display:none;">
+                <div style="margin-top:20px;">
+                  <div class="ob-section-heading" style="margin-top:0;">Personal Details</div>
+                  <div class="ob-row-2">
+                    <div class="ob-field">
+                      <label>Full legal name</label>
+                      <input class="field-input" type="text" value="Liam Greenwood" disabled style="background:var(--surface-soft);color:var(--text-body-muted);">
+                      <div class="helper">Contact support to change this. Verification required.</div>
+                    </div>
+                    <div class="ob-field">
+                      <label>Date of birth</label>
+                      <div class="pm-filter-field" style="width:100%;">
+                        <button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="supDob" style="width:100%;height:48px;">
+                          <span class="cdd-value cal-value" data-cal-text="supDob">05/11/1987</span>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                        </button>
+                        <div class="pm-cal-popup" data-cal-popup="supDob">
+                          <div class="pm-cal-head">
+                            <button type="button" class="pm-cal-month-label" data-cal-monthlabel="supDob"><span data-cal-monthtext="supDob">November 1987</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                            <div class="pm-cal-nav">
+                              <button type="button" class="pm-cal-nav-btn" data-cal-prev="supDob" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+                              <button type="button" class="pm-cal-nav-btn" data-cal-next="supDob" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
+                            </div>
+                          </div>
+                          <div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
+                          <div class="pm-cal-grid" data-cal-grid="supDob"></div>
+                          <div class="pm-cal-foot">
+                            <button type="button" class="pm-cal-link" data-cal-clear="supDob">Clear</button>
+                            <button type="button" class="pm-cal-link" data-cal-today="supDob">Today</button>
+                          </div>
+                        </div>
+                        <input type="hidden" id="supDobInput" value="1987-11-05">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="ob-row-2">
+                    <div class="ob-field">
+                      <label>Phone number</label>
+                      <input class="field-input" type="tel" value="+447671542225">
+                    </div>
+                    <div class="ob-field">
+                      <label>Email address</label>
+                      <input class="field-input" type="email" value="greenwood86@gmail.com">
+                    </div>
+                  </div>
+                  <div class="ob-row-2">
+                    <div class="ob-field">
+                      <label>NI number</label>
+                      <input class="field-input" type="text" value="enc:131ac863d6307f0599e9f98e" disabled style="background:var(--surface-soft);color:var(--text-body-muted);">
+                      <div class="helper">View only. Contact support to change.</div>
+                    </div>
+                    <div class="ob-field">
+                      <label>Nationality</label>
+                      <input class="field-input" type="text" placeholder="e.g. British">
+                    </div>
+                  </div>
+                  <div class="ob-field">
+                    <label>Home address</label>
+                    <input class="field-input" type="text" value="91 Victoria Road, Manchester" id="supHomeAddressInput">
+                  </div>
+
+                  <div class="ob-toggle-card">
+                    <div class="otc-top">
+                      <div><div class="otc-title">Registered for HMRC self-assessment?</div><div class="otc-desc">Required if you trade as a sole trader.</div></div>
+                      <button type="button" class="toggle-switch on" id="supHmrcToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
+                    </div>
+                    <div class="field-collapsible open" id="supUtrField" style="max-height:1200px;opacity:1;">
+                      <div class="otc-body">
+                        <div class="ob-field" style="margin-bottom:0;">
+                          <label>UTR number</label>
+                          <input class="field-input" type="text" placeholder="10-digit number">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="ob-section-heading">Proof of Address</div>
+                  <div class="scf-label" style="font-size:12.5px;font-weight:600;color:var(--text-body-muted);margin-bottom:8px;">Proof of address</div>
+                  <div class="sup-comp-doc-row">
+                    <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                    <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:700;color:var(--text-heading);" id="supProofAddressDocName">Uploaded</div><span class="sup-view-all-link" style="font-size:12px;" id="supProofAddressViewBtn" data-doc-view="Proof of Address">View file</span></div>
+                    <span class="scdr-badge">UPLOADED</span>
+                    <span style="font-size:12.5px;font-weight:600;color:var(--accent-blue);cursor:pointer;" id="supProofAddressReplaceBtn" data-doc-replace="proofAddress">Replace</span>
+                    <input type="file" data-doc-input="proofAddress" style="display:none;">
+                    <span style="cursor:pointer;color:var(--text-body-muted);">&times;</span>
+                  </div>
+                  <div style="display:flex;justify-content:flex-end;margin-top:20px;"><button type="button" class="btn btn-primary" data-supsettings-save="Identity">Save Changes</button></div>
+                </div>
+              </div>
+
+              <!-- Insurance tab -->
+              <div id="supSettingsPanelInsurance" style="display:none;">
+                <div style="margin-top:20px;">
+                  <div class="ob-section-heading" style="margin-top:0;">Public Liability Insurance</div>
+                  <div class="ob-toggle-card">
+                    <div class="otc-top">
+                      <div><div class="otc-title">Do you have Public Liability Insurance?</div><div class="otc-desc">Minimum £1,000,000 cover (£2,000,000 for companies).</div></div>
+                      <button type="button" class="toggle-switch on" id="supPliToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
+                    </div>
+                    <div class="field-collapsible open" id="supPliFields" style="max-height:1200px;opacity:1;">
+                      <div class="otc-body">
+                        <div class="ob-row-2">
+                          <div class="ob-field"><label>Insurance provider</label><input class="field-input" type="text" value="Markel"></div>
+                          <div class="ob-field"><label>Policy number</label><input class="field-input" type="text" value="PL-722800"></div>
+                        </div>
+                        <div class="ob-row-2" style="margin-bottom:0;">
+                          <div class="ob-field" style="margin-bottom:0;"><label>Coverage amount (£)</label><input class="field-input" type="text" value="£2,000,000"></div>
+                          <div class="ob-field" style="margin-bottom:0;">
+                            <label>Policy expiry date</label>
+                            <div class="pm-filter-field" style="width:100%;">
+                              <button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="supPliExpiry" style="width:100%;height:48px;">
+                                <span class="cdd-value cal-value" data-cal-text="supPliExpiry">26/11/2026</span>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                              </button>
+                              <div class="pm-cal-popup" data-cal-popup="supPliExpiry">
+                                <div class="pm-cal-head">
+                                  <button type="button" class="pm-cal-month-label" data-cal-monthlabel="supPliExpiry"><span data-cal-monthtext="supPliExpiry">November 2026</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                                  <div class="pm-cal-nav">
+                                    <button type="button" class="pm-cal-nav-btn" data-cal-prev="supPliExpiry" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+                                    <button type="button" class="pm-cal-nav-btn" data-cal-next="supPliExpiry" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
+                                  </div>
+                                </div>
+                                <div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
+                                <div class="pm-cal-grid" data-cal-grid="supPliExpiry"></div>
+                                <div class="pm-cal-foot">
+                                  <button type="button" class="pm-cal-link" data-cal-clear="supPliExpiry">Clear</button>
+                                  <button type="button" class="pm-cal-link" data-cal-today="supPliExpiry">Today</button>
+                                </div>
+                              </div>
+                              <input type="hidden" id="supPliExpiryInput" value="2026-11-26">
+                            </div>
+                            <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#1a7a3e;background:#eafaf0;padding:3px 10px;border-radius:999px;margin-top:8px;"><span style="width:5px;height:5px;border-radius:50%;background:#1a7a3e;"></span>Valid</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="ob-section-heading">Insurance Certificate</div>
+                  <div class="scf-label" style="font-size:12.5px;font-weight:600;color:var(--text-body-muted);margin-bottom:8px;">Public liability certificate</div>
+                  <div class="sup-comp-doc-row" style="margin-bottom:20px;">
+                    <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                    <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:700;color:var(--text-heading);" id="supPliDocName">Uploaded certificate</div><span class="sup-view-all-link" style="font-size:12px;" data-doc-view="Public Liability Certificate">View File</span></div>
+                    <span class="scdr-badge">Uploaded</span>
+                    <span style="font-size:12.5px;font-weight:600;color:var(--accent-blue);cursor:pointer;" data-doc-replace="pli">Replace</span>
+                    <input type="file" data-doc-input="pli" style="display:none;">
+                    <span style="cursor:pointer;color:var(--text-body-muted);">&times;</span>
+                  </div>
+
+                  <div class="ob-section-heading">Professional Indemnity Insurance</div>
+                  <div class="ob-toggle-card" style="margin-bottom:0;">
+                    <div class="otc-top">
+                      <div><div class="otc-title">Professional Indemnity</div><div class="otc-desc">Covers claims of negligence, errors or omissions in professional services</div></div>
+                      <button type="button" class="toggle-switch on" id="supPiToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
+                    </div>
+                    <div class="field-collapsible open" id="supPiFields" style="max-height:1200px;opacity:1;">
+                      <div class="otc-body">
+                        <div class="ob-row-2">
+                          <div class="ob-field"><label>Indemnity provider</label><input class="field-input" type="text" value="Direct Line for Business"></div>
+                          <div class="ob-field"><label>Policy number</label><input class="field-input" type="text" value="PI-124012"></div>
+                        </div>
+                        <div class="ob-row-2" style="margin-bottom:14px;">
+                          <div class="ob-field" style="margin-bottom:0;"><label>Coverage amount (£)</label><input class="field-input" type="text" value="£1,000,000"></div>
+                          <div class="ob-field" style="margin-bottom:0;">
+                            <label>Expiry date</label>
+                            <div class="pm-filter-field" style="width:100%;">
+                              <button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="supPiExpiry" style="width:100%;height:48px;">
+                                <span class="cdd-value cal-value" data-cal-text="supPiExpiry">26/09/2026</span>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                              </button>
+                              <div class="pm-cal-popup" data-cal-popup="supPiExpiry">
+                                <div class="pm-cal-head">
+                                  <button type="button" class="pm-cal-month-label" data-cal-monthlabel="supPiExpiry"><span data-cal-monthtext="supPiExpiry">September 2026</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                                  <div class="pm-cal-nav">
+                                    <button type="button" class="pm-cal-nav-btn" data-cal-prev="supPiExpiry" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+                                    <button type="button" class="pm-cal-nav-btn" data-cal-next="supPiExpiry" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
+                                  </div>
+                                </div>
+                                <div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
+                                <div class="pm-cal-grid" data-cal-grid="supPiExpiry"></div>
+                                <div class="pm-cal-foot">
+                                  <button type="button" class="pm-cal-link" data-cal-clear="supPiExpiry">Clear</button>
+                                  <button type="button" class="pm-cal-link" data-cal-today="supPiExpiry">Today</button>
+                                </div>
+                              </div>
+                              <input type="hidden" id="supPiExpiryInput" value="2026-09-26">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="scf-label" style="font-size:12.5px;font-weight:600;color:var(--text-body-muted);margin-bottom:8px;">PI certificate</div>
+                        <div class="sup-comp-doc-row" style="margin-bottom:0;">
+                          <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                          <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:700;color:var(--text-heading);" id="supPiDocName">Uploaded certificate</div><span class="sup-view-all-link" style="font-size:12px;" data-doc-view="Professional Indemnity Certificate">View File</span></div>
+                          <span class="scdr-badge">Uploaded</span>
+                          <span style="font-size:12.5px;font-weight:600;color:var(--accent-blue);cursor:pointer;" data-doc-replace="pi">Replace</span>
+                          <input type="file" data-doc-input="pi" style="display:none;">
+                          <span style="cursor:pointer;color:var(--text-body-muted);">&times;</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="display:flex;justify-content:flex-end;margin-top:20px;"><button type="button" class="btn btn-primary" data-supsettings-save="Insurance">Save Changes</button></div>
+                </div>
+              </div>
+
+              <!-- Background tab -->
+              <div id="supSettingsPanelBackground" style="display:none;">
+                <div style="margin-top:20px;">
+                  <div class="ob-card-section">
+                    <div class="ocs-head">
+                      <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                      <div class="ocs-title">DBS Check (Basic)</div>
+                      <span class="meta-badge required-badge" style="text-transform:none;">Required</span>
+                    </div>
+                    <div class="ocs-desc">A Basic DBS certificate confirms you have no unspent criminal convictions. This is a mandatory requirement for all sole traders listing on the marketplace. An Enhanced DBS is <strong>not</strong> required at sign-up — it's only triggered when a client flags a sensitive environment (schools, care homes, hospitals).</div>
+
+                    <div class="ob-toggle-card" style="border:1px solid var(--border-subtle);">
+                      <div class="otc-top">
+                        <div><div class="otc-title">Do you have a DBS certificate?</div><div class="otc-desc">Basic DBS mandatory for all · Enhanced only triggered by client environment flag.</div></div>
+                        <button type="button" class="toggle-switch on" id="supDbsToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
+                      </div>
+                      <div class="field-collapsible open" id="supDbsFields" style="max-height:1200px;opacity:1;">
+                        <div class="otc-body">
+                          <div class="scf-label" style="font-size:12.5px;font-weight:600;color:var(--text-body-muted);margin-bottom:8px;">Basic DBS certificate</div>
+                          <div class="sup-comp-doc-row">
+                            <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                            <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:700;color:var(--text-heading);" id="supDbsDocName">Uploaded</div><span class="sup-view-all-link" style="font-size:12px;" data-doc-view="DBS Certificate">View file</span></div>
+                            <span class="scdr-badge">UPLOADED</span>
+                            <span style="font-size:12.5px;font-weight:600;color:var(--accent-blue);cursor:pointer;" data-doc-replace="dbs">Replace</span>
+                            <input type="file" data-doc-input="dbs" style="display:none;">
+                            <span style="cursor:pointer;color:var(--text-body-muted);">&times;</span>
+                          </div>
+
+                          <div class="callout callout-neutral" style="margin-top:14px;margin-bottom:0;">
+                            <div><div class="callout-title">Don't have a DBS certificate?</div><div class="callout-body">You can apply for a Basic DBS check online through the official DBS website. It costs £18 and typically arrives within 14 days.<br><a href="#" onclick="return false;" style="color:var(--accent-blue);font-weight:600;">Apply for a Basic DBS check on GOV.UK ↗</a></div></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="scf-label" style="font-size:13px;font-weight:700;color:var(--text-heading);margin:18px 0 10px;">Criminal record declaration</div>
+                    <div class="radio-tile-row cols-1" id="supDashCriminalDeclaration" style="display:grid;gap:10px;">
+                      <div class="radio-tile selected" data-value="none">
+                        <div class="rt-icon"><svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><circle class="rt-radio-dot" cx="12" cy="12" r="5" fill="currentColor"/></svg></div>
+                        <div class="rt-body"><div class="rt-title">I confirm I have no unspent criminal convictions</div><div style="font-size:12px;color:var(--text-body-muted);margin-top:2px;">This declaration covers unspent offences only under the Rehabilitation of Offenders Act 1974.</div></div>
+                      </div>
+                      <div class="radio-tile" data-value="unspent">
+                        <div class="rt-icon"><svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><circle class="rt-radio-dot" cx="12" cy="12" r="5" fill="currentColor"/></svg></div>
+                        <div class="rt-body"><div class="rt-title">I have unspent convictions to declare</div><div style="font-size:12px;color:var(--text-body-muted);margin-top:2px;">Having a record doesn't automatically disqualify you — we review each case individually.</div></div>
+                      </div>
+                    </div>
+                    <div class="field-collapsible" id="supDashConvictionDetailsField" style="margin-top:14px;">
+                      <textarea class="ob-textarea" placeholder="Provide details including dates, offences, and outcomes."></textarea>
+                    </div>
+                  </div>
+
+                  <div class="ob-card-section">
+                    <div class="ocs-head">
+                      <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg></div>
+                      <div class="ocs-title">Right to Work</div>
+                      <span class="meta-badge required-badge" style="text-transform:none;">Required</span>
+                    </div>
+                    <div class="ocs-desc">You must confirm whether you have the legal right to work in the United Kingdom. Some property managers in regulated sectors (construction, education, healthcare) may require document verification before booking.</div>
+
+                    <div class="radio-tile-row cols-2" id="supRightToWorkTiles" style="text-align:center;">
+                      <div class="radio-tile selected" data-value="yes" style="border-color:#22c55e;background:#f0fdf4;justify-content:center;">
+                        <div class="rt-body" style="text-align:center;width:100%;">
+                          <div class="rtw-icon" style="width:26px;height:26px;border-radius:50%;background:#22c55e;color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                          <div class="rt-title">Yes</div><div style="font-size:12px;color:var(--text-body-muted);margin-top:2px;">I have the right to work in the UK</div>
+                        </div>
+                      </div>
+                      <div class="radio-tile" data-value="no" style="justify-content:center;">
+                        <div class="rt-body" style="text-align:center;width:100%;">
+                          <div class="rtw-icon" style="width:26px;height:26px;border-radius:50%;background:#e8482c;color:#fff;display:none;align-items:center;justify-content:center;margin:0 auto 6px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+                          <div class="rt-title">No</div><div style="font-size:12px;color:var(--text-body-muted);margin-top:2px;">I do not currently have right to work</div>
+                        </div>
+                      </div>
+                    </div>
+                    <p class="helper" style="margin-top:12px;margin-bottom:0;font-size:11px;">If a client requires document verification, you can provide your UKVI share code later — verified via the Home Office API.</p>
+                  </div>
+
+                  <div class="ob-card-section" style="margin-bottom:0;">
+                    <div class="ocs-head">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="1"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+                      <div class="ocs-title">Job References &amp; Portfolio</div>
+                      <span class="meta-badge" style="background:#fef3c7;color:#92620a;text-transform:none;">Recommended</span>
+                    </div>
+                    <div class="ocs-desc">References and portfolio photos are displayed on your marketplace profile. They help build trust and improve your search ranking significantly.</div>
+                    <textarea class="ob-textarea" style="margin-bottom:16px;">References available on request from managing agents.</textarea>
+
+                    <div class="scf-label" style="font-size:13px;font-weight:700;color:var(--text-heading);margin-bottom:10px;">Portfolio photos</div>
+                    <input type="file" id="supPortfolioPhotoInput" accept="image/*" multiple style="display:none;">
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:600px;" id="supPortfolioPhotoGrid">
+                      <div style="position:relative;border-radius:12px;overflow:hidden;aspect-ratio:1;"><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=300" style="width:100%;height:100%;object-fit:cover;" alt=""><span class="sup-portfolio-remove-btn" style="position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,0.6);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;">&times;</span></div>
+                      <div style="position:relative;border-radius:12px;overflow:hidden;aspect-ratio:1;"><img src="https://images.unsplash.com/photo-1493397212122-2b85dda8106b?w=300" style="width:100%;height:100%;object-fit:cover;" alt=""><span class="sup-portfolio-remove-btn" style="position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,0.6);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;">&times;</span></div>
+                      <div style="border:1px dashed var(--border-subtle);border-radius:12px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;color:var(--text-body-muted);font-size:12.5px;cursor:pointer;" id="supAddPhotoBtn">Add photo</div>
+                    </div>
+                    <p class="helper" style="margin-top:10px;font-size:11px;">Upload photos of completed work — kitchens, bathrooms, electrical panels, before/after shots. High-quality images increase booking rates by up to 40%.</p>
+                  </div>
+                  <div style="display:flex;justify-content:flex-end;margin-top:20px;"><button type="button" class="btn btn-primary" data-supsettings-save="Background">Save Changes</button></div>
+                </div>
+              </div>
+
+              <!-- Questionnaire tab (more to come) -->
+              <div id="supSettingsPanelQuestionnaire" style="display:none;">
+                <div style="margin-top:20px;text-align:center;padding:60px 20px;color:var(--text-body-muted);font-size:13.5px;">Questionnaire designs coming soon.</div>
               </div>
             </div>
           </div>
@@ -9616,7 +10060,12 @@
   });
   document.getElementById('pmProfileAvatarInput').addEventListener('change', function () {
     if (this.files && this.files[0]) {
-      document.getElementById('pmProfileAvatarImg').src = URL.createObjectURL(this.files[0]);
+      var photoUrl = URL.createObjectURL(this.files[0]);
+      document.getElementById('pmProfileAvatarImg').src = photoUrl;
+      var sidebarImg = document.getElementById('acctAvatarPhoto');
+      sidebarImg.src = photoUrl;
+      sidebarImg.style.display = 'block';
+      document.getElementById('acctInitials').style.display = 'none';
       showToast('Profile photo updated.');
     }
   });
@@ -9847,6 +10296,103 @@
 
   /* ---- Step 1: About Business ---- */
   initSingleSelectTiles(document.getElementById('businessTypeTiles'));
+  var supplierBusinessType = 'sole-trader';
+  function updateSupProfileTypeChip() {
+    var pill = document.getElementById('supProfileTypePill');
+    if (!pill) return;
+    if (supplierBusinessType === 'company') {
+      pill.textContent = 'Company';
+      pill.classList.remove('sole-trader');
+    } else {
+      pill.textContent = 'Sole Trader';
+      pill.classList.add('sole-trader');
+    }
+  }
+  document.querySelectorAll('#businessTypeTiles .choice-tile').forEach(function (tile) {
+    tile.addEventListener('click', function () {
+      supplierBusinessType = tile.getAttribute('data-value');
+      updateSupProfileTypeChip();
+    });
+  });
+  updateSupProfileTypeChip();
+
+  function computeSupProfileCompletion() {
+    var total = 0, done = 0;
+    function check(bool) { total++; if (bool) done++; }
+
+    check(document.getElementById('supProfileFullNameInput').value.trim().length > 0);
+    check(document.querySelectorAll('#supDashSectorTiles .choice-tile.selected').length > 0);
+    check(document.getElementById('supDobInput').value.length > 0);
+    check(document.getElementById('supHomeAddressInput').value.trim().length > 0);
+    check(document.getElementById('supPliToggle').classList.contains('on'));
+    check(document.getElementById('supPiToggle').classList.contains('on'));
+    check(document.getElementById('supDbsToggle').classList.contains('on'));
+    check(document.querySelectorAll('#supDashCriminalDeclaration .radio-tile.selected').length > 0);
+    check(document.querySelectorAll('#supRightToWorkTiles .radio-tile.selected').length > 0);
+
+    var pct = total > 0 ? Math.round((done / total) * 100) : 100;
+    var circumference = 169.6;
+    var offset = circumference - (pct / 100) * circumference;
+    var ring = document.getElementById('supProfileCompleteRing');
+    ring.setAttribute('stroke-dashoffset', offset);
+    ring.style.stroke = pct >= 100 ? '#22c55e' : pct >= 50 ? '#f59e0b' : '#e8482c';
+    document.getElementById('supProfileCompletePct').textContent = pct + '%';
+    document.getElementById('supProfileCompletePct').style.color = pct >= 100 ? '#1a7a3e' : pct >= 50 ? '#b5891a' : '#c0392b';
+  }
+  document.getElementById('supProfileSettingsView').addEventListener('input', computeSupProfileCompletion);
+  document.getElementById('supProfileSettingsView').addEventListener('click', function () { setTimeout(computeSupProfileCompletion, 0); });
+  computeSupProfileCompletion();
+
+  document.querySelectorAll('#supProfileSettingsView [data-doc-view]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      showToast('Opening ' + btn.getAttribute('data-doc-view') + ' \u2014 preview isn\u2019t available in this prototype.');
+    });
+  });
+  var supDocNameMap = { proofAddress: 'supProofAddressDocName', pli: 'supPliDocName', pi: 'supPiDocName', dbs: 'supDbsDocName' };
+  document.querySelectorAll('#supProfileSettingsView [data-doc-replace]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var key = btn.getAttribute('data-doc-replace');
+      document.querySelector('#supProfileSettingsView [data-doc-input="' + key + '"]').click();
+    });
+  });
+  document.querySelectorAll('#supProfileSettingsView [data-doc-input]').forEach(function (input) {
+    input.addEventListener('change', function () {
+      if (this.files && this.files[0]) {
+        var key = this.getAttribute('data-doc-input');
+        var nameEl = document.getElementById(supDocNameMap[key]);
+        if (nameEl) nameEl.textContent = this.files[0].name;
+        showToast('File replaced.');
+      }
+    });
+  });
+
+  document.getElementById('supAddPhotoBtn').addEventListener('click', function () {
+    document.getElementById('supPortfolioPhotoInput').click();
+  });
+  function wireSupPortfolioRemoveBtns() {
+    document.querySelectorAll('#supPortfolioPhotoGrid .sup-portfolio-remove-btn').forEach(function (btn) {
+      btn.onclick = function (e) {
+        e.stopPropagation();
+        btn.closest('div[style*="position:relative"]').remove();
+      };
+    });
+  }
+  wireSupPortfolioRemoveBtns();
+  document.getElementById('supPortfolioPhotoInput').addEventListener('change', function () {
+    if (!this.files || !this.files.length) return;
+    var grid = document.getElementById('supPortfolioPhotoGrid');
+    var addBtn = document.getElementById('supAddPhotoBtn');
+    Array.prototype.forEach.call(this.files, function (file) {
+      var cell = document.createElement('div');
+      cell.style.cssText = 'position:relative;border-radius:12px;overflow:hidden;aspect-ratio:1;';
+      cell.innerHTML = '<img src="' + URL.createObjectURL(file) + '" style="width:100%;height:100%;object-fit:cover;" alt=""><span class="sup-portfolio-remove-btn" style="position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,0.6);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;">\u00d7</span>';
+      grid.insertBefore(cell, addBtn);
+    });
+    wireSupPortfolioRemoveBtns();
+    showToast('Photo' + (this.files.length > 1 ? 's' : '') + ' added.');
+    this.value = '';
+  });
+
   initMultiSelectTiles(document.getElementById('sectorTypeTiles'));
   initMultiSelectTiles(document.getElementById('residentialSubTypes').querySelector('.simple-chip-row'));
   initMultiSelectTiles(document.getElementById('commercialSubTypes').querySelector('.simple-chip-row'));
@@ -10587,6 +11133,8 @@
     document.getElementById('supAcctInitials').textContent = initials(fullName);
     document.getElementById('supDashGreeting').textContent = timeGreeting() + ', ' + firstName + ' \uD83D\uDC4B';
     document.getElementById('supDashDate').textContent = formatFullDateSupplier(new Date());
+    var supJobReqCount = document.getElementById('supBadgeJobRequests').textContent || '0';
+    document.getElementById('supDashTopbarSub').innerHTML = formatFullDateSupplier(new Date()) + '<span class="dot-sep"></span><strong style="color:#1a7a3e;">' + supJobReqCount + ' new requests</strong> waiting';
 
     renderSupplierDashboardState(mode || 'new');
 
@@ -10616,14 +11164,116 @@
   });
 
   /* Sidebar nav item selection */
+  function showSupplierView(view) {
+    document.getElementById('supHomeView').style.display = view === 'home' ? '' : 'none';
+    document.getElementById('supProfileSettingsView').style.display = view === 'profile-settings' ? '' : 'none';
+    document.querySelector('#supplierDashboard .dash-scroll-area').scrollTop = 0;
+  }
   document.querySelectorAll('#supplierDashboard .dash-nav-item').forEach(function (item) {
     item.addEventListener('click', function () {
       document.querySelectorAll('#supplierDashboard .dash-nav-item').forEach(function (i) { i.classList.remove('active'); });
       item.classList.add('active');
-      if (item.getAttribute('data-nav') !== 'dashboard') {
+      var nav = item.getAttribute('data-nav');
+      if (nav === 'dashboard') {
+        showSupplierView('home');
+      } else if (nav === 'sup-profile') {
+        showSupplierView('profile-settings');
+      } else {
         showToast(item.querySelector('.nav-label').textContent + ' isn\u2019t wired up in this prototype yet.');
       }
     });
+  });
+  document.querySelector('#supplierDashboard .dash-account-avatar').style.cursor = 'pointer';
+  document.querySelector('#supplierDashboard .dash-account-info').style.cursor = 'pointer';
+  ['dash-account-avatar', 'dash-account-info'].forEach(function (cls) {
+    document.querySelector('#supplierDashboard .' + cls).addEventListener('click', function () {
+      document.querySelectorAll('#supplierDashboard .dash-nav-item').forEach(function (i) { i.classList.remove('active'); });
+      document.querySelector('#supplierDashboard .dash-nav-item[data-nav="sup-profile"]').classList.add('active');
+      showSupplierView('profile-settings');
+    });
+  });
+
+  /* ---- Supplier Profile Settings ---- */
+  function switchSupSettingsTab(key) {
+    document.querySelectorAll('#supSettingsTabs .pm-settings-tab-item').forEach(function (t) { t.classList.toggle('active', t.getAttribute('data-supsettingstab') === key); });
+    ['profile', 'sectors', 'identity', 'insurance', 'background', 'questionnaire'].forEach(function (k) {
+      var panel = document.getElementById('supSettingsPanel' + k.charAt(0).toUpperCase() + k.slice(1));
+      panel.style.display = k === key ? '' : 'none';
+      if (k === key) {
+        panel.classList.remove('pm-settings-panel-active');
+        void panel.offsetWidth;
+        panel.classList.add('pm-settings-panel-active');
+      }
+    });
+  }
+  document.querySelectorAll('#supSettingsTabs .pm-settings-tab-item').forEach(function (tab) {
+    tab.addEventListener('click', function () { switchSupSettingsTab(tab.getAttribute('data-supsettingstab')); });
+  });
+  document.querySelectorAll('[data-supsettings-save]').forEach(function (btn) {
+    btn.addEventListener('click', function () { showToast(btn.getAttribute('data-supsettings-save') + ' updated.'); });
+  });
+
+  initMultiSelectTiles(document.getElementById('supDashSectorTiles'));
+  initMultiSelectTiles(document.getElementById('supResSubChips'));
+  initMultiSelectTiles(document.getElementById('supComSubChips'));
+
+  initObToggle('supHmrcToggle', 'supUtrField', true);
+  initObToggle('supPliToggle', 'supPliFields', true);
+  initObToggle('supPiToggle', 'supPiFields', true);
+  initObToggle('supDbsToggle', 'supDbsFields', true);
+
+  document.querySelectorAll('#supDashCriminalDeclaration .radio-tile').forEach(function (tile) {
+    tile.addEventListener('click', function () {
+      document.querySelectorAll('#supDashCriminalDeclaration .radio-tile').forEach(function (t) { t.classList.remove('selected'); });
+      tile.classList.add('selected');
+      setCollapsibleOpen(document.getElementById('supDashConvictionDetailsField'), tile.getAttribute('data-value') === 'unspent');
+    });
+  });
+  document.querySelectorAll('#supRightToWorkTiles .radio-tile').forEach(function (tile) {
+    tile.addEventListener('click', function () {
+      document.querySelectorAll('#supRightToWorkTiles .radio-tile').forEach(function (t) {
+        t.classList.remove('selected');
+        t.style.borderColor = '';
+        t.style.background = '';
+        t.querySelector('.rtw-icon').style.display = 'none';
+      });
+      tile.classList.add('selected');
+      tile.querySelector('.rtw-icon').style.display = 'flex';
+      if (tile.getAttribute('data-value') === 'yes') { tile.style.borderColor = '#22c55e'; tile.style.background = '#f0fdf4'; }
+      else { tile.style.borderColor = '#e8482c'; tile.style.background = '#fdecea'; }
+    });
+  });
+
+  document.getElementById('supChangeNumberBtn').addEventListener('click', function () {
+    document.getElementById('supMobileNumberRow').style.display = 'none';
+    document.getElementById('supChangeNumberBtn').style.display = 'none';
+    document.getElementById('supChangeNumberForm').style.display = '';
+  });
+  document.getElementById('supCancelChangeNumberBtn').addEventListener('click', function () {
+    document.getElementById('supChangeNumberForm').style.display = 'none';
+    document.getElementById('supMobileNumberRow').style.display = '';
+    document.getElementById('supChangeNumberBtn').style.display = '';
+    document.getElementById('supNewNumberInput').value = '';
+  });
+  document.getElementById('supVerifyNewNumberBtn').addEventListener('click', function () {
+    var newNumber = document.getElementById('supNewNumberInput').value.trim();
+    if (!newNumber) { showToast('Enter a new mobile number first.'); return; }
+    showToast('OTP sent \u2014 verify to confirm your new number.');
+  });
+
+  document.getElementById('supProfileAvatarEditBtn').addEventListener('click', function () {
+    document.getElementById('supProfileAvatarInput').click();
+  });
+  document.getElementById('supProfileAvatarInput').addEventListener('change', function () {
+    if (this.files && this.files[0]) {
+      var photoUrl = URL.createObjectURL(this.files[0]);
+      document.getElementById('supProfileAvatarImg').src = photoUrl;
+      var sidebarImg = document.getElementById('supAcctAvatarPhoto');
+      sidebarImg.src = photoUrl;
+      sidebarImg.style.display = 'block';
+      document.getElementById('supAcctInitials').style.display = 'none';
+      showToast('Profile photo updated.');
+    }
   });
 
   /* Logout */
@@ -12560,7 +13210,10 @@
     jobsFrom: { viewYear: null, viewMonth: null, selected: null },
     jobsTo: { viewYear: null, viewMonth: null, selected: null },
     appJoinedBefore: { viewYear: null, viewMonth: null, selected: null },
-    appJoinedAfter: { viewYear: null, viewMonth: null, selected: null }
+    appJoinedAfter: { viewYear: null, viewMonth: null, selected: null },
+    supDob: { viewYear: null, viewMonth: null, selected: new Date(1987, 10, 5) },
+    supPliExpiry: { viewYear: null, viewMonth: null, selected: new Date(2026, 10, 26) },
+    supPiExpiry: { viewYear: null, viewMonth: null, selected: new Date(2026, 8, 26) }
   };
   var calHiddenInputIds = {
     joinedBefore: 'pmFilterJoinedBefore',
@@ -12568,7 +13221,10 @@
     jobsFrom: 'jobsFilterFrom',
     jobsTo: 'jobsFilterTo',
     appJoinedBefore: 'appFilterJoinedBefore',
-    appJoinedAfter: 'appFilterJoinedAfter'
+    appJoinedAfter: 'appFilterJoinedAfter',
+    supDob: 'supDobInput',
+    supPliExpiry: 'supPliExpiryInput',
+    supPiExpiry: 'supPiExpiryInput'
   };
   function calPad2(n) { return n < 10 ? '0' + n : '' + n; }
   function calFormatDMY(d) { return calPad2(d.getDate()) + '/' + calPad2(d.getMonth() + 1) + '/' + d.getFullYear(); }
