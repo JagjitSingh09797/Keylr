@@ -1400,7 +1400,8 @@
   .sel-chip {
     display: inline-flex; align-items: center; gap: 6px;
     background: var(--tile-selected-bg, #e8f0f8); color: var(--accent-blue);
-    padding: 6px 8px 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 600;
+    border: 1px solid #b9d0ea;
+    padding: 5px 7px 5px 11px; border-radius: 999px; font-size: 13px; font-weight: 600;
     transition: opacity 150ms ease-out, max-width 200ms ease-out, margin 200ms ease-out, transform 150ms ease-out;
     max-width: 260px; overflow: hidden; white-space: nowrap;
   }
@@ -1881,7 +1882,7 @@
   .dash-sidebar.collapsed .dash-nav-item .nav-label { display: none; }
   .dash-sidebar.collapsed .dash-nav-item { justify-content: center; }
   .dash-nav-badge {
-    margin-left: auto; background: #e8482c; color: #fff;
+    margin-left: auto; background: #dbe2f2; color: #3e5893;
     font-size: 10.5px; font-weight: 700; border-radius: 999px;
     min-width: 18px; height: 18px; display: flex; align-items: center; justify-content: center;
     padding: 0 5px;
@@ -3032,6 +3033,15 @@
   .client-tab, .sup-tab-item { padding: 12px 2px; font-size: 14px; font-weight: 600; color: var(--text-body-muted); border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; }
   .client-tab.active, .sup-tab-item.active { color: var(--accent-blue); border-bottom-color: var(--accent-blue); font-weight: 700; }
   .client-tab:hover:not(.active), .sup-tab-item:hover:not(.active) { color: var(--text-heading); }
+  .pm-settings-tabs-row { display: flex; gap: 28px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 20px; }
+  .pm-settings-tab-item { padding: 12px 2px; font-size: 14px; font-weight: 600; color: var(--text-body-muted); border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; }
+  .pm-settings-tab-item.active { color: var(--accent-blue); border-bottom-color: var(--accent-blue); font-weight: 700; }
+  .pm-settings-tab-item:hover:not(.active) { color: var(--text-heading); }
+  .settings-input-embed { display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid var(--border-subtle); border-radius: 11px; padding: 0 14px; height: 43px; background: var(--surface-white); }
+  .settings-input-embed .sie-text { font-size: 14.5px; color: var(--text-body-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .settings-input-embed .verif-chip { border-radius: 999px; font-size: 10px; gap: 4px; line-height: 1; padding-top: 4px; padding-bottom: 4px; padding-right: 6px; padding-left: 6px; }
+  @keyframes pmSettingsFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .pm-settings-panel-active { animation: pmSettingsFadeIn 260ms cubic-bezier(0.16,1,0.3,1); }
 
   .client-show-filter { display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 14px 18px; margin-bottom: 20px; }
   .client-show-filter .csf-label { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; color: #94a3b8; flex-shrink: 0; }
@@ -3100,6 +3110,7 @@
   .verif-chip-wrap { position: relative; }
   .verif-chip { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; padding: 10px 16px; border-radius: 10px; cursor: pointer; transition: box-shadow 150ms ease-out; }
   .verif-chip:hover { box-shadow: 0 0 0 3px rgba(16,24,40,0.06); }
+  #pmSettingsPanelProfile .verif-chip:hover { box-shadow: none; }
   .verif-chip.ok { color: #1a7a3e; background: #eafaf0; }
   .verif-chip.warn { color: #92620a; background: #fef3c7; }
   .verif-chip.info { color: #284890; background: #e8f0f8; }
@@ -5251,10 +5262,6 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M9 15h6M9 11h6"/></svg>
             <span class="nav-label">Invoices</span>
           </div>
-          <div class="dash-nav-item" data-nav="billing">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
-            <span class="nav-label">Billing &amp; Payments</span>
-          </div>
           <div class="dash-nav-item" data-nav="disputes">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
             <span class="nav-label">Disputes</span>
@@ -5305,6 +5312,7 @@
 
       <div class="dash-scroll-area">
         <div class="dash-content">
+          <div id="pmHomeView">
 
           <div class="dash-section" id="pendingBanners">
             <div class="dash-banner">
@@ -5501,9 +5509,497 @@
             </div>
           </div>
 
+          </div>
+          <!-- ============ PM SETTINGS VIEW ============ -->
+          <div id="pmSettingsView" style="display:none;">
+            <div class="dash-section">
+              <div class="dash-header">
+                <div>
+                  <div style="font-size:11px;font-weight:700;letter-spacing:0.06em;color:#94a3b8;margin-bottom:4px;">ACCOUNT</div>
+                  <h2 style="background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); -webkit-background-clip: text; background-clip: text; color: transparent;">Settings</h2>
+                  <div class="dash-content-sub">Manage your profile, business &amp; subscription.</div>
+                </div>
+              </div>
+
+              <div class="pm-settings-tabs-row" id="pmSettingsTabs" style="margin-top:8px;">
+                <div class="pm-settings-tab-item active" data-settingstab="profile">Profile</div>
+                <div class="pm-settings-tab-item" data-settingstab="portfolio">Portfolio</div>
+                <div class="pm-settings-tab-item" data-settingstab="company">Company</div>
+                <div class="pm-settings-tab-item" data-settingstab="locations">Locations</div>
+                <div class="pm-settings-tab-item" data-settingstab="billing">Billing</div>
+                <div class="pm-settings-tab-item" data-settingstab="billingpayments">Billing &amp; Payments</div>
+                <div class="pm-settings-tab-item" data-settingstab="contacts">Contacts</div>
+              </div>
+
+              <!-- Profile tab -->
+              <div id="pmSettingsPanelProfile">
+                <div style="margin-top:20px;">
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:14px;padding-bottom:20px;border-bottom:1px solid var(--border-subtle);">
+                    <div style="display:flex;align-items:center;gap:16px;">
+                      <div style="position:relative;">
+                        <img src="https://i.pravatar.cc/80?img=12" alt="" style="width:64px;height:64px;border-radius:50%;object-fit:cover;" id="pmProfileAvatarImg">
+                        <input type="file" id="pmProfileAvatarInput" accept="image/png,image/jpeg,image/webp" style="display:none;">
+                        <button type="button" style="position:absolute;bottom:-2px;right:-2px;width:24px;height:24px;border-radius:50%;background:var(--navy-900);color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid #fff;cursor:pointer;" id="pmProfileAvatarEditBtn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg></button>
+                      </div>
+                      <div>
+                        <h3 style="font-size:18px;font-weight:800;color:var(--text-heading);">Thomas Davies</h3>
+                        <div style="font-size:13px;color:var(--text-body-muted);margin:2px 0 8px;">pm.thomas.davies.6@keylr-seed.co.uk</div>
+                        <span class="verif-chip ok" style="cursor:default;padding:3px 8px 3px 6px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Email Verified</span>
+                      </div>
+                    </div>
+                    <button type="button" class="btn btn-primary" data-settings-save="Profile">Save Changes</button>
+                  </div>
+                  <div class="ob-row-2">
+                    <div class="ob-field">
+                      <label>Full name</label>
+                      <input class="field-input" type="text" id="pmSettingsFullName" value="Thomas Davies">
+                    </div>
+                    <div class="ob-field">
+                      <label>Email address</label>
+                      <div class="settings-input-embed">
+                        <span class="sie-text">pm.thomas.davies.6@keylr-seed.co.uk</span>
+                        <span class="verif-chip ok" style="cursor:default;flex-shrink:0;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Verified</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="ob-field" style="margin-bottom:0;max-width:50%;">
+                    <label>Mobile number</label>
+                    <div class="settings-input-embed">
+                      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
+                        <span style="display:flex;align-items:center;gap:4px;font-size:13px;color:var(--text-body-muted);font-weight:600;padding-right:10px;border-right:1px solid var(--border-subtle);flex-shrink:0;">GB +44<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+                        <span class="sie-text">7888542811</span>
+                      </div>
+                      <span class="verif-chip ok" style="cursor:default;flex-shrink:0;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Verified</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Portfolio tab -->
+              <div id="pmSettingsPanelPortfolio" style="display:none;">
+                <div style="margin-top:20px;">
+                  <div class="ob-section">
+                    <div class="ob-section-title">What sectors do you manage properties in? <span class="meta-badge optional">Select all that apply</span></div>
+                    <div class="tile-grid" id="stgSectorTiles">
+                      <div class="choice-tile selected" data-value="estate-agent" tabindex="0" role="checkbox" aria-checked="true">
+                        <div class="tile-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></div>
+                        <div class="tile-body"><div class="tile-title">Estate Agent</div><div class="tile-desc">Residential letting and sales agents managing properties on behalf of landlords.</div></div>
+                        <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                      </div>
+                      <div class="choice-tile selected" data-value="str-operator" tabindex="0" role="checkbox" aria-checked="true">
+                        <div class="tile-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></div>
+                        <div class="tile-body"><div class="tile-title">Short-Term Rental Operator</div><div class="tile-desc">Serviced apartments, holiday lets, Airbnb-style rentals and STR management companies.</div></div>
+                        <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                      </div>
+                      <div class="choice-tile selected" data-value="hotels-hostels" tabindex="0" role="checkbox" aria-checked="true">
+                        <div class="tile-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M4 21V9l5-4 5 4v12M9 21v-4h4v4M14 12h5v9"/></svg></div>
+                        <div class="tile-body"><div class="tile-title">Hotels &amp; Hostels</div><div class="tile-desc">Commercial hospitality — hotels, boutique hotels, hostels and serviced accommodation.</div></div>
+                        <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="ob-section">
+                    <div class="ob-section-title">How many properties do you currently manage?</div>
+                    <div class="count-grid" id="stgCountTiles">
+                      <div class="count-tile" data-value="1-5"><div class="range">1–5</div><div class="cat-label">Small</div></div>
+                      <div class="count-tile selected" data-value="6-25"><div class="range">6–25</div><div class="cat-label">Growing</div></div>
+                      <div class="count-tile" data-value="26-100"><div class="range">26–100</div><div class="cat-label">Mid-size</div></div>
+                      <div class="count-tile" data-value="101-500"><div class="range">101–500</div><div class="cat-label">Large</div></div>
+                      <div class="count-tile" data-value="501-1000"><div class="range">501–1,000</div><div class="cat-label">Very large</div></div>
+                      <div class="count-tile" data-value="1000+"><div class="range">1,000+</div><div class="cat-label">Enterprise</div></div>
+                    </div>
+                  </div>
+
+                  <div class="ob-section" style="margin-bottom:0;">
+                    <div class="ob-field" style="margin-bottom:0;">
+                      <label for="stgAgentCount">How many agents / property managers will use the platform?</label>
+                      <select class="ob-select" id="stgAgentCount">
+                        <option value="1">Just me (1)</option>
+                        <option value="2-5">2–5</option>
+                        <option value="6-10" selected>6–10</option>
+                        <option value="11-25">11–25</option>
+                        <option value="26-50">26–50</option>
+                        <option value="50+">50+</option>
+                      </select>
+                      <div class="helper">This helps us set up the right number of seats for your team.</div>
+                    </div>
+                  </div>
+                  <div style="display:flex;justify-content:flex-start;margin-top:20px;"><button type="button" class="btn btn-primary" data-settings-save="Portfolio">Save Changes</button></div>
+                </div>
+              </div>
+
+              <!-- Company tab -->
+              <div id="pmSettingsPanelCompany" style="display:none;">
+                <div style="margin-top:20px;">
+                  <div class="ob-field">
+                    <label>Commercial / trading name</label>
+                    <input class="field-input" type="text" value="KEY RIDERS LTD">
+                    <div class="ai-hint-pill"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg>Pre-filled from sign up — editable</div>
+                  </div>
+
+                  <div class="ob-section">
+                    <div class="ob-section-title">Is this your only location or part of a wider group?</div>
+                    <div class="tile-row-2" id="stgLocationTypeTiles">
+                      <div class="choice-tile selected" data-value="single" tabindex="0" role="radio" aria-checked="true">
+                        <div class="tile-body"><div class="tile-title">Single location</div><div class="tile-desc">One office or operating location</div></div>
+                        <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                      </div>
+                      <div class="choice-tile" data-value="branch" tabindex="0" role="radio" aria-checked="false">
+                        <div class="tile-body"><div class="tile-title">Branch / part of a group</div><div class="tile-desc">One of multiple offices or franchises</div></div>
+                        <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="ob-section-heading">Registered Company Details</div>
+                  <div class="ob-row-2">
+                    <div class="ob-field">
+                      <label>Company registration number</label>
+                      <input class="field-input" type="text" value="15019055">
+                      <div style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:#1a7a3e;margin-top:6px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Company found — details auto-filled.</div>
+                    </div>
+                    <div class="ob-field">
+                      <label>Legal company name <span class="meta-badge auto">Auto</span></label>
+                      <input class="field-input" type="text" value="KEY RIDERS LTD">
+                    </div>
+                  </div>
+
+                  <div class="ob-field">
+                    <label>Registered address <span class="meta-badge auto">Auto</span></label>
+                    <input class="field-input" type="text" value="60 Tottenham Court Road, Suite 3260a, Fitzrovia, London, W1T 2EW, United Kingdom">
+                    <div class="helper">Official registered business address — auto-filled, editable.</div>
+                  </div>
+
+                  <div class="ob-section-heading" style="margin-bottom:14px;">Trading address <span class="meta-badge optional" style="text-transform:none;font-size:11px;">If different</span></div>
+                  <div class="same-as-row" style="border-bottom:none;padding-bottom:0;">
+                    <input type="checkbox" id="stgSameAsRegistered">
+                    <label for="stgSameAsRegistered">Same as registered address</label>
+                  </div>
+                  <div class="ob-field" style="margin-top:14px;">
+                    <label>Trading address</label>
+                    <input class="field-input" type="text" value="60 Tottenham Court Road, Suite 3260a, Fitzrovia, London, W1T 2EW, United Kingdom">
+                  </div>
+
+                  <div class="ob-section-heading" style="margin-bottom:14px;">Operating address</div>
+                  <div class="ob-field">
+                    <input class="field-input" type="text" placeholder="Start typing a postcode or address">
+                  </div>
+
+                  <div class="ob-toggle-card">
+                    <div class="otc-top">
+                      <div><div class="otc-title">Are you VAT registered?</div><div class="otc-desc">Your VAT number will be added to all invoices</div></div>
+                      <button type="button" class="toggle-switch on" id="stgVatToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
+                    </div>
+                    <div class="field-collapsible open" id="stgVatField" style="max-height:1200px;opacity:1;">
+                      <div class="otc-body">
+                        <div class="ob-field" style="margin-bottom:0;">
+                          <label>VAT number</label>
+                          <input class="field-input" type="text" value="GB868776770">
+                          <div class="helper">Format: GB followed by 9 digits.</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="ob-field">
+                    <label>Website <span class="meta-badge optional">Optional</span></label>
+                    <input class="field-input" type="url" placeholder="https://yourcompany.co.uk">
+                  </div>
+
+                  <div class="ob-section-heading">Operating Hours</div>
+                  <p class="ob-section-subtext" style="margin-top:-2px;">Helps service providers understand when your team is reachable for job coordination.</p>
+                  <div class="ob-field">
+                    <label>Operating days</label>
+                    <div class="day-pill-row" id="stgDayPills">
+                      <div class="day-pill selected" data-value="mon">Mon</div>
+                      <div class="day-pill selected" data-value="tue">Tue</div>
+                      <div class="day-pill selected" data-value="wed">Wed</div>
+                      <div class="day-pill selected" data-value="thu">Thu</div>
+                      <div class="day-pill selected" data-value="fri">Fri</div>
+                      <div class="day-pill selected" data-value="sat">Sat</div>
+                      <div class="day-pill selected" data-value="sun">Sun</div>
+                    </div>
+                  </div>
+                  <div class="ob-field">
+                    <label>Standard hours</label>
+                    <div class="time-row">
+                      <span class="time-sep">From</span>
+                      <select class="ob-select"><option>06:00</option><option>07:00</option><option selected>08:00</option><option>09:00</option><option>10:00</option></select>
+                      <span class="time-sep">to</span>
+                      <select class="ob-select"><option>15:00</option><option>16:00</option><option selected>17:00</option><option>18:00</option><option>19:00</option></select>
+                    </div>
+                  </div>
+
+                  <div class="ob-section" style="margin-top:24px;margin-bottom:0;">
+                    <div class="ob-field" style="margin-bottom:0;">
+                      <label>Company logo <span class="meta-badge optional">Optional</span></label>
+                      <input type="file" id="stgLogoInput" accept="image/png,image/svg+xml" style="display:none;">
+                      <div style="display:flex;align-items:center;gap:12px;border:1px solid var(--border-subtle);border-radius:10px;padding:10px 14px;">
+                        <div style="width:36px;height:36px;border-radius:8px;background:var(--surface-soft);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--text-body-muted);flex-shrink:0;overflow:hidden;" id="stgLogoThumb">Comp</div>
+                        <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--text-heading);" id="stgLogoName">Current logo</div><div style="font-size:11.5px;color:var(--text-body-muted);">PNG or SVG · shown to service providers</div></div>
+                        <span style="font-size:12.5px;font-weight:600;color:var(--accent-blue);cursor:pointer;" id="stgLogoReplaceBtn">Replace</span>
+                        <span style="cursor:pointer;color:var(--text-body-muted);" id="stgLogoRemoveBtn">&times;</span>
+                      </div>
+                      <div class="helper">PNG or SVG. Shown to service providers.</div>
+                    </div>
+                  </div>
+                  <div style="display:flex;justify-content:flex-start;margin-top:20px;"><button type="button" class="btn btn-primary" data-settings-save="Company">Save Changes</button></div>
+                </div>
+              </div>
+
+              <!-- Locations tab -->
+              <div id="pmSettingsPanelLocations" style="display:none;">
+                <div style="margin-top:20px;">
+                  <div class="ob-section">
+                    <div class="ob-section-title">Where are your properties located?</div>
+                    <div class="ob-section-subtext">London — select the zones you cover</div>
+                    <div class="simple-chip-row" id="stgLondonZones" style="margin-bottom:22px;">
+                      <div class="simple-chip selected" data-value="central">Central</div>
+                      <div class="simple-chip" data-value="north">North</div>
+                      <div class="simple-chip selected" data-value="north-west">North West</div>
+                      <div class="simple-chip selected" data-value="north-east">North East</div>
+                      <div class="simple-chip" data-value="east">East</div>
+                      <div class="simple-chip" data-value="south-east">South East</div>
+                      <div class="simple-chip" data-value="south">South</div>
+                      <div class="simple-chip" data-value="south-west">South West</div>
+                      <div class="simple-chip" data-value="west">West</div>
+                      <div class="simple-chip simple-chip-action" data-value="all-london">All London</div>
+                    </div>
+
+                    <div class="ob-section-title" style="font-size:13.5px;">Other cities / regions <span class="meta-badge optional">Optional</span></div>
+                    <div class="simple-chip-row" id="stgOtherRegions" style="margin-bottom:12px;">
+                      <div class="simple-chip selected" data-value="manchester">Manchester</div>
+                      <div class="simple-chip selected" data-value="birmingham">Birmingham</div>
+                      <div class="simple-chip" data-value="bristol">Bristol</div>
+                      <div class="simple-chip" data-value="leeds">Leeds</div>
+                      <div class="simple-chip" data-value="liverpool">Liverpool</div>
+                      <div class="simple-chip" data-value="cambridge">Cambridge</div>
+                      <div class="simple-chip" data-value="oxford">Oxford</div>
+                    </div>
+                    <input class="field-input" type="text" id="stgCustomRegionInput" placeholder="Add city or region... (press Enter)">
+                  </div>
+
+                  <div class="ob-section" style="margin-bottom:0;">
+                    <div class="ob-section-title">Do you use any PMS or CRM tools? <span class="meta-badge optional">Optional</span></div>
+                    <div class="chip-multiselect" id="stgPmsMultiselect">
+                      <div class="chip-search-input">
+                        <input class="field-input" type="text" id="stgPmsSearchInput" placeholder="Search PMS / CRM or type your own..." autocomplete="off">
+                        <div class="ms-dropdown" id="stgPmsDropdown">
+                          <div class="ms-dropdown-row" data-value="Fixflo">Fixflo <svg class="row-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                          <div class="ms-dropdown-row" data-value="Arthur Online">Arthur Online <svg class="row-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                          <div class="ms-dropdown-row" data-value="Re-Leased">Re-Leased <svg class="row-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                          <div class="ms-dropdown-row" data-value="Yardi">Yardi <svg class="row-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                          <div class="ms-dropdown-row" data-value="Hostaway">Hostaway <svg class="row-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                          <div class="ms-dropdown-row" data-value="Guesty">Guesty <svg class="row-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        </div>
+                      </div>
+                      <div class="selected-chips" id="stgPmsSelectedChips">
+                        <span class="sel-chip" data-value="Alto">Alto <button type="button" aria-label="Remove"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>
+                        <span class="sel-chip" data-value="Reapit">Reapit <button type="button" aria-label="Remove"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>
+                        <span class="sel-chip" data-value="Dezrez">Dezrez <button type="button" aria-label="Remove"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>
+                        <span class="sel-chip" data-value="MRI Software">MRI Software <button type="button" aria-label="Remove"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>
+                        <span class="sel-chip" data-value="Agent Pro">Agent Pro <button type="button" aria-label="Remove"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>
+                        <span class="sel-chip" data-value="APEX 27">APEX 27 <button type="button" aria-label="Remove"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>
+                        <span class="sel-chip" data-value="Rex Software">Rex Software <button type="button" aria-label="Remove"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>
+                        <span class="sel-chip" data-value="Street">Street <button type="button" aria-label="Remove"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>
+                        <span class="sel-chip" data-value="Jupix">Jupix <button type="button" aria-label="Remove"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>
+                        <span class="sel-chip" data-value="Vaultre">Vaultre <button type="button" aria-label="Remove"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>
+                        <span class="sel-chip" data-value="Arthur Online">Arthur Online <button type="button" aria-label="Remove"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>
+                        <span class="sel-chip" data-value="Re-Leased">Re-Leased <button type="button" aria-label="Remove"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>
+                        <span class="sel-chip" data-value="PropertyMe">PropertyMe <button type="button" aria-label="Remove"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>
+                        <span class="sel-chip" data-value="Hostaway">Hostaway <button type="button" aria-label="Remove"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>
+                        <span class="sel-chip" data-value="Guesty">Guesty <button type="button" aria-label="Remove"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>
+                        <span class="sel-chip" data-value="Fixflo">Fixflo <button type="button" aria-label="Remove"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>
+                      </div>
+                      <div class="helper" style="font-size:10.5px;padding-top:6px;">e.g. Fixflo, Arthur Online, Re-Leased, Yardi, MRI, Hostaway, Guesty. Helps us understand integrations you may need.</div>
+                    </div>
+                  </div>
+                  <div style="display:flex;justify-content:flex-start;margin-top:20px;"><button type="button" class="btn btn-primary" data-settings-save="Locations">Save Changes</button></div>
+                </div>
+              </div>
+
+              <!-- Billing tab -->
+              <div id="pmSettingsPanelBilling" style="display:none;">
+                <div style="margin-top:20px;">
+                  <div class="callout callout-info" style="margin-bottom:10px;">
+                    <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg></div>
+                    <div>
+                      <div class="callout-title">A payment card is required to activate your account</div>
+                      <div class="callout-body">Once your account is approved, you'll be asked to add a card on file. This is used for pay-upfront jobs. Your card is never charged without your approval.</div>
+                    </div>
+                  </div>
+
+                  <div class="callout callout-success">
+                    <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                    <div>
+                      <div class="callout-title" style="color:#145c2e;">Billing Cycle Approved &amp; Active</div>
+                      <div class="callout-body" style="color:#145c2e;">Your Direct Debit has been approved and activated. Your selected billing cycle is now live.</div>
+                    </div>
+                  </div>
+
+                  <div class="ob-section">
+                    <div class="ob-section-title">What's your preferred billing cycle?</div>
+                    <div id="stgBillingCycleCards">
+                      <div class="billing-card" data-value="upfront">
+                        <div class="bc-top"><div class="bc-radio"></div><div class="bc-title">Pay upfront</div><span class="meta-badge default" style="margin-left:auto;">Default · Instant</span></div>
+                        <div class="bc-desc">Pay per job at the time of booking using your card on file. Available immediately on activation — no approval needed.</div>
+                        <div class="bc-sub">🛡 Payment held in escrow until job is completed</div>
+                      </div>
+                      <div class="billing-card selected" data-value="fortnightly">
+                        <div class="bc-top"><div class="bc-radio"></div><div class="bc-title">Fortnightly</div><span class="meta-badge" style="margin-left:auto;background:#eafaf0;color:#1a7a3e;">✓ Approved</span></div>
+                        <div class="bc-desc">Consolidated invoice every 2 weeks settled by Direct Debit. Balanced for steady-volume operations. Our team will contact you to activate.</div>
+                      </div>
+                      <div class="billing-card" data-value="monthly">
+                        <div class="bc-top"><div class="bc-radio"></div><div class="bc-title">Monthly (4 weeks)</div><span class="meta-badge approval" style="margin-left:auto;">Approval required</span></div>
+                        <div class="bc-desc">Single monthly consolidated invoice via Direct Debit. Most common for established operators. Our team will contact you to activate.</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="callout callout-neutral">
+                    <div><div class="callout-title">About Supplier Deposits</div><div class="callout-body">Some suppliers may request a deposit for certain jobs. In these cases Keylr generates an option to pay the deposit upfront and leaves the remaining amount for your billing cycle. This is always shown clearly before you confirm a job.</div></div>
+                  </div>
+
+                  <div class="callout callout-warning">
+                    <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg></div>
+                    <div style="width:100%;">
+                      <div class="callout-title">Billing Cycle Approval Process</div>
+                      <div class="callout-body" style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+                        <div style="display:flex;gap:10px;align-items:flex-start;"><span style="background:#102048;color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">1</span> Your preferred billing cycle is noted when you submit your profile</div>
+                        <div style="display:flex;gap:10px;align-items:flex-start;"><span style="background:#102048;color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">2</span> Keylr reviews your account — one of our team members will contact you directly</div>
+                        <div style="display:flex;gap:10px;align-items:flex-start;"><span style="background:#102048;color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">3</span> Once approved, your Direct Debit is activated and your billing cycle goes live</div>
+                        <div style="display:flex;gap:10px;align-items:flex-start;"><span style="background:#102048;color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">4</span> You can book services on pay-upfront immediately while approval is in progress</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="callout callout-success">
+                    <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                    <div class="callout-body" style="color:#145c2e;">You approve every job before it starts. All charges are shown clearly — no surprise fees regardless of billing cycle.</div>
+                  </div>
+
+                  <div class="ob-field" style="margin-top:8px;">
+                    <label>Billing email address <span class="meta-badge optional">Optional</span></label>
+                    <input class="field-input" type="email" placeholder="finance@company.com">
+                    <div class="helper">Add a dedicated email for invoices if your finance team handles payments separately.</div>
+                  </div>
+                  <div style="display:flex;justify-content:flex-start;margin-top:20px;"><button type="button" class="btn btn-primary" data-settings-save="Billing">Save Changes</button></div>
+                </div>
+              </div>
+
+              <!-- Billing & Payments tab -->
+              <div id="pmSettingsPanelBillingpayments" style="display:none;">
+                <div style="margin-top:20px;">
+                  <div style="font-size:11px;font-weight:700;letter-spacing:0.05em;color:#94a3b8;margin-bottom:6px;">BILLING SETUP</div>
+                  <p style="font-size:13px;color:var(--text-body-muted);margin-bottom:20px;">Authorise the BACS Direct Debit your consolidated invoices will settle against. Your billing cycle is set during onboarding and can be changed in your profile.</p>
+
+                  <div class="sup-bg-check-card">
+                    <div style="display:flex;gap:14px;align-items:flex-start;">
+                      <div style="width:40px;height:40px;border-radius:10px;background:#eafaf0;color:#1a7a3e;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+                      <div style="flex:1;min-width:0;">
+                        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap;">
+                          <h4 style="font-size:15px;font-weight:700;color:var(--text-heading);">Direct Debit</h4>
+                          <span style="display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;letter-spacing:0.03em;color:#1a7a3e;background:#eafaf0;padding:3px 10px;border-radius:999px;"><span style="width:5px;height:5px;border-radius:50%;background:#1a7a3e;"></span>MANDATE ACTIVE</span>
+                        </div>
+                        <p style="font-size:12.5px;color:var(--text-body-muted);line-height:1.5;margin-bottom:16px;">We'll redirect you to our payment processor to authorise a BACS Direct Debit. You stay protected by the DD guarantee — we only collect on approved invoices.</p>
+                        <div style="display:flex;gap:12px;align-items:flex-start;background:#f0fdf4;border:1px solid #c0f5d4;border-radius:10px;padding:14px 16px;">
+                          <div style="width:22px;height:22px;border-radius:50%;background:#1a7a3e;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                          <div><div style="font-size:13px;font-weight:700;color:var(--text-heading);margin-bottom:2px;">You're all set</div><div style="font-size:12.5px;color:#1a7a3e;">Approved invoices will collect automatically on your selected billing cycle. Protected by the BACS Direct Debit guarantee.</div></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="sup-bg-check-card" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:0;">
+                    <div style="width:40px;height:40px;border-radius:10px;background:#fef3c7;color:#92620a;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+                    <div style="flex:1;min-width:200px;">
+                      <h4 style="font-size:15px;font-weight:700;color:var(--text-heading);margin-bottom:3px;">Manage Payment Methods</h4>
+                      <p style="font-size:12.5px;color:var(--text-body-muted);">Update your card details or switch the bank account on file. Opens the Stripe customer portal in a new tab.</p>
+                    </div>
+                    <button type="button" class="btn btn-primary" id="stgOpenStripePortalBtn" style="flex-shrink:0;">Open Portal <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Contacts tab -->
+              <div id="pmSettingsPanelContacts" style="display:none;">
+                <div style="margin-top:20px;">
+                  <div class="contact-card">
+                    <div class="cc-head"><div class="cc-title">Customer support contact<span class="req">*</span></div></div>
+                    <div class="cc-subtext">Who handles day-to-day queries and job issues</div>
+                    <div class="same-as-row">
+                      <input type="checkbox" id="stgSameAsSupport" checked>
+                      <label for="stgSameAsSupport">Same person as onboarding contact</label>
+                    </div>
+                    <div class="contact-fields locked" id="stgSupportFields">
+                      <div class="ob-row-2">
+                        <div class="ob-field"><label>Full name</label><input class="field-input" type="text" placeholder="Full name"></div>
+                        <div class="ob-field"><label>Job title</label><input class="field-input" type="text" placeholder="e.g. Lettings Manager"></div>
+                      </div>
+                      <div class="ob-row-2">
+                        <div class="ob-field"><label>Phone</label><input class="field-input" type="tel" placeholder="+44 7700 000000"></div>
+                        <div class="ob-field"><label>Email</label><input class="field-input" type="email" placeholder="name@company.com"></div>
+                      </div>
+                    </div>
+                    <div class="ai-hint-pill"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg>Pre-filled from sign up · untick to enter a different person</div>
+                  </div>
+
+                  <div class="contact-card">
+                    <div class="cc-head"><div class="cc-title">Finance &amp; invoicing contact</div><span class="meta-badge optional">Optional</span></div>
+                    <div class="cc-subtext">Who handles billing, invoices, and payments</div>
+                    <div class="same-as-row">
+                      <input type="checkbox" id="stgSameAsFinance">
+                      <label for="stgSameAsFinance">Same person as onboarding contact</label>
+                    </div>
+                    <div class="contact-fields" id="stgFinanceFields">
+                      <div class="ob-row-2">
+                        <div class="ob-field"><label>Full name</label><input class="field-input" type="text" value="Thomas Davies"></div>
+                        <div class="ob-field"><label>Job title</label><input class="field-input" type="text" placeholder="e.g. Lettings Manager"></div>
+                      </div>
+                      <div class="ob-row-2">
+                        <div class="ob-field"><label>Phone</label><input class="field-input" type="tel" value="+447888542811"></div>
+                        <div class="ob-field"><label>Email</label><input class="field-input" type="email" value="pm.thomas.davies.6@keylr-seed.co.uk"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="contact-card">
+                    <div class="cc-head"><div class="cc-title">Manager / office contact</div><span class="meta-badge optional">Optional</span></div>
+                    <div class="cc-subtext">Branch manager or office lead for escalations</div>
+                    <div class="same-as-row">
+                      <input type="checkbox" id="stgSameAsManager">
+                      <label for="stgSameAsManager">Same person as onboarding contact</label>
+                    </div>
+                    <div class="contact-fields" id="stgManagerFields">
+                      <div class="ob-row-2">
+                        <div class="ob-field"><label>Full name</label><input class="field-input" type="text" value="Thomas Davies"></div>
+                        <div class="ob-field"><label>Job title</label><input class="field-input" type="text" placeholder="e.g. Lettings Manager"></div>
+                      </div>
+                      <div class="ob-row-2">
+                        <div class="ob-field"><label>Phone</label><input class="field-input" type="tel" value="+447888542811"></div>
+                        <div class="ob-field"><label>Email</label><input class="field-input" type="email" value="pm.thomas.davies.6@keylr-seed.co.uk"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="callout callout-neutral" style="margin-bottom:0;">
+                    <div class="callout-body">By submitting, you confirm that all information provided is accurate. Keylr will review your account and contact you within 1-2 business days. You can explore the platform in the meantime.</div>
+                  </div>
+                  <div style="display:flex;justify-content:flex-start;margin-top:20px;"><button type="button" class="btn btn-primary" data-settings-save="Contacts">Save Changes</button></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
+
+
+
+
+
 
     <div class="dash-toast" id="dashToast">
       <div class="dt-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
@@ -9077,6 +9573,161 @@
   document.getElementById('supportFields').classList.toggle('locked', document.getElementById('sameAsSupport').checked);
 
   /* ---- Launch onboarding after signup OTP confirm ---- */
+  /* ---- PM Settings view ---- */
+  function showPMView(view) {
+    document.getElementById('pmHomeView').style.display = view === 'home' ? '' : 'none';
+    document.getElementById('pmSettingsView').style.display = view === 'settings' ? '' : 'none';
+    document.querySelector('#pmDashboard .dash-scroll-area').scrollTop = 0;
+  }
+  document.querySelector('#pmDashboard .dash-account-avatar').style.cursor = 'pointer';
+  document.querySelector('#pmDashboard .dash-account-info').style.cursor = 'pointer';
+  document.querySelector('#pmDashboard .dash-account-avatar').addEventListener('click', function () {
+    document.querySelectorAll('#pmDashboard .dash-nav-item').forEach(function (i) { i.classList.remove('active'); });
+    showPMView('settings');
+  });
+  document.querySelector('#pmDashboard .dash-account-info').addEventListener('click', function () {
+    document.querySelectorAll('#pmDashboard .dash-nav-item').forEach(function (i) { i.classList.remove('active'); });
+    showPMView('settings');
+  });
+
+  function switchPMSettingsTab(key) {
+    document.querySelectorAll('#pmSettingsTabs .pm-settings-tab-item').forEach(function (t) { t.classList.toggle('active', t.getAttribute('data-settingstab') === key); });
+    ['profile', 'portfolio', 'company', 'locations', 'billing', 'billingpayments', 'contacts'].forEach(function (k) {
+      var panel = document.getElementById('pmSettingsPanel' + k.charAt(0).toUpperCase() + k.slice(1));
+      panel.style.display = k === key ? '' : 'none';
+      if (k === key) {
+        panel.classList.remove('pm-settings-panel-active');
+        void panel.offsetWidth;
+        panel.classList.add('pm-settings-panel-active');
+      }
+    });
+  }
+  document.querySelectorAll('#pmSettingsTabs .pm-settings-tab-item').forEach(function (tab) {
+    tab.addEventListener('click', function () { switchPMSettingsTab(tab.getAttribute('data-settingstab')); });
+  });
+
+  document.querySelectorAll('[data-settings-save]').forEach(function (btn) {
+    btn.addEventListener('click', function () { showToast(btn.getAttribute('data-settings-save') + ' updated.'); });
+  });
+  document.getElementById('pmProfileAvatarEditBtn').addEventListener('click', function () {
+    document.getElementById('pmProfileAvatarInput').click();
+  });
+  document.getElementById('pmProfileAvatarInput').addEventListener('change', function () {
+    if (this.files && this.files[0]) {
+      document.getElementById('pmProfileAvatarImg').src = URL.createObjectURL(this.files[0]);
+      showToast('Profile photo updated.');
+    }
+  });
+  document.getElementById('stgLogoReplaceBtn').addEventListener('click', function () {
+    document.getElementById('stgLogoInput').click();
+  });
+  document.getElementById('stgLogoInput').addEventListener('change', function () {
+    if (this.files && this.files[0]) {
+      var thumb = document.getElementById('stgLogoThumb');
+      thumb.innerHTML = '<img src="' + URL.createObjectURL(this.files[0]) + '" style="width:100%;height:100%;object-fit:cover;">';
+      document.getElementById('stgLogoName').textContent = this.files[0].name;
+      showToast('Company logo updated.');
+    }
+  });
+  document.getElementById('stgLogoRemoveBtn').addEventListener('click', function () {
+    document.getElementById('stgLogoThumb').innerHTML = 'Comp';
+    document.getElementById('stgLogoName').textContent = 'No logo uploaded';
+    document.getElementById('stgLogoInput').value = '';
+    showToast('Company logo removed.');
+  });
+  document.getElementById('stgOpenStripePortalBtn').addEventListener('click', function () {
+    showToast('This would open the Stripe customer portal in a new tab.');
+  });
+
+  initMultiSelectTiles(document.getElementById('stgSectorTiles'));
+  initSingleSelectTiles(document.getElementById('stgCountTiles'));
+  initSingleSelectTiles(document.getElementById('stgLocationTypeTiles'));
+  initSingleSelectTiles(document.getElementById('stgBillingCycleCards'));
+  initMultiSelectTiles(document.getElementById('stgLondonZones'));
+  initMultiSelectTiles(document.getElementById('stgOtherRegions'));
+
+  var stgSameAsRegistered = document.getElementById('stgSameAsRegistered');
+  stgSameAsRegistered.addEventListener('change', function () {
+    showToast(stgSameAsRegistered.checked ? 'Trading address synced with registered address.' : 'You can now enter a different trading address.');
+  });
+
+  document.getElementById('stgVatToggle').addEventListener('click', function () {
+    var isOn = this.classList.toggle('on');
+    this.setAttribute('aria-checked', isOn ? 'true' : 'false');
+    setCollapsibleOpen(document.getElementById('stgVatField'), isOn);
+  });
+
+  document.querySelectorAll('#stgDayPills .day-pill').forEach(function (pill) {
+    pill.addEventListener('click', function () { pill.classList.toggle('selected'); });
+  });
+
+  var stgAllLondonChip = document.querySelector('#stgLondonZones .simple-chip-action');
+  if (stgAllLondonChip) {
+    stgAllLondonChip.addEventListener('click', function () {
+      var zoneChips = document.querySelectorAll('#stgLondonZones .simple-chip:not(.simple-chip-action)');
+      var allSelected = Array.prototype.every.call(zoneChips, function (c) { return c.classList.contains('selected'); });
+      zoneChips.forEach(function (c) { c.classList.toggle('selected', !allSelected); });
+    });
+  }
+  document.getElementById('stgCustomRegionInput').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && this.value.trim()) {
+      e.preventDefault();
+      var chip = document.createElement('div');
+      chip.className = 'simple-chip selected just-added';
+      chip.textContent = this.value.trim();
+      chip.addEventListener('click', function () { chip.classList.toggle('selected'); });
+      document.getElementById('stgOtherRegions').appendChild(chip);
+      this.value = '';
+    }
+  });
+
+  /* PMS/CRM multiselect (Settings) */
+  (function () {
+    var wrap = document.getElementById('stgPmsMultiselect');
+    var input = document.getElementById('stgPmsSearchInput');
+    var dropdown = document.getElementById('stgPmsDropdown');
+    var chipsWrap = document.getElementById('stgPmsSelectedChips');
+    var rows = Array.prototype.slice.call(dropdown.querySelectorAll('.ms-dropdown-row'));
+    function isSelected(value) { return !!chipsWrap.querySelector('.sel-chip[data-value="' + CSS.escape(value) + '"]'); }
+    function syncRowChecks() { rows.forEach(function (row) { row.classList.toggle('checked', isSelected(row.getAttribute('data-value'))); }); }
+    function addChip(value) {
+      if (isSelected(value)) return;
+      var chip = document.createElement('span');
+      chip.className = 'sel-chip just-added';
+      chip.setAttribute('data-value', value);
+      chip.innerHTML = value + ' <button type="button" aria-label="Remove ' + value + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>';
+      chip.querySelector('button').addEventListener('click', function (e) { e.stopPropagation(); removeChip(chip); });
+      chipsWrap.appendChild(chip);
+      syncRowChecks();
+    }
+    function removeChip(chip) { chip.classList.add('removing'); setTimeout(function () { chip.remove(); syncRowChecks(); }, 200); }
+    chipsWrap.querySelectorAll('.sel-chip button').forEach(function (btn) { btn.addEventListener('click', function () { removeChip(btn.closest('.sel-chip')); }); });
+    function filterRows() {
+      var q = input.value.trim().toLowerCase();
+      rows.forEach(function (row) { row.style.display = row.getAttribute('data-value').toLowerCase().indexOf(q) !== -1 ? '' : 'none'; });
+    }
+    input.addEventListener('focus', function () { filterRows(); dropdown.classList.add('open'); });
+    input.addEventListener('input', function () { filterRows(); dropdown.classList.add('open'); });
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && input.value.trim()) { e.preventDefault(); addChip(input.value.trim()); input.value = ''; dropdown.classList.remove('open'); }
+    });
+    rows.forEach(function (row) {
+      row.addEventListener('click', function () {
+        var value = row.getAttribute('data-value');
+        if (isSelected(value)) { var chip = chipsWrap.querySelector('.sel-chip[data-value="' + CSS.escape(value) + '"]'); if (chip) removeChip(chip); }
+        else { addChip(value); }
+        input.value = ''; input.focus(); filterRows();
+      });
+    });
+    document.addEventListener('click', function (e) { if (!wrap.contains(e.target)) dropdown.classList.remove('open'); });
+    syncRowChecks();
+  })();
+
+  initSameAsContact('stgSameAsSupport', 'stgSupportFields');
+  initSameAsContact('stgSameAsFinance', 'stgFinanceFields');
+  initSameAsContact('stgSameAsManager', 'stgManagerFields');
+  document.getElementById('stgSupportFields').classList.toggle('locked', document.getElementById('stgSameAsSupport').checked);
+
   function startPMOnboarding(signupData) {
     signupData = signupData || {};
 
@@ -9794,7 +10445,9 @@
     item.addEventListener('click', function () {
       document.querySelectorAll('#pmDashboard .dash-nav-item').forEach(function (i) { i.classList.remove('active'); });
       item.classList.add('active');
-      if (item.getAttribute('data-nav') !== 'home') {
+      if (item.getAttribute('data-nav') === 'home') {
+        showPMView('home');
+      } else {
         showToast(item.querySelector('.nav-label').textContent + ' isn\u2019t wired up in this prototype yet.');
       }
     });
