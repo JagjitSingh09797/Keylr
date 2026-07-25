@@ -1628,6 +1628,7 @@
   .upload-method-option .umo-title { font-size: 14.5px; font-weight: 700; color: var(--text-heading); }
   .upload-method-option .umo-sub { font-size: 12.5px; color: var(--text-body-muted); margin-top: 2px; }
   .upload-method-option .umo-chevron { margin-left: auto; color: var(--text-body-muted); flex-shrink: 0; }
+  .upload-method-overlay.single-option #uploadFromPhoneOption { display: none; }
 
   .qr-code-box {
     width: 200px; height: 200px; margin: 0 auto 18px; border-radius: 12px;
@@ -1846,7 +1847,7 @@
   .dash-sidebar {
     width: 258px;
     flex-shrink: 0;
-    background: var(--sidebar-bg, #f8f8f8);
+    background: var(--sidebar-bg, #ffffff);
     border-right: 1px solid var(--border-subtle);
     display: flex;
     flex-direction: column;
@@ -1947,7 +1948,7 @@
   .dash-topbar .admin-header-actions { margin-left: auto; }
 
   .dash-scroll-area { flex: 1; overflow-y: auto; }
-  .dash-content { max-width: 1240px; margin: 0 auto; padding: 24px 32px 60px; }
+  .dash-content { max-width: 1240px; margin: 0 auto; padding: 24px 32px 60px; background: #F9FAFB; }
   .dash-content-sub { font-size: 13.5px; color: var(--text-body-muted); margin-top: 4px; }
 
   .dash-header {
@@ -2832,6 +2833,99 @@
   .sup-comp-doc-row .scdr-badge { display: inline-flex; align-items: center; font-size: 10px; font-weight: 700; color: #1a7a3e; background: #eafaf0; letter-spacing: 0.03em; padding: 3px 9px; border-radius: 999px; flex-shrink: 0; }
   .sup-comp-doc-row .scdr-view-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 8px; background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); color: #fff; font-size: 12.5px; font-weight: 700; cursor: pointer; flex-shrink: 0; }
   .sup-comp-doc-row .scdr-upload-btn { width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: center; color: var(--text-body-muted); cursor: pointer; flex-shrink: 0; }
+
+  /* ---- Supplier Settings: Questionnaire wizard (all classes prefixed supq- to stay scoped) ---- */
+  .supq-head-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+  .supq-step-meta { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; color: var(--text-body-muted); text-transform: uppercase; margin-bottom: 6px; }
+  .supq-step-title { font-size: 19px; font-weight: 800; color: var(--text-heading); margin-bottom: 4px; }
+  .supq-step-sub { font-size: 13px; color: var(--text-body-muted); max-width: 640px; line-height: 1.5; }
+  .supq-nav-btns { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .supq-dots { display: flex; align-items: center; gap: 6px; margin: 16px 0 20px; }
+  .supq-divider { border-bottom: 1px solid var(--border-subtle); margin-bottom: 22px; }
+
+  .supq-chiprow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 14px; }
+  .supq-chip { display: inline-flex; align-items: center; gap: 4px; padding: 5px 5px 5px 11px; border-radius: 999px; background: var(--tile-selected-bg, #e8f0f8); border: 1px solid var(--accent-blue); color: var(--accent-blue); font-size: 11.5px; font-weight: 600; }
+  .supq-chip .supq-chip-x { width: 15px; height: 15px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; line-height: 1; color: var(--accent-blue); flex-shrink: 0; }
+  .supq-chip .supq-chip-x:hover { background: rgba(40,72,144,0.14); }
+  .supq-add-cat-chip { padding: 6px 12px; border-radius: 999px; border: 1px dashed var(--accent-blue); color: var(--accent-blue); font-size: 11.5px; font-weight: 700; background: #fff; cursor: pointer; }
+  .supq-add-cat-chip:hover { background: var(--icon-tint-bg); }
+
+  .supq-search-wrap { position: relative; margin-bottom: 14px; }
+  .supq-search-wrap svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; }
+  .supq-suggest-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+  #supqSuggestChips.supq-suggest-row .simple-chip { padding: 6px 12px; font-size: 11.5px; }
+
+  .supq-trades-layout { display: grid; grid-template-columns: 300px 1fr; gap: 20px; align-items: start; }
+  @media (max-width: 900px) { .supq-trades-layout { grid-template-columns: 1fr; } }
+  .supq-cat-list { display: flex; flex-direction: column; gap: 8px; }
+  .supq-cat-item { border-radius: 12px; padding: 12px 14px; cursor: pointer; border: 1px solid var(--border-subtle); background: #fff; transition: background-color 150ms ease-out, border-color 150ms ease-out; }
+  .supq-cat-item:hover:not(.active) { border-color: #90a8c8; }
+  .supq-cat-item.active { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); border-color: var(--btn-grad-end); }
+  .supq-cat-item .supq-cat-name { font-size: 13.5px; font-weight: 700; color: var(--text-heading); }
+  .supq-cat-item.active .supq-cat-name { color: #fff; }
+  .supq-cat-item .supq-cat-counts { font-size: 11.5px; color: var(--text-body-muted); margin-top: 3px; }
+  .supq-cat-item.active .supq-cat-counts { color: #b7c2da; }
+  .supq-cat-item .supq-quote-link { text-decoration: underline; cursor: pointer; }
+  .supq-cat-item.active .supq-quote-link { color: #cfe0ff; }
+
+  .supq-role-panel { border: 1px solid var(--border-subtle); border-radius: 14px; background: #fff; padding: 22px; min-height: 220px; max-height: 640px; overflow-y: auto; }
+  .supq-role-head { display: flex; align-items: center; gap: 12px; }
+  .supq-role-head-icon { width: 38px; height: 38px; border-radius: 10px; background: var(--icon-tint-bg); color: var(--accent-blue); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .supq-role-head-title { font-size: 15px; font-weight: 800; color: var(--text-heading); }
+  .supq-role-head-sub1 { font-size: 12px; color: var(--text-body-muted); margin-top: 1px; }
+  .supq-role-head-sub2 { font-size: 12px; color: var(--text-body-muted); line-height: 1.5; margin-top: 10px; }
+
+  .supq-role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+  @media (max-width: 640px) { .supq-role-grid { grid-template-columns: 1fr; } }
+  .supq-role-tile { display: flex; align-items: flex-start; gap: 10px; border: 1.5px solid var(--border-subtle); border-radius: 10px; padding: 13px 14px; cursor: pointer; transition: border-color 150ms ease-out, background-color 150ms ease-out; }
+  .supq-role-tile:hover:not(.selected) { border-color: #90a8c8; }
+  .supq-role-tile.selected { background: var(--tile-selected-bg, #e8f0f8); border-color: var(--accent-blue); }
+  .supq-role-tile.span-2 { grid-column: 1 / -1; }
+  .supq-role-box { width: 20px; height: 20px; border-radius: 5px; border: 1.5px solid #c3cddc; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 1px; background: #fff; transition: background-color 150ms ease-out, border-color 150ms ease-out; }
+  .supq-role-tile.selected .supq-role-box { background: var(--accent-blue); border-color: var(--accent-blue); }
+  .supq-role-box svg { opacity: 0; transform: scale(0.5); transition: opacity 120ms ease-out, transform 120ms ease-out; color: #fff; }
+  .supq-role-tile.selected .supq-role-box svg { opacity: 1; transform: scale(1); }
+  .supq-role-title { font-size: 13px; font-weight: 700; color: var(--text-heading); }
+  .supq-role-req { font-size: 11.5px; color: var(--text-body-muted); margin-top: 2px; }
+
+  .supq-proof-row { grid-column: 1 / -1; display: flex; align-items: center; gap: 12px; border: 1px solid var(--border-subtle); border-radius: 10px; padding: 12px 14px; margin-top: -2px; background: var(--surface-soft); }
+  .supq-proof-badge { font-size: 10.5px; font-weight: 700; letter-spacing: 0.02em; color: var(--text-body-muted); background: #eef1f5; padding: 4px 10px; border-radius: 999px; flex-shrink: 0; text-transform: uppercase; }
+  .supq-proof-row.done .supq-proof-badge { color: #1a7a3e; background: #eafaf0; }
+  .supq-proof-label { font-size: 12.5px; font-weight: 600; color: var(--text-heading); flex: 1; min-width: 0; }
+  .supq-upload-btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 8px; background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); color: #fff; font-size: 12.5px; font-weight: 700; cursor: pointer; flex-shrink: 0; border: none; }
+  .supq-upload-done { display: inline-flex; align-items: center; gap: 6px; color: #1a7a3e; font-size: 12.5px; font-weight: 700; flex-shrink: 0; }
+
+  .supq-check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 600px; }
+  @media (max-width: 640px) { .supq-check-grid { grid-template-columns: 1fr; } }
+  #supqExperienceTiles { max-width: 520px; }
+  #supqJobsTiles { max-width: 420px; }
+  .supq-check-tile { display: flex; align-items: center; gap: 10px; border: 1.5px solid var(--border-subtle); border-radius: 10px; padding: 14px 16px; cursor: pointer; transition: border-color 150ms ease-out, background-color 150ms ease-out; }
+  .supq-check-tile:hover:not(.selected) { border-color: #90a8c8; }
+  .supq-check-tile.selected { background: var(--tile-selected-bg, #e8f0f8); border-color: var(--accent-blue); }
+  .supq-check-tile .supq-role-box { margin-top: 0; }
+  .supq-check-tile.selected .supq-role-box { background: var(--accent-blue); border-color: var(--accent-blue); }
+  .supq-check-tile.selected .supq-role-box svg { opacity: 1; transform: scale(1); }
+  .supq-check-label { font-size: 13.5px; font-weight: 600; color: var(--text-heading); }
+
+  .supq-tips-card { margin-top: 18px; border: 1px solid var(--border-subtle); background: var(--surface-soft); border-radius: 12px; padding: 16px 18px; max-width: 640px; }
+  .supq-tips-title { font-size: 13px; font-weight: 800; color: var(--text-heading); margin-bottom: 8px; }
+  .supq-tips-card ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
+  .supq-tips-card li { font-size: 12.5px; color: var(--text-body-muted); line-height: 1.5; }
+
+  /* Rich (two-line) success toast, kept independent from the shared single-line #toast to avoid touching that already-wired component */
+  .toast-rich {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: #10a048; color: #fff; padding: 15px 16px; border-radius: 12px;
+    display: flex; align-items: flex-start; gap: 12px; font-size: 14px;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.25); opacity: 0; pointer-events: none;
+    transition: opacity 250ms ease-out, transform 250ms ease-out; z-index: 200; max-width: 380px;
+  }
+  .toast-rich.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+  .toast-rich .tr-icon { flex-shrink: 0; margin-top: 1px; }
+  .toast-rich .tr-title { font-weight: 700; }
+  .toast-rich .tr-detail { font-size: 12.5px; font-weight: 400; color: rgba(255,255,255,0.9); margin-top: 2px; }
+  .toast-rich .toast-close { color: rgba(255,255,255,0.85); flex-shrink: 0; margin-left: 4px; cursor: pointer; }
+  .toast-rich .toast-close:hover { color: #fff; }
   .sup-comp-upload-placeholder { display: flex; align-items: center; gap: 8px; border: 1px solid var(--border-subtle); border-radius: 8px; padding: 10px 12px; font-size: 12.5px; color: var(--accent-blue); font-weight: 600; cursor: pointer; background: var(--surface-soft); }
   .sup-cert-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
   .sup-cert-tile { border: 1px solid var(--border-subtle); border-radius: 10px; padding: 12px 14px; cursor: pointer; }
@@ -3698,6 +3792,16 @@
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.2l2.3 2.3 4.7-4.9"/></svg>
     <span id="toastMessage">Account created — welcome to Keylr!</span>
     <button type="button" class="toast-close" id="toastCloseBtn" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+
+  <!-- ============ RICH (TWO-LINE) TOAST ============ -->
+  <div class="toast-rich" id="toastRich">
+    <svg class="tr-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.2l2.3 2.3 4.7-4.9"/></svg>
+    <div>
+      <div class="tr-title" id="toastRichTitle">Saved</div>
+      <div class="tr-detail" id="toastRichDetail"></div>
+    </div>
+    <button type="button" class="toast-close" id="toastRichCloseBtn" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
   </div>
 
   <!-- ============ SIGNUP MODAL ============ -->
@@ -6703,9 +6807,96 @@
                 </div>
               </div>
 
-              <!-- Questionnaire tab (more to come) -->
+              <!-- Questionnaire tab -->
               <div id="supSettingsPanelQuestionnaire" style="display:none;">
-                <div style="margin-top:20px;text-align:center;padding:60px 20px;color:var(--text-body-muted);font-size:13.5px;">Questionnaire designs coming soon.</div>
+                <div style="margin-top:20px;">
+                  <div class="supq-dots" id="supqDots"></div>
+
+                  <div class="supq-head-row">
+                    <div>
+                      <div class="supq-step-meta" id="supqStepMeta">1 OF 5</div>
+                      <div class="supq-step-title" id="supqStepTitle">Which trades do you do?</div>
+                      <div class="supq-step-sub" id="supqStepSub">Pick the categories you work in, then tick the specific roles within each. We route matching jobs to you and verify only the certificates your roles need.</div>
+                    </div>
+                    <div class="supq-nav-btns">
+                      <button type="button" class="ob-back-btn" id="supqBackBtn" hidden>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                        Back
+                      </button>
+                      <button type="button" class="btn btn-primary" id="supqNextBtn">Next <span class="arrow">→</span></button>
+                    </div>
+                  </div>
+
+                  <div class="supq-divider"></div>
+
+                  <!-- Step 1: Trades -->
+                  <div class="supq-step" id="supqStep1">
+                    <div class="supq-chiprow" id="supqCategoryChips"></div>
+                    <div class="supq-search-wrap">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+                      <input type="text" class="field-input" style="padding-left:40px;" id="supqSearchInput" placeholder="Search by category or role — e.g. Plumbing, EPC..." autocomplete="off">
+                    </div>
+                    <div class="supq-suggest-row" id="supqSuggestChips"></div>
+                    <div class="supq-trades-layout">
+                      <div class="supq-cat-list" id="supqCatList"></div>
+                      <div class="supq-role-panel" id="supqRolePanel"></div>
+                    </div>
+                  </div>
+
+                  <!-- Step 2: Pricing models -->
+                  <div class="supq-step" id="supqStep2" style="display:none;">
+                    <div class="supq-check-grid" id="supqPricingTiles">
+                      <div class="supq-check-tile selected" data-value="fixed"><div class="supq-role-box"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><div class="supq-check-label">Fixed Price</div></div>
+                      <div class="supq-check-tile selected" data-value="hourly"><div class="supq-role-box"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><div class="supq-check-label">Hourly / Day Rate</div></div>
+                      <div class="supq-check-tile" data-value="tiered"><div class="supq-role-box"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><div class="supq-check-label">Tiered / Banded</div></div>
+                      <div class="supq-check-tile" data-value="estimated"><div class="supq-role-box"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><div class="supq-check-label">Estimated</div></div>
+                      <div class="supq-check-tile" data-value="quotebased"><div class="supq-role-box"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><div class="supq-check-label">Quote Based</div></div>
+                      <div class="supq-check-tile" data-value="subscription"><div class="supq-role-box"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><div class="supq-check-label">Subscription / Bundle</div></div>
+                    </div>
+                  </div>
+
+                  <!-- Step 3: Experience -->
+                  <div class="supq-step" id="supqStep3" style="display:none;">
+                    <div class="radio-row-list" id="supqExperienceTiles">
+                      <div class="radio-row" data-value="lt1" role="radio" tabindex="0" aria-checked="false"><div class="rr-circle"></div><div><div class="rr-title">Less than 1 year</div><div class="rr-sub">Just starting out or recently qualified</div></div></div>
+                      <div class="radio-row selected" data-value="1-3" role="radio" tabindex="0" aria-checked="true"><div class="rr-circle"></div><div><div class="rr-title">1–3 years</div><div class="rr-sub">Building a client base</div></div></div>
+                      <div class="radio-row" data-value="3-5" role="radio" tabindex="0" aria-checked="false"><div class="rr-circle"></div><div><div class="rr-title">3–5 years</div><div class="rr-sub">Established professional</div></div></div>
+                      <div class="radio-row" data-value="5-10" role="radio" tabindex="0" aria-checked="false"><div class="rr-circle"></div><div><div class="rr-title">5–10 years</div><div class="rr-sub">Experienced professional</div></div></div>
+                      <div class="radio-row" data-value="10-20" role="radio" tabindex="0" aria-checked="false"><div class="rr-circle"></div><div><div class="rr-title">10–20 years</div><div class="rr-sub">Seasoned expert in your field</div></div></div>
+                      <div class="radio-row" data-value="20plus" role="radio" tabindex="0" aria-checked="false"><div class="rr-circle"></div><div><div class="rr-title">20+ years</div><div class="rr-sub">Decades of trusted experience</div></div></div>
+                    </div>
+                    <div style="margin-top:22px;max-width:520px;">
+                      <div class="ob-section-title" style="font-size:13.5px;">Tell clients more about your experience <span class="meta-badge optional">(optional)</span></div>
+                      <textarea class="ob-textarea" id="supqExperienceNotes" placeholder="Describe job details, responsibilities, or any additional notes."></textarea>
+                    </div>
+                  </div>
+
+                  <!-- Step 4: Jobs completed -->
+                  <div class="supq-step" id="supqStep4" style="display:none;">
+                    <div class="radio-row-list" id="supqJobsTiles">
+                      <div class="radio-row" data-value="u50" role="radio" tabindex="0" aria-checked="false"><div class="rr-circle"></div><div><div class="rr-title">Under 50 jobs</div></div></div>
+                      <div class="radio-row selected" data-value="50-200" role="radio" tabindex="0" aria-checked="true"><div class="rr-circle"></div><div><div class="rr-title">50–200 jobs</div></div></div>
+                      <div class="radio-row" data-value="200-500" role="radio" tabindex="0" aria-checked="false"><div class="rr-circle"></div><div><div class="rr-title">200–500 jobs</div></div></div>
+                      <div class="radio-row" data-value="500-1000" role="radio" tabindex="0" aria-checked="false"><div class="rr-circle"></div><div><div class="rr-title">500–1,000 jobs</div></div></div>
+                      <div class="radio-row" data-value="1000plus" role="radio" tabindex="0" aria-checked="false"><div class="rr-circle"></div><div><div class="rr-title">1,000+ jobs</div></div></div>
+                    </div>
+                  </div>
+
+                  <!-- Step 5: Bio -->
+                  <div class="supq-step" id="supqStep5" style="display:none;">
+                    <div style="max-width:640px;">
+                      <textarea class="ob-textarea" id="supqBioTextarea" style="min-height:110px;">Reliable, fully-insured appliances team based in Manchester. Sole trader with 15 years experience.</textarea>
+                      <div class="supq-tips-card">
+                        <div class="supq-tips-title">Tips for a great bio:</div>
+                        <ul>
+                          <li>Mention your primary trade and years of experience</li>
+                          <li>Highlight what makes you different (response time, speciality, reliability)</li>
+                          <li>Keep it professional but personable — 2-4 sentences is ideal</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -9396,9 +9587,10 @@
     zone.dispatchEvent(new CustomEvent('keylr-uploaded', { bubbles: true }));
   }
 
-  function openUploadMethodPopup(zone) {
+  function openUploadMethodPopup(zone, singleOption) {
     activeUploadZone = zone;
     document.getElementById('uploadMethodTitle').textContent = zone.getAttribute('data-title') || 'Upload document';
+    uploadMethodOverlay.classList.toggle('single-option', !!singleOption);
     uploadMethodOverlay.classList.add('open');
   }
   function closeUploadMethodPopup() { uploadMethodOverlay.classList.remove('open'); }
@@ -9822,7 +10014,7 @@
   /* ---- Generic tile group helpers ---- */
   function initMultiSelectTiles(container) {
     if (!container) return;
-    container.querySelectorAll('.choice-tile, .count-tile, .simple-chip:not(.simple-chip-action)').forEach(function (tile) {
+    container.querySelectorAll('.choice-tile, .count-tile, .simple-chip:not(.simple-chip-action), .supq-check-tile').forEach(function (tile) {
       tile.addEventListener('click', function () {
         var isSelected = tile.classList.toggle('selected');
         if (tile.hasAttribute('aria-checked')) tile.setAttribute('aria-checked', isSelected ? 'true' : 'false');
@@ -11212,6 +11404,367 @@
   document.querySelectorAll('[data-supsettings-save]').forEach(function (btn) {
     btn.addEventListener('click', function () { showToast(btn.getAttribute('data-supsettings-save') + ' updated.'); });
   });
+
+  /* ---- Supplier Settings: Questionnaire wizard ---- */
+  var SUPQ_DATA = {
+    categories: [
+      { id: 'cleaning', name: 'Cleaning', pricedTotal: 6, roles: [
+        { name: 'Cleaner', requires: null, checked: true, uploaded: false }
+      ] },
+      { id: 'compliance-legal', name: 'Compliance & Legal', pricedTotal: 15, roles: [
+        { name: 'DEA Assessor', requires: null, checked: true, uploaded: false },
+        { name: 'Risk Assessor', requires: null, checked: true, uploaded: false },
+        { name: 'Gas Safe Engineer', requires: 'Gas Safe registration', checked: true, uploaded: false },
+        { name: 'Retrofit Assessor', requires: 'TrustMark / Retrofit Academy', checked: true, uploaded: false },
+        { name: 'Retrofit Coordinator', requires: 'TrustMark / Retrofit Academy', checked: true, uploaded: false },
+        { name: 'Thermal Imaging Surveyor', requires: 'ITC Level 1 / BINDT', checked: true, uploaded: false },
+        { name: 'Asbestos Surveyor', requires: 'UKAS / P402', checked: true, uploaded: false },
+        { name: 'Asbestos Removal Contractor', requires: 'HSE Asbestos Licence', checked: true, uploaded: false },
+        { name: 'HMO Inspector', requires: 'Local Authority HMO Licence', checked: true, uploaded: false },
+        { name: 'RICS Surveyor', requires: 'RICS Chartered Surveyor', checked: true, uploaded: false },
+        { name: 'Structural Engineer', requires: 'MRICS / IStructE', checked: true, uploaded: false },
+        { name: 'Party Wall Surveyor', requires: 'RICS / FPWS Member', checked: true, uploaded: false },
+        { name: 'Insulation Contractor', requires: 'TrustMark / CIGA Registered', checked: true, uploaded: false },
+        { name: 'Builder', requires: null, checked: true, uploaded: false },
+        { name: 'Building Control Inspector', requires: 'Registered Building Inspector', checked: true, uploaded: false },
+        { name: 'Planning Consultant', requires: null, checked: true, uploaded: false }
+      ] },
+      { id: 'damp-mould-structural', name: 'Damp, Mould & Structural', pricedTotal: 12, roles: [
+        { name: 'Damp Specialist', requires: 'PCA Membership', checked: true, uploaded: false },
+        { name: 'Ventilation Engineer', requires: null, checked: true, uploaded: false },
+        { name: 'Electrician', requires: null, checked: false, uploaded: false },
+        { name: 'Roofer', requires: null, checked: true, uploaded: false },
+        { name: 'Handyman', requires: null, checked: true, uploaded: false },
+        { name: 'Builder', requires: null, checked: true, uploaded: false },
+        { name: 'Plasterer', requires: null, checked: true, uploaded: false },
+        { name: 'Scaffolder', requires: 'CISRS Card', checked: true, uploaded: false },
+        { name: 'Kitchen Fitter', requires: null, checked: true, uploaded: false }
+      ] },
+      { id: 'electrical', name: 'Electrical', pricedTotal: 14, roles: [
+        { name: 'Electrician', requires: null, checked: true, uploaded: false },
+        { name: 'Handyman', requires: null, checked: true, uploaded: false },
+        { name: 'Smart Home Installer', requires: 'NICEIC / NAPIT', checked: true, uploaded: false },
+        { name: 'EV Charger Installer', requires: 'OZEV Approved Installer', checked: true, uploaded: false },
+        { name: 'Solar Panel Installer', requires: 'MCS Certified Installer', checked: true, uploaded: false },
+        { name: 'Battery Storage Installer', requires: 'MCS Certified Installer', checked: true, uploaded: false },
+        { name: 'Energy Supplier (Smart Meters)', requires: 'DNO / Energy Supplier Licence', checked: true, uploaded: false }
+      ] },
+      { id: 'electrical-compliance-legal', name: 'Electrical + compliance & legal', pricedTotal: 4, roles: [
+        { name: 'Electrician', requires: null, checked: true, uploaded: false },
+        { name: 'PAT Tester', requires: null, checked: true, uploaded: false },
+        { name: 'Handyman', requires: null, checked: true, uploaded: false },
+        { name: 'Inventory Clerk', requires: null, checked: true, uploaded: false }
+      ] },
+      { id: 'electrical-general', name: 'Electrical General', pricedTotal: 1, roles: [] },
+      { id: 'fire-safety', name: 'Fire Safety', pricedTotal: 8, roles: [
+        { name: 'Fire Safety Assessor', requires: 'IFE / IFSM', checked: false, uploaded: false },
+        { name: 'Fire Alarm Engineer', requires: 'FIA / BAFE SP203', checked: false, uploaded: false },
+        { name: 'Fire Door Installer', requires: 'FIRAS / BM TRADA', checked: true, uploaded: false },
+        { name: 'Fire Safety Contractor', requires: 'BAFE / FIA', checked: false, uploaded: false },
+        { name: 'Fire Stopping Contractor', requires: 'IFC SDI 05', checked: false, uploaded: false },
+        { name: 'Dry Riser Engineer', requires: 'BAFE / BS 9990', checked: false, uploaded: false },
+        { name: 'Sprinkler Engineer', requires: 'LPCB / FIRAS / FIA Approved', checked: false, uploaded: false }
+      ] },
+      { id: 'gas-heating', name: 'Gas & Heating', pricedTotal: 12, roles: [
+        { name: 'Gas Safe Engineer', requires: 'Gas Safe registration', checked: true, uploaded: false },
+        { name: 'Plumber', requires: 'Gas Safe Register', checked: true, uploaded: false },
+        { name: 'Heat Pump Installer', requires: 'MCS Certified Installer', checked: true, uploaded: false },
+        { name: 'Air Conditioning Engineer', requires: 'F-Gas Certificate (C&G 2079)', checked: true, uploaded: false }
+      ] },
+      { id: 'gas-heating-compliance-legal', name: 'Gas & Heating + compliance & legal', pricedTotal: 2, roles: [
+        { name: 'Gas Safe Engineer', requires: 'Gas Safe registration', checked: true, uploaded: false }
+      ] },
+      { id: 'plumbing', name: 'Plumbing', pricedTotal: 12, roles: [
+        { name: 'Plumber', requires: 'Gas Safe Register', checked: true, uploaded: false },
+        { name: 'Drainage Engineer', requires: 'Experience', checked: true, uploaded: false },
+        { name: 'Handyman', requires: null, checked: true, uploaded: false },
+        { name: 'Bathroom Fitter', requires: 'Experience', checked: true, uploaded: false }
+      ] },
+      { id: 'smart-home-tech', name: 'Smart Home & Tech', pricedTotal: 2, roles: [
+        { name: 'Smart Home Installer', requires: 'NICEIC / NAPIT', checked: true, uploaded: false },
+        { name: 'Electrician', requires: null, checked: true, uploaded: false },
+        { name: 'IT / Network Engineer', requires: null, checked: true, uploaded: false }
+      ] }
+    ],
+    suggestions: ['Appliances', 'Fire Safety General', 'Gas & Heating General', 'General Maintenance', 'Grounds & Outdoor', 'HVAC & AC', 'Lifts & Accessibility', 'Pest Control', 'Plumbing General', 'Property Marketing & Agency', 'Security & Access', 'Void & Turnover']
+  };
+  var supqSelectedCatId = 'cleaning';
+  var supqSearchQuery = '';
+
+  function supqEscapeHtml(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function supqMatches(text, q) { return text.toLowerCase().indexOf(q) !== -1; }
+  function supqCheckSvg() {
+    return '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+  }
+  function supqCatCounts(cat) {
+    return { checked: cat.roles.filter(function (r) { return r.checked; }).length, total: cat.roles.length };
+  }
+
+  function renderSupqChips() {
+    var wrap = document.getElementById('supqCategoryChips');
+    if (!wrap) return;
+    var html = '';
+    SUPQ_DATA.categories.forEach(function (cat) {
+      html += '<div class="supq-chip">' + supqEscapeHtml(cat.name) + '<span class="supq-chip-x" data-remove-cat="' + cat.id + '">\u00d7</span></div>';
+    });
+    html += '<div class="supq-add-cat-chip" id="supqAddCatBtn">+ Add category</div>';
+    wrap.innerHTML = html;
+  }
+
+  function renderSupqSuggestions() {
+    var wrap = document.getElementById('supqSuggestChips');
+    if (!wrap) return;
+    var q = supqSearchQuery.trim().toLowerCase();
+    var html = '';
+    SUPQ_DATA.suggestions.forEach(function (name) {
+      if (q && !supqMatches(name, q)) return;
+      html += '<div class="simple-chip simple-chip-action" data-add-suggestion="' + supqEscapeHtml(name) + '">+ ' + supqEscapeHtml(name) + '</div>';
+    });
+    wrap.innerHTML = html;
+  }
+
+  function renderSupqCatList() {
+    var wrap = document.getElementById('supqCatList');
+    if (!wrap) return;
+    var q = supqSearchQuery.trim().toLowerCase();
+    var html = '';
+    var visibleIds = [];
+    SUPQ_DATA.categories.forEach(function (cat) {
+      if (q) {
+        var catMatch = supqMatches(cat.name, q);
+        var roleMatch = cat.roles.some(function (r) { return supqMatches(r.name, q); });
+        if (!catMatch && !roleMatch) return;
+      }
+      visibleIds.push(cat.id);
+      var counts = supqCatCounts(cat);
+      var active = cat.id === supqSelectedCatId;
+      html += '<div class="supq-cat-item' + (active ? ' active' : '') + '" data-cat="' + cat.id + '">' +
+        '<div class="supq-cat-name">' + supqEscapeHtml(cat.name) + '</div>' +
+        '<div class="supq-cat-counts">' + counts.checked + '/' + counts.total + ' roles \u00b7 0/' + cat.pricedTotal + ' priced \u00b7 <span class="supq-quote-link" data-quote-cat="' + cat.id + '">Quote</span></div>' +
+        '</div>';
+    });
+    wrap.innerHTML = html;
+    if (visibleIds.length && visibleIds.indexOf(supqSelectedCatId) === -1) {
+      supqSelectedCatId = visibleIds[0];
+    }
+  }
+
+  function renderSupqRolePanel() {
+    var panel = document.getElementById('supqRolePanel');
+    if (!panel) return;
+    var cat = SUPQ_DATA.categories.find(function (c) { return c.id === supqSelectedCatId; });
+    if (!cat) { panel.innerHTML = ''; return; }
+    var html = '<div class="supq-role-head">' +
+      '<div class="supq-role-head-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M17 11l2 2 4-4"/></svg></div>' +
+      '<div><div class="supq-role-head-title">' + supqEscapeHtml(cat.name) + '</div><div class="supq-role-head-sub1">Your roles in this category</div></div>' +
+      '</div>';
+    if (!cat.roles.length) {
+      html += '<div class="supq-role-head-sub2">Pick at least one role you actually do — the matching jobs and fixed-price cards appear below.</div>';
+      panel.innerHTML = html;
+      return;
+    }
+    html += '<div class="supq-role-head-sub2">Pick at least one role you actually do — the matching jobs and fixed-price cards appear below.</div>';
+    html += '<div class="supq-role-grid">';
+    cat.roles.forEach(function (role, idx) {
+      var spanFull = role.checked && role.requires;
+      html += '<div class="supq-role-tile' + (role.checked ? ' selected' : '') + (spanFull ? ' span-2' : '') + '" data-role-idx="' + idx + '">' +
+        '<div class="supq-role-box">' + supqCheckSvg() + '</div>' +
+        '<div><div class="supq-role-title">' + supqEscapeHtml(role.name) + '</div>' +
+        (role.requires ? '<div class="supq-role-req">Requires: ' + supqEscapeHtml(role.requires) + '</div>' : '') +
+        '</div></div>';
+      if (spanFull) {
+        var done = role.uploaded;
+        html += '<div class="supq-proof-row' + (done ? ' done' : '') + '" data-proof-idx="' + idx + '" data-title="Upload ' + supqEscapeHtml(role.requires) + ' certificate">' +
+          '<span class="supq-proof-badge">' + (done ? 'Uploaded' : 'Not Uploaded') + '</span>' +
+          '<span class="supq-proof-label">' + supqEscapeHtml(role.name) + ' \u2014 ' + supqEscapeHtml(role.requires) + '</span>' +
+          (done
+            ? '<span class="supq-upload-done"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>On file</span>'
+            : '<button type="button" class="supq-upload-btn" data-proof-upload-idx="' + idx + '">Upload proof</button><span class="fd-label" style="display:none;"></span><input type="file" class="supq-proof-input" data-proof-input-idx="' + idx + '" style="display:none;" accept="image/*,application/pdf">') +
+          '</div>';
+      }
+    });
+    html += '</div>';
+    panel.innerHTML = html;
+    wireSupqRolePanelEvents(cat);
+  }
+
+  function wireSupqRolePanelEvents(cat) {
+    var panel = document.getElementById('supqRolePanel');
+    panel.querySelectorAll('.supq-role-tile').forEach(function (tile) {
+      tile.addEventListener('click', function () {
+        var idx = parseInt(tile.getAttribute('data-role-idx'), 10);
+        cat.roles[idx].checked = !cat.roles[idx].checked;
+        renderSupqStep1(true);
+      });
+    });
+    panel.querySelectorAll('[data-proof-upload-idx]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        openUploadMethodPopup(btn.closest('.supq-proof-row'), true);
+      });
+    });
+    panel.querySelectorAll('.supq-proof-input').forEach(function (input) {
+      input.addEventListener('click', function (e) { e.stopPropagation(); });
+      input.addEventListener('change', function () {
+        if (!(input.files && input.files[0])) return;
+        markZoneUploaded(input.closest('.supq-proof-row'), input.files[0].name);
+      });
+    });
+    panel.querySelectorAll('.supq-proof-row').forEach(function (row) {
+      row.addEventListener('click', function (e) { e.stopPropagation(); });
+      row.addEventListener('keylr-uploaded', function () {
+        var idx = parseInt(row.getAttribute('data-proof-idx'), 10);
+        cat.roles[idx].uploaded = true;
+        showToast('Certificate uploaded.');
+        renderSupqStep1(true);
+      });
+    });
+  }
+
+  function wireSupqDynamicEvents() {
+    document.querySelectorAll('#supqCatList .supq-cat-item').forEach(function (item) {
+      item.addEventListener('click', function (e) {
+        if (e.target.closest('.supq-quote-link')) return;
+        supqSelectedCatId = item.getAttribute('data-cat');
+        renderSupqStep1();
+      });
+    });
+    document.querySelectorAll('.supq-quote-link').forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        e.stopPropagation();
+        showToast('Pricing setup isn\u2019t available in this prototype yet.');
+      });
+    });
+    document.querySelectorAll('#supqCategoryChips [data-remove-cat]').forEach(function (x) {
+      x.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var id = x.getAttribute('data-remove-cat');
+        var cat = SUPQ_DATA.categories.find(function (c) { return c.id === id; });
+        SUPQ_DATA.categories = SUPQ_DATA.categories.filter(function (c) { return c.id !== id; });
+        if (cat) { SUPQ_DATA.suggestions.push(cat.name); SUPQ_DATA.suggestions.sort(); }
+        if (supqSelectedCatId === id) supqSelectedCatId = SUPQ_DATA.categories.length ? SUPQ_DATA.categories[0].id : null;
+        renderSupqStep1();
+      });
+    });
+    var addBtn = document.getElementById('supqAddCatBtn');
+    if (addBtn) addBtn.addEventListener('click', function () {
+      var search = document.getElementById('supqSearchInput');
+      search.focus();
+      search.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+    document.querySelectorAll('[data-add-suggestion]').forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        var name = chip.getAttribute('data-add-suggestion');
+        SUPQ_DATA.suggestions = SUPQ_DATA.suggestions.filter(function (n) { return n !== name; });
+        var id = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        SUPQ_DATA.categories.push({ id: id, name: name, pricedTotal: 0, roles: [] });
+        supqSelectedCatId = id;
+        renderSupqStep1();
+      });
+    });
+  }
+
+  function renderSupqStep1(preserveScroll) {
+    var panelScroll = 0;
+    var pBefore = document.getElementById('supqRolePanel');
+    if (preserveScroll && pBefore) panelScroll = pBefore.scrollTop;
+    renderSupqChips();
+    renderSupqSuggestions();
+    renderSupqCatList();
+    renderSupqRolePanel();
+    wireSupqDynamicEvents();
+    var pAfter = document.getElementById('supqRolePanel');
+    if (pAfter) pAfter.scrollTop = panelScroll;
+  }
+
+  function initSupqSearchOnce() {
+    var search = document.getElementById('supqSearchInput');
+    if (!search) return;
+    search.addEventListener('input', function () {
+      supqSearchQuery = search.value;
+      renderSupqSuggestions();
+      renderSupqCatList();
+      renderSupqRolePanel();
+      wireSupqDynamicEvents();
+    });
+  }
+
+  var SUPQ_STEP_META = [
+    null,
+    { meta: '1 OF 5', title: 'Which trades do you do?', sub: 'Pick the categories you work in, then tick the specific roles within each. We route matching jobs to you and verify only the certificates your roles need.' },
+    { meta: '2 OF 5', title: 'What pricing models do you use?', sub: 'You can combine multiple models.' },
+    { meta: '3 OF 5', title: 'How many years of experience do you have?', sub: 'Displayed on your marketplace profile. Clients often filter by experience level.' },
+    { meta: '4 OF 5', title: 'How many jobs have you completed?', sub: 'An estimate across your career. Helps clients understand your track record.' },
+    { meta: '5 OF 5', title: 'Describe yourself to clients', sub: 'Write a short bio for your marketplace profile — your chance to make a great first impression.' }
+  ];
+  var supqCurrentStep = 1;
+
+  function renderSupqDots() {
+    var wrap = document.getElementById('supqDots');
+    if (!wrap) return;
+    var html = '';
+    for (var i = 1; i < supqCurrentStep; i++) html += '<span class="stepper-dot done"></span>';
+    html += '<span class="stepper-dot current"></span>';
+    wrap.innerHTML = html;
+  }
+
+  function renderSupqHeader() {
+    var meta = SUPQ_STEP_META[supqCurrentStep];
+    document.getElementById('supqStepMeta').textContent = meta.meta;
+    document.getElementById('supqStepTitle').textContent = meta.title;
+    document.getElementById('supqStepSub').textContent = meta.sub;
+    document.getElementById('supqBackBtn').hidden = supqCurrentStep === 1;
+    var nextBtn = document.getElementById('supqNextBtn');
+    nextBtn.innerHTML = supqCurrentStep === 5 ? 'Save' : 'Next <span class="arrow">\u2192</span>';
+  }
+
+  function showSupqStep(n) {
+    supqCurrentStep = n;
+    for (var i = 1; i <= 5; i++) {
+      var el = document.getElementById('supqStep' + i);
+      if (el) el.style.display = i === n ? '' : 'none';
+    }
+    renderSupqDots();
+    renderSupqHeader();
+  }
+
+  var toastRich = document.getElementById('toastRich');
+  var toastRichTitle = document.getElementById('toastRichTitle');
+  var toastRichDetail = document.getElementById('toastRichDetail');
+  var toastRichTimer = null;
+  function showRichToast(title, detail) {
+    toastRichTitle.textContent = title;
+    toastRichDetail.textContent = detail || '';
+    toastRich.classList.add('show');
+    clearTimeout(toastRichTimer);
+    toastRichTimer = setTimeout(function () { toastRich.classList.remove('show'); }, 4500);
+  }
+  document.getElementById('toastRichCloseBtn').addEventListener('click', function () {
+    toastRich.classList.remove('show');
+    clearTimeout(toastRichTimer);
+  });
+
+  function initSupQuestionnaire() {
+    renderSupqStep1();
+    initSupqSearchOnce();
+    showSupqStep(1);
+    initMultiSelectTiles(document.getElementById('supqPricingTiles'));
+    initSingleSelectTiles(document.getElementById('supqExperienceTiles'));
+    initSingleSelectTiles(document.getElementById('supqJobsTiles'));
+    document.getElementById('supqBackBtn').addEventListener('click', function () {
+      if (supqCurrentStep > 1) showSupqStep(supqCurrentStep - 1);
+    });
+    document.getElementById('supqNextBtn').addEventListener('click', function () {
+      if (supqCurrentStep < 5) {
+        showSupqStep(supqCurrentStep + 1);
+      } else {
+        showRichToast('Questionnaire saved', 'Your responses have been updated.');
+      }
+    });
+  }
+  initSupQuestionnaire();
 
   initMultiSelectTiles(document.getElementById('supDashSectorTiles'));
   initMultiSelectTiles(document.getElementById('supResSubChips'));
