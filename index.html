@@ -1914,7 +1914,7 @@
   .dash-logout-btn:hover { background: #f8e8e8; color: #b5424a; }
   .dash-sidebar.collapsed .dash-logout-btn { display: none; }
   .dash-account-avatar {
-    position: relative; width: 38px; height: 38px; flex-shrink: 0;
+    position: relative; width: 38px; height: 38px; flex-shrink: 0; overflow: hidden; border-radius: 50%;
   }
   .dash-account-avatar svg.ring { position: absolute; inset: 0; transform: rotate(-90deg); }
   .dash-account-avatar .initials {
@@ -1923,7 +1923,7 @@
     display: flex; align-items: center; justify-content: center;
     font-size: 12px; font-weight: 700;
   }
-  .dash-account-avatar .avatar-photo { position: absolute; inset: 4px; border-radius: 50%; object-fit: cover; display: none; }
+  .dash-account-avatar .avatar-photo { position: absolute; inset: 4px; width: 30px; height: 30px; border-radius: 50%; object-fit: cover; display: none; }
   .dash-account-info { min-width: 0; flex: 1; }
   .dash-sidebar.collapsed .dash-account-info { display: none; }
   .dash-account-info .acc-name { font-size: 13px; font-weight: 700; color: var(--text-heading); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
