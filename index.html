@@ -1954,6 +1954,7 @@
   .dash-scroll-area { flex: 1; overflow-y: auto; }
   .dash-content { max-width: 1240px; margin: 0 auto; padding: 24px 32px 60px; background: #F9FAFB; }
   .dash-content.dash-content-full { max-width: none; margin: 0; }
+  .dash-content.dash-content-narrow-pad { padding-left: 16px; padding-right: 16px; }
   @keyframes pmViewFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   .pm-view-animate { animation: pmViewFadeIn 300ms ease-out; }
   @keyframes pmTabFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
@@ -3831,17 +3832,22 @@
      PM: PROPERTIES
   ========================================================== */
   .pmprop-header-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-  .pmprop-quickadd-btn { display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 1.5px solid var(--border-subtle); border-radius: 9px; padding: 8px 14px; font-size: 12.5px; font-weight: 700; color: var(--text-heading); cursor: pointer; font-family: inherit; }
+  .pmprop-quickadd-btn { display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 1.5px solid var(--border-subtle); border-radius: 9px; padding: 10px 16px; font-size: 12.5px; font-weight: 700; color: var(--text-heading); cursor: pointer; font-family: inherit; }
   .pmprop-quickadd-btn:hover { border-color: #90a8c8; background: var(--surface-soft); }
-  .pmprop-create-btn { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); color: #fff; border: none; border-radius: 9px; padding: 8px 16px; font-size: 12.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .pmprop-create-btn { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); color: #fff; border: none; border-radius: 9px; padding: 10px 18px; font-size: 12.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
   .pmprop-create-btn:hover { opacity: 0.9; }
 
-  .pmprop-search-row { display: flex; align-items: center; gap: 14px; background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 8px; margin: 20px 0; }
-  .pmprop-search-wrap { position: relative; flex: 1; }
+  .pmprop-search-row { display: flex; align-items: center; gap: 14px; margin: 20px 0; }
+  .pmprop-search-wrap { position: relative; flex: 1; background: #fff; border: 1px solid var(--border-subtle); border-radius: 12px; }
   .pmprop-search-wrap svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; }
-  .pmprop-search-wrap input { width: 100%; border: none; outline: none; padding: 11px 14px 11px 40px; font-size: 14px; font-family: inherit; color: var(--text-heading); background: transparent; }
+  .pmprop-search-wrap input { width: 100%; border: none; outline: none; padding: 12px 14px 12px 40px; font-size: 14px; font-family: inherit; color: var(--text-heading); background: transparent; border-radius: 12px; }
+  .pmprop-search-wrap:focus-within { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(40,72,144,0.12); }
   .pmprop-search-wrap input::placeholder { color: #a6b0bf; }
-  .pmprop-count-pill { flex-shrink: 0; background: var(--icon-tint-bg); color: var(--accent-blue); font-size: 13px; font-weight: 700; padding: 9px 16px; border-radius: 10px; white-space: nowrap; }
+  .pmprop-count-pill { flex-shrink: 0; background: var(--icon-tint-bg); color: var(--accent-blue); font-size: 13px; font-weight: 700; padding: 12px 18px; border-radius: 10px; white-space: nowrap; }
+
+  .pmprop-page-btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border: 1px solid var(--border-subtle); border-radius: 9px; background: #fff; font-size: 13px; font-weight: 600; color: var(--text-heading); cursor: pointer; font-family: inherit; }
+  .pmprop-page-btn:hover { background: var(--surface-soft); }
+  #pmpropPageNumbers .pm-page-num.active { border: 1.5px solid var(--accent-blue); background: var(--icon-tint-bg); color: var(--accent-blue); font-weight: 800; }
 
   .pmprop-avatar { width: 38px; height: 38px; border-radius: 10px; background: var(--icon-tint-bg); color: var(--accent-blue); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0; }
   .pmprop-name-cell { display: flex; align-items: center; gap: 12px; }
@@ -3864,7 +3870,7 @@
   }
 
   /* Property form (shared: New Property / Edit Property) */
-  .pmprop-form-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 20px; flex-wrap: wrap; }
+  .pmprop-form-head { position: sticky; top: 0; z-index: 5; background: #F9FAFB; display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 14px 0; margin-bottom: 6px; flex-wrap: wrap; }
   .pmprop-form-head-left { display: flex; align-items: center; gap: 14px; }
   .pmprop-back-btn { width: 36px; height: 36px; border-radius: 9px; border: 1px solid var(--border-subtle); background: #fff; display: flex; align-items: center; justify-content: center; color: var(--text-heading); cursor: pointer; flex-shrink: 0; }
   .pmprop-back-btn:hover { background: var(--surface-soft); }
@@ -3886,6 +3892,8 @@
   .pmprop-field-hint { font-size: 11.5px; color: var(--text-body-muted); text-align: right; margin-bottom: 6px; }
   #pmpropIdentityCard .pmprop-select-field .pm-custom-dd-btn { padding: 12px 14px; border-radius: 11px; font-size: 14.5px; }
   #pmpropIdentityCard .pmprop-select-field .cdd-value { color: var(--text-heading); }
+  #pmpropComplianceGrid .pmprop-select-field .pm-custom-dd-btn { padding: 11px 13px; border-radius: 10px; font-size: 13px; }
+  #pmpropComplianceGrid .pmprop-select-field .cdd-value { color: var(--text-heading); }
   .pmprop-field-hint.left { text-align: left; margin-top: 6px; }
 
   .pmprop-callout { background: var(--icon-tint-bg); border-radius: 10px; padding: 13px 16px; font-size: 12.5px; color: var(--accent-blue); line-height: 1.5; margin-top: 6px; }
@@ -3900,15 +3908,16 @@
   .pmprop-inclusions-actions { display: flex; align-items: center; gap: 8px; }
   .pmprop-inclusions-icon-btn { width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--border-subtle); background: #fff; display: flex; align-items: center; justify-content: center; color: var(--text-body-muted); cursor: pointer; }
   .pmprop-inclusions-icon-btn:hover { background: var(--surface-soft); }
-  .pmprop-inclusions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 32px; margin-top: 14px; }
+  .pmprop-inclusions-box { background: var(--surface-soft); border-radius: 14px; padding: 8px 20px; margin-top: 14px; }
+  .pmprop-inclusions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 32px; }
   @media (max-width: 700px) { .pmprop-inclusions-grid { grid-template-columns: 1fr; } }
-  .pmprop-inclusion-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f1f5f9; gap: 10px; }
+  .pmprop-inclusion-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #e8ecf0; gap: 10px; }
+  .pmprop-stepper { display: flex; align-items: center; gap: 0; flex-shrink: 0; background: #fff; border: 1px solid var(--border-subtle); border-radius: 8px; padding: 3px; }
+  .pmprop-stepper button { width: 24px; height: 24px; border-radius: 6px; border: none; background: transparent; display: flex; align-items: center; justify-content: center; color: var(--text-heading); cursor: pointer; font-size: 15px; line-height: 1; }
+  .pmprop-stepper button:hover { background: var(--surface-soft); }
+  .pmprop-stepper .val { font-size: 13.5px; font-weight: 700; color: var(--text-heading); width: 22px; text-align: center; }
   .pmprop-inclusion-label { display: flex; align-items: center; gap: 10px; font-size: 13.5px; font-weight: 500; color: var(--text-heading); }
   .pmprop-inclusion-label svg { color: var(--accent-blue); flex-shrink: 0; }
-  .pmprop-stepper { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-  .pmprop-stepper button { width: 26px; height: 26px; border-radius: 7px; border: 1px solid var(--border-subtle); background: #fff; display: flex; align-items: center; justify-content: center; color: var(--text-heading); cursor: pointer; font-size: 15px; line-height: 1; }
-  .pmprop-stepper button:hover { background: var(--surface-soft); }
-  .pmprop-stepper .val { font-size: 13.5px; font-weight: 700; color: var(--text-heading); width: 16px; text-align: center; }
 
   .pmprop-desc-count { font-size: 11.5px; color: #94a3b8; text-align: right; margin-top: 4px; }
 
@@ -3917,7 +3926,7 @@
   .pmprop-toggle-section-desc { font-size: 12.5px; color: var(--text-body-muted); margin-top: 4px; line-height: 1.55; max-width: 720px; }
 
   .pmprop-media-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0 14px; }
-  .pmprop-media-tab { padding: 8px 15px; border-radius: 999px; border: 1.5px solid var(--border-subtle); background: #fff; font-size: 12.5px; font-weight: 600; color: var(--text-heading); cursor: pointer; }
+  .pmprop-media-tab { padding: 6px 12px; border-radius: 999px; border: 1.5px solid var(--border-subtle); background: #fff; font-size: 11.5px; font-weight: 600; color: var(--text-heading); cursor: pointer; }
   .pmprop-media-tab:hover:not(.selected) { border-color: #90a8c8; }
   .pmprop-media-tab.selected { background: var(--navy-900); border-color: var(--navy-900); color: #fff; }
 
@@ -3936,7 +3945,7 @@
   .pmprop-comp-title { font-size: 14px; font-weight: 800; color: var(--text-heading); }
   .pmprop-comp-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; padding: 2px 9px; border-radius: 999px; background: var(--icon-tint-bg); color: var(--accent-blue); }
   .pmprop-comp-tag.optional { background: var(--surface-soft); color: var(--text-body-muted); }
-  .pmprop-comp-missing { font-size: 11px; font-weight: 700; color: #dc2626; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; flex-shrink: 0; }
+  .pmprop-comp-missing { font-size: 11px; font-weight: 700; color: #dc2626; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; flex-shrink: 0; background: #fef2f2; padding: 5px 12px; border-radius: 999px; }
   .pmprop-comp-missing .dot { width: 6px; height: 6px; border-radius: 50%; background: #dc2626; }
   .pmprop-comp-desc { font-size: 12.5px; color: var(--text-body-muted); margin-top: 6px; line-height: 1.5; }
   .pmprop-comp-freq { font-size: 11.5px; color: #94a3b8; margin-top: 2px; }
@@ -3947,10 +3956,12 @@
   .pmprop-comp-dropzone-sub { font-size: 11px; color: var(--text-body-muted); margin-top: 4px; }
   .pmprop-comp-expiry-label { font-size: 12.5px; font-weight: 600; color: var(--text-heading); margin: 14px 0 6px; }
   .pmprop-comp-info { font-size: 11.5px; color: var(--text-body-muted); font-style: italic; margin-top: 12px; line-height: 1.5; }
+  .pmprop-comp-optional-box { background: var(--surface-soft); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 14px 16px; margin-top: 14px; }
+  .pmprop-comp-optional-box .pmprop-comp-info { margin-top: 0; }
   .pmprop-comp-sub-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
   .pmprop-comp-sub-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; color: #94a3b8; text-transform: uppercase; margin-bottom: 5px; }
 
-  .pmprop-form-footer { position: sticky; bottom: 0; display: flex; align-items: center; justify-content: space-between; background: #fff; border-top: 1px solid var(--border-subtle); padding: 16px 0 4px; margin-top: 8px; }
+  .pmprop-form-footer { position: sticky; bottom: 0; z-index: 4; display: flex; align-items: center; justify-content: space-between; background: #fff; border-top: 1px solid var(--border-subtle); padding: 16px 0; margin-top: 8px; box-shadow: 0 -6px 16px rgba(16,24,40,0.05); }
   .pmprop-cancel-btn { background: #fff; border: 1.5px solid var(--border-subtle); border-radius: 10px; padding: 11px 22px; font-size: 13.5px; font-weight: 700; color: var(--text-heading); cursor: pointer; font-family: inherit; }
   .pmprop-cancel-btn:hover { background: var(--surface-soft); }
   .pmprop-submit-btn { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); color: #fff; border: none; border-radius: 10px; padding: 11px 24px; font-size: 13.5px; font-weight: 700; cursor: pointer; font-family: inherit; margin-left: auto; }
@@ -3966,7 +3977,7 @@
   .pmprop-del-btns button { flex: 1; border-radius: 10px; padding: 12px; font-size: 13.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
   .pmprop-del-cancel { background: #fff; border: 1.5px solid var(--border-subtle); color: var(--text-heading); }
   .pmprop-del-cancel:hover { background: var(--surface-soft); }
-  .pmprop-del-confirm { background: var(--navy-900); border: none; color: #fff; }
+  .pmprop-del-confirm { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); border: none; color: #fff; }
   .pmprop-del-confirm:hover { opacity: 0.9; }
 
 </style>
@@ -6913,9 +6924,9 @@
                 </span>
                 <span class="pm-count-text" id="pmpropShowingText">Showing 1–10 of 21</span>
                 <div style="display:flex;gap:4px;align-items:center;">
-                  <button type="button" class="pm-icon-btn-sq" id="pmpropPagePrev" aria-label="Previous page"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg> Prev</button>
+                  <button type="button" class="pmprop-page-btn" id="pmpropPagePrev" aria-label="Previous page"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg> Prev</button>
                   <div style="display:flex;gap:4px;" id="pmpropPageNumbers"></div>
-                  <button type="button" class="pm-icon-btn-sq" id="pmpropPageNext" aria-label="Next page">Next <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+                  <button type="button" class="pmprop-page-btn" id="pmpropPageNext" aria-label="Next page">Next <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
                 </div>
               </div>
             </div>
@@ -6978,14 +6989,37 @@
                       <div class="pmprop-comp-freq">Renewed annually</div>
                       <div class="pmprop-comp-dropzone" data-pmprop-comp-upload="cp12"><div class="pmprop-comp-dropzone-title">Drag &amp; drop or <a href="javascript:void(0)">browse</a></div><div class="pmprop-comp-dropzone-sub">PDF / JPG / PNG &middot; 10 MB max</div><input type="file" style="display:none;" accept="image/*,.pdf"></div>
                       <div class="pmprop-comp-expiry-label">Expiry date</div>
-                      <input type="date" class="field-input">
-                      <div class="pmprop-comp-info">Optional but recommended &mdash; these can be asked at booking if missing and we'll remember the answer.</div>
-                      <div class="pmprop-comp-sub-row">
-                        <div><div class="pmprop-comp-sub-label">Heating type</div><select class="field-input"><option value="">Select heating...</option><option>Gas central heating</option><option>Electric heating</option><option>Heat pump</option></select></div>
-                        <div><div class="pmprop-comp-sub-label">Boiler make</div><select class="field-input"><option value="">Select make...</option><option>Worcester Bosch</option><option>Vaillant</option><option>Baxi</option><option>Ideal</option></select></div>
+                      <div class="pm-filter-field" style="width:100%;">
+                        <button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="cp12Expiry" style="width:100%;height:48px;">
+                          <span class="cdd-value cal-value placeholder" data-cal-text="cp12Expiry">dd/mm/yyyy</span>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                        </button>
+                        <div class="pm-cal-popup" data-cal-popup="cp12Expiry">
+                          <div class="pm-cal-head">
+                            <button type="button" class="pm-cal-month-label" data-cal-monthlabel="cp12Expiry"><span data-cal-monthtext="cp12Expiry">July 2026</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                            <div class="pm-cal-nav">
+                              <button type="button" class="pm-cal-nav-btn" data-cal-prev="cp12Expiry" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+                              <button type="button" class="pm-cal-nav-btn" data-cal-next="cp12Expiry" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
+                            </div>
+                          </div>
+                          <div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
+                          <div class="pm-cal-grid" data-cal-grid="cp12Expiry"></div>
+                          <div class="pm-cal-footer">
+                            <button type="button" class="pm-cal-link" data-cal-clear="cp12Expiry">Clear</button>
+                            <button type="button" class="pm-cal-link" data-cal-today="cp12Expiry">Today</button>
+                          </div>
+                        </div>
+                        <input type="hidden" id="cp12ExpiryInput" value="">
                       </div>
-                      <div class="pmprop-comp-sub-label" style="margin-top:10px;">Gas appliances</div>
-                      <select class="field-input"><option value="">Count</option><option>1</option><option>2</option><option>3</option><option>4+</option></select>
+                      <div class="pmprop-comp-optional-box">
+                        <div class="pmprop-comp-info">Optional but recommended &mdash; these can be asked at booking if missing and we'll remember the answer.</div>
+                        <div class="pmprop-comp-sub-row">
+                          <div><div class="pmprop-comp-sub-label">Heating type</div><div class="pm-filter-field pmprop-select-field"><button type="button" class="pm-custom-dd-btn" data-pmprop-select="heatingType"><span class="cdd-value">Select heating...</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="pm-custom-dd-menu" data-pmprop-select-menu="heatingType"><div class="cdd-item" data-value="Gas central heating">Gas central heating</div><div class="cdd-item" data-value="Electric heating">Electric heating</div><div class="cdd-item" data-value="Heat pump">Heat pump</div></div></div></div>
+                          <div><div class="pmprop-comp-sub-label">Boiler make</div><div class="pm-filter-field pmprop-select-field"><button type="button" class="pm-custom-dd-btn" data-pmprop-select="boilerMake"><span class="cdd-value">Select make...</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="pm-custom-dd-menu" data-pmprop-select-menu="boilerMake"><div class="cdd-item" data-value="Worcester Bosch">Worcester Bosch</div><div class="cdd-item" data-value="Vaillant">Vaillant</div><div class="cdd-item" data-value="Baxi">Baxi</div><div class="cdd-item" data-value="Ideal">Ideal</div></div></div></div>
+                        </div>
+                        <div class="pmprop-comp-sub-label" style="margin-top:10px;">Gas appliances</div>
+                        <div class="pm-filter-field pmprop-select-field"><button type="button" class="pm-custom-dd-btn" data-pmprop-select="gasAppliances"><span class="cdd-value">Count</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="pm-custom-dd-menu" data-pmprop-select-menu="gasAppliances"><div class="cdd-item" data-value="1">1</div><div class="cdd-item" data-value="2">2</div><div class="cdd-item" data-value="3">3</div><div class="cdd-item" data-value="4+">4+</div></div></div>
+                      </div>
                     </div>
 
                     <div class="pmprop-comp-card">
@@ -6997,10 +7031,33 @@
                       <div class="pmprop-comp-freq">Renewed every 5 years</div>
                       <div class="pmprop-comp-dropzone" data-pmprop-comp-upload="eicr"><div class="pmprop-comp-dropzone-title">Drag &amp; drop or <a href="javascript:void(0)">browse</a></div><div class="pmprop-comp-dropzone-sub">PDF / JPG / PNG &middot; 10 MB max</div><input type="file" style="display:none;" accept="image/*,.pdf"></div>
                       <div class="pmprop-comp-expiry-label">Expiry date</div>
-                      <input type="date" class="field-input">
-                      <div class="pmprop-comp-info">Modern houses typically have 10&ndash;20 circuits; larger / renovated homes 30&ndash;40.</div>
-                      <div class="pmprop-comp-sub-label" style="margin-top:10px;">Number of circuits</div>
-                      <select class="field-input"><option value="">Select...</option><option>Under 10</option><option>10&ndash;20</option><option>20&ndash;30</option><option>30&ndash;40</option><option>40+</option></select>
+                      <div class="pm-filter-field" style="width:100%;">
+                        <button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="eicrExpiry" style="width:100%;height:48px;">
+                          <span class="cdd-value cal-value placeholder" data-cal-text="eicrExpiry">dd/mm/yyyy</span>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                        </button>
+                        <div class="pm-cal-popup" data-cal-popup="eicrExpiry">
+                          <div class="pm-cal-head">
+                            <button type="button" class="pm-cal-month-label" data-cal-monthlabel="eicrExpiry"><span data-cal-monthtext="eicrExpiry">July 2026</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                            <div class="pm-cal-nav">
+                              <button type="button" class="pm-cal-nav-btn" data-cal-prev="eicrExpiry" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+                              <button type="button" class="pm-cal-nav-btn" data-cal-next="eicrExpiry" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
+                            </div>
+                          </div>
+                          <div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
+                          <div class="pm-cal-grid" data-cal-grid="eicrExpiry"></div>
+                          <div class="pm-cal-footer">
+                            <button type="button" class="pm-cal-link" data-cal-clear="eicrExpiry">Clear</button>
+                            <button type="button" class="pm-cal-link" data-cal-today="eicrExpiry">Today</button>
+                          </div>
+                        </div>
+                        <input type="hidden" id="eicrExpiryInput" value="">
+                      </div>
+                      <div class="pmprop-comp-optional-box">
+                        <div class="pmprop-comp-info">Modern houses typically have 10&ndash;20 circuits; larger / renovated homes 30&ndash;40.</div>
+                        <div class="pmprop-comp-sub-label" style="margin-top:10px;">Number of circuits</div>
+                        <div class="pm-filter-field pmprop-select-field"><button type="button" class="pm-custom-dd-btn" data-pmprop-select="numCircuits"><span class="cdd-value">Select...</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="pm-custom-dd-menu" data-pmprop-select-menu="numCircuits"><div class="cdd-item" data-value="Under 10">Under 10</div><div class="cdd-item" data-value="10–20">10–20</div><div class="cdd-item" data-value="20–30">20–30</div><div class="cdd-item" data-value="30–40">30–40</div><div class="cdd-item" data-value="40+">40+</div></div></div>
+                      </div>
                     </div>
 
                     <div class="pmprop-comp-card">
@@ -7012,9 +7069,30 @@
                       <div class="pmprop-comp-freq">Renewed every 10 years</div>
                       <div class="pmprop-comp-dropzone" data-pmprop-comp-upload="epc"><div class="pmprop-comp-dropzone-title">Drag &amp; drop or <a href="javascript:void(0)">browse</a></div><div class="pmprop-comp-dropzone-sub">PDF / JPG / PNG &middot; 10 MB max</div><input type="file" style="display:none;" accept="image/*,.pdf"></div>
                       <div class="pmprop-comp-expiry-label">Expiry date</div>
-                      <input type="date" class="field-input">
+                      <div class="pm-filter-field" style="width:100%;">
+                        <button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="epcExpiry" style="width:100%;height:48px;">
+                          <span class="cdd-value cal-value placeholder" data-cal-text="epcExpiry">dd/mm/yyyy</span>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                        </button>
+                        <div class="pm-cal-popup" data-cal-popup="epcExpiry">
+                          <div class="pm-cal-head">
+                            <button type="button" class="pm-cal-month-label" data-cal-monthlabel="epcExpiry"><span data-cal-monthtext="epcExpiry">July 2026</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                            <div class="pm-cal-nav">
+                              <button type="button" class="pm-cal-nav-btn" data-cal-prev="epcExpiry" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+                              <button type="button" class="pm-cal-nav-btn" data-cal-next="epcExpiry" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
+                            </div>
+                          </div>
+                          <div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
+                          <div class="pm-cal-grid" data-cal-grid="epcExpiry"></div>
+                          <div class="pm-cal-footer">
+                            <button type="button" class="pm-cal-link" data-cal-clear="epcExpiry">Clear</button>
+                            <button type="button" class="pm-cal-link" data-cal-today="epcExpiry">Today</button>
+                          </div>
+                        </div>
+                        <input type="hidden" id="epcExpiryInput" value="">
+                      </div>
                       <div class="pmprop-comp-sub-label" style="margin-top:14px;">Energy rating</div>
-                      <select class="field-input"><option value="">A &ndash; F</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option></select>
+                      <div class="pm-filter-field pmprop-select-field"><button type="button" class="pm-custom-dd-btn" data-pmprop-select="energyRating"><span class="cdd-value">A – F</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="pm-custom-dd-menu" data-pmprop-select-menu="energyRating"><div class="cdd-item" data-value="A">A</div><div class="cdd-item" data-value="B">B</div><div class="cdd-item" data-value="C">C</div><div class="cdd-item" data-value="D">D</div><div class="cdd-item" data-value="E">E</div><div class="cdd-item" data-value="F">F</div></div></div>
                     </div>
 
                     <div class="pmprop-comp-card">
@@ -7046,13 +7124,36 @@
                       <div class="pmprop-comp-freq">Every 6 / 12 months</div>
                       <div class="pmprop-comp-dropzone" data-pmprop-comp-upload="loler"><div class="pmprop-comp-dropzone-title">Drag &amp; drop or <a href="javascript:void(0)">browse</a></div><div class="pmprop-comp-dropzone-sub">PDF / JPG / PNG &middot; 10 MB max</div><input type="file" style="display:none;" accept="image/*,.pdf"></div>
                       <div class="pmprop-comp-expiry-label">Expiry date</div>
-                      <input type="date" class="field-input">
-                      <div class="pmprop-comp-info">LOLER expiry depends on lift type. Use the suggestion to fill the date from the last inspection.</div>
-                      <div class="pmprop-comp-sub-label" style="margin-top:10px;">Lift type</div>
-                      <select class="field-input"><option value="">Select lift type...</option><option>Passenger lift</option><option>Goods lift</option><option>Stairlift</option><option>Platform lift</option></select>
-                      <div class="pmprop-comp-sub-label" style="margin-top:10px;">Suggested expiry</div>
-                      <div style="font-size:12.5px;color:var(--text-body-muted);">Upload + pick lift type</div>
-                      <div class="pmprop-comp-info" style="margin-top:6px;">Pick a lift type to see the recommended interval.</div>
+                      <div class="pm-filter-field" style="width:100%;">
+                        <button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="lolerExpiry" style="width:100%;height:48px;">
+                          <span class="cdd-value cal-value placeholder" data-cal-text="lolerExpiry">dd/mm/yyyy</span>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                        </button>
+                        <div class="pm-cal-popup" data-cal-popup="lolerExpiry">
+                          <div class="pm-cal-head">
+                            <button type="button" class="pm-cal-month-label" data-cal-monthlabel="lolerExpiry"><span data-cal-monthtext="lolerExpiry">July 2026</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                            <div class="pm-cal-nav">
+                              <button type="button" class="pm-cal-nav-btn" data-cal-prev="lolerExpiry" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+                              <button type="button" class="pm-cal-nav-btn" data-cal-next="lolerExpiry" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
+                            </div>
+                          </div>
+                          <div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
+                          <div class="pm-cal-grid" data-cal-grid="lolerExpiry"></div>
+                          <div class="pm-cal-footer">
+                            <button type="button" class="pm-cal-link" data-cal-clear="lolerExpiry">Clear</button>
+                            <button type="button" class="pm-cal-link" data-cal-today="lolerExpiry">Today</button>
+                          </div>
+                        </div>
+                        <input type="hidden" id="lolerExpiryInput" value="">
+                      </div>
+                      <div class="pmprop-comp-optional-box">
+                        <div class="pmprop-comp-info">LOLER expiry depends on lift type. Use the suggestion to fill the date from the last inspection.</div>
+                        <div class="pmprop-comp-sub-label" style="margin-top:10px;">Lift type</div>
+                        <div class="pm-filter-field pmprop-select-field"><button type="button" class="pm-custom-dd-btn" data-pmprop-select="liftType"><span class="cdd-value">Select lift type...</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="pm-custom-dd-menu" data-pmprop-select-menu="liftType"><div class="cdd-item" data-value="Passenger lift">Passenger lift</div><div class="cdd-item" data-value="Goods lift">Goods lift</div><div class="cdd-item" data-value="Stairlift">Stairlift</div><div class="cdd-item" data-value="Platform lift">Platform lift</div></div></div>
+                        <div class="pmprop-comp-sub-label" style="margin-top:10px;">Suggested expiry</div>
+                        <div style="font-size:12.5px;color:var(--text-body-muted);">Upload + pick lift type</div>
+                        <div class="pmprop-comp-info" style="margin-top:6px;">Pick a lift type to see the recommended interval.</div>
+                      </div>
                     </div>
 
                     <div class="pmprop-comp-card">
@@ -12693,6 +12794,29 @@
   }
 
   var PMPROP_ROOM_TYPES = ['Bedroom', 'Bathroom', 'Kitchen', 'Living Room', 'Hallway', 'Study', 'Stairs', 'Garden', 'Cinema', 'Gym', 'Shed', 'Laundry', 'Utility Room', 'Dining Room', 'Balcony', 'Garage', 'Conservatory', 'Terrace', 'Office', 'Pool', 'Dressing Room'];
+  var PMPROP_ROOM_ICONS = {
+    'Bedroom': '<path d="M2 19v-6a2 2 0 012-2h16a2 2 0 012 2v6"/><path d="M2 19h20M4 11V7a2 2 0 012-2h3a2 2 0 012 2v4M13 11V9a2 2 0 012-2h3a2 2 0 012 2v2"/>',
+    'Bathroom': '<path d="M4 12h16M4 12V5a2 2 0 012-2 2 2 0 012 2M6 12v7a2 2 0 002 2h8a2 2 0 002-2v-7"/><circle cx="7" cy="16" r=".5" fill="currentColor"/>',
+    'Kitchen': '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 10h16M9 3v7M15 3v7"/><circle cx="9" cy="15" r="1.4"/><circle cx="15" cy="15" r="1.4"/>',
+    'Living Room': '<path d="M4 18v-5a2 2 0 012-2h12a2 2 0 012 2v5"/><path d="M2 18h20v2H2zM4 13V9a2 2 0 012-2h12a2 2 0 012 2v4"/>',
+    'Hallway': '<path d="M8 21V3h8v18"/><path d="M8 3H5v18h3M16 3h3v18h-3"/><circle cx="13.5" cy="12" r=".7" fill="currentColor"/>',
+    'Study': '<path d="M4 19V9l8-5 8 5v10"/><path d="M9 19v-6h6v6"/><path d="M2 19h20"/>',
+    'Stairs': '<path d="M3 21V17h4v-4h4v-4h4V5h6"/>',
+    'Garden': '<path d="M12 22V12"/><path d="M12 12C7 12 5 9 5 5c4 0 7 2 7 7zM12 12c5 0 7-3 7-7-4 0-7 2-7 7z"/>',
+    'Cinema': '<rect x="2" y="4" width="20" height="14" rx="2"/><path d="M9 9l6 3-6 3z"/>',
+    'Gym': '<path d="M4 8v8M8 6v12M16 6v12M20 8v8"/><path d="M8 12h8"/>',
+    'Shed': '<path d="M3 21V10l9-6 9 6v11z"/><path d="M3 10l9 4 9-4"/><path d="M12 14v7"/>',
+    'Laundry': '<rect x="4" y="2" width="16" height="20" rx="2"/><circle cx="12" cy="14" r="5"/><circle cx="12" cy="14" r="2"/><circle cx="7" cy="5" r=".8" fill="currentColor"/><circle cx="10" cy="5" r=".8" fill="currentColor"/>',
+    'Utility Room': '<path d="M7 3l7 7-2 2 7 7-2 2-7-7-2 2-7-7z"/>',
+    'Dining Room': '<path d="M6 2v9M4 2v5a2 2 0 004 0V2M18 2s-2 2-2 5 2 3 2 3v12M18 2v20"/>',
+    'Balcony': '<rect x="3" y="4" width="18" height="6" rx="1"/><path d="M5 10v10M19 10v10M9 10v3M13 10v3M17 10v3"/>',
+    'Garage': '<path d="M3 21V9l9-6 9 6v12"/><path d="M3 21h18M7 21v-8h10v8"/>',
+    'Conservatory': '<path d="M4 21V9l8-6 8 6v12"/><path d="M4 21h16M8 21V9M12 21V9M16 21V9M4 13h16"/>',
+    'Terrace': '<path d="M12 3a9 9 0 019 9H3a9 9 0 019-9z"/><path d="M3 12v9h18v-9"/>',
+    'Office': '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/><path d="M3 12h18"/>',
+    'Pool': '<path d="M2 17c1.5 1.3 3 1.3 4.5 0s3-1.3 4.5 0 3 1.3 4.5 0 3-1.3 4.5 0"/><path d="M6 12V5l4 3 4-3v7"/>',
+    'Dressing Room': '<path d="M12 2a2.5 2.5 0 012.5 2.5H9.5A2.5 2.5 0 0112 2z"/><path d="M12 6L3 11l2 3 7-4 7 4 2-3z"/><path d="M6 12l-2 9h16l-2-9"/>'
+  };
 
   var PMPROP_PROPERTIES = [
     { id: 'prop-1', name: 'travelodge hotel', addr: 'Travelodge Hotels Ltd, 3 Smythe Close, London, London, N9 0TW \u00b7 London', type: 'Residential', occupancy: null, lastUpdated: '1 weeks ago', postcode: 'N9 0TW', street: 'Travelodge Hotels Ltd, 3 Smythe Close, London, London, N9 0TW', city: 'London', region: 'London', unit: '', bedroom: 'Studio', inclusions: pmpropDefaultInclusions(), description: '' },
@@ -12857,13 +12981,13 @@
         '<button type="button" class="pmprop-inclusions-icon-btn" id="pmpropInclusionsEyeBtn" aria-label="Show/hide"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg></button>' +
         '<button type="button" class="pmprop-inclusions-icon-btn" id="pmpropInclusionsChevronBtn" aria-label="Collapse"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 150ms;' + (pmpropInclusionsCollapsed ? 'transform:rotate(180deg);' : '') + '"><path d="M18 15l-6-6-6 6"/></svg></button>' +
         '</div></div>' +
-        '<div class="pmprop-inclusions-grid" id="pmpropInclusionsGrid" style="' + (pmpropInclusionsCollapsed ? 'display:none;' : '') + '">' +
+        '<div class="pmprop-inclusions-box" style="' + (pmpropInclusionsCollapsed ? 'display:none;' : '') + '"><div class="pmprop-inclusions-grid" id="pmpropInclusionsGrid">' +
         PMPROP_ROOM_TYPES.map(function (room) {
           var val = (p && p.inclusions && p.inclusions[room] !== undefined) ? p.inclusions[room] : (pmpropInclusionsValues[room] || 0);
-          return '<div class="pmprop-inclusion-row"><div class="pmprop-inclusion-label"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg>' + room + '</div>' +
+          return '<div class="pmprop-inclusion-row"><div class="pmprop-inclusion-label"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (PMPROP_ROOM_ICONS[room] || PMPROP_ROOM_ICONS['Office']) + '</svg>' + room + '</div>' +
             '<div class="pmprop-stepper" data-room="' + room + '"><button type="button" data-step="-1">\u2212</button><span class="val">' + val + '</span><button type="button" data-step="1">+</button></div></div>';
         }).join('') +
-        '</div></div>';
+        '</div></div></div>';
 
       html += '<div class="field-group" style="margin-top:22px;"><label>Description (optional)</label><textarea class="field-input" id="pmpropFieldDesc" style="min-height:90px;" maxlength="500" placeholder="A short description suppliers see when accepting jobs at this property.">' + pmpropEscapeHtml(p ? (p.description || '') : '') + '</textarea><div class="pmprop-desc-count"><span id="pmpropDescCount">' + (p && p.description ? p.description.length : 0) + '</span>/500</div></div>';
     }
@@ -12995,6 +13119,7 @@
     if (pmpropInitialized) return;
     pmpropInitialized = true;
     pmpropRenderList();
+    pmpropWireCustomSelects(document.getElementById('pmpropComplianceGrid'));
 
     document.getElementById('pmpropSearchInput').addEventListener('input', function (e) {
       pmpropSearchQuery = e.target.value;
@@ -13064,8 +13189,8 @@
     });
     document.addEventListener('click', function (e) {
       if (!e.target.closest('.pmprop-select-field')) {
-        document.querySelectorAll('#pmpropIdentityCard .pm-custom-dd-btn.open').forEach(function (b) { b.classList.remove('open'); });
-        document.querySelectorAll('#pmpropIdentityCard .pm-custom-dd-menu.open').forEach(function (m) { m.classList.remove('open'); });
+        document.querySelectorAll('#pmpropIdentityCard .pm-custom-dd-btn.open, #pmpropComplianceGrid .pm-custom-dd-btn.open').forEach(function (b) { b.classList.remove('open'); });
+        document.querySelectorAll('#pmpropIdentityCard .pm-custom-dd-menu.open, #pmpropComplianceGrid .pm-custom-dd-menu.open').forEach(function (m) { m.classList.remove('open'); });
       }
     });
   }
@@ -13086,6 +13211,7 @@
     });
     var pmDashContent = document.querySelector('#pmDashboard .dash-content');
     if (pmDashContent) pmDashContent.classList.toggle('dash-content-full', view === 'responses');
+    if (pmDashContent) pmDashContent.classList.toggle('dash-content-narrow-pad', view === 'properties' || view === 'propertyform');
     document.querySelector('#pmDashboard .dash-scroll-area').scrollTop = 0;
   }
   document.querySelector('#pmDashboard .dash-account-avatar').style.cursor = 'pointer';
@@ -16686,7 +16812,11 @@
     appJoinedAfter: { viewYear: null, viewMonth: null, selected: null },
     supDob: { viewYear: null, viewMonth: null, selected: new Date(1987, 10, 5) },
     supPliExpiry: { viewYear: null, viewMonth: null, selected: new Date(2026, 10, 26) },
-    supPiExpiry: { viewYear: null, viewMonth: null, selected: new Date(2026, 8, 26) }
+    supPiExpiry: { viewYear: null, viewMonth: null, selected: new Date(2026, 8, 26) },
+    cp12Expiry: { viewYear: null, viewMonth: null, selected: null },
+    eicrExpiry: { viewYear: null, viewMonth: null, selected: null },
+    epcExpiry: { viewYear: null, viewMonth: null, selected: null },
+    lolerExpiry: { viewYear: null, viewMonth: null, selected: null }
   };
   var calHiddenInputIds = {
     joinedBefore: 'pmFilterJoinedBefore',
@@ -16697,7 +16827,11 @@
     appJoinedAfter: 'appFilterJoinedAfter',
     supDob: 'supDobInput',
     supPliExpiry: 'supPliExpiryInput',
-    supPiExpiry: 'supPiExpiryInput'
+    supPiExpiry: 'supPiExpiryInput',
+    cp12Expiry: 'cp12ExpiryInput',
+    eicrExpiry: 'eicrExpiryInput',
+    epcExpiry: 'epcExpiryInput',
+    lolerExpiry: 'lolerExpiryInput'
   };
   function calPad2(n) { return n < 10 ? '0' + n : '' + n; }
   function calFormatDMY(d) { return calPad2(d.getDate()) + '/' + calPad2(d.getMonth() + 1) + '/' + d.getFullYear(); }
