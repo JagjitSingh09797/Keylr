@@ -1706,6 +1706,9 @@
   .ob-toggle-card .otc-title { font-size: 14px; font-weight: 700; color: var(--text-heading); display: flex; align-items: center; gap: 8px; }
   .ob-toggle-card .otc-desc { font-size: 12.5px; color: var(--text-body-muted); margin-top: 4px; line-height: 1.5; }
   .ob-toggle-card .otc-body { margin-top: 16px; }
+  /* Tinted-blue variant (Categories & Roles "all operatives licensed" banner, company-only) — scoped modifier, does not alter the base .ob-toggle-card rule */
+  .ob-toggle-card.tinted-blue { background: var(--icon-tint-bg); border-color: var(--border-subtle); }
+  .ob-toggle-card.tinted-blue .otc-desc { color: #3a5a8a; }
 
   /* Simple radio tile row (Yes/No, VAT options etc.) */
   .radio-tile-row { display: grid; gap: 12px; }
@@ -2576,6 +2579,17 @@
   .cdd-item.selected { background: var(--surface-soft); font-weight: 600; }
   .cdd-item .cdd-check { color: var(--accent-blue); flex-shrink: 0; opacity: 0; }
   .cdd-item.selected .cdd-check { opacity: 1; }
+
+  /* Form-field-sized custom dropdown (matches .field-input / .ob-select proportions) — used wherever a
+     custom dropdown replaces a native select element inside a form, as opposed to the smaller filter-bar dropdowns. */
+  .ob-select-dd.pm-custom-dd-btn { padding: 12px 14px; border-radius: 11px; font-size: 14.5px; }
+  .ob-select-dd.pm-custom-dd-btn .cdd-value { color: var(--text-heading); }
+  .ob-select-dd.pm-custom-dd-btn .cdd-value.cdd-placeholder { color: #a6b0bf; }
+  /* Stacked title+description dropdown item (e.g. "1-3 years / Building a client base") */
+  .cdd-item.cdd-item-stacked { display: block; padding: 9px 12px; }
+  .cdd-item.cdd-item-stacked .cdd-item-title { font-size: 13px; font-weight: 600; color: var(--text-heading); }
+  .cdd-item.cdd-item-stacked .cdd-item-desc { font-size: 11.5px; color: var(--text-body-muted); margin-top: 2px; }
+  .cdd-item.cdd-item-stacked.selected .cdd-item-title { color: var(--accent-blue); }
 
   /* Card grid */
   .pm-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
@@ -6080,6 +6094,16 @@
           <h2>Categories &amp; roles</h2>
           <p class="ob-subtext">Pick the categories you work in and the specific roles within each. We route matching jobs to you and decide which certificates to verify based on your role choices.</p>
 
+          <div class="ob-toggle-card tinted-blue" id="supAllOperativesLicencedCard" style="display:none;">
+            <div class="otc-top">
+              <div>
+                <div class="otc-title">All operatives hold valid trade licences for the jobs they do</div>
+                <div class="otc-desc">Confirm before selecting your categories. Keylr may request evidence during audits.</div>
+              </div>
+              <button type="button" class="toggle-switch on" id="supAllOperativesLicencedToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
+            </div>
+          </div>
+
           <div class="selected-cat-chips-row" id="selectedCatChipsRow"></div>
 
           <div class="cat-role-picker">
@@ -6119,7 +6143,7 @@
           <h2>Setup profile</h2>
           <p class="ob-subtext">Set your availability, share your experience, and tell clients about yourself.</p>
 
-          <div class="ob-card-section">
+          <div class="ob-card-section" id="supProfilePhotoCard">
             <div class="ocs-head">
               <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
               <div class="ocs-title">Profile photo</div>
@@ -6133,20 +6157,110 @@
             </div>
           </div>
 
+          <div class="ob-card-section" id="supCompanyLogoCard" style="display:none;">
+            <div class="ocs-head">
+              <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+              <div class="ocs-title">Company logo</div>
+              <span class="meta-badge optional">Optional</span>
+            </div>
+            <div class="ocs-desc">Your company logo shown on your public profile and job notifications.</div>
+            <div class="ob-field" style="margin-bottom:0;">
+              <label>Upload Company Logo</label>
+              <div class="file-dropzone" style="max-width:280px;">
+                <input type="file" style="display:none;">
+                <div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>
+                <div class="fd-label">Click to Upload</div>
+              </div>
+            </div>
+          </div>
+
           <div class="ob-card-section">
             <div class="ocs-head">
               <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M9 14l-2 7 5-3 5 3-2-7"/></svg></div>
               <div class="ocs-title">Experience &amp; track record</div>
             </div>
             <div class="ocs-desc">Clients often filter by experience and completed jobs — these appear on your marketplace profile.</div>
-            <div class="ob-row-2">
-              <div class="ob-field">
-                <label>How many years of experience do you have?</label>
-                <select class="ob-select"><option>Select...</option><option>Less than 1 year</option><option>1–3 years</option><option>4–7 years</option><option>8–15 years</option><option>15+ years</option></select>
+
+            <div id="supExpTrackSoleTrader">
+              <div class="ob-row-2">
+                <div class="ob-field">
+                  <label>How many years of experience do you have?</label>
+                  <div style="position:relative;">
+                    <button type="button" class="pm-custom-dd-btn ob-select-dd" data-dd="supExpYearsSole"><span class="cdd-value cdd-placeholder">Select...</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                    <div class="pm-custom-dd-menu" data-dd-menu="supExpYearsSole">
+                      <div class="cdd-item" data-value="Less than 1 year">Less than 1 year</div>
+                      <div class="cdd-item" data-value="1–3 years">1–3 years</div>
+                      <div class="cdd-item" data-value="4–7 years">4–7 years</div>
+                      <div class="cdd-item" data-value="8–15 years">8–15 years</div>
+                      <div class="cdd-item" data-value="15+ years">15+ years</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="ob-field">
+                  <label>How many jobs have you completed?</label>
+                  <div style="position:relative;">
+                    <button type="button" class="pm-custom-dd-btn ob-select-dd" data-dd="supJobsSole"><span class="cdd-value cdd-placeholder">Select...</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                    <div class="pm-custom-dd-menu" data-dd-menu="supJobsSole">
+                      <div class="cdd-item" data-value="1–10">1–10</div>
+                      <div class="cdd-item" data-value="11–50">11–50</div>
+                      <div class="cdd-item" data-value="51–200">51–200</div>
+                      <div class="cdd-item" data-value="200+">200+</div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="ob-field">
-                <label>How many jobs have you completed?</label>
-                <select class="ob-select"><option>Select...</option><option>1–10</option><option>11–50</option><option>51–200</option><option>200+</option></select>
+            </div>
+
+            <div id="supExpTrackCompany" style="display:none;">
+              <div class="ob-row-2">
+                <div class="ob-field">
+                  <label>How many years of experience do you have?</label>
+                  <div style="position:relative;">
+                    <button type="button" class="pm-custom-dd-btn ob-select-dd" data-dd="supExpYearsCompany"><span class="cdd-value cdd-placeholder">Select...</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                    <div class="pm-custom-dd-menu" data-dd-menu="supExpYearsCompany">
+                      <div class="cdd-item cdd-item-stacked" data-value="Less than 1 year"><div class="cdd-item-title">Less than 1 year</div><div class="cdd-item-desc">Just starting out or recently qualified</div></div>
+                      <div class="cdd-item cdd-item-stacked" data-value="1–3 years"><div class="cdd-item-title">1–3 years</div><div class="cdd-item-desc">Building a client base</div></div>
+                      <div class="cdd-item cdd-item-stacked" data-value="3–5 years"><div class="cdd-item-title">3–5 years</div><div class="cdd-item-desc">Established professional</div></div>
+                      <div class="cdd-item cdd-item-stacked" data-value="5–10 years"><div class="cdd-item-title">5–10 years</div><div class="cdd-item-desc">Experienced professional</div></div>
+                      <div class="cdd-item cdd-item-stacked" data-value="10+ years"><div class="cdd-item-title">10+ years</div><div class="cdd-item-desc">Industry veteran</div></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="ob-field">
+                  <label>How many jobs have you completed?</label>
+                  <div style="position:relative;">
+                    <button type="button" class="pm-custom-dd-btn ob-select-dd" data-dd="supJobsCompany"><span class="cdd-value cdd-placeholder">Select...</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                    <div class="pm-custom-dd-menu" data-dd-menu="supJobsCompany">
+                      <div class="cdd-item" data-value="Under 50 jobs">Under 50 jobs</div>
+                      <div class="cdd-item" data-value="50–200 jobs">50–200 jobs</div>
+                      <div class="cdd-item" data-value="200–500 jobs">200–500 jobs</div>
+                      <div class="cdd-item" data-value="500–1,000 jobs">500–1,000 jobs</div>
+                      <div class="cdd-item" data-value="1,000+ jobs">1,000+ jobs</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="ob-row-2">
+                <div class="ob-field">
+                  <label>Year established <span class="meta-badge optional">Optional</span></label>
+                  <input class="field-input" type="text" id="supCompanyYearEstablished" placeholder="e.g. 2014">
+                </div>
+                <div class="ob-field">
+                  <label>Number of operatives</label>
+                  <div style="position:relative;">
+                    <button type="button" class="pm-custom-dd-btn ob-select-dd" data-dd="supNumOperatives"><span class="cdd-value cdd-placeholder">Select...</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                    <div class="pm-custom-dd-menu" data-dd-menu="supNumOperatives">
+                      <div class="cdd-item" data-value="1–5">1–5</div>
+                      <div class="cdd-item" data-value="6–15">6–15</div>
+                      <div class="cdd-item" data-value="16–50">16–50</div>
+                      <div class="cdd-item" data-value="50+">50+</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="ob-field" style="margin-bottom:0;">
+                <label>Website <span class="meta-badge optional">Optional</span></label>
+                <input class="field-input" type="url" id="supCompanyWebsite" placeholder="https://yourcompany.co.uk">
               </div>
             </div>
           </div>
@@ -6217,11 +6331,25 @@
             <div class="ob-row-2">
               <div class="ob-field">
                 <label>Start time</label>
-                <select class="ob-select"><option>07:00 AM</option><option selected>09:00 AM</option><option>10:00 AM</option></select>
+                <div style="position:relative;">
+                  <button type="button" class="pm-custom-dd-btn ob-select-dd" data-dd="supAvailStart"><span class="cdd-value">09:00 AM</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                  <div class="pm-custom-dd-menu" data-dd-menu="supAvailStart">
+                    <div class="cdd-item" data-value="07:00 AM">07:00 AM</div>
+                    <div class="cdd-item selected" data-value="09:00 AM">09:00 AM</div>
+                    <div class="cdd-item" data-value="10:00 AM">10:00 AM</div>
+                  </div>
+                </div>
               </div>
               <div class="ob-field">
                 <label>End time</label>
-                <select class="ob-select"><option>05:00 PM</option><option selected>06:00 PM</option><option>07:00 PM</option></select>
+                <div style="position:relative;">
+                  <button type="button" class="pm-custom-dd-btn ob-select-dd" data-dd="supAvailEnd"><span class="cdd-value">06:00 PM</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                  <div class="pm-custom-dd-menu" data-dd-menu="supAvailEnd">
+                    <div class="cdd-item" data-value="05:00 PM">05:00 PM</div>
+                    <div class="cdd-item selected" data-value="06:00 PM">06:00 PM</div>
+                    <div class="cdd-item" data-value="07:00 PM">07:00 PM</div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -6241,7 +6369,7 @@
             <div class="ob-toggle-card" style="border:1px solid var(--border-subtle);">
               <div class="otc-top">
                 <div>
-                  <div class="otc-title">I am available for out-of-hours jobs</div>
+                  <div class="otc-title" id="supAvailOutOfHoursTitle">I am available for out-of-hours jobs</div>
                   <div class="otc-desc">Evenings · early mornings · weekends · bank holidays</div>
                 </div>
                 <button type="button" class="toggle-switch" role="switch" aria-checked="false"><span class="thumb"></span></button>
@@ -6253,7 +6381,7 @@
             <div class="ob-toggle-card" style="border:1px solid var(--border-subtle);">
               <div class="otc-top">
                 <div>
-                  <div class="otc-title">I accept emergency call-outs</div>
+                  <div class="otc-title" id="supAvailEmergencyTitle">I accept emergency call-outs</div>
                   <div class="otc-desc">Rapid response — typically within 1-2 hours</div>
                 </div>
                 <button type="button" class="toggle-switch" role="switch" aria-checked="false"><span class="thumb"></span></button>
@@ -6262,7 +6390,7 @@
             <div class="ob-toggle-card" style="border:1px solid var(--border-subtle);">
               <div class="otc-top">
                 <div>
-                  <div class="otc-title">I accept urgent same-day jobs</div>
+                  <div class="otc-title" id="supAvailUrgentTitle">I accept urgent same-day jobs</div>
                   <div class="otc-desc">Less than 4 hours' notice</div>
                 </div>
                 <button type="button" class="toggle-switch" role="switch" aria-checked="false"><span class="thumb"></span></button>
@@ -14185,6 +14313,14 @@
     document.getElementById('supElInsuranceCard').style.display = isCompany ? '' : 'none';
     document.getElementById('supBgCheckSoleTrader').style.display = isCompany ? 'none' : '';
     document.getElementById('supBgCheckCompany').style.display = isCompany ? '' : 'none';
+    document.getElementById('supAllOperativesLicencedCard').style.display = isCompany ? '' : 'none';
+    document.getElementById('supProfilePhotoCard').style.display = isCompany ? 'none' : '';
+    document.getElementById('supCompanyLogoCard').style.display = isCompany ? '' : 'none';
+    document.getElementById('supExpTrackSoleTrader').style.display = isCompany ? 'none' : '';
+    document.getElementById('supExpTrackCompany').style.display = isCompany ? '' : 'none';
+    document.getElementById('supAvailOutOfHoursTitle').textContent = isCompany ? 'We are available for out-of-hours jobs' : 'I am available for out-of-hours jobs';
+    document.getElementById('supAvailEmergencyTitle').textContent = isCompany ? 'We accept emergency call-outs' : 'I accept emergency call-outs';
+    document.getElementById('supAvailUrgentTitle').textContent = isCompany ? 'We accept urgent same-day jobs' : 'I accept urgent same-day jobs';
   }
   document.querySelectorAll('#businessTypeTiles .choice-tile').forEach(function (tile) {
     tile.addEventListener('click', function () {
@@ -14342,6 +14478,7 @@
 
   /* ---- Step 4: Background Checks ---- */
   initObToggle('dbsToggle', 'dbsFields');
+  initObToggle('supAllOperativesLicencedToggle', null);
   initSingleSelectTiles(document.getElementById('convictionTiles'), function (value) {
     setCollapsibleOpen(document.getElementById('convictionDetailsField'), value === 'has-convictions');
   });
@@ -17556,6 +17693,7 @@
       menu.querySelectorAll('.cdd-item').forEach(function (i) { i.classList.remove('selected'); });
       item.classList.add('selected');
       btn.querySelector('.cdd-value').textContent = item.getAttribute('data-value');
+      btn.querySelector('.cdd-value').classList.remove('cdd-placeholder');
       closeAllCustomDropdowns();
     });
   });
