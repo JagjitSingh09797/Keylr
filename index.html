@@ -37,7 +37,11 @@
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: #aab4c2; }
 
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -1949,6 +1953,11 @@
 
   .dash-scroll-area { flex: 1; overflow-y: auto; }
   .dash-content { max-width: 1240px; margin: 0 auto; padding: 24px 32px 60px; background: #F9FAFB; }
+  .dash-content.dash-content-full { max-width: none; margin: 0; }
+  @keyframes pmViewFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .pm-view-animate { animation: pmViewFadeIn 300ms ease-out; }
+  @keyframes pmTabFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .pm-tab-animate { animation: pmTabFadeIn 240ms ease-out; }
   .dash-content-sub { font-size: 13.5px; color: var(--text-body-muted); margin-top: 4px; }
 
   .dash-header {
@@ -2534,9 +2543,11 @@
   }
   .pm-custom-dd-menu.drop-up { top: auto; bottom: calc(100% + 6px); transform: translateY(6px); }
   .pm-custom-dd-menu.open { opacity: 1; visibility: visible; transform: none; }
-  .cdd-item { padding: 9px 12px; border-radius: 7px; font-size: 13px; color: var(--text-heading); cursor: pointer; }
+  .cdd-item { padding: 9px 12px; border-radius: 7px; font-size: 13px; color: var(--text-heading); cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
   .cdd-item:hover { background: var(--surface-soft); }
   .cdd-item.selected { background: var(--surface-soft); font-weight: 600; }
+  .cdd-item .cdd-check { color: var(--accent-blue); flex-shrink: 0; opacity: 0; }
+  .cdd-item.selected .cdd-check { opacity: 1; }
 
   /* Card grid */
   .pm-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
@@ -3581,6 +3592,240 @@
   .pmex-pp-bar-track { flex: 1; height: 6px; background: var(--surface-soft); border-radius: 3px; overflow: hidden; }
   .pmex-pp-bar-fill { height: 100%; background: #f59e0b; border-radius: 3px; }
   .pmex-pp-bar-pct { font-size: 12px; color: var(--text-body-muted); width: 30px; text-align: right; }
+
+  /* =========================================================
+     PM: JOB RESPONSES
+  ========================================================== */
+  .pmjr-tabs-row { display: flex; gap: 12px; border-bottom: 1px solid var(--border-subtle); margin-top: 20px; }
+  .pmjr-tab { display: flex; align-items: center; gap: 8px; padding: 4px 0 12px; font-size: 14.5px; font-weight: 600; color: var(--text-body-muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color 120ms ease-out, border-color 120ms ease-out; }
+  .pmjr-tab:hover { color: var(--text-heading); }
+  .pmjr-tab.active { color: var(--accent-blue); border-bottom-color: var(--accent-blue); }
+  .pmjr-tab-count { font-size: 12px; font-weight: 700; color: var(--text-body-muted); background: var(--surface-soft); padding: 1px 9px; border-radius: 999px; }
+  .pmjr-tab.active .pmjr-tab-count { color: var(--accent-blue); background: var(--icon-tint-bg); }
+
+  .pmjr-search-row { display: flex; gap: 10px; align-items: center; margin: 0 0 14px; }
+  .pmjr-search-wrap { position: relative; flex: 1; }
+  .pmjr-search-wrap svg { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; }
+  .pmjr-filter-toggle { width: 42px; height: 42px; flex-shrink: 0; border-radius: 10px; border: 1.5px solid var(--border-subtle); background: #fff; display: flex; align-items: center; justify-content: center; color: var(--text-body-muted); cursor: pointer; transition: border-color 120ms ease-out, color 120ms ease-out; position: relative; }
+  .pmjr-filter-toggle:hover { border-color: #90a8c8; color: var(--accent-blue); }
+  .pmjr-filter-toggle.active { border-color: var(--accent-blue); color: var(--accent-blue); background: var(--icon-tint-bg); }
+  .pmjr-filter-badge { position: absolute; top: -6px; right: -6px; width: 17px; height: 17px; border-radius: 50%; background: var(--accent-blue); color: #fff; font-size: 10px; font-weight: 800; display: none; align-items: center; justify-content: center; }
+  .pmjr-filter-badge.show { display: flex; }
+
+  .pmjr-filter-panel { display: none; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 14px; }
+  .pmjr-filter-panel.open { display: flex; }
+  .pmjr-filter-panel .pm-filter-field { width: auto; }
+  .pmjr-filter-panel .pm-custom-dd-btn { width: auto; white-space: nowrap; padding: 7px 12px; font-size: 12px; }
+  .pmjr-filter-panel .pm-custom-dd-btn .cdd-value { flex: 0 1 auto; }
+  .pmjr-filter-panel .pm-custom-dd-menu { max-height: none; width: max-content; min-width: 100%; }
+  .pmjr-filter-panel .pm-custom-dd-btn.filter-active { border-color: var(--accent-blue); color: var(--accent-blue); background: var(--icon-tint-bg); font-weight: 700; }
+  .pmjr-filter-panel .pm-custom-dd-btn.filter-active svg { color: var(--accent-blue); }
+  .pmjr-filter-clear-btn { background: #fff; border: 1.5px solid var(--border-subtle); border-radius: 8px; padding: 7px 14px; font-size: 12.5px; font-weight: 700; color: var(--text-heading); cursor: pointer; font-family: inherit; height: 36px; }
+  .pmjr-filter-clear-btn:hover { border-color: #90a8c8; background: var(--surface-soft); }
+
+  .pmjr-layout { display: grid; grid-template-columns: 350px 1fr; gap: 22px; align-items: start; margin-top: 20px; }
+  @media (max-width: 960px) { .pmjr-layout { grid-template-columns: 1fr; } }
+
+  .pmjr-list-col { width: 350px; min-width: 0; }
+  @media (max-width: 960px) { .pmjr-list-col { width: 100%; } }
+  .pmjr-detail-wrap { position: relative; background: #fff; border: 1px solid var(--border-subtle); border-radius: 16px; padding: 24px; min-width: 0; overflow: hidden; }
+
+  .pmjr-list { display: flex; flex-direction: column; gap: 10px; max-height: calc(100vh - 320px); min-height: 300px; overflow-y: auto; padding-right: 4px; }
+  .pmjr-job-card { border: 1.5px solid var(--border-subtle); border-radius: 14px; padding: 14px 16px; cursor: pointer; background: #fff; transition: border-color 120ms ease-out, background-color 120ms ease-out; }
+  .pmjr-job-card:hover:not(.active) { border-color: #90a8c8; }
+  .pmjr-job-card.active { background: var(--icon-tint-bg); border-color: var(--accent-blue); }
+  .pmjr-job-card-top { display: flex; align-items: flex-start; gap: 10px; }
+  .pmjr-job-avatar { width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 11.5px; font-weight: 800; }
+  .pmjr-job-id-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 2px; }
+  .pmjr-job-id { font-size: 11.5px; color: #94a3b8; font-weight: 600; }
+  .pmjr-job-status { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 600; color: var(--text-body-muted); }
+  .pmjr-job-status .dot { width: 5px; height: 5px; border-radius: 50%; background: #94a3b8; flex-shrink: 0; }
+  .pmjr-job-status.pending { color: #b45309; }
+  .pmjr-job-status.pending .dot { background: #f59e0b; }
+  .pmjr-job-title { font-size: 14px; font-weight: 700; color: var(--text-heading); line-height: 1.3; }
+  .pmjr-job-addr1 { font-size: 12px; color: var(--text-body-muted); margin-top: 3px; }
+  .pmjr-job-addr2 { font-size: 11.5px; color: #94a3b8; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pmjr-job-meta1 { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 11.5px; }
+  .pmjr-job-meta1 .lbl { color: #94a3b8; font-weight: 500; }
+  .pmjr-job-meta1 .price-lbl { color: var(--accent-blue); font-weight: 700; }
+  .pmjr-job-badge { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 999px; background: #f2ecfc; color: #7c3aed; }
+  .pmjr-job-badge.setprice { background: #fff1e0; color: #b45309; }
+  .pmjr-job-meta2 { display: flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 11.5px; }
+  .pmjr-job-meta2 .closed-lbl { color: #dc2626; font-weight: 700; flex-shrink: 0; }
+  .pmjr-job-meta2 .desc { color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .pmjr-detail-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .pmjr-detail-head-label { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; color: #94a3b8; text-transform: uppercase; }
+  .pmjr-status-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; }
+  .pmjr-status-pill .dot { width: 7px; height: 7px; border-radius: 50%; }
+  .pmjr-status-pill.waiting { color: #b45309; }
+  .pmjr-status-pill.waiting .dot { background: #f59e0b; }
+  .pmjr-status-pill.declined { color: #dc2626; }
+  .pmjr-status-pill.declined .dot { background: #dc2626; }
+  .pmjr-status-pill.ready { color: #15803d; }
+  .pmjr-status-pill.ready .dot { background: #15803d; }
+
+  .pmjr-supplier-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+  .pmjr-supplier-chip { display: flex; align-items: center; gap: 8px; border: 1.5px solid var(--border-subtle); border-radius: 12px; padding: 8px 14px 8px 8px; background: #fff; cursor: pointer; transition: border-color 120ms ease-out, background-color 120ms ease-out; }
+  .pmjr-supplier-chip:hover:not(.selected) { border-color: #90a8c8; }
+  .pmjr-supplier-chip.selected { background: var(--icon-tint-bg); border-color: var(--accent-blue); }
+  .pmjr-chip-avatar { width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 10.5px; font-weight: 800; }
+  .pmjr-chip-name { font-size: 13px; font-weight: 700; color: var(--text-heading); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 130px; }
+  .pmjr-chip-price { font-size: 11.5px; color: var(--text-body-muted); font-weight: 500; margin-left: 2px; }
+
+  .pmjr-alert-box { background: #fef2f2; border: 1.5px solid #fecaca; border-radius: 14px; padding: 18px 20px; margin-bottom: 16px; }
+  .pmjr-alert-title { font-size: 14.5px; font-weight: 800; color: #dc2626; margin-bottom: 6px; }
+  .pmjr-alert-desc { font-size: 13px; color: #7a5252; line-height: 1.55; margin-bottom: 14px; }
+  .pmjr-alert-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+  .pmjr-btn-market { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); color: #fff; border: none; border-radius: 9px; padding: 8px 16px; font-size: 12.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .pmjr-btn-market:hover { opacity: 0.9; }
+  .pmjr-btn-cancel { background: #fff; border: 1.5px solid #fecaca; color: #dc2626; border-radius: 9px; padding: 8px 16px; font-size: 12.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .pmjr-btn-cancel:hover { background: #fef2f2; }
+
+  .pmjr-selected-card { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); border-radius: 16px; padding: 22px 24px; margin-bottom: 20px; color: #fff; }
+  .pmjr-sel-label { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; color: #9fb0d8; text-transform: uppercase; margin-bottom: 8px; }
+  .pmjr-sel-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
+  .pmjr-sel-head { display: flex; align-items: flex-start; gap: 14px; min-width: 0; }
+  .pmjr-sel-avatar { width: 46px; height: 46px; border-radius: 11px; background: rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 15px; font-weight: 800; flex-shrink: 0; }
+  .pmjr-sel-name { font-size: 18px; font-weight: 800; color: #fff; line-height: 1.25; }
+  .pmjr-sel-sub { font-size: 13px; color: #9fb0d8; margin-top: 2px; }
+  .pmjr-sel-right { text-align: right; flex-shrink: 0; }
+  .pmjr-sel-rating { display: flex; align-items: center; gap: 4px; justify-content: flex-end; font-size: 14px; font-weight: 700; color: #fff; }
+  .pmjr-sel-rating .star { color: #f59e0b; }
+  .pmjr-sel-price { font-size: 22px; font-weight: 800; color: #fff; margin-top: 4px; }
+  .pmjr-sel-badges { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0 0; }
+  .pmjr-sel-badge { font-size: 12px; font-weight: 600; color: #fff; background: rgba(255,255,255,0.14); border-radius: 6px; padding: 4px 11px; }
+  .pmjr-sel-divider { border-top: 1px solid rgba(255,255,255,0.16); margin: 18px 0 14px; }
+  .pmjr-sel-footer { display: flex; align-items: flex-end; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+  .pmjr-sel-footer-name { font-size: 14.5px; font-weight: 700; color: #fff; }
+  .pmjr-sel-footer-jobs { font-size: 12.5px; color: #9fb0d8; margin-top: 2px; }
+  .pmjr-sel-phone { display: flex; align-items: center; gap: 6px; font-size: 13.5px; color: #fff; }
+
+  .pmjr-summary-label { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px; }
+  .pmjr-summary-id { font-size: 12px; color: var(--text-body-muted); margin-bottom: 4px; }
+  .pmjr-summary-title { font-size: 19px; font-weight: 800; color: var(--text-heading); margin-bottom: 12px; }
+  .pmjr-meta-row { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 22px; }
+  .pmjr-meta-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-body-muted); }
+  .pmjr-meta-item svg { color: #94a3b8; flex-shrink: 0; }
+
+  .pmjr-section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; color: #94a3b8; text-transform: uppercase; margin-bottom: 12px; margin-top: 20px; }
+  .pmjr-section-label:first-of-type { margin-top: 0; }
+  .pmjr-scope-item { display: flex; align-items: center; gap: 10px; font-size: 13.5px; color: var(--text-heading); padding: 6px 0; }
+  .pmjr-scope-item svg { color: #10b981; flex-shrink: 0; }
+
+  .pmjr-waiting-notice { background: #fefce8; border: 1.5px solid #fde68a; border-radius: 12px; padding: 14px 18px; font-size: 13.5px; font-weight: 600; color: #92720c; margin-top: 20px; }
+
+  .pmjr-commercial { background: var(--icon-tint-bg); border-radius: 14px; overflow: hidden; }
+  .pmjr-commercial-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 13px 18px; border-bottom: 1px solid rgba(40,72,144,0.1); font-size: 13.5px; }
+  .pmjr-commercial-row:last-child { border-bottom: none; }
+  .pmjr-commercial-row .lbl { color: var(--text-heading); font-weight: 500; }
+  .pmjr-commercial-row .sub { display: block; font-size: 11.5px; color: #94a3b8; font-weight: 400; margin-top: 1px; }
+  .pmjr-commercial-row .val { color: var(--text-heading); font-weight: 600; flex-shrink: 0; }
+  .pmjr-commercial-row.total { background: rgba(40,72,144,0.08); }
+  .pmjr-commercial-row.total .lbl, .pmjr-commercial-row.total .val { font-weight: 800; font-size: 15px; }
+  .pmjr-commercial-row.section-head .lbl { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; color: #94a3b8; text-transform: uppercase; }
+  .pmjr-material-note { font-size: 12px; color: #94a3b8; font-style: italic; padding: 10px 18px; background: var(--surface-soft); border-radius: 10px; margin-top: 10px; }
+
+  .pmjr-final-price-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
+  .pmjr-final-price-label { font-size: 14.5px; font-weight: 800; color: var(--text-heading); }
+  .pmjr-final-price-value { font-size: 19px; font-weight: 800; color: var(--accent-blue); }
+  .pmjr-release-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 6px; flex-wrap: wrap; }
+  .pmjr-pb-link { font-size: 12.5px; font-weight: 700; color: var(--accent-blue); text-decoration: underline; cursor: pointer; background: none; border: none; font-family: inherit; padding: 0; }
+  .pmjr-pb-link:hover { color: var(--btn-grad-end); }
+
+  .pmjr-release-line { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #15803d; font-weight: 600; }
+  .pmjr-release-line svg { flex-shrink: 0; }
+  .pmjr-upfront-label { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; color: #94a3b8; text-transform: uppercase; margin-top: 20px; margin-bottom: 12px; }
+  .pmjr-upfront-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 640px) { .pmjr-upfront-grid { grid-template-columns: 1fr; } }
+  .pmjr-upfront-col { border-radius: 12px; padding: 14px 16px; }
+  .pmjr-upfront-col.primary { background: var(--icon-tint-bg); }
+  .pmjr-upfront-col-title { font-size: 12.5px; font-weight: 700; margin-bottom: 10px; }
+  .pmjr-upfront-col-title.primary { color: var(--accent-blue); }
+  .pmjr-upfront-col-title.muted { color: var(--text-body-muted); }
+  .pmjr-upfront-row { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--text-heading); padding: 5px 0; }
+  .pmjr-upfront-row .val { color: var(--text-body-muted); }
+  .pmjr-upfront-row.total { border-top: 1px solid rgba(40,72,144,0.15); margin-top: 6px; padding-top: 10px; font-weight: 800; }
+  .pmjr-upfront-row.total .val { color: var(--text-heading); }
+  .pmjr-upfront-note { font-size: 12px; color: var(--text-body-muted); margin-top: 12px; line-height: 1.5; }
+  .pmjr-req-badges { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pmjr-req-badge { font-size: 12px; font-weight: 600; color: var(--text-heading); background: var(--surface-soft); border: 1px solid var(--border-subtle); border-radius: 999px; padding: 6px 13px; }
+  .pmjr-declined-line { font-size: 13px; font-weight: 700; color: #dc2626; margin-top: 20px; }
+
+  .pmjr-action-toast { position: fixed; bottom: 24px; right: 24px; background: #10a048; color: #fff; padding: 14px 18px; border-radius: 12px; display: flex; align-items: center; gap: 10px; font-size: 13.5px; font-weight: 700; box-shadow: 0 12px 28px rgba(0,0,0,0.22); z-index: 400; opacity: 0; transform: translateY(14px); pointer-events: none; transition: opacity 220ms ease-out, transform 220ms ease-out; }
+  .pmjr-action-toast.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  .pmjr-action-toast svg:first-child { flex-shrink: 0; }
+  .pmjr-action-toast-close { color: rgba(255,255,255,0.85); background: none; border: none; cursor: pointer; flex-shrink: 0; display: flex; }
+  .pmjr-action-toast-close:hover { color: #fff; }
+
+  .pmjr-pb-card { width: 100%; max-width: 460px; background: #fff; border-radius: 18px; padding: 26px; box-shadow: 0 30px 80px rgba(0,0,0,0.35); transform: translateY(18px) scale(0.98); opacity: 0; transition: transform 300ms cubic-bezier(0.16,1,0.3,1), opacity 300ms ease-out; }
+  .modal-overlay.open .pmjr-pb-card { transform: none; opacity: 1; }
+  .pmjr-pb-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .pmjr-pb-title { font-size: 17px; font-weight: 800; color: var(--text-heading); }
+  .pmjr-pb-close { width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--border-subtle); background: #fff; display: flex; align-items: center; justify-content: center; color: var(--text-body-muted); cursor: pointer; flex-shrink: 0; }
+  .pmjr-pb-close:hover { background: var(--surface-soft); color: var(--text-heading); }
+  .pmjr-pb-box { background: var(--icon-tint-bg); border-radius: 14px; padding: 16px; }
+  .pmjr-pb-label { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; color: var(--accent-blue); text-transform: uppercase; margin-bottom: 12px; }
+  .pmjr-pb-rows { background: #fff; border-radius: 12px; padding: 4px 16px; }
+  .pmjr-pb-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; font-size: 13.5px; color: var(--text-heading); border-bottom: 1px solid #f1f5f9; }
+  .pmjr-pb-row:last-child { border-bottom: none; }
+  .pmjr-pb-row .val { font-weight: 700; }
+  .pmjr-pb-total-row { display: flex; align-items: center; justify-content: space-between; padding-top: 14px; margin-top: 8px; border-top: 1.5px dashed rgba(40,72,144,0.3); font-size: 14.5px; font-weight: 800; color: var(--accent-blue); }
+  .pmjr-pb-note { font-size: 12.5px; color: var(--text-body-muted); line-height: 1.6; margin-top: 16px; }
+
+  .pmjr-footer-bar { position: sticky; bottom: 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; background: #fff; border-top: 1px solid var(--border-subtle); padding: 16px 0 4px; margin-top: 22px; }
+  .pmjr-chat-btn { display: inline-flex; align-items: center; gap: 7px; background: #fff; border: 1.5px solid var(--border-subtle); border-radius: 9px; padding: 8px 15px; font-size: 12.5px; font-weight: 700; color: var(--text-heading); cursor: pointer; font-family: inherit; }
+  .pmjr-chat-btn:hover { border-color: #90a8c8; background: var(--surface-soft); }
+  .pmjr-award-wrap { display: flex; align-items: center; gap: 16px; margin-left: auto; }
+  .pmjr-award-price-info { text-align: right; }
+  .pmjr-award-price-info .breakdown { font-size: 11.5px; color: #94a3b8; }
+  .pmjr-award-price-info .final { font-size: 15px; font-weight: 800; color: var(--text-heading); }
+  .pmjr-award-btn { display: inline-flex; align-items: center; gap: 7px; border: none; border-radius: 9px; padding: 9px 18px; font-size: 12.5px; font-weight: 700; cursor: pointer; font-family: inherit; background: #cbd5e1; color: #64748b; }
+  .pmjr-award-btn.ready { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); color: #fff; cursor: pointer; }
+  .pmjr-award-btn.ready:hover { opacity: 0.9; }
+  .pmjr-award-btn:disabled { cursor: not-allowed; }
+
+  .pmjr-empty-detail { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 80px 24px; color: var(--text-body-muted); border: 1.5px dashed var(--border-subtle); border-radius: 16px; }
+
+  /* Chat drawer — scoped to the detail panel (pmjr-detail-wrap), not the full page */
+  .pmjr-chat-overlay { position: absolute; inset: 0; background: rgba(16,24,40,0.2); z-index: 20; opacity: 0; pointer-events: none; transition: opacity 200ms ease-out; border-radius: 16px; }
+  .pmjr-chat-overlay.open { opacity: 1; pointer-events: auto; }
+  .pmjr-chat-drawer { position: absolute; top: 0; right: 0; height: 100%; width: 380px; max-width: 92%; background: #fff; z-index: 21; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 220ms ease-out, box-shadow 220ms ease-out; border-radius: 0 16px 16px 0; border-left: 1px solid var(--border-subtle); }
+  .pmjr-chat-drawer.open { transform: translateX(0); box-shadow: -12px 0 36px rgba(16,24,40,0.18); }
+  .pmjr-chat-head { display: flex; align-items: center; gap: 10px; padding: 16px 16px 12px; border-bottom: 1px solid var(--border-subtle); flex-shrink: 0; }
+  .pmjr-chat-avatar { width: 36px; height: 36px; border-radius: 9px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; font-weight: 800; position: relative; }
+  .pmjr-chat-online-dot { position: absolute; bottom: -2px; right: -2px; width: 10px; height: 10px; border-radius: 50%; background: #10b981; border: 2px solid #fff; }
+  .pmjr-chat-name { font-size: 13.5px; font-weight: 800; color: var(--text-heading); }
+  .pmjr-chat-status { font-size: 11.5px; color: var(--text-body-muted); display: flex; align-items: center; gap: 5px; margin-top: 1px; }
+  .pmjr-chat-status .dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; }
+  .pmjr-chat-award-btn { background: #16a34a; color: #fff; border: none; border-radius: 7px; padding: 6px 12px; font-size: 11.5px; font-weight: 700; cursor: pointer; font-family: inherit; flex-shrink: 0; margin-left: auto; }
+  .pmjr-chat-award-btn:hover { opacity: 0.9; }
+  .pmjr-chat-close { width: 28px; height: 28px; border-radius: 7px; border: none; background: none; color: var(--text-body-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+  .pmjr-chat-close:hover { background: var(--surface-soft); color: var(--text-heading); }
+  .pmjr-chat-job-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; border-bottom: 1px solid var(--border-subtle); flex-shrink: 0; }
+  .pmjr-chat-job-lbl { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; color: #94a3b8; text-transform: uppercase; }
+  .pmjr-chat-job-badge { font-size: 11px; font-weight: 700; padding: 2px 10px; border-radius: 999px; background: var(--icon-tint-bg); color: var(--accent-blue); }
+  .pmjr-chat-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+  .pmjr-chat-msg { display: flex; align-items: flex-start; gap: 10px; }
+  .pmjr-chat-msg-avatar { width: 26px; height: 26px; border-radius: 7px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 10px; font-weight: 800; }
+  .pmjr-chat-bubble { background: var(--surface-soft); border-radius: 12px; padding: 10px 14px; font-size: 13px; color: var(--text-heading); line-height: 1.5; max-width: 260px; }
+  .pmjr-chat-timestamp { font-size: 10.5px; color: #94a3b8; margin-top: 4px; }
+  .pmjr-chat-footer { flex-shrink: 0; padding: 12px 16px 16px; border-top: 1px solid var(--border-subtle); }
+  .pmjr-chat-price-update-btn { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); color: #fff; border: none; border-radius: 8px; padding: 8px 14px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; margin-bottom: 10px; }
+  .pmjr-chat-price-update-btn:hover { opacity: 0.9; }
+  .pmjr-chat-price-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .pmjr-chat-price-input-wrap { flex: 1; display: flex; align-items: center; gap: 4px; border: 1.5px solid var(--border-subtle); border-radius: 10px; padding: 8px 12px; }
+  .pmjr-chat-price-input-wrap:focus-within { border-color: var(--accent-blue); }
+  .pmjr-chat-price-prefix { color: var(--text-body-muted); font-weight: 600; font-size: 13px; }
+  .pmjr-chat-price-input { border: none; outline: none; font-size: 13px; font-family: inherit; flex: 1; min-width: 0; color: var(--text-heading); }
+  .pmjr-chat-send-price { background: var(--navy-900); color: #fff; border: none; border-radius: 8px; padding: 9px 14px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; flex-shrink: 0; white-space: nowrap; }
+  .pmjr-chat-send-price:hover { opacity: 0.9; }
+  .pmjr-chat-input-row { display: flex; align-items: center; gap: 8px; }
+  .pmjr-chat-input { flex: 1; border: 1.5px solid var(--border-subtle); border-radius: 999px; padding: 9px 15px; font-size: 13px; font-family: inherit; outline: none; }
+  .pmjr-chat-input:focus { border-color: var(--accent-blue); }
+  .pmjr-chat-send { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); color: #fff; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+  .pmjr-chat-send:hover { opacity: 0.9; }
+  @media (max-width: 640px) { .pmjr-chat-drawer { width: 100%; max-width: 100%; border-radius: 0; } }
 
 </style>
 </head>
@@ -6371,6 +6616,129 @@
             </div>
           </div>
 
+          <!-- Job Responses view -->
+          <div id="pmResponsesView" style="display:none;">
+            <div class="dash-section">
+              <div class="dash-header">
+                <div>
+                  <div style="font-size:11px;font-weight:700;letter-spacing:0.06em;color:#94a3b8;margin-bottom:4px;">JOBS</div>
+                  <h2 style="background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); -webkit-background-clip: text; background-clip: text; color: transparent;">Job Responses</h2>
+                  <div class="dash-content-sub">Review supplier responses and award jobs — compare quotes, set a price, and award the winner.</div>
+                </div>
+              </div>
+
+              <div class="pmjr-tabs-row" id="pmjrTabs">
+                <div class="pmjr-tab active" data-tab="all">All Requests <span class="pmjr-tab-count" id="pmjrCountAll">0</span></div>
+                <div class="pmjr-tab" data-tab="setprice">Set Price Jobs <span class="pmjr-tab-count" id="pmjrCountSetprice">0</span></div>
+                <div class="pmjr-tab" data-tab="quote">Quote Requests <span class="pmjr-tab-count" id="pmjrCountQuote">0</span></div>
+                <div class="pmjr-tab" data-tab="preferred">Preferred Suppliers <span class="pmjr-tab-count" id="pmjrCountPreferred">0</span></div>
+              </div>
+
+              <div class="pmjr-layout">
+                <div class="pmjr-list-col">
+                  <div class="pmjr-search-row">
+                    <div class="pmjr-search-wrap">
+                      <svg width="15" height="15" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="4.5"/><path d="M10 10l2.5 2.5"/></svg>
+                      <input type="text" class="field-input" style="padding-left:38px;" id="pmjrSearchInput" placeholder="Search job, property, manager..." autocomplete="off">
+                    </div>
+                    <button type="button" class="pmjr-filter-toggle" id="pmjrFilterToggleBtn" aria-label="Filters">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
+                      <span class="pmjr-filter-badge" id="pmjrFilterBadge">0</span>
+                    </button>
+                  </div>
+
+                  <div class="pmjr-filter-panel" id="pmjrFilterPanel">
+                    <div class="pm-filter-field">
+                      <button type="button" class="pm-custom-dd-btn" data-dd="pmjrStatusFilter"><span class="cdd-value">All Statuses</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                      <div class="pm-custom-dd-menu" data-dd-menu="pmjrStatusFilter">
+                        <div class="cdd-item selected" data-value="All Statuses">All Statuses<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        <div class="cdd-item" data-value="Awaiting Quotes">Awaiting Quotes<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        <div class="cdd-item" data-value="Closed">Closed<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                      </div>
+                    </div>
+                    <div class="pm-filter-field">
+                      <button type="button" class="pm-custom-dd-btn" data-dd="pmjrServiceFilter"><span class="cdd-value">All Services</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                      <div class="pm-custom-dd-menu" data-dd-menu="pmjrServiceFilter" id="pmjrServiceFilterMenu">
+                        <div class="cdd-item selected" data-value="All Services">All Services<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        <div class="cdd-item" data-value="Airbnb Turnover Clean">Airbnb Turnover Clean<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        <div class="cdd-item" data-value="Biohazard / Trauma Clean">Biohazard / Trauma Clean<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        <div class="cdd-item" data-value="Boiler Repair / No Hot Water / Gas Leak Emergency">Boiler Repair / No Hot Water / Gas Leak Emergency<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        <div class="cdd-item" data-value="Carpet / Stair Carpet Steam Clean">Carpet / Stair Carpet Steam Clean<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        <div class="cdd-item" data-value="Door Entry / Intercom / Smart Doorbell">Door Entry / Intercom / Smart Doorbell<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        <div class="cdd-item" data-value="EICR — Electrical Installation Condition Report">EICR — Electrical Installation Condition Report<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        <div class="cdd-item" data-value="End of Tenancy / Deep / Regular / Co…">End of Tenancy / Deep / Regular / Co&hellip;<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        <div class="cdd-item" data-value="PAT Testing">PAT Testing<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        <div class="cdd-item" data-value="Post-Build / Upholstery / Oven / Mould">Post-Build / Upholstery / Oven / Mould<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                      </div>
+                    </div>
+                    <div class="pm-filter-field">
+                      <button type="button" class="pm-custom-dd-btn" data-dd="pmjrPropertyFilter"><span class="cdd-value">All Properties</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                      <div class="pm-custom-dd-menu" data-dd-menu="pmjrPropertyFilter" id="pmjrPropertyFilterMenu">
+                        <div class="cdd-item selected" data-value="All Properties">All Properties<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        <div class="cdd-item" data-value="Carrington">Carrington<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        <div class="cdd-item" data-value="Old Shades">Old Shades<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        <div class="cdd-item" data-value="45-47">45-47, Whitehall<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        <div class="cdd-item" data-value="Flat 1">Flat 1, 39 Whitehall<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        <div class="cdd-item" data-value="Q &amp; Q Recovery">Q &amp; Q Recovery<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        <div class="cdd-item" data-value="Travelodge Hotels Ltd">Travelodge Hotels Ltd<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                      </div>
+                    </div>
+                    <div class="pm-filter-field">
+                      <button type="button" class="pm-custom-dd-btn" data-dd="pmjrDeadlineFilter"><span class="cdd-value">Any Deadline</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                      <div class="pm-custom-dd-menu" data-dd-menu="pmjrDeadlineFilter">
+                        <div class="cdd-item selected" data-value="Any Deadline">Any Deadline<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        <div class="cdd-item" data-value="Today">Today<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        <div class="cdd-item" data-value="This week">This week<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        <div class="cdd-item" data-value="Overdue">Overdue<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                      </div>
+                    </div>
+                    <button type="button" class="pmjr-filter-clear-btn" id="pmjrFilterClearAllBtn">Clear</button>
+                  </div>
+
+                  <div class="pmjr-list" id="pmjrList"></div>
+                </div>
+                <div class="pmjr-detail-wrap" id="pmjrDetailWrap">
+                  <div id="pmjrDetail"></div>
+
+                  <!-- Job Responses: chat drawer, scoped to the detail panel only -->
+                  <div class="pmjr-chat-overlay" id="pmjrChatOverlay"></div>
+                  <div class="pmjr-chat-drawer" id="pmjrChatDrawer">
+                    <div class="pmjr-chat-head">
+                      <div class="pmjr-chat-avatar" id="pmjrChatAvatar">
+                        <div class="pmjr-chat-online-dot"></div>
+                      </div>
+                      <div style="min-width:0;flex:1;">
+                        <div class="pmjr-chat-name" id="pmjrChatName">&nbsp;</div>
+                        <div class="pmjr-chat-status"><span class="dot"></span><span id="pmjrChatStatusText">&nbsp;</span></div>
+                      </div>
+                      <button type="button" class="pmjr-chat-award-btn" id="pmjrChatAwardBtn">Award Job</button>
+                      <button type="button" class="pmjr-chat-close" id="pmjrChatCloseBtn" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+                    </div>
+                    <div class="pmjr-chat-job-row">
+                      <span class="pmjr-chat-job-lbl" id="pmjrChatJobLbl">JOB · —</span>
+                      <span class="pmjr-chat-job-badge" id="pmjrChatJobBadge">Quote</span>
+                    </div>
+                    <div class="pmjr-chat-messages" id="pmjrChatMessages"></div>
+                    <div class="pmjr-chat-footer">
+                      <button type="button" class="pmjr-chat-price-update-btn" id="pmjrChatPriceUpdateBtn">Price Update</button>
+                      <div class="pmjr-chat-price-row" id="pmjrChatPriceRow" style="display:none;">
+                        <div class="pmjr-chat-price-input-wrap">
+                          <span class="pmjr-chat-price-prefix">£</span>
+                          <input type="text" class="pmjr-chat-price-input" id="pmjrChatPriceInput" placeholder="Updated amount">
+                        </div>
+                        <button type="button" class="pmjr-chat-send-price" id="pmjrChatSendPriceBtn">Send Price</button>
+                      </div>
+                      <div class="pmjr-chat-input-row">
+                        <input type="text" class="pmjr-chat-input" id="pmjrChatInput" placeholder="Message...">
+                        <button type="button" class="pmjr-chat-send" id="pmjrChatSendBtn" aria-label="Send"><svg width="15" height="15" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 7h10M8 4l4 3-4 3"/></svg></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -6389,6 +6757,29 @@
       <button type="button" class="dt-close" id="dashToastClose" aria-label="Close">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
       </button>
+    </div>
+
+    <!-- Job Responses: bottom-right action confirmation toast -->
+    <div class="pmjr-action-toast" id="pmjrActionToast">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12.3l2.5 2.5 5-5.6"/></svg>
+      <span id="pmjrActionToastMsg"></span>
+      <button type="button" class="pmjr-action-toast-close" id="pmjrActionToastClose" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+
+    <!-- Job Responses: Price Breakdown modal -->
+    <div class="modal-overlay" id="pmjrPbOverlay">
+      <div class="pmjr-pb-card">
+        <div class="pmjr-pb-head">
+          <div class="pmjr-pb-title" id="pmjrPbTitle">Price Breakdown</div>
+          <button type="button" class="pmjr-pb-close" id="pmjrPbCloseBtn" aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+        </div>
+        <div class="pmjr-pb-box">
+          <div class="pmjr-pb-label">How this price splits</div>
+          <div class="pmjr-pb-rows" id="pmjrPbRows"></div>
+          <div class="pmjr-pb-total-row"><span>Total Paid by You</span><span id="pmjrPbTotal">—</span></div>
+        </div>
+        <div class="pmjr-pb-note">The supplier's net rate plus their VAT, the Keylr handling fee and its VAT make up the total you pay.</div>
+      </div>
     </div>
   </div>
 
@@ -11231,11 +11622,658 @@
     document.getElementById('pmexProfileBackBtn').addEventListener('click', pmexShowBrowse);
   }
 
+  /* =========================================================
+     PM: JOB RESPONSES
+  ========================================================== */
+  var PMJR_COLORS = { purple: '#7c5cdb', navy: '#1e2a44', brown: '#b0703f', teal: '#0f9488' };
+  var PMJR_DEFAULT_REQUIREMENTS = ['Provide access arrangements at least 24 hours before the visit', 'Respond to supplier queries within 1 working day', 'Approve completed work within 3 working days', 'Notify suppliers of any access changes immediately', 'Respond within 4 hours', 'Arrive on the agreed date & time', 'Provide photo proof of completion', 'Use qualified, insured staff'];
+
+  function pmjrSupplier(id, name, shortName, initials, color, price) {
+    return { id: id, name: name, shortName: shortName, initials: initials, color: color, price: price };
+  }
+
+  var PMJR_JOBS = [
+    { id: 'JOB-2764', title: 'Boiler Repair / No Hot Water / Gas Leak Emergency', avatarInitials: 'Q&', avatarColor: 'brown',
+      addr1: 'Q & Q Recovery, West Road', addr2: 'Q & Q Recovery, West Road, Barnsley', postcode: 'S75 2DH',
+      type: 'quote', preferred: true, status: 'pending', priceLabel: null, due: '2026-07-03', urgency: 'Emergency \u2013 as soon as possible',
+      scope: ['Check the boiler', 'Check the gas leakage', 'Check the water'],
+      suppliers: [
+        pmjrSupplier('sup-lg1', 'Liam Greenwood Appliance Engineer', 'Liam Greenwood...', 'LG', 'teal', null),
+        pmjrSupplier('sup-s1', 'GRIFFIN RAIL WHEEL LTD', 'GRIFFIN RAIL...', 'S', 'navy', null),
+        pmjrSupplier('sup-dc1', 'KEY RIDERS LTD', 'KEY RIDERS...', 'DC', 'navy', null),
+        pmjrSupplier('sup-d1', 'doefy', 'doefy', 'D', 'purple', null)
+      ],
+      selectedSupplierId: 'sup-lg1', supplierDetail: { businessType: 'Individual', rating: 5.0, badges: ['Individual', 'TrustMark', 'Public Liability'], jobsCompleted: 4, phone: '+447671542225' },
+      waiting: true, declinedAlert: false, commercial: null, listMeta: { awaiting: true, closedText: null } },
+
+    { id: 'JOB-2746', title: 'Door Entry / Intercom / Smart Doorbell', avatarInitials: 'CP', avatarColor: 'purple',
+      addr1: 'Carrington, PO Box 81490', addr2: 'Carrington, PO Box 81490, London \u00b7 SW18 9WR', postcode: 'SW18 9WR',
+      type: 'quote', preferred: true, status: 'pending', priceLabel: null, due: '2026-07-01', urgency: 'Emergency \u2013 as soon as possible',
+      scope: ['Confirm work area is safe to access', 'Complete the service as specified', 'Photograph completed work'],
+      suppliers: [
+        pmjrSupplier('sup-dc2', 'KEY RIDERS LTD', 'KEY RIDERS LTD', 'DC', 'navy', null),
+        pmjrSupplier('sup-s2', 'GRIFFIN RAIL WHEEL LTD', 'GRIFFIN RAIL WHEEL LTD', 'S', 'navy', null),
+        pmjrSupplier('sup-nr1', 'Nadia Reid Gardener', 'Nadia Reid Gardener', 'NR', 'purple', '\u00a330')
+      ],
+      selectedSupplierId: 'sup-nr1', supplierDetail: { businessType: 'Individual', rating: 4.7, badges: ['Individual', 'Gas Safe', 'F-Gas', 'Public Liability'], jobsCompleted: 7, phone: '+447974202021' },
+      waiting: false, declinedAlert: false,
+      commercial: { rows: [ { label: 'Call-out fee', value: '\u00a310.00' }, { label: 'Emergency Charges', sub: 'Out-of-hours rate', value: '\u00a310.00' }, { label: 'Supplier earning', value: '\u00a316.67' }, { label: 'VAT (20%)', value: '\u00a33.33' } ], totalLabel: 'TOTAL (INC. VAT)', totalValue: '\u00a320.00', materialNote: 'Material cost is not included in the total quote amount \u2014 no VAT or Keylr fee applies. The receipt is uploaded later.', finalPrice: '\u00a336', breakdownNote: '\u00a325 + \u00a35 Keylr Handling Fees' },
+      listMeta: { awaiting: true, closedText: 'KEY RIDERS LTD responded \u00b7 02/07\u2026' } },
+
+    { id: 'JOB-2743', title: 'Carpet / Stair Carpet Steam Clean', avatarInitials: 'CP', avatarColor: 'purple',
+      addr1: 'Carrington, PO Box 81490', addr2: 'Carrington, PO Box 81490, London \u00b7 SW18 9WR', postcode: 'SW18 9WR',
+      type: 'quote', preferred: true, status: 'expired', priceLabel: null, due: '2026-07-01', urgency: 'Emergency \u2013 as soon as possible',
+      scope: ['Confirm work area is safe to access', 'Complete the service as specified', 'Photograph completed work'], scopeSections: 1,
+      requirements: ['Provide access arrangements at least 24 hours before the visit', 'Respond to supplier queries within 1 working day', 'Approve completed work within 3 working days', 'Notify suppliers of any access changes immediately', 'Respond within 4 hours', 'Arrive on the agreed date & time', 'Provide photo proof of completion', 'Use qualified, insured staff'],
+      suppliers: [ pmjrSupplier('sup-nr2', 'Nadia Reid Gardener', 'Nadia Reid Gardener', 'NR', 'purple', '\u00a340') ],
+      selectedSupplierId: 'sup-nr2', supplierDetail: { businessType: 'Individual', rating: 4.7, badges: ['Individual', 'Gas Safe', 'F-Gas', 'Public Liability'], jobsCompleted: 7, phone: '+447974202021' },
+      waiting: false, declinedAlert: true,
+      commercial: { rows: [ { label: 'Pipe', value: '\u00a320.00' }, { label: 'Call-out fee', value: '\u00a310.00' }, { label: 'Emergency Charges', sub: 'Out-of-hours rate', value: '\u00a310.00' }, { label: 'Keylr Handling Fees', value: '\u00a36.67' }, { label: 'VAT (20%)', value: '\u00a31.33' } ], totalLabel: null, totalValue: null, materialNote: 'Material cost is not included in the total quote amount \u2014 no VAT or Keylr fee applies. The receipt is uploaded later.', finalPrice: '\u00a348', breakdownNote: '\u00a333.33 + \u00a36.67 Keylr Handling Fees' },
+      releaseInfo: 'Released on Completion \u00b7 Net 14 Days',
+      upfront: {
+        pay: [ { label: 'Supplier net', value: '\u00a38.33' }, { label: 'Supplier VAT', value: '\u00a31.67' }, { label: 'Keylr fee', value: '\u00a31.67' }, { label: 'VAT on fee', value: '\u00a30.33' } ], payTotal: '\u00a312',
+        remaining: [ { label: 'Supplier net', value: '\u00a325' }, { label: 'Supplier VAT', value: '\u00a35' }, { label: 'Keylr fee', value: '\u00a35' }, { label: 'VAT on fee', value: '\u00a31' } ], remainingTotal: '\u00a336',
+        note: 'Supplier asked for \u00a312 upfront (incl. Keylr fee + VAT). Awarding accepts it; pay it from the job\u2019s detail page before they can start.'
+      },
+      listMeta: { awaiting: true, closedText: 'Nadia Reid Gardener submitted a quo\u2026' },
+      chat: { supplierName: 'Nadia Reid', supplierInitials: 'NR', supplierColor: 'purple', jobBadge: 'Quote',
+        messages: [
+          { kind: 'system', text: 'Conversation started for Carpet / Stair Carpet Steam Clean.', ts: 'Wed 21:50' },
+          { kind: 'supplier', text: 'Submitted a quote: \u00a340', ts: 'Wed 21:50' },
+          { kind: 'system', text: 'A supplier withdrew their response A supplier cancelled the response they\u2019d submitted. The job is still open for your other responders.', ts: 'Thu 20:17' }
+        ] } },
+
+    { id: 'JOB-2742', title: 'Carpet / Stair Carpet Steam Clean', avatarInitials: 'CP', avatarColor: 'purple',
+      addr1: 'Carrington, PO Box 81490', addr2: 'Carrington, PO Box 81490, London \u00b7 SW18 9WR', postcode: 'SW18 9WR',
+      type: 'quote', preferred: true, status: 'expired', priceLabel: null, due: '2026-07-01', urgency: 'Flexible',
+      scope: ['Confirm work area is safe to access', 'Complete the service as specified', 'Photograph completed work'],
+      suppliers: [ pmjrSupplier('sup-nr3', 'Nadia Reid Gardener', 'Nadia Reid Gardener', 'NR', 'purple', '\u00a338') ],
+      selectedSupplierId: 'sup-nr3', supplierDetail: { businessType: 'Individual', rating: 4.7, badges: ['Individual', 'Gas Safe', 'Public Liability'], jobsCompleted: 7, phone: '+447974202021' },
+      waiting: false, declinedAlert: false,
+      commercial: { rows: [ { label: 'Call-out fee', value: '\u00a310.00' }, { label: 'Supplier earning', value: '\u00a324.17' }, { label: 'VAT (20%)', value: '\u00a33.83' } ], totalLabel: 'TOTAL (INC. VAT)', totalValue: '\u00a338.00', materialNote: null, finalPrice: '\u00a345.60', breakdownNote: '\u00a338 + \u00a37.60 Keylr Handling Fees' },
+      listMeta: { awaiting: true, closedText: 'Nadia Reid Gardener responded \u00b7 01\u2026' } },
+
+    { id: 'JOB-2741', title: 'Carpet / Stair Carpet Steam Clean', avatarInitials: 'CP', avatarColor: 'purple',
+      addr1: 'Carrington, PO Box 81490', addr2: 'Carrington, PO Box 81490, London \u00b7 SW18 9WR', postcode: 'SW18 9WR',
+      type: 'quote', preferred: true, status: 'expired', priceLabel: null, due: '2026-07-01', urgency: 'Flexible',
+      scope: ['Confirm work area is safe to access', 'Complete the service as specified', 'Photograph completed work'],
+      suppliers: [ pmjrSupplier('sup-nr4', 'Nadia Reid Gardener', 'Nadia Reid Gardener', 'NR', 'purple', '\u00a335') ],
+      selectedSupplierId: 'sup-nr4', supplierDetail: { businessType: 'Individual', rating: 4.7, badges: ['Individual', 'Gas Safe', 'Public Liability'], jobsCompleted: 7, phone: '+447974202021' },
+      waiting: false, declinedAlert: false,
+      commercial: { rows: [ { label: 'Call-out fee', value: '\u00a310.00' }, { label: 'Supplier earning', value: '\u00a321.67' }, { label: 'VAT (20%)', value: '\u00a33.33' } ], totalLabel: 'TOTAL (INC. VAT)', totalValue: '\u00a335.00', materialNote: null, finalPrice: '\u00a342.00', breakdownNote: '\u00a335 + \u00a37 Keylr Handling Fees' },
+      listMeta: { awaiting: true, closedText: 'Nadia Reid Gardener responded \u00b7 01\u2026' } },
+
+    { id: 'JOB-2738', title: 'Carpet / Stair Carpet Steam Clean', avatarInitials: 'CP', avatarColor: 'purple',
+      addr1: 'Carrington, PO Box 81490', addr2: 'Carrington, PO Box 81490, London \u00b7 SW18 9WR', postcode: 'SW18 9WR',
+      type: 'quote', preferred: true, status: 'expired', priceLabel: null, due: '2026-07-01', urgency: 'Flexible',
+      scope: ['Confirm work area is safe to access', 'Complete the service as specified', 'Photograph completed work'],
+      suppliers: [ pmjrSupplier('sup-nr5', 'Nadia Reid Gardener', 'Nadia Reid Gardener', 'NR', 'purple', '\u00a332') ],
+      selectedSupplierId: 'sup-nr5', supplierDetail: { businessType: 'Individual', rating: 4.7, badges: ['Individual', 'Gas Safe', 'Public Liability'], jobsCompleted: 7, phone: '+447974202021' },
+      waiting: false, declinedAlert: false,
+      commercial: { rows: [ { label: 'Call-out fee', value: '\u00a310.00' }, { label: 'Supplier earning', value: '\u00a318.33' }, { label: 'VAT (20%)', value: '\u00a33.67' } ], totalLabel: 'TOTAL (INC. VAT)', totalValue: '\u00a332.00', materialNote: null, finalPrice: '\u00a338.40', breakdownNote: '\u00a332 + \u00a36.40 Keylr Handling Fees' },
+      listMeta: { awaiting: true, closedText: 'Nadia Reid Gardener responded \u00b7 01\u2026' } },
+
+    { id: 'JOB-2737', title: 'Carpet / Stair Carpet Steam Clean', avatarInitials: 'CP', avatarColor: 'purple',
+      addr1: 'Carrington, PO Box 81490', addr2: 'Carrington, PO Box 81490, London \u00b7 SW18 9WR', postcode: 'SW18 9WR',
+      type: 'quote', preferred: true, status: 'expired', priceLabel: null, due: '2026-07-01', urgency: 'Flexible',
+      scope: ['Confirm work area is safe to access', 'Complete the service as specified', 'Photograph completed work'],
+      suppliers: [ pmjrSupplier('sup-nr6', 'Nadia Reid Gardener', 'Nadia Reid Gardener', 'NR', 'purple', '\u00a330') ],
+      selectedSupplierId: 'sup-nr6', supplierDetail: { businessType: 'Individual', rating: 4.7, badges: ['Individual', 'Gas Safe', 'Public Liability'], jobsCompleted: 7, phone: '+447974202021' },
+      waiting: false, declinedAlert: false,
+      commercial: { rows: [ { label: 'Call-out fee', value: '\u00a310.00' }, { label: 'Supplier earning', value: '\u00a316.67' }, { label: 'VAT (20%)', value: '\u00a33.33' } ], totalLabel: 'TOTAL (INC. VAT)', totalValue: '\u00a330.00', materialNote: null, finalPrice: '\u00a336.00', breakdownNote: '\u00a330 + \u00a36 Keylr Handling Fees' },
+      listMeta: { awaiting: true, closedText: 'Nadia Reid Gardener responded \u00b7 01\u2026' } },
+
+    { id: 'JOB-2736', title: 'Post-Build / Upholstery / Oven / Mould', avatarInitials: 'CP', avatarColor: 'purple',
+      addr1: 'Carrington, PO Box 81490', addr2: 'Carrington, PO Box 81490, London \u00b7 SW18 9WR', postcode: 'SW18 9WR',
+      type: 'quote', preferred: true, status: 'expired', priceLabel: null, due: '2026-07-01', urgency: 'Flexible',
+      scope: ['Confirm work area is safe to access', 'Complete the service as specified', 'Photograph completed work'],
+      suppliers: [ pmjrSupplier('sup-nr7', 'Nadia Reid Gardener', 'Nadia Reid Gardener', 'NR', 'purple', '\u00a365') ],
+      selectedSupplierId: 'sup-nr7', supplierDetail: { businessType: 'Individual', rating: 4.7, badges: ['Individual', 'Gas Safe', 'Public Liability'], jobsCompleted: 7, phone: '+447974202021' },
+      waiting: false, declinedAlert: false,
+      commercial: { rows: [ { label: 'Call-out fee', value: '\u00a315.00' }, { label: 'Supplier earning', value: '\u00a341.67' }, { label: 'VAT (20%)', value: '\u00a38.33' } ], totalLabel: 'TOTAL (INC. VAT)', totalValue: '\u00a365.00', materialNote: null, finalPrice: '\u00a378.00', breakdownNote: '\u00a365 + \u00a313 Keylr Handling Fees' },
+      listMeta: { awaiting: true, closedText: 'Nadia Reid Gardener responded \u00b7 01\u2026' } },
+
+    { id: 'JOB-2735', title: 'Biohazard / Trauma Clean', avatarInitials: 'CP', avatarColor: 'purple',
+      addr1: 'Carrington, PO Box 81490', addr2: 'Carrington, PO Box 81490, London \u00b7 SW18 9WR', postcode: 'SW18 9WR',
+      type: 'quote', preferred: true, status: 'expired', priceLabel: null, due: '2026-07-01', urgency: 'Emergency \u2013 as soon as possible',
+      scope: ['Confirm work area is safe to access', 'Complete the service as specified', 'Photograph completed work'],
+      suppliers: [ pmjrSupplier('sup-nr8', 'Nadia Reid Gardener', 'Nadia Reid Gardener', 'NR', 'purple', '\u00a3120') ],
+      selectedSupplierId: 'sup-nr8', supplierDetail: { businessType: 'Individual', rating: 4.7, badges: ['Individual', 'Gas Safe', 'Public Liability'], jobsCompleted: 7, phone: '+447974202021' },
+      waiting: false, declinedAlert: false,
+      commercial: { rows: [ { label: 'Call-out fee', value: '\u00a320.00' }, { label: 'Supplier earning', value: '\u00a383.33' }, { label: 'VAT (20%)', value: '\u00a316.67' } ], totalLabel: 'TOTAL (INC. VAT)', totalValue: '\u00a3120.00', materialNote: null, finalPrice: '\u00a3144.00', breakdownNote: '\u00a3120 + \u00a324 Keylr Handling Fees' },
+      listMeta: { awaiting: true, closedText: 'Nadia Reid Gardener responded \u00b7 01\u2026' } },
+
+    { id: 'JOB-2724', title: 'Carpet / Stair Carpet Steam Clean', avatarInitials: 'OS', avatarColor: 'purple',
+      addr1: 'Old Shades, 37 Whitehall', addr2: 'Old Shades, 37 Whitehall, London \u00b7 SW1A 2BX', postcode: 'SW1A 2BX',
+      type: 'quote', preferred: true, status: 'expired', priceLabel: null, due: '2026-07-01', urgency: 'Flexible',
+      scope: ['Confirm work area is safe to access', 'Complete the service as specified', 'Photograph completed work'],
+      suppliers: [ pmjrSupplier('sup-lg2', 'Liam Greenwood Appliance Engineer', 'Liam Greenwood Appliance Engineer', 'LG', 'teal', '\u00a342') ],
+      selectedSupplierId: 'sup-lg2', supplierDetail: { businessType: 'Individual', rating: 5.0, badges: ['Individual', 'TrustMark', 'Public Liability'], jobsCompleted: 4, phone: '+447671542225' },
+      waiting: false, declinedAlert: false,
+      commercial: { rows: [ { label: 'Call-out fee', value: '\u00a310.00' }, { label: 'Supplier earning', value: '\u00a326.67' }, { label: 'VAT (20%)', value: '\u00a35.33' } ], totalLabel: 'TOTAL (INC. VAT)', totalValue: '\u00a342.00', materialNote: null, finalPrice: '\u00a350.40', breakdownNote: '\u00a342 + \u00a38.40 Keylr Handling Fees' },
+      listMeta: { awaiting: true, closedText: 'Liam Greenwood Appliance Engineer \u2026' } },
+
+    { id: 'JOB-2725', title: 'Airbnb Turnover Clean', avatarInitials: 'OS', avatarColor: 'purple',
+      addr1: 'Old Shades, 37 Whitehall', addr2: 'Old Shades, 37 Whitehall, London \u00b7 SW1A 2BX', postcode: 'SW1A 2BX',
+      type: 'setprice', preferred: true, status: 'expired', priceLabel: '\u00a31,000', due: '2026-07-01', urgency: 'Emergency \u2013 as soon as possible',
+      suppliers: [ pmjrSupplier('sup-lg3', 'Liam Greenwood Appliance Engineer', 'Liam Greenwood Appliance Engineer', 'LG', 'teal', '\u00a31,344') ],
+      selectedSupplierId: 'sup-lg3', supplierDetail: { businessType: 'Individual', rating: 5.0, badges: ['Individual', 'TrustMark', 'Public Liability'], jobsCompleted: 4, phone: '+447671542225' },
+      waiting: false, declinedAlert: true,
+      commercial: { rows: [ { label: 'Supplier Price', value: '\u00a31,120' }, { label: 'Supplier VAT (20%)', value: '\u00a3224' }, { label: 'Keylr Handling Fees', value: '\u00a3224' }, { label: 'VAT (20%)', value: '\u00a344.80' } ], totalLabel: null, totalValue: null, materialNote: null, finalPrice: '\u00a31612.80', breakdownNote: '\u00a31,120 + \u00a3224 Keylr Handling Fees' },
+      listMeta: { awaiting: false, closedText: 'Liam Greenwood Appliance Engineer r\u2026' } },
+
+    { id: 'JOB-2716', title: 'Airbnb Turnover Clean', avatarInitials: '4W', avatarColor: 'navy',
+      addr1: '45-47, Whitehall, 45-47 Whitehall', addr2: '45-47, Whitehall, 45-47 Whitehall, London \u00b7 S\u2026', postcode: 'SW1A 2BX',
+      type: 'setprice', preferred: true, status: 'pending', priceLabel: '\u00a31,000', due: '2026-07-01', urgency: 'Multiple slots offered',
+      scope: ['Check windows open and lock', 'Test lights and sockets', 'Photograph room condition', 'Check taps and drainage', 'Test extractor fan', 'Photograph room condition'], scopeSections: 2,
+      requirements: ['Provide access arrangements at least 24 hours before the visit', 'Respond to supplier queries within 1 working day', 'Approve completed work within 3 working days', 'Notify suppliers of any access changes immediately', 'Respond within 4 hours', 'Arrive on the agreed date & time', 'Provide photo proof of completion', 'Leave the work area clean'],
+      suppliers: [ pmjrSupplier('sup-lg4', 'Liam Greenwood Appliance Engineer', 'Liam Greenwood Appliance Engineer', 'LG', 'teal', '\u00a31,344') ],
+      selectedSupplierId: 'sup-lg4', supplierDetail: { businessType: 'Individual', rating: 5.0, badges: ['Individual', 'TrustMark', 'Public Liability'], jobsCompleted: 4, phone: '+447671542225' },
+      waiting: false, declinedAlert: true,
+      commercial: { rows: [ { label: 'Supplier Price', value: '\u00a31,000' }, { label: 'Supplier VAT (20%)', value: '\u00a3200' }, { label: 'Keylr Handling Fees', value: '\u00a3200' }, { label: 'VAT (20%)', value: '\u00a340.00' } ], totalLabel: null, totalValue: null, materialNote: null, finalPrice: '\u00a31440.00', breakdownNote: '\u00a31,000 + \u00a3200 Keylr Handling Fees' },
+      listMeta: { awaiting: false, closedText: 'GRIFFIN RAIL WHEEL LTD responded \u2026' } },
+
+    { id: 'JOB-2763', title: 'End of Tenancy / Deep / Regular / Co\u2026', avatarInitials: 'Q&', avatarColor: 'brown',
+      addr1: 'Q & Q Recovery, West Road', addr2: 'Q & Q Recovery, West Road, Barnsley \u00b7 S75 2\u2026', postcode: 'S75 2DH',
+      type: 'setprice', preferred: true, status: 'pending', priceLabel: '\u00a3100', due: '2026-07-03', urgency: 'Flexible',
+      suppliers: [], selectedSupplierId: null, supplierDetail: null, waiting: true, declinedAlert: false, commercial: null,
+      listMeta: { awaiting: true, closedText: null } },
+
+    { id: 'JOB-2777', title: 'EICR \u2014 Electrical Installation Condition Report', avatarInitials: 'F1', avatarColor: 'brown',
+      addr1: 'Flat 1, 39 Whitehall', addr2: 'Flat 1, 39 Whitehall, London \u00b7 SW1A 2BX', postcode: 'SW1A 2BX',
+      type: 'setprice', preferred: true, status: 'pending', priceLabel: '\u00a3122', due: '2026-07-06', urgency: 'Flexible',
+      suppliers: [], selectedSupplierId: null, supplierDetail: null, waiting: true, declinedAlert: false, commercial: null,
+      listMeta: { awaiting: true, closedText: null } },
+
+    { id: 'JOB-2775', title: 'PAT Testing', avatarInitials: 'Q&', avatarColor: 'brown',
+      addr1: 'Q & Q Recovery, West Road', addr2: 'Q & Q Recovery, West Road, Barnsley \u00b7 S75 2\u2026', postcode: 'S75 2DH',
+      type: 'setprice', preferred: true, status: 'pending', priceLabel: '\u00a320', due: '2026-07-06', urgency: 'Flexible',
+      suppliers: [], selectedSupplierId: null, supplierDetail: null, waiting: true, declinedAlert: false, commercial: null,
+      listMeta: { awaiting: true, closedText: null } },
+
+    { id: 'JOB-2779', title: 'End of Tenancy / Deep / Regular / Co\u2026', avatarInitials: 'Q&', avatarColor: 'brown',
+      addr1: 'Q & Q Recovery, West Road', addr2: 'Q & Q Recovery, West Road, Barnsley \u00b7 S75 2\u2026', postcode: 'S75 2DH',
+      type: 'setprice', preferred: true, status: 'pending', priceLabel: '\u00a350', due: '2026-07-21', urgency: 'Flexible',
+      suppliers: [], selectedSupplierId: null, supplierDetail: null, waiting: true, declinedAlert: false, commercial: null,
+      listMeta: { awaiting: true, closedText: null } },
+
+    { id: 'JOB-2778', title: 'End of Tenancy / Deep / Regular / Co\u2026', avatarInitials: 'TH', avatarColor: 'purple',
+      addr1: 'Travelodge Hotels Ltd, 3 Smythe Close', addr2: 'Travelodge Hotels Ltd, 3 Smythe Close, Lond\u2026', postcode: 'SW1A 2BX',
+      type: 'setprice', preferred: true, status: 'pending', priceLabel: '\u00a320', due: '2026-07-21', urgency: 'Flexible',
+      suppliers: [], selectedSupplierId: null, supplierDetail: null, waiting: true, declinedAlert: false, commercial: null,
+      listMeta: { awaiting: true, closedText: null } }
+  ];
+
+  var pmjrCurrentTab = 'all';
+  var pmjrSelectedJobId = null;
+  var pmjrSearchQuery = '';
+  var pmjrInitialized = false;
+  var pmjrStatusFilter = 'All Statuses';
+  var pmjrServiceFilter = 'All Services';
+  var pmjrPropertyFilter = 'All Properties';
+  var pmjrDeadlineFilter = 'Any Deadline';
+  var PMJR_REFERENCE_DATE = new Date('2026-07-14T00:00:00');
+
+  function pmjrEscapeHtml(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function pmjrJobProperty(job) {
+    return job.addr1.split(',')[0].trim();
+  }
+
+  function pmjrJobsForTab(tab) {
+    if (tab === 'setprice') return PMJR_JOBS.filter(function (j) { return j.type === 'setprice'; });
+    if (tab === 'quote') return PMJR_JOBS.filter(function (j) { return j.type === 'quote'; });
+    if (tab === 'preferred') return PMJR_JOBS.filter(function (j) { return j.preferred; });
+    return PMJR_JOBS;
+  }
+
+  function pmjrDeadlineMatches(job, filter) {
+    if (filter === 'Any Deadline') return true;
+    var due = new Date(job.due + 'T00:00:00');
+    var ref = PMJR_REFERENCE_DATE;
+    if (filter === 'Today') return due.getTime() === ref.getTime();
+    if (filter === 'Overdue') return due.getTime() < ref.getTime();
+    if (filter === 'This week') {
+      var weekEnd = new Date(ref.getTime() + 7 * 24 * 60 * 60 * 1000);
+      return due.getTime() >= ref.getTime() && due.getTime() <= weekEnd.getTime();
+    }
+    return true;
+  }
+
+  function pmjrFilteredJobs() {
+    var jobs = pmjrJobsForTab(pmjrCurrentTab);
+    var q = pmjrSearchQuery.trim().toLowerCase();
+    return jobs.filter(function (j) {
+      if (pmjrStatusFilter === 'Awaiting Quotes' && !j.waiting) return false;
+      if (pmjrStatusFilter === 'Closed' && (j.waiting || !j.listMeta.closedText)) return false;
+      if (pmjrServiceFilter !== 'All Services' && j.title !== pmjrServiceFilter) return false;
+      if (pmjrPropertyFilter !== 'All Properties' && pmjrJobProperty(j) !== pmjrPropertyFilter) return false;
+      if (!pmjrDeadlineMatches(j, pmjrDeadlineFilter)) return false;
+      if (q && j.title.toLowerCase().indexOf(q) < 0 && j.addr1.toLowerCase().indexOf(q) < 0 && j.id.toLowerCase().indexOf(q) < 0) return false;
+      return true;
+    });
+  }
+
+  function pmjrActiveFilterCount() {
+    var count = 0;
+    if (pmjrStatusFilter !== 'All Statuses') count++;
+    if (pmjrServiceFilter !== 'All Services') count++;
+    if (pmjrPropertyFilter !== 'All Properties') count++;
+    if (pmjrDeadlineFilter !== 'Any Deadline') count++;
+    return count;
+  }
+
+  function pmjrUpdateFilterBadge() {
+    var count = pmjrActiveFilterCount();
+    var badge = document.getElementById('pmjrFilterBadge');
+    badge.textContent = count;
+    badge.classList.toggle('show', count > 0);
+    document.getElementById('pmjrFilterToggleBtn').classList.toggle('active', count > 0);
+  }
+
+  function pmjrClearFilters() {
+    pmjrStatusFilter = 'All Statuses';
+    pmjrServiceFilter = 'All Services';
+    pmjrPropertyFilter = 'All Properties';
+    pmjrDeadlineFilter = 'Any Deadline';
+    [
+      { key: 'pmjrStatusFilter', label: 'All Statuses' },
+      { key: 'pmjrServiceFilter', label: 'All Services' },
+      { key: 'pmjrPropertyFilter', label: 'All Properties' },
+      { key: 'pmjrDeadlineFilter', label: 'Any Deadline' }
+    ].forEach(function (f) {
+      var btn = document.querySelector('.pm-custom-dd-btn[data-dd="' + f.key + '"]');
+      var menu = document.querySelector('.pm-custom-dd-menu[data-dd-menu="' + f.key + '"]');
+      if (btn) { btn.querySelector('.cdd-value').textContent = f.label; btn.classList.remove('filter-active'); }
+      if (menu) menu.querySelectorAll('.cdd-item').forEach(function (i) { i.classList.toggle('selected', i.getAttribute('data-value') === f.label); });
+    });
+    pmjrUpdateFilterBadge();
+    pmjrRenderList();
+  }
+
+  function pmjrUpdateTabCounts() {
+    document.getElementById('pmjrCountAll').textContent = PMJR_JOBS.length;
+    document.getElementById('pmjrCountSetprice').textContent = pmjrJobsForTab('setprice').length;
+    document.getElementById('pmjrCountQuote').textContent = pmjrJobsForTab('quote').length;
+    document.getElementById('pmjrCountPreferred').textContent = pmjrJobsForTab('preferred').length;
+    var badge = document.getElementById('badgeResponses');
+    if (badge) { badge.textContent = pmjrJobsForTab('setprice').length; badge.hidden = false; }
+  }
+
+  function pmjrJobCardHtml(job, active) {
+    var meta1 = '';
+    if (job.type === 'setprice') {
+      meta1 = '<div class="pmjr-job-meta1"><span class="price-lbl">Set price \u00b7 ' + job.priceLabel + '</span><span class="pmjr-job-badge setprice">Set Price \u00b7 ' + job.priceLabel + '</span></div>';
+    } else {
+      meta1 = '<div class="pmjr-job-meta1"><span class="lbl">Awaiting responses \u2014 \u2014</span><span class="pmjr-job-badge">Quote Required</span></div>';
+    }
+    var meta2 = job.listMeta.closedText
+      ? '<div class="pmjr-job-meta2"><span class="closed-lbl">Closed</span><span class="desc">' + pmjrEscapeHtml(job.listMeta.closedText) + '</span></div>'
+      : '';
+    return '<div class="pmjr-job-card' + (active ? ' active' : '') + '" data-job-id="' + job.id + '">' +
+      '<div class="pmjr-job-card-top">' +
+      '<div class="pmjr-job-avatar" style="background:' + PMJR_COLORS[job.avatarColor] + ';">' + pmjrEscapeHtml(job.avatarInitials) + '</div>' +
+      '<div style="flex:1;min-width:0;">' +
+      '<div class="pmjr-job-id-row"><span class="pmjr-job-id">' + job.id + '</span><span class="pmjr-job-status' + (job.status === 'pending' ? ' pending' : '') + '"><span class="dot"></span>' + (job.status === 'pending' ? 'Pending' : 'Expired') + '</span></div>' +
+      '<div class="pmjr-job-title">' + pmjrEscapeHtml(job.title) + '</div>' +
+      '<div class="pmjr-job-addr1">' + pmjrEscapeHtml(job.addr1) + '</div>' +
+      '<div class="pmjr-job-addr2">' + pmjrEscapeHtml(job.addr2) + '</div>' +
+      '</div></div>' +
+      meta1 + meta2 +
+      '</div>';
+  }
+
+  function pmjrRenderList() {
+    var list = document.getElementById('pmjrList');
+    var jobs = pmjrFilteredJobs();
+    if (!jobs.length) {
+      list.innerHTML = '<div class="pmjr-empty-detail" style="padding:40px 20px;">No jobs match your search.</div>';
+      return;
+    }
+    if (!pmjrSelectedJobId || jobs.indexOf(PMJR_JOBS.find(function (j) { return j.id === pmjrSelectedJobId; })) === -1) {
+      pmjrSelectedJobId = jobs[0].id;
+    }
+    list.innerHTML = jobs.map(function (j) { return pmjrJobCardHtml(j, j.id === pmjrSelectedJobId); }).join('');
+    list.querySelectorAll('.pmjr-job-card').forEach(function (card) {
+      card.addEventListener('click', function () {
+        pmjrSelectedJobId = card.getAttribute('data-job-id');
+        pmjrRenderList();
+        pmjrRenderDetail();
+      });
+    });
+  }
+
+  function pmjrMetaIcons() {
+    return {
+      pin: '<svg width="13" height="13" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="5" r="2.5"/><path d="M6 11C6 11 1 7.5 1 5a5 5 0 0110 0c0 2.5-5 6-5 6z"/></svg>',
+      clock: '<svg width="13" height="13" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="5"/><path d="M6 3v3l1.5 1.5"/></svg>',
+      cal: '<svg width="13" height="13" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="2" width="10" height="9" rx="1.5"/><path d="M1 5h10M4 1v2M8 1v2"/></svg>'
+    };
+  }
+
+  function pmjrRenderDetail() {
+    var detail = document.getElementById('pmjrDetail');
+    var job = PMJR_JOBS.find(function (j) { return j.id === pmjrSelectedJobId; });
+    if (!job) { detail.innerHTML = '<div class="pmjr-empty-detail">Select a job to view responses</div>'; return; }
+
+    var respondedCount = job.suppliers.filter(function (s) { return s.price !== null; }).length;
+    var statusPillClass = job.waiting ? 'waiting' : (job.declinedAlert ? 'declined' : 'ready');
+    var statusPillText = job.waiting ? 'Waiting' : (job.declinedAlert ? 'Declined' : 'Ready');
+
+    var html = '<div class="pmjr-detail-head"><span class="pmjr-detail-head-label">' + respondedCount + ' SUPPLIER' + (respondedCount === 1 ? '' : 'S') + ' RESPONDED</span>' +
+      '<span class="pmjr-status-pill ' + statusPillClass + '"><span class="dot"></span>' + statusPillText + '</span></div>';
+
+    if (job.suppliers.length) {
+      html += '<div class="pmjr-supplier-chips">' + job.suppliers.map(function (s) {
+        return '<div class="pmjr-supplier-chip' + (s.id === job.selectedSupplierId ? ' selected' : '') + '" data-supplier-id="' + s.id + '">' +
+          '<div class="pmjr-chip-avatar" style="background:' + PMJR_COLORS[s.color] + ';">' + pmjrEscapeHtml(s.initials) + '</div>' +
+          '<span class="pmjr-chip-name">' + pmjrEscapeHtml(s.shortName) + '</span>' +
+          '<span class="pmjr-chip-price">' + (s.price || '\u2014') + '</span>' +
+          '</div>';
+      }).join('') + '</div>';
+    }
+
+    if (job.declinedAlert) {
+      html += '<div class="pmjr-alert-box"><div class="pmjr-alert-title">No supplier is available for this job</div>' +
+        '<div class="pmjr-alert-desc">The supplier you picked declined (or was rejected). Cancel the job, or open it to the wider market so any eligible supplier can respond.</div>' +
+        '<div class="pmjr-alert-btns"><button type="button" class="pmjr-btn-market" data-open-market="' + job.id + '">Open for Market</button>' +
+        '<button type="button" class="pmjr-btn-cancel" data-cancel-job="' + job.id + '">Cancel Job</button></div></div>';
+    }
+
+    var selSupplier = job.suppliers.find(function (s) { return s.id === job.selectedSupplierId; });
+    if (selSupplier && job.supplierDetail) {
+      var sd = job.supplierDetail;
+      html += '<div class="pmjr-selected-card">' +
+        '<div class="pmjr-sel-label">Selected Supplier</div>' +
+        '<div class="pmjr-sel-top">' +
+        '<div class="pmjr-sel-head"><div class="pmjr-sel-avatar">' + pmjrEscapeHtml(selSupplier.initials) + '</div>' +
+        '<div><div class="pmjr-sel-name">' + pmjrEscapeHtml(selSupplier.name) + '</div><div class="pmjr-sel-sub">' + pmjrEscapeHtml(sd.businessType) + ' \u00b7 ' + pmjrEscapeHtml(selSupplier.name.split(' ')[0] + ' ' + (selSupplier.name.split(' ')[1] || '')) + '</div></div></div>' +
+        '<div class="pmjr-sel-right"><div class="pmjr-sel-rating"><span class="star">\u2605</span> ' + sd.rating.toFixed(1) + '</div>' +
+        (job.commercial ? '<div class="pmjr-sel-price">' + job.commercial.finalPrice + '</div>' : '') +
+        '</div></div>' +
+        '<div class="pmjr-sel-badges">' + sd.badges.map(function (b) { return '<span class="pmjr-sel-badge">' + pmjrEscapeHtml(b) + '</span>'; }).join('') + '</div>' +
+        '<div class="pmjr-sel-divider"></div>' +
+        '<div class="pmjr-sel-footer"><div><div class="pmjr-sel-footer-name">' + pmjrEscapeHtml(selSupplier.name.split(' ').slice(0, 2).join(' ')) + ' \u00b7 ' + pmjrEscapeHtml(sd.businessType) + '</div>' +
+        '<div class="pmjr-sel-footer-jobs">' + sd.jobsCompleted + ' jobs completed</div></div>' +
+        '<div class="pmjr-sel-phone">\u260e ' + pmjrEscapeHtml(sd.phone) + '</div></div>' +
+        '</div>';
+    }
+
+    var icons = pmjrMetaIcons();
+    html += '<div class="pmjr-summary-label">Job Summary</div>' +
+      '<div class="pmjr-summary-id">' + job.id + '</div>' +
+      '<div class="pmjr-summary-title">' + pmjrEscapeHtml(job.title) + '</div>' +
+      '<div class="pmjr-meta-row">' +
+      '<span class="pmjr-meta-item">' + icons.pin + pmjrEscapeHtml(job.addr1) + '</span>' +
+      '<span class="pmjr-meta-item">' + icons.clock + pmjrEscapeHtml(job.urgency) + '</span>' +
+      '<span class="pmjr-meta-item">' + icons.cal + 'Due ' + job.due + '</span>' +
+      '<span class="pmjr-meta-item">' + icons.pin + job.postcode + '</span>' +
+      '</div>';
+
+    if (job.waiting) {
+      if (job.scope && job.scope.length) {
+        html += '<div class="pmjr-section-label">Scope of Work \u00b7 ' + job.scope.length + ' item' + (job.scope.length === 1 ? '' : 's') + '</div>';
+        html += job.scope.map(function (s) { return '<div class="pmjr-scope-item"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.5l3 3 6-7"/></svg>' + pmjrEscapeHtml(s) + '</div>'; }).join('');
+      }
+      html += '<div class="pmjr-waiting-notice">Waiting for supplier response\u2026</div>';
+    } else if (job.commercial) {
+      html += '<div class="pmjr-section-label">Commercial</div><div class="pmjr-commercial">';
+      html += job.commercial.rows.map(function (r) {
+        return '<div class="pmjr-commercial-row"><div class="lbl">' + pmjrEscapeHtml(r.label) + (r.sub ? '<span class="sub">' + pmjrEscapeHtml(r.sub) + '</span>' : '') + '</div><div class="val">' + pmjrEscapeHtml(r.value) + '</div></div>';
+      }).join('');
+      if (job.commercial.totalLabel) {
+        html += '<div class="pmjr-commercial-row total"><div class="lbl">' + pmjrEscapeHtml(job.commercial.totalLabel) + '</div><div class="val">' + pmjrEscapeHtml(job.commercial.totalValue) + '</div></div>';
+      }
+      html += '</div>';
+      if (job.commercial.materialNote) html += '<div class="pmjr-material-note">' + pmjrEscapeHtml(job.commercial.materialNote) + '</div>';
+
+      /* Final Price + Release info + Price Breakdown link \u2014 standard for every priced job */
+      html += '<div class="pmjr-final-price-row"><span class="pmjr-final-price-label">Final Price</span><span class="pmjr-final-price-value">' + pmjrEscapeHtml(job.commercial.finalPrice) + '</span></div>' +
+        '<div class="pmjr-release-row"><span class="pmjr-release-line"><svg width="15" height="15" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.5l3 3 6-7"/></svg>' + pmjrEscapeHtml(job.releaseInfo || 'Released on Completion \u00b7 Net 14 Days') + '</span>' +
+        '<button type="button" class="pmjr-pb-link" data-price-breakdown="' + job.id + '">Price Breakdown</button></div>';
+
+      if (job.upfront) {
+        var uf = job.upfront;
+        html += '<div class="pmjr-upfront-label">Upfront Requested</div><div class="pmjr-upfront-grid">' +
+          '<div class="pmjr-upfront-col primary"><div class="pmjr-upfront-col-title primary">Pay upfront \u2014 before start</div>' +
+          uf.pay.map(function (r) { return '<div class="pmjr-upfront-row"><span>' + pmjrEscapeHtml(r.label) + '</span><span class="val">' + pmjrEscapeHtml(r.value) + '</span></div>'; }).join('') +
+          '<div class="pmjr-upfront-row total"><span>Total</span><span class="val">' + pmjrEscapeHtml(uf.payTotal) + '</span></div></div>' +
+          '<div class="pmjr-upfront-col"><div class="pmjr-upfront-col-title muted">On completion \u2014 remaining</div>' +
+          uf.remaining.map(function (r) { return '<div class="pmjr-upfront-row"><span>' + pmjrEscapeHtml(r.label) + '</span><span class="val">' + pmjrEscapeHtml(r.value) + '</span></div>'; }).join('') +
+          '<div class="pmjr-upfront-row total"><span>Total</span><span class="val">' + pmjrEscapeHtml(uf.remainingTotal) + '</span></div></div>' +
+          '</div>' + (uf.note ? '<div class="pmjr-upfront-note">' + pmjrEscapeHtml(uf.note) + '</div>' : '');
+      }
+
+      if (job.scope && job.scope.length) {
+        var scopeSections = job.scopeSections || 1;
+        html += '<div class="pmjr-section-label">Scope of Work \u00b7 ' + scopeSections + ' SECTION' + (scopeSections === 1 ? '' : 'S') + '</div>';
+        html += job.scope.map(function (s) { return '<div class="pmjr-scope-item"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.5l3 3 6-7"/></svg>' + pmjrEscapeHtml(s) + '</div>'; }).join('');
+      }
+
+      var reqList = job.requirements || PMJR_DEFAULT_REQUIREMENTS;
+      html += '<div class="pmjr-section-label">Requirements &amp; SLA</div><div class="pmjr-req-badges">' +
+        reqList.map(function (r) { return '<span class="pmjr-req-badge">' + pmjrEscapeHtml(r) + '</span>'; }).join('') + '</div>';
+      if (job.declinedAlert) html += '<div class="pmjr-declined-line">Declined</div>';
+    }
+
+    var awardReady = !!job.commercial;
+    html += '<div class="pmjr-footer-bar">' +
+      '<button type="button" class="pmjr-chat-btn" data-chat-job="' + job.id + '"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 8c0-3.3 2.7-6 6-6s6 2.7 6 6-2.7 6-6 6c-.8 0-1.6-.16-2.3-.46L2 14l1.05-3.5C2.4 9.7 2 8.9 2 8z"/></svg> Chat Supplier</button>' +
+      '<div class="pmjr-award-wrap">' +
+      (awardReady ? '<div class="pmjr-award-price-info"><div class="breakdown">' + pmjrEscapeHtml(job.commercial.breakdownNote) + '</div><div class="final">Final Price ' + pmjrEscapeHtml(job.commercial.finalPrice) + '</div></div>' : '') +
+      '<button type="button" class="pmjr-award-btn' + (awardReady ? ' ready' : '') + '" data-award-job="' + job.id + '"' + (awardReady ? '' : ' disabled') + '>' +
+      '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7l3 3 6-6.5"/></svg> Award Job' + (awardReady ? ' \u00b7 ' + job.commercial.finalPrice : '') +
+      '</button></div></div>';
+
+    detail.innerHTML = html;
+    pmjrWireDetailEvents(job);
+  }
+
+  function pmjrWireDetailEvents(job) {
+    var detail = document.getElementById('pmjrDetail');
+    detail.querySelectorAll('[data-supplier-id]').forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        job.selectedSupplierId = chip.getAttribute('data-supplier-id');
+        pmjrRenderDetail();
+      });
+    });
+    detail.querySelectorAll('[data-open-market]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        pmjrShowActionToast('Job opened to the market \u2014 5 suppliers invited.');
+        job.declinedAlert = false;
+        pmjrRenderDetail();
+      });
+    });
+    detail.querySelectorAll('[data-cancel-job]').forEach(function (btn) {
+      btn.addEventListener('click', function () { pmjrShowActionToast('Job cancelled.'); });
+    });
+    detail.querySelectorAll('[data-award-job]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (btn.disabled) return;
+        showToast('Job awarded \u2014 ' + job.commercial.finalPrice + ' to ' + (job.suppliers.find(function (s) { return s.id === job.selectedSupplierId; }) || {}).name + '.');
+      });
+    });
+    detail.querySelectorAll('[data-chat-job]').forEach(function (btn) {
+      btn.addEventListener('click', function () { pmjrOpenChat(job); });
+    });
+    detail.querySelectorAll('[data-price-breakdown]').forEach(function (btn) {
+      btn.addEventListener('click', function () { pmjrOpenPriceBreakdown(job); });
+    });
+  }
+
+  var pmjrActionToastTimer = null;
+  function pmjrShowActionToast(msg) {
+    document.getElementById('pmjrActionToastMsg').textContent = msg;
+    var t = document.getElementById('pmjrActionToast');
+    t.classList.add('show');
+    clearTimeout(pmjrActionToastTimer);
+    pmjrActionToastTimer = setTimeout(function () { t.classList.remove('show'); }, 4500);
+  }
+
+  function pmjrPriceBreakdownRows(job) {
+    if (!job.commercial) return [];
+    var rows = job.commercial.rows;
+    var keylrFeeRow = rows.find(function (r) { return /keylr handling/i.test(r.label); });
+    var supplierVatRow = rows.find(function (r) { return /supplier vat/i.test(r.label); });
+    var keylrVatRow = rows.find(function (r) { return /^vat/i.test(r.label); });
+    var netRows = rows.filter(function (r) { return r !== keylrFeeRow && r !== supplierVatRow && r !== keylrVatRow; });
+    var netValue;
+    if (netRows.length === 1) {
+      netValue = netRows[0].value;
+    } else {
+      var sum = netRows.reduce(function (total, r) { return total + (parseFloat(String(r.value).replace(/[^0-9.]/g, '')) || 0); }, 0);
+      netValue = '\u00a3' + sum.toFixed(2).replace(/\.00$/, '');
+    }
+    var out = [ { label: 'Supplier Receives (Net)', value: netValue } ];
+    if (supplierVatRow) out.push({ label: 'Supplier VAT (20%)', value: supplierVatRow.value });
+    if (keylrFeeRow) out.push({ label: 'Keylr Handling Fee (20%)', value: keylrFeeRow.value });
+    if (keylrVatRow) out.push({ label: 'Keylr VAT (20%)', value: keylrVatRow.value });
+    return out;
+  }
+
+  function pmjrOpenPriceBreakdown(job) {
+    var sel = job.suppliers.find(function (s) { return s.id === job.selectedSupplierId; });
+    var firstName = sel ? sel.name.split(' ')[0] + ' ' + (sel.name.split(' ')[1] || '') : 'Supplier';
+    document.getElementById('pmjrPbTitle').textContent = 'Price Breakdown \u2014 ' + firstName;
+    var rows = pmjrPriceBreakdownRows(job);
+    document.getElementById('pmjrPbRows').innerHTML = rows.map(function (r) {
+      return '<div class="pmjr-pb-row"><span>' + pmjrEscapeHtml(r.label) + '</span><span class="val">' + pmjrEscapeHtml(r.value) + '</span></div>';
+    }).join('');
+    document.getElementById('pmjrPbTotal').textContent = job.commercial ? job.commercial.finalPrice : '\u2014';
+    document.getElementById('pmjrPbOverlay').classList.add('open');
+  }
+  function pmjrClosePriceBreakdown() {
+    document.getElementById('pmjrPbOverlay').classList.remove('open');
+  }
+
+  function pmjrOpenChat(job) {
+    var sel = job.suppliers.find(function (s) { return s.id === job.selectedSupplierId; });
+    var chatData = job.chat || {
+      supplierName: sel ? sel.name.split(' ').slice(0, 2).join(' ') : 'Supplier',
+      supplierInitials: sel ? sel.initials : '?',
+      supplierColor: sel ? sel.color : 'navy',
+      jobBadge: job.type === 'setprice' ? 'Set Price' : 'Quote',
+      messages: [ { kind: 'system', text: 'Conversation started for ' + job.title + '.', ts: 'Just now' } ]
+    };
+    document.getElementById('pmjrChatAvatar').style.background = PMJR_COLORS[chatData.supplierColor];
+    document.getElementById('pmjrChatAvatar').innerHTML = pmjrEscapeHtml(chatData.supplierInitials) + '<div class="pmjr-chat-online-dot"></div>';
+    document.getElementById('pmjrChatName').textContent = chatData.supplierName;
+    document.getElementById('pmjrChatStatusText').textContent = 'Online \u00b7 ' + job.title;
+    document.getElementById('pmjrChatJobLbl').textContent = 'JOB \u00b7 ' + job.id;
+    document.getElementById('pmjrChatJobBadge').textContent = chatData.jobBadge;
+    var msgWrap = document.getElementById('pmjrChatMessages');
+    msgWrap.innerHTML = chatData.messages.map(function (m) {
+      return '<div class="pmjr-chat-msg"><div class="pmjr-chat-msg-avatar" style="background:' + PMJR_COLORS[chatData.supplierColor] + ';">' + pmjrEscapeHtml(chatData.supplierInitials) + '</div>' +
+        '<div><div class="pmjr-chat-bubble">' + pmjrEscapeHtml(m.text) + '</div><div class="pmjr-chat-timestamp">' + pmjrEscapeHtml(m.ts) + '</div></div></div>';
+    }).join('');
+    document.getElementById('pmjrChatInput').placeholder = 'Message ' + chatData.supplierName + '...';
+    document.getElementById('pmjrChatAwardBtn').setAttribute('data-award-chat-job', job.id);
+    document.getElementById('pmjrChatPriceRow').style.display = 'none';
+    document.getElementById('pmjrChatPriceInput').value = '';
+    document.getElementById('pmjrChatOverlay').classList.add('open');
+    document.getElementById('pmjrChatDrawer').classList.add('open');
+    msgWrap.scrollTop = msgWrap.scrollHeight;
+  }
+  function pmjrCloseChat() {
+    document.getElementById('pmjrChatOverlay').classList.remove('open');
+    document.getElementById('pmjrChatDrawer').classList.remove('open');
+  }
+
+  function pmjrSwitchTab(tab) {
+    pmjrCurrentTab = tab;
+    pmjrSelectedJobId = null;
+    document.querySelectorAll('#pmjrTabs .pmjr-tab').forEach(function (t) { t.classList.toggle('active', t.getAttribute('data-tab') === tab); });
+    pmjrRenderList();
+    pmjrRenderDetail();
+    var layout = document.querySelector('#pmResponsesView .pmjr-layout');
+    if (layout) {
+      layout.classList.remove('pm-tab-animate');
+      void layout.offsetWidth;
+      layout.classList.add('pm-tab-animate');
+    }
+  }
+
+  function initPmjrOnce() {
+    if (pmjrInitialized) return;
+    pmjrInitialized = true;
+    pmjrUpdateTabCounts();
+    pmjrRenderList();
+    pmjrRenderDetail();
+
+    document.querySelectorAll('#pmjrTabs .pmjr-tab').forEach(function (tab) {
+      tab.addEventListener('click', function () { pmjrSwitchTab(tab.getAttribute('data-tab')); });
+    });
+    document.getElementById('pmjrSearchInput').addEventListener('input', function (e) {
+      pmjrSearchQuery = e.target.value;
+      pmjrRenderList();
+    });
+    var filterBtn = document.getElementById('pmjrFilterToggleBtn');
+    var filterPanel = document.getElementById('pmjrFilterPanel');
+    filterBtn.addEventListener('click', function () {
+      filterPanel.classList.toggle('open');
+    });
+    document.getElementById('pmjrFilterClearAllBtn').addEventListener('click', pmjrClearFilters);
+    document.getElementById('pmjrChatCloseBtn').addEventListener('click', pmjrCloseChat);
+    document.getElementById('pmjrChatOverlay').addEventListener('click', pmjrCloseChat);
+    document.getElementById('pmjrChatAwardBtn').addEventListener('click', function () {
+      var jid = this.getAttribute('data-award-chat-job');
+      var job = PMJR_JOBS.find(function (j) { return j.id === jid; });
+      if (job && job.commercial) { showToast('Job awarded \u2014 ' + job.commercial.finalPrice + '.'); pmjrCloseChat(); }
+      else showToast('No confirmed price yet for this supplier.');
+    });
+    document.getElementById('pmjrChatPriceUpdateBtn').addEventListener('click', function () {
+      var row = document.getElementById('pmjrChatPriceRow');
+      var isOpen = row.style.display !== 'none';
+      row.style.display = isOpen ? 'none' : 'flex';
+      if (!isOpen) document.getElementById('pmjrChatPriceInput').focus();
+    });
+    document.getElementById('pmjrChatSendPriceBtn').addEventListener('click', function () {
+      var input = document.getElementById('pmjrChatPriceInput');
+      var amount = input.value.trim();
+      if (!amount) { input.focus(); return; }
+      var msgWrap = document.getElementById('pmjrChatMessages');
+      msgWrap.insertAdjacentHTML('beforeend', '<div class="pmjr-chat-msg" style="flex-direction:row-reverse;"><div style="text-align:right;"><div class="pmjr-chat-bubble" style="background:var(--accent-blue);color:#fff;">Updated price: \u00a3' + pmjrEscapeHtml(amount) + '</div><div class="pmjr-chat-timestamp">Just now</div></div></div>');
+      msgWrap.scrollTop = msgWrap.scrollHeight;
+      input.value = '';
+      document.getElementById('pmjrChatPriceRow').style.display = 'none';
+      showToast('Updated price sent to supplier.');
+    });
+    document.getElementById('pmjrPbCloseBtn').addEventListener('click', pmjrClosePriceBreakdown);
+    document.getElementById('pmjrPbOverlay').addEventListener('click', function (e) { if (e.target === this) pmjrClosePriceBreakdown(); });
+    document.getElementById('pmjrActionToastClose').addEventListener('click', function () {
+      document.getElementById('pmjrActionToast').classList.remove('show');
+      clearTimeout(pmjrActionToastTimer);
+    });
+    function pmjrSendChatMsg() {
+      var input = document.getElementById('pmjrChatInput');
+      if (!input.value.trim()) return;
+      var msgWrap = document.getElementById('pmjrChatMessages');
+      msgWrap.insertAdjacentHTML('beforeend', '<div class="pmjr-chat-msg" style="flex-direction:row-reverse;"><div style="text-align:right;"><div class="pmjr-chat-bubble" style="background:var(--accent-blue);color:#fff;">' + pmjrEscapeHtml(input.value.trim()) + '</div><div class="pmjr-chat-timestamp">Just now</div></div></div>');
+      input.value = '';
+      msgWrap.scrollTop = msgWrap.scrollHeight;
+    }
+    document.getElementById('pmjrChatSendBtn').addEventListener('click', pmjrSendChatMsg);
+    document.getElementById('pmjrChatInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); pmjrSendChatMsg(); } });
+  }
+
   /* ---- PM Settings view ---- */
   function showPMView(view) {
-    document.getElementById('pmHomeView').style.display = view === 'home' ? '' : 'none';
-    document.getElementById('pmSettingsView').style.display = view === 'settings' ? '' : 'none';
-    document.getElementById('pmExploreView').style.display = view === 'explore' ? '' : 'none';
+    var viewIds = { home: 'pmHomeView', settings: 'pmSettingsView', explore: 'pmExploreView', responses: 'pmResponsesView' };
+    Object.keys(viewIds).forEach(function (key) {
+      var el = document.getElementById(viewIds[key]);
+      if (key === view) {
+        el.style.display = '';
+        el.classList.remove('pm-view-animate');
+        void el.offsetWidth;
+        el.classList.add('pm-view-animate');
+      } else {
+        el.style.display = 'none';
+      }
+    });
+    var pmDashContent = document.querySelector('#pmDashboard .dash-content');
+    if (pmDashContent) pmDashContent.classList.toggle('dash-content-full', view === 'responses');
     document.querySelector('#pmDashboard .dash-scroll-area').scrollTop = 0;
   }
   document.querySelector('#pmDashboard .dash-account-avatar').style.cursor = 'pointer';
@@ -12211,6 +13249,9 @@
       } else if (item.getAttribute('data-nav') === 'explore') {
         showPMView('explore');
         initPmExploreOnce();
+      } else if (item.getAttribute('data-nav') === 'responses') {
+        showPMView('responses');
+        initPmjrOnce();
       } else {
         showToast(item.querySelector('.nav-label').textContent + ' isn\u2019t wired up in this prototype yet.');
       }
@@ -14726,6 +15767,30 @@
     pmexRatingFilter: function (v) {
       var map = { 'Any rating': 0, '3.0+ \u2605': 3, '4.0+ \u2605': 4, '4.5+ \u2605': 4.5 };
       pmexApplyFilter(map[v] !== undefined ? map[v] : 0);
+    },
+    pmjrStatusFilter: function (v) {
+      pmjrStatusFilter = v;
+      document.querySelector('.pm-custom-dd-btn[data-dd="pmjrStatusFilter"]').classList.toggle('filter-active', v !== 'All Statuses');
+      pmjrUpdateFilterBadge();
+      pmjrRenderList();
+    },
+    pmjrServiceFilter: function (v) {
+      pmjrServiceFilter = v;
+      document.querySelector('.pm-custom-dd-btn[data-dd="pmjrServiceFilter"]').classList.toggle('filter-active', v !== 'All Services');
+      pmjrUpdateFilterBadge();
+      pmjrRenderList();
+    },
+    pmjrPropertyFilter: function (v) {
+      pmjrPropertyFilter = v;
+      document.querySelector('.pm-custom-dd-btn[data-dd="pmjrPropertyFilter"]').classList.toggle('filter-active', v !== 'All Properties');
+      pmjrUpdateFilterBadge();
+      pmjrRenderList();
+    },
+    pmjrDeadlineFilter: function (v) {
+      pmjrDeadlineFilter = v;
+      document.querySelector('.pm-custom-dd-btn[data-dd="pmjrDeadlineFilter"]').classList.toggle('filter-active', v !== 'Any Deadline');
+      pmjrUpdateFilterBadge();
+      pmjrRenderList();
     }
   };
   document.querySelectorAll('.cdd-item[data-value]').forEach(function (item) {
