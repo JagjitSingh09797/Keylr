@@ -3389,6 +3389,198 @@
   .admin-back-login-row button { font-size: 13.5px; font-weight: 600; color: var(--accent-blue); background: none; border: none; cursor: pointer; font-family: inherit; }
   .admin-back-login-row button:hover { text-decoration: underline; }
 
+  /* =========================================================
+     PM: EXPLORE SERVICES
+  ========================================================== */
+  .pmex-loc-wrap { position: relative; margin-bottom: 16px; }
+  .pmex-loc-wrap svg.pmex-loc-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; z-index: 2; }
+  .pmex-loc-input { width: 100%; padding: 13px 42px 13px 40px; }
+  .pmex-loc-clear { display: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; border-radius: 50%; background: var(--surface-soft); border: none; cursor: pointer; align-items: center; justify-content: center; color: var(--text-body-muted); z-index: 2; }
+  .pmex-loc-clear:hover { background: #eef1f5; }
+  .pmex-loc-dd { display: none; position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: #fff; border: 1.5px solid var(--border-subtle); border-radius: 12px; box-shadow: 0 8px 24px rgba(16,24,40,0.1); max-height: 340px; overflow-y: auto; z-index: 100; }
+  .pmex-loc-dd-heading { padding: 10px 14px 4px; font-size: 10.5px; font-weight: 700; color: var(--text-body-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  .pmex-loc-dd-heading.with-border { border-top: 1px solid var(--border-subtle); margin-top: 4px; }
+  .pmex-loc-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; cursor: pointer; transition: background-color 100ms ease-out; }
+  .pmex-loc-row:hover { background: var(--surface-soft); }
+  .pmex-loc-row-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .pmex-loc-row-name { font-size: 14px; font-weight: 700; color: var(--text-heading); line-height: 1.3; }
+  .pmex-loc-row-sub { font-size: 12.5px; color: var(--text-body-muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pmex-loc-empty { padding: 18px 14px; text-align: center; font-size: 13px; color: var(--text-body-muted); }
+
+  .pmex-search-row { display: flex; gap: 10px; align-items: center; margin-bottom: 14px; }
+  .pmex-search-wrap { position: relative; flex: 1; }
+  .pmex-search-wrap svg { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; }
+  .pmex-filter-btn { display: none; align-items: center; gap: 7px; background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); color: #fff; border: none; border-radius: 10px; padding: 11px 16px; font-size: 13.5px; font-weight: 700; cursor: pointer; font-family: inherit; white-space: nowrap; }
+  .pmex-filter-btn:hover { opacity: 0.9; }
+  .pmex-filter-badge { background: rgba(255,255,255,0.25); color: #fff; font-size: 10px; font-weight: 800; border-radius: 999px; padding: 1px 6px; margin-left: 2px; }
+  .pmex-filter-panel { background: #fff; border: 1.5px solid var(--border-subtle); border-radius: 14px; padding: 18px 20px; margin-bottom: 18px; display: none; }
+  .pmex-filter-panel.open { display: block; }
+  .pmex-filter-panel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .pmex-filter-panel-title { font-size: 14px; font-weight: 700; color: var(--text-heading); }
+  .pmex-filter-clear { background: none; border: none; cursor: pointer; color: var(--text-body-muted); font-size: 13px; font-weight: 600; font-family: inherit; }
+  .pmex-filter-clear:hover { color: var(--text-heading); }
+  .pmex-filter-label { font-size: 12px; font-weight: 600; color: var(--text-heading); margin-bottom: 8px; }
+
+  .pmex-chiprow { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
+  .pmex-chip { display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 1.5px solid var(--border-subtle); border-radius: 999px; padding: 8px 15px; font-size: 12.5px; font-weight: 600; color: var(--text-heading); cursor: pointer; transition: border-color 120ms ease-out, background-color 120ms ease-out, color 120ms ease-out; }
+  .pmex-chip:hover:not(.active) { border-color: #90a8c8; background: var(--surface-soft); }
+  .pmex-chip.active { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); border-color: var(--btn-grad-end); color: #fff; }
+
+  .pmex-group-heading { font-size: 14.5px; font-weight: 800; color: var(--text-heading); margin: 22px 0 10px; }
+  .pmex-group-heading.first { margin-top: 0; }
+  .pmex-svc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  @media (max-width: 800px) { .pmex-svc-grid { grid-template-columns: repeat(2, 1fr); } }
+  .pmex-svc-card { background: #fff; border: 1.5px solid var(--border-subtle); border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: border-color 150ms ease-out, box-shadow 150ms ease-out; }
+  .pmex-svc-card:hover { border-color: var(--accent-blue); box-shadow: 0 2px 12px rgba(40,72,144,0.1); }
+  .pmex-svc-card-icon { width: 36px; height: 36px; background: var(--icon-tint-bg); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--accent-blue); }
+  .pmex-svc-card-label { font-size: 13.5px; font-weight: 600; color: var(--text-heading); }
+  .pmex-svc-card-count { font-size: 12px; color: var(--text-body-muted); margin-top: 2px; }
+
+  .pmex-provider-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+  .pmex-pcard { background: #fff; border: 1.5px solid var(--border-subtle); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; height: 100%; transition: box-shadow 180ms ease-out, transform 150ms ease-out, border-color 150ms ease-out; }
+  .pmex-pcard:hover { box-shadow: 0 8px 32px rgba(40,72,144,0.13); border-color: #bfdbfe; transform: translateY(-2px); }
+  .pmex-pcard-head { display: flex; align-items: flex-start; gap: 10px; padding: 14px 14px 8px; }
+  .pmex-pcard-avatar { width: 56px; height: 56px; border-radius: 12px; flex-shrink: 0; background: linear-gradient(145deg, var(--btn-grad-start), var(--btn-grad-end)); position: relative; overflow: hidden; }
+  .pmex-pcard-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pmex-pcard-online { position: absolute; bottom: -2px; right: -2px; width: 12px; height: 12px; border-radius: 50%; background: #10b981; border: 2px solid #fff; }
+  .pmex-pcard-info { flex: 1; min-width: 0; }
+  .pmex-pcard-name { font-size: 13.5px; font-weight: 700; color: var(--text-heading); display: flex; align-items: center; gap: 4px; line-height: 1.25; flex-wrap: wrap; }
+  .pmex-pcard-sub { font-size: 11px; color: var(--text-body-muted); margin-top: 1px; }
+  .pmex-pcard-rating { display: flex; align-items: center; gap: 2px; margin-top: 4px; }
+  .pmex-pcard-rating-num { font-size: 12px; font-weight: 700; color: var(--text-heading); margin-left: 2px; }
+  .pmex-pcard-rating-cnt { font-size: 11px; color: #94a3b8; margin-left: 1px; }
+  .pmex-pcard-rating-jobs { font-size: 11px; color: var(--text-body-muted); margin-left: 3px; }
+  .pmex-pcard-price { font-size: 10px; color: #94a3b8; text-align: right; flex-shrink: 0; line-height: 1.2; padding-top: 1px; }
+  .pmex-pcard-price strong { font-size: 19px; font-weight: 800; color: var(--text-heading); display: block; line-height: 1.05; }
+
+  .pmex-pcard-badges { display: flex; gap: 4px; flex-wrap: wrap; padding: 0 14px 8px; }
+  .pmex-cert-chip { font-size: 9.5px; font-weight: 700; padding: 2px 8px 2px 6px; border-radius: 20px; white-space: nowrap; display: inline-flex; align-items: center; gap: 3px; }
+  .pmex-cert-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+
+  .pmex-pcard-avail { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 0 14px 10px; }
+  .pmex-pcard-avail.two-col { grid-template-columns: repeat(2, 1fr); }
+  .pmex-avail-card { background: var(--surface-soft); border: 1px solid #edf0f5; border-radius: 10px; padding: 8px 4px 7px; display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center; }
+  .pmex-avail-card.emg { background: #fffbeb; border-color: #fde68a; }
+  .pmex-avail-card-icon { display: flex; align-items: center; justify-content: center; color: var(--text-body-muted); margin-bottom: 1px; }
+  .pmex-avail-card.emg .pmex-avail-card-icon { color: #d97706; }
+  .pmex-avail-card-val { font-size: 10.5px; font-weight: 600; color: var(--text-heading); line-height: 1.2; }
+  .pmex-avail-card.emg .pmex-avail-card-val { color: #b45309; }
+  .pmex-avail-card-lbl { font-size: 9px; color: #94a3b8; font-weight: 500; }
+  .pmex-avail-card.emg .pmex-avail-card-lbl { color: #d97706; }
+
+  .pmex-pcard-services { padding: 0 12px 8px; }
+  .pmex-svc-box { background: var(--surface-soft); border: 1px solid #e8ecf0; border-radius: 8px; padding: 0 10px 6px; }
+  .pmex-svc-tabs { display: flex; border-bottom: 1.5px solid #e8ecf0; margin-bottom: 2px; }
+  .pmex-svc-tab { flex: 1; text-align: center; font-size: 10px; font-weight: 700; color: #94a3b8; padding: 7px 4px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1.5px; transition: color 120ms ease-out, border-color 120ms ease-out; }
+  .pmex-svc-tab.active { color: var(--accent-blue); border-bottom-color: var(--accent-blue); }
+  .pmex-svc-tab:hover:not(.active) { color: var(--text-heading); }
+  .pmex-svc-row { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #374151; padding: 5px 0; border-bottom: 1px solid #eef0f3; font-weight: 500; }
+  .pmex-svc-row:last-child { border-bottom: none; }
+  .pmex-svc-row .svc-name { min-width: 0; font-size: 11.5px; font-weight: 500; }
+  .pmex-svc-row .svc-budget { font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 4px; background: #f0fdf4; color: #15803d; white-space: nowrap; }
+  .pmex-svc-row .svc-price { font-weight: 600; color: var(--text-heading); font-size: 11.5px; white-space: nowrap; margin-left: auto; }
+  .pmex-svc-row .svc-quote { font-size: 11.5px; color: #94a3b8; margin-left: auto; }
+  .pmex-show-more { background: none; border: none; color: var(--accent-blue); font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit; padding: 5px 14px; display: flex; align-items: center; justify-content: center; gap: 4px; width: 100%; border-radius: 999px; margin-top: 3px; }
+  .pmex-show-more:hover { background: var(--icon-tint-bg); }
+
+  .pmex-pcard-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 14px; border-top: 1px solid #f1f5f9; }
+  .pmex-pcard-meta span { font-size: 11px; display: flex; align-items: center; gap: 3px; }
+  .pmex-pcard-footer { display: flex; align-items: center; gap: 6px; padding: 8px 14px 12px; border-top: 1px solid #f1f5f9; margin-top: auto; }
+  .pmex-book-btn { flex: 1; background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); color: #fff; border: none; border-radius: 999px; padding: 9px 14px; font-size: 12.5px; font-weight: 700; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .pmex-book-btn:hover { opacity: 0.9; }
+  .pmex-profile-btn { background: transparent; border: 1.5px solid transparent; color: #374151; font-size: 12.5px; font-weight: 600; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 4px; white-space: nowrap; padding: 9px 12px; border-radius: 999px; flex-shrink: 0; transition: background-color 120ms ease-out, border-color 120ms ease-out; }
+  .pmex-profile-btn:hover { background: var(--surface-soft); border-color: var(--border-subtle); color: var(--text-heading); }
+
+  .pmex-empty { background: #fff; border: 1.5px solid var(--border-subtle); border-radius: 16px; padding: 60px 24px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .pmex-empty-title { font-size: 16px; font-weight: 700; color: var(--text-heading); }
+  .pmex-empty-sub { font-size: 13.5px; color: var(--text-body-muted); }
+  .pmex-empty-btn { background: #fff; border: 1.5px solid var(--border-subtle); border-radius: 10px; padding: 10px 24px; font-size: 13.5px; font-weight: 600; color: #374151; cursor: pointer; font-family: inherit; margin-top: 8px; }
+  .pmex-empty-btn:hover { border-color: #90a8c8; }
+
+  .pmex-back-btn { background: none; border: none; cursor: pointer; font-size: 13.5px; font-weight: 600; color: var(--text-body-muted); font-family: inherit; display: flex; align-items: center; gap: 6px; margin-bottom: 20px; padding: 0; }
+  .pmex-back-btn:hover { color: var(--text-heading); }
+
+  .pmex-pp-main { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+  .pmex-pp-layout { display: grid; grid-template-columns: 1fr 300px; gap: 20px; align-items: start; }
+  @media (max-width: 960px) { .pmex-pp-layout { grid-template-columns: 1fr; } }
+  .pmex-pp-content { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+  .pmex-pp-sidebar { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+
+  .pmex-pp-gallery { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: 220px 140px; gap: 6px; border-radius: 16px; overflow: hidden; }
+  @media (max-width: 640px) { .pmex-pp-gallery { grid-template-rows: 150px 90px; } }
+  .pmex-pp-gallery-tile { position: relative; overflow: hidden; background: linear-gradient(135deg, var(--navy-900), var(--btn-grad-start)); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.3); }
+  .pmex-pp-gallery-tile svg { width: 56px; height: 56px; }
+  .pmex-pp-gallery-tile.main svg { width: 84px; height: 84px; }
+  .pmex-pp-gallery-tile.main { grid-row: 1 / 3; }
+
+  .pmex-pp-head { background: #fff; border: 1.5px solid var(--border-subtle); border-radius: 16px; padding: 24px; }
+  .pmex-pp-head-top { display: flex; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+  .pmex-pp-avatar { width: 72px; height: 72px; border-radius: 14px; flex-shrink: 0; background: linear-gradient(145deg, var(--btn-grad-start), var(--btn-grad-end)); position: relative; overflow: hidden; }
+  .pmex-pp-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pmex-pp-info { flex: 1; min-width: 220px; }
+  .pmex-pp-name-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+  .pmex-pp-name { font-size: 21px; font-weight: 800; color: var(--text-heading); }
+  .pmex-pp-role-chip { background: var(--surface-soft); color: #374151; border-radius: 6px; padding: 3px 10px; font-size: 12px; font-weight: 600; }
+  .pmex-pp-verified-row { margin-bottom: 6px; }
+  .pmex-pp-verified-chip { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; border-radius: 6px; padding: 3px 10px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
+  .pmex-pp-role-line { font-size: 13.5px; color: var(--text-body-muted); margin-bottom: 8px; }
+  .pmex-pp-rating-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 13px; color: var(--text-body-muted); }
+  .pmex-pp-rating-row strong { font-size: 14px; font-weight: 700; color: var(--text-heading); }
+  .pmex-pp-rating-row .pmex-pp-dot { color: var(--border-subtle); }
+  .pmex-pp-member-line { font-size: 12.5px; color: var(--text-body-muted); margin-top: 4px; }
+  .pmex-pp-desc { font-size: 13.5px; color: #374151; line-height: 1.65; margin: 16px 0 0; padding-top: 16px; border-top: 1px solid var(--border-subtle); }
+  .pmex-pp-btn-row { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+  .pmex-pp-book-btn { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); color: #fff; border: none; border-radius: 10px; padding: 12px 22px; font-size: 13.5px; font-weight: 700; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 8px; }
+  .pmex-pp-book-btn:hover { opacity: 0.9; }
+  .pmex-pp-quote-btn { background: #fff; border: 1.5px solid var(--border-subtle); color: #374151; border-radius: 10px; padding: 12px 20px; font-size: 13.5px; font-weight: 600; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 6px; }
+  .pmex-pp-quote-btn:hover { border-color: #90a8c8; background: var(--surface-soft); }
+
+  .pmex-pp-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  @media (max-width: 640px) { .pmex-pp-stats { grid-template-columns: repeat(2, 1fr); } }
+  .pmex-pp-stat-card { background: #fff; border: 1.5px solid var(--border-subtle); border-radius: 14px; padding: 18px 12px; text-align: center; }
+  .pmex-pp-stat-icon { display: flex; justify-content: center; margin-bottom: 8px; color: var(--accent-blue); }
+  .pmex-pp-stat-val { font-size: 17px; font-weight: 800; color: var(--text-heading); }
+  .pmex-pp-stat-lbl { font-size: 11.5px; color: var(--text-body-muted); margin-top: 3px; }
+
+  .pmex-pp-section { background: #fff; border: 1.5px solid var(--border-subtle); border-radius: 16px; padding: 22px 24px; }
+  .pmex-pp-section-title { font-size: 15.5px; font-weight: 800; color: var(--text-heading); margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+
+  .pmex-pp-svc-row { display: flex; align-items: center; gap: 10px; background: var(--surface-soft); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; flex-wrap: wrap; transition: background-color 150ms ease-out; }
+  .pmex-pp-svc-row:last-child { margin-bottom: 0; }
+  .pmex-pp-svc-row:hover { background: #f1f4f8; }
+  .pmex-pp-svc-name { flex: 1; min-width: 140px; font-size: 14px; font-weight: 500; color: var(--text-heading); }
+  .pmex-pp-svc-name .pmex-pp-rate-note { font-size: 11px; color: #94a3b8; font-weight: 400; }
+  .pmex-pp-svc-budget { font-size: 11px; background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; border-radius: 5px; padding: 2px 8px; font-weight: 600; flex-shrink: 0; }
+  .pmex-pp-svc-price { font-size: 16px; font-weight: 800; color: var(--text-heading); flex-shrink: 0; }
+  .pmex-pp-svc-book { background: var(--accent-blue); color: #fff; border: none; border-radius: 8px; padding: 7px 15px; font-size: 12.5px; font-weight: 700; cursor: pointer; font-family: inherit; flex-shrink: 0; opacity: 0; pointer-events: none; transition: opacity 150ms ease-out, background-color 150ms ease-out; }
+  .pmex-pp-svc-row:hover .pmex-pp-svc-book, .pmex-pp-svc-row:focus-within .pmex-pp-svc-book { opacity: 1; pointer-events: auto; }
+  .pmex-pp-svc-book:hover { background: var(--btn-grad-end); }
+  .pmex-pp-svc-quote-btn { background: #fff; border: 1.5px solid var(--border-subtle); border-radius: 8px; padding: 7px 16px; font-size: 12.5px; font-family: inherit; cursor: pointer; color: #374151; font-weight: 600; flex-shrink: 0; margin-left: auto; }
+  .pmex-pp-svc-quote-btn:hover { border-color: #90a8c8; }
+
+  .pmex-pp-side-card { background: #fff; border: 1.5px solid var(--border-subtle); border-radius: 16px; padding: 18px; }
+  .pmex-pp-side-title { font-size: 14px; font-weight: 700; color: var(--text-heading); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .pmex-pp-verify-list { display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
+  .pmex-pp-verify-item { display: flex; align-items: center; gap: 8px; color: #15803d; }
+  .pmex-pp-verify-item.unmet { color: #94a3b8; }
+  .pmex-pp-cert-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .pmex-pp-area-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+  .pmex-pp-area-tag { background: var(--surface-soft); color: #374151; border-radius: 5px; padding: 3px 9px; font-size: 12px; }
+  .pmex-pp-side-line { font-size: 12px; color: var(--text-body-muted); margin-bottom: 6px; }
+  .pmex-pp-sla-line { font-size: 12px; color: var(--accent-blue); display: flex; align-items: center; gap: 4px; }
+  .pmex-pp-contact-list { display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #374151; }
+  .pmex-pp-contact-item { display: flex; align-items: center; gap: 8px; }
+  .pmex-pp-review-score-row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 4px; }
+  .pmex-pp-review-score-row svg { align-self: center; }
+  .pmex-pp-review-score { font-size: 26px; font-weight: 800; color: var(--text-heading); line-height: 1; }
+  .pmex-pp-review-outof { font-size: 12px; color: #94a3b8; }
+  .pmex-pp-review-count { font-size: 12px; color: var(--text-body-muted); margin-bottom: 10px; }
+  .pmex-pp-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .pmex-pp-bar-row .pmex-pp-star-n { font-size: 12px; color: var(--text-body-muted); width: 8px; }
+  .pmex-pp-bar-track { flex: 1; height: 6px; background: var(--surface-soft); border-radius: 3px; overflow: hidden; }
+  .pmex-pp-bar-fill { height: 100%; background: #f59e0b; border-radius: 3px; }
+  .pmex-pp-bar-pct { font-size: 12px; color: var(--text-body-muted); width: 30px; text-align: right; }
+
 </style>
 </head>
 <body>
@@ -6105,6 +6297,74 @@
                     <div class="callout-body">By submitting, you confirm that all information provided is accurate. Keylr will review your account and contact you within 1-2 business days. You can explore the platform in the meantime.</div>
                   </div>
                   <div style="display:flex;justify-content:flex-start;margin-top:20px;"><button type="button" class="btn btn-primary" data-settings-save="Contacts">Save Changes</button></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Explore Services view -->
+          <div id="pmExploreView" style="display:none;">
+            <div class="dash-section">
+              <div class="dash-header" id="pmexHeaderBlock">
+                <div>
+                  <div style="font-size:11px;font-weight:700;letter-spacing:0.06em;color:#94a3b8;margin-bottom:4px;">JOBS</div>
+                  <h2 style="background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); -webkit-background-clip: text; background-clip: text; color: transparent;">Explore Services</h2>
+                  <div class="dash-content-sub">Find and book any service for your property.</div>
+                </div>
+              </div>
+
+              <div style="margin-top:20px;">
+                <div id="pmexBrowseWrap">
+                  <div class="pmex-loc-wrap" id="pmexLocWrap">
+                    <svg class="pmex-loc-icon" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1a5 5 0 00-5 5c0 4 5 9 5 9s5-5 5-9a5 5 0 00-5-5z"/><circle cx="8" cy="6" r="1.8"/></svg>
+                    <input type="text" class="field-input pmex-loc-input" id="pmexLocInput" autocomplete="off" placeholder="Filter by postcode, city or property name...">
+                    <button type="button" class="pmex-loc-clear" id="pmexLocClearBtn" aria-label="Clear"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 1l8 8M9 1L1 9"/></svg></button>
+                    <div class="pmex-loc-dd" id="pmexLocDd"></div>
+                  </div>
+
+                  <div class="pmex-search-row" id="pmexSearchRow">
+                    <div class="pmex-search-wrap">
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="4.5"/><path d="M10 10l2.5 2.5"/></svg>
+                      <input type="text" class="field-input" style="padding-left:36px;" id="pmexSearchInput" placeholder="Search services..." autocomplete="off">
+                    </div>
+                    <button type="button" class="pmex-filter-btn" id="pmexFilterToggleBtn">
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 3h12M3 7h8M5 11h4"/></svg>
+                      Filters <span class="pmex-filter-badge" id="pmexFilterBadge" style="display:none;"></span>
+                    </button>
+                  </div>
+
+                  <div class="pmex-filter-panel" id="pmexFilterPanel">
+                    <div class="pmex-filter-panel-head">
+                      <div class="pmex-filter-panel-title">Refine results</div>
+                      <button type="button" class="pmex-filter-clear" id="pmexFilterClearBtn">✕ Clear</button>
+                    </div>
+                    <div class="pmex-filter-label">Minimum rating</div>
+                    <div class="pm-filter-field" style="width:220px;">
+                      <button type="button" class="pm-custom-dd-btn" data-dd="pmexRatingFilter">
+                        <span class="cdd-value">Any rating</span>
+                        <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                      </button>
+                      <div class="pm-custom-dd-menu" data-dd-menu="pmexRatingFilter">
+                        <div class="cdd-item selected" data-value="Any rating">Any rating</div>
+                        <div class="cdd-item" data-value="3.0+ ★">3.0+ ★</div>
+                        <div class="cdd-item" data-value="4.0+ ★">4.0+ ★</div>
+                        <div class="cdd-item" data-value="4.5+ ★">4.5+ ★</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="pmex-chiprow" id="pmexCategoryChips"></div>
+
+                  <div id="pmexCatCards" style="display:none;"></div>
+                  <div id="pmexProviderCards" style="display:none;"></div>
+                </div>
+
+                <div id="pmexProfileWrap" style="display:none;">
+                  <button type="button" class="pmex-back-btn" id="pmexProfileBackBtn">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3L5 7l4 4"/></svg>
+                    Back to results
+                  </button>
+                  <div id="pmexProfileContent"></div>
                 </div>
               </div>
             </div>
@@ -10211,10 +10471,745 @@
   document.getElementById('supportFields').classList.toggle('locked', document.getElementById('sameAsSupport').checked);
 
   /* ---- Launch onboarding after signup OTP confirm ---- */
+
+  /* =========================================================
+     PM: EXPLORE SERVICES
+  ========================================================== */
+  var PMEX_CAT_DEFS = [
+    { key: 'plumbing', label: 'Plumbing & Gas', icon: '<svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="14" cy="18" r="6"/><path d="M14 4c0 5-7 7-7 12"/></svg>' },
+    { key: 'electrical', label: 'Electrical', icon: '<svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M17 3L11 15h6L10 25l10-13h-6z" stroke-linejoin="round"/></svg>' },
+    { key: 'cleaning', label: 'Cleaning', icon: '<svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 21l7-7 6 6"/><circle cx="21" cy="7" r="3"/></svg>' },
+    { key: 'fire', label: 'Fire Safety', icon: '<svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 3c0 7-9 10-9 17a9 9 0 0018 0c0-7-9-10-9-17z"/></svg>' },
+    { key: 'inventory', label: 'Inventory & Reports', icon: '<svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="3" width="18" height="22" rx="2"/><path d="M9 10h10M9 15h10M9 20h6"/></svg>' },
+    { key: 'repairs', label: 'General Repairs', icon: '<svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 23l13-13M20 5l3 3-3.5 3.5-3-3z"/><path d="M5 23l3-3"/></svg>' },
+    { key: 'hvac', label: 'HVAC', icon: '<svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="8" width="22" height="14" rx="3"/><path d="M10 8V6M14 8V4M18 8V6"/></svg>' },
+    { key: 'pest', label: 'Pest Control', icon: '<svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="14" cy="11" r="5"/><path d="M5 24c0-5 4-9 9-9s9 4 9 9"/></svg>' },
+    { key: 'maintenance', label: 'Property Maintenance', icon: '<svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 24V17l8-7 8 7v7"/><path d="M10 24v-6h8v6"/></svg>' }
+  ];
+
+  var PMEX_ICONS = {
+    gas: '<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="13" r="4.5"/><path d="M10 3c0 4-6 6-6 10"/></svg>',
+    electric: '<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L7 11h5L8 18l9-10h-5z" stroke-linejoin="round"/></svg>',
+    doc: '<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="12" height="16" rx="2"/><path d="M8 7h4M8 11h4M8 15h2"/></svg>',
+    fire: '<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 2c0 5-7 7-7 13a7 7 0 0014 0c0-6-7-8-7-13z"/></svg>',
+    water: '<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 2c0 5-6 7-6 12a6 6 0 0012 0c0-5-6-7-6-12z"/></svg>',
+    clean: '<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 16l5-5 4 4 5-8"/><circle cx="17" cy="4" r="2"/></svg>',
+    boiler: '<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="3" width="12" height="14" rx="2"/><path d="M8 8h4M8 12h4M10 16v2"/></svg>',
+    lock: '<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="9" width="12" height="9" rx="1.5"/><path d="M7 9V6a3 3 0 016 0v3"/></svg>',
+    wrench: '<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 17l8-8M14 3l3 3-2 2-3-3z"/><path d="M14 3c-3 0-4 3-2 5s5 1 5-2"/></svg>',
+    home: '<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 18V9l7-5 7 5v9"/><path d="M8 18v-5h4v5"/></svg>',
+    pest: '<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="8" r="3.5"/><path d="M4 18c0-4 3-7 6-7s6 3 6 7"/><path d="M7 6L4 4M13 6l3-2M7 10L4 12M13 10l3 2"/></svg>'
+  };
+
+  var PMEX_GROUPS = [
+    { heading: 'Compliance & safety', defaultCat: 'fire', items: [
+      { label: 'Gas Safety Certificate', icon: 'gas', cat: 'plumbing' },
+      { label: 'EICR Inspection', icon: 'electric', cat: 'electrical' },
+      { label: 'EPC', icon: 'doc', cat: 'inventory' },
+      { label: 'Fire Risk Assessment', icon: 'fire', cat: 'fire' },
+      { label: 'PAT Testing', icon: 'electric', cat: 'electrical' },
+      { label: 'Legionella Risk Assessment', icon: 'water', cat: 'plumbing' }
+    ] },
+    { heading: 'General maintenance', defaultCat: 'maintenance', items: [
+      { label: 'Regular Cleaning', icon: 'clean', cat: 'cleaning' },
+      { label: 'Deep Cleaning', icon: 'clean', cat: 'cleaning' },
+      { label: 'Boiler Service', icon: 'boiler', cat: 'plumbing' },
+      { label: 'End of Tenancy Clean', icon: 'clean', cat: 'cleaning' }
+    ] },
+    { heading: 'Issues & repairs', defaultCat: 'repairs', items: [
+      { label: 'Leak Repair', icon: 'water', cat: 'plumbing' },
+      { label: 'Drain Unblocking', icon: 'water', cat: 'plumbing' },
+      { label: 'Faulty Electrics', icon: 'electric', cat: 'electrical' },
+      { label: 'Lock Change', icon: 'lock', cat: 'repairs' },
+      { label: 'Damp & Mould', icon: 'home', cat: 'maintenance' },
+      { label: 'General Repairs', icon: 'wrench', cat: 'repairs' }
+    ] },
+    { heading: 'Inventory & reports', defaultCat: 'inventory', items: [
+      { label: 'Check-In Report', icon: 'doc', cat: 'inventory' },
+      { label: 'Check-Out Report', icon: 'doc', cat: 'inventory' },
+      { label: 'Mid-Term Inspection', icon: 'doc', cat: 'inventory' }
+    ] },
+    { heading: 'Tradespeople', defaultCat: 'repairs', items: [
+      { label: 'Handyman', icon: 'wrench', cat: 'repairs' },
+      { label: 'Plumber', icon: 'water', cat: 'plumbing' },
+      { label: 'Electrician', icon: 'electric', cat: 'electrical' },
+      { label: 'Gas Engineer', icon: 'gas', cat: 'plumbing' },
+      { label: 'Painter & Decorator', icon: 'home', cat: 'maintenance' },
+      { label: 'Pest Control', icon: 'pest', cat: 'pest' }
+    ] }
+  ];
+
+  var PMEX_CERT_STYLE = {
+    'Gas Safe': { bg: '#fff7ed', bd: '#fed7aa', tx: '#92400e', dot: '#ea580c' },
+    'CIPHE': { bg: '#eff6ff', bd: '#bfdbfe', tx: '#1d4ed8', dot: '#1d4ed8' },
+    'WaterSafe': { bg: '#f0f9ff', bd: '#bae6fd', tx: '#0369a1', dot: '#0369a1' },
+    'NICEIC': { bg: '#f5f3ff', bd: '#ddd6fe', tx: '#6d28d9', dot: '#7c3aed' },
+    'Part P': { bg: '#f0fdfa', bd: '#99f6e4', tx: '#0f766e', dot: '#0f766e' },
+    'BAFE': { bg: '#fef2f2', bd: '#fecaca', tx: '#dc2626', dot: '#dc2626' },
+    'IFE': { bg: '#eff6ff', bd: '#bfdbfe', tx: '#1d4ed8', dot: '#1d4ed8' },
+    'DBS': { bg: '#f0fdf4', bd: '#bbf7d0', tx: '#15803d', dot: '#16a34a' }
+  };
+
+  var PMEX_PROVIDERS = [
+    { id: 'pv1', name: 'Thameside Plumbing & Gas', businessType: 'Company', role: 'Gas Engineer \u00b7 Plumber \u00b7 HVAC', rating: 4.8, reviews: 136, jobs: 4210, price: 90, sla: '4 hours', hours: '06:00-22:00', days: 'Mon-Sun', emergency: true, certs: ['Gas Safe', 'CIPHE', 'WaterSafe'], areas: 'E1, EC1', insured: true, dbs: false, cat: ['plumbing', 'maintenance'], experience: 14, responseRate: 98, completionRate: 97, repeatClients: 82, memberSince: 2016,
+      services: [
+        { name: 'Boiler Service', tags: ['RES', 'COM'], price: '\u00a3175', budget: true },
+        { name: 'Gas Safety Check', tags: ['RES', 'COM'], price: '\u00a385', budget: true },
+        { name: 'Leak Repair', tags: ['RES', 'COM'], price: '\u00a3115', budget: true },
+        { name: 'Drain Unblocking', tags: ['RES', 'COM'], price: '\u00a390', budget: true },
+        { name: 'Shower Install', tags: ['RES', 'COM'], quote: true },
+        { name: 'Underfloor Heating', tags: ['RES', 'COM'], quote: true }
+      ] },
+    { id: 'pv2', name: 'Clearflow Plumbing', businessType: 'Company', role: 'Plumber', rating: 4.2, reviews: 64, jobs: 1490, price: 75, sla: 'Same day', hours: '07:00-20:00', days: 'Mon-Sat', emergency: true, certs: ['Gas Safe', 'CIPHE'], areas: 'E1, E2', insured: true, dbs: true, cat: ['plumbing', 'maintenance'], experience: 7, responseRate: 95, completionRate: 96, repeatClients: 74, memberSince: 2019,
+      services: [
+        { name: 'Boiler Service', tags: ['RES', 'COM'], price: '\u00a3155', budget: true },
+        { name: 'Leak Repair', tags: ['RES', 'COM'], price: '\u00a390', budget: true },
+        { name: 'Drain Unblocking', tags: ['RES', 'COM'], price: '\u00a378', budget: true },
+        { name: 'Pipe Repair', tags: ['RES', 'COM'], price: '\u00a3105', budget: true }
+      ] },
+    { id: 'pv3', name: 'Maria Ibanez', businessType: 'Sole Trader', role: 'Cleaner', rating: 4.9, reviews: 58, jobs: 610, price: 18, sla: 'Same day', hours: '07:00-20:00', days: 'Mon-Sun', emergency: false, certs: ['DBS'], areas: 'London, Manchester', insured: true, dbs: true, cat: ['cleaning'], experience: 5, responseRate: 99, completionRate: 98, repeatClients: 88, memberSince: 2021,
+      services: [
+        { name: 'Standard Clean', tags: ['RES'], price: '\u00a318', budget: true },
+        { name: 'Deep Clean', tags: ['RES'], price: '\u00a324', budget: true },
+        { name: 'End of Tenancy Clean', tags: ['RES'], price: '\u00a3175' },
+        { name: 'Carpet Clean', tags: ['RES', 'COM'], quote: true }
+      ] },
+    { id: 'pv4', name: 'Sparkle Commercial Clean', businessType: 'Company', role: 'Commercial Cleaning', rating: 3.6, reviews: 71, jobs: 455, price: 20, sla: 'Next day', hours: '08:00-17:00', days: 'Mon-Fri', emergency: false, certs: [], areas: 'Manchester, Leeds', insured: true, dbs: true, cat: ['cleaning'], experience: 9, responseRate: 92, completionRate: 94, repeatClients: 70, memberSince: 2018,
+      services: [
+        { name: 'Office Clean', tags: ['COM'], price: '\u00a320/hr' },
+        { name: 'Deep Clean', tags: ['RES', 'COM'], price: '\u00a3240' },
+        { name: 'Carpet Clean', tags: ['RES', 'COM'], price: '\u00a375' },
+        { name: 'Window Clean', tags: ['RES', 'COM'], price: '\u00a342' }
+      ] },
+    { id: 'pv5', name: 'Voltix Electrical Ltd', businessType: 'Company', role: 'Electrician', rating: 4.6, reviews: 82, jobs: 905, price: 95, sla: 'Next day', hours: '08:00-18:00', days: 'Mon-Sat', emergency: true, certs: ['NICEIC', 'Part P'], areas: 'London, Home Counties', insured: true, dbs: false, cat: ['electrical'], experience: 11, responseRate: 97, completionRate: 97, repeatClients: 80, memberSince: 2017,
+      services: [
+        { name: 'EICR', tags: ['RES', 'COM'], price: '\u00a3180', budget: true },
+        { name: 'Fault Finding', tags: ['RES', 'COM'], price: '\u00a390', budget: true },
+        { name: 'PAT Testing', tags: ['COM'], price: '\u00a3145' },
+        { name: 'Consumer Unit Upgrade', tags: ['RES'], price: '\u00a3820' }
+      ] },
+    { id: 'pv6', name: 'Guardian Fire Safety', businessType: 'Company', role: 'Fire Safety Engineer', rating: 4.7, reviews: 89, jobs: 540, price: 150, sla: '48 hours', hours: '09:00-17:00', days: 'Mon-Fri', emergency: false, certs: ['BAFE', 'IFE'], areas: 'UK Wide', insured: true, dbs: true, cat: ['fire'], experience: 16, responseRate: 96, completionRate: 99, repeatClients: 85, memberSince: 2015,
+      services: [
+        { name: 'Fire Risk Assessment', tags: ['RES', 'COM'], price: '\u00a3145' },
+        { name: 'Fire Alarm Test', tags: ['COM'], price: '\u00a375' },
+        { name: 'Emergency Lighting Test', tags: ['COM'], price: '\u00a365' },
+        { name: 'Fire Extinguisher Service', tags: ['COM'], quote: true }
+      ] },
+    { id: 'pv7', name: 'Inventory Experts UK', businessType: 'Sole Trader', role: 'Inventory Clerk', rating: 4.8, reviews: 203, jobs: 1780, price: 95, sla: 'Same day', hours: '08:00-20:00', days: 'Mon-Sun', emergency: false, certs: [], areas: 'London & South East', insured: true, dbs: true, cat: ['inventory'], experience: 8, responseRate: 99, completionRate: 98, repeatClients: 91, memberSince: 2019,
+      services: [
+        { name: 'Check-In Report', tags: ['RES'], price: '\u00a390' },
+        { name: 'Check-Out Report', tags: ['RES'], price: '\u00a390' },
+        { name: 'Mid-Term Inspection', tags: ['RES'], price: '\u00a370' },
+        { name: 'Full Inventory', tags: ['RES'], price: '\u00a3175' }
+      ] },
+    { id: 'pv8', name: 'Dan Whitfield', businessType: 'Sole Trader', role: 'Handyman', rating: 4.7, reviews: 36, jobs: 812, price: 25, sla: 'Same day', hours: '07:00-19:00', days: 'Mon-Sat', emergency: true, certs: [], areas: 'E1, E2', insured: true, dbs: true, cat: ['repairs', 'maintenance'], experience: 12, responseRate: 97, completionRate: 96, repeatClients: 79, memberSince: 2016,
+      services: [
+        { name: 'General Repairs', tags: ['RES', 'COM'], price: '\u00a325', budget: true },
+        { name: 'Lock Change', tags: ['RES', 'COM'], price: '\u00a360', budget: true },
+        { name: 'Shelf Install', tags: ['RES', 'COM'], quote: true },
+        { name: 'Door Repair', tags: ['RES', 'COM'], price: '\u00a350', budget: true }
+      ] }
+  ];
+
+  var PMEX_PROPERTIES = [
+    { name: '14 Thames House', addr: 'Wapping High Street, London', postcode: 'E1W 1AA' },
+    { name: 'Oakfield Court, Flat 3B', addr: 'Oakfield Road, Manchester', postcode: 'M1 4GH' },
+    { name: 'The Maltings', addr: 'Kirkstall Road, Leeds', postcode: 'LS4 2AB' }
+  ];
+
+  var PMEX_UK_CITIES = [
+    { city: 'London', prefixes: ['E', 'W', 'N', 'S', 'EC', 'WC', 'NW', 'SE', 'SW'] },
+    { city: 'Manchester', prefixes: ['M1', 'M2', 'M3'] },
+    { city: 'Leeds', prefixes: ['LS1', 'LS2', 'LS3'] },
+    { city: 'Liverpool', prefixes: ['L1', 'L2', 'L3'] },
+    { city: 'Birmingham', prefixes: ['B1', 'B2', 'B3'] },
+    { city: 'Bristol', prefixes: ['BS1', 'BS2', 'BS3'] },
+    { city: 'Edinburgh', prefixes: ['EH1', 'EH2', 'EH3'] },
+    { city: 'Glasgow', prefixes: ['G1', 'G2', 'G3'] },
+    { city: 'Newcastle', prefixes: ['NE1', 'NE2', 'NE3'] },
+    { city: 'Sheffield', prefixes: ['S1', 'S2', 'S3'] },
+    { city: 'Nottingham', prefixes: ['NG1', 'NG2', 'NG3'] },
+    { city: 'Cardiff', prefixes: ['CF1', 'CF2', 'CF3'] },
+    { city: 'Oxford', prefixes: ['OX1', 'OX2', 'OX3'] },
+    { city: 'Cambridge', prefixes: ['CB1', 'CB2', 'CB3'] },
+    { city: 'Brighton', prefixes: ['BN1', 'BN2', 'BN3'] }
+  ];
+
+  var pmexInitialized = false;
+  var pmexCurrentCat = 'all';
+  var pmexMinRating = 0;
+  var pmexSearchQuery = '';
+  var pmexLocValue = '';
+
+  function pmexEscapeHtml(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function pmexDaysLabel(days) {
+    var m = { 'Mon-Sun': '7 days', 'Mon-Sat': '6 days', 'Mon-Fri': '5 days' };
+    return m[days] || days || '';
+  }
+  function pmexCertChip(cert) {
+    var cs = PMEX_CERT_STYLE[cert] || { bg: '#f8fafc', bd: '#e2e8f0', tx: '#374151', dot: '#94a3b8' };
+    return '<span class="pmex-cert-chip" style="background:' + cs.bg + ';border:1.5px solid ' + cs.bd + ';color:' + cs.tx + ';"><span class="pmex-cert-dot" style="background:' + cs.dot + ';"></span>' + pmexEscapeHtml(cert) + '</span>';
+  }
+  function pmexSvcRowHtml(s) {
+    var chk = '<svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="#10b981" stroke-width="2" style="flex-shrink:0;"><circle cx="7" cy="7" r="6"/><path d="M4.5 7l2 2 3-3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var budgetBadge = s.budget ? '<span class="svc-budget">Budget</span>' : '';
+    var priceEl = s.quote ? '<span class="svc-quote">Quote</span>' : '<span class="svc-price">' + pmexEscapeHtml(s.price) + '</span>';
+    return '<div class="pmex-svc-row">' + chk + '<span class="svc-name">' + pmexEscapeHtml(s.name) + '</span><span style="flex:1;"></span>' + budgetBadge + ' ' + priceEl + '</div>';
+  }
+
+  function pmexRenderChips() {
+    var wrap = document.getElementById('pmexCategoryChips');
+    if (!wrap) return;
+    var html = '<div class="pmex-chip' + (pmexCurrentCat === 'all' ? ' active' : '') + '" data-cat="all">All</div>';
+    PMEX_CAT_DEFS.forEach(function (c) {
+      html += '<div class="pmex-chip' + (pmexCurrentCat === c.key ? ' active' : '') + '" data-cat="' + c.key + '">' + pmexEscapeHtml(c.label) + '</div>';
+    });
+    wrap.innerHTML = html;
+    wrap.querySelectorAll('.pmex-chip').forEach(function (chip) {
+      chip.addEventListener('click', function () { pmexFilterCategory(chip.getAttribute('data-cat')); });
+    });
+  }
+
+  function pmexCountForCat(cat) {
+    return PMEX_PROVIDERS.filter(function (p) { return p.cat.indexOf(cat) >= 0; }).length;
+  }
+
+  function pmexRenderCatCards() {
+    var el = document.getElementById('pmexCatCards');
+    if (!el) return;
+    var html = '';
+    PMEX_GROUPS.forEach(function (group, gi) {
+      html += '<div class="pmex-group-heading' + (gi === 0 ? ' first' : '') + '">' + pmexEscapeHtml(group.heading) + '</div>';
+      html += '<div class="pmex-svc-grid">';
+      group.items.forEach(function (item) {
+        var count = pmexCountForCat(item.cat);
+        html += '<div class="pmex-svc-card" data-svc-cat="' + item.cat + '" data-svc-label="' + pmexEscapeHtml(item.label) + '">' +
+          '<div class="pmex-svc-card-icon">' + (PMEX_ICONS[item.icon] || PMEX_ICONS.wrench) + '</div>' +
+          '<div><div class="pmex-svc-card-label">' + pmexEscapeHtml(item.label) + '</div>' +
+          '<div class="pmex-svc-card-count">' + count + ' pro' + (count !== 1 ? 's' : '') + '</div></div>' +
+          '</div>';
+      });
+      html += '</div>';
+    });
+    el.innerHTML = html;
+    el.querySelectorAll('.pmex-svc-card').forEach(function (card) {
+      card.addEventListener('click', function () { pmexFilterCategory(card.getAttribute('data-svc-cat')); });
+    });
+  }
+
+  function pmexEmptyState(title, sub, btnLabel, onClick) {
+    var wrap = document.createElement('div');
+    wrap.className = 'pmex-empty';
+    wrap.innerHTML = '<svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="#d1d5db" stroke-width="1.8"><circle cx="18" cy="18" r="11"/><path d="M27 27l7 7"/></svg>' +
+      '<div class="pmex-empty-title">' + pmexEscapeHtml(title) + '</div>' +
+      '<div class="pmex-empty-sub">' + pmexEscapeHtml(sub) + '</div>' +
+      '<button type="button" class="pmex-empty-btn">' + pmexEscapeHtml(btnLabel) + '</button>';
+    wrap.querySelector('.pmex-empty-btn').addEventListener('click', onClick);
+    return wrap;
+  }
+
+  function pmexProviderCardHtml(p, idx) {
+    var starSvg = '<svg width="13" height="13" viewBox="0 0 12 12" fill="#f59e0b" stroke="#f59e0b" stroke-width="0"><path d="M6 1l1.2 3.6H11L8.2 7l1.1 3.6L6 8.8 2.7 10.6 3.8 7 1 4.6h3.8z"/></svg>';
+    var slaIco = '<svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6" cy="6" r="5"/><path d="M6 3v3l1.5 1.5"/></svg>';
+    var calIco = '<svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="2" width="10" height="9" rx="1.5"/><path d="M1 5h10M4 1v2M8 1v2"/></svg>';
+    var emgIco = '<svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 1L4 7h4l-3 4 7-7H8z" stroke-linejoin="round"/></svg>';
+    var availClass = p.emergency ? 'pmex-pcard-avail' : 'pmex-pcard-avail two-col';
+    var avail = '<div class="pmex-avail-card"><div class="pmex-avail-card-icon">' + slaIco + '</div><div class="pmex-avail-card-val">' + pmexEscapeHtml(p.sla) + '</div><div class="pmex-avail-card-lbl">SLA</div></div>' +
+      '<div class="pmex-avail-card"><div class="pmex-avail-card-icon">' + calIco + '</div><div class="pmex-avail-card-val">' + pmexDaysLabel(p.days) + '</div><div class="pmex-avail-card-lbl">' + pmexEscapeHtml(p.hours) + '</div></div>' +
+      (p.emergency ? '<div class="pmex-avail-card emg"><div class="pmex-avail-card-icon">' + emgIco + '</div><div class="pmex-avail-card-val">24/7</div><div class="pmex-avail-card-lbl">Emergency</div></div>' : '');
+
+    var resSvcs = p.services.filter(function (s) { return (s.tags || []).indexOf('RES') >= 0; });
+    var comSvcs = p.services.filter(function (s) { return (s.tags || []).indexOf('COM') >= 0; });
+    if (!resSvcs.length && comSvcs.length) resSvcs = comSvcs;
+    if (!comSvcs.length && resSvcs.length) comSvcs = resSvcs;
+    var hasTabs = resSvcs.length > 0 && comSvcs.length > 0 && resSvcs !== comSvcs;
+
+    function tabRows(svcs, tabKey) {
+      var shown = svcs.slice(0, 2);
+      var extra = svcs.slice(2);
+      var h = shown.map(pmexSvcRowHtml).join('');
+      if (extra.length) {
+        h += '<div class="pmex-svc-more" data-more-key="' + tabKey + '" style="display:none;">' + extra.map(pmexSvcRowHtml).join('') + '</div>';
+        h += '<button type="button" class="pmex-show-more" data-more-toggle="' + tabKey + '" data-more-count="' + extra.length + '">+' + extra.length + ' more <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4l2 2 2-2"/></svg></button>';
+      }
+      return h;
+    }
+
+    var svcsSection = '<div class="pmex-svc-box">';
+    if (hasTabs) {
+      svcsSection += '<div class="pmex-svc-tabs">' +
+        '<div class="pmex-svc-tab active" data-svc-tab="res" data-pid="' + p.id + '">Residential (' + resSvcs.length + ')</div>' +
+        '<div class="pmex-svc-tab" data-svc-tab="com" data-pid="' + p.id + '">Commercial (' + comSvcs.length + ')</div>' +
+        '</div>' +
+        '<div class="pmex-svc-pane" data-pane="res_' + p.id + '">' + tabRows(resSvcs, 'res_' + p.id) + '</div>' +
+        '<div class="pmex-svc-pane" data-pane="com_' + p.id + '" style="display:none;">' + tabRows(comSvcs, 'com_' + p.id) + '</div>';
+    } else {
+      svcsSection += tabRows(p.services, 'all_' + p.id);
+    }
+    svcsSection += '</div>';
+
+    var certsHtml = p.certs.map(pmexCertChip).join('');
+    var footer = '';
+    if (p.areas) footer += '<span style="color:var(--text-body-muted);"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="#94a3b8" stroke-width="1.5"><circle cx="6" cy="5" r="2.5"/><path d="M6 11C6 11 1 7.5 1 5a5 5 0 0110 0c0 2.5-5 6-5 6z"/></svg>' + pmexEscapeHtml(p.areas) + '</span>';
+    if (p.insured) footer += '<span style="color:#10b981;"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="#10b981" stroke-width="1.5"><path d="M6 1l4 2v4c0 2.5-4 5-4 5S2 9.5 2 7V3z"/></svg> Insured</span>';
+    if (p.dbs) footer += '<span style="color:var(--accent-blue);"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="var(--accent-blue)" stroke-width="1.5"><path d="M2 6l3 3 5-5"/></svg> DBS</span>';
+
+    return '<div class="pmex-pcard">' +
+      '<div class="pmex-pcard-head">' +
+      '<div style="position:relative;flex-shrink:0;"><div class="pmex-pcard-avatar"><img src="https://i.pravatar.cc/112?img=' + (idx % 70 + 3) + '" alt="" onerror="this.style.display=\'none\'"></div><div class="pmex-pcard-online"></div></div>' +
+      '<div class="pmex-pcard-info">' +
+      '<div class="pmex-pcard-name">' + pmexEscapeHtml(p.name) + ' <svg width="14" height="14" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="7.5" fill="var(--accent-blue)"/><path d="M4.5 7.5l2.5 2.5 4-4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>' +
+      '<div class="pmex-pcard-sub">' + pmexEscapeHtml(p.role) + '</div>' +
+      '<div class="pmex-pcard-rating">' + starSvg + '<span class="pmex-pcard-rating-num">' + p.rating + '</span><span class="pmex-pcard-rating-cnt">(' + p.reviews + ')</span><span class="pmex-pcard-rating-jobs">' + p.jobs.toLocaleString() + ' jobs</span></div>' +
+      '</div>' +
+      '<div class="pmex-pcard-price">from<strong>\u00a3' + p.price + '</strong></div>' +
+      '</div>' +
+      (certsHtml ? '<div class="pmex-pcard-badges">' + certsHtml + '</div>' : '') +
+      '<div class="' + availClass + '">' + avail + '</div>' +
+      '<div class="pmex-pcard-services">' + svcsSection + '</div>' +
+      (footer ? '<div class="pmex-pcard-meta">' + footer + '</div>' : '') +
+      '<div class="pmex-pcard-footer">' +
+      '<button type="button" class="pmex-book-btn" data-book-pid="' + p.id + '"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="12" height="10" rx="1.5"/><path d="M1 6.5h12M4.5 1.5v2M9.5 1.5v2"/></svg> Book now</button>' +
+      '<button type="button" class="pmex-profile-btn" data-profile-pid="' + p.id + '">Profile <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6h6M7 3l3 3-3 3"/></svg></button>' +
+      '</div>' +
+      '</div>';
+  }
+
+  function pmexWireProviderCardEvents(container) {
+    container.querySelectorAll('[data-svc-tab]').forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        var pid = tab.getAttribute('data-pid');
+        var which = tab.getAttribute('data-svc-tab');
+        container.querySelectorAll('[data-svc-tab][data-pid="' + pid + '"]').forEach(function (t) { t.classList.toggle('active', t.getAttribute('data-svc-tab') === which); });
+        container.querySelectorAll('[data-pane="res_' + pid + '"], [data-pane="com_' + pid + '"]').forEach(function (pane) {
+          pane.style.display = pane.getAttribute('data-pane') === (which + '_' + pid) ? '' : 'none';
+        });
+      });
+    });
+    container.querySelectorAll('[data-more-toggle]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var key = btn.getAttribute('data-more-toggle');
+        var count = btn.getAttribute('data-more-count');
+        var more = container.querySelector('.pmex-svc-more[data-more-key="' + key + '"]');
+        var isExpanded = btn.getAttribute('data-expanded') === 'true';
+        if (more) more.style.display = isExpanded ? 'none' : '';
+        btn.setAttribute('data-expanded', isExpanded ? 'false' : 'true');
+        btn.innerHTML = isExpanded
+          ? '+' + count + ' more <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4l2 2 2-2"/></svg>'
+          : 'Show less <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" style="transform:rotate(180deg);"><path d="M3 4l2 2 2-2"/></svg>';
+      });
+    });
+    container.querySelectorAll('[data-book-pid]').forEach(function (btn) {
+      btn.addEventListener('click', function () { showToast('Booking flow isn\u2019t wired up in this prototype yet.'); });
+    });
+    container.querySelectorAll('[data-profile-pid]').forEach(function (btn) {
+      btn.addEventListener('click', function () { pmexShowProfile(btn.getAttribute('data-profile-pid')); });
+    });
+  }
+
+  function pmexShowBrowse() {
+    document.getElementById('pmexProfileWrap').style.display = 'none';
+    document.getElementById('pmexBrowseWrap').style.display = '';
+    document.getElementById('pmexHeaderBlock').style.display = '';
+    document.querySelector('#pmDashboard .dash-scroll-area').scrollTop = 0;
+  }
+
+  function pmexShowProfile(pid) {
+    var p = PMEX_PROVIDERS.find(function (x) { return x.id === pid; });
+    if (!p) return;
+    var idx = PMEX_PROVIDERS.indexOf(p);
+    var content = document.getElementById('pmexProfileContent');
+    content.innerHTML = pmexProviderProfileHtml(p, idx);
+    pmexWireProfilePageEvents(content);
+    document.getElementById('pmexBrowseWrap').style.display = 'none';
+    document.getElementById('pmexHeaderBlock').style.display = 'none';
+    document.getElementById('pmexProfileWrap').style.display = '';
+    document.querySelector('#pmDashboard .dash-scroll-area').scrollTop = 0;
+  }
+
+  function pmexRatingDistribution(rating) {
+    if (rating >= 4.7) return [78, 15, 4, 2, 1];
+    if (rating >= 4.4) return [66, 23, 7, 2, 2];
+    if (rating >= 4.0) return [54, 27, 11, 5, 3];
+    return [38, 30, 16, 10, 6];
+  }
+  function pmexProviderEmail(p) {
+    return 'hello@' + p.name.toLowerCase().replace(/[^a-z0-9]+/g, '') + '.co.uk';
+  }
+  function pmexProviderPhone(p) {
+    var n = 700000 + (p.id.charCodeAt(2) * 137 + p.jobs) % 99999;
+    return '+44 7' + String(n).slice(0, 8);
+  }
+  function pmexProviderBio(p) {
+    var bits = [];
+    bits.push(pmexEscapeHtml(p.name) + ' is a ' + pmexEscapeHtml(p.role.toLowerCase()) + ' with ' + p.experience + ' years\u2019 experience, covering ' + pmexEscapeHtml(p.areas) + '.');
+    if (p.insured) bits.push('Fully insured.');
+    if (p.dbs) bits.push('DBS checked.');
+    bits.push('Trusted by property managers for reliable, on-time work with a ' + pmexEscapeHtml(p.sla).toLowerCase() + ' response time.');
+    return bits.join(' ');
+  }
+
+  function pmexProviderProfileHtml(p, idx) {
+    var starSvg = '<svg width="15" height="15" viewBox="0 0 12 12" fill="#f59e0b" stroke="#f59e0b" stroke-width="0"><path d="M6 1l1.2 3.6H11L8.2 7l1.1 3.6L6 8.8 2.7 10.6 3.8 7 1 4.6h3.8z"/></svg>';
+    var checkSvg = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#10b981" stroke-width="2"><path d="M2.5 7l3 3 6-6"/></svg>';
+    var dashSvg = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#d1d5db" stroke-width="1.8"><circle cx="7" cy="7" r="6"/></svg>';
+    var firstCat = (p.cat && p.cat[0]) || 'maintenance';
+    var catDef = PMEX_CAT_DEFS.find(function (c) { return c.key === firstCat; });
+    var galleryIcon = catDef ? catDef.icon : PMEX_ICONS.wrench;
+
+    var certsHtml = p.certs.map(pmexCertChip).join('');
+
+    var statDefs = [
+      { icon: '<svg width="20" height="20" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="3" width="12" height="16" rx="2"/><path d="M8 7h6M8 11h6M8 15h3"/></svg>', val: p.experience + ' years', label: 'Experience' },
+      { icon: '<svg width="20" height="20" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 11l4 4 10-10"/></svg>', val: p.responseRate + '%', label: 'Response rate' },
+      { icon: '<svg width="20" height="20" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 13l4-5 4 4 6-8"/></svg>', val: p.completionRate + '%', label: 'Completion' },
+      { icon: '<svg width="20" height="20" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="8" r="3.5"/><path d="M4 19c0-4 3-7 7-7s7 3 7 7"/><path d="M16 5l2 2-2 2"/></svg>', val: p.repeatClients + '%', label: 'Repeat clients' }
+    ];
+    var statsHtml = statDefs.map(function (s) {
+      return '<div class="pmex-pp-stat-card"><div class="pmex-pp-stat-icon">' + s.icon + '</div><div class="pmex-pp-stat-val">' + s.val + '</div><div class="pmex-pp-stat-lbl">' + s.label + '</div></div>';
+    }).join('');
+
+    var fixedSvcs = p.services.filter(function (s) { return !s.quote; });
+    var quoteSvcs = p.services.filter(function (s) { return s.quote; });
+    var fixedSvcsHtml = fixedSvcs.map(function (s) {
+      return '<div class="pmex-pp-svc-row">' +
+        '<div class="pmex-pp-svc-name">' + pmexEscapeHtml(s.name) + ' <span class="pmex-pp-rate-note">flat rate</span></div>' +
+        (s.budget ? '<span class="pmex-pp-svc-budget">Within budget</span>' : '') +
+        '<span class="pmex-pp-svc-price">' + pmexEscapeHtml(s.price) + '</span>' +
+        '<button type="button" class="pmex-pp-svc-book" data-book-pid="' + p.id + '" data-svc="' + pmexEscapeHtml(s.name) + '">Book</button>' +
+        '</div>';
+    }).join('');
+    var quoteSvcsHtml = quoteSvcs.map(function (s) {
+      return '<div class="pmex-pp-svc-row">' +
+        '<div class="pmex-pp-svc-name">' + pmexEscapeHtml(s.name) + '</div>' +
+        '<button type="button" class="pmex-pp-svc-quote-btn" data-book-pid="' + p.id + '" data-svc="' + pmexEscapeHtml(s.name) + '">Get quote</button>' +
+        '</div>';
+    }).join('');
+
+    var areaTagsHtml = p.areas.split(/,\s*/).map(function (a) { return '<span class="pmex-pp-area-tag">' + pmexEscapeHtml(a.trim()) + '</span>'; }).join('');
+    var dist = pmexRatingDistribution(p.rating);
+
+    var barsHtml = [5, 4, 3, 2, 1].map(function (star, i) {
+      return '<div class="pmex-pp-bar-row"><span class="pmex-pp-star-n">' + star + '</span>' + starSvg +
+        '<div class="pmex-pp-bar-track"><div class="pmex-pp-bar-fill" style="width:' + dist[i] + '%;"></div></div>' +
+        '<span class="pmex-pp-bar-pct">' + dist[i] + '%</span></div>';
+    }).join('');
+
+    var galleryHtml = '<div class="pmex-pp-gallery">' +
+      '<div class="pmex-pp-gallery-tile main">' + galleryIcon + '</div>' +
+      '<div class="pmex-pp-gallery-tile">' + galleryIcon + '</div>' +
+      '<div class="pmex-pp-gallery-tile">' + galleryIcon + '</div>' +
+      '</div>';
+
+    var contentHtml = '<div class="pmex-pp-head">' +
+      '<div class="pmex-pp-head-top">' +
+      '<div class="pmex-pp-avatar"><img src="https://i.pravatar.cc/168?img=' + (idx % 70 + 3) + '" alt="" onerror="this.style.display=\'none\'"></div>' +
+      '<div class="pmex-pp-info">' +
+      '<div class="pmex-pp-name-row"><span class="pmex-pp-name">' + pmexEscapeHtml(p.name) + '</span>' +
+      '<span class="pmex-pp-role-chip">' + pmexEscapeHtml(p.businessType) + '</span></div>' +
+      '<div class="pmex-pp-verified-row"><span class="pmex-pp-verified-chip"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="#15803d" stroke-width="1.8"><path d="M2 6l3 3 5-5"/></svg> Verified</span></div>' +
+      '<div class="pmex-pp-role-line">' + pmexEscapeHtml(p.role) + '</div>' +
+      '<div class="pmex-pp-rating-row">' + starSvg + ' <strong>' + p.rating + '</strong> (' + p.reviews + ' reviews)' +
+      '<span class="pmex-pp-dot">\u00b7</span>' + p.jobs.toLocaleString() + ' jobs completed' +
+      '</div>' +
+      '<div class="pmex-pp-member-line">Member since ' + p.memberSince + '</div>' +
+      '</div>' +
+      '</div>' +
+      '<p class="pmex-pp-desc">' + pmexProviderBio(p) + '</p>' +
+      '<div class="pmex-pp-btn-row">' +
+      '<button type="button" class="pmex-pp-book-btn" data-book-pid="' + p.id + '"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="3" width="12" height="9" rx="1.5"/><path d="M1 6h12M4 1v3M10 1v3"/></svg> Book now</button>' +
+      '<button type="button" class="pmex-pp-quote-btn" data-book-pid="' + p.id + '"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 2C4.5 2 2.5 3.8 2.5 6c0 1 .4 2 1.2 2.7L3 11l2.5-1c.4.1.97.2 1.5.2C9.5 10.2 11.5 8.3 11.5 6S9.5 2 7 2z"/></svg> Request quote</button>' +
+      '</div>' +
+      '</div>' +
+
+      '<div class="pmex-pp-stats">' + statsHtml + '</div>' +
+
+      (fixedSvcsHtml ? '<div class="pmex-pp-section"><div class="pmex-pp-section-title"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#10b981" stroke-width="2"><path d="M2 8l4 4 8-8"/></svg>Fixed-price services</div>' + fixedSvcsHtml + '</div>' : '') +
+      (quoteSvcsHtml ? '<div class="pmex-pp-section"><div class="pmex-pp-section-title">Additional services</div>' + quoteSvcsHtml + '</div>' : '');
+
+    var sideHtml = '<div class="pmex-pp-side-card">' +
+      '<div class="pmex-pp-side-title"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#10b981" stroke-width="2"><path d="M2 7l4 4 6-6"/></svg>Verification status</div>' +
+      '<div class="pmex-pp-verify-list">' +
+      '<div class="pmex-pp-verify-item">' + checkSvg + 'Identity verified</div>' +
+      '<div class="pmex-pp-verify-item">' + checkSvg + 'Insurance verified</div>' +
+      '<div class="pmex-pp-verify-item' + (p.dbs ? '' : ' unmet') + '">' + (p.dbs ? checkSvg : dashSvg) + 'DBS checked</div>' +
+      '<div class="pmex-pp-verify-item">' + checkSvg + 'Right to work</div>' +
+      '</div></div>' +
+
+      (certsHtml ? '<div class="pmex-pp-side-card"><div class="pmex-pp-side-title"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="var(--accent-blue)" stroke-width="1.8"><path d="M7 1l2 4h4l-3 2.5 1 4L7 9l-4 2.5 1-4L1 5h4z"/></svg>Certifications</div><div class="pmex-pp-cert-chips">' + certsHtml + '</div></div>' : '') +
+
+      '<div class="pmex-pp-side-card">' +
+      '<div class="pmex-pp-side-title">Insurance</div>' +
+      '<div class="pmex-pp-side-line">\u00a31M public liability</div>' +
+      (p.emergency ? '<div class="pmex-pp-sla-line" style="color:#d97706;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#d97706" stroke-width="1.6"><path d="M6 1l1.5 4H11L7.5 8l1.5 4L6 9.5 2 12l1.5-4L0 5h3.5z"/></svg>Emergency callout available</div>' : '') +
+      '</div>' +
+
+      '<div class="pmex-pp-side-card">' +
+      '<div class="pmex-pp-side-title">Coverage</div>' +
+      '<div class="pmex-pp-area-tags">' + areaTagsHtml + '</div>' +
+      '<div class="pmex-pp-side-line">Serves Residential &amp; Commercial</div>' +
+      '<div class="pmex-pp-sla-line"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="var(--accent-blue)" stroke-width="1.5"><circle cx="6" cy="6" r="5"/><path d="M6 3v3l2 2"/></svg>SLA: ' + pmexEscapeHtml(p.sla) + ' response</div>' +
+      '</div>' +
+
+      '<div class="pmex-pp-side-card">' +
+      '<div class="pmex-pp-side-title">Contact</div>' +
+      '<div class="pmex-pp-contact-list">' +
+      '<div class="pmex-pp-contact-item"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#64748b" stroke-width="1.6"><path d="M2 3h10a1 1 0 011 1v7a1 1 0 01-1 1H2a1 1 0 01-1-1V4a1 1 0 011-1z"/><path d="M1 4l6 4 6-4"/></svg>' + pmexProviderEmail(p) + '</div>' +
+      '<div class="pmex-pp-contact-item"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#64748b" stroke-width="1.6"><path d="M2 2c0 8 2.5 10.5 10 10l1-3-3-1-1 1.5C7 9 5 7 4.5 5L6 4 5 1 2 2z"/></svg>' + pmexProviderPhone(p) + '</div>' +
+      '</div></div>' +
+
+      '<div class="pmex-pp-side-card">' +
+      '<div class="pmex-pp-side-title">Reviews</div>' +
+      '<div class="pmex-pp-review-score-row"><svg width="20" height="20" viewBox="0 0 12 12" fill="#f59e0b" stroke="#f59e0b" stroke-width="0"><path d="M6 1l1.2 3.6H11L8.2 7l1.1 3.6L6 8.8 2.7 10.6 3.8 7 1 4.6h3.8z"/></svg><span class="pmex-pp-review-score">' + p.rating + '</span><span class="pmex-pp-review-outof">/ 5</span></div>' +
+      '<div class="pmex-pp-review-count">' + p.reviews + ' verified reviews</div>' +
+      barsHtml +
+      '</div>';
+
+    return '<div class="pmex-pp-main">' + galleryHtml +
+      '<div class="pmex-pp-layout"><div class="pmex-pp-content">' + contentHtml + '</div><div class="pmex-pp-sidebar">' + sideHtml + '</div></div>' +
+      '</div>';
+  }
+
+  function pmexWireProfilePageEvents(content) {
+    content.querySelectorAll('[data-book-pid]').forEach(function (btn) {
+      btn.addEventListener('click', function () { showToast('Booking flow isn\u2019t wired up in this prototype yet.'); });
+    });
+  }
+
+  function pmexRenderProviders(cat, minRating, searchQuery) {
+    var container = document.getElementById('pmexProviderCards');
+    if (!container) return;
+    cat = cat || pmexCurrentCat;
+    minRating = minRating !== undefined ? minRating : pmexMinRating;
+    var q = (searchQuery || '').toLowerCase().trim();
+    var filtered = PMEX_PROVIDERS.filter(function (p) {
+      var catMatch = cat === 'all' || p.cat.indexOf(cat) >= 0;
+      var ratingMatch = p.rating >= minRating;
+      var searchMatch = !q || p.name.toLowerCase().indexOf(q) >= 0 || p.role.toLowerCase().indexOf(q) >= 0 ||
+        p.certs.join(' ').toLowerCase().indexOf(q) >= 0 || p.services.some(function (s) { return s.name.toLowerCase().indexOf(q) >= 0; });
+      return catMatch && ratingMatch && searchMatch;
+    });
+    container.innerHTML = '';
+    if (!filtered.length) {
+      container.appendChild(pmexEmptyState('No providers found', q ? 'No suppliers match your search' : 'No suppliers cover your properties for this service', q ? 'Clear search' : 'Browse all services', function () {
+        if (q) { pmexClearSearch(); } else { pmexFilterCategory('all'); }
+      }));
+      return;
+    }
+    var grid = document.createElement('div');
+    grid.className = 'pmex-provider-grid';
+    grid.innerHTML = filtered.map(function (p, i) { return pmexProviderCardHtml(p, i); }).join('');
+    container.appendChild(grid);
+    pmexWireProviderCardEvents(grid);
+  }
+
+  function pmexUpdateSearchPlaceholder() {
+    var inp = document.getElementById('pmexSearchInput');
+    if (inp) inp.placeholder = pmexCurrentCat === 'all' ? 'Search services...' : 'Search providers...';
+  }
+
+  function pmexFilterCategory(cat) {
+    pmexCurrentCat = cat;
+    pmexSearchQuery = '';
+    var searchInput = document.getElementById('pmexSearchInput');
+    if (searchInput) searchInput.value = '';
+    pmexRenderChips();
+    pmexUpdateSearchPlaceholder();
+    var catCards = document.getElementById('pmexCatCards');
+    var provCards = document.getElementById('pmexProviderCards');
+    var filterBtn = document.getElementById('pmexFilterToggleBtn');
+    var panel = document.getElementById('pmexFilterPanel');
+    if (cat === 'all') {
+      if (catCards) { pmexRenderCatCards(); catCards.style.display = ''; }
+      if (provCards) { provCards.style.display = 'none'; provCards.innerHTML = ''; }
+      if (filterBtn) filterBtn.style.display = pmexMinRating > 0 ? 'flex' : 'none';
+      if (panel) panel.classList.remove('open');
+    } else {
+      if (catCards) catCards.style.display = 'none';
+      if (provCards) { provCards.style.display = ''; pmexRenderProviders(cat, pmexMinRating); }
+      if (filterBtn) filterBtn.style.display = 'flex';
+    }
+  }
+
+  function pmexToggleFilterPanel() {
+    var p = document.getElementById('pmexFilterPanel');
+    if (p) p.classList.toggle('open');
+  }
+  function pmexUpdateFilterBadge() {
+    var badge = document.getElementById('pmexFilterBadge');
+    if (!badge) return;
+    if (pmexMinRating > 0) {
+      badge.textContent = pmexMinRating.toFixed(1).replace('.0', '') + '+';
+      badge.style.display = 'inline';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+  function pmexApplyFilter(rating) {
+    pmexMinRating = rating || 0;
+    pmexUpdateFilterBadge();
+    // Keep the filter reachable on the "All" view once a rating is chosen, even with no search query yet
+    var filterBtn = document.getElementById('pmexFilterToggleBtn');
+    if (filterBtn && pmexCurrentCat === 'all') filterBtn.style.display = 'flex';
+    pmexRenderProviders(pmexCurrentCat, pmexMinRating, pmexSearchQuery);
+  }
+  function pmexResetRatingDropdown() {
+    var btn = document.querySelector('.pm-custom-dd-btn[data-dd="pmexRatingFilter"]');
+    var menu = document.querySelector('.pm-custom-dd-menu[data-dd-menu="pmexRatingFilter"]');
+    if (btn) btn.querySelector('.cdd-value').textContent = 'Any rating';
+    if (menu) menu.querySelectorAll('.cdd-item').forEach(function (i) { i.classList.toggle('selected', i.getAttribute('data-value') === 'Any rating'); });
+  }
+  function pmexClearFilter() {
+    pmexMinRating = 0;
+    pmexResetRatingDropdown();
+    pmexUpdateFilterBadge();
+    var panel = document.getElementById('pmexFilterPanel');
+    if (panel) panel.classList.remove('open');
+    var filterBtn = document.getElementById('pmexFilterToggleBtn');
+    if (filterBtn && pmexCurrentCat === 'all' && !pmexSearchQuery) filterBtn.style.display = 'none';
+    pmexRenderProviders(pmexCurrentCat, 0, pmexSearchQuery);
+  }
+  function pmexClearSearch() {
+    var inp = document.getElementById('pmexSearchInput');
+    if (inp) inp.value = '';
+    pmexFilterSearch('');
+  }
+  function pmexFilterSearch(q) {
+    q = (q || '').trim();
+    pmexSearchQuery = q;
+    var filterBtn = document.getElementById('pmexFilterToggleBtn');
+    if (pmexCurrentCat === 'all') {
+      var catCards = document.getElementById('pmexCatCards');
+      var provCards = document.getElementById('pmexProviderCards');
+      if (!q) {
+        if (catCards) catCards.style.display = '';
+        if (provCards) { provCards.style.display = 'none'; provCards.innerHTML = ''; }
+        if (filterBtn) filterBtn.style.display = pmexMinRating > 0 ? 'flex' : 'none';
+        return;
+      }
+      if (catCards) catCards.style.display = 'none';
+      if (provCards) provCards.style.display = '';
+      if (filterBtn) filterBtn.style.display = 'flex';
+      pmexRenderProviders('all', pmexMinRating, q);
+    } else {
+      pmexRenderProviders(pmexCurrentCat, pmexMinRating, q);
+    }
+  }
+
+  /* ---- Location filter autocomplete ---- */
+  function pmexLocEsc(s) { return pmexEscapeHtml(s); }
+  function pmexLocRenderDropdown(q) {
+    var dd = document.getElementById('pmexLocDd');
+    if (!dd) return;
+    var query = (q || '').toLowerCase().trim();
+    var matchedProps = PMEX_PROPERTIES.filter(function (p) {
+      if (!query) return true;
+      return p.name.toLowerCase().indexOf(query) >= 0 || p.addr.toLowerCase().indexOf(query) >= 0 || p.postcode.toLowerCase().indexOf(query) >= 0;
+    });
+    var matchedCities = [];
+    if (query) {
+      matchedCities = PMEX_UK_CITIES.filter(function (c) {
+        if (c.city.toLowerCase().indexOf(query) >= 0) return true;
+        return c.prefixes.some(function (p) { return p.toLowerCase().indexOf(query) >= 0; });
+      });
+    }
+    var html = '';
+    if (matchedProps.length) {
+      html += '<div class="pmex-loc-dd-heading">YOUR PROPERTIES</div>';
+      matchedProps.forEach(function (p) {
+        var addrLine = p.addr + (p.postcode ? ' \u00b7 ' + p.postcode : '');
+        html += '<div class="pmex-loc-row" data-loc-name="' + pmexLocEsc(p.name) + '" data-loc-sub="' + pmexLocEsc(addrLine) + '">' +
+          '<div class="pmex-loc-row-icon" style="background:var(--icon-tint-bg);"><svg width="17" height="17" viewBox="0 0 18 18" fill="none" stroke="var(--accent-blue)" stroke-width="1.6"><rect x="3" y="2" width="12" height="14" rx="1"/><path d="M6 5h1M6 8h1M6 11h1M11 5h1M11 8h1M11 11h1"/><path d="M7 16v-3h4v3"/></svg></div>' +
+          '<div style="flex:1;min-width:0;"><div class="pmex-loc-row-name">' + pmexLocEsc(p.name) + '</div><div class="pmex-loc-row-sub">' + pmexLocEsc(addrLine) + '</div></div>' +
+          '</div>';
+      });
+    }
+    if (matchedCities.length) {
+      html += '<div class="pmex-loc-dd-heading' + (matchedProps.length ? ' with-border' : '') + '">CITIES</div>';
+      matchedCities.forEach(function (c) {
+        var prefs = c.prefixes.slice(0, 3).join(', ') + '...';
+        html += '<div class="pmex-loc-row" data-loc-name="' + pmexLocEsc(c.city) + '" data-loc-sub="' + pmexLocEsc(prefs) + '">' +
+          '<div class="pmex-loc-row-icon" style="background:#d1fae5;"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#047857" stroke-width="1.6"><path d="M8 1a5 5 0 00-5 5c0 4 5 9 5 9s5-5 5-9a5 5 0 00-5-5z"/><circle cx="8" cy="6" r="1.8"/></svg></div>' +
+          '<div style="flex:1;min-width:0;"><div class="pmex-loc-row-name">' + pmexLocEsc(c.city) + '</div><div class="pmex-loc-row-sub">' + pmexLocEsc(prefs) + '</div></div>' +
+          '</div>';
+      });
+    }
+    if (!matchedProps.length && !matchedCities.length) {
+      html = '<div class="pmex-loc-empty">' + (!query ? 'No saved properties yet. Start typing to search cities and postcodes.' : 'No matches for \u201c' + pmexLocEsc(q) + '\u201d') + '</div>';
+    }
+    dd.innerHTML = html;
+    dd.querySelectorAll('.pmex-loc-row').forEach(function (row) {
+      row.addEventListener('mousedown', function (e) {
+        e.preventDefault();
+        pmexLocSelectItem(row.getAttribute('data-loc-name'), row.getAttribute('data-loc-sub'));
+      });
+    });
+  }
+  function pmexLocSelectItem(name, sub) {
+    var input = document.getElementById('pmexLocInput');
+    var composed = sub ? (name + ' \u00b7 ' + sub) : name;
+    if (input) input.value = composed;
+    pmexLocValue = composed;
+    var btn = document.getElementById('pmexLocClearBtn');
+    if (btn) btn.style.display = 'flex';
+    var dd = document.getElementById('pmexLocDd');
+    if (dd) dd.style.display = 'none';
+  }
+  function pmexFilterByLocation(v) {
+    pmexLocValue = (v || '').trim();
+    var btn = document.getElementById('pmexLocClearBtn');
+    if (btn) btn.style.display = pmexLocValue ? 'flex' : 'none';
+    var dd = document.getElementById('pmexLocDd');
+    if (!pmexLocValue) { if (dd) dd.style.display = 'none'; return; }
+    pmexLocRenderDropdown(pmexLocValue);
+    if (dd) dd.style.display = 'block';
+  }
+  function pmexLocDropdownShow() {
+    if (pmexLocValue) {
+      pmexLocRenderDropdown(pmexLocValue);
+      var dd = document.getElementById('pmexLocDd');
+      if (dd) dd.style.display = 'block';
+    }
+  }
+  function pmexLocDropdownHide() {
+    var dd = document.getElementById('pmexLocDd');
+    if (dd) dd.style.display = 'none';
+  }
+  function pmexLocClear() {
+    var input = document.getElementById('pmexLocInput');
+    if (input) { input.value = ''; input.focus(); }
+    pmexLocValue = '';
+    var btn = document.getElementById('pmexLocClearBtn');
+    if (btn) btn.style.display = 'none';
+    pmexLocDropdownHide();
+  }
+
+  function initPmExploreOnce() {
+    if (pmexInitialized) return;
+    pmexInitialized = true;
+
+    pmexRenderChips();
+    pmexFilterCategory('all');
+
+    document.getElementById('pmexSearchInput').addEventListener('input', function (e) { pmexFilterSearch(e.target.value); });
+    document.getElementById('pmexFilterToggleBtn').addEventListener('click', pmexToggleFilterPanel);
+    document.getElementById('pmexFilterClearBtn').addEventListener('click', pmexClearFilter);
+
+    var locInput = document.getElementById('pmexLocInput');
+    locInput.addEventListener('input', function (e) { pmexFilterByLocation(e.target.value); });
+    locInput.addEventListener('focus', pmexLocDropdownShow);
+    locInput.addEventListener('blur', function () { setTimeout(pmexLocDropdownHide, 160); });
+    document.getElementById('pmexLocClearBtn').addEventListener('click', pmexLocClear);
+    document.getElementById('pmexProfileBackBtn').addEventListener('click', pmexShowBrowse);
+  }
+
   /* ---- PM Settings view ---- */
   function showPMView(view) {
     document.getElementById('pmHomeView').style.display = view === 'home' ? '' : 'none';
     document.getElementById('pmSettingsView').style.display = view === 'settings' ? '' : 'none';
+    document.getElementById('pmExploreView').style.display = view === 'explore' ? '' : 'none';
     document.querySelector('#pmDashboard .dash-scroll-area').scrollTop = 0;
   }
   document.querySelector('#pmDashboard .dash-account-avatar').style.cursor = 'pointer';
@@ -11187,6 +12182,9 @@
       item.classList.add('active');
       if (item.getAttribute('data-nav') === 'home') {
         showPMView('home');
+      } else if (item.getAttribute('data-nav') === 'explore') {
+        showPMView('explore');
+        initPmExploreOnce();
       } else {
         showToast(item.querySelector('.nav-label').textContent + ' isn\u2019t wired up in this prototype yet.');
       }
@@ -13698,7 +14696,11 @@
     supRowsPerPage: function (v) { supRowsPerPage = parseInt(v, 10); supCurrentPage = 1; renderSupplierList(); },
     supAppType: function (v) { supAppTypeFilter = v; supAppCurrentPage = 1; renderSupAppList(); },
     supAppState: function (v) { supAppStateFilter = v; supAppCurrentPage = 1; renderSupAppList(); },
-    supAppRowsPerPage: function (v) { supAppRowsPerPage = parseInt(v, 10); supAppCurrentPage = 1; renderSupAppList(); }
+    supAppRowsPerPage: function (v) { supAppRowsPerPage = parseInt(v, 10); supAppCurrentPage = 1; renderSupAppList(); },
+    pmexRatingFilter: function (v) {
+      var map = { 'Any rating': 0, '3.0+ \u2605': 3, '4.0+ \u2605': 4, '4.5+ \u2605': 4.5 };
+      pmexApplyFilter(map[v] !== undefined ? map[v] : 0);
+    }
   };
   document.querySelectorAll('.cdd-item[data-value]').forEach(function (item) {
     var menu = item.closest('.pm-custom-dd-menu');
