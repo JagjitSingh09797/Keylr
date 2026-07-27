@@ -1121,7 +1121,7 @@
     position: fixed;
     inset: 0;
     background: var(--app-bg, #eeeff2);
-    z-index: 300;
+    z-index: 350;
     display: none;
     flex-direction: column;
     opacity: 0;
@@ -1257,6 +1257,10 @@
     transform: translateY(-1px);
   }
   .choice-tile.selected { background: var(--tile-selected-bg, #e8f0f8); border-color: var(--tile-selected-border, #284890); }
+  #supPscTiles .choice-tile.selected { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); border-color: transparent; }
+  #supPscTiles .choice-tile.selected .tile-title,
+  #supPscTiles .choice-tile.selected .tile-desc { color: #fff; }
+  #supPscTiles .choice-tile.selected .tile-check { background: #fff; color: var(--navy-900); }
   .choice-tile .tile-icon {
     width: 34px; height: 34px; border-radius: 9px;
     background: var(--icon-tint-bg); color: var(--accent-blue);
@@ -1716,6 +1720,29 @@
   }
   .radio-tile:hover:not(.selected) { border-color: #90a8c8; transform: translateY(-1px); }
   .radio-tile.selected { background: var(--tile-selected-bg, #e8f0f8); border-color: var(--tile-selected-border, #284890); }
+  #rightToWorkTiles .radio-tile[data-value="no"].selected { background: #fef2f2; border-color: #fecaca; }
+  #rightToWorkTiles .radio-tile[data-value="no"].selected .rt-icon { background: #dc2626; color: #fff; }
+
+  /* Company Background Checks step (supplier onboarding, Company only) */
+  .supbg-yn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 640px) { .supbg-yn-row { grid-template-columns: 1fr; } }
+  .supbg-yn-tile { border: 1.5px solid var(--border-subtle); border-radius: 12px; padding: 16px 18px; cursor: pointer; display: flex; align-items: flex-start; gap: 12px; background: #fff; transition: background-color 150ms ease-out, border-color 150ms ease-out; }
+  .supbg-yn-tile:hover:not(.selected) { border-color: #90a8c8; }
+  .supbg-yn-icon { width: 22px; height: 22px; border-radius: 50%; background: var(--surface-soft); color: var(--text-body-muted); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .supbg-yn-title { font-size: 14px; font-weight: 700; color: var(--text-heading); }
+  .supbg-yn-desc { font-size: 12px; color: var(--text-body-muted); margin-top: 2px; line-height: 1.4; }
+  .supbg-yn-tile.selected.supbg-yes { background: #f0fdf4; border-color: #86efac; }
+  .supbg-yn-tile.selected.supbg-yes .supbg-yn-icon { background: #16a34a; color: #fff; }
+  .supbg-yn-tile.selected.supbg-no { background: #fef2f2; border-color: #fecaca; }
+  .supbg-yn-tile.selected.supbg-no .supbg-yn-icon { background: #dc2626; color: #fff; }
+  .supbg-radio-row.supbg-amber-option.selected { background: #fefce8; border-color: #f0b429; }
+  .supbg-ai-assist { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-subtle); }
+  .supbg-ai-assist-label { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--accent-blue); margin-right: 4px; }
+  .supbg-ai-btn { background: var(--icon-tint-bg); border: none; border-radius: 8px; padding: 7px 13px; font-size: 12px; font-weight: 700; color: var(--accent-blue); cursor: pointer; font-family: inherit; }
+  .supbg-ai-btn:hover:not(:disabled) { opacity: 0.85; }
+  .supbg-ai-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .supbg-policy-block { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-subtle); }
+  .supbg-policy-block:first-of-type { margin-top: 16px; padding-top: 0; border-top: none; }
   .radio-tile .rt-icon {
     width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
     background: var(--surface-soft); color: var(--text-body-muted);
@@ -3906,7 +3933,42 @@
 
   .pmprop-inclusions-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
   .pmprop-inclusions-actions { display: flex; align-items: center; gap: 8px; }
-  .pmprop-inclusions-icon-btn { width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--border-subtle); background: #fff; display: flex; align-items: center; justify-content: center; color: var(--text-body-muted); cursor: pointer; }
+  .pmprop-inclusions-icon-btn { width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--border-subtle); background: #fff; display: flex; align-items: center; justify-content: center; color: var(--text-body-muted); cursor: pointer; position: relative; }
+
+  /* Rich Access Method dropdown (title + subtitle rows) */
+  .pmprop-am-menu { width: max-content; min-width: 100%; max-width: 420px; max-height: 340px; overflow-y: auto; padding: 6px; }
+  .pmprop-am-item { padding: 11px 12px; border-radius: 9px; cursor: pointer; display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+  .pmprop-am-item:hover { background: var(--surface-soft); }
+  .pmprop-am-item.selected { background: var(--icon-tint-bg); }
+  .pmprop-am-item-title { font-size: 13.5px; font-weight: 700; color: var(--text-heading); }
+  .pmprop-am-item.selected .pmprop-am-item-title { color: var(--accent-blue); }
+  .pmprop-am-item-desc { font-size: 12px; color: var(--text-body-muted); margin-top: 2px; line-height: 1.4; }
+  .pmprop-am-check { color: var(--accent-blue); flex-shrink: 0; margin-top: 2px; opacity: 0; }
+  .pmprop-am-item.selected .pmprop-am-check { opacity: 1; }
+
+  /* Conditional access-method fields */
+  .pmprop-access-fields { background: var(--surface-soft); border-radius: 14px; padding: 18px 20px; margin-top: 16px; }
+  .pmprop-access-fields .pmprop-field-row { margin-bottom: 0; }
+  .pmprop-code-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 14px; align-items: flex-end; margin-bottom: 14px; }
+  @media (max-width: 700px) { .pmprop-code-row { grid-template-columns: 1fr; } }
+  .pmprop-code-row:last-of-type { margin-bottom: 0; }
+  .pmprop-code-remove-btn { width: 42px; height: 42px; border-radius: 10px; border: 1.5px solid var(--border-subtle); background: #fff; display: flex; align-items: center; justify-content: center; color: #dc2626; cursor: pointer; flex-shrink: 0; }
+  .pmprop-code-remove-btn:hover { background: #fef2f2; border-color: #fecaca; }
+  .pmprop-code-remove-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .pmprop-add-code-btn { display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 1.5px solid var(--border-subtle); border-radius: 9px; padding: 9px 15px; font-size: 12.5px; font-weight: 700; color: var(--accent-blue); cursor: pointer; font-family: inherit; margin-top: 4px; }
+  .pmprop-add-code-btn:hover { background: var(--icon-tint-bg); }
+  .pmprop-same-pickup-row { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; color: var(--text-heading); cursor: pointer; user-select: none; }
+  .pmprop-same-pickup-row input { width: 15px; height: 15px; accent-color: var(--accent-blue); cursor: pointer; }
+
+  /* Property inclusions summary popover */
+  .pmprop-inclusions-summary { position: absolute; top: calc(100% + 8px); right: 0; width: 260px; background: #fff; border-radius: 14px; box-shadow: 0 16px 40px rgba(16,24,40,0.16); border: 1px solid var(--border-subtle); padding: 16px; z-index: 20; display: none; }
+  .pmprop-inclusions-summary.open { display: block; }
+  .pmprop-inclusions-summary-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; color: #94a3b8; text-transform: uppercase; margin-bottom: 10px; }
+  .pmprop-inclusions-summary-row { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; font-size: 13px; }
+  .pmprop-inclusions-summary-row-label { display: flex; align-items: center; gap: 9px; color: var(--text-heading); font-weight: 500; }
+  .pmprop-inclusions-summary-row-label svg { color: var(--accent-blue); flex-shrink: 0; }
+  .pmprop-inclusions-summary-row-count { font-weight: 700; color: var(--text-heading); }
+  .pmprop-inclusions-summary-empty { font-size: 12.5px; color: var(--text-body-muted); text-align: center; padding: 8px 0; }
   .pmprop-inclusions-icon-btn:hover { background: var(--surface-soft); }
   .pmprop-inclusions-box { background: var(--surface-soft); border-radius: 14px; padding: 8px 20px; margin-top: 14px; }
   .pmprop-inclusions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 32px; }
@@ -3928,7 +3990,7 @@
   .pmprop-media-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0 14px; }
   .pmprop-media-tab { padding: 6px 12px; border-radius: 999px; border: 1.5px solid var(--border-subtle); background: #fff; font-size: 11.5px; font-weight: 600; color: var(--text-heading); cursor: pointer; }
   .pmprop-media-tab:hover:not(.selected) { border-color: #90a8c8; }
-  .pmprop-media-tab.selected { background: var(--navy-900); border-color: var(--navy-900); color: #fff; }
+  .pmprop-media-tab.selected { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); border-color: transparent; color: #fff; }
 
   .pmprop-dropzone { border: 1.5px dashed var(--border-subtle); border-radius: 14px; padding: 40px 20px; text-align: center; background: var(--surface-soft); cursor: pointer; }
   .pmprop-dropzone:hover { border-color: #90a8c8; }
@@ -3978,6 +4040,17 @@
   .pmprop-del-cancel { background: #fff; border: 1.5px solid var(--border-subtle); color: var(--text-heading); }
   .pmprop-del-cancel:hover { background: var(--surface-soft); }
   .pmprop-del-confirm { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); border: none; color: #fff; }
+
+  /* Generic small confirmation modal (Log Out, etc.) — same visual language as the property delete modal */
+  .confirm-modal-card { width: 100%; max-width: 420px; background: #fff; border-radius: 18px; padding: 32px; text-align: center; box-shadow: 0 30px 80px rgba(0,0,0,0.35); transform: translateY(18px) scale(0.98); opacity: 0; transition: transform 300ms cubic-bezier(0.16,1,0.3,1), opacity 300ms ease-out; }
+  .modal-overlay.open .confirm-modal-card { transform: none; opacity: 1; }
+  .confirm-modal-icon { width: 64px; height: 64px; border-radius: 50%; background: var(--icon-tint-bg); color: var(--navy-900); display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; }
+  .confirm-modal-title { font-size: 18px; font-weight: 800; color: var(--text-heading); margin-bottom: 10px; }
+  .confirm-modal-desc { font-size: 13.5px; color: var(--text-body-muted); line-height: 1.6; margin-bottom: 22px; }
+  .confirm-modal-btns { display: flex; gap: 10px; }
+  .confirm-modal-btns button { flex: 1; border-radius: 10px; padding: 12px; font-size: 13.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .confirm-modal-confirm { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); border: none; color: #fff; }
+  .confirm-modal-confirm:hover { opacity: 0.9; }
   .pmprop-del-confirm:hover { opacity: 0.9; }
 
 </style>
@@ -4803,6 +4876,17 @@
           <h2>Company details</h2>
           <p class="ob-subtext">Complete this so your invoices are correct and service providers can identify your company.</p>
 
+          <div class="attention-banner" id="pmCompanyAttentionBanner">
+            <div class="ab-head"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg><div class="ab-title">4 details still needed to finish this step</div></div>
+            <div class="ab-sub">The highlighted fields below are required. Tap one to jump to it.</div>
+            <div class="attention-jump-row">
+              <div class="attention-jump-pill" data-jump="legalCompanyName">Legal company name</div>
+              <div class="attention-jump-pill" data-jump="registeredAddress">Registered address</div>
+              <div class="attention-jump-pill" data-jump="tradingAddressInput">Trading address</div>
+              <div class="attention-jump-pill" data-jump="vatNumber">Valid VAT number</div>
+            </div>
+          </div>
+
           <div class="ob-field">
             <label for="tradingName">Commercial / trading name<span class="req">*</span></label>
             <input class="field-input" type="text" id="tradingName" value="Thames House Properties">
@@ -4848,7 +4932,7 @@
 
           <div class="ob-field">
             <label>Registered address <span class="meta-badge auto">Auto</span></label>
-            <input class="field-input" type="text" placeholder="Official registered business address — auto-filled, editable.">
+            <input class="field-input" type="text" id="registeredAddress" placeholder="Official registered business address — auto-filled, editable.">
           </div>
 
           <div class="ob-section-heading" style="margin-bottom:14px;">Trading address <span class="meta-badge optional" style="text-transform:none;font-size:11px;">If different</span></div>
@@ -4860,7 +4944,7 @@
           <div class="contact-fields locked" id="tradingAddressFields" style="margin-top:14px;">
             <div class="ob-field">
               <label>Trading address</label>
-              <input class="field-input" type="text" placeholder="Start typing a postcode or address">
+              <input class="field-input" type="text" id="tradingAddressInput" placeholder="Start typing a postcode or address">
             </div>
           </div>
 
@@ -5079,6 +5163,16 @@
           <h2>Contacts</h2>
           <p class="ob-subtext">Add the right people for each type of communication. Keylr uses these to reach the correct person quickly for job issues, billing queries, and account escalations.</p>
 
+          <div class="attention-banner" id="pmContactsAttentionBanner">
+            <div class="ab-head"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg><div class="ab-title">3 details still needed to finish this step</div></div>
+            <div class="ab-sub">The highlighted contacts below are still incomplete. Tap one to jump to it.</div>
+            <div class="attention-jump-row">
+              <div class="attention-jump-pill" data-jump="supportName">Support contact</div>
+              <div class="attention-jump-pill" data-jump="sameAsFinance">Finance contact</div>
+              <div class="attention-jump-pill" data-jump="sameAsManager">Manager contact</div>
+            </div>
+          </div>
+
           <div class="contact-card">
             <div class="cc-head">
               <div class="cc-title">Customer support contact<span class="req">*</span></div>
@@ -5257,8 +5351,9 @@
 
         <!-- Step 2: Identity -->
         <section class="ob-step" data-step="2">
+        <div id="supIdentitySoleTrader">
           <h2>Your identity</h2>
-          <p class="ob-subtext">As a sole trader, you are the business. We verify your personal identity to comply with UK marketplace regulations and HMRC DAC7 reporting.</p>
+          <p class="ob-subtext" style="font-size:12px;margin-bottom:20px;">As a sole trader, you are the business. We verify your personal identity to comply with UK marketplace regulations and HMRC DAC7 reporting.</p>
 
           <div class="attention-banner" id="identityAttentionBanner">
             <div class="ab-head"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg><div class="ab-title">4 details still needed to finish this step</div></div>
@@ -5352,6 +5447,164 @@
               <input class="field-input" type="text" id="supHomeAddress" placeholder="Start typing your address...">
             </div>
           </div>
+        </div>
+
+        <div id="supIdentityCompany" style="display:none;">
+          <h2>Company &amp; director identity</h2>
+          <p class="ob-subtext" style="font-size:12px;margin-bottom:20px;">We verify the registered company and each person of significant control (PSC). Company identity details are validated against Companies House records.</p>
+
+          <div class="attention-banner" id="companyIdentityAttentionBanner">
+            <div class="ab-head"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg><div class="ab-title">5 details still needed to finish this step</div></div>
+            <div class="ab-sub">The highlighted fields below are required. Tap one to jump to it.</div>
+            <div class="attention-jump-row">
+              <div class="attention-jump-pill" data-jump="supCompanyFullName">Full name</div>
+              <div class="attention-jump-pill" data-jump="supCompanyRegNo">Company registration number</div>
+              <div class="attention-jump-pill" data-jump="supCompanyOperAddress">Operational address</div>
+              <div class="attention-jump-pill" data-jump="supCompanyTin">TIN</div>
+              <div class="attention-jump-pill" data-jump="supCompanyProofAddress">Proof of company address</div>
+            </div>
+          </div>
+
+          <div class="callout callout-success">
+            <div class="callout-body" style="color:#145c2e;">After you submit, our team reviews your details and emails the PSC a secure identity-verification link via our partner <strong>TrustID</strong>.</div>
+          </div>
+
+          <div class="ob-section-heading">Contact Details</div>
+
+          <div class="ob-field">
+            <label for="supCompanyFullName">Full name <span class="req-text">Required</span></label>
+            <input class="field-input" type="text" id="supCompanyFullName" placeholder="Full name">
+          </div>
+
+          <div class="ob-row-2">
+            <div class="ob-field">
+              <label for="supCompanyPhone">Phone number <span class="req-text">Required</span></label>
+              <input class="field-input" type="tel" id="supCompanyPhone" placeholder="+44 7700 900000">
+            </div>
+            <div class="ob-field">
+              <label for="supCompanyEmail">Email address <span class="req-text">Required</span></label>
+              <input class="field-input" type="email" id="supCompanyEmail" placeholder="name@company.com">
+            </div>
+          </div>
+
+          <div class="ob-section-heading">Company Details</div>
+
+          <div class="ob-row-2">
+            <div class="ob-field">
+              <label for="supCompanyRegNo">Company registration number <span class="req-text">Required</span> <span class="meta-badge dac7">DAC7</span></label>
+              <input class="field-input" type="text" id="supCompanyRegNo" placeholder="e.g. 12345678">
+            </div>
+            <div class="ob-field">
+              <label for="supCompanyRegName">Registered company name <span class="meta-badge dac7">DAC7 Required</span></label>
+              <input class="field-input" type="text" id="supCompanyRegName" placeholder="Exactly as registered at Companies House">
+            </div>
+          </div>
+
+          <div class="ai-hint-pill" style="margin-top:-6px;margin-bottom:16px;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg>
+            Companies House lookup auto-fills name, registered office, company type &amp; incorporation date
+          </div>
+
+          <div class="ob-row-2">
+            <div class="ob-field">
+              <label for="supCompanyTradingName">Trading name <span class="meta-badge" style="background:#dcfce7;color:#166534;">Displayed to clients</span></label>
+              <input class="field-input" type="text" id="supCompanyTradingName" placeholder="The name clients will see (e.g. Smith Plumbing)">
+            </div>
+            <div class="ob-field">
+              <label for="supCompanyType">Company type <span class="meta-badge auto">Auto-verified</span></label>
+              <input class="field-input" type="text" id="supCompanyType" placeholder="Auto-populated from Companies House" disabled>
+            </div>
+          </div>
+
+          <div class="ob-row-2">
+            <div class="ob-field">
+              <label for="supCompanyIncorpDate">Incorporation date <span class="meta-badge auto">Auto-verified</span> <span class="meta-badge dac7">DAC7</span></label>
+              <input class="field-input" type="text" id="supCompanyIncorpDate" placeholder="Auto-populated from Companies House" disabled>
+            </div>
+            <div class="ob-field">
+              <label for="supCompanyRegOffice">Registered office address <span class="meta-badge auto">Auto-verified</span></label>
+              <input class="field-input" type="text" id="supCompanyRegOffice" placeholder="Auto-populated from Companies House" disabled>
+            </div>
+          </div>
+
+          <div class="ob-row-2">
+            <div class="ob-field">
+              <label for="supCompanyOperAddress">Operational address <span class="req-text">Required</span></label>
+              <input class="field-input" type="text" id="supCompanyOperAddress" placeholder="Main trading / operational address">
+            </div>
+            <div class="ob-field">
+              <label for="supCompanyTin">TIN (tax identification number) <span class="req-text">Required</span> <span class="meta-badge dac7">DAC7</span></label>
+              <input class="field-input" type="text" id="supCompanyTin" placeholder="e.g. UTR or company TIN">
+            </div>
+          </div>
+
+          <div class="ob-section-heading">Person of Significant Control (PSC)</div>
+
+          <div class="callout callout-info">
+            <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M12 11v5"/></svg></div>
+            <div class="callout-body">Someone holding 25%+ of the company's shares must complete identity verification (anti-money-laundering rules). We send them a TrustID link after submission.</div>
+          </div>
+
+          <div class="tile-row-2" id="supPscTiles">
+            <div class="choice-tile" data-value="yes" tabindex="0" role="radio" aria-checked="false">
+              <div class="tile-body">
+                <div class="tile-title">Yes, I am the PSC</div>
+                <div class="tile-desc">TrustID verification is sent to your email after submission.</div>
+              </div>
+              <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+            </div>
+            <div class="choice-tile" data-value="no" tabindex="0" role="radio" aria-checked="false">
+              <div class="tile-body">
+                <div class="tile-title">No, someone else is the PSC</div>
+                <div class="tile-desc">We'll collect their details and send TrustID to them directly.</div>
+              </div>
+              <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+            </div>
+          </div>
+
+          <div class="field-collapsible" id="supPscFields">
+            <div class="ob-field">
+              <label for="supPscName">Full legal name of PSC <span class="req-text">Required</span> <span class="meta-badge dac7">DAC7</span></label>
+              <input class="field-input" type="text" id="supPscName" placeholder="Full legal name">
+            </div>
+            <div class="ob-row-2">
+              <div class="ob-field">
+                <label for="supPscPhone">PSC phone number <span class="req-text">Required</span></label>
+                <input class="field-input" type="tel" id="supPscPhone" placeholder="07700 000000">
+              </div>
+              <div class="ob-field">
+                <label for="supPscEmail">PSC email address <span class="req-text">Required</span></label>
+                <input class="field-input" type="email" id="supPscEmail" placeholder="psc@company.com">
+              </div>
+            </div>
+            <div class="ob-field">
+              <label for="supPscDob">PSC date of birth <span class="req-text">Required</span> <span class="meta-badge dac7">DAC7</span></label>
+              <input class="field-input" type="date" id="supPscDob">
+            </div>
+            <div class="field-collapsible" id="supPscConfirmField">
+              <div class="ob-toggle-card" style="background:#fff;border:1px solid var(--border-subtle);">
+                <div class="otc-top">
+                  <div>
+                    <div class="otc-title">I confirm this person holds 25%+ of company shares</div>
+                    <div class="otc-desc">This person is a registered PSC at Companies House for this company.</div>
+                  </div>
+                  <button type="button" class="toggle-switch" id="supPscConfirmToggle" role="switch" aria-checked="false"><span class="thumb"></span></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ob-section-heading">Proof of Company Address</div>
+          <div class="ob-field">
+            <label>Proof of address &mdash; company <span class="req-text">Required</span> <span class="meta-badge dac7">DAC7</span></label>
+            <div class="file-dropzone" id="supCompanyProofAddress">
+              <input type="file" style="display:none;">
+              <div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>
+              <div class="fd-label">Click to Upload</div>
+            </div>
+            <div class="ai-hint-pill"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg>Company utility bill or bank statement (last 3 months) — auto-fills the company address</div>
+          </div>
+        </div>
         </section>
 
         <!-- Step 3: Insurance & Compliance -->
@@ -5409,6 +5662,37 @@
             </div>
           </div>
 
+          <div class="ob-toggle-card" id="supElInsuranceCard" style="display:none;">
+            <div class="otc-top">
+              <div>
+                <div class="otc-title">Employers' Liability Insurance</div>
+                <div class="otc-desc">Legally required if your company has employees. Min £5,000,000.</div>
+              </div>
+              <button type="button" class="toggle-switch" id="elInsuranceToggle" role="switch" aria-checked="false"><span class="thumb"></span></button>
+            </div>
+            <div class="field-collapsible" id="elInsuranceFields">
+              <div class="otc-body">
+                <div class="ob-row-2">
+                  <div class="ob-field">
+                    <label>Upload EL Insurance Certificate</label>
+                    <div class="file-dropzone" id="elUploadZone" data-title="Upload EL Insurance Certificate">
+                      <input type="file" style="display:none;">
+                      <div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>
+                      <div class="fd-label">Click to Upload<span class="fd-sub">PDF or image</span></div>
+                    </div>
+                  </div>
+                  <div class="ob-field"><label for="elProvider">EL insurance provider</label><input class="field-input" type="text" id="elProvider" placeholder="e.g. Zurich, Aviva"></div>
+                </div>
+                <div class="ob-row-2">
+                  <div class="ob-field"><label for="elPolicyNumber">EL policy number</label><input class="field-input" type="text" id="elPolicyNumber" placeholder="e.g. EL-12345"></div>
+                  <div class="ob-field"><label for="elCoverage">EL coverage amount</label><input class="field-input" type="text" id="elCoverage" placeholder="Min £5,000,000"></div>
+                </div>
+                <div class="ob-field" style="max-width:calc(50% - 7px);"><label for="elExpiry">EL expiry date</label><input class="field-input" type="date" id="elExpiry"></div>
+                <div class="ai-hint-pill"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg>Upload will auto-fill the provider, policy number, coverage &amp; expiry date</div>
+              </div>
+            </div>
+          </div>
+
           <div class="ob-toggle-card">
             <div class="otc-top">
               <div>
@@ -5443,6 +5727,7 @@
 
         <!-- Step 4: Background Checks & Right to Work -->
         <section class="ob-step" data-step="4">
+        <div id="supBgCheckSoleTrader">
           <h2>Background checks &amp; right to work</h2>
 
           <div class="attention-banner" id="bgCheckAttentionBanner">
@@ -5559,8 +5844,169 @@
                 </div>
               </div>
             </div>
+            <div class="plain-warning-bar" id="supRtwSoleNoWarning" style="display:none;margin-top:14px;">You are legally required to verify your Right to Work before you can be dispatched on the platform. Please resolve this before completing onboarding.</div>
             <p class="helper" style="margin-top:12px;margin-bottom:0;font-size:11px;">If a client requires document verification, you can provide your UKVI share code later — verified via the Home Office API.</p>
           </div>
+        </div>
+
+        <div id="supBgCheckCompany" style="display:none;">
+          <h2 style="margin-bottom:20px;">Background checks &amp; right to work</h2>
+
+          <div class="ob-card-section">
+            <div class="ocs-head">
+              <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+              <div class="ocs-title">DBS &amp; Background Checks</div>
+            </div>
+            <div class="ocs-desc">Shown on your marketplace profile as a trust indicator for property managers.</div>
+
+            <div class="ob-field-label-plain">Are all your operatives DBS checked?</div>
+            <div class="supbg-yn-row" id="supAllDbsTiles">
+              <div class="supbg-yn-tile supbg-yes" data-value="yes">
+                <div class="supbg-yn-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                <div><div class="supbg-yn-title">Yes</div><div class="supbg-yn-desc">All operatives are DBS checked</div></div>
+              </div>
+              <div class="supbg-yn-tile supbg-no" data-value="no">
+                <div class="supbg-yn-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+                <div><div class="supbg-yn-title">No</div><div class="supbg-yn-desc">Not all operatives have DBS checks</div></div>
+              </div>
+            </div>
+            <div class="plain-warning-bar" id="supDbsNoWarning" style="display:none;margin-top:14px;">Some property managers require DBS-checked operatives. You can still list, but your profile will indicate that not all staff are DBS verified.</div>
+
+            <div class="field-collapsible" id="supDbsLevelField">
+              <div style="margin-top:16px;">
+                <div class="ob-field-label-plain">What level of DBS check do your operatives hold?</div>
+                <div class="radio-tile-row cols-2" id="supDbsLevelTiles">
+                  <div class="radio-tile" data-value="basic">
+                    <div class="rt-body"><div class="rt-title">Basic DBS</div><div class="rt-sub">Shows unspent convictions only. Suitable for most trades.</div></div>
+                  </div>
+                  <div class="radio-tile" data-value="enhanced">
+                    <div class="rt-body"><div class="rt-title">Enhanced DBS</div><div class="rt-sub">Includes spent &amp; unspent convictions, cautions, and barred list checks.</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ob-card-section">
+            <div class="ocs-head">
+              <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></div>
+              <div class="ocs-title">Compliance Policies</div>
+              <span class="meta-badge" style="background:var(--surface-soft);color:var(--text-body-muted);text-transform:uppercase;">Recommended</span>
+            </div>
+            <div class="ocs-desc">A compliant policy means you don't need an individual certificate for every employee. Attach a PDF or describe your procedures below.</div>
+
+            <div class="supbg-policy-block">
+              <div class="ob-field-label-plain" style="margin-bottom:2px;">DBS policy</div>
+              <div class="ocs-desc" style="margin-bottom:12px;">Cover check frequency, escalation process, named compliance owner, and record retention.</div>
+              <div class="ob-field">
+                <label>Upload DBS Policy Document</label>
+                <div class="file-dropzone" id="supDbsPolicyUpload" data-title="Upload DBS Policy Document">
+                  <input type="file" style="display:none;">
+                  <div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>
+                  <div class="fd-label">Click to Upload<span class="fd-sub">PDF of your formal DBS procedures</span></div>
+                </div>
+              </div>
+              <div class="ai-hint-pill"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg>Upload will auto-fill a short summary of the document into the box below</div>
+              <textarea class="ob-textarea" id="supDbsPolicyText" style="margin-top:12px;" placeholder="Describe your company's DBS checking procedures, frequency of checks, escalation process, and compliance ownership."></textarea>
+              <div class="supbg-ai-assist">
+                <span class="supbg-ai-assist-label"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg>AI Writing Assist</span>
+                <button type="button" class="supbg-ai-btn" data-ai-draft="supDbsPolicyText">Draft for Me</button>
+                <button type="button" class="supbg-ai-btn" data-ai-improve="supDbsPolicyText" disabled>Improve</button>
+                <button type="button" class="supbg-ai-btn" data-ai-shorten="supDbsPolicyText" disabled>Shorten</button>
+              </div>
+            </div>
+
+            <div class="supbg-policy-block">
+              <div class="ob-field-label-plain" style="margin-bottom:2px;">Worker vetting policy</div>
+              <div class="ocs-desc" style="margin-bottom:12px;">How you vet operatives before dispatching them — reviewed by our compliance team within 2–3 days.</div>
+              <div class="ob-field">
+                <label>Upload Vetting Policy Document</label>
+                <div class="file-dropzone" id="supVettingPolicyUpload" data-title="Upload Vetting Policy Document">
+                  <input type="file" style="display:none;">
+                  <div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>
+                  <div class="fd-label">Click to Upload<span class="fd-sub">PDF — ID checks, references, ongoing monitoring</span></div>
+                </div>
+              </div>
+              <div class="ai-hint-pill"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg>Upload will auto-fill a short summary of the document into the box below</div>
+              <textarea class="ob-textarea" id="supVettingPolicyText" style="margin-top:12px;" placeholder="Describe how you vet operatives before dispatching them: ID checks, trade verification, reference checks, ongoing monitoring."></textarea>
+              <div class="supbg-ai-assist">
+                <span class="supbg-ai-assist-label"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg>AI Writing Assist</span>
+                <button type="button" class="supbg-ai-btn" data-ai-draft="supVettingPolicyText">Draft for Me</button>
+                <button type="button" class="supbg-ai-btn" data-ai-improve="supVettingPolicyText" disabled>Improve</button>
+                <button type="button" class="supbg-ai-btn" data-ai-shorten="supVettingPolicyText" disabled>Shorten</button>
+              </div>
+            </div>
+
+            <div class="supbg-policy-block">
+              <div class="ob-field-label-plain" style="margin-bottom:2px;">Health &amp; Safety policy</div>
+              <div class="ocs-desc" style="margin-bottom:12px;">Legally required for companies with 5 or more employees under UK H&amp;S regulations. Describe your procedures and responsible person.</div>
+              <div class="ob-field">
+                <label>Upload H&amp;S Policy Document</label>
+                <div class="file-dropzone" id="supHsPolicyUpload" data-title="Upload H&amp;S Policy Document">
+                  <input type="file" style="display:none;">
+                  <div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>
+                  <div class="fd-label">Click to Upload<span class="fd-sub">PDF of your formal H&amp;S procedures</span></div>
+                </div>
+              </div>
+              <div class="ai-hint-pill"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg>Upload will auto-fill a short summary of the document into the box below</div>
+              <textarea class="ob-textarea" id="supHsPolicyText" style="margin-top:12px;" placeholder="Describe your company's health and safety procedures and the responsible person."></textarea>
+              <div class="supbg-ai-assist">
+                <span class="supbg-ai-assist-label"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg>AI Writing Assist</span>
+                <button type="button" class="supbg-ai-btn" data-ai-draft="supHsPolicyText">Draft for Me</button>
+                <button type="button" class="supbg-ai-btn" data-ai-improve="supHsPolicyText" disabled>Improve</button>
+                <button type="button" class="supbg-ai-btn" data-ai-shorten="supHsPolicyText" disabled>Shorten</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="ob-card-section">
+            <div class="ocs-head">
+              <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+              <div class="ocs-title">Director / PSC Criminal Record Declaration</div>
+            </div>
+            <div class="ocs-desc">Covers unspent offences only. Having a record doesn't automatically disqualify you — we review each case individually.</div>
+
+            <div class="radio-row-list supbg-radio-list" id="supPscConvictionTiles">
+              <div class="radio-row supbg-radio-row" data-value="none">
+                <div class="rr-circle"></div>
+                <div>
+                  <div class="rr-title">The PSC has no unspent criminal convictions</div>
+                  <div class="rr-sub">This declaration covers unspent offences only.</div>
+                </div>
+              </div>
+              <div class="radio-row supbg-radio-row supbg-amber-option" data-value="has-convictions">
+                <div class="rr-circle"></div>
+                <div>
+                  <div class="rr-title">The PSC has unspent convictions to declare</div>
+                  <div class="rr-sub">Having a record doesn't automatically disqualify you — we review each case individually.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ob-card-section" style="margin-bottom:0;">
+            <div class="ocs-head">
+              <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg></div>
+              <div class="ocs-title">Right to Work</div>
+              <span class="meta-badge required-badge" style="text-transform:none;">Required</span>
+            </div>
+            <div class="ocs-desc">Required by UK law before anyone can be dispatched on the platform.</div>
+
+            <div class="ob-field-label-plain">Does everyone you dispatch have the right to work in the UK?</div>
+            <div class="supbg-yn-row" id="supRtwTiles">
+              <div class="supbg-yn-tile supbg-yes" data-value="yes">
+                <div class="supbg-yn-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                <div><div class="supbg-yn-title">Yes</div><div class="supbg-yn-desc">All staff have right to work in the UK</div></div>
+              </div>
+              <div class="supbg-yn-tile supbg-no" data-value="no">
+                <div class="supbg-yn-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+                <div><div class="supbg-yn-title">No</div><div class="supbg-yn-desc">Not all staff have verified right to work</div></div>
+              </div>
+            </div>
+            <div class="plain-warning-bar" id="supRtwNoWarning" style="display:none;margin-top:14px;">You are legally required to verify Right to Work for all operatives before dispatching them. Please resolve this before completing onboarding.</div>
+            <p class="helper" style="margin-top:12px;margin-bottom:0;font-size:11px;">You are responsible for maintaining up-to-date Right to Work records. Keylr may request evidence during periodic audits.</p>
+          </div>
+        </div>
         </section>
 
         <!-- Step 5: Payment setup -->
@@ -7151,7 +7597,7 @@
                         <div class="pmprop-comp-sub-label" style="margin-top:10px;">Lift type</div>
                         <div class="pm-filter-field pmprop-select-field"><button type="button" class="pm-custom-dd-btn" data-pmprop-select="liftType"><span class="cdd-value">Select lift type...</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="pm-custom-dd-menu" data-pmprop-select-menu="liftType"><div class="cdd-item" data-value="Passenger lift">Passenger lift</div><div class="cdd-item" data-value="Goods lift">Goods lift</div><div class="cdd-item" data-value="Stairlift">Stairlift</div><div class="cdd-item" data-value="Platform lift">Platform lift</div></div></div>
                         <div class="pmprop-comp-sub-label" style="margin-top:10px;">Suggested expiry</div>
-                        <div style="font-size:12.5px;color:var(--text-body-muted);">Upload + pick lift type</div>
+                        <input type="text" class="field-input" placeholder="Upload + pick lift type" id="lolerSuggestedExpiry">
                         <div class="pmprop-comp-info" style="margin-top:6px;">Pick a lift type to see the recommended interval.</div>
                       </div>
                     </div>
@@ -7190,9 +7636,23 @@
             </div>
           </div>
 
+          <!-- PM Dashboard: Log Out confirmation modal -->
+          <div class="modal-overlay" id="pmLogoutOverlay">
+            <div class="confirm-modal-card">
+              <div class="confirm-modal-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg></div>
+              <div class="confirm-modal-title">Log Out?</div>
+              <div class="confirm-modal-desc">Your progress and data are saved. You can log back in anytime.</div>
+              <div class="confirm-modal-btns">
+                <button type="button" class="pmprop-del-cancel" id="pmLogoutCancelBtn">Cancel</button>
+                <button type="button" class="confirm-modal-confirm" id="pmLogoutConfirmBtn">Log Out</button>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
+
 
 
 
@@ -11081,6 +11541,16 @@
         var same = document.getElementById('sameAsManager');
         if (same && same.checked) return true;
         return Array.prototype.some.call(document.querySelectorAll('#managerFields input.field-input'), function (i) { return i.value.trim().length > 0; });
+      } },
+    { step: 2, done: function () { var el = document.getElementById('legalCompanyName'); return !!(el && el.value.trim()); } },
+    { step: 2, done: function () { var el = document.getElementById('registeredAddress'); return !!(el && el.value.trim()); } },
+    { step: 2, done: function () {
+        var same = document.getElementById('sameAsRegistered'), el = document.getElementById('tradingAddressInput');
+        return !!(same && same.checked) || !!(el && el.value.trim());
+      } },
+    { step: 2, done: function () {
+        var toggle = document.getElementById('vatToggle'), el = document.getElementById('vatNumber');
+        return !(toggle && toggle.classList.contains('on')) || !!(el && el.value.trim());
       } }
   ];
   function pmObComputeCompletion() {
@@ -11088,7 +11558,7 @@
     var firstPendingStep = null;
     OB_CHECKLIST.forEach(function (item) {
       if (item.done()) { doneCount++; }
-      else if (firstPendingStep === null) { firstPendingStep = item.step; }
+      else if (firstPendingStep === null || item.step < firstPendingStep) { firstPendingStep = item.step; }
     });
     return { percent: Math.round((doneCount / OB_CHECKLIST.length) * 100), firstPendingStep: firstPendingStep, complete: doneCount === OB_CHECKLIST.length };
   }
@@ -11164,6 +11634,7 @@
         obApp.classList.remove('active');
         document.body.style.overflow = '';
         showPMDashboard(signupCapturedData, 'new');
+        pmObUpdateBanner();
       }, 200);
     }
   });
@@ -11184,7 +11655,7 @@
 
   function initSingleSelectTiles(container, onChange) {
     if (!container) return;
-    var tiles = container.querySelectorAll('.choice-tile, .count-tile, .billing-card, .radio-tile, .radio-row');
+    var tiles = container.querySelectorAll('.choice-tile, .count-tile, .billing-card, .radio-tile, .radio-row, .supbg-yn-tile');
     tiles.forEach(function (tile) {
       tile.addEventListener('click', function () {
         tiles.forEach(function (t) {
@@ -11221,7 +11692,19 @@
     var isOn = vatToggle.classList.toggle('on');
     vatToggle.setAttribute('aria-checked', isOn ? 'true' : 'false');
     setCollapsibleOpen(vatField, isOn);
+    setTimeout(pmCompanyBanner.update, 0);
   });
+
+  var pmCompanyBanner = initAttentionBanner('pmCompanyAttentionBanner', [
+    { jumpId: 'legalCompanyName', check: function () { return document.getElementById('legalCompanyName').value.trim().length > 0; } },
+    { jumpId: 'registeredAddress', check: function () { return document.getElementById('registeredAddress').value.trim().length > 0; } },
+    { jumpId: 'tradingAddressInput', check: function () { return document.getElementById('sameAsRegistered').checked || document.getElementById('tradingAddressInput').value.trim().length > 0; } },
+    { jumpId: 'vatNumber', check: function () { return !document.getElementById('vatToggle').classList.contains('on') || document.getElementById('vatNumber').value.trim().length > 0; } }
+  ]);
+  ['legalCompanyName', 'registeredAddress', 'tradingAddressInput', 'vatNumber'].forEach(function (id) {
+    document.getElementById(id).addEventListener('input', pmCompanyBanner.update);
+  });
+  sameAsRegistered.addEventListener('change', function () { setTimeout(pmCompanyBanner.update, 0); });
 
   document.querySelectorAll('#dayPills .day-pill').forEach(function (pill) {
     pill.addEventListener('click', function () { pill.classList.toggle('selected'); });
@@ -11379,6 +11862,18 @@
   initSameAsContact('sameAsFinance', 'financeFields');
   initSameAsContact('sameAsManager', 'managerFields');
   document.getElementById('supportFields').classList.toggle('locked', document.getElementById('sameAsSupport').checked);
+
+  var pmContactsBanner = initAttentionBanner('pmContactsAttentionBanner', [
+    { jumpId: 'supportName', check: OB_CHECKLIST[1].done },
+    { jumpId: 'sameAsFinance', check: OB_CHECKLIST[2].done },
+    { jumpId: 'sameAsManager', check: OB_CHECKLIST[3].done }
+  ]);
+  ['supportName', 'supportPhone'].forEach(function (id) { document.getElementById(id).addEventListener('input', pmContactsBanner.update); });
+  document.querySelectorAll('#financeFields input.field-input').forEach(function (i) { i.addEventListener('input', pmContactsBanner.update); });
+  document.querySelectorAll('#managerFields input.field-input').forEach(function (i) { i.addEventListener('input', pmContactsBanner.update); });
+  ['sameAsSupport', 'sameAsFinance', 'sameAsManager'].forEach(function (id) {
+    document.getElementById(id).addEventListener('change', function () { setTimeout(pmContactsBanner.update, 0); });
+  });
 
   /* ---- Launch onboarding after signup OTP confirm ---- */
 
@@ -12862,6 +13357,24 @@
   var pmpropBedroomValue = 'Studio';
   var pmpropInclusionsCollapsed = false;
   var pmpropInclusionsValues = pmpropDefaultInclusions();
+  var pmpropAccessMethod = null;
+  var pmpropAccessCodes = [{ code: '', instructions: '' }];
+  var pmpropAccessContact = { name: '', email: '', phone: '' };
+  var pmpropAccessAddress = { pickup: '', dropoff: '', sameAsPickup: false };
+  var pmpropFreeParking = 'No';
+  var pmpropParkingInstructions = '';
+  var pmpropInclusionsSummaryOpen = false;
+
+  var PMPROP_ACCESS_METHODS = [
+    { value: 'Key Safe', desc: 'Physical safe holding keys \u2014 share the code with suppliers.', fields: 'codes' },
+    { value: 'Reception Desk', desc: 'Suppliers sign in at a manned reception during opening hours.', fields: 'contact' },
+    { value: 'Smart Lock', desc: 'App or PIN entry \u2014 codes can be issued per visit.', fields: 'codes' },
+    { value: 'Agent Provides Access', desc: 'An agent meets the supplier on site to let them in.', fields: 'contact' },
+    { value: 'Landlord Provides Access', desc: 'The landlord meets the supplier on site to let them in.', fields: 'contact' },
+    { value: 'Tenant Provides Access', desc: 'The tenant meets the supplier on site to let them in.', fields: 'contact' },
+    { value: 'Keys at Agency / Office', desc: 'Suppliers collect keys from a nearby agency or office.', fields: 'address' },
+    { value: 'Keys at KeyNest', desc: 'Keys held at a local KeyNest store; collect with a one-time code.', fields: 'address' }
+  ];
   var pmpropDeleteTargetId = null;
 
   function pmpropFilteredList() {
@@ -12937,6 +13450,114 @@
       '</div></div>';
   }
 
+  function pmpropAccessMethodDropdownHtml() {
+    var current = PMPROP_ACCESS_METHODS.find(function (m) { return m.value === pmpropAccessMethod; });
+    return '<div class="pm-filter-field pmprop-select-field">' +
+      '<button type="button" class="pm-custom-dd-btn" id="pmpropAccessMethodBtn"><span class="cdd-value">' + pmpropEscapeHtml(pmpropAccessMethod || 'Select...') + '</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>' +
+      '<div class="pm-custom-dd-menu pmprop-am-menu" id="pmpropAccessMethodMenu">' +
+      PMPROP_ACCESS_METHODS.map(function (m) {
+        var sel = m.value === pmpropAccessMethod;
+        return '<div class="pmprop-am-item' + (sel ? ' selected' : '') + '" data-value="' + pmpropEscapeHtml(m.value) + '">' +
+          '<div><div class="pmprop-am-item-title">' + pmpropEscapeHtml(m.value) + '</div><div class="pmprop-am-item-desc">' + pmpropEscapeHtml(m.desc) + '</div></div>' +
+          '<svg class="pmprop-am-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>' +
+          '</div>';
+      }).join('') +
+      '</div></div>' +
+      (current ? '<div class="pmprop-field-hint left">' + pmpropEscapeHtml(current.desc) + '</div>' : '<div class="pmprop-field-hint left">Pick how suppliers will get into the property on the day.</div>');
+  }
+
+  function pmpropAccessConditionalFieldsHtml() {
+    var method = PMPROP_ACCESS_METHODS.find(function (m) { return m.value === pmpropAccessMethod; });
+    if (!method) return '';
+    if (method.fields === 'codes') {
+      var rows = pmpropAccessCodes.map(function (row, i) {
+        return '<div class="pmprop-code-row" data-code-idx="' + i + '">' +
+          '<div class="field-group" style="margin-bottom:0;"><label>Code' + (i === 0 ? '' : ' ' + (i + 1)) + '</label><input type="text" class="field-input pmprop-code-input" placeholder="e.g. 4471" value="' + pmpropEscapeHtml(row.code) + '"></div>' +
+          '<div class="field-group" style="margin-bottom:0;"><label>Instructions</label><input type="text" class="field-input pmprop-code-instructions-input" placeholder="e.g. Safe is behind the meter box" value="' + pmpropEscapeHtml(row.instructions) + '"></div>' +
+          '<button type="button" class="pmprop-code-remove-btn" data-remove-code="' + i + '"' + (pmpropAccessCodes.length <= 1 ? ' disabled' : '') + ' aria-label="Remove code"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>' +
+          '</div>';
+      }).join('');
+      return '<div class="pmprop-access-fields">' + rows + '<button type="button" class="pmprop-add-code-btn" id="pmpropAddCodeBtn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Add another code</button></div>';
+    }
+    if (method.fields === 'contact') {
+      return '<div class="pmprop-access-fields"><div class="pmprop-field-row">' +
+        '<div class="field-group" style="margin-bottom:0;"><label>Name <span class="req">*</span></label><input type="text" class="field-input" id="pmpropAccessName" placeholder="Full name" value="' + pmpropEscapeHtml(pmpropAccessContact.name) + '"></div>' +
+        '<div class="field-group" style="margin-bottom:0;"><label>Email <span class="req">*</span></label><input type="email" class="field-input" id="pmpropAccessEmail" placeholder="contact@example.com" value="' + pmpropEscapeHtml(pmpropAccessContact.email) + '"></div>' +
+        '<div class="field-group" style="margin-bottom:0;"><label>Phone <span class="req">*</span></label><input type="text" class="field-input" id="pmpropAccessPhone" placeholder="07700 900000" value="' + pmpropEscapeHtml(pmpropAccessContact.phone) + '"></div>' +
+        '</div></div>';
+    }
+    if (method.fields === 'address') {
+      return '<div class="pmprop-access-fields"><div class="pmprop-field-row two-col">' +
+        '<div class="field-group" style="margin-bottom:0;"><label>Pickup address <span class="req">*</span></label><input type="text" class="field-input" id="pmpropAccessPickup" placeholder="100 Camden High St, NW1 7JN" value="' + pmpropEscapeHtml(pmpropAccessAddress.pickup) + '"' + (pmpropAccessAddress.sameAsPickup ? ' disabled' : '') + '></div>' +
+        '<div class="field-group" style="margin-bottom:0;"><div style="display:flex;align-items:center;justify-content:space-between;"><label>Drop-off address</label><label class="pmprop-same-pickup-row"><input type="checkbox" id="pmpropSameAsPickup"' + (pmpropAccessAddress.sameAsPickup ? ' checked' : '') + '> Same as pickup</label></div><input type="text" class="field-input" id="pmpropAccessDropoff" placeholder="Same as pickup, or different out-of-hours address" value="' + pmpropEscapeHtml(pmpropAccessAddress.sameAsPickup ? pmpropAccessAddress.pickup : pmpropAccessAddress.dropoff) + '"' + (pmpropAccessAddress.sameAsPickup ? ' disabled' : '') + '></div>' +
+        '</div></div>';
+    }
+    return '';
+  }
+
+  function pmpropSyncAccessFieldsFromDOM() {
+    var codeInputs = document.querySelectorAll('.pmprop-code-input');
+    var instrInputs = document.querySelectorAll('.pmprop-code-instructions-input');
+    if (codeInputs.length) {
+      pmpropAccessCodes = Array.prototype.map.call(codeInputs, function (input, i) {
+        return { code: input.value, instructions: instrInputs[i] ? instrInputs[i].value : '' };
+      });
+    }
+    var nameEl = document.getElementById('pmpropAccessName'), emailEl = document.getElementById('pmpropAccessEmail'), phoneEl = document.getElementById('pmpropAccessPhone');
+    if (nameEl) pmpropAccessContact = { name: nameEl.value, email: emailEl ? emailEl.value : '', phone: phoneEl ? phoneEl.value : '' };
+    var pickupEl = document.getElementById('pmpropAccessPickup'), dropoffEl = document.getElementById('pmpropAccessDropoff');
+    if (pickupEl) {
+      pmpropAccessAddress.pickup = pickupEl.value;
+      if (!pmpropAccessAddress.sameAsPickup && dropoffEl) pmpropAccessAddress.dropoff = dropoffEl.value;
+    }
+    var parkingInstrEl = document.getElementById('pmpropParkingInstructionsInput');
+    if (parkingInstrEl) pmpropParkingInstructions = parkingInstrEl.value;
+  }
+
+  function pmpropWireAccessMethodDropdown() {
+    var btn = document.getElementById('pmpropAccessMethodBtn');
+    var menu = document.getElementById('pmpropAccessMethodMenu');
+    if (!btn || !menu) return;
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var isOpen = btn.classList.contains('open');
+      document.querySelectorAll('#pmpropIdentityCard .pm-custom-dd-btn.open').forEach(function (b) { b.classList.remove('open'); });
+      document.querySelectorAll('#pmpropIdentityCard .pm-custom-dd-menu.open').forEach(function (m) { m.classList.remove('open'); });
+      if (!isOpen) { btn.classList.add('open'); menu.classList.add('open'); }
+    });
+    menu.querySelectorAll('.pmprop-am-item').forEach(function (item) {
+      item.addEventListener('click', function (e) {
+        e.stopPropagation();
+        pmpropSyncAccessFieldsFromDOM();
+        pmpropAccessMethod = item.getAttribute('data-value');
+        pmpropRenderIdentityCard();
+      });
+    });
+  }
+
+  function pmpropWireAccessConditionalFields() {
+    document.querySelectorAll('[data-remove-code]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        pmpropSyncAccessFieldsFromDOM();
+        var idx = parseInt(btn.getAttribute('data-remove-code'), 10);
+        if (pmpropAccessCodes.length > 1) pmpropAccessCodes.splice(idx, 1);
+        pmpropRenderIdentityCard();
+      });
+    });
+    var addBtn = document.getElementById('pmpropAddCodeBtn');
+    if (addBtn) addBtn.addEventListener('click', function () {
+      pmpropSyncAccessFieldsFromDOM();
+      pmpropAccessCodes.push({ code: '', instructions: '' });
+      pmpropRenderIdentityCard();
+    });
+    var sameCheckbox = document.getElementById('pmpropSameAsPickup');
+    if (sameCheckbox) sameCheckbox.addEventListener('change', function () {
+      pmpropSyncAccessFieldsFromDOM();
+      pmpropAccessAddress.sameAsPickup = sameCheckbox.checked;
+      pmpropRenderIdentityCard();
+    });
+  }
+
   function pmpropIdentityHtml() {
     var p = pmpropEditingId ? PMPROP_PROPERTIES.find(function (x) { return x.id === pmpropEditingId; }) : null;
     var quickAdd = pmpropQuickAdd && !p;
@@ -12949,7 +13570,7 @@
 
     html += '<div class="pmprop-field-row">' +
       '<div class="field-group"><label>Property name' + (p ? '' : '') + '</label><input type="text" class="field-input" id="pmpropFieldName" placeholder="e.g. Acacia Court Flat 4B" value="' + pmpropEscapeHtml(p ? p.name : '') + '"></div>' +
-      '<div class="field-group"><div style="display:flex;align-items:center;justify-content:space-between;"><label>Postcode <span class="req">*</span></label><span class="pmprop-field-hint" style="margin-bottom:0;">Search a postcode' + (p ? ', pick' : ', then pick') + ' an address to auto-fill below</span></div><input type="text" class="field-input" id="pmpropFieldPostcode" placeholder="E1 7AA" value="' + pmpropEscapeHtml(p ? p.postcode : '') + '"></div>' +
+      '<div class="field-group"><label>Postcode <span class="req">*</span></label><input type="text" class="field-input" id="pmpropFieldPostcode" placeholder="E1 7AA" value="' + pmpropEscapeHtml(p ? p.postcode : '') + '"><div class="pmprop-field-hint left">Search a postcode, then pick an address to auto-fill below</div></div>' +
       '<div class="field-group"><label>Street address' + (quickAdd ? '' : ' <span class="req">*</span>') + '</label><input type="text" class="field-input" id="pmpropFieldStreet" placeholder="12 Acacia Avenue" value="' + pmpropEscapeHtml(p ? p.street : '') + '"></div>' +
       '</div>';
 
@@ -12966,9 +13587,13 @@
       html += '<div class="pmprop-field-row">' +
         '<div class="field-group"><label>Property type</label>' + pmpropCustomSelectHtml('type', 'Select type', ['Residential', 'Hotels & Hostels', 'Commercial'], p ? p.type : null) + '</div>' +
         '<div class="field-group"><label>Occupancy</label>' + pmpropCustomSelectHtml('occupancy', 'Select occupancy', ['Occupied', 'Void / Vacant'], p && p.occupancy === 'occupied' ? 'Occupied' : (p && p.occupancy === 'void' ? 'Void / Vacant' : null)) + '</div>' +
-        '<div class="field-group"><label>Access method <span class="req">*</span></label>' + pmpropCustomSelectHtml('access', 'Select...', ['Key safe', 'Concierge', 'Tenant let-in', 'Managing agent'], null) + '<div class="pmprop-field-hint left">Pick how suppliers will get into the property on the day.</div></div>' +
+        '<div class="field-group"><label>Access method <span class="req">*</span></label>' + pmpropAccessMethodDropdownHtml() + '</div>' +
         '</div>';
-      html += '<div class="field-group" style="max-width:220px;"><label>Free Parking Available</label>' + pmpropCustomSelectHtml('parking', 'No', ['No', 'Yes'], 'No') + '</div>';
+      html += pmpropAccessConditionalFieldsHtml();
+      html += '<div class="pmprop-field-row two-col" style="margin-top:18px;">' +
+        '<div class="field-group" style="margin-bottom:0;"><label>Free Parking Available</label>' + pmpropCustomSelectHtml('parking', 'No', ['No', 'Yes'], pmpropFreeParking) + '</div>' +
+        (pmpropFreeParking === 'Yes' ? '<div class="field-group" style="margin-bottom:0;"><label>Parking instructions</label><input type="text" class="field-input" id="pmpropParkingInstructionsInput" placeholder="Visitor bays on Acacia Mews, max 2 hr..." value="' + pmpropEscapeHtml(pmpropParkingInstructions) + '"></div>' : '') +
+        '</div>';
 
       html += '<div class="field-group" style="margin-top:8px;"><label>Bedroom layout</label><div class="pmprop-bedroom-pills" id="pmpropBedroomPills">' +
         ['Studio', '1 Bed', '2 Bed', '3 Bed', '4 Bed', '5+ Bed'].map(function (b) {
@@ -12981,7 +13606,7 @@
         '<button type="button" class="pmprop-inclusions-icon-btn" id="pmpropInclusionsEyeBtn" aria-label="Show/hide"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg></button>' +
         '<button type="button" class="pmprop-inclusions-icon-btn" id="pmpropInclusionsChevronBtn" aria-label="Collapse"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 150ms;' + (pmpropInclusionsCollapsed ? 'transform:rotate(180deg);' : '') + '"><path d="M18 15l-6-6-6 6"/></svg></button>' +
         '</div></div>' +
-        '<div class="pmprop-inclusions-box" style="' + (pmpropInclusionsCollapsed ? 'display:none;' : '') + '"><div class="pmprop-inclusions-grid" id="pmpropInclusionsGrid">' +
+        '<div class="field-collapsible pmprop-inclusions-box' + (pmpropInclusionsCollapsed ? '' : ' open') + '" id="pmpropInclusionsBox"><div class="pmprop-inclusions-grid" id="pmpropInclusionsGrid">' +
         PMPROP_ROOM_TYPES.map(function (room) {
           var val = (p && p.inclusions && p.inclusions[room] !== undefined) ? p.inclusions[room] : (pmpropInclusionsValues[room] || 0);
           return '<div class="pmprop-inclusion-row"><div class="pmprop-inclusion-label"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (PMPROP_ROOM_ICONS[room] || PMPROP_ROOM_ICONS['Office']) + '</svg>' + room + '</div>' +
@@ -13031,18 +13656,60 @@
     var inclusionsGrid = document.getElementById('pmpropInclusionsGrid');
     if (inclusionsGrid) pmpropWireInclusionsSteppers(inclusionsGrid);
     var eyeBtn = document.getElementById('pmpropInclusionsEyeBtn');
-    if (eyeBtn) eyeBtn.addEventListener('click', function () { showToast('Inclusions preview toggled.'); });
+    if (eyeBtn) eyeBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      pmpropInclusionsSummaryOpen = !pmpropInclusionsSummaryOpen;
+      pmpropRenderInclusionsSummary();
+    });
     var chevBtn = document.getElementById('pmpropInclusionsChevronBtn');
     if (chevBtn) chevBtn.addEventListener('click', function () {
       pmpropInclusionsCollapsed = !pmpropInclusionsCollapsed;
-      pmpropRenderIdentityCard();
+      var box = document.getElementById('pmpropInclusionsBox');
+      setCollapsibleOpen(box, !pmpropInclusionsCollapsed);
+      chevBtn.querySelector('svg').style.transform = pmpropInclusionsCollapsed ? 'rotate(180deg)' : '';
     });
     var descField = document.getElementById('pmpropFieldDesc');
     if (descField) descField.addEventListener('input', function () {
       document.getElementById('pmpropDescCount').textContent = descField.value.length;
     });
     pmpropWireCustomSelects(card);
+    pmpropWireAccessMethodDropdown();
+    pmpropWireAccessConditionalFields();
+    var parkingMenu = card.querySelector('[data-pmprop-select-menu="parking"]');
+    if (parkingMenu) parkingMenu.querySelectorAll('.cdd-item').forEach(function (item) {
+      item.addEventListener('click', function () {
+        pmpropSyncAccessFieldsFromDOM();
+        pmpropFreeParking = item.getAttribute('data-value');
+        pmpropRenderIdentityCard();
+      });
+    });
+    pmpropRenderInclusionsSummary();
   }
+
+  function pmpropRenderInclusionsSummary() {
+    var eyeBtn = document.getElementById('pmpropInclusionsEyeBtn');
+    if (!eyeBtn) return;
+    var existing = document.getElementById('pmpropInclusionsSummary');
+    if (existing) existing.remove();
+    if (!pmpropInclusionsSummaryOpen) return;
+    var included = PMPROP_ROOM_TYPES.filter(function (room) { return (pmpropInclusionsValues[room] || 0) > 0; });
+    var html = '<div class="pmprop-inclusions-summary open" id="pmpropInclusionsSummary">' +
+      '<div class="pmprop-inclusions-summary-label">What\u2019s Included</div>' +
+      (included.length ? included.map(function (room) {
+        return '<div class="pmprop-inclusions-summary-row"><div class="pmprop-inclusions-summary-row-label"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (PMPROP_ROOM_ICONS[room] || PMPROP_ROOM_ICONS['Office']) + '</svg>' + room + '</div><div class="pmprop-inclusions-summary-row-count">\u00d7 ' + pmpropInclusionsValues[room] + '</div></div>';
+      }).join('') : '<div class="pmprop-inclusions-summary-empty">No rooms added yet.</div>') +
+      '</div>';
+    eyeBtn.insertAdjacentHTML('beforeend', html);
+  }
+  document.addEventListener('click', function (e) {
+    if (pmpropInclusionsSummaryOpen && !e.target.closest('#pmpropInclusionsEyeBtn')) {
+      pmpropInclusionsSummaryOpen = false;
+      var el = document.getElementById('pmpropInclusionsSummary');
+      if (el) el.remove();
+    }
+  });
+
+
 
   function pmpropWireCustomSelects(container) {
     container.querySelectorAll('[data-pmprop-select]').forEach(function (btn) {
@@ -13069,6 +13736,17 @@
     });
   }
 
+  function pmpropResetMediaComplianceToggles() {
+    ['pmpropMediaToggle', 'pmpropComplianceToggle'].forEach(function (toggleId) {
+      var t = document.getElementById(toggleId);
+      if (t) { t.classList.remove('on'); t.setAttribute('aria-checked', 'false'); }
+    });
+    var mediaField = document.getElementById('pmpropMediaField');
+    var complianceField = document.getElementById('pmpropComplianceField');
+    if (mediaField) { mediaField.classList.remove('open'); mediaField.style.maxHeight = ''; }
+    if (complianceField) { complianceField.classList.remove('open'); complianceField.style.maxHeight = ''; }
+  }
+
   function pmpropOpenNew(quickAdd) {
     pmpropEditingId = null;
     pmpropQuickAdd = quickAdd;
@@ -13082,6 +13760,7 @@
     var showFull = !quickAdd;
     document.getElementById('pmpropMediaCard').style.display = showFull ? '' : 'none';
     document.getElementById('pmpropComplianceCard').style.display = showFull ? '' : 'none';
+    pmpropResetMediaComplianceToggles();
     showPMView('propertyform');
   }
 
@@ -13098,8 +13777,9 @@
     document.getElementById('pmpropFormDeleteBtn').setAttribute('data-prop-id', p.id);
     document.getElementById('pmpropSubmitBtn').textContent = 'Update Property';
     pmpropRenderIdentityCard();
-    document.getElementById('pmpropMediaCard').style.display = 'none';
-    document.getElementById('pmpropComplianceCard').style.display = 'none';
+    document.getElementById('pmpropMediaCard').style.display = '';
+    document.getElementById('pmpropComplianceCard').style.display = '';
+    pmpropResetMediaComplianceToggles();
     showPMView('propertyform');
   }
 
@@ -13490,14 +14170,21 @@
   var supplierBusinessType = 'sole-trader';
   function updateSupProfileTypeChip() {
     var pill = document.getElementById('supProfileTypePill');
-    if (!pill) return;
-    if (supplierBusinessType === 'company') {
-      pill.textContent = 'Company';
-      pill.classList.remove('sole-trader');
-    } else {
-      pill.textContent = 'Sole Trader';
-      pill.classList.add('sole-trader');
+    if (pill) {
+      if (supplierBusinessType === 'company') {
+        pill.textContent = 'Company';
+        pill.classList.remove('sole-trader');
+      } else {
+        pill.textContent = 'Sole Trader';
+        pill.classList.add('sole-trader');
+      }
     }
+    var isCompany = supplierBusinessType === 'company';
+    document.getElementById('supIdentitySoleTrader').style.display = isCompany ? 'none' : '';
+    document.getElementById('supIdentityCompany').style.display = isCompany ? '' : 'none';
+    document.getElementById('supElInsuranceCard').style.display = isCompany ? '' : 'none';
+    document.getElementById('supBgCheckSoleTrader').style.display = isCompany ? 'none' : '';
+    document.getElementById('supBgCheckCompany').style.display = isCompany ? '' : 'none';
   }
   document.querySelectorAll('#businessTypeTiles .choice-tile').forEach(function (tile) {
     tile.addEventListener('click', function () {
@@ -13613,7 +14300,30 @@
   });
   document.getElementById('supProofAddress').addEventListener('keylr-uploaded', identityBanner.update);
 
+  /* ---- Step 2 (Company): Company & Director Identity ---- */
+  var supPscFields = document.getElementById('supPscFields');
+  var supPscConfirmField = document.getElementById('supPscConfirmField');
+  initSingleSelectTiles(document.getElementById('supPscTiles'), function (value) {
+    setCollapsibleOpen(supPscFields, true);
+    setCollapsibleOpen(supPscConfirmField, true);
+    setTimeout(companyIdentityBanner.update, 0);
+  });
+  initObToggle('supPscConfirmToggle', null);
+
+  var companyIdentityBanner = initAttentionBanner('companyIdentityAttentionBanner', [
+    { jumpId: 'supCompanyFullName', check: function () { return document.getElementById('supCompanyFullName').value.trim().length > 0; } },
+    { jumpId: 'supCompanyRegNo', check: function () { return document.getElementById('supCompanyRegNo').value.trim().length > 0; } },
+    { jumpId: 'supCompanyOperAddress', check: function () { return document.getElementById('supCompanyOperAddress').value.trim().length > 0; } },
+    { jumpId: 'supCompanyTin', check: function () { return document.getElementById('supCompanyTin').value.trim().length > 0; } },
+    { jumpId: 'supCompanyProofAddress', check: function () { return document.getElementById('supCompanyProofAddress').classList.contains('uploaded'); } }
+  ]);
+  ['supCompanyFullName', 'supCompanyRegNo', 'supCompanyOperAddress', 'supCompanyTin'].forEach(function (id) {
+    document.getElementById(id).addEventListener('input', companyIdentityBanner.update);
+  });
+  document.getElementById('supCompanyProofAddress').addEventListener('keylr-uploaded', companyIdentityBanner.update);
+
   /* ---- Step 3: Insurance & Compliance ---- */
+  initObToggle('elInsuranceToggle', 'elInsuranceFields');
   initObToggle('publicLiabilityToggle', 'publicLiabilityFields');
   initObToggle('profIndemnityToggle', 'profIndemnityFields');
 
@@ -13635,7 +14345,9 @@
   initSingleSelectTiles(document.getElementById('convictionTiles'), function (value) {
     setCollapsibleOpen(document.getElementById('convictionDetailsField'), value === 'has-convictions');
   });
-  initSingleSelectTiles(document.getElementById('rightToWorkTiles'));
+  initSingleSelectTiles(document.getElementById('rightToWorkTiles'), function (value) {
+    document.getElementById('supRtwSoleNoWarning').style.display = value === 'no' ? '' : 'none';
+  });
 
   var bgCheckBanner = initAttentionBanner('bgCheckAttentionBanner', [
     { jumpId: 'rightToWorkTiles', check: function () { return document.querySelectorAll('#rightToWorkTiles .radio-tile.selected').length > 0; } },
@@ -13645,6 +14357,39 @@
   document.getElementById('dbsToggle').addEventListener('click', function () { setTimeout(bgCheckBanner.update, 0); });
   document.querySelectorAll('#rightToWorkTiles .radio-tile').forEach(function (tile) {
     tile.addEventListener('click', function () { setTimeout(bgCheckBanner.update, 0); });
+  });
+
+  /* ---- Step 4 (Company): Background Checks & Right to Work ---- */
+  initSingleSelectTiles(document.getElementById('supAllDbsTiles'), function (value) {
+    setCollapsibleOpen(document.getElementById('supDbsLevelField'), value === 'yes');
+    document.getElementById('supDbsNoWarning').style.display = value === 'no' ? '' : 'none';
+  });
+  initSingleSelectTiles(document.getElementById('supDbsLevelTiles'));
+  initSingleSelectTiles(document.getElementById('supPscConvictionTiles'));
+  initSingleSelectTiles(document.getElementById('supRtwTiles'), function (value) {
+    document.getElementById('supRtwNoWarning').style.display = value === 'no' ? '' : 'none';
+  });
+
+  var AI_DRAFT_TEXT = {
+    supDbsPolicyText: 'As a responsible home-services supplier, we prioritise the safety and security of our clients by ensuring that all our employees undergo comprehensive DBS checks. This rigorous process verifies the background of our team members, providing peace of mind and maintaining the highest standards of trust and integrity. We are committed to transparency and continuously updating our practices to comply with the latest regulations, ensuring a safe and reliable service for every household.',
+    supVettingPolicyText: 'Every operative is vetted before being dispatched to a job: we verify photo ID, confirm trade qualifications and certifications, and take up references from at least two previous employers or clients. Ongoing monitoring includes annual re-checks and a named compliance owner who reviews any client feedback or incidents. Records are retained for the duration of employment plus six years.',
+    supHsPolicyText: 'Our company follows a documented Health & Safety policy covering risk assessments, PPE requirements, and incident reporting for every job type we dispatch. A named responsible person reviews procedures quarterly and after any incident, and all operatives receive H&S induction training before their first dispatch. Records of training and incidents are retained centrally.'
+  };
+  document.querySelectorAll('[data-ai-draft]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var fieldId = btn.getAttribute('data-ai-draft');
+      var field = document.getElementById(fieldId);
+      if (!field) return;
+      field.value = AI_DRAFT_TEXT[fieldId] || '';
+      var block = btn.closest('.supbg-ai-assist');
+      if (block) block.querySelectorAll('[data-ai-improve], [data-ai-shorten]').forEach(function (b) { b.disabled = false; });
+    });
+  });
+  document.querySelectorAll('[data-ai-improve]').forEach(function (btn) {
+    btn.addEventListener('click', function () { if (!btn.disabled) showToast('Improved wording applied.'); });
+  });
+  document.querySelectorAll('[data-ai-shorten]').forEach(function (btn) {
+    btn.addEventListener('click', function () { if (!btn.disabled) showToast('Shortened.'); });
   });
 
   /* ---- Step 5: Payment ---- */
@@ -14149,6 +14894,7 @@
     document.getElementById('dashGreeting').textContent = timeGreeting() + ', ' + firstName + ' \uD83D\uDC4B';
 
     renderDashboardState(mode || 'new');
+    pmObUpdateBanner();
 
     pmDashboard.classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -14203,10 +14949,25 @@
 
   /* Logout */
   document.getElementById('dashLogoutBtn').addEventListener('click', function () {
+    document.getElementById('pmLogoutOverlay').classList.add('open');
+  });
+  document.getElementById('pmLogoutCancelBtn').addEventListener('click', function () {
+    document.getElementById('pmLogoutOverlay').classList.remove('open');
+  });
+  document.getElementById('pmLogoutOverlay').addEventListener('click', function (e) {
+    if (e.target === this) this.classList.remove('open');
+  });
+  document.getElementById('pmLogoutConfirmBtn').addEventListener('click', function () {
+    document.getElementById('pmLogoutOverlay').classList.remove('open');
+    // Defensive reset: ensure no leftover onboarding overlay state can resurface once the dashboard closes
+    obApp.classList.remove('active', 'visible');
+    obReentryMode = false;
+    document.getElementById('obCloseBtn').hidden = true;
     pmDashboard.classList.remove('visible');
     setTimeout(function () {
       pmDashboard.classList.remove('active');
       document.body.style.overflow = '';
+      window.scrollTo(0, 0);
       showToast('You\u2019ve been logged out.');
     }, 200);
   });
@@ -16842,8 +17603,10 @@
   }
   function renderCalendarGrid(key) {
     var st = calState[key];
+    if (!st) return;
     var grid = document.querySelector('.pm-cal-grid[data-cal-grid="' + key + '"]');
     var monthText = document.querySelector('[data-cal-monthtext="' + key + '"]');
+    if (!grid || !monthText) return;
     monthText.textContent = MONTH_NAMES[st.viewMonth] + ' ' + st.viewYear;
     var firstOfMonth = new Date(st.viewYear, st.viewMonth, 1);
     var startWeekday = firstOfMonth.getDay();
@@ -16869,16 +17632,18 @@
   }
   function updateCalFieldDisplay(key) {
     var st = calState[key];
+    if (!st) return;
     var textEl = document.querySelector('[data-cal-text="' + key + '"]');
-    var hiddenInput = document.getElementById(calHiddenInputIds[key]);
+    var hiddenInput = calHiddenInputIds[key] ? document.getElementById(calHiddenInputIds[key]) : null;
+    if (!textEl) return;
     if (st.selected) {
       textEl.textContent = calFormatDMY(st.selected);
       textEl.classList.remove('placeholder');
-      hiddenInput.value = calFormatISO(st.selected);
+      if (hiddenInput) hiddenInput.value = calFormatISO(st.selected);
     } else {
       textEl.textContent = 'dd/mm/yyyy';
       textEl.classList.add('placeholder');
-      hiddenInput.value = '';
+      if (hiddenInput) hiddenInput.value = '';
     }
   }
   document.querySelectorAll('.pm-cal-trigger-btn').forEach(function (btn) {
@@ -16890,12 +17655,14 @@
       closeAllCustomDropdowns();
       if (wasOpen) return;
       var st = calState[key];
+      if (!st) return;
       var base = st.selected || new Date();
       st.viewYear = base.getFullYear();
       st.viewMonth = base.getMonth();
       renderCalendarGrid(key);
       btn.classList.add('open');
-      document.querySelector('.pm-cal-popup[data-cal-popup="' + key + '"]').classList.add('open');
+      var popup = document.querySelector('.pm-cal-popup[data-cal-popup="' + key + '"]');
+      if (popup) popup.classList.add('open');
     });
   });
   document.querySelectorAll('[data-cal-prev]').forEach(function (btn) {
