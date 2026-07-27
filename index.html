@@ -3512,6 +3512,7 @@
   .pmex-pp-gallery-tile svg { width: 56px; height: 56px; }
   .pmex-pp-gallery-tile.main svg { width: 84px; height: 84px; }
   .pmex-pp-gallery-tile.main { grid-row: 1 / 3; }
+  .pmex-pp-gallery-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 
   .pmex-pp-head { background: #fff; border: 1.5px solid var(--border-subtle); border-radius: 16px; padding: 24px; }
   .pmex-pp-head-top { display: flex; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
@@ -10475,6 +10476,24 @@
   /* =========================================================
      PM: EXPLORE SERVICES
   ========================================================== */
+  var PMEX_STOCK_IMG = {
+    pipes: 'https://images.unsplash.com/photo-1538474705339-e87de81450e8',
+    circuits: 'https://images.unsplash.com/photo-1576446470246-499c738d1c8e',
+    spray: 'https://images.unsplash.com/photo-1563453392212-326f5e854473',
+    drill: 'https://images.unsplash.com/photo-1562259929-b4e1fd3aef09'
+  };
+  var PMEX_GALLERY_IMAGES = {
+    plumbing: ['pipes', 'circuits', 'drill'],
+    electrical: ['circuits', 'drill', 'pipes'],
+    cleaning: ['spray', 'drill', 'circuits'],
+    fire: ['circuits', 'drill', 'spray'],
+    inventory: ['drill', 'circuits', 'spray'],
+    repairs: ['drill', 'pipes', 'circuits'],
+    hvac: ['drill', 'circuits', 'pipes'],
+    pest: ['spray', 'drill', 'circuits'],
+    maintenance: ['drill', 'pipes', 'spray']
+  };
+
   var PMEX_CAT_DEFS = [
     { key: 'plumbing', label: 'Plumbing & Gas', icon: '<svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="14" cy="18" r="6"/><path d="M14 4c0 5-7 7-7 12"/></svg>' },
     { key: 'electrical', label: 'Electrical', icon: '<svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M17 3L11 15h6L10 25l10-13h-6z" stroke-linejoin="round"/></svg>' },
@@ -10897,10 +10916,17 @@
         '<span class="pmex-pp-bar-pct">' + dist[i] + '%</span></div>';
     }).join('');
 
+    function pmexGalleryTile(imgKey, w, h, isMain) {
+      var url = PMEX_STOCK_IMG[imgKey] ? (PMEX_STOCK_IMG[imgKey] + '?w=' + w + '&h=' + h + '&fit=crop&auto=format&q=70') : '';
+      return '<div class="pmex-pp-gallery-tile' + (isMain ? ' main' : '') + '">' + galleryIcon +
+        (url ? '<img src="' + url + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '') +
+        '</div>';
+    }
+    var galleryKeys = PMEX_GALLERY_IMAGES[firstCat] || PMEX_GALLERY_IMAGES.maintenance;
     var galleryHtml = '<div class="pmex-pp-gallery">' +
-      '<div class="pmex-pp-gallery-tile main">' + galleryIcon + '</div>' +
-      '<div class="pmex-pp-gallery-tile">' + galleryIcon + '</div>' +
-      '<div class="pmex-pp-gallery-tile">' + galleryIcon + '</div>' +
+      pmexGalleryTile(galleryKeys[0], 900, 700, true) +
+      pmexGalleryTile(galleryKeys[1], 450, 350, false) +
+      pmexGalleryTile(galleryKeys[2], 450, 350, false) +
       '</div>';
 
     var contentHtml = '<div class="pmex-pp-head">' +
