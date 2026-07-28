@@ -2591,6 +2591,182 @@
   .cdd-item.cdd-item-stacked .cdd-item-desc { font-size: 11.5px; color: var(--text-body-muted); margin-top: 2px; }
   .cdd-item.cdd-item-stacked.selected .cdd-item-title { color: var(--accent-blue); }
 
+  /* =========================================================
+     SUPPLIER: JOB REQUESTS
+  ========================================================== */
+  .supjr-job-card { border: 1.5px solid var(--border-subtle); border-radius: 14px; padding: 14px 16px; cursor: pointer; background: #fff; transition: border-color 120ms ease-out, background-color 120ms ease-out; margin-bottom: 12px; }
+  .supjr-job-card:last-child { margin-bottom: 0; }
+  .supjr-job-card.active { background: var(--icon-tint-bg); border-color: var(--accent-blue); }
+  .supjr-job-card-top { display: flex; align-items: flex-start; gap: 10px; }
+  .supjr-job-avatar { width: 30px; height: 30px; border-radius: 8px; background: var(--navy-900); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 800; flex-shrink: 0; }
+  .supjr-job-company { font-size: 11px; font-weight: 700; letter-spacing: 0.03em; color: #94a3b8; text-transform: uppercase; }
+  .supjr-job-title { font-size: 14px; font-weight: 700; color: var(--text-heading); margin-top: 2px; line-height: 1.3; }
+  .supjr-job-meta-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; }
+  .supjr-job-badge { font-size: 11.5px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+  .supjr-job-badge.setprice { background: #fde8e8; color: #c0392b; }
+  .supjr-job-badge.quote { background: #dcf5e6; color: #1a7a3e; }
+  .supjr-job-due { font-size: 12px; font-weight: 600; color: #c0392b; display: flex; align-items: center; gap: 4px; }
+  .supjr-job-desc-row { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--text-body-muted); margin-top: 8px; }
+  .supjr-job-desc-row .sep { color: #cbd5e1; }
+  .supjr-card-actions { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+  .supjr-card-primary-btn { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; gap: 7px; background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); color: #fff; border: none; border-radius: 10px; padding: 11px 14px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; white-space: nowrap; }
+  .supjr-card-primary-btn:hover { opacity: 0.9; }
+  .supjr-card-primary-btn.submitted { background: #eafaf0; color: #1a7a3e; border: 1px solid #b7e8c8; }
+  .supjr-card-primary-btn.submitted:hover { opacity: 1; }
+  .supjr-card-icon-btn { width: 40px; height: 40px; flex-shrink: 0; border-radius: 10px; border: 1px solid var(--border-subtle); background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-heading); transition: background-color 120ms ease-out; }
+  .supjr-card-icon-btn:hover { background: var(--surface-soft); }
+  .supjr-card-icon-btn.decline { color: #d92d20; border-color: #fda29b; }
+  .supjr-card-icon-btn.decline:hover { background: #fef3f2; }
+
+  /* Job Requests tabs — pill-style, scoped to #supjrTabs only (does not touch the shared .pmjr-tab underline style used elsewhere) */
+  #supjrTabs { display: flex; gap: 4px; background: #EEF0F4; padding: 5px; border-radius: 14px; border-bottom: none; margin-top: 20px; width: fit-content; }
+  #supjrTabs .pmjr-tab { padding: 7px 13px; font-size: 13px; border-radius: 9px; border-bottom: none; margin-bottom: 0; }
+  #supjrTabs .pmjr-tab.active { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); color: #fff; }
+  #supjrTabs .pmjr-tab .pmjr-tab-count { background: var(--surface-white); }
+  #supjrTabs .pmjr-tab.active .pmjr-tab-count { background: rgba(255,255,255,0.25); color: #fff; }
+
+  /* Detail panel header banner */
+  .supjr-detail-banner { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); border-radius: 12px; padding: 18px 20px; color: #fff; }
+  .supjr-detail-banner-top { display: flex; align-items: center; gap: 12px; }
+  .supjr-detail-avatar { width: 40px; height: 40px; border-radius: 9px; background: rgba(255,255,255,0.14); display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; flex-shrink: 0; }
+  .supjr-detail-banner-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+  .supjr-detail-banner-name { font-size: 16px; font-weight: 800; }
+  .supjr-detail-tags { display: flex; gap: 8px; margin-top: 14px; }
+  .supjr-detail-tag { font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 7px; background: rgba(255,255,255,0.12); color: #fff; display: flex; align-items: center; gap: 4px; }
+  .supjr-detail-tag.emergency { background: #7a2020; color: #ffc9be; }
+  .supjr-detail-booked-row { display: flex; align-items: center; gap: 10px; margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.14); }
+  .supjr-detail-booked-avatar { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0; }
+  .supjr-detail-booked-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+  .supjr-detail-booked-name { font-size: 13.5px; font-weight: 700; }
+  .supjr-detail-req { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; color: #94a3b8; margin-top: 20px; }
+  .supjr-detail-title { font-size: 20px; font-weight: 800; color: var(--text-heading); margin-top: 4px; }
+  .supjr-detail-addr { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-body-muted); margin-top: 8px; }
+  .supjr-detail-info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 18px; }
+  .supjr-detail-info-grid.two-col { grid-template-columns: repeat(2, 1fr); }
+  .supjr-detail-info-card { background: var(--surface-soft); border-radius: 12px; padding: 14px 16px; }
+  .supjr-detail-info-card.highlight { background: var(--icon-tint-bg); }
+  .supjr-detail-info-label { font-size: 11.5px; font-weight: 600; color: var(--text-body-muted); margin-bottom: 4px; }
+  .supjr-detail-info-value { font-size: 15px; font-weight: 700; color: var(--text-heading); }
+  .supjr-detail-section { margin-top: 20px; }
+  .supjr-detail-card { margin-top: 16px; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 20px; }
+  .supjr-detail-section-head { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; color: #94a3b8; text-transform: uppercase; }
+  .supjr-detail-property-name { font-size: 16px; font-weight: 800; color: var(--text-heading); margin-top: 8px; }
+  .supjr-detail-property-addr { font-size: 13px; color: var(--accent-blue); margin-top: 2px; }
+  .supjr-whatsincluded-title { font-size: 16px; font-weight: 800; color: var(--text-heading); margin-top: 8px; }
+  .supjr-whatsincluded-sub { font-size: 13px; color: var(--text-body-muted); margin-top: 2px; }
+  .supjr-sla-respond-box { background: #fdeeee; border-radius: 10px; padding: 12px 16px; margin-top: 14px; }
+  .supjr-sla-respond-label { color: #c0392b; font-weight: 700; font-size: 12.5px; display: flex; align-items: center; gap: 6px; }
+  .supjr-sla-respond-date { color: #c0392b; font-weight: 800; font-size: 15px; margin-top: 4px; }
+  .supjr-detail-footer { display: flex; align-items: center; gap: 10px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-subtle); flex-wrap: wrap; }
+  .supjr-detail-footer .spacer { flex: 1; }
+  .supjr-link-btn { font-size: 12px; font-weight: 600; color: var(--accent-blue); text-decoration: underline; display: flex; align-items: center; gap: 5px; background: none; border: none; cursor: pointer; font-family: inherit; }
+  .supjr-link-btn:hover { opacity: 0.8; }
+  .btn-quote-submitted { display: inline-flex; align-items: center; gap: 7px; background: #eafaf0; color: #1a7a3e; border: 1px solid #b7e8c8; border-radius: 9px; padding: 9px 16px; font-size: 13.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .btn-quote-submitted:hover { opacity: 0.9; }
+  .supjr-btn-outline { display: inline-flex; align-items: center; gap: 7px; font-size: 13.5px; font-weight: 600; color: var(--text-heading); background: #fff; border: 1px solid var(--border-subtle); border-radius: 10px; padding: 10px 16px; cursor: pointer; font-family: inherit; }
+  .supjr-btn-outline:hover { background: var(--surface-soft); }
+  .supjr-collapsible-head { display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+  .supjr-collapsible-chevron { transition: transform 150ms ease-out; color: var(--text-body-muted); }
+  .supjr-collapsible-head.open .supjr-collapsible-chevron { transform: rotate(180deg); }
+
+  /* Right side-drawer modals: Send Quote, Counter the Set Price */
+  .supjr-side-overlay { position: fixed; inset: 0; background: rgba(16,24,40,0.45); z-index: 90; opacity: 0; pointer-events: none; transition: opacity 200ms ease-out; }
+  .supjr-side-overlay.open { opacity: 1; pointer-events: auto; }
+  .supjr-side-modal { position: fixed; top: 0; right: 0; height: 100%; width: min(600px, 94vw); background: #fff; z-index: 91; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 240ms cubic-bezier(0.16,1,0.3,1); box-shadow: -16px 0 40px rgba(16,24,40,0.2); }
+  .supjr-side-modal.narrow { width: min(420px, 92vw); }
+  .supjr-side-overlay.open .supjr-side-modal { transform: translateX(0); }
+  /* Popup-center modifier: renders as a centered dialog instead of a right-side drawer (used for Send Quote) */
+  .supjr-side-overlay.popup-mode { display: flex; align-items: center; justify-content: center; padding: 24px; }
+  .supjr-side-modal.popup-center { position: relative; top: auto; right: auto; height: auto; max-height: 90vh; width: min(680px, 94vw); border-radius: 20px; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.35); transform: scale(0.97); opacity: 0; transition: opacity 220ms ease-out, transform 220ms ease-out; }
+  .supjr-side-overlay.popup-mode.open .supjr-side-modal.popup-center { transform: scale(1); opacity: 1; }
+  .supjr-side-head { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); color: #fff; padding: 22px 24px; flex-shrink: 0; position: relative; }
+  .supjr-side-head-title { font-size: 19px; font-weight: 800; }
+  .supjr-side-head-sub { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 4px; }
+  .supjr-side-close { position: absolute; top: 20px; right: 20px; width: 30px; height: 30px; border-radius: 50%; border: none; background: rgba(255,255,255,0.12); color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  /* Light-header variant — used for the Send Quote popup only; the Counter Price drawer keeps the gradient header. */
+  .supjr-side-head.light { background: #F1F4F8; border-bottom: 1px solid var(--border-subtle); }
+  .supjr-side-head.light .supjr-side-head-title { color: var(--text-heading); }
+  .supjr-side-head.light .supjr-side-head-sub { color: var(--text-body-muted); }
+  .supjr-side-head.light .supjr-side-close { background: none; color: var(--text-body-muted); }
+  .supjr-side-head.light .supjr-side-close:hover { background: var(--border-subtle); color: var(--text-heading); }
+  .supjr-side-close:hover { background: rgba(255,255,255,0.2); }
+  .supjr-side-body { flex: 1; overflow-y: auto; padding: 22px 24px; }
+  .supjr-side-footer { flex-shrink: 0; padding: 16px 24px; border-top: 1px solid var(--border-subtle); display: flex; gap: 10px; }
+  .supjr-side-footer .btn-secondary-plain { flex: 0 0 auto; }
+  .supjr-side-footer .supjr-send-btn { flex: 1; }
+  .supjr-field-label { font-size: 11.5px; font-weight: 700; letter-spacing: 0.03em; color: var(--text-body-muted); text-transform: uppercase; margin-bottom: 8px; }
+  .supjr-quick-callout-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .supjr-quick-callout-card { border-radius: 12px; padding: 14px 16px; }
+  .supjr-quick-callout-card.fee { background: var(--icon-tint-bg); }
+  .supjr-quick-callout-card.emergency { background: #fdf3d8; }
+  .supjr-qc-label { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--text-heading); }
+  .supjr-qc-label.fee-lbl { color: var(--accent-blue); }
+  .supjr-qc-label.emg-lbl { color: #92650a; }
+  .supjr-qc-sub { font-size: 11.5px; color: var(--text-body-muted); margin: 2px 0 8px; }
+  .supjr-money-input-wrap { display: flex; align-items: center; gap: 6px; background: #fff; border: 1.5px solid var(--border-subtle); border-radius: 9px; padding: 9px 12px; }
+  .supjr-money-input-wrap:focus-within { border-color: var(--accent-blue); }
+  .supjr-money-prefix { font-weight: 700; color: var(--text-heading); font-size: 14px; }
+  .supjr-money-input { border: none; outline: none; font-family: inherit; font-size: 14px; font-weight: 600; color: var(--text-heading); flex: 1; min-width: 0; }
+  .supjr-itemised-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .supjr-itemised-row .item-name-input { flex: 1; min-width: 0; }
+  .supjr-itemised-row .item-amount-wrap { width: 130px; flex-shrink: 0; }
+  .supjr-itemised-remove-btn { width: 38px; height: 38px; flex-shrink: 0; border-radius: 9px; border: 1px solid var(--border-subtle); background: #fff; color: var(--text-body-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .supjr-itemised-remove-btn:hover { background: #fef3f2; color: #d92d20; border-color: #fda29b; }
+  .supjr-summary-box { background: var(--surface-soft); border-radius: 12px; padding: 16px; margin-top: 4px; }
+  .supjr-summary-row { display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: var(--text-heading); padding: 6px 0; }
+  .supjr-summary-row.total { border-top: 1px solid var(--border-subtle); margin-top: 8px; padding-top: 12px; font-size: 15px; font-weight: 800; }
+  .supjr-add-line-btn { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--accent-blue); background: none; border: none; cursor: pointer; font-family: inherit; }
+  .supjr-material-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .supjr-material-row .supjr-field-label { margin-bottom: 0; }
+  .supjr-material-row .supjr-money-input-wrap { width: 140px; flex-shrink: 0; }
+  .supjr-upfront-toggle { display: flex; background: var(--surface-soft); border-radius: 9px; padding: 3px; gap: 2px; flex-shrink: 0; }
+  .supjr-upfront-toggle button { border: none; background: transparent; padding: 7px 14px; border-radius: 7px; font-family: inherit; font-size: 13px; font-weight: 700; color: var(--text-body-muted); cursor: pointer; }
+  .supjr-upfront-toggle button.active { background: #fff; color: var(--text-heading); box-shadow: 0 1px 3px rgba(16,24,40,0.12); }
+  .supjr-char-count { text-align: right; font-size: 11px; color: #94a3b8; margin-top: 4px; }
+  .supjr-validity-note { display: flex; align-items: flex-start; gap: 7px; font-size: 12px; color: var(--text-body-muted); margin-top: 16px; }
+
+  /* Price Breakdown modal (centered) */
+  .supjr-pbk-card { width: 100%; max-width: 440px; background: #fff; border-radius: 16px; padding: 24px; }
+  .supjr-pbk-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 4px; }
+  .supjr-pbk-title { font-size: 18px; font-weight: 800; color: var(--text-heading); }
+  .supjr-pbk-sub { font-size: 13px; color: var(--text-body-muted); margin-top: 4px; }
+  .supjr-pbk-close { width: 28px; height: 28px; border-radius: 7px; border: none; background: none; color: var(--text-body-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+  .supjr-pbk-close:hover { background: var(--surface-soft); }
+  .supjr-pbk-rows { border: 1px solid var(--border-subtle); border-radius: 12px; overflow: hidden; margin-top: 16px; }
+  .supjr-pbk-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--border-subtle); }
+  .supjr-pbk-row:last-child { border-bottom: none; }
+  .supjr-pbk-row.total { background: var(--icon-tint-bg); }
+  .supjr-pbk-row-label { font-size: 13.5px; font-weight: 700; color: var(--text-heading); }
+  .supjr-pbk-row-label.total-lbl { color: var(--accent-blue); }
+  .supjr-pbk-row-sub { font-size: 11.5px; color: var(--text-body-muted); margin-top: 2px; }
+  .supjr-pbk-row-value { font-size: 15px; font-weight: 800; color: var(--text-heading); white-space: nowrap; }
+
+  /* Supplier chat drawer — dark gradient header, circular avatar (base .pmjr-chat-avatar has no
+     background of its own), and a light pill-style "Update price" button. Scoped to #supjrChatDrawer
+     only, so the PM-side job-responses chat drawer (.pmjr-chat-*) is untouched. */
+  #supjrChatDrawer .pmjr-chat-head { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); border-bottom: none; }
+  #supjrChatDrawer .pmjr-chat-avatar { background: rgba(255,255,255,0.18); border-radius: 50%; }
+  #supjrChatDrawer .pmjr-chat-name { color: #fff; }
+  #supjrChatDrawer .pmjr-chat-status { color: rgba(255,255,255,0.75); }
+  #supjrChatDrawer .pmjr-chat-status .dot { background: #34d399; }
+  #supjrChatDrawer .pmjr-chat-close { color: #fff; background: rgba(255,255,255,0.14); }
+  #supjrChatDrawer .pmjr-chat-close:hover { background: rgba(255,255,255,0.24); }
+  #supjrChatDrawer .pmjr-chat-price-update-btn { display: inline-flex; align-items: center; background: #fff; color: var(--text-heading); border: 1px solid var(--border-subtle); border-radius: 999px; padding: 8px 16px; box-shadow: 0 1px 3px rgba(16,24,40,0.06); }
+  #supjrChatDrawer .pmjr-chat-price-update-btn:hover { background: var(--surface-soft); opacity: 1; }
+  #supjrChatDrawer .pmjr-chat-price-update-btn svg { color: var(--accent-blue); }
+
+  /* Lighter price-summary callout for the Counter drawer (softer than the shared .callout-warning) */
+  .supjr-price-callout { background: #fdf8ec; border: 1px solid #f2e3ad; border-radius: 12px; padding: 16px; }
+
+  /* Success snackbars — Accept Job (solid banner) / Quote submitted (light pill) */
+  .supjr-success-toast { position: fixed; bottom: 24px; right: 24px; padding: 14px 18px; border-radius: 12px; display: flex; align-items: center; gap: 10px; font-size: 13.5px; font-weight: 700; box-shadow: 0 12px 28px rgba(0,0,0,0.18); z-index: 400; opacity: 0; transform: translateY(14px); pointer-events: none; transition: opacity 220ms ease-out, transform 220ms ease-out; max-width: 420px; }
+  .supjr-success-toast.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  .supjr-success-toast.banner { background: #10a048; color: #fff; }
+  .supjr-success-toast.pill { background: #eafaf0; color: #1a7a3e; border: 1px solid #b7e8c8; box-shadow: 0 8px 20px rgba(16,24,40,0.1); }
+  .supjr-success-toast .toast-icon { flex-shrink: 0; display: flex; }
+  .supjr-success-toast .toast-close { background: none; border: none; color: inherit; opacity: 0.8; cursor: pointer; display: flex; align-items: center; flex-shrink: 0; margin-left: 4px; }
+  .supjr-success-toast .toast-close:hover { opacity: 1; }
+
   /* Card grid */
   .pm-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
   .pm-client-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 16px; cursor: pointer; transition: box-shadow 150ms ease-out, border-color 150ms ease-out; position: relative; min-width: 0; }
@@ -8079,6 +8255,197 @@
           </div>
 
           </div>
+
+          <!-- ============ SUPPLIER JOB REQUESTS VIEW ============ -->
+          <div id="supJobRequestsView" style="display:none;">
+            <div class="dash-section">
+              <div class="dash-header">
+                <div>
+                  <h2>Job Requests</h2>
+                  <div class="dash-content-sub" id="supjrAwaitingSub">0 awaiting response</div>
+                </div>
+                <div class="dash-search-bar" style="max-width:420px;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                  <input type="text" id="supjrSearchInput" placeholder="Search property, job ID, service, PM..." autocomplete="off">
+                </div>
+              </div>
+
+              <div class="pmjr-tabs-row" id="supjrTabs">
+                <div class="pmjr-tab active" data-tab="all">All requests <span class="pmjr-tab-count" id="supjrCountAll">0</span></div>
+                <div class="pmjr-tab" data-tab="setprice">Set price <span class="pmjr-tab-count" id="supjrCountSetprice">0</span></div>
+                <div class="pmjr-tab" data-tab="quote">Quote <span class="pmjr-tab-count" id="supjrCountQuote">0</span></div>
+              </div>
+
+              <div class="pmjr-layout">
+                <div class="pmjr-list-col">
+                  <div class="pm-filter-field" id="supjrQuoteFilterField" style="display:none;margin-bottom:12px;">
+                    <button type="button" class="pm-custom-dd-btn" data-dd="supjrQuoteStatusFilter">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px;color:#e8a53d;"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
+                      <span class="cdd-value">All Quotes</span>
+                      <span class="pmjr-tab-count" id="supjrQuoteFilterCount" style="margin-left:6px;">0</span>
+                      <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="pm-custom-dd-menu" data-dd-menu="supjrQuoteStatusFilter">
+                      <div class="cdd-item selected" data-value="All Quotes">All Quotes <span class="pmjr-tab-count" id="supjrQfAll">0</span></div>
+                      <div class="cdd-item" data-value="Needs Quote">Needs Quote <span class="pmjr-tab-count" id="supjrQfNeeds">0</span></div>
+                      <div class="cdd-item" data-value="Submitted">Submitted <span class="pmjr-tab-count" id="supjrQfSubmitted">0</span></div>
+                      <div class="cdd-item" data-value="Counter Offer">Counter Offer <span class="pmjr-tab-count" id="supjrQfCounter">0</span></div>
+                      <div class="cdd-item" data-value="Won">Won <span class="pmjr-tab-count" id="supjrQfWon">0</span></div>
+                    </div>
+                  </div>
+                  <div class="pmjr-list" id="supjrList"></div>
+                </div>
+                <div class="pmjr-detail-wrap" id="supjrDetailWrap">
+                  <div id="supjrDetail"></div>
+
+                  <div class="pmjr-chat-overlay" id="supjrChatOverlay"></div>
+                  <div class="pmjr-chat-drawer" id="supjrChatDrawer">
+                    <div class="pmjr-chat-head">
+                      <div class="pmjr-chat-avatar" id="supjrChatAvatar"><div class="pmjr-chat-online-dot"></div></div>
+                      <div style="min-width:0;flex:1;">
+                        <div class="pmjr-chat-name" id="supjrChatName">&nbsp;</div>
+                        <div class="pmjr-chat-status"><span class="dot"></span><span id="supjrChatStatusText">Online now</span></div>
+                      </div>
+                      <button type="button" class="pmjr-chat-close" id="supjrChatCloseBtn" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+                    </div>
+                    <div class="pmjr-chat-messages" id="supjrChatMessages"></div>
+                    <div class="pmjr-chat-footer">
+                      <button type="button" class="pmjr-chat-price-update-btn" id="supjrChatPriceUpdateBtn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="margin-right:4px;vertical-align:-2px;"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Update price</button>
+                      <div class="pmjr-chat-input-row">
+                        <input type="text" class="pmjr-chat-input" id="supjrChatInput" placeholder="Message...">
+                        <button type="button" class="pmjr-chat-send" id="supjrChatSendBtn" aria-label="Send"><svg width="15" height="15" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 7h10M8 4l4 3-4 3"/></svg></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Price Breakdown modal (centered) -->
+            <div class="modal-overlay" id="supjrPbkOverlay">
+              <div class="supjr-pbk-card">
+                <div class="supjr-pbk-head">
+                  <div>
+                    <div class="supjr-pbk-title">Price breakdown</div>
+                    <div class="supjr-pbk-sub">What you'll receive for this job and what you can claim on top.</div>
+                  </div>
+                  <button type="button" class="supjr-pbk-close" id="supjrPbkCloseBtn" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+                </div>
+                <div class="supjr-pbk-rows" id="supjrPbkRows"></div>
+              </div>
+            </div>
+
+            <!-- Counter the Set Price — right side-drawer -->
+            <div class="supjr-side-overlay" id="supjrCounterOverlay">
+              <div class="supjr-side-modal narrow">
+                <div class="supjr-side-head">
+                  <div class="supjr-side-head-title">Counter the set price</div>
+                  <div class="supjr-side-head-sub" id="supjrCounterSub">—</div>
+                  <button type="button" class="supjr-side-close" id="supjrCounterCloseBtn" aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+                </div>
+                <div class="supjr-side-body">
+                  <div class="supjr-price-callout" style="margin-bottom:20px;">
+                    <div>
+                      <div style="font-weight:700;color:var(--text-heading);margin-bottom:10px;">The current set price for you</div>
+                      <div class="supjr-summary-row"><span>Job price (net)</span><span id="supjrCounterNet">£0.00</span></div>
+                      <div class="supjr-summary-row"><span>VAT (20%)</span><span id="supjrCounterVat">£0.00</span></div>
+                      <div class="supjr-summary-row total" style="border-top:1px solid rgba(0,0,0,0.08);"><span>Total</span><span id="supjrCounterTotal">£0.00</span></div>
+                      <div style="font-size:12px;color:#92650a;margin-top:8px;">A counter requires their approval before scheduling.</div>
+                    </div>
+                  </div>
+                  <div class="supjr-field-label">Your price (incl. VAT)</div>
+                  <div class="supjr-money-input-wrap" style="margin-bottom:6px;">
+                    <span class="supjr-money-prefix">£</span>
+                    <input type="text" inputmode="decimal" class="supjr-money-input" id="supjrCounterPriceInput" placeholder="0">
+                  </div>
+                  <div style="font-size:12px;color:var(--text-body-muted);margin-bottom:20px;">Enter the total price including VAT.</div>
+                  <div class="supjr-field-label">Notes for the client</div>
+                  <textarea class="field-input" id="supjrCounterNotes" rows="4" placeholder="Scope, exclusions, materials provided, lead time..." style="resize:vertical;"></textarea>
+                  <div class="supjr-validity-note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Quote is valid for 7 days. Client confirms before you're scheduled.</div>
+                </div>
+                <div class="supjr-side-footer">
+                  <button type="button" class="btn btn-sm" style="border:1px solid var(--border-subtle);background:#fff;" id="supjrCounterCancelBtn">Cancel</button>
+                  <button type="button" class="btn btn-primary supjr-send-btn" id="supjrCounterSendBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>Send counter offer</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Send Your Quote — right side-drawer -->
+            <div class="supjr-side-overlay popup-mode" id="supjrQuoteOverlay">
+              <div class="supjr-side-modal popup-center">
+                <div class="supjr-side-head light">
+                  <div class="supjr-side-head-title">Send Your Quote</div>
+                  <div class="supjr-side-head-sub" id="supjrQuoteSub">—</div>
+                  <button type="button" class="supjr-side-close" id="supjrQuoteCloseBtn" aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+                </div>
+                <div class="supjr-side-body">
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                    <div class="supjr-field-label" style="margin-bottom:0;">Quick call-out</div>
+                    <div style="font-size:11.5px;color:var(--text-body-muted);">Always included in your quote</div>
+                  </div>
+                  <div class="supjr-quick-callout-grid" style="margin-bottom:20px;">
+                    <div class="supjr-quick-callout-card fee">
+                      <div class="supjr-qc-label fee-lbl"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Call-out fee</div>
+                      <div class="supjr-qc-sub">Diagnose + first hour</div>
+                      <div class="supjr-money-input-wrap"><span class="supjr-money-prefix">£</span><input type="text" inputmode="decimal" class="supjr-money-input" id="supjrQuoteCalloutInput" value="150"></div>
+                    </div>
+                    <div class="supjr-quick-callout-card emergency">
+                      <div class="supjr-qc-label emg-lbl"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>Emergency charges</div>
+                      <div class="supjr-qc-sub">Out-of-hours rate</div>
+                      <div class="supjr-money-input-wrap"><span class="supjr-money-prefix">£</span><input type="text" inputmode="decimal" class="supjr-money-input" id="supjrQuoteEmergencyInput" value="200"></div>
+                    </div>
+                  </div>
+
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                    <div class="supjr-field-label" style="margin-bottom:0;">Itemised breakdown</div>
+                    <button type="button" class="supjr-add-line-btn" id="supjrAddLineBtn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add Line</button>
+                  </div>
+                  <div id="supjrItemisedRows" style="margin-bottom:16px;"></div>
+
+                  <div class="supjr-summary-box" style="margin-bottom:20px;">
+                    <div id="supjrSummaryRows"></div>
+                  </div>
+
+                  <div class="supjr-material-row" style="margin-bottom:6px;">
+                    <div class="supjr-field-label">Material cost (optional)</div>
+                    <div class="supjr-money-input-wrap">
+                      <span class="supjr-money-prefix">£</span><input type="text" inputmode="decimal" class="supjr-money-input" id="supjrMaterialCostInput" value="0">
+                    </div>
+                  </div>
+                  <div style="font-size:12px;color:var(--text-body-muted);margin-bottom:20px;">Material cost is NOT included in the priced total — no VAT or Keylr fee applies. You'll upload the receipt later.</div>
+
+                  <div class="supjr-field-label">Upfront payment (optional)</div>
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;">
+                    <div class="supjr-upfront-toggle">
+                      <button type="button" class="active" data-upfront-mode="£" id="supjrUpfrontModeCurrency">£</button>
+                      <button type="button" data-upfront-mode="%" id="supjrUpfrontModePercent">%</button>
+                    </div>
+                    <div class="supjr-money-input-wrap" style="flex:1;">
+                      <span class="supjr-money-prefix" id="supjrUpfrontPrefix">£</span><input type="text" inputmode="decimal" class="supjr-money-input" id="supjrUpfrontInput" value="0">
+                    </div>
+                  </div>
+
+                  <div class="supjr-field-label">Notes for the client</div>
+                  <textarea class="field-input" id="supjrQuoteNotes" rows="4" maxlength="4000" placeholder="Scope, exclusions, materials provided, lead time..." style="resize:vertical;"></textarea>
+                  <div class="supjr-char-count"><span id="supjrQuoteNotesCount">0</span> / 4000</div>
+
+                  <div class="supjr-validity-note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Quote is valid for 7 days. The client confirms before you're scheduled.</div>
+                </div>
+                <div class="supjr-side-footer">
+                  <button type="button" class="btn btn-sm" style="border:1px solid var(--border-subtle);background:#fff;" id="supjrQuoteCancelBtn">Cancel</button>
+                  <button type="button" class="btn btn-primary supjr-send-btn" id="supjrQuoteSendBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>Send Quote</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Success snackbar — Accept Job (solid banner) / Quote submitted / Counter offer sent (light pill) -->
+            <div class="supjr-success-toast banner" id="supjrSuccessToast">
+              <span class="toast-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12.3l2.5 2.5 5-5.6"/></svg></span>
+              <span id="supjrSuccessToastMsg"></span>
+              <button type="button" class="toast-close" id="supjrSuccessToastClose" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+            </div>
+          </div>
+
           <!-- ============ SUPPLIER PROFILE SETTINGS VIEW ============ -->
           <div id="supProfileSettingsView" style="display:none;">
             <div class="dash-section">
@@ -15273,6 +15640,7 @@
   /* Sidebar nav item selection */
   function showSupplierView(view) {
     document.getElementById('supHomeView').style.display = view === 'home' ? '' : 'none';
+    document.getElementById('supJobRequestsView').style.display = view === 'job-requests' ? '' : 'none';
     document.getElementById('supProfileSettingsView').style.display = view === 'profile-settings' ? '' : 'none';
     document.querySelector('#supplierDashboard .dash-scroll-area').scrollTop = 0;
   }
@@ -15283,6 +15651,9 @@
       var nav = item.getAttribute('data-nav');
       if (nav === 'dashboard') {
         showSupplierView('home');
+      } else if (nav === 'job-requests') {
+        showSupplierView('job-requests');
+        initSupjrOnce();
       } else if (nav === 'sup-profile') {
         showSupplierView('profile-settings');
       } else {
@@ -15299,6 +15670,622 @@
       showSupplierView('profile-settings');
     });
   });
+
+  /* =========================================================
+     SUPPLIER: JOB REQUESTS
+  ========================================================== */
+  function supjrEscapeHtml(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function supjrFmtMoney(n) { return '\u00a3' + (Math.round(n * 100) / 100).toFixed(2); }
+  function supjrFmtWhole(n) { var r = Math.round(n * 100) / 100; return '\u00a3' + (r % 1 === 0 ? r.toFixed(0) : r.toFixed(2)); }
+  function supjrFmtDate(iso) {
+    var d = new Date(iso + 'T00:00:00');
+    var dd = ('0' + d.getDate()).slice(-2);
+    var mm = ('0' + (d.getMonth() + 1)).slice(-2);
+    return dd + '/' + mm + '/' + d.getFullYear();
+  }
+
+  var SUPJR_JOBS = [
+    { id: '2778', type: 'setprice', company: 'KEY RIDERS LTD', avatarInitial: 'K',
+      title: 'End of Tenancy / Deep / Regular / Communal',
+      due: '2026-07-08', urgency: 'Emergency \u2013 as soon as possible', emergency: true, postcode: 'N9 0TW',
+      netPrice: 20, vat: 4, total: 24,
+      bookedByName: 'Thomas Davies', bookedByInitials: 'TD', bookedByRole: null,
+      property: { name: 'Travelodge Hotels Ltd, 3 Smythe Close', addr: 'Travelodge Hotels Ltd, 3 Smythe Close, London, N9 0TW', type: 'Residential', occupancy: null } },
+
+    { id: '2763', type: 'setprice', company: 'KEY RIDERS LTD', avatarInitial: 'K',
+      title: 'End of Tenancy / Deep / Regular / Communal',
+      due: '2026-07-03', urgency: 'Emergency \u2013 as soon as possible', emergency: true, postcode: 'S75 2DH',
+      netPrice: 100, vat: 20, total: 120,
+      bookedByName: 'Thomas Davies', bookedByInitials: 'TD', bookedByRole: null,
+      property: { name: 'Q & Q Recovery, West Road', addr: 'Q & Q Recovery, West Road, Barnsley, S75 2DH', type: 'Residential', occupancy: 'Occupied' } },
+
+    { id: '2777', type: 'setprice', company: 'WHITEHALL ESTATES', avatarInitial: 'W',
+      title: 'EICR \u2014 Electrical Installation Condition Report',
+      due: '2026-07-06', urgency: 'Flexible', emergency: false, postcode: 'SW1A 2BX',
+      netPrice: 101.67, vat: 20.33, total: 122,
+      bookedByName: 'Priya Shah', bookedByInitials: 'PS', bookedByRole: null,
+      property: { name: 'Flat 1, 39 Whitehall', addr: 'Flat 1, 39 Whitehall, London, SW1A 2BX', type: 'Residential', occupancy: 'Occupied' } },
+
+    { id: '2775', type: 'setprice', company: 'KEY RIDERS LTD', avatarInitial: 'K',
+      title: 'PAT Testing',
+      due: '2026-07-06', urgency: 'Flexible', emergency: false, postcode: 'S75 2DH',
+      netPrice: 16.67, vat: 3.33, total: 20,
+      bookedByName: 'Thomas Davies', bookedByInitials: 'TD', bookedByRole: null,
+      property: { name: 'Q & Q Recovery, West Road', addr: 'Q & Q Recovery, West Road, Barnsley, S75 2DH', type: 'Residential', occupancy: 'Occupied' } },
+
+    { id: '2779', type: 'setprice', company: 'KEY RIDERS LTD', avatarInitial: 'K',
+      title: 'End of Tenancy / Deep / Regular / Communal',
+      due: '2026-07-21', urgency: 'Flexible', emergency: false, postcode: 'S75 2DH',
+      netPrice: 41.67, vat: 8.33, total: 50,
+      bookedByName: 'Thomas Davies', bookedByInitials: 'TD', bookedByRole: null,
+      property: { name: 'Q & Q Recovery, West Road', addr: 'Q & Q Recovery, West Road, Barnsley, S75 2DH', type: 'Residential', occupancy: 'Occupied' } },
+
+    { id: '2769', type: 'quote', company: 'NEW SERVICES LTD.', avatarInitial: 'N',
+      title: 'Carpet / Stair Carpet Steam Clean',
+      due: '2026-07-06', urgency: 'Emergency \u2013 as soon as possible', emergency: true, postcode: 'BA12 0SW',
+      quoteStatus: 'needs-quote',
+      bookedByName: 'fotatap', bookedByInitials: 'FO', bookedByRole: 'Manager',
+      property: { name: 'Flat 4B, 44 Sherrington', addr: 'Flat 4B, 44 Sherrington, Warminster, BA12 0SW', type: 'Residential', occupancy: 'Occupied' } },
+
+    { id: '2770', type: 'quote', company: 'NEW SERVICES LTD.', avatarInitial: 'N',
+      title: 'Carpet / Stair Carpet Steam Clean',
+      due: '2026-07-06', urgency: 'Emergency \u2013 as soon as possible', emergency: true, postcode: 'BA12 0SW',
+      quoteStatus: 'needs-quote',
+      bookedByName: 'fotatap', bookedByInitials: 'FO', bookedByRole: 'Manager',
+      property: { name: 'Flat 4B, 44 Sherrington', addr: 'Flat 4B, 44 Sherrington, Warminster, BA12 0SW', type: 'Residential', occupancy: 'Occupied' } },
+
+    { id: '2764', type: 'quote', company: 'KEY RIDERS LTD', avatarInitial: 'K',
+      title: 'Boiler Repair / No Hot Water / Gas Leak Emergency',
+      due: '2026-07-03', urgency: 'Emergency \u2013 as soon as possible', emergency: true, postcode: 'S75 2DH',
+      quoteStatus: 'needs-quote',
+      bookedByName: 'Thomas Davies', bookedByInitials: 'TD', bookedByRole: null,
+      property: { name: 'Q & Q Recovery, West Road', addr: 'Q & Q Recovery, West Road, Barnsley, S75 2DH', type: 'Residential', occupancy: 'Occupied' } },
+
+    { id: '2746', type: 'quote', company: 'KEY RIDERS LTD', avatarInitial: 'K',
+      title: 'Door Entry / Intercom / Smart Doorbell',
+      due: '2026-07-10', urgency: 'Flexible up to 10/07/2026', emergency: false, postcode: 'SW1A 2BX',
+      quoteStatus: 'submitted', submittedQuoteTotal: 30,
+      bookedByName: 'Thomas Davies', bookedByInitials: 'TD', bookedByRole: null,
+      property: { name: 'Carrington, PO Box 81490', addr: 'Carrington, PO Box 81490, London, SW18 9WR', type: 'Residential', occupancy: null } },
+
+    { id: '2724', type: 'quote', company: 'OLD SHADES MANAGEMENT', avatarInitial: 'O',
+      title: 'Carpet / Stair Carpet Steam Clean',
+      due: '2026-07-01', urgency: 'Flexible', emergency: false, postcode: 'SW1A 2BX',
+      quoteStatus: 'submitted', submittedQuoteTotal: 42,
+      bookedByName: 'Morgan Ellis', bookedByInitials: 'ME', bookedByRole: null,
+      property: { name: 'Old Shades, 37 Whitehall', addr: 'Old Shades, 37 Whitehall, London, SW1A 2BX', type: 'Residential', occupancy: null } },
+
+    { id: '2790', type: 'setprice', company: 'KEY RIDERS LTD', avatarInitial: 'K',
+      title: 'Smoke Alarm Installation',
+      due: '2026-07-16', urgency: 'Emergency \u2013 as soon as possible', emergency: true, postcode: 'S75 2DH',
+      netPrice: 375, vat: 75, total: 450,
+      breakdown: [
+        { label: 'First alarm installed', sub: '\u00a3200.00 base + 2 \u00d7 \u00a325.00/unit', value: '\u00a3250.00' },
+        { label: 'Out-of-hours / urgent uplift', sub: 'urgent/emergency: \u00d71.50 of \u00a3250.00', value: '\u00a3125.00' },
+        { label: 'Supplier net total', sub: 'Your rate, before VAT', value: '\u00a3375.00' }
+      ],
+      bookedByName: 'Thomas Davies', bookedByInitials: 'TD', bookedByRole: null,
+      property: { name: 'Q & Q Recovery, West Road', addr: 'Q & Q Recovery, West Road, Barnsley, S75 2DH', type: 'Residential', occupancy: 'Occupied' } }
+  ];
+
+  var supjrCurrentTab = 'all';
+  var supjrSelectedJobId = null;
+  var supjrSearchQuery = '';
+  var supjrQuoteStatusFilter = 'All Quotes';
+  var supjrInitialized = false;
+  var supjrQuoteItems = [];
+  var supjrQuoteItemSeq = 0;
+  var supjrActiveQuoteJobId = null;
+  var supjrActiveCounterJobId = null;
+  var supjrActiveChatJobId = null;
+  var supjrQuoteFromChat = false;
+  var supjrUpfrontMode = '\u00a3';
+
+  function supjrJobsForTab(tab) {
+    if (tab === 'setprice') return SUPJR_JOBS.filter(function (j) { return j.type === 'setprice'; });
+    if (tab === 'quote') return SUPJR_JOBS.filter(function (j) { return j.type === 'quote'; });
+    return SUPJR_JOBS;
+  }
+
+  function supjrFilteredJobs() {
+    var jobs = supjrJobsForTab(supjrCurrentTab);
+    if (supjrCurrentTab === 'quote' && supjrQuoteStatusFilter !== 'All Quotes') {
+      var statusMap = { 'Needs Quote': 'needs-quote', 'Submitted': 'submitted', 'Counter Offer': 'counter-offer', 'Won': 'won' };
+      jobs = jobs.filter(function (j) { return j.quoteStatus === statusMap[supjrQuoteStatusFilter]; });
+    }
+    var q = supjrSearchQuery.trim().toLowerCase();
+    if (q) {
+      jobs = jobs.filter(function (j) {
+        return j.title.toLowerCase().indexOf(q) >= 0 || j.company.toLowerCase().indexOf(q) >= 0 || j.id.indexOf(q) >= 0 || j.property.name.toLowerCase().indexOf(q) >= 0;
+      });
+    }
+    return jobs;
+  }
+
+  function supjrUpdateTabCounts() {
+    document.getElementById('supjrCountAll').textContent = SUPJR_JOBS.length;
+    document.getElementById('supjrCountSetprice').textContent = supjrJobsForTab('setprice').length;
+    document.getElementById('supjrCountQuote').textContent = supjrJobsForTab('quote').length;
+    document.getElementById('supjrAwaitingSub').textContent = SUPJR_JOBS.length + ' awaiting response';
+    var badge = document.getElementById('supBadgeJobRequests');
+    if (badge) { badge.textContent = SUPJR_JOBS.length; badge.hidden = SUPJR_JOBS.length === 0; }
+  }
+
+  function supjrUpdateQuoteFilterCounts() {
+    var quoteJobs = supjrJobsForTab('quote');
+    var counts = { all: quoteJobs.length, 'needs-quote': 0, submitted: 0, 'counter-offer': 0, won: 0 };
+    quoteJobs.forEach(function (j) { counts[j.quoteStatus] = (counts[j.quoteStatus] || 0) + 1; });
+    document.getElementById('supjrQfAll').textContent = counts.all;
+    document.getElementById('supjrQfNeeds').textContent = counts['needs-quote'];
+    document.getElementById('supjrQfSubmitted').textContent = counts.submitted;
+    document.getElementById('supjrQfCounter').textContent = counts['counter-offer'];
+    document.getElementById('supjrQfWon').textContent = counts.won;
+    var keyMap = { 'All Quotes': 'all', 'Needs Quote': 'needs-quote', 'Submitted': 'submitted', 'Counter Offer': 'counter-offer', 'Won': 'won' };
+    document.getElementById('supjrQuoteFilterCount').textContent = counts[keyMap[supjrQuoteStatusFilter]];
+  }
+
+  function supjrJobCardHtml(job, active) {
+    var badgeClass = job.type === 'setprice' ? 'setprice' : 'quote';
+    var badgeLabel = job.type === 'setprice' ? 'Set price' : 'Quote';
+    var isSubmitted = job.type === 'quote' && job.quoteStatus === 'submitted';
+    var primaryLabel = job.type === 'setprice'
+      ? ('Accept \u00b7 ' + supjrFmtWhole(job.total))
+      : (isSubmitted ? ('Quote submitted \u00b7 ' + supjrFmtWhole(job.submittedQuoteTotal || 0)) : 'Send Quote');
+    return '<div class="supjr-job-card' + (active ? ' active' : '') + '" data-job-id="' + job.id + '">' +
+      '<div class="supjr-job-card-top">' +
+        '<div class="supjr-job-avatar">' + supjrEscapeHtml(job.avatarInitial) + '</div>' +
+        '<div style="min-width:0;flex:1;">' +
+          '<div class="supjr-job-company">' + supjrEscapeHtml(job.company) + '</div>' +
+          '<div class="supjr-job-title">' + supjrEscapeHtml(job.title) + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="supjr-job-meta-row">' +
+        '<span class="supjr-job-badge ' + badgeClass + '">' + badgeLabel + '</span>' +
+        '<span class="supjr-job-due"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>' + supjrFmtDate(job.due) + '</span>' +
+      '</div>' +
+      '<div class="supjr-job-desc-row">' +
+        '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>' +
+        '<span>' + supjrEscapeHtml(job.urgency) + '</span><span class="sep">\u00b7</span><span>' + supjrEscapeHtml(job.postcode) + '</span>' +
+      '</div>' +
+      '<div class="supjr-card-actions">' +
+        '<button type="button" class="supjr-card-primary-btn' + (isSubmitted ? ' submitted' : '') + '" data-card-action="primary"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>' + primaryLabel + '</button>' +
+        '<button type="button" class="supjr-card-icon-btn" data-card-action="chat" aria-label="Chat"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></button>' +
+        '<button type="button" class="supjr-card-icon-btn decline" data-card-action="decline" aria-label="Decline"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function supjrRenderList() {
+    var list = document.getElementById('supjrList');
+    var jobs = supjrFilteredJobs();
+    if (!jobs.length) {
+      list.innerHTML = '<div class="pmjr-empty-detail" style="padding:40px 20px;">No job requests match.</div>';
+      return;
+    }
+    if (!supjrSelectedJobId || !jobs.some(function (j) { return j.id === supjrSelectedJobId; })) {
+      supjrSelectedJobId = jobs[0].id;
+    }
+    list.innerHTML = jobs.map(function (j) { return supjrJobCardHtml(j, j.id === supjrSelectedJobId); }).join('');
+    list.querySelectorAll('.supjr-job-card').forEach(function (card) {
+      var jobId = card.getAttribute('data-job-id');
+      card.addEventListener('click', function (e) {
+        var actionEl = e.target.closest('[data-card-action]');
+        var job = SUPJR_JOBS.find(function (j) { return j.id === jobId; });
+        if (actionEl) {
+          e.stopPropagation();
+          supjrSelectedJobId = jobId;
+          var action = actionEl.getAttribute('data-card-action');
+          if (action === 'chat') { supjrRenderList(); supjrRenderDetail(); supjrOpenChat(job); }
+          else if (action === 'decline') { supjrDeclineJob(job); }
+          else if (action === 'primary') {
+            if (job.type === 'setprice') { supjrAcceptJob(job); }
+            else { supjrRenderList(); supjrRenderDetail(); supjrQuoteFromChat = false; supjrOpenQuoteModal(job); }
+          }
+          return;
+        }
+        supjrSelectedJobId = jobId;
+        supjrRenderList();
+        supjrRenderDetail();
+      });
+    });
+  }
+
+  function supjrWhatsIncludedHtml(job) {
+    var rows = (job.breakdown || [{ label: 'Job price (net)', sub: 'Your rate, before VAT', value: supjrFmtMoney(job.netPrice) }]).slice();
+    rows.push({ label: 'VAT (20%)', value: supjrFmtMoney(job.vat) });
+    rows.push({ label: 'Total you\u2019ll receive', sub: 'Your net + VAT for this job', value: supjrFmtMoney(job.total), total: true });
+    var rowsHtml = rows.map(function (r) {
+      return '<div class="supjr-pbk-row' + (r.total ? ' total' : '') + '"><div><div class="supjr-pbk-row-label' + (r.total ? ' total-lbl' : '') + '">' + supjrEscapeHtml(r.label) + '</div>' + (r.sub ? '<div class="supjr-pbk-row-sub">' + supjrEscapeHtml(r.sub) + '</div>' : '') + '</div><div class="supjr-pbk-row-value">' + r.value + '</div></div>';
+    }).join('');
+    return '<div class="supjr-detail-card">' +
+      '<div class="supjr-detail-section-head"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>WHAT\u2019S INCLUDED</div>' +
+      '<div class="supjr-whatsincluded-title">' + supjrEscapeHtml(job.title) + '</div>' +
+      '<div class="supjr-whatsincluded-sub">What this job comprises and what you\u2019ll be paid for.</div>' +
+      '<div class="supjr-pbk-rows">' + rowsHtml + '</div>' +
+    '</div>';
+  }
+
+  function supjrRenderDetail() {
+    var detail = document.getElementById('supjrDetail');
+    var jobs = supjrFilteredJobs();
+    var job = SUPJR_JOBS.find(function (j) { return j.id === supjrSelectedJobId; });
+    if (!job || jobs.indexOf(job) === -1) {
+      detail.innerHTML = '<div class="pmjr-empty-detail" style="padding:80px 24px;">Select a job request to see details.</div>';
+      return;
+    }
+    var isSetPrice = job.type === 'setprice';
+    var isSubmitted = !isSetPrice && job.quoteStatus === 'submitted';
+    var tagsHtml = '<span class="supjr-detail-tag">' + (isSetPrice ? 'Set price' : 'Quote') + '</span>' +
+      (job.emergency ? '<span class="supjr-detail-tag emergency">\u26a0 Emergency</span>' : '');
+    var bookedRoleHtml = job.bookedByRole ? ' \u00b7 ' + supjrEscapeHtml(job.bookedByRole) : '';
+
+    var infoCardsHtml = '<div class="supjr-detail-info-grid">' +
+      '<div class="supjr-detail-info-card"><div class="supjr-detail-info-label">When</div><div class="supjr-detail-info-value">' + supjrEscapeHtml(job.urgency) + '</div></div>' +
+      '<div class="supjr-detail-info-card"><div class="supjr-detail-info-label">Postcode</div><div class="supjr-detail-info-value">' + supjrEscapeHtml(job.postcode) + '</div></div>' +
+      (isSetPrice
+        ? '<div class="supjr-detail-info-card highlight"><div class="supjr-detail-info-label">Total Price</div><div class="supjr-detail-info-value">' + supjrFmtWhole(job.total) + '</div></div>'
+        : '<div class="supjr-detail-info-card highlight"><div class="supjr-detail-info-label">Budget</div><div class="supjr-detail-info-value">\u2014</div></div>') +
+      '</div>';
+
+    var propOccupancyHtml = job.property.occupancy
+      ? '<div class="supjr-detail-info-card"><div class="supjr-detail-info-label">Occupancy</div><div class="supjr-detail-info-value">' + supjrEscapeHtml(job.property.occupancy) + '</div></div>'
+      : '';
+
+    var footerLeftHtml = isSetPrice
+      ? '<button type="button" class="supjr-link-btn" id="supjrPriceBreakdownBtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>Price breakdown</button>'
+      : '';
+
+    var primaryBtnHtml = isSetPrice
+      ? '<button type="button" class="btn btn-primary" id="supjrAcceptJobBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Accept Job</button>'
+      : (isSubmitted
+        ? '<button type="button" class="btn-quote-submitted" id="supjrSubmitQuoteBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Quote submitted \u00b7 ' + supjrFmtWhole(job.submittedQuoteTotal || 0) + '</button>'
+        : '<button type="button" class="btn btn-primary" id="supjrSubmitQuoteBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>Submit Quote</button>');
+
+    detail.innerHTML =
+      '<div class="supjr-detail-banner">' +
+        '<div class="supjr-detail-banner-top">' +
+          '<div class="supjr-detail-avatar">' + supjrEscapeHtml(job.avatarInitial) + '</div>' +
+          '<div><div class="supjr-detail-banner-label">Booking from</div><div class="supjr-detail-banner-name">' + supjrEscapeHtml(job.company) + '</div></div>' +
+        '</div>' +
+        '<div class="supjr-detail-tags">' + tagsHtml + '</div>' +
+        '<div class="supjr-detail-booked-row">' +
+          '<div class="supjr-detail-booked-avatar">' + supjrEscapeHtml(job.bookedByInitials) + '</div>' +
+          '<div><div class="supjr-detail-booked-label">Booked by</div><div class="supjr-detail-booked-name">' + supjrEscapeHtml(job.bookedByName) + bookedRoleHtml + '</div></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="supjr-detail-req">REQ \u00b7 ' + supjrEscapeHtml(job.id) + '</div>' +
+      '<div class="supjr-detail-title">' + supjrEscapeHtml(job.title) + '</div>' +
+      '<div class="supjr-detail-addr"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/></svg>' + supjrEscapeHtml(job.property.addr) + '</div>' +
+      infoCardsHtml +
+      (isSetPrice ? supjrWhatsIncludedHtml(job) : '') +
+      '<div class="supjr-detail-card">' +
+        '<div class="supjr-detail-section-head"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>PROPERTY</div>' +
+        '<div class="supjr-detail-property-name">' + supjrEscapeHtml(job.property.name) + '</div>' +
+        '<div class="supjr-detail-property-addr">' + supjrEscapeHtml(job.property.addr) + '</div>' +
+        '<div class="supjr-detail-info-grid two-col" style="margin-top:14px;">' +
+          '<div class="supjr-detail-info-card"><div class="supjr-detail-info-label">Type</div><div class="supjr-detail-info-value">' + supjrEscapeHtml(job.property.type) + '</div></div>' +
+          propOccupancyHtml +
+        '</div>' +
+      '</div>' +
+      '<div class="supjr-detail-card">' +
+        '<div class="supjr-collapsible-head" id="supjrSlaToggle">' +
+          '<div class="supjr-detail-section-head" style="margin:0;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>SLA &amp; DEADLINES</div>' +
+          '<svg class="supjr-collapsible-chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' +
+        '</div>' +
+        '<div id="supjrSlaBody" style="display:none;">' +
+          '<div class="supjr-sla-respond-box">' +
+            '<div class="supjr-sla-respond-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Respond by</div>' +
+            '<div class="supjr-sla-respond-date">' + supjrFmtDate(job.due) + '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="supjr-detail-footer">' +
+        '<button type="button" class="btn-danger-outline" id="supjrDeclineBtn">Decline</button>' +
+        '<button type="button" class="supjr-btn-outline" id="supjrChatBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Chat with PM</button>' +
+        '<div class="spacer"></div>' +
+        footerLeftHtml +
+        primaryBtnHtml +
+      '</div>';
+
+    supjrWireDetailEvents(job);
+  }
+
+  function supjrWireDetailEvents(job) {
+    document.getElementById('supjrDeclineBtn').addEventListener('click', function () { supjrDeclineJob(job); });
+    document.getElementById('supjrChatBtn').addEventListener('click', function () { supjrOpenChat(job); });
+    var slaToggle = document.getElementById('supjrSlaToggle');
+    if (slaToggle) {
+      slaToggle.addEventListener('click', function () {
+        var body = document.getElementById('supjrSlaBody');
+        var isOpen = body.style.display !== 'none';
+        body.style.display = isOpen ? 'none' : 'block';
+        slaToggle.classList.toggle('open', !isOpen);
+      });
+    }
+    if (job.type === 'setprice') {
+      document.getElementById('supjrPriceBreakdownBtn').addEventListener('click', function () { supjrOpenPriceBreakdown(job); });
+      document.getElementById('supjrAcceptJobBtn').addEventListener('click', function () { supjrAcceptJob(job); });
+    } else {
+      document.getElementById('supjrSubmitQuoteBtn').addEventListener('click', function () { supjrQuoteFromChat = false; supjrOpenQuoteModal(job); });
+    }
+  }
+
+  function supjrRemoveJob(jobId) {
+    var idx = SUPJR_JOBS.findIndex(function (j) { return j.id === jobId; });
+    if (idx >= 0) SUPJR_JOBS.splice(idx, 1);
+    if (supjrSelectedJobId === jobId) supjrSelectedJobId = null;
+    supjrUpdateTabCounts();
+    if (supjrCurrentTab === 'quote') supjrUpdateQuoteFilterCounts();
+    supjrRenderList();
+    supjrRenderDetail();
+  }
+  function supjrAcceptJob(job) {
+    supjrShowSuccessToast('You\u2019ve accepted the job. The PM has been notified.', 'banner');
+    supjrRemoveJob(job.id);
+  }
+  function supjrDeclineJob(job) {
+    showToast('Job request declined.');
+    supjrCloseChat();
+    supjrRemoveJob(job.id);
+  }
+
+  function supjrOpenPriceBreakdown(job) {
+    var rows = [
+      { label: 'Net price', sub: 'Your rate, before VAT', value: supjrFmtMoney(job.netPrice) },
+      { label: 'VAT (20%)', sub: null, value: supjrFmtMoney(job.vat) },
+      { label: 'Total you\u2019ll receive', sub: 'Your net + VAT for this job', value: supjrFmtMoney(job.total), total: true }
+    ];
+    document.getElementById('supjrPbkRows').innerHTML = rows.map(function (r) {
+      return '<div class="supjr-pbk-row' + (r.total ? ' total' : '') + '"><div><div class="supjr-pbk-row-label' + (r.total ? ' total-lbl' : '') + '">' + supjrEscapeHtml(r.label) + '</div>' + (r.sub ? '<div class="supjr-pbk-row-sub">' + supjrEscapeHtml(r.sub) + '</div>' : '') + '</div><div class="supjr-pbk-row-value">' + r.value + '</div></div>';
+    }).join('');
+    document.getElementById('supjrPbkOverlay').classList.add('open');
+  }
+  function supjrClosePriceBreakdown() { document.getElementById('supjrPbkOverlay').classList.remove('open'); }
+
+  function supjrOpenCounterModal(job) {
+    supjrActiveCounterJobId = job.id;
+    document.getElementById('supjrCounterSub').textContent = job.company + ' \u00b7 ' + job.title;
+    document.getElementById('supjrCounterNet').textContent = supjrFmtMoney(job.netPrice);
+    document.getElementById('supjrCounterVat').textContent = supjrFmtMoney(job.vat);
+    document.getElementById('supjrCounterTotal').textContent = supjrFmtMoney(job.total);
+    document.getElementById('supjrCounterPriceInput').value = '';
+    document.getElementById('supjrCounterNotes').value = '';
+    document.getElementById('supjrCounterOverlay').classList.add('open');
+  }
+  function supjrCloseCounterModal() { document.getElementById('supjrCounterOverlay').classList.remove('open'); }
+
+  var supjrSuccessToastTimer = null;
+  function supjrShowSuccessToast(msg, style) {
+    var toast = document.getElementById('supjrSuccessToast');
+    toast.classList.remove('pill', 'banner');
+    toast.classList.add(style || 'banner');
+    document.getElementById('supjrSuccessToastMsg').textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(supjrSuccessToastTimer);
+    supjrSuccessToastTimer = setTimeout(function () { toast.classList.remove('show'); }, 4500);
+  }
+
+  function supjrRecalcQuoteSummary() {
+    var callout = parseFloat(document.getElementById('supjrQuoteCalloutInput').value) || 0;
+    var emergency = parseFloat(document.getElementById('supjrQuoteEmergencyInput').value) || 0;
+    var itemsTotal = supjrQuoteItems.reduce(function (sum, it) { return sum + (parseFloat(it.amount) || 0); }, 0);
+    var total = callout + emergency + itemsTotal;
+    var earning = total / 1.2;
+    var vat = total - earning;
+    var rows = [
+      { label: 'Call-out fee', value: supjrFmtMoney(callout) },
+      { label: 'Emergency Charges', value: supjrFmtMoney(emergency) }
+    ];
+    supjrQuoteItems.forEach(function (it) {
+      if (it.name || parseFloat(it.amount)) rows.push({ label: it.name || 'Item', value: supjrFmtMoney(parseFloat(it.amount) || 0) });
+    });
+    rows.push({ label: 'Supplier earning', value: supjrFmtMoney(earning) });
+    rows.push({ label: 'VAT (20%)', value: supjrFmtMoney(vat) });
+    var html = rows.map(function (r) { return '<div class="supjr-summary-row"><span>' + supjrEscapeHtml(r.label) + '</span><span>' + r.value + '</span></div>'; }).join('') +
+      '<div class="supjr-summary-row total"><span>TOTAL (INC. VAT)</span><span>' + supjrFmtMoney(total) + '</span></div>';
+    document.getElementById('supjrSummaryRows').innerHTML = html;
+    return total;
+  }
+
+  function supjrRenderItemisedRows() {
+    var wrap = document.getElementById('supjrItemisedRows');
+    wrap.innerHTML = supjrQuoteItems.map(function (it) {
+      return '<div class="supjr-itemised-row" data-item-id="' + it.id + '">' +
+        '<input type="text" class="field-input item-name-input" placeholder="Item" value="' + supjrEscapeHtml(it.name) + '" data-item-field="name">' +
+        '<div class="supjr-money-input-wrap item-amount-wrap"><span class="supjr-money-prefix">\u00a3</span><input type="text" inputmode="decimal" class="supjr-money-input" value="' + supjrEscapeHtml(it.amount) + '" data-item-field="amount"></div>' +
+        '<button type="button" class="supjr-itemised-remove-btn" data-item-remove aria-label="Remove line">\u2014</button>' +
+      '</div>';
+    }).join('');
+    wrap.querySelectorAll('.supjr-itemised-row').forEach(function (row) {
+      var itemId = row.getAttribute('data-item-id');
+      row.querySelectorAll('[data-item-field]').forEach(function (input) {
+        input.addEventListener('input', function () {
+          var item = supjrQuoteItems.find(function (it) { return it.id === itemId; });
+          if (item) item[input.getAttribute('data-item-field')] = input.value;
+          supjrRecalcQuoteSummary();
+        });
+      });
+      row.querySelector('[data-item-remove]').addEventListener('click', function () {
+        supjrQuoteItems = supjrQuoteItems.filter(function (it) { return it.id !== itemId; });
+        supjrRenderItemisedRows();
+        supjrRecalcQuoteSummary();
+      });
+    });
+  }
+
+  function supjrOpenQuoteModal(job) {
+    supjrActiveQuoteJobId = job.id;
+    document.getElementById('supjrQuoteSub').textContent = job.title;
+    document.getElementById('supjrQuoteCalloutInput').value = '150';
+    document.getElementById('supjrQuoteEmergencyInput').value = '200';
+    supjrQuoteItems = [{ id: 'qi' + (++supjrQuoteItemSeq), name: '', amount: '' }];
+    supjrRenderItemisedRows();
+    document.getElementById('supjrMaterialCostInput').value = '0';
+    supjrUpfrontMode = '\u00a3';
+    document.getElementById('supjrUpfrontModeCurrency').classList.add('active');
+    document.getElementById('supjrUpfrontModePercent').classList.remove('active');
+    document.getElementById('supjrUpfrontPrefix').textContent = '\u00a3';
+    document.getElementById('supjrUpfrontInput').value = '0';
+    document.getElementById('supjrQuoteNotes').value = '';
+    document.getElementById('supjrQuoteNotesCount').textContent = '0';
+    supjrRecalcQuoteSummary();
+    document.getElementById('supjrQuoteOverlay').classList.add('open');
+  }
+  function supjrCloseQuoteModal() { document.getElementById('supjrQuoteOverlay').classList.remove('open'); }
+
+  function supjrChatSystemMsgHtml(text) {
+    return '<div class="chat-day-divider"><span>' + supjrEscapeHtml(text) + '</span></div>';
+  }
+  function supjrChatOutMsgHtml(text) {
+    return '<div class="pmjr-chat-msg" style="flex-direction:row-reverse;"><div style="text-align:right;"><div class="pmjr-chat-bubble" style="background:var(--accent-blue);color:#fff;">' + supjrEscapeHtml(text) + '</div><div class="pmjr-chat-timestamp">Just now</div></div></div>';
+  }
+  function supjrChatMsgHtml(m) {
+    return m.kind === 'system' ? supjrChatSystemMsgHtml(m.text) : supjrChatOutMsgHtml(m.text);
+  }
+
+  function supjrOpenChat(job) {
+    supjrActiveChatJobId = job.id;
+    document.getElementById('supjrChatAvatar').innerHTML = supjrEscapeHtml(job.bookedByInitials) + '<div class="pmjr-chat-online-dot"></div>';
+    document.getElementById('supjrChatName').textContent = job.bookedByName;
+    document.getElementById('supjrChatStatusText').textContent = 'Online now';
+    if (!job.chatMessages) {
+      job.chatMessages = [{ kind: 'system', text: 'Conversation started for ' + job.title + '.' }];
+    }
+    var msgWrap = document.getElementById('supjrChatMessages');
+    msgWrap.innerHTML = job.chatMessages.map(supjrChatMsgHtml).join('');
+    document.getElementById('supjrChatInput').placeholder = 'Message...';
+    document.getElementById('supjrChatOverlay').classList.add('open');
+    document.getElementById('supjrChatDrawer').classList.add('open');
+    msgWrap.scrollTop = msgWrap.scrollHeight;
+  }
+  function supjrCloseChat() {
+    document.getElementById('supjrChatOverlay').classList.remove('open');
+    document.getElementById('supjrChatDrawer').classList.remove('open');
+  }
+
+  function supjrSwitchTab(tab) {
+    supjrCurrentTab = tab;
+    supjrSelectedJobId = null;
+    document.querySelectorAll('#supjrTabs .pmjr-tab').forEach(function (t) { t.classList.toggle('active', t.getAttribute('data-tab') === tab); });
+    document.getElementById('supjrQuoteFilterField').style.display = tab === 'quote' ? '' : 'none';
+    if (tab === 'quote') supjrUpdateQuoteFilterCounts();
+    supjrRenderList();
+    supjrRenderDetail();
+  }
+
+  function initSupjrOnce() {
+    if (supjrInitialized) return;
+    supjrInitialized = true;
+    supjrUpdateTabCounts();
+    supjrRenderList();
+    supjrRenderDetail();
+
+    document.querySelectorAll('#supjrTabs .pmjr-tab').forEach(function (tab) {
+      tab.addEventListener('click', function () { supjrSwitchTab(tab.getAttribute('data-tab')); });
+    });
+    document.getElementById('supjrSearchInput').addEventListener('input', function (e) {
+      supjrSearchQuery = e.target.value;
+      supjrRenderList();
+    });
+
+    document.querySelectorAll('.pm-custom-dd-menu[data-dd-menu="supjrQuoteStatusFilter"] .cdd-item').forEach(function (item) {
+      item.addEventListener('click', function () {
+        supjrQuoteStatusFilter = item.getAttribute('data-value');
+        supjrUpdateQuoteFilterCounts();
+        supjrRenderList();
+        supjrRenderDetail();
+      });
+    });
+
+    document.getElementById('supjrChatCloseBtn').addEventListener('click', supjrCloseChat);
+    document.getElementById('supjrChatOverlay').addEventListener('click', supjrCloseChat);
+    document.getElementById('supjrChatPriceUpdateBtn').addEventListener('click', function () {
+      var job = SUPJR_JOBS.find(function (j) { return j.id === supjrActiveChatJobId; });
+      if (!job) return;
+      supjrCloseChat();
+      if (job.type === 'setprice') supjrOpenCounterModal(job);
+      else { supjrQuoteFromChat = true; supjrOpenQuoteModal(job); }
+    });
+    function supjrSendChatMsg() {
+      var input = document.getElementById('supjrChatInput');
+      var text = input.value.trim();
+      if (!text) return;
+      var job = SUPJR_JOBS.find(function (j) { return j.id === supjrActiveChatJobId; });
+      if (job) { job.chatMessages = job.chatMessages || []; job.chatMessages.push({ kind: 'out', text: text }); }
+      var msgWrap = document.getElementById('supjrChatMessages');
+      msgWrap.insertAdjacentHTML('beforeend', supjrChatOutMsgHtml(text));
+      input.value = '';
+      msgWrap.scrollTop = msgWrap.scrollHeight;
+    }
+    document.getElementById('supjrChatSendBtn').addEventListener('click', supjrSendChatMsg);
+    document.getElementById('supjrChatInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); supjrSendChatMsg(); } });
+    document.getElementById('supjrSuccessToastClose').addEventListener('click', function () {
+      document.getElementById('supjrSuccessToast').classList.remove('show');
+      clearTimeout(supjrSuccessToastTimer);
+    });
+
+    document.getElementById('supjrPbkCloseBtn').addEventListener('click', supjrClosePriceBreakdown);
+    document.getElementById('supjrPbkOverlay').addEventListener('click', function (e) { if (e.target === this) supjrClosePriceBreakdown(); });
+
+    document.getElementById('supjrCounterCloseBtn').addEventListener('click', supjrCloseCounterModal);
+    document.getElementById('supjrCounterCancelBtn').addEventListener('click', supjrCloseCounterModal);
+    document.getElementById('supjrCounterOverlay').addEventListener('click', function (e) { if (e.target === this) supjrCloseCounterModal(); });
+    document.getElementById('supjrCounterSendBtn').addEventListener('click', function () {
+      var price = parseFloat(document.getElementById('supjrCounterPriceInput').value);
+      if (!price) { document.getElementById('supjrCounterPriceInput').focus(); return; }
+      var job = SUPJR_JOBS.find(function (j) { return j.id === supjrActiveCounterJobId; });
+      supjrCloseCounterModal();
+      if (job) {
+        job.chatMessages = job.chatMessages || [{ kind: 'system', text: 'Conversation started for ' + job.title + '.' }];
+        job.chatMessages.push({ kind: 'out', text: 'Updated price: ' + supjrFmtWhole(price) });
+        supjrOpenChat(job);
+      }
+      supjrShowSuccessToast('Quote submitted \u00b7 ' + supjrFmtWhole(price), 'pill');
+    });
+
+    document.getElementById('supjrQuoteCloseBtn').addEventListener('click', supjrCloseQuoteModal);
+    document.getElementById('supjrQuoteCancelBtn').addEventListener('click', supjrCloseQuoteModal);
+    document.getElementById('supjrQuoteOverlay').addEventListener('click', function (e) { if (e.target === this) supjrCloseQuoteModal(); });
+    document.getElementById('supjrQuoteCalloutInput').addEventListener('input', supjrRecalcQuoteSummary);
+    document.getElementById('supjrQuoteEmergencyInput').addEventListener('input', supjrRecalcQuoteSummary);
+    document.getElementById('supjrAddLineBtn').addEventListener('click', function () {
+      supjrQuoteItems.push({ id: 'qi' + (++supjrQuoteItemSeq), name: '', amount: '' });
+      supjrRenderItemisedRows();
+      supjrRecalcQuoteSummary();
+    });
+    document.getElementById('supjrUpfrontModeCurrency').addEventListener('click', function () {
+      supjrUpfrontMode = '\u00a3';
+      this.classList.add('active');
+      document.getElementById('supjrUpfrontModePercent').classList.remove('active');
+      document.getElementById('supjrUpfrontPrefix').textContent = '\u00a3';
+    });
+    document.getElementById('supjrUpfrontModePercent').addEventListener('click', function () {
+      supjrUpfrontMode = '%';
+      this.classList.add('active');
+      document.getElementById('supjrUpfrontModeCurrency').classList.remove('active');
+      document.getElementById('supjrUpfrontPrefix').textContent = '%';
+    });
+    document.getElementById('supjrQuoteNotes').addEventListener('input', function () {
+      document.getElementById('supjrQuoteNotesCount').textContent = this.value.length;
+    });
+    document.getElementById('supjrQuoteSendBtn').addEventListener('click', function () {
+      var job = SUPJR_JOBS.find(function (j) { return j.id === supjrActiveQuoteJobId; });
+      var total = supjrRecalcQuoteSummary();
+      if (job) { job.quoteStatus = 'submitted'; job.submittedQuoteTotal = total; }
+      supjrCloseQuoteModal();
+      if (job && supjrQuoteFromChat) {
+        job.chatMessages = job.chatMessages || [{ kind: 'system', text: 'Conversation started for ' + job.title + '.' }];
+        job.chatMessages.push({ kind: 'out', text: 'Updated price: ' + supjrFmtWhole(total) });
+        supjrOpenChat(job);
+      }
+      supjrShowSuccessToast('Quote submitted \u00b7 ' + supjrFmtWhole(total), 'pill');
+      if (supjrCurrentTab === 'quote') supjrUpdateQuoteFilterCounts();
+      supjrRenderList();
+      supjrRenderDetail();
+    });
+  }
 
   /* ---- Supplier Profile Settings ---- */
   function switchSupSettingsTab(key) {
@@ -15762,7 +16749,10 @@
     showToast('You\u2019ve already submitted your onboarding details \u2014 verification is in progress.');
   });
   document.getElementById('supNotifCard').addEventListener('click', function () {
-    showToast('Job Requests isn\u2019t wired up in this prototype yet.');
+    document.querySelectorAll('#supplierDashboard .dash-nav-item').forEach(function (i) { i.classList.remove('active'); });
+    document.querySelector('#supplierDashboard .dash-nav-item[data-nav="job-requests"]').classList.add('active');
+    showSupplierView('job-requests');
+    initSupjrOnce();
   });
 
   /* =========================================================
