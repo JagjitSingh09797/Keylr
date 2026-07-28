@@ -1199,10 +1199,9 @@
   .ob-section-subtext { font-size: 11.5px; color: var(--text-body-muted); margin-bottom: 14px; }
   .ob-section-heading {
     font-size: 12.5px; font-weight: 700; color: var(--text-heading);
-    margin: 6px 0 12px; padding-top: 16px; border-top: 1px solid var(--border-subtle);
+    margin: 16px 0;
     letter-spacing: 0.02em;
   }
-  .ob-section-heading:first-child { border-top: none; padding-top: 0; }
 
   .ob-field { margin-bottom: 16px; }
   .ob-field label {
@@ -1279,6 +1278,8 @@
     transition: transform 220ms cubic-bezier(0.34,1.56,0.64,1), opacity 180ms ease-out;
   }
   .choice-tile.selected .tile-check { transform: scale(1); opacity: 1; }
+  #vatRegTiles .choice-tile.selected { background: #f0fdf4; border-color: #1a7a3e; }
+  #vatRegTiles .choice-tile.selected .tile-title { color: #145c2e; }
 
   /* Simple 2-option tile row (single location vs branch) */
   .tile-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
@@ -2783,34 +2784,24 @@
   .supsa-map-head { display: flex; align-items: center; justify-content: space-between; margin-top: 28px; margin-bottom: 10px; }
   .supsa-map-headline { display: flex; align-items: center; gap: 7px; font-size: 14.5px; font-weight: 700; color: var(--text-heading); }
   .supsa-map-headline span.sub { font-weight: 400; color: var(--text-body-muted); }
-  .supsa-map-wrap { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--border-subtle); background: #cfd9c8; height: 460px; }
-  .supsa-map-svg { width: 100%; height: 100%; display: block; cursor: grab; transition: transform 220ms ease-out; }
-  .supsa-map-terrain-blob { opacity: 0.65; }
-  .supsa-map-road { fill: none; stroke: #fff; stroke-width: 6; stroke-linecap: round; opacity: 0.9; }
-  .supsa-map-road-line { fill: none; stroke: #e2a4b8; stroke-width: 2.4; stroke-linecap: round; }
-  .supsa-map-road-line.motorway { stroke: #6f9fd8; stroke-width: 3; }
-  .supsa-map-road-label { font-size: 10px; font-weight: 700; fill: #8a4a63; font-family: inherit; }
-  .supsa-map-road-label.motorway { fill: #2a5a9a; }
-  .supsa-map-town-label { font-size: 12.5px; font-weight: 700; fill: #3a4658; font-family: inherit; paint-order: stroke; stroke: rgba(249,250,251,0.85); stroke-width: 4px; stroke-linejoin: round; pointer-events: none; }
-  .supsa-map-avail-dot { fill: #fff; stroke: #94a3b8; stroke-width: 1.3; opacity: 0.9; }
-  .supsa-map-district { fill: rgba(255,255,255,0.05); stroke: #5a7a90; stroke-width: 1; cursor: pointer; transition: fill 120ms ease-out, stroke 120ms ease-out; }
-  .supsa-map-district:hover { fill: rgba(40,72,144,0.16); }
-  .supsa-map-district.selected { fill: rgba(40,72,144,0.13); stroke: #28488f; stroke-width: 1.6; }
-  .supsa-map-dot { fill: #fff; stroke: #94a3b8; stroke-width: 1.5; cursor: pointer; }
-  .supsa-map-dot.selected { fill: var(--navy-900); stroke: #fff; }
-  .supsa-map-zoom { position: absolute; top: 14px; left: 14px; display: flex; flex-direction: column; background: #fff; border-radius: 10px; box-shadow: 0 4px 14px rgba(16,24,40,0.16); overflow: hidden; }
+  .supsa-map-wrap { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--border-subtle); background: #eef1f4; height: 460px; }
+  .supsa-map-wrap .leaflet-container { font-family: inherit; }
+  .supsa-map-loading { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 8px; color: #94a3b8; font-size: 13px; font-weight: 600; background: #eef1f4; z-index: 2; }
+  .supsa-map-loading svg { animation: supsaMapSpin 0.9s linear infinite; }
+  @keyframes supsaMapSpin { to { transform: rotate(360deg); } }
+  .supsa-leaflet-tooltip { background: #fff !important; border: none !important; border-radius: 9px !important; box-shadow: 0 10px 26px rgba(16,24,40,0.2) !important; padding: 6px 11px !important; font-family: inherit !important; }
+  .supsa-leaflet-tooltip .code { font-weight: 800; font-size: 12.5px; color: var(--text-heading); }
+  .supsa-leaflet-tooltip .town { font-size: 11px; color: var(--text-body-muted); margin-top: 1px; }
+  .supsa-leaflet-tooltip::before { display: none !important; }
+  .supsa-map-zoom { position: absolute; top: 14px; left: 14px; display: flex; flex-direction: column; background: #fff; border-radius: 10px; box-shadow: 0 4px 14px rgba(16,24,40,0.16); overflow: hidden; z-index: 3; }
   .supsa-map-zoom button { width: 34px; height: 34px; border: none; background: #fff; font-size: 18px; font-weight: 700; color: var(--text-heading); cursor: pointer; font-family: inherit; line-height: 1; }
   .supsa-map-zoom button:first-child { border-bottom: 1px solid var(--border-subtle); }
   .supsa-map-zoom button:hover { background: var(--surface-soft); }
-  .supsa-map-legend { position: absolute; top: 14px; right: 14px; display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,0.92); padding: 7px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; color: var(--text-body-muted); box-shadow: 0 4px 14px rgba(16,24,40,0.1); }
+  .supsa-map-legend { position: absolute; top: 14px; right: 14px; display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,0.92); padding: 7px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; color: var(--text-body-muted); box-shadow: 0 4px 14px rgba(16,24,40,0.1); z-index: 3; }
   .supsa-map-legend .item { display: flex; align-items: center; gap: 5px; }
   .supsa-map-legend .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
   .supsa-map-legend .dot.selected { background: var(--navy-900); }
   .supsa-map-legend .dot.available { background: #fff; border: 1.5px solid #94a3b8; }
-  .supsa-map-tooltip { position: absolute; background: #fff; border-radius: 10px; padding: 9px 14px; box-shadow: 0 10px 30px rgba(16,24,40,0.22); pointer-events: none; opacity: 0; transition: opacity 100ms ease-out; z-index: 5; transform: translate(-50%, -110%); white-space: nowrap; }
-  .supsa-map-tooltip.show { opacity: 1; }
-  .supsa-map-tooltip .code { font-weight: 800; font-size: 13.5px; color: var(--text-heading); }
-  .supsa-map-tooltip .town { font-size: 11.5px; color: var(--text-body-muted); margin-top: 1px; }
 
   .supsa-postcode-section { margin-top: 28px; }
   .supsa-postcode-input-row { display: flex; gap: 10px; margin-top: 14px; }
@@ -8148,10 +8139,6 @@
 
         <div class="dash-nav-group">
           <div class="dash-nav-group-label">Finance</div>
-          <div class="dash-nav-item" data-nav="payment-setup">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
-            <span class="nav-label">Payment Setup</span>
-          </div>
           <div class="dash-nav-item" data-nav="payouts">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 10-3.5 6.6"/><path d="M20 8v4h-4"/></svg>
             <span class="nav-label">Payouts</span>
@@ -8550,12 +8537,12 @@
                 </div>
               </div>
               <div class="supsa-map-wrap">
-                <svg class="supsa-map-svg" id="supsaMapSvg" viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg"></svg>
+                <div id="supsaMapCanvas" style="width:100%;height:100%;"></div>
+                <div class="supsa-map-loading" id="supsaMapLoading"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9" stroke-dasharray="34 20"/></svg>Loading map…</div>
                 <div class="supsa-map-zoom">
                   <button type="button" id="supsaZoomInBtn" aria-label="Zoom in">+</button>
                   <button type="button" id="supsaZoomOutBtn" aria-label="Zoom out">−</button>
                 </div>
-                <div class="supsa-map-tooltip" id="supsaMapTooltip"><div class="code" id="supsaTooltipCode">—</div><div class="town" id="supsaTooltipTown">—</div></div>
               </div>
 
               <div class="supsa-postcode-section">
@@ -8610,6 +8597,7 @@
                 <div class="pm-settings-tab-item" data-supsettingstab="insurance">Insurance</div>
                 <div class="pm-settings-tab-item" data-supsettingstab="background">Background</div>
                 <div class="pm-settings-tab-item" data-supsettingstab="questionnaire">Questionnaire</div>
+                <div class="pm-settings-tab-item" data-supsettingstab="payment">Payment Setup</div>
               </div>
 
               <!-- Profile tab -->
@@ -8793,7 +8781,7 @@
               <div id="supSettingsPanelInsurance" style="display:none;">
                 <div style="margin-top:20px;">
                   <div class="ob-section-heading" style="margin-top:0;">Public Liability Insurance</div>
-                  <div class="ob-toggle-card">
+                  <div class="ob-toggle-card" style="margin-bottom:0;">
                     <div class="otc-top">
                       <div><div class="otc-title">Do you have Public Liability Insurance?</div><div class="otc-desc">Minimum £1,000,000 cover (£2,000,000 for companies).</div></div>
                       <button type="button" class="toggle-switch on" id="supPliToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
@@ -8804,7 +8792,7 @@
                           <div class="ob-field"><label>Insurance provider</label><input class="field-input" type="text" value="Markel"></div>
                           <div class="ob-field"><label>Policy number</label><input class="field-input" type="text" value="PL-722800"></div>
                         </div>
-                        <div class="ob-row-2" style="margin-bottom:0;">
+                        <div class="ob-row-2">
                           <div class="ob-field" style="margin-bottom:0;"><label>Coverage amount (£)</label><input class="field-input" type="text" value="£2,000,000"></div>
                           <div class="ob-field" style="margin-bottom:0;">
                             <label>Policy expiry date</label>
@@ -8833,19 +8821,17 @@
                             <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#1a7a3e;background:#eafaf0;padding:3px 10px;border-radius:999px;margin-top:8px;"><span style="width:5px;height:5px;border-radius:50%;background:#1a7a3e;"></span>Valid</span>
                           </div>
                         </div>
+                        <div class="scf-label" style="font-size:12.5px;font-weight:600;color:var(--text-body-muted);margin-bottom:8px;">Public liability certificate</div>
+                        <div class="sup-comp-doc-row" style="margin-bottom:0;">
+                          <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                          <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:700;color:var(--text-heading);" id="supPliDocName">Uploaded certificate</div><span class="sup-view-all-link" style="font-size:12px;" data-doc-view="Public Liability Certificate">View File</span></div>
+                          <span class="scdr-badge">Uploaded</span>
+                          <span style="font-size:12.5px;font-weight:600;color:var(--accent-blue);cursor:pointer;" data-doc-replace="pli">Replace</span>
+                          <input type="file" data-doc-input="pli" style="display:none;">
+                          <span style="cursor:pointer;color:var(--text-body-muted);">&times;</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-
-                  <div class="ob-section-heading">Insurance Certificate</div>
-                  <div class="scf-label" style="font-size:12.5px;font-weight:600;color:var(--text-body-muted);margin-bottom:8px;">Public liability certificate</div>
-                  <div class="sup-comp-doc-row" style="margin-bottom:20px;">
-                    <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
-                    <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:700;color:var(--text-heading);" id="supPliDocName">Uploaded certificate</div><span class="sup-view-all-link" style="font-size:12px;" data-doc-view="Public Liability Certificate">View File</span></div>
-                    <span class="scdr-badge">Uploaded</span>
-                    <span style="font-size:12.5px;font-weight:600;color:var(--accent-blue);cursor:pointer;" data-doc-replace="pli">Replace</span>
-                    <input type="file" data-doc-input="pli" style="display:none;">
-                    <span style="cursor:pointer;color:var(--text-body-muted);">&times;</span>
                   </div>
 
                   <div class="ob-section-heading">Professional Indemnity Insurance</div>
@@ -8860,7 +8846,7 @@
                           <div class="ob-field"><label>Indemnity provider</label><input class="field-input" type="text" value="Direct Line for Business"></div>
                           <div class="ob-field"><label>Policy number</label><input class="field-input" type="text" value="PI-124012"></div>
                         </div>
-                        <div class="ob-row-2" style="margin-bottom:14px;">
+                        <div class="ob-row-2">
                           <div class="ob-field" style="margin-bottom:0;"><label>Coverage amount (£)</label><input class="field-input" type="text" value="£1,000,000"></div>
                           <div class="ob-field" style="margin-bottom:0;">
                             <label>Expiry date</label>
@@ -9088,6 +9074,77 @@
                           <li>Highlight what makes you different (response time, speciality, reliability)</li>
                           <li>Keep it professional but personable — 2-4 sentences is ideal</li>
                         </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Payment Setup tab -->
+              <div id="supSettingsPanelPayment" style="display:none;">
+                <div style="margin-top:20px;">
+                  <div class="callout callout-success">
+                    <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                    <div class="callout-body" style="font-weight:700;">Payment setup complete — VAT, payouts, and your self-billing agreement are all in.</div>
+                  </div>
+
+                  <div class="ob-card-section">
+                    <div class="ocs-head">
+                      <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg></div>
+                      <div class="ocs-title">Are you VAT registered?</div>
+                    </div>
+                    <div class="ocs-desc">If yes, VAT will be added to your invoices and we'll verify your number with HMRC.</div>
+                    <div class="tile-row-2" id="vatRegTiles">
+                      <div class="choice-tile selected" data-value="yes">
+                        <div class="tile-body">
+                          <div class="tile-title">Yes, VAT registered</div>
+                          <div class="tile-desc">I charge VAT on my invoices</div>
+                        </div>
+                      </div>
+                      <div class="choice-tile" data-value="no">
+                        <div class="tile-body">
+                          <div class="tile-title">No, not registered</div>
+                          <div class="tile-desc">Below the VAT threshold or exempt</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="field-collapsible open" id="vatNumberFields" style="max-height:400px;opacity:1;margin-top:16px;">
+                      <input class="field-input" type="text" id="supPaymentVatNumberInput" value="GB553557881" style="margin-bottom:12px;">
+                      <div class="callout callout-success" style="margin-bottom:0;">
+                        <div style="display:flex;align-items:center;justify-content:space-between;width:100%;flex-wrap:wrap;gap:8px;">
+                          <span style="display:flex;align-items:center;gap:8px;color:#145c2e;font-weight:700;font-size:13px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Verified with HMRC</span>
+                          <span style="font-size:12.5px;color:var(--text-body-muted);">Need to change? <a href="#" style="color:var(--accent-blue);text-decoration:underline;font-weight:600;">Contact support</a></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="ob-card-section" style="margin-bottom:0;">
+                    <div class="ocs-head">
+                      <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+                      <div class="ocs-title">Your Payout Account</div>
+                    </div>
+                    <div class="ocs-desc">Update your bank details, tax forms, and account info. Your payout balance and history live on the Payouts tab.</div>
+                    <div class="callout callout-info" style="margin-bottom:12px;">
+                      <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M12 11v5"/></svg></div>
+                      <div class="callout-body">
+                        <div style="font-weight:700;color:var(--text-heading);">£2.50/month active-account fee</div>
+                        <div style="margin-top:2px;">Keylr automatically deducts this from your payouts each month to keep your account active.</div>
+                      </div>
+                    </div>
+                    <div class="callout callout-success" style="margin-bottom:16px;">
+                      <div style="display:flex;align-items:center;gap:8px;color:#145c2e;font-weight:700;font-size:13px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Connected — payouts enabled</div>
+                    </div>
+                    <button type="button" class="btn" id="paymentAccountDetailsToggle" style="border:1px solid var(--border-subtle);background:#fff;color:var(--accent-blue);font-weight:700;">Show account details</button>
+
+                    <div id="paymentAccountDetailsPanel" style="display:none;margin-top:16px;">
+                      <div class="ob-card-section" style="border:1px solid var(--border-subtle);margin-bottom:0;">
+                        <div class="ocs-title" style="margin-bottom:20px;">Bank &amp; account details</div>
+                        <div style="text-align:center;padding:60px 20px;">
+                          <div style="font-weight:800;font-size:16px;color:var(--text-heading);margin-bottom:8px;">Sign in to see your account details.</div>
+                          <div style="font-size:13px;color:var(--text-body-muted);margin-bottom:20px;max-width:440px;margin-left:auto;margin-right:auto;">Keylr sandbox partners with Stripe to help you receive payments and keep your personal bank and details secure.</div>
+                          <button type="button" class="btn btn-primary" id="paymentStripeSignInBtn">Sign in</button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -15815,6 +15872,7 @@
       } else if (nav === 'service-area') {
         showSupplierView('service-area');
         initSupsaOnce();
+        setTimeout(function () { if (supsaMap) supsaMap.invalidateSize(); }, 160);
       } else if (nav === 'sup-profile') {
         showSupplierView('profile-settings');
       } else {
@@ -16508,11 +16566,6 @@
   var supsaCoverage = {};
   var supsaFocusedRegionKey = 'southeast';
   var supsaMapCells = [];
-  var supsaMapTerrain = [];
-  var supsaMapRoads = [];
-  var supsaMapTownLabels = [];
-  var supsaMapAvailDots = [];
-  var supsaZoomLevel = 1;
   var supsaInitialized = false;
 
   function supsaKeyFor(prefix, code) { return prefix + code; }
@@ -16566,95 +16619,20 @@
     });
   }
 
-  function supsaGenerateGrid(cols, rows, w, h, jitter) {
-    var vx = [], vy = [];
-    for (var r = 0; r <= rows; r++) {
-      vx.push([]); vy.push([]);
-      for (var c = 0; c <= cols; c++) {
-        var baseX = (c / cols) * w;
-        var baseY = (r / rows) * h;
-        var jx = (c === 0 || c === cols) ? 0 : (Math.random() - 0.5) * jitter;
-        var jy = (r === 0 || r === rows) ? 0 : (Math.random() - 0.5) * jitter;
-        vx[r].push(baseX + jx);
-        vy[r].push(baseY + jy);
-      }
-    }
-    var cells = [];
-    for (var r2 = 0; r2 < rows; r2++) {
-      for (var c2 = 0; c2 < cols; c2++) {
-        var pts = [
-          [vx[r2][c2], vy[r2][c2]],
-          [vx[r2][c2 + 1], vy[r2][c2 + 1]],
-          [vx[r2 + 1][c2 + 1], vy[r2 + 1][c2 + 1]],
-          [vx[r2 + 1][c2], vy[r2 + 1][c2]]
-        ];
-        var cx = (pts[0][0] + pts[1][0] + pts[2][0] + pts[3][0]) / 4;
-        var cy = (pts[0][1] + pts[1][1] + pts[2][1] + pts[3][1]) / 4;
-        cells.push({ points: pts, cx: cx, cy: cy });
-      }
-    }
-    return cells;
-  }
-
-  function supsaGenerateTerrain() {
-    var palette = ['#c3d9b3', '#d3e0bd', '#e2dcae', '#b9d2c2', '#cdd9b8', '#dcd6a8', '#c7d6cb'];
-    var blobs = [];
-    for (var i = 0; i < 11; i++) {
-      blobs.push({
-        cx: Math.random() * 1000,
-        cy: Math.random() * 600,
-        rx: 90 + Math.random() * 170,
-        ry: 60 + Math.random() * 130,
-        rot: Math.random() * 360,
-        color: palette[i % palette.length]
-      });
-    }
-    return blobs;
-  }
-
-  function supsaGenerateRoads() {
-    var roads = [];
-    var count = 5 + Math.floor(Math.random() * 3);
-    for (var i = 0; i < count; i++) {
-      var y1 = Math.random() * 600;
-      var y2 = Math.random() * 600;
-      var midX = 250 + Math.random() * 500;
-      var midY = (y1 + y2) / 2 + (Math.random() - 0.5) * 220;
-      var isMotorway = Math.random() < 0.3;
-      var label = isMotorway ? ('M' + (1 + Math.floor(Math.random() * 50))) : ('A' + (1 + Math.floor(Math.random() * 400)));
-      roads.push({
-        path: 'M -20,' + y1.toFixed(0) + ' Q ' + midX.toFixed(0) + ',' + midY.toFixed(0) + ' 1020,' + y2.toFixed(0),
-        label: label, labelX: midX, labelY: midY, motorway: isMotorway
-      });
-    }
-    return roads;
-  }
-
-  function supsaBuildTownLabels(cells) {
-    var byPrefix = {};
-    cells.forEach(function (c) {
-      byPrefix[c.prefix] = byPrefix[c.prefix] || [];
-      byPrefix[c.prefix].push(c);
-    });
-    return Object.keys(byPrefix).map(function (prefix) {
-      var arr = byPrefix[prefix];
-      var avgX = arr.reduce(function (s, c) { return s + c.cx; }, 0) / arr.length;
-      var avgY = arr.reduce(function (s, c) { return s + c.cy; }, 0) / arr.length;
-      return { x: avgX, y: Math.max(16, avgY - 16), text: SUPSA_TOWN_NAMES[prefix] || prefix };
-    });
-  }
-
-  function supsaGenerateAvailDots() {
-    var dots = [];
-    for (var i = 0; i < 13; i++) {
-      var edge = Math.floor(Math.random() * 4);
-      var x, y;
-      if (edge === 0 || edge === 2) { x = 15 + Math.random() * 970; y = edge === 0 ? (5 + Math.random() * 40) : (555 + Math.random() * 40); }
-      else { x = edge === 1 ? (960 + Math.random() * 35) : (5 + Math.random() * 35); y = 15 + Math.random() * 570; }
-      dots.push({ x: Math.max(6, Math.min(994, x)), y: Math.max(6, Math.min(594, y)) });
-    }
-    return dots;
-  }
+  var SUPSA_PREFIX_COORDS = {
+    BN: [50.822, -0.137], CT: [51.279, 1.078], GU: [51.236, -0.579], KT: [51.409, -0.306], RH: [51.241, -0.176], TN: [51.196, 0.263],
+    E: [51.527, -0.041], EC: [51.517, -0.093], N: [51.568, -0.109], NW: [51.548, -0.201], SE: [51.472, -0.070], SW: [51.462, -0.170], W: [51.512, -0.198], WC: [51.517, -0.122],
+    BA: [51.381, -2.360], BS: [51.454, -2.588], EX: [50.722, -3.527], PL: [50.371, -4.143], TA: [51.018, -3.104], TR: [50.263, -5.051],
+    CB: [52.205, 0.119], CM: [51.736, 0.469], CO: [51.890, 0.900], IP: [52.059, 1.156], NR: [52.630, 1.298], SG: [51.902, -0.203],
+    DE: [52.922, -1.478], LE: [52.636, -1.132], LN: [53.234, -0.538], NG: [52.954, -1.150], NN: [52.240, -0.902],
+    B: [52.486, -1.890], CV: [52.408, -1.510], DY: [52.508, -2.075], WS: [52.586, -1.983], WV: [52.586, -2.128],
+    L: [53.408, -2.992], M: [53.483, -2.244], PR: [53.759, -2.700], WA: [53.393, -2.597], CH: [53.190, -2.892],
+    DH: [54.777, -1.576], NE: [54.978, -1.618], SR: [54.906, -1.383], TS: [54.576, -1.235],
+    LS: [53.801, -1.549], S: [53.381, -1.470], YO: [53.958, -1.081], HU: [53.745, -0.335], BD: [53.796, -1.759],
+    EH: [55.953, -3.189], G: [55.861, -4.251], AB: [57.149, -2.099], DD: [56.460, -2.971], IV: [57.478, -4.225], KY: [56.113, -3.163], PA: [55.847, -4.424], FK: [56.001, -3.784],
+    CF: [51.481, -3.180], SA: [51.622, -3.943], LL: [53.325, -3.829], NP: [51.586, -2.995],
+    BT: [54.596, -5.930]
+  };
 
   function supsaInterleaveGroups(groups) {
     var iters = groups.map(function (g) { return { prefix: g.prefix, codes: g.codes, i: 0 }; });
@@ -16674,127 +16652,105 @@
     return out;
   }
 
-  function supsaGenerateSeeds(n, w, h) {
-    var pts = [];
-    var minDist = Math.sqrt((w * h) / n) * 0.55;
-    var attempts = 0;
-    while (pts.length < n && attempts < n * 40) {
-      attempts++;
-      var x = 25 + Math.random() * (w - 50);
-      var y = 25 + Math.random() * (h - 50);
-      var ok = true;
-      for (var i = 0; i < pts.length; i++) {
-        var dx = pts[i][0] - x, dy = pts[i][1] - y;
-        if (dx * dx + dy * dy < minDist * minDist) { ok = false; break; }
-      }
-      if (ok) pts.push([x, y]);
-    }
-    while (pts.length < n) pts.push([25 + Math.random() * (w - 50), 25 + Math.random() * (h - 50)]);
-    return pts;
-  }
-
-  function supsaClipPolygon(poly, a, b, c) {
-    var result = [];
-    var n = poly.length;
-    for (var i = 0; i < n; i++) {
-      var curr = poly[i];
-      var next = poly[(i + 1) % n];
-      var currIn = (a * curr[0] + b * curr[1]) <= c;
-      var nextIn = (a * next[0] + b * next[1]) <= c;
-      if (currIn) result.push(curr);
-      if (currIn !== nextIn) {
-        var denom = a * (next[0] - curr[0]) + b * (next[1] - curr[1]);
-        var t = denom !== 0 ? (c - (a * curr[0] + b * curr[1])) / denom : 0;
-        result.push([curr[0] + t * (next[0] - curr[0]), curr[1] + t * (next[1] - curr[1])]);
-      }
-    }
-    return result;
-  }
-
-  function supsaVoronoi(points, w, h) {
-    return points.map(function (p, i) {
-      var poly = [[0, 0], [w, 0], [w, h], [0, h]];
-      points.forEach(function (q, j) {
-        if (i === j || !poly.length) return;
-        var a = 2 * (q[0] - p[0]);
-        var b = 2 * (q[1] - p[1]);
-        var c = (q[0] * q[0] + q[1] * q[1]) - (p[0] * p[0] + p[1] * p[1]);
-        poly = supsaClipPolygon(poly, a, b, c);
-      });
-      return { points: poly, cx: p[0], cy: p[1] };
-    });
+  function supsaCodeLatLng(prefix, index, total) {
+    var center = SUPSA_PREFIX_COORDS[prefix] || [54.5, -3.0];
+    var cols = Math.max(1, Math.ceil(Math.sqrt(total)));
+    var rows = Math.max(1, Math.ceil(total / cols));
+    var row = Math.floor(index / cols), col = index % cols;
+    var latSpan = 0.09, lngSpan = 0.16;
+    var lat = center[0] + (rows > 1 ? (row / (rows - 1) - 0.5) : 0) * latSpan;
+    var lng = center[1] + (cols > 1 ? (col / (cols - 1) - 0.5) : 0) * lngSpan;
+    return [lat, lng];
   }
 
   function supsaBuildMapForRegion(region) {
     var flat = supsaInterleaveGroups(region.groups);
-    if (!flat.length) { supsaMapCells = []; supsaMapTerrain = []; supsaMapRoads = []; supsaMapTownLabels = []; supsaMapAvailDots = []; return; }
-    var cellCount = Math.min(flat.length, 56);
-    var seeds = supsaGenerateSeeds(cellCount, 1000, 600);
-    var geo = supsaVoronoi(seeds, 1000, 600);
-    supsaMapCells = geo.map(function (cell, i) {
-      var d = flat[i % flat.length];
-      return { points: cell.points, cx: cell.cx, cy: cell.cy, prefix: d.prefix, code: d.code };
+    var byPrefixCount = {};
+    flat.forEach(function (d) { byPrefixCount[d.prefix] = (byPrefixCount[d.prefix] || 0) + 1; });
+    var seenCount = {};
+    supsaMapCells = flat.map(function (d) {
+      var idx = seenCount[d.prefix] || 0;
+      var ll = supsaCodeLatLng(d.prefix, idx, byPrefixCount[d.prefix]);
+      seenCount[d.prefix] = idx + 1;
+      return { prefix: d.prefix, code: d.code, lat: ll[0], lng: ll[1] };
     });
-    supsaMapTerrain = supsaGenerateTerrain();
-    supsaMapRoads = supsaGenerateRoads();
-    supsaMapTownLabels = supsaBuildTownLabels(supsaMapCells);
-    supsaMapAvailDots = supsaGenerateAvailDots();
   }
 
-  function supsaTerrainHtml() {
-    return supsaMapTerrain.map(function (b) {
-      return '<ellipse class="supsa-map-terrain-blob" cx="' + b.cx.toFixed(0) + '" cy="' + b.cy.toFixed(0) + '" rx="' + b.rx.toFixed(0) + '" ry="' + b.ry.toFixed(0) + '" fill="' + b.color + '" transform="rotate(' + b.rot.toFixed(0) + ' ' + b.cx.toFixed(0) + ' ' + b.cy.toFixed(0) + ')"></ellipse>';
-    }).join('');
-  }
-  function supsaRoadsHtml() {
-    return supsaMapRoads.map(function (r) {
-      var lineClass = r.motorway ? ' motorway' : '';
-      var labelClass = r.motorway ? ' motorway' : '';
-      return '<path class="supsa-map-road" d="' + r.path + '"></path>' +
-        '<path class="supsa-map-road-line' + lineClass + '" d="' + r.path + '"></path>' +
-        '<rect x="' + (r.labelX - 15).toFixed(0) + '" y="' + (r.labelY - 9).toFixed(0) + '" width="30" height="14" rx="3" fill="#fff" opacity="0.88"></rect>' +
-        '<text class="supsa-map-road-label' + labelClass + '" x="' + r.labelX.toFixed(0) + '" y="' + (r.labelY + 2).toFixed(0) + '" text-anchor="middle">' + r.label + '</text>';
-    }).join('');
-  }
-  function supsaTownLabelsHtml() {
-    return supsaMapTownLabels.map(function (t) {
-      return '<text class="supsa-map-town-label" x="' + t.x.toFixed(0) + '" y="' + t.y.toFixed(0) + '" text-anchor="middle">' + supjrEscapeHtml(t.text) + '</text>';
-    }).join('');
-  }
-  function supsaAvailDotsHtml() {
-    return supsaMapAvailDots.map(function (d) {
-      return '<circle class="supsa-map-avail-dot" cx="' + d.x.toFixed(0) + '" cy="' + d.y.toFixed(0) + '" r="4"></circle>';
-    }).join('');
-  }
-
-  function supsaMapDistrictHtml(cell) {
-    var key = supsaKeyFor(cell.prefix, cell.code);
-    var selected = !!supsaCoverage[key];
-    var ptsStr = cell.points.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' ');
-    return '<polygon class="supsa-map-district' + (selected ? ' selected' : '') + '" points="' + ptsStr + '" data-key="' + key + '"></polygon>' +
-      '<circle class="supsa-map-dot' + (selected ? ' selected' : '') + '" cx="' + cell.cx.toFixed(1) + '" cy="' + cell.cy.toFixed(1) + '" r="5" data-key="' + key + '"></circle>';
+  /* Real Leaflet map (genuine OpenStreetMap tiles) — lazy-loaded from a CDN since this
+     is loaded in the person's own browser, which has normal internet access. */
+  var supsaLeafletLoading = false;
+  function supsaEnsureLeaflet(cb) {
+    if (window.L) { cb(); return; }
+    if (supsaLeafletLoading) {
+      var iv = setInterval(function () { if (window.L) { clearInterval(iv); cb(); } }, 60);
+      return;
+    }
+    supsaLeafletLoading = true;
+    var css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    document.head.appendChild(css);
+    var js = document.createElement('script');
+    js.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    js.onload = function () { supsaLeafletLoading = false; cb(); };
+    js.onerror = function () {
+      supsaLeafletLoading = false;
+      var el = document.getElementById('supsaMapLoading');
+      if (el) el.innerHTML = '<span>Map unavailable \u2014 region &amp; postcode controls still work normally.</span>';
+    };
+    document.head.appendChild(js);
   }
 
+  var supsaMap = null;
+  var supsaMarkers = {};
   function supsaRenderMap() {
-    var svg = document.getElementById('supsaMapSvg');
-    svg.innerHTML = supsaTerrainHtml() + supsaRoadsHtml() + supsaMapCells.map(supsaMapDistrictHtml).join('') + supsaAvailDotsHtml() + supsaTownLabelsHtml();
-    var tooltip = document.getElementById('supsaMapTooltip');
-    svg.querySelectorAll('[data-key]').forEach(function (el) {
-      var key = el.getAttribute('data-key');
-      var cell = supsaMapCells.find(function (c) { return supsaKeyFor(c.prefix, c.code) === key; });
-      if (!cell) return;
-      el.addEventListener('mouseenter', function () {
-        document.getElementById('supsaTooltipCode').textContent = cell.prefix + cell.code;
-        document.getElementById('supsaTooltipTown').textContent = SUPSA_TOWN_NAMES[cell.prefix] || '';
-        tooltip.style.left = (cell.cx / 1000 * 100) + '%';
-        tooltip.style.top = (cell.cy / 600 * 100) + '%';
-        tooltip.classList.add('show');
+    supsaEnsureLeaflet(function () {
+      var canvas = document.getElementById('supsaMapCanvas');
+      if (!canvas) return;
+      var loading = document.getElementById('supsaMapLoading');
+      if (loading) loading.style.display = 'none';
+
+      if (!supsaMap) {
+        supsaMap = L.map(canvas, { attributionControl: false, zoomControl: false, scrollWheelZoom: false });
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 16, minZoom: 4, attribution: '\u00a9 OpenStreetMap'
+        }).addTo(supsaMap);
+        L.control.attribution({ prefix: false, position: 'bottomright' }).addTo(supsaMap);
+      }
+
+      Object.keys(supsaMarkers).forEach(function (key) { supsaMap.removeLayer(supsaMarkers[key]); });
+      supsaMarkers = {};
+
+      var bounds = [];
+      supsaMapCells.forEach(function (cell) {
+        var key = supsaKeyFor(cell.prefix, cell.code);
+        var sel = !!supsaCoverage[key];
+        var marker = L.circleMarker([cell.lat, cell.lng], {
+          radius: sel ? 7 : 4,
+          fillColor: sel ? '#101828' : '#ffffff',
+          color: sel ? '#0b1220' : '#94a3b8',
+          weight: sel ? 1.8 : 1.4,
+          opacity: 1,
+          fillOpacity: sel ? 0.92 : 0.75,
+          bubblingMouseEvents: false
+        });
+        var town = SUPSA_TOWN_NAMES[cell.prefix] || '';
+        marker.bindTooltip('<div class="code">' + cell.prefix + cell.code + '</div><div class="town">' + supjrEscapeHtml(town) + '</div>', { direction: 'top', offset: [0, -6], className: 'supsa-leaflet-tooltip' });
+        marker.on('click', function () {
+          if (supsaCoverage[key]) delete supsaCoverage[key]; else supsaCoverage[key] = true;
+          supsaRenderAll();
+        });
+        marker.addTo(supsaMap);
+        supsaMarkers[key] = marker;
+        bounds.push([cell.lat, cell.lng]);
       });
-      el.addEventListener('mouseleave', function () { tooltip.classList.remove('show'); });
-      el.addEventListener('click', function () {
-        if (supsaCoverage[key]) delete supsaCoverage[key]; else supsaCoverage[key] = true;
-        supsaRenderAll();
-      });
+
+      if (bounds.length) {
+        supsaMap.fitBounds(bounds, { padding: [24, 24], maxZoom: 11, animate: false });
+      } else {
+        supsaMap.setView([54.5, -3.0], 5);
+      }
+      setTimeout(function () { if (supsaMap) supsaMap.invalidateSize(); }, 120);
     });
   }
 
@@ -16887,12 +16843,10 @@
     supsaRenderAll();
 
     document.getElementById('supsaZoomInBtn').addEventListener('click', function () {
-      supsaZoomLevel = Math.min(2.5, supsaZoomLevel + 0.25);
-      document.getElementById('supsaMapSvg').style.transform = 'scale(' + supsaZoomLevel + ')';
+      if (supsaMap) supsaMap.zoomIn();
     });
     document.getElementById('supsaZoomOutBtn').addEventListener('click', function () {
-      supsaZoomLevel = Math.max(0.6, supsaZoomLevel - 0.25);
-      document.getElementById('supsaMapSvg').style.transform = 'scale(' + supsaZoomLevel + ')';
+      if (supsaMap) supsaMap.zoomOut();
     });
 
     function supsaHandleAddPostcode() {
@@ -16919,7 +16873,7 @@
   /* ---- Supplier Profile Settings ---- */
   function switchSupSettingsTab(key) {
     document.querySelectorAll('#supSettingsTabs .pm-settings-tab-item').forEach(function (t) { t.classList.toggle('active', t.getAttribute('data-supsettingstab') === key); });
-    ['profile', 'sectors', 'identity', 'insurance', 'background', 'questionnaire'].forEach(function (k) {
+    ['profile', 'sectors', 'identity', 'insurance', 'background', 'questionnaire', 'payment'].forEach(function (k) {
       var panel = document.getElementById('supSettingsPanel' + k.charAt(0).toUpperCase() + k.slice(1));
       panel.style.display = k === key ? '' : 'none';
       if (k === key) {
@@ -16934,6 +16888,25 @@
   });
   document.querySelectorAll('[data-supsettings-save]').forEach(function (btn) {
     btn.addEventListener('click', function () { showToast(btn.getAttribute('data-supsettings-save') + ' updated.'); });
+  });
+
+  /* ---- Payment Setup tab ---- */
+  document.querySelectorAll('#vatRegTiles .choice-tile').forEach(function (tile) {
+    tile.addEventListener('click', function () {
+      document.querySelectorAll('#vatRegTiles .choice-tile').forEach(function (t) { t.classList.remove('selected'); });
+      tile.classList.add('selected');
+      var isYes = tile.getAttribute('data-value') === 'yes';
+      document.getElementById('vatNumberFields').style.display = isYes ? '' : 'none';
+    });
+  });
+  document.getElementById('paymentAccountDetailsToggle').addEventListener('click', function () {
+    var panel = document.getElementById('paymentAccountDetailsPanel');
+    var isOpen = panel.style.display !== 'none';
+    panel.style.display = isOpen ? 'none' : '';
+    this.textContent = isOpen ? 'Show account details' : 'Hide account details';
+  });
+  document.getElementById('paymentStripeSignInBtn').addEventListener('click', function () {
+    showToast('This would open Stripe\u2019s secure sign-in flow.');
   });
 
   /* ---- Supplier Settings: Questionnaire wizard ---- */
@@ -17372,7 +17345,10 @@
 
   /* Banner / bar actions */
   document.getElementById('completeSetupBtn').addEventListener('click', function () {
-    showToast('This would open the account-level setup checklist (bank account, tax info).');
+    document.querySelectorAll('#supplierDashboard .dash-nav-item').forEach(function (i) { i.classList.remove('active'); });
+    document.querySelector('#supplierDashboard .dash-nav-item[data-nav="sup-profile"]').classList.add('active');
+    showSupplierView('profile-settings');
+    switchSupSettingsTab('payment');
   });
   document.getElementById('supContinueOnboardingBtn').addEventListener('click', function () {
     showToast('You\u2019ve already submitted your onboarding details \u2014 verification is in progress.');
