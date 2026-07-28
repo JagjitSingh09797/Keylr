@@ -1608,7 +1608,7 @@
   .upload-method-overlay, .qr-upload-overlay {
     position: fixed; inset: 0; background: rgba(8,13,22,0.55);
     display: flex; align-items: center; justify-content: center; padding: 24px;
-    z-index: 350; opacity: 0; visibility: hidden;
+    z-index: 420; opacity: 0; visibility: hidden;
     transition: opacity 220ms ease-out, visibility 220ms ease-out;
   }
   .upload-method-overlay.open, .qr-upload-overlay.open { opacity: 1; visibility: visible; }
@@ -1981,7 +1981,9 @@
   .dash-topbar .bell-btn { margin-left: auto; }
   .dash-topbar .admin-header-actions { margin-left: auto; }
 
-  .dash-scroll-area { flex: 1; overflow-y: auto; }
+  .dash-scroll-area { flex: 1; overflow-y: auto; scroll-behavior: smooth; }
+  @keyframes supViewFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .sup-view-animate { animation: supViewFadeIn 320ms cubic-bezier(0.16,1,0.3,1); }
   .dash-content { max-width: 1240px; margin: 0 auto; padding: 24px 32px 60px; background: #F9FAFB; }
   .dash-content.dash-content-full { max-width: none; margin: 0; }
   .dash-content.dash-content-narrow-pad { padding-left: 16px; padding-right: 16px; }
@@ -2757,6 +2759,86 @@
 
   /* Lighter price-summary callout for the Counter drawer (softer than the shared .callout-warning) */
   .supjr-price-callout { background: #fdf8ec; border: 1px solid #f2e3ad; border-radius: 12px; padding: 16px; }
+
+  /* =========================================================
+     SUPPLIER: SERVICE AREA
+  ========================================================== */
+  .supsa-region-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; margin-top: 16px; }
+  .supsa-region-tile { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border: 1.5px solid var(--border-subtle); border-radius: 12px; cursor: pointer; background: #fff; transition: border-color 120ms ease-out, background-color 120ms ease-out; }
+  .supsa-region-tile:hover { border-color: #c7d0dc; }
+  .supsa-region-tile.partial { background: var(--icon-tint-bg); border-color: var(--accent-blue); }
+  .supsa-region-tile.full { background: var(--icon-tint-bg); border-color: var(--accent-blue); border-width: 2px; }
+  .supsa-region-tile.focused { box-shadow: 0 0 0 2px rgba(40,72,144,0.3); }
+  .supsa-region-icon { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border-subtle); flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; }
+  .supsa-region-tile.partial .supsa-region-icon { border-color: var(--accent-blue); position: relative; }
+  .supsa-region-tile.partial .supsa-region-icon::after { content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--accent-blue); }
+  .supsa-region-tile.full .supsa-region-icon { border: none; background: var(--accent-blue); color: #fff; }
+  .supsa-region-body { flex: 1; min-width: 0; }
+  .supsa-region-top-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .supsa-region-name { font-size: 14px; font-weight: 700; color: var(--text-heading); }
+  .supsa-region-count { font-size: 12.5px; font-weight: 700; color: var(--text-body-muted); flex-shrink: 0; white-space: nowrap; }
+  .supsa-region-tile.partial .supsa-region-count, .supsa-region-tile.full .supsa-region-count { color: var(--accent-blue); }
+  .supsa-region-desc { font-size: 12px; color: var(--text-body-muted); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .supsa-map-head { display: flex; align-items: center; justify-content: space-between; margin-top: 28px; margin-bottom: 10px; }
+  .supsa-map-headline { display: flex; align-items: center; gap: 7px; font-size: 14.5px; font-weight: 700; color: var(--text-heading); }
+  .supsa-map-headline span.sub { font-weight: 400; color: var(--text-body-muted); }
+  .supsa-map-wrap { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--border-subtle); background: #cfd9c8; height: 460px; }
+  .supsa-map-svg { width: 100%; height: 100%; display: block; cursor: grab; transition: transform 220ms ease-out; }
+  .supsa-map-terrain-blob { opacity: 0.65; }
+  .supsa-map-road { fill: none; stroke: #fff; stroke-width: 6; stroke-linecap: round; opacity: 0.9; }
+  .supsa-map-road-line { fill: none; stroke: #e2a4b8; stroke-width: 2.4; stroke-linecap: round; }
+  .supsa-map-road-line.motorway { stroke: #6f9fd8; stroke-width: 3; }
+  .supsa-map-road-label { font-size: 10px; font-weight: 700; fill: #8a4a63; font-family: inherit; }
+  .supsa-map-road-label.motorway { fill: #2a5a9a; }
+  .supsa-map-town-label { font-size: 12.5px; font-weight: 700; fill: #3a4658; font-family: inherit; paint-order: stroke; stroke: rgba(249,250,251,0.85); stroke-width: 4px; stroke-linejoin: round; pointer-events: none; }
+  .supsa-map-avail-dot { fill: #fff; stroke: #94a3b8; stroke-width: 1.3; opacity: 0.9; }
+  .supsa-map-district { fill: rgba(255,255,255,0.05); stroke: #5a7a90; stroke-width: 1; cursor: pointer; transition: fill 120ms ease-out, stroke 120ms ease-out; }
+  .supsa-map-district:hover { fill: rgba(40,72,144,0.16); }
+  .supsa-map-district.selected { fill: rgba(40,72,144,0.13); stroke: #28488f; stroke-width: 1.6; }
+  .supsa-map-dot { fill: #fff; stroke: #94a3b8; stroke-width: 1.5; cursor: pointer; }
+  .supsa-map-dot.selected { fill: var(--navy-900); stroke: #fff; }
+  .supsa-map-zoom { position: absolute; top: 14px; left: 14px; display: flex; flex-direction: column; background: #fff; border-radius: 10px; box-shadow: 0 4px 14px rgba(16,24,40,0.16); overflow: hidden; }
+  .supsa-map-zoom button { width: 34px; height: 34px; border: none; background: #fff; font-size: 18px; font-weight: 700; color: var(--text-heading); cursor: pointer; font-family: inherit; line-height: 1; }
+  .supsa-map-zoom button:first-child { border-bottom: 1px solid var(--border-subtle); }
+  .supsa-map-zoom button:hover { background: var(--surface-soft); }
+  .supsa-map-legend { position: absolute; top: 14px; right: 14px; display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,0.92); padding: 7px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; color: var(--text-body-muted); box-shadow: 0 4px 14px rgba(16,24,40,0.1); }
+  .supsa-map-legend .item { display: flex; align-items: center; gap: 5px; }
+  .supsa-map-legend .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .supsa-map-legend .dot.selected { background: var(--navy-900); }
+  .supsa-map-legend .dot.available { background: #fff; border: 1.5px solid #94a3b8; }
+  .supsa-map-tooltip { position: absolute; background: #fff; border-radius: 10px; padding: 9px 14px; box-shadow: 0 10px 30px rgba(16,24,40,0.22); pointer-events: none; opacity: 0; transition: opacity 100ms ease-out; z-index: 5; transform: translate(-50%, -110%); white-space: nowrap; }
+  .supsa-map-tooltip.show { opacity: 1; }
+  .supsa-map-tooltip .code { font-weight: 800; font-size: 13.5px; color: var(--text-heading); }
+  .supsa-map-tooltip .town { font-size: 11.5px; color: var(--text-body-muted); margin-top: 1px; }
+
+  .supsa-postcode-section { margin-top: 28px; }
+  .supsa-postcode-input-row { display: flex; gap: 10px; margin-top: 14px; }
+  .supsa-postcode-input-wrap { flex: 1; position: relative; }
+  .supsa-postcode-input-wrap svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+  .supsa-postcode-input-wrap input { width: 100%; padding: 13px 14px 13px 40px; border-radius: 11px; border: 1px solid var(--border-subtle); font-size: 14px; font-family: inherit; color: var(--text-heading); }
+  .supsa-postcode-input-wrap input:focus { outline: none; border-color: var(--accent-blue); }
+  .supsa-postcode-tip { font-size: 12px; color: var(--text-body-muted); margin-top: 9px; }
+  .supsa-postcode-tip code { background: var(--surface-soft); padding: 1px 6px; border-radius: 5px; font-family: monospace; color: var(--text-heading); }
+
+  .supsa-coverage-card { border: 1px solid var(--border-subtle); border-radius: 16px; padding: 20px; margin-top: 20px; }
+  .supsa-coverage-head { display: flex; align-items: center; justify-content: space-between; }
+  .supsa-coverage-title-row { display: flex; align-items: center; gap: 10px; }
+  .supsa-coverage-title { display: flex; align-items: center; gap: 7px; font-size: 14.5px; font-weight: 700; color: var(--text-heading); }
+  .supsa-coverage-badge { background: var(--icon-tint-bg); color: var(--accent-blue); font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+  .supsa-clear-all-btn { color: #d92d20; font-size: 13px; font-weight: 600; background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 5px; font-family: inherit; }
+  .supsa-clear-all-btn:hover { text-decoration: underline; }
+  .supsa-group { margin-top: 20px; }
+  .supsa-group-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 9px; }
+  .supsa-group-label { font-size: 13px; font-weight: 700; color: var(--text-heading); }
+  .supsa-group-label span { color: var(--text-body-muted); font-weight: 600; }
+  .supsa-group-remove { font-size: 12px; font-weight: 600; color: #d92d20; background: none; border: none; cursor: pointer; font-family: inherit; }
+  .supsa-group-remove:hover { text-decoration: underline; }
+  .supsa-chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .supsa-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--icon-tint-bg); color: var(--accent-blue); font-size: 12.5px; font-weight: 700; padding: 6px 8px 6px 12px; border-radius: 999px; }
+  .supsa-chip button { background: none; border: none; color: var(--accent-blue); opacity: 0.65; cursor: pointer; display: flex; padding: 0; }
+  .supsa-chip button:hover { opacity: 1; }
+  .supsa-empty-coverage { text-align: center; padding: 30px 20px; color: var(--text-body-muted); font-size: 13px; }
 
   /* Success snackbars — Accept Job (solid banner) / Quote submitted (light pill) */
   .supjr-success-toast { position: fixed; bottom: 24px; right: 24px; padding: 14px 18px; border-radius: 12px; display: flex; align-items: center; gap: 10px; font-size: 13.5px; font-weight: 700; box-shadow: 0 12px 28px rgba(0,0,0,0.18); z-index: 400; opacity: 0; transform: translateY(14px); pointer-events: none; transition: opacity 220ms ease-out, transform 220ms ease-out; max-width: 420px; }
@@ -5202,7 +5284,7 @@
           <div class="ob-section" style="margin-top:24px;margin-bottom:0;">
             <div class="ob-field" style="margin-bottom:0;">
               <label>Company logo <span class="meta-badge optional">Optional</span></label>
-              <div class="file-dropzone" id="logoDropzone">
+              <div class="file-dropzone" id="logoDropzone" data-title="Upload Company Logo">
                 <input type="file" id="logoInput" accept="image/png,image/svg+xml" style="display:none;">
                 <div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>
                 <div class="fd-label">Upload PNG or SVG</div>
@@ -5625,7 +5707,7 @@
           <div class="ob-row-2">
             <div class="ob-field">
               <label>Upload Proof of Address <span class="req-text">Required</span></label>
-              <div class="file-dropzone" id="supProofAddress">
+              <div class="file-dropzone" id="supProofAddress" data-title="Upload Proof of Address">
                 <input type="file" style="display:none;">
                 <div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>
                 <div class="fd-label">Click to Upload</div>
@@ -5787,7 +5869,7 @@
           <div class="ob-section-heading">Proof of Company Address</div>
           <div class="ob-field">
             <label>Proof of address &mdash; company <span class="req-text">Required</span> <span class="meta-badge dac7">DAC7</span></label>
-            <div class="file-dropzone" id="supCompanyProofAddress">
+            <div class="file-dropzone" id="supCompanyProofAddress" data-title="Upload Proof of Company Address">
               <input type="file" style="display:none;">
               <div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>
               <div class="fd-label">Click to Upload</div>
@@ -6326,7 +6408,7 @@
               <span class="meta-badge optional">Optional</span>
             </div>
             <div class="ocs-desc">A clear photo of yourself shown on your public profile and job notifications.</div>
-            <div class="file-dropzone" style="max-width:280px;">
+            <div class="file-dropzone" style="max-width:280px;" data-title="Upload Profile Photo">
               <input type="file" style="display:none;">
               <div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0112 0v1"/></svg></div>
               <div class="fd-label">Upload Profile Photo</div>
@@ -6342,7 +6424,7 @@
             <div class="ocs-desc">Your company logo shown on your public profile and job notifications.</div>
             <div class="ob-field" style="margin-bottom:0;">
               <label>Upload Company Logo</label>
-              <div class="file-dropzone" style="max-width:280px;">
+              <div class="file-dropzone" style="max-width:280px;" data-title="Upload Company Logo">
                 <input type="file" style="display:none;">
                 <div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>
                 <div class="fd-label">Click to Upload</div>
@@ -8443,6 +8525,61 @@
               <span class="toast-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12.3l2.5 2.5 5-5.6"/></svg></span>
               <span id="supjrSuccessToastMsg"></span>
               <button type="button" class="toast-close" id="supjrSuccessToastClose" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+            </div>
+          </div>
+
+          <!-- ============ SUPPLIER SERVICE AREA VIEW ============ -->
+          <div id="supServiceAreaView" style="display:none;">
+            <div class="dash-section">
+              <div class="dash-header">
+                <div>
+                  <h2 style="display:flex;align-items:center;gap:9px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/></svg>Service Area</h2>
+                  <div class="dash-content-sub">Choose where you want to receive jobs. You'll only get requests from these areas.</div>
+                </div>
+                <button type="button" class="btn btn-primary btn-sm" id="supsaSaveBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>Save</button>
+              </div>
+
+              <div class="supsa-map-headline" style="margin-top:4px;"><span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--navy-900);color:#fff;font-size:11px;font-weight:800;">1</span>Pick regions <span class="sub">— click to add or remove</span></div>
+              <div class="supsa-region-grid" id="supsaRegionGrid"></div>
+
+              <div class="supsa-map-head">
+                <div class="supsa-map-headline"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/></svg>Map <span class="sub" id="supsaMapSub">— tap districts to toggle</span></div>
+                <div class="supsa-map-legend" style="position:static;box-shadow:none;background:none;padding:0;">
+                  <div class="item"><span class="dot selected"></span>Selected</div>
+                  <div class="item"><span class="dot available"></span>Available</div>
+                </div>
+              </div>
+              <div class="supsa-map-wrap">
+                <svg class="supsa-map-svg" id="supsaMapSvg" viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg"></svg>
+                <div class="supsa-map-zoom">
+                  <button type="button" id="supsaZoomInBtn" aria-label="Zoom in">+</button>
+                  <button type="button" id="supsaZoomOutBtn" aria-label="Zoom out">−</button>
+                </div>
+                <div class="supsa-map-tooltip" id="supsaMapTooltip"><div class="code" id="supsaTooltipCode">—</div><div class="town" id="supsaTooltipTown">—</div></div>
+              </div>
+
+              <div class="supsa-postcode-section">
+                <div class="supsa-map-headline"><span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--navy-900);color:#fff;font-size:11px;font-weight:800;">2</span>Add specific postcodes <span class="sub">— optional</span></div>
+                <div class="supsa-postcode-input-row">
+                  <div class="supsa-postcode-input-wrap">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                    <input type="text" id="supsaPostcodeInput" placeholder='Type &quot;E1&quot;, &quot;SW1-SW10&quot;, or postcode ranges' autocomplete="off">
+                  </div>
+                  <button type="button" class="btn btn-primary" id="supsaAddPostcodeBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add</button>
+                </div>
+                <div class="supsa-postcode-tip">Tip: ranges like <code>E1-E10</code> add 10 districts at once.</div>
+              </div>
+
+              <div class="supsa-coverage-card">
+                <div class="supsa-coverage-head">
+                  <div class="supsa-coverage-title-row">
+                    <div class="supsa-coverage-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/></svg>Your coverage</div>
+                    <span class="supsa-coverage-badge" id="supsaCoverageBadge">0 districts</span>
+                  </div>
+                  <button type="button" class="supsa-clear-all-btn" id="supsaClearAllBtn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg>Clear all</button>
+                </div>
+                <div id="supsaCoverageGroups"></div>
+              </div>
             </div>
           </div>
 
@@ -11647,7 +11784,7 @@
 
   function openUploadMethodPopup(zone, singleOption) {
     activeUploadZone = zone;
-    document.getElementById('uploadMethodTitle').textContent = zone.getAttribute('data-title') || 'Upload document';
+    document.getElementById('uploadMethodTitle').textContent = (zone.getAttribute('data-title') || 'Upload document').replace(/^(Upload\s+)Upload\s+/i, '$1');
     uploadMethodOverlay.classList.toggle('single-option', !!singleOption);
     uploadMethodOverlay.classList.add('open');
   }
@@ -11657,15 +11794,14 @@
   uploadMethodOverlay.addEventListener('click', function (e) { if (e.target === uploadMethodOverlay) closeUploadMethodPopup(); });
 
   document.getElementById('chooseFromFilesOption').addEventListener('click', function () {
-    closeUploadMethodPopup();
-    if (!activeUploadZone) return;
-    var input = activeUploadZone.querySelector('input[type="file"]');
+    var input = activeUploadZone && activeUploadZone.querySelector('input[type="file"]');
     if (input) input.click();
+    closeUploadMethodPopup();
   });
 
   document.getElementById('uploadFromPhoneOption').addEventListener('click', function () {
     closeUploadMethodPopup();
-    document.getElementById('qrUploadTitle').textContent = (activeUploadZone && activeUploadZone.getAttribute('data-title')) || 'this document';
+    document.getElementById('qrUploadTitle').textContent = ((activeUploadZone && activeUploadZone.getAttribute('data-title')) || 'this document').replace(/^Upload\s+/i, '');
     drawFakeQrPattern();
     document.getElementById('qrWaitingPill').style.display = 'flex';
     qrUploadOverlay.classList.add('open');
@@ -15035,7 +15171,7 @@
         '<div class="crc-sub">' + cert.helper + '</div></div>' +
         '<div class="crc-body">' +
         '<div class="ob-row-2">' +
-        '<div class="ob-field"><label>Upload Certificate</label><div class="file-dropzone" id="' + zoneId + '" data-title="' + cert.label + '"><input type="file" style="display:none;">' +
+        '<div class="ob-field"><label>Upload Certificate</label><div class="file-dropzone" id="' + zoneId + '" data-title="Upload ' + cert.label + '"><input type="file" style="display:none;">' +
         '<div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>' +
         '<div class="fd-label">Click to Upload<span class="fd-sub">Photo or PDF</span></div></div></div>' +
         '<div class="ob-field"><label>Registration number</label><input class="field-input" type="text" placeholder="Enter your ' + cert.label + ' number"></div>' +
@@ -15386,7 +15522,15 @@
     // Active Jobs and Upcoming Jobs stay in their static empty state — see note above.
   }
 
+  function closeAnyLeakedGlobalModals() {
+    var upload = document.getElementById('uploadMethodOverlay');
+    if (upload) upload.classList.remove('open');
+    var qr = document.getElementById('qrUploadOverlay');
+    if (qr) qr.classList.remove('open');
+  }
+
   function showPMDashboard(signupData, mode) {
+    closeAnyLeakedGlobalModals();
     signupData = signupData || {};
     var fullName = signupData.fullName || 'Jordan Blake';
     var firstName = fullName.trim().split(/\s+/)[0];
@@ -15597,6 +15741,7 @@
   }
 
   function showSupplierDashboard(signupData, mode) {
+    closeAnyLeakedGlobalModals();
     signupData = signupData || {};
     var fullName = signupData.fullName || 'Fern Whitfield';
     var firstName = fullName.trim().split(/\s+/)[0];
@@ -15638,11 +15783,24 @@
   });
 
   /* Sidebar nav item selection */
+  var SUP_VIEW_IDS = {
+    'home': 'supHomeView',
+    'job-requests': 'supJobRequestsView',
+    'service-area': 'supServiceAreaView',
+    'profile-settings': 'supProfileSettingsView'
+  };
   function showSupplierView(view) {
-    document.getElementById('supHomeView').style.display = view === 'home' ? '' : 'none';
-    document.getElementById('supJobRequestsView').style.display = view === 'job-requests' ? '' : 'none';
-    document.getElementById('supProfileSettingsView').style.display = view === 'profile-settings' ? '' : 'none';
-    document.querySelector('#supplierDashboard .dash-scroll-area').scrollTop = 0;
+    Object.keys(SUP_VIEW_IDS).forEach(function (key) {
+      document.getElementById(SUP_VIEW_IDS[key]).style.display = (key === view) ? '' : 'none';
+    });
+    var scrollArea = document.querySelector('#supplierDashboard .dash-scroll-area');
+    scrollArea.scrollTo({ top: 0, behavior: 'smooth' });
+    var activeViewEl = document.getElementById(SUP_VIEW_IDS[view]);
+    if (activeViewEl) {
+      activeViewEl.classList.remove('sup-view-animate');
+      void activeViewEl.offsetWidth;
+      activeViewEl.classList.add('sup-view-animate');
+    }
   }
   document.querySelectorAll('#supplierDashboard .dash-nav-item').forEach(function (item) {
     item.addEventListener('click', function () {
@@ -15654,6 +15812,9 @@
       } else if (nav === 'job-requests') {
         showSupplierView('job-requests');
         initSupjrOnce();
+      } else if (nav === 'service-area') {
+        showSupplierView('service-area');
+        initSupsaOnce();
       } else if (nav === 'sup-profile') {
         showSupplierView('profile-settings');
       } else {
@@ -16284,6 +16445,474 @@
       if (supjrCurrentTab === 'quote') supjrUpdateQuoteFilterCounts();
       supjrRenderList();
       supjrRenderDetail();
+    });
+  }
+
+  /* =========================================================
+     SUPPLIER: SERVICE AREA
+  ========================================================== */
+  var SUPSA_TOWN_NAMES = {
+    E: 'East London', EC: 'City of London', N: 'North London', NW: 'North West London', SE: 'South East London', SW: 'South West London', W: 'West London', WC: 'West Central London',
+    BN: 'Brighton', CT: 'Canterbury', GU: 'Guildford', KT: 'Kingston upon Thames', RH: 'Redhill', TN: 'Tonbridge',
+    BA: 'Bath', BS: 'Bristol', EX: 'Exeter', PL: 'Plymouth', TA: 'Taunton', TR: 'Truro',
+    CB: 'Cambridge', CM: 'Chelmsford', CO: 'Colchester', IP: 'Ipswich', NR: 'Norwich', SG: 'Stevenage',
+    DE: 'Derby', LE: 'Leicester', LN: 'Lincoln', NG: 'Nottingham', NN: 'Northampton',
+    B: 'Birmingham', CV: 'Coventry', DY: 'Dudley', WS: 'Walsall', WV: 'Wolverhampton',
+    L: 'Liverpool', M: 'Manchester', PR: 'Preston', WA: 'Warrington', CH: 'Chester',
+    DH: 'Durham', NE: 'Newcastle upon Tyne', SR: 'Sunderland', TS: 'Teesside',
+    LS: 'Leeds', S: 'Sheffield', YO: 'York', HU: 'Hull', BD: 'Bradford',
+    EH: 'Edinburgh', G: 'Glasgow', AB: 'Aberdeen', DD: 'Dundee', IV: 'Inverness', KY: 'Kirkcaldy', PA: 'Paisley', FK: 'Falkirk',
+    CF: 'Cardiff', SA: 'Swansea', LL: 'Llandudno', NP: 'Newport',
+    BT: 'Belfast'
+  };
+
+  function supsaDistribute(prefixes, total) {
+    var groups = [];
+    var base = Math.floor(total / prefixes.length);
+    var remainder = total - base * prefixes.length;
+    prefixes.forEach(function (p, i) {
+      var count = base + (i < remainder ? 1 : 0);
+      var codes = [];
+      for (var n = 1; n <= count; n++) codes.push(n);
+      groups.push({ prefix: p, codes: codes });
+    });
+    return groups;
+  }
+
+  var SUPSA_REGIONS = [
+    { key: 'london', name: 'London', total: 347, desc: 'All London postcode districts', prefixes: ['E', 'EC', 'N', 'NW', 'SE', 'SW', 'W', 'WC'] },
+    { key: 'southeast', name: 'South East', total: 0, desc: 'Kent, Surrey, Sussex, Berks, Bu\u2026',
+      groups: [
+        { prefix: 'BN', codes: [1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 21, 22, 23, 24, 25, 26, 27, 41, 42, 43, 44, 45, 50, 51, 52, 88, 95, 99] },
+        { prefix: 'CT', codes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 50] },
+        { prefix: 'GU', codes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 46, 47, 51, 52] },
+        { prefix: 'KT', codes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24] },
+        { prefix: 'RH', codes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20] },
+        { prefix: 'TN', codes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 40] }
+      ] },
+    { key: 'southwest', name: 'South West', total: 288, desc: 'Cornwall, Devon, Somerset, B\u2026', prefixes: ['BA', 'BS', 'EX', 'PL', 'TA', 'TR'] },
+    { key: 'eastofengland', name: 'East of England', total: 226, desc: 'Essex, Norfolk, Suffolk, Camb\u2026', prefixes: ['CB', 'CM', 'CO', 'IP', 'NR', 'SG'] },
+    { key: 'eastmidlands', name: 'East Midlands', total: 113, desc: 'Derbys, Leics, Lincs, Notts, No\u2026', prefixes: ['DE', 'LE', 'LN', 'NG', 'NN'] },
+    { key: 'westmidlands', name: 'West Midlands', total: 235, desc: 'Birmingham, Coventry, Worcs,\u2026', prefixes: ['B', 'CV', 'DY', 'WS', 'WV'] },
+    { key: 'northwest', name: 'North West', total: 303, desc: 'Manchester, Liverpool, Lancs,\u2026', prefixes: ['L', 'M', 'PR', 'WA', 'CH'] },
+    { key: 'northeast', name: 'North East', total: 131, desc: 'Tyne & Wear, Durham, Northu\u2026', prefixes: ['DH', 'NE', 'SR', 'TS'] },
+    { key: 'yorkshire', name: 'Yorkshire and The Humber', total: 231, desc: 'Leeds, Sheffield, York, Hull, Br\u2026', prefixes: ['LS', 'S', 'YO', 'HU', 'BD'] },
+    { key: 'scotland', name: 'Scotland', total: 454, desc: 'All Scottish postcode districts', prefixes: ['EH', 'G', 'AB', 'DD', 'IV', 'KY', 'PA', 'FK'] },
+    { key: 'wales', name: 'Wales', total: 185, desc: 'All Welsh postcode districts', prefixes: ['CF', 'SA', 'LL', 'NP'] },
+    { key: 'ni', name: 'Northern Ireland', total: 80, desc: 'All Northern Ireland postcode d\u2026', prefixes: ['BT'] }
+  ];
+  SUPSA_REGIONS.forEach(function (r) {
+    if (!r.groups) r.groups = supsaDistribute(r.prefixes, r.total);
+  });
+
+  var supsaCoverage = {};
+  var supsaFocusedRegionKey = 'southeast';
+  var supsaMapCells = [];
+  var supsaMapTerrain = [];
+  var supsaMapRoads = [];
+  var supsaMapTownLabels = [];
+  var supsaMapAvailDots = [];
+  var supsaZoomLevel = 1;
+  var supsaInitialized = false;
+
+  function supsaKeyFor(prefix, code) { return prefix + code; }
+
+  function supsaRegionTotal(region) {
+    var total = 0;
+    region.groups.forEach(function (g) { total += g.codes.length; });
+    return total;
+  }
+  function supsaRegionSelectedCount(region) {
+    var count = 0;
+    region.groups.forEach(function (g) {
+      g.codes.forEach(function (c) { if (supsaCoverage[supsaKeyFor(g.prefix, c)]) count++; });
+    });
+    return count;
+  }
+
+  function supsaRenderRegionGrid() {
+    var grid = document.getElementById('supsaRegionGrid');
+    grid.innerHTML = SUPSA_REGIONS.map(function (r) {
+      var total = supsaRegionTotal(r);
+      var selected = supsaRegionSelectedCount(r);
+      var state = selected === 0 ? 'none' : (selected === total ? 'full' : 'partial');
+      var countLabel = state === 'full' ? 'All' : (state === 'partial' ? (selected + '/' + total) : String(total));
+      var iconInner = state === 'full' ? '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>' : '';
+      return '<div class="supsa-region-tile' + (state !== 'none' ? ' ' + state : '') + (r.key === supsaFocusedRegionKey ? ' focused' : '') + '" data-region="' + r.key + '">' +
+        '<div class="supsa-region-icon">' + iconInner + '</div>' +
+        '<div class="supsa-region-body">' +
+          '<div class="supsa-region-top-row"><span class="supsa-region-name">' + supjrEscapeHtml(r.name) + '</span><span class="supsa-region-count">' + countLabel + '</span></div>' +
+          '<div class="supsa-region-desc">' + supjrEscapeHtml(r.desc) + '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+    grid.querySelectorAll('.supsa-region-tile').forEach(function (tile) {
+      tile.addEventListener('click', function () {
+        var key = tile.getAttribute('data-region');
+        var region = SUPSA_REGIONS.find(function (r) { return r.key === key; });
+        var total = supsaRegionTotal(region);
+        var selected = supsaRegionSelectedCount(region);
+        var makeFull = selected < total;
+        region.groups.forEach(function (g) {
+          g.codes.forEach(function (c) {
+            var k = supsaKeyFor(g.prefix, c);
+            if (makeFull) supsaCoverage[k] = true; else delete supsaCoverage[k];
+          });
+        });
+        supsaFocusedRegionKey = key;
+        supsaBuildMapForRegion(region);
+        supsaRenderAll();
+      });
+    });
+  }
+
+  function supsaGenerateGrid(cols, rows, w, h, jitter) {
+    var vx = [], vy = [];
+    for (var r = 0; r <= rows; r++) {
+      vx.push([]); vy.push([]);
+      for (var c = 0; c <= cols; c++) {
+        var baseX = (c / cols) * w;
+        var baseY = (r / rows) * h;
+        var jx = (c === 0 || c === cols) ? 0 : (Math.random() - 0.5) * jitter;
+        var jy = (r === 0 || r === rows) ? 0 : (Math.random() - 0.5) * jitter;
+        vx[r].push(baseX + jx);
+        vy[r].push(baseY + jy);
+      }
+    }
+    var cells = [];
+    for (var r2 = 0; r2 < rows; r2++) {
+      for (var c2 = 0; c2 < cols; c2++) {
+        var pts = [
+          [vx[r2][c2], vy[r2][c2]],
+          [vx[r2][c2 + 1], vy[r2][c2 + 1]],
+          [vx[r2 + 1][c2 + 1], vy[r2 + 1][c2 + 1]],
+          [vx[r2 + 1][c2], vy[r2 + 1][c2]]
+        ];
+        var cx = (pts[0][0] + pts[1][0] + pts[2][0] + pts[3][0]) / 4;
+        var cy = (pts[0][1] + pts[1][1] + pts[2][1] + pts[3][1]) / 4;
+        cells.push({ points: pts, cx: cx, cy: cy });
+      }
+    }
+    return cells;
+  }
+
+  function supsaGenerateTerrain() {
+    var palette = ['#c3d9b3', '#d3e0bd', '#e2dcae', '#b9d2c2', '#cdd9b8', '#dcd6a8', '#c7d6cb'];
+    var blobs = [];
+    for (var i = 0; i < 11; i++) {
+      blobs.push({
+        cx: Math.random() * 1000,
+        cy: Math.random() * 600,
+        rx: 90 + Math.random() * 170,
+        ry: 60 + Math.random() * 130,
+        rot: Math.random() * 360,
+        color: palette[i % palette.length]
+      });
+    }
+    return blobs;
+  }
+
+  function supsaGenerateRoads() {
+    var roads = [];
+    var count = 5 + Math.floor(Math.random() * 3);
+    for (var i = 0; i < count; i++) {
+      var y1 = Math.random() * 600;
+      var y2 = Math.random() * 600;
+      var midX = 250 + Math.random() * 500;
+      var midY = (y1 + y2) / 2 + (Math.random() - 0.5) * 220;
+      var isMotorway = Math.random() < 0.3;
+      var label = isMotorway ? ('M' + (1 + Math.floor(Math.random() * 50))) : ('A' + (1 + Math.floor(Math.random() * 400)));
+      roads.push({
+        path: 'M -20,' + y1.toFixed(0) + ' Q ' + midX.toFixed(0) + ',' + midY.toFixed(0) + ' 1020,' + y2.toFixed(0),
+        label: label, labelX: midX, labelY: midY, motorway: isMotorway
+      });
+    }
+    return roads;
+  }
+
+  function supsaBuildTownLabels(cells) {
+    var byPrefix = {};
+    cells.forEach(function (c) {
+      byPrefix[c.prefix] = byPrefix[c.prefix] || [];
+      byPrefix[c.prefix].push(c);
+    });
+    return Object.keys(byPrefix).map(function (prefix) {
+      var arr = byPrefix[prefix];
+      var avgX = arr.reduce(function (s, c) { return s + c.cx; }, 0) / arr.length;
+      var avgY = arr.reduce(function (s, c) { return s + c.cy; }, 0) / arr.length;
+      return { x: avgX, y: Math.max(16, avgY - 16), text: SUPSA_TOWN_NAMES[prefix] || prefix };
+    });
+  }
+
+  function supsaGenerateAvailDots() {
+    var dots = [];
+    for (var i = 0; i < 13; i++) {
+      var edge = Math.floor(Math.random() * 4);
+      var x, y;
+      if (edge === 0 || edge === 2) { x = 15 + Math.random() * 970; y = edge === 0 ? (5 + Math.random() * 40) : (555 + Math.random() * 40); }
+      else { x = edge === 1 ? (960 + Math.random() * 35) : (5 + Math.random() * 35); y = 15 + Math.random() * 570; }
+      dots.push({ x: Math.max(6, Math.min(994, x)), y: Math.max(6, Math.min(594, y)) });
+    }
+    return dots;
+  }
+
+  function supsaInterleaveGroups(groups) {
+    var iters = groups.map(function (g) { return { prefix: g.prefix, codes: g.codes, i: 0 }; });
+    var out = [];
+    var remaining = true;
+    while (remaining) {
+      remaining = false;
+      for (var gi = 0; gi < iters.length; gi++) {
+        var it = iters[gi];
+        if (it.i < it.codes.length) {
+          out.push({ prefix: it.prefix, code: it.codes[it.i] });
+          it.i++;
+          remaining = true;
+        }
+      }
+    }
+    return out;
+  }
+
+  function supsaGenerateSeeds(n, w, h) {
+    var pts = [];
+    var minDist = Math.sqrt((w * h) / n) * 0.55;
+    var attempts = 0;
+    while (pts.length < n && attempts < n * 40) {
+      attempts++;
+      var x = 25 + Math.random() * (w - 50);
+      var y = 25 + Math.random() * (h - 50);
+      var ok = true;
+      for (var i = 0; i < pts.length; i++) {
+        var dx = pts[i][0] - x, dy = pts[i][1] - y;
+        if (dx * dx + dy * dy < minDist * minDist) { ok = false; break; }
+      }
+      if (ok) pts.push([x, y]);
+    }
+    while (pts.length < n) pts.push([25 + Math.random() * (w - 50), 25 + Math.random() * (h - 50)]);
+    return pts;
+  }
+
+  function supsaClipPolygon(poly, a, b, c) {
+    var result = [];
+    var n = poly.length;
+    for (var i = 0; i < n; i++) {
+      var curr = poly[i];
+      var next = poly[(i + 1) % n];
+      var currIn = (a * curr[0] + b * curr[1]) <= c;
+      var nextIn = (a * next[0] + b * next[1]) <= c;
+      if (currIn) result.push(curr);
+      if (currIn !== nextIn) {
+        var denom = a * (next[0] - curr[0]) + b * (next[1] - curr[1]);
+        var t = denom !== 0 ? (c - (a * curr[0] + b * curr[1])) / denom : 0;
+        result.push([curr[0] + t * (next[0] - curr[0]), curr[1] + t * (next[1] - curr[1])]);
+      }
+    }
+    return result;
+  }
+
+  function supsaVoronoi(points, w, h) {
+    return points.map(function (p, i) {
+      var poly = [[0, 0], [w, 0], [w, h], [0, h]];
+      points.forEach(function (q, j) {
+        if (i === j || !poly.length) return;
+        var a = 2 * (q[0] - p[0]);
+        var b = 2 * (q[1] - p[1]);
+        var c = (q[0] * q[0] + q[1] * q[1]) - (p[0] * p[0] + p[1] * p[1]);
+        poly = supsaClipPolygon(poly, a, b, c);
+      });
+      return { points: poly, cx: p[0], cy: p[1] };
+    });
+  }
+
+  function supsaBuildMapForRegion(region) {
+    var flat = supsaInterleaveGroups(region.groups);
+    if (!flat.length) { supsaMapCells = []; supsaMapTerrain = []; supsaMapRoads = []; supsaMapTownLabels = []; supsaMapAvailDots = []; return; }
+    var cellCount = Math.min(flat.length, 56);
+    var seeds = supsaGenerateSeeds(cellCount, 1000, 600);
+    var geo = supsaVoronoi(seeds, 1000, 600);
+    supsaMapCells = geo.map(function (cell, i) {
+      var d = flat[i % flat.length];
+      return { points: cell.points, cx: cell.cx, cy: cell.cy, prefix: d.prefix, code: d.code };
+    });
+    supsaMapTerrain = supsaGenerateTerrain();
+    supsaMapRoads = supsaGenerateRoads();
+    supsaMapTownLabels = supsaBuildTownLabels(supsaMapCells);
+    supsaMapAvailDots = supsaGenerateAvailDots();
+  }
+
+  function supsaTerrainHtml() {
+    return supsaMapTerrain.map(function (b) {
+      return '<ellipse class="supsa-map-terrain-blob" cx="' + b.cx.toFixed(0) + '" cy="' + b.cy.toFixed(0) + '" rx="' + b.rx.toFixed(0) + '" ry="' + b.ry.toFixed(0) + '" fill="' + b.color + '" transform="rotate(' + b.rot.toFixed(0) + ' ' + b.cx.toFixed(0) + ' ' + b.cy.toFixed(0) + ')"></ellipse>';
+    }).join('');
+  }
+  function supsaRoadsHtml() {
+    return supsaMapRoads.map(function (r) {
+      var lineClass = r.motorway ? ' motorway' : '';
+      var labelClass = r.motorway ? ' motorway' : '';
+      return '<path class="supsa-map-road" d="' + r.path + '"></path>' +
+        '<path class="supsa-map-road-line' + lineClass + '" d="' + r.path + '"></path>' +
+        '<rect x="' + (r.labelX - 15).toFixed(0) + '" y="' + (r.labelY - 9).toFixed(0) + '" width="30" height="14" rx="3" fill="#fff" opacity="0.88"></rect>' +
+        '<text class="supsa-map-road-label' + labelClass + '" x="' + r.labelX.toFixed(0) + '" y="' + (r.labelY + 2).toFixed(0) + '" text-anchor="middle">' + r.label + '</text>';
+    }).join('');
+  }
+  function supsaTownLabelsHtml() {
+    return supsaMapTownLabels.map(function (t) {
+      return '<text class="supsa-map-town-label" x="' + t.x.toFixed(0) + '" y="' + t.y.toFixed(0) + '" text-anchor="middle">' + supjrEscapeHtml(t.text) + '</text>';
+    }).join('');
+  }
+  function supsaAvailDotsHtml() {
+    return supsaMapAvailDots.map(function (d) {
+      return '<circle class="supsa-map-avail-dot" cx="' + d.x.toFixed(0) + '" cy="' + d.y.toFixed(0) + '" r="4"></circle>';
+    }).join('');
+  }
+
+  function supsaMapDistrictHtml(cell) {
+    var key = supsaKeyFor(cell.prefix, cell.code);
+    var selected = !!supsaCoverage[key];
+    var ptsStr = cell.points.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' ');
+    return '<polygon class="supsa-map-district' + (selected ? ' selected' : '') + '" points="' + ptsStr + '" data-key="' + key + '"></polygon>' +
+      '<circle class="supsa-map-dot' + (selected ? ' selected' : '') + '" cx="' + cell.cx.toFixed(1) + '" cy="' + cell.cy.toFixed(1) + '" r="5" data-key="' + key + '"></circle>';
+  }
+
+  function supsaRenderMap() {
+    var svg = document.getElementById('supsaMapSvg');
+    svg.innerHTML = supsaTerrainHtml() + supsaRoadsHtml() + supsaMapCells.map(supsaMapDistrictHtml).join('') + supsaAvailDotsHtml() + supsaTownLabelsHtml();
+    var tooltip = document.getElementById('supsaMapTooltip');
+    svg.querySelectorAll('[data-key]').forEach(function (el) {
+      var key = el.getAttribute('data-key');
+      var cell = supsaMapCells.find(function (c) { return supsaKeyFor(c.prefix, c.code) === key; });
+      if (!cell) return;
+      el.addEventListener('mouseenter', function () {
+        document.getElementById('supsaTooltipCode').textContent = cell.prefix + cell.code;
+        document.getElementById('supsaTooltipTown').textContent = SUPSA_TOWN_NAMES[cell.prefix] || '';
+        tooltip.style.left = (cell.cx / 1000 * 100) + '%';
+        tooltip.style.top = (cell.cy / 600 * 100) + '%';
+        tooltip.classList.add('show');
+      });
+      el.addEventListener('mouseleave', function () { tooltip.classList.remove('show'); });
+      el.addEventListener('click', function () {
+        if (supsaCoverage[key]) delete supsaCoverage[key]; else supsaCoverage[key] = true;
+        supsaRenderAll();
+      });
+    });
+  }
+
+  function supsaRenderCoverage() {
+    var byPrefix = {};
+    Object.keys(supsaCoverage).forEach(function (key) {
+      var m = key.match(/^([A-Z]{1,2})(\d+)$/);
+      if (!m) return;
+      var prefix = m[1], code = parseInt(m[2], 10);
+      byPrefix[prefix] = byPrefix[prefix] || [];
+      byPrefix[prefix].push(code);
+    });
+    var prefixes = Object.keys(byPrefix).sort();
+    var totalCount = Object.keys(supsaCoverage).length;
+    document.getElementById('supsaCoverageBadge').textContent = totalCount + ' district' + (totalCount === 1 ? '' : 's');
+    var wrap = document.getElementById('supsaCoverageGroups');
+    if (!prefixes.length) {
+      wrap.innerHTML = '<div class="supsa-empty-coverage">No areas selected yet \u2014 pick a region above or add specific postcodes.</div>';
+      return;
+    }
+    wrap.innerHTML = prefixes.map(function (prefix) {
+      var codes = byPrefix[prefix].slice().sort(function (a, b) { return a - b; });
+      var chips = codes.map(function (c) {
+        return '<span class="supsa-chip">' + prefix + c + '<button type="button" data-remove-code="' + prefix + c + '" aria-label="Remove">\u00d7</button></span>';
+      }).join('');
+      return '<div class="supsa-group">' +
+        '<div class="supsa-group-head"><div class="supsa-group-label">' + prefix + ' <span>\u00b7 ' + codes.length + '</span></div><button type="button" class="supsa-group-remove" data-remove-prefix="' + prefix + '">Remove all ' + prefix + '</button></div>' +
+        '<div class="supsa-chip-row">' + chips + '</div>' +
+      '</div>';
+    }).join('');
+    wrap.querySelectorAll('[data-remove-code]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        delete supsaCoverage[btn.getAttribute('data-remove-code')];
+        supsaRenderAll();
+      });
+    });
+    wrap.querySelectorAll('[data-remove-prefix]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var prefix = btn.getAttribute('data-remove-prefix');
+        var re = new RegExp('^' + prefix + '\\d+$');
+        Object.keys(supsaCoverage).forEach(function (key) { if (re.test(key)) delete supsaCoverage[key]; });
+        supsaRenderAll();
+      });
+    });
+  }
+
+  function supsaRenderAll() {
+    supsaRenderRegionGrid();
+    supsaRenderMap();
+    supsaRenderCoverage();
+    var focusedRegion = SUPSA_REGIONS.find(function (r) { return r.key === supsaFocusedRegionKey; });
+    document.getElementById('supsaMapSub').textContent = '\u2014 tap districts to toggle \u00b7 ' + (focusedRegion ? focusedRegion.name : '');
+  }
+
+  function supsaParsePostcodeInput(text) {
+    text = text.trim().toUpperCase();
+    if (!text) return null;
+    var rangeMatch = text.match(/^([A-Z]{1,2})(\d+)\s*-\s*(?:[A-Z]{1,2})?(\d+)$/);
+    if (rangeMatch) {
+      var prefix = rangeMatch[1];
+      var from = parseInt(rangeMatch[2], 10);
+      var to = parseInt(rangeMatch[3], 10);
+      var out = [];
+      if (to >= from && (to - from) < 200) { for (var n = from; n <= to; n++) out.push({ prefix: prefix, code: n }); }
+      return out;
+    }
+    var singleMatch = text.match(/^([A-Z]{1,2})(\d+)$/);
+    if (singleMatch) {
+      return [{ prefix: singleMatch[1], code: parseInt(singleMatch[2], 10) }];
+    }
+    var bareMatch = text.match(/^([A-Z]{1,2})$/);
+    if (bareMatch) {
+      var out2 = [];
+      for (var m = 1; m <= 10; m++) out2.push({ prefix: bareMatch[1], code: m });
+      return out2;
+    }
+    return null;
+  }
+
+  function initSupsaOnce() {
+    if (supsaInitialized) return;
+    supsaInitialized = true;
+
+    var se = SUPSA_REGIONS.find(function (r) { return r.key === 'southeast'; });
+    se.groups.forEach(function (g) { g.codes.forEach(function (c) { supsaCoverage[supsaKeyFor(g.prefix, c)] = true; }); });
+    var london = SUPSA_REGIONS.find(function (r) { return r.key === 'london'; });
+    supsaCoverage[supsaKeyFor(london.groups[0].prefix, london.groups[0].codes[0])] = true;
+
+    supsaBuildMapForRegion(se);
+    supsaRenderAll();
+
+    document.getElementById('supsaZoomInBtn').addEventListener('click', function () {
+      supsaZoomLevel = Math.min(2.5, supsaZoomLevel + 0.25);
+      document.getElementById('supsaMapSvg').style.transform = 'scale(' + supsaZoomLevel + ')';
+    });
+    document.getElementById('supsaZoomOutBtn').addEventListener('click', function () {
+      supsaZoomLevel = Math.max(0.6, supsaZoomLevel - 0.25);
+      document.getElementById('supsaMapSvg').style.transform = 'scale(' + supsaZoomLevel + ')';
+    });
+
+    function supsaHandleAddPostcode() {
+      var input = document.getElementById('supsaPostcodeInput');
+      var parsed = supsaParsePostcodeInput(input.value);
+      if (!parsed || !parsed.length) { showToast('Enter a postcode like "E1", or a range like "E1-E10".'); return; }
+      parsed.forEach(function (d) { supsaCoverage[supsaKeyFor(d.prefix, d.code)] = true; });
+      input.value = '';
+      showToast(parsed.length + ' district' + (parsed.length === 1 ? '' : 's') + ' added.');
+      supsaRenderAll();
+    }
+    document.getElementById('supsaAddPostcodeBtn').addEventListener('click', supsaHandleAddPostcode);
+    document.getElementById('supsaPostcodeInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); supsaHandleAddPostcode(); } });
+
+    document.getElementById('supsaClearAllBtn').addEventListener('click', function () {
+      supsaCoverage = {};
+      supsaRenderAll();
+    });
+    document.getElementById('supsaSaveBtn').addEventListener('click', function () {
+      showToast('Service area saved \u2014 ' + Object.keys(supsaCoverage).length + ' districts.');
     });
   }
 
