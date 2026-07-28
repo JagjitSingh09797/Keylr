@@ -1280,6 +1280,11 @@
   .choice-tile.selected .tile-check { transform: scale(1); opacity: 1; }
   #vatRegTiles .choice-tile.selected { background: #f0fdf4; border-color: #1a7a3e; }
   #vatRegTiles .choice-tile.selected .tile-title { color: #145c2e; }
+  .choice-tile.disabled { cursor: not-allowed; }
+  .choice-tile.disabled:hover { border-color: var(--border-subtle); box-shadow: none; transform: none; }
+  .choice-tile.disabled .tile-title,
+  .choice-tile.disabled .tile-desc { color: #94a3b8; }
+  .field-input:disabled { background: var(--surface-soft); color: #94a3b8; cursor: not-allowed; }
 
   /* Simple 2-option tile row (single location vs branch) */
   .tile-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
@@ -9101,7 +9106,7 @@
                           <div class="tile-desc">I charge VAT on my invoices</div>
                         </div>
                       </div>
-                      <div class="choice-tile" data-value="no">
+                      <div class="choice-tile disabled" data-value="no">
                         <div class="tile-body">
                           <div class="tile-title">No, not registered</div>
                           <div class="tile-desc">Below the VAT threshold or exempt</div>
@@ -9109,7 +9114,7 @@
                       </div>
                     </div>
                     <div class="field-collapsible open" id="vatNumberFields" style="max-height:400px;opacity:1;margin-top:16px;">
-                      <input class="field-input" type="text" id="supPaymentVatNumberInput" value="GB553557881" style="margin-bottom:12px;">
+                      <input class="field-input" type="text" id="supPaymentVatNumberInput" value="GB553557881" style="margin-bottom:12px;" disabled>
                       <div class="callout callout-success" style="margin-bottom:0;">
                         <div style="display:flex;align-items:center;justify-content:space-between;width:100%;flex-wrap:wrap;gap:8px;">
                           <span style="display:flex;align-items:center;gap:8px;color:#145c2e;font-weight:700;font-size:13px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Verified with HMRC</span>
@@ -16663,6 +16668,42 @@
     return [lat, lng];
   }
 
+  function supsaClipPolygon(poly, a, b, c) {
+    var result = [];
+    var n = poly.length;
+    for (var i = 0; i < n; i++) {
+      var curr = poly[i];
+      var next = poly[(i + 1) % n];
+      var currIn = (a * curr[0] + b * curr[1]) <= c;
+      var nextIn = (a * next[0] + b * next[1]) <= c;
+      if (currIn) result.push(curr);
+      if (currIn !== nextIn) {
+        var denom = a * (next[0] - curr[0]) + b * (next[1] - curr[1]);
+        var t = denom !== 0 ? (c - (a * curr[0] + b * curr[1])) / denom : 0;
+        result.push([curr[0] + t * (next[0] - curr[0]), curr[1] + t * (next[1] - curr[1])]);
+      }
+    }
+    return result;
+  }
+
+  function supsaVoronoiCells(points, bounds) {
+    // bounds = [minLat, minLng, maxLat, maxLng] — each cell starts as the full padded
+    // bounding box, then gets clipped by the perpendicular bisector against every other
+    // point, leaving an irregular polygon that looks like a real district boundary.
+    var box = [[bounds[0], bounds[1]], [bounds[0], bounds[3]], [bounds[2], bounds[3]], [bounds[2], bounds[1]]];
+    return points.map(function (p, i) {
+      var poly = box;
+      points.forEach(function (q, j) {
+        if (i === j || !poly.length) return;
+        var a = 2 * (q[0] - p[0]);
+        var b = 2 * (q[1] - p[1]);
+        var c = (q[0] * q[0] + q[1] * q[1]) - (p[0] * p[0] + p[1] * p[1]);
+        poly = supsaClipPolygon(poly, a, b, c);
+      });
+      return poly;
+    });
+  }
+
   function supsaBuildMapForRegion(region) {
     var flat = supsaInterleaveGroups(region.groups);
     var byPrefixCount = {};
@@ -16674,6 +16715,20 @@
       seenCount[d.prefix] = idx + 1;
       return { prefix: d.prefix, code: d.code, lat: ll[0], lng: ll[1] };
     });
+
+    // Give every marker a Voronoi boundary polygon within a padded bounding box
+    if (supsaMapCells.length) {
+      var lats = supsaMapCells.map(function (c) { return c.lat; });
+      var lngs = supsaMapCells.map(function (c) { return c.lng; });
+      var minLat = Math.min.apply(null, lats), maxLat = Math.max.apply(null, lats);
+      var minLng = Math.min.apply(null, lngs), maxLng = Math.max.apply(null, lngs);
+      var padLat = Math.max(0.06, (maxLat - minLat) * 0.25);
+      var padLng = Math.max(0.10, (maxLng - minLng) * 0.25);
+      var bounds = [minLat - padLat, minLng - padLng, maxLat + padLat, maxLng + padLng];
+      var points = supsaMapCells.map(function (c) { return [c.lat, c.lng]; });
+      var cells = supsaVoronoiCells(points, bounds);
+      supsaMapCells.forEach(function (c, i) { c.boundary = cells[i]; });
+    }
   }
 
   /* Real Leaflet map (genuine OpenStreetMap tiles) — lazy-loaded from a CDN since this
@@ -16703,6 +16758,7 @@
 
   var supsaMap = null;
   var supsaMarkers = {};
+  var supsaBoundaries = {};
   function supsaRenderMap() {
     supsaEnsureLeaflet(function () {
       var canvas = document.getElementById('supsaMapCanvas');
@@ -16719,12 +16775,35 @@
       }
 
       Object.keys(supsaMarkers).forEach(function (key) { supsaMap.removeLayer(supsaMarkers[key]); });
+      Object.keys(supsaBoundaries).forEach(function (key) { supsaMap.removeLayer(supsaBoundaries[key]); });
       supsaMarkers = {};
+      supsaBoundaries = {};
 
       var bounds = [];
       supsaMapCells.forEach(function (cell) {
         var key = supsaKeyFor(cell.prefix, cell.code);
         var sel = !!supsaCoverage[key];
+        var town = SUPSA_TOWN_NAMES[cell.prefix] || '';
+        var tooltipHtml = '<div class="code">' + cell.prefix + cell.code + '</div><div class="town">' + supjrEscapeHtml(town) + '</div>';
+        var toggle = function () {
+          if (supsaCoverage[key]) delete supsaCoverage[key]; else supsaCoverage[key] = true;
+          supsaRenderAll();
+        };
+
+        if (cell.boundary && cell.boundary.length >= 3) {
+          var boundary = L.polygon(cell.boundary, {
+            color: sel ? '#28488f' : '#5a7a90',
+            weight: sel ? 2 : 1.2,
+            fillColor: sel ? '#284890' : '#ffffff',
+            fillOpacity: sel ? 0.16 : 0.04,
+            bubblingMouseEvents: false
+          });
+          boundary.bindTooltip(tooltipHtml, { direction: 'top', className: 'supsa-leaflet-tooltip' });
+          boundary.on('click', toggle);
+          boundary.addTo(supsaMap);
+          supsaBoundaries[key] = boundary;
+        }
+
         var marker = L.circleMarker([cell.lat, cell.lng], {
           radius: sel ? 7 : 4,
           fillColor: sel ? '#101828' : '#ffffff',
@@ -16734,12 +16813,8 @@
           fillOpacity: sel ? 0.92 : 0.75,
           bubblingMouseEvents: false
         });
-        var town = SUPSA_TOWN_NAMES[cell.prefix] || '';
-        marker.bindTooltip('<div class="code">' + cell.prefix + cell.code + '</div><div class="town">' + supjrEscapeHtml(town) + '</div>', { direction: 'top', offset: [0, -6], className: 'supsa-leaflet-tooltip' });
-        marker.on('click', function () {
-          if (supsaCoverage[key]) delete supsaCoverage[key]; else supsaCoverage[key] = true;
-          supsaRenderAll();
-        });
+        marker.bindTooltip(tooltipHtml, { direction: 'top', offset: [0, -6], className: 'supsa-leaflet-tooltip' });
+        marker.on('click', toggle);
         marker.addTo(supsaMap);
         supsaMarkers[key] = marker;
         bounds.push([cell.lat, cell.lng]);
@@ -16893,6 +16968,7 @@
   /* ---- Payment Setup tab ---- */
   document.querySelectorAll('#vatRegTiles .choice-tile').forEach(function (tile) {
     tile.addEventListener('click', function () {
+      if (tile.classList.contains('disabled')) return;
       document.querySelectorAll('#vatRegTiles .choice-tile').forEach(function (t) { t.classList.remove('selected'); });
       tile.classList.add('selected');
       var isYes = tile.getAttribute('data-value') === 'yes';
