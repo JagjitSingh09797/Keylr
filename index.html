@@ -2798,11 +2798,11 @@
   .supsa-leaflet-tooltip .code { font-weight: 800; font-size: 12.5px; color: var(--text-heading); }
   .supsa-leaflet-tooltip .town { font-size: 11px; color: var(--text-body-muted); margin-top: 1px; }
   .supsa-leaflet-tooltip::before { display: none !important; }
-  .supsa-map-zoom { position: absolute; top: 14px; left: 14px; display: flex; flex-direction: column; background: #fff; border-radius: 10px; box-shadow: 0 4px 14px rgba(16,24,40,0.16); overflow: hidden; z-index: 3; }
+  .supsa-map-zoom { position: absolute; top: 14px; left: 14px; display: flex; flex-direction: column; background: #fff; border-radius: 10px; box-shadow: 0 4px 14px rgba(16,24,40,0.16); overflow: hidden; z-index: 1000; }
   .supsa-map-zoom button { width: 34px; height: 34px; border: none; background: #fff; font-size: 18px; font-weight: 700; color: var(--text-heading); cursor: pointer; font-family: inherit; line-height: 1; }
   .supsa-map-zoom button:first-child { border-bottom: 1px solid var(--border-subtle); }
   .supsa-map-zoom button:hover { background: var(--surface-soft); }
-  .supsa-map-legend { position: absolute; top: 14px; right: 14px; display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,0.92); padding: 7px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; color: var(--text-body-muted); box-shadow: 0 4px 14px rgba(16,24,40,0.1); z-index: 3; }
+  .supsa-map-legend { position: absolute; top: 14px; right: 14px; display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,0.92); padding: 7px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; color: var(--text-body-muted); box-shadow: 0 4px 14px rgba(16,24,40,0.1); z-index: 1000; }
   .supsa-map-legend .item { display: flex; align-items: center; gap: 5px; }
   .supsa-map-legend .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
   .supsa-map-legend .dot.selected { background: var(--navy-900); }
@@ -16659,49 +16659,17 @@
 
   function supsaCodeLatLng(prefix, index, total) {
     var center = SUPSA_PREFIX_COORDS[prefix] || [54.5, -3.0];
-    var cols = Math.max(1, Math.ceil(Math.sqrt(total)));
-    var rows = Math.max(1, Math.ceil(total / cols));
-    var row = Math.floor(index / cols), col = index % cols;
-    var latSpan = 0.09, lngSpan = 0.16;
-    var lat = center[0] + (rows > 1 ? (row / (rows - 1) - 0.5) : 0) * latSpan;
-    var lng = center[1] + (cols > 1 ? (col / (cols - 1) - 0.5) : 0) * lngSpan;
+    if (total <= 1) return [center[0], center[1]];
+    // Sunflower/phyllotaxis spiral spread — naturally fans points outward with no grid
+    // artifacts or dense clustering, and widens with count so busier prefixes spread
+    // over a larger, more realistic area instead of bunching into a tight block.
+    var goldenAngle = 2.399963;
+    var maxRadius = 0.06 + Math.min(0.24, total * 0.007);
+    var r = maxRadius * Math.sqrt((index + 0.5) / total);
+    var theta = index * goldenAngle;
+    var lat = center[0] + r * Math.cos(theta);
+    var lng = center[1] + r * Math.sin(theta) * 1.6;
     return [lat, lng];
-  }
-
-  function supsaClipPolygon(poly, a, b, c) {
-    var result = [];
-    var n = poly.length;
-    for (var i = 0; i < n; i++) {
-      var curr = poly[i];
-      var next = poly[(i + 1) % n];
-      var currIn = (a * curr[0] + b * curr[1]) <= c;
-      var nextIn = (a * next[0] + b * next[1]) <= c;
-      if (currIn) result.push(curr);
-      if (currIn !== nextIn) {
-        var denom = a * (next[0] - curr[0]) + b * (next[1] - curr[1]);
-        var t = denom !== 0 ? (c - (a * curr[0] + b * curr[1])) / denom : 0;
-        result.push([curr[0] + t * (next[0] - curr[0]), curr[1] + t * (next[1] - curr[1])]);
-      }
-    }
-    return result;
-  }
-
-  function supsaVoronoiCells(points, bounds) {
-    // bounds = [minLat, minLng, maxLat, maxLng] — each cell starts as the full padded
-    // bounding box, then gets clipped by the perpendicular bisector against every other
-    // point, leaving an irregular polygon that looks like a real district boundary.
-    var box = [[bounds[0], bounds[1]], [bounds[0], bounds[3]], [bounds[2], bounds[3]], [bounds[2], bounds[1]]];
-    return points.map(function (p, i) {
-      var poly = box;
-      points.forEach(function (q, j) {
-        if (i === j || !poly.length) return;
-        var a = 2 * (q[0] - p[0]);
-        var b = 2 * (q[1] - p[1]);
-        var c = (q[0] * q[0] + q[1] * q[1]) - (p[0] * p[0] + p[1] * p[1]);
-        poly = supsaClipPolygon(poly, a, b, c);
-      });
-      return poly;
-    });
   }
 
   function supsaBuildMapForRegion(region) {
@@ -16715,20 +16683,6 @@
       seenCount[d.prefix] = idx + 1;
       return { prefix: d.prefix, code: d.code, lat: ll[0], lng: ll[1] };
     });
-
-    // Give every marker a Voronoi boundary polygon within a padded bounding box
-    if (supsaMapCells.length) {
-      var lats = supsaMapCells.map(function (c) { return c.lat; });
-      var lngs = supsaMapCells.map(function (c) { return c.lng; });
-      var minLat = Math.min.apply(null, lats), maxLat = Math.max.apply(null, lats);
-      var minLng = Math.min.apply(null, lngs), maxLng = Math.max.apply(null, lngs);
-      var padLat = Math.max(0.06, (maxLat - minLat) * 0.25);
-      var padLng = Math.max(0.10, (maxLng - minLng) * 0.25);
-      var bounds = [minLat - padLat, minLng - padLng, maxLat + padLat, maxLng + padLng];
-      var points = supsaMapCells.map(function (c) { return [c.lat, c.lng]; });
-      var cells = supsaVoronoiCells(points, bounds);
-      supsaMapCells.forEach(function (c, i) { c.boundary = cells[i]; });
-    }
   }
 
   /* Real Leaflet map (genuine OpenStreetMap tiles) — lazy-loaded from a CDN since this
@@ -16758,7 +16712,6 @@
 
   var supsaMap = null;
   var supsaMarkers = {};
-  var supsaBoundaries = {};
   function supsaRenderMap() {
     supsaEnsureLeaflet(function () {
       var canvas = document.getElementById('supsaMapCanvas');
@@ -16767,7 +16720,7 @@
       if (loading) loading.style.display = 'none';
 
       if (!supsaMap) {
-        supsaMap = L.map(canvas, { attributionControl: false, zoomControl: false, scrollWheelZoom: false });
+        supsaMap = L.map(canvas, { attributionControl: false, zoomControl: false, scrollWheelZoom: true });
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 16, minZoom: 4, attribution: '\u00a9 OpenStreetMap'
         }).addTo(supsaMap);
@@ -16775,9 +16728,7 @@
       }
 
       Object.keys(supsaMarkers).forEach(function (key) { supsaMap.removeLayer(supsaMarkers[key]); });
-      Object.keys(supsaBoundaries).forEach(function (key) { supsaMap.removeLayer(supsaBoundaries[key]); });
       supsaMarkers = {};
-      supsaBoundaries = {};
 
       var bounds = [];
       supsaMapCells.forEach(function (cell) {
@@ -16789,20 +16740,6 @@
           if (supsaCoverage[key]) delete supsaCoverage[key]; else supsaCoverage[key] = true;
           supsaRenderAll();
         };
-
-        if (cell.boundary && cell.boundary.length >= 3) {
-          var boundary = L.polygon(cell.boundary, {
-            color: sel ? '#28488f' : '#5a7a90',
-            weight: sel ? 2 : 1.2,
-            fillColor: sel ? '#284890' : '#ffffff',
-            fillOpacity: sel ? 0.16 : 0.04,
-            bubblingMouseEvents: false
-          });
-          boundary.bindTooltip(tooltipHtml, { direction: 'top', className: 'supsa-leaflet-tooltip' });
-          boundary.on('click', toggle);
-          boundary.addTo(supsaMap);
-          supsaBoundaries[key] = boundary;
-        }
 
         var marker = L.circleMarker([cell.lat, cell.lng], {
           radius: sel ? 7 : 4,
