@@ -5603,7 +5603,7 @@
       <div class="ob-container">
 
         <!-- Step 1: About Business -->
-        <section class="ob-step active" data-step="1">
+        <section class="ob-step active" data-step="1" data-stepkey="portfolio">
           <h2>Tell us about your business</h2>
           <p class="ob-subtext">Help us match you with the right jobs and set up the correct compliance checks.</p>
 
@@ -5666,7 +5666,7 @@
         </section>
 
         <!-- Step 2: Identity -->
-        <section class="ob-step" data-step="2">
+        <section class="ob-step" data-step="2" data-stepkey="identity">
         <div id="supIdentitySoleTrader">
           <h2>Your identity</h2>
           <p class="ob-subtext" style="font-size:12px;margin-bottom:20px;">As a sole trader, you are the business. We verify your personal identity to comply with UK marketplace regulations and HMRC DAC7 reporting.</p>
@@ -5970,7 +5970,7 @@
         </section>
 
         <!-- Step 3: Insurance & Compliance -->
-        <section class="ob-step" data-step="3">
+        <section class="ob-step" data-step="3" data-stepkey="insurance">
           <h2>Insurance &amp; compliance</h2>
           <p class="ob-subtext">Your insurance and certifications are displayed on your marketplace profile as trust badges. Verified credentials increase your visibility and booking rate.</p>
 
@@ -6154,7 +6154,7 @@
         </section>
 
         <!-- Step 4: Background Checks & Right to Work -->
-        <section class="ob-step" data-step="4">
+        <section class="ob-step" data-step="4" data-stepkey="background">
         <div id="supBgCheckSoleTrader">
           <h2>Background checks &amp; right to work</h2>
 
@@ -6466,7 +6466,7 @@
         </section>
 
         <!-- Step 5: Payment setup -->
-        <section class="ob-step" data-step="5">
+        <section class="ob-step" data-step="5" data-stepkey="payment">
           <h2>Payment setup</h2>
           <p class="ob-subtext">Confirm your VAT status and accept the self-billing agreement so we can pay you out. You can also do this later from your earnings page.</p>
 
@@ -6532,7 +6532,7 @@
         </section>
 
         <!-- Step 6: Categories & Roles -->
-        <section class="ob-step" data-step="6">
+        <section class="ob-step" data-step="6" data-stepkey="categories">
           <h2>Categories &amp; roles</h2>
           <p class="ob-subtext">Pick the categories you work in and the specific roles within each. We route matching jobs to you and decide which certificates to verify based on your role choices.</p>
 
@@ -6581,7 +6581,7 @@
         </section>
 
         <!-- Step 7: Setup Profile -->
-        <section class="ob-step" data-step="7">
+        <section class="ob-step" data-step="7" data-stepkey="setup-profile">
           <h2>Setup profile</h2>
           <p class="ob-subtext">Set your availability, share your experience, and tell clients about yourself.</p>
 
@@ -15137,42 +15137,48 @@
   var supObCurrentStep = 1;
   var TOTAL_SUP_OB_STEPS = 7;
 
-  var supObStepMeta = {
-    1: { label: 'Setup', next: 'Continue' },
-    2: { label: 'Verification', next: 'Continue' },
-    3: { label: 'Verification', next: 'Continue' },
-    4: { label: 'Verification', next: 'Continue' },
-    5: { label: 'Profile', next: 'Continue' },
-    6: { label: 'Profile', next: 'Continue' },
-    7: { label: 'Profile', next: 'Submit for Review' }
-  };
-  var PROFILE_PHASE_STEPS = { 5: 1, 6: 2, 7: 3 }; // step -> sub-step index (1-3)
+  // Categories & Roles moves before Insurance for Sole Trader only; Company keeps the original order.
+  var SUP_OB_ORDER_SOLE = ['portfolio', 'identity', 'categories', 'insurance', 'background', 'payment', 'setup-profile'];
+  var SUP_OB_ORDER_COMPANY = ['portfolio', 'identity', 'insurance', 'background', 'payment', 'categories', 'setup-profile'];
+  var SUP_OB_PROFILE_KEYS = ['payment', 'categories', 'setup-profile'];
 
-  function findSupStepEl(step) {
-    return supObApp.querySelector('.ob-step[data-step="' + step + '"]');
+  function currentSupObStepOrder() {
+    var companyTile = document.querySelector('#businessTypeTiles .choice-tile[data-value="company"]');
+    var isCompany = companyTile && companyTile.classList.contains('selected');
+    return isCompany ? SUP_OB_ORDER_COMPANY : SUP_OB_ORDER_SOLE;
+  }
+
+  function findSupStepEl(key) {
+    return supObApp.querySelector('.ob-step[data-stepkey="' + key + '"]');
   }
 
   function renderSupObStep(step) {
     supObSteps.forEach(function (el) { el.classList.remove('active'); });
-    var target = findSupStepEl(step);
+    var order = currentSupObStepOrder();
+    var key = order[step - 1];
+    var target = findSupStepEl(key);
     if (target) target.classList.add('active');
     supObContent.scrollTop = 0;
 
     supObNextBtn.hidden = false;
-    var meta = supObStepMeta[step];
-    supObStepLabel.textContent = meta.label;
-    supObNextBtn.innerHTML = meta.next + ' <span class="arrow">→</span>';
+    var label = step === 1 ? 'Setup' : (step >= 5 ? 'Profile' : 'Verification');
+    var isLast = step === TOTAL_SUP_OB_STEPS;
+    supObStepLabel.textContent = label;
+    supObNextBtn.innerHTML = (isLast ? 'Submit for Review' : 'Continue') + ' <span class="arrow">→</span>';
     supObBackBtn.hidden = step === 1;
     supObProgressFill.style.width = ((step / TOTAL_SUP_OB_STEPS) * 100) + '%';
 
     var stepper = document.getElementById('supProfileDotStepper');
-    var subStep = PROFILE_PHASE_STEPS[step];
-    if (subStep) {
+    var isCompanyType = order === SUP_OB_ORDER_COMPANY;
+    var profileKeys = isCompanyType ? SUP_OB_PROFILE_KEYS : ['payment', 'setup-profile'];
+    var allDots = stepper.querySelectorAll('.stepper-dot');
+    if (allDots[2]) allDots[2].style.display = isCompanyType ? '' : 'none';
+    if (profileKeys.indexOf(key) !== -1) {
       stepper.classList.add('show');
-      var dots = stepper.querySelectorAll('.stepper-dot');
-      dots.forEach(function (dot, i) {
-        var idx = i + 1;
-        dot.className = 'stepper-dot ' + (idx < subStep ? 'done' : idx === subStep ? 'current' : 'upcoming');
+      var currentPos = order.indexOf(key);
+      Array.prototype.slice.call(allDots, 0, profileKeys.length).forEach(function (dot, i) {
+        var comparePos = order.indexOf(profileKeys[i]);
+        dot.className = 'stepper-dot ' + (comparePos < currentPos ? 'done' : comparePos === currentPos ? 'current' : 'upcoming');
       });
     } else {
       stepper.classList.remove('show');
@@ -15365,6 +15371,18 @@
   initSingleSelectTiles(document.getElementById('supPscTiles'), function (value) {
     setCollapsibleOpen(supPscFields, true);
     setCollapsibleOpen(supPscConfirmField, true);
+    if (value === 'yes') {
+      document.getElementById('supPscName').value = document.getElementById('supCompanyFullName').value;
+      document.getElementById('supPscPhone').value = document.getElementById('supCompanyPhone').value;
+      document.getElementById('supPscEmail').value = document.getElementById('supCompanyEmail').value;
+    } else {
+      document.getElementById('supPscName').value = '';
+      document.getElementById('supPscPhone').value = '';
+      document.getElementById('supPscEmail').value = '';
+      calState.obPscDob.selected = null;
+      document.querySelector('[data-cal-text="obPscDob"]').textContent = 'Select date...';
+      document.querySelector('[data-cal-text="obPscDob"]').classList.add('cdd-placeholder');
+    }
     setTimeout(companyIdentityBanner.update, 0);
   });
   initObToggle('supPscConfirmToggle', null);
