@@ -4159,8 +4159,87 @@
   @media (max-width: 640px) { .pmjr-chat-drawer { width: 100%; max-width: 100%; border-radius: 0; } }
 
   /* =========================================================
-     PM: PROPERTIES
+     PM: TICKETS
   ========================================================== */
+  #pmtkTabs { display: flex; gap: 4px; background: #EEF0F4; padding: 5px; border-radius: 14px; margin-top: 20px; width: fit-content; }
+  #pmtkTabs .pmjr-tab { padding: 7px 13px; font-size: 13px; border-radius: 9px; border-bottom: none; margin-bottom: 0; }
+  #pmtkTabs .pmjr-tab.active { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); color: #fff; }
+  #pmtkTabs .pmjr-tab .pmjr-tab-count { background: var(--surface-white); }
+  #pmtkTabs .pmjr-tab.active .pmjr-tab-count { background: rgba(255,255,255,0.25); color: #fff; }
+
+  .pmtk-header-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  .pmtk-table-wrap { margin-top: 20px; border: 1px solid var(--border-subtle); border-radius: 14px; overflow: hidden; background: #fff; }
+  .pmtk-table { width: 100%; border-collapse: collapse; }
+  .pmtk-table thead th { text-align: left; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-body-muted); padding: 14px 18px; background: var(--surface-soft); border-bottom: 1px solid var(--border-subtle); white-space: nowrap; }
+  .pmtk-table tbody tr { border-bottom: 1px solid var(--border-subtle); cursor: pointer; transition: background-color 100ms ease-out; }
+  .pmtk-table tbody tr:last-child { border-bottom: none; }
+  .pmtk-table tbody tr:hover { background: var(--surface-soft); }
+  .pmtk-table td { padding: 14px 18px; font-size: 13.5px; color: var(--text-heading); vertical-align: middle; }
+  .pmtk-ticket-id { color: var(--accent-blue); font-weight: 700; white-space: nowrap; }
+  .pmtk-source-badge { display: inline-flex; align-items: center; font-size: 11.5px; font-weight: 700; padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+  .pmtk-source-badge.supplier { background: #fdf1de; color: #92650a; }
+  .pmtk-source-badge.tenant { background: var(--icon-tint-bg); color: var(--accent-blue); }
+  .pmtk-subject { font-weight: 700; color: var(--text-heading); }
+  .pmtk-subline { font-size: 12px; color: var(--text-body-muted); margin-top: 2px; }
+  .pmtk-chip { display: inline-flex; align-items: center; font-size: 11.5px; font-weight: 700; padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+  .pmtk-chip.high { background: #fef1f0; color: #d92d20; }
+  .pmtk-chip.medium { background: var(--icon-tint-bg); color: var(--accent-blue); }
+  .pmtk-chip.low { background: var(--surface-soft); color: var(--text-body-muted); }
+  .pmtk-chip.resolved { background: #eafaf0; color: #1a7a3e; }
+  .pmtk-chip.new { background: #fef1f0; color: #d92d20; }
+  .pmtk-chip.closed { background: var(--surface-soft); color: var(--text-body-muted); }
+  .pmtk-chip.waiting-tenant { background: #f2edfc; color: #7c3aed; }
+  .pmtk-dot-label { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+  .pmtk-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .pmtk-dot.high, .pmtk-dot.new { background: #d92d20; }
+  .pmtk-dot.medium { background: var(--accent-blue); }
+  .pmtk-dot.low, .pmtk-dot.closed { background: #94a3b8; }
+  .pmtk-dot.resolved { background: #1a7a3e; }
+  .pmtk-dot.waiting-tenant { background: #8b5cf6; }
+  .pmtk-chevron-cell { text-align: right; color: #94a3b8; width: 30px; }
+  .pmtk-empty-property { color: #94a3b8; }
+  .pmtk-pagination { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; font-size: 13px; color: var(--text-body-muted); }
+  .pmtk-page-btns { display: flex; align-items: center; gap: 6px; }
+  .pmtk-page-btn { width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--border-subtle); background: #fff; color: var(--text-heading); font-size: 12.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .pmtk-page-btn.active { background: var(--navy-900); color: #fff; border-color: transparent; }
+  .pmtk-page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .pmtk-empty-state { text-align: center; padding: 60px 20px; color: var(--text-body-muted); font-size: 13px; }
+
+  /* Ticket detail side panel */
+  .pmtk-detail-overlay { position: fixed; inset: 0; background: rgba(16,24,40,0.35); z-index: 90; opacity: 0; pointer-events: none; transition: opacity 200ms ease-out; }
+  .pmtk-detail-overlay.open { opacity: 1; pointer-events: auto; }
+  .pmtk-detail-panel { position: fixed; top: 0; right: 0; height: 100%; width: min(460px, 94vw); background: #fff; z-index: 91; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 240ms cubic-bezier(0.16,1,0.3,1); box-shadow: -16px 0 40px rgba(16,24,40,0.2); }
+  .pmtk-detail-overlay.open .pmtk-detail-panel { transform: translateX(0); }
+  .pmtk-detail-head { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; border-bottom: 1px solid var(--border-subtle); flex-shrink: 0; }
+  .pmtk-detail-head-left { display: flex; align-items: center; gap: 10px; }
+  .pmtk-detail-id { font-size: 14px; font-weight: 800; color: var(--accent-blue); }
+  .pmtk-detail-close { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border-subtle); background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-body-muted); flex-shrink: 0; }
+  .pmtk-detail-close:hover { background: var(--surface-soft); }
+  .pmtk-detail-body { padding: 22px; overflow-y: auto; flex: 1; }
+  .pmtk-detail-subject { font-size: 19px; font-weight: 800; color: var(--text-heading); margin-bottom: 12px; }
+  .pmtk-detail-badges { display: flex; gap: 8px; margin-bottom: 24px; }
+  .pmtk-badge-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; padding: 4px 11px; border-radius: 999px; }
+  .pmtk-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 22px; }
+  .pmtk-info-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-body-muted); margin-bottom: 5px; }
+  .pmtk-info-value { font-size: 13.5px; font-weight: 700; color: var(--text-heading); }
+  .pmtk-detail-section-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-body-muted); margin-bottom: 8px; margin-top: 4px; }
+  .pmtk-linked-job-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--accent-blue); background: var(--icon-tint-bg); border: 1px solid #c7d4ed; padding: 6px 12px; border-radius: 9px; margin: 0 8px 8px 0; cursor: pointer; }
+  .pmtk-reported-issue { font-size: 13.5px; color: var(--text-heading); line-height: 1.5; margin-bottom: 22px; }
+  .pmtk-photos-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+  .pmtk-photo-thumb { width: 128px; }
+  .pmtk-photo-thumb-img { width: 128px; height: 88px; border-radius: 10px; border: 1px solid var(--border-subtle); object-fit: cover; background: var(--surface-soft); display: flex; align-items: center; justify-content: center; color: #94a3b8; }
+  .pmtk-photo-name { font-size: 11px; color: var(--text-body-muted); margin-top: 5px; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* New Tenant Ticket modal */
+  .pmtk-newticket-card { background: #fff; border-radius: 18px; padding: 26px 28px; width: min(520px, 92vw); max-height: 88vh; overflow-y: auto; }
+  .pmtk-newticket-title { font-size: 19px; font-weight: 800; color: var(--text-heading); }
+  .pmtk-newticket-sub { font-size: 13px; color: var(--text-body-muted); margin-top: 6px; line-height: 1.5; }
+  .pmtk-delivery-row { display: flex; gap: 10px; }
+  .pmtk-delivery-tab { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 11px; border: 1.5px solid var(--border-subtle); border-radius: 10px; font-size: 13px; font-weight: 700; color: var(--text-body-muted); cursor: pointer; background: #fff; }
+  .pmtk-delivery-tab.active { border-color: var(--accent-blue); color: var(--accent-blue); background: var(--icon-tint-bg); }
+
+
   .pmprop-header-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
   .pmprop-quickadd-btn { display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 1.5px solid var(--border-subtle); border-radius: 9px; padding: 10px 16px; font-size: 12.5px; font-weight: 700; color: var(--text-heading); cursor: pointer; font-family: inherit; }
   .pmprop-quickadd-btn:hover { border-color: #90a8c8; background: var(--surface-soft); }
@@ -7783,10 +7862,158 @@
             </div>
           </div>
 
+          <!-- Tickets view -->
+          <div id="pmTicketsView" style="display:none;">
+            <div class="dash-section">
+              <div class="dash-header">
+                <div>
+                  <h2>Tickets</h2>
+                  <div class="dash-content-sub">Communication hub — tenants, suppliers &amp; Keylr Support</div>
+                </div>
+                <div class="dash-header-actions">
+                  <div class="dash-search-bar" style="max-width:280px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                    <input type="text" id="pmtkSearchInput" placeholder="Search ticket, property, tenant, job...">
+                  </div>
+                  <button type="button" class="btn btn-primary" id="pmtkNewTicketBtn" style="white-space:nowrap;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>New Tenant Ticket</button>
+                </div>
+              </div>
+
+              <div id="pmtkTabs" style="margin-top:16px;">
+                <div class="pmjr-tab active" data-pmtk-tab="all">All <span class="pmjr-tab-count" id="pmtkCountAll">0</span></div>
+                <div class="pmjr-tab" data-pmtk-tab="tenant">Tenant <span class="pmjr-tab-count" id="pmtkCountTenant">0</span></div>
+                <div class="pmjr-tab" data-pmtk-tab="supplier">Supplier <span class="pmjr-tab-count" id="pmtkCountSupplier">0</span></div>
+                <div class="pmjr-tab" data-pmtk-tab="support">Support <span class="pmjr-tab-count" id="pmtkCountSupport">0</span></div>
+                <div class="pmjr-tab" data-pmtk-tab="unread">Unread <span class="pmjr-tab-count" id="pmtkCountUnread">0</span></div>
+              </div>
+
+              <div class="pmtk-table-wrap">
+                <table class="pmtk-table">
+                  <thead>
+                    <tr>
+                      <th>Ticket</th>
+                      <th>Source</th>
+                      <th>Property</th>
+                      <th>Subject</th>
+                      <th>Raised by</th>
+                      <th>Priority</th>
+                      <th>Status</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="pmtkTableBody"></tbody>
+                </table>
+              </div>
+              <div class="pmtk-pagination">
+                <div id="pmtkShowingText">Showing 1–10 of 15 tickets</div>
+                <div class="pmtk-page-btns" id="pmtkPageBtns"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ticket detail side panel -->
+          <div class="pmtk-detail-overlay" id="pmtkDetailOverlay">
+            <div class="pmtk-detail-panel">
+              <div class="pmtk-detail-head">
+                <div class="pmtk-detail-head-left">
+                  <span class="pmtk-detail-id" id="pmtkDetailId">TK-1024</span>
+                  <span class="pmtk-source-badge" id="pmtkDetailSourceBadge">Supplier</span>
+                </div>
+                <button type="button" class="pmtk-detail-close" id="pmtkDetailCloseBtn" aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+              </div>
+              <div class="pmtk-detail-body">
+                <div class="pmtk-detail-subject" id="pmtkDetailSubject">—</div>
+                <div class="pmtk-detail-badges">
+                  <span class="pmtk-badge-pill" id="pmtkDetailPriorityBadge">High</span>
+                  <span class="pmtk-badge-pill" id="pmtkDetailStatusBadge">Resolved</span>
+                </div>
+                <div class="pmtk-info-grid">
+                  <div>
+                    <div class="pmtk-info-label">Property</div>
+                    <div class="pmtk-info-value" id="pmtkDetailProperty">—</div>
+                  </div>
+                  <div>
+                    <div class="pmtk-info-label" id="pmtkDetailPersonLabel">Supplier</div>
+                    <div class="pmtk-info-value" id="pmtkDetailPerson">—</div>
+                  </div>
+                </div>
+                <div class="pmtk-info-grid">
+                  <div>
+                    <div class="pmtk-info-label">Created</div>
+                    <div class="pmtk-info-value" id="pmtkDetailCreated" style="font-weight:600;font-size:12.5px;">—</div>
+                  </div>
+                  <div>
+                    <div class="pmtk-info-label">Status</div>
+                    <div class="pmtk-info-value" id="pmtkDetailStatusText">—</div>
+                  </div>
+                </div>
+                <div id="pmtkDetailCategoryWrap" style="margin-bottom:22px;">
+                  <div class="pmtk-info-label">Category</div>
+                  <div class="pmtk-info-value" id="pmtkDetailCategory">—</div>
+                </div>
+                <div id="pmtkDetailLinkedJobWrap" style="margin-bottom:4px;">
+                  <div class="pmtk-detail-section-label">Linked job</div>
+                  <div id="pmtkDetailLinkedJobs"></div>
+                </div>
+                <div class="pmtk-detail-section-label">Reported issue</div>
+                <div class="pmtk-reported-issue" id="pmtkDetailIssue">—</div>
+                <div id="pmtkDetailPhotosWrap">
+                  <div class="pmtk-detail-section-label">Photos</div>
+                  <div class="pmtk-photos-grid" id="pmtkDetailPhotos"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- New Tenant Ticket modal -->
+          <div class="modal-overlay" id="pmtkNewTicketOverlay">
+            <div class="pmtk-newticket-card">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;">
+                <div class="pmtk-newticket-title">New Tenant Ticket</div>
+                <button type="button" class="pmtk-detail-close" id="pmtkNewTicketCloseBtn" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+              </div>
+              <div class="pmtk-newticket-sub">Enter the tenant's details and send a secure link. The tenant adds the issue themselves.</div>
+
+              <div class="ob-field" style="margin-top:20px;">
+                <label>Property</label>
+                <div style="position:relative;">
+                  <button type="button" class="pm-custom-dd-btn ob-select-dd" data-dd="pmtkNewTicketProperty" style="width:100%;"><span class="cdd-value cdd-placeholder">Select property...</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                  <div class="pm-custom-dd-menu" data-dd-menu="pmtkNewTicketProperty">
+                    <div class="cdd-item" data-value="Unit 18, Flat 62, 135 Kings Road">Unit 18, Flat 62, 135 Kings Road</div>
+                    <div class="cdd-item" data-value="Flat 4B, Homeland Heights">Flat 4B, Homeland Heights</div>
+                    <div class="cdd-item" data-value="Unit 10, Flat 38, 79 Victoria Road">Unit 10, Flat 38, 79 Victoria Road</div>
+                    <div class="cdd-item" data-value="Unit 6, Flat 26, 51 Queens Drive">Unit 6, Flat 26, 51 Queens Drive</div>
+                  </div>
+                </div>
+              </div>
+              <div class="ob-field">
+                <label>Tenant email <span style="color:var(--required-red);font-weight:700;">*</span></label>
+                <input class="field-input" type="email" id="pmtkNewTicketEmail" placeholder="tenant@example.com">
+              </div>
+              <div class="ob-field">
+                <label>Tenant name <span style="color:var(--text-body-muted);font-weight:600;">(optional)</span></label>
+                <input class="field-input" type="text" id="pmtkNewTicketName" placeholder="e.g. Sam Taylor">
+              </div>
+              <div class="ob-field">
+                <label>Message to tenant <span style="color:var(--text-body-muted);font-weight:600;">(optional)</span></label>
+                <textarea class="field-input" id="pmtkNewTicketMessage" rows="3" placeholder="e.g. Please report the boiler fault and attach a photo." style="resize:vertical;"></textarea>
+              </div>
+              <div class="ob-field" style="margin-bottom:16px;">
+                <label>Delivery</label>
+                <div class="pmtk-delivery-row">
+                  <div class="pmtk-delivery-tab active" data-pmtk-delivery="email"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6 10-6"/></svg>Email</div>
+                  <div class="pmtk-delivery-tab" data-pmtk-delivery="sms"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>SMS</div>
+                  <div class="pmtk-delivery-tab" data-pmtk-delivery="copy"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.07 0l1.71-1.71a5 5 0 00-7.07-7.07L10 6"/><path d="M14 11a5 5 0 00-7.07 0l-1.71 1.71a5 5 0 007.07 7.07L14 18"/></svg>Copy link</div>
+                </div>
+              </div>
+              <button type="button" class="btn btn-primary" id="pmtkNewTicketSendBtn" style="width:100%;justify-content:center;padding:13px;font-size:14.5px;">Send via Email</button>
+            </div>
+          </div>
+
           <!-- Job Responses view -->
           <div id="pmResponsesView" style="display:none;">
             <div class="dash-section">
-              <div class="dash-header">
+            <div class="dash-header">
                 <div>
                   <div style="font-size:11px;font-weight:700;letter-spacing:0.06em;color:#94a3b8;margin-bottom:4px;">JOBS</div>
                   <h2 style="background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); -webkit-background-clip: text; background-clip: text; color: transparent;">Job Responses</h2>
@@ -14795,6 +15022,284 @@
     pmpropDeleteTargetId = null;
   }
 
+  /* =========================================================
+     PM: TICKETS
+  ========================================================== */
+  var PMTICKET_DATA = [
+    { id: 'TK-1024', source: 'supplier', property: 'Unit 18, Flat 62, 135 Kings Road', subject: 'Light is not working', subline: 'Ticket marked resolved', raisedBy: 'Liam Greenwood', priority: 'high', status: 'resolved',
+      person: 'Liam Greenwood', created: '2026-06-27T03:09:44.117390+00:00', category: 'Out-of-scope work', linkedJobs: ['K-2651', 'K-2652'], issue: 'Light is not working properly',
+      photos: ['Pasted image (8).png', 'Pasted image (9).png'] },
+    { id: 'TK-1027', source: 'supplier', property: 'travelodge hotel', subject: 'Found work larger than agreed', subline: 'Ticket raised by Liam Greenwood', raisedBy: 'Liam Greenwood', priority: 'low', status: 'new',
+      person: 'Liam Greenwood', created: '2026-07-10T09:15:00.000000+00:00', category: 'Out-of-scope work', linkedJobs: [], issue: 'Found work larger than what was originally agreed in the quote — additional scope needs sign-off before continuing.', photos: [] },
+    { id: 'TK-1026', source: 'tenant', property: 'Flat 4B, Homeland Heights', subject: 'Awaiting tenant submission', subline: 'Magic link created (copy link) to Tenant', raisedBy: 'Tenant', priority: 'medium', status: 'waiting-tenant',
+      person: '—', created: '2026-07-08T14:20:00.000000+00:00', category: '', linkedJobs: [], issue: 'Awaiting tenant to submit their issue via the secure link that was sent.', photos: [] },
+    { id: 'TK-1025', source: 'tenant', property: 'Flat 4B, Homeland Heights', subject: 'Test Ticket', subline: 'Magic link re-created (copy link) to Tenant', raisedBy: 'Tenant', priority: 'medium', status: 'closed',
+      person: '—', created: '2026-07-05T11:00:00.000000+00:00', category: '', linkedJobs: [], issue: 'Test ticket created for demo purposes.', photos: [] },
+    { id: 'TK-1023', source: 'supplier', property: '—', subject: 'Pipe leakgae at Washroom', subline: 'Completed — job #K-2651', raisedBy: 'Liam Greenwood', priority: 'high', status: 'resolved',
+      person: 'Liam Greenwood', created: '2026-06-20T10:00:00.000000+00:00', category: 'Job completion', linkedJobs: ['K-2651'], issue: 'Pipe leakage found at washroom during inspection.', photos: [] },
+    { id: 'TK-1022', source: 'supplier', property: '—', subject: 'Pipe problem', subline: 'Completed — job #K-2645', raisedBy: 'Liam Greenwood', priority: 'high', status: 'resolved',
+      person: 'Liam Greenwood', created: '2026-06-18T09:30:00.000000+00:00', category: 'Job completion', linkedJobs: ['K-2645'], issue: 'Pipe problem identified while carrying out the job.', photos: [] },
+    { id: 'TK-1021', source: 'supplier', property: '—', subject: 'There is an issue with Pipe', subline: 'Completed — job #K-2645', raisedBy: 'Liam Greenwood', priority: 'medium', status: 'resolved',
+      person: 'Liam Greenwood', created: '2026-06-17T15:45:00.000000+00:00', category: 'Job completion', linkedJobs: ['K-2645'], issue: 'Issue with pipe reported while on-site for the job.', photos: [] },
+    { id: 'TK-1018', source: 'tenant', property: 'Unit 10, Flat 38, 79 Victoria Road', subject: 'bedroom is not clean properly', subline: 'Completed — job #K-2631', raisedBy: 'sam', priority: 'medium', status: 'resolved',
+      person: 'sam', created: '2026-06-10T08:00:00.000000+00:00', category: 'Cleaning', linkedJobs: ['K-2631'], issue: 'Bedroom was not cleaned properly by the cleaner.', photos: [] },
+    { id: 'TK-1017', source: 'tenant', property: 'Unit 6, Flat 26, 51 Queens Drive', subject: 'boiler not working', subline: 'Ticket closed', raisedBy: 'fekov', priority: 'medium', status: 'closed',
+      person: 'fekov', created: '2026-06-05T07:30:00.000000+00:00', category: 'Heating', linkedJobs: [], issue: 'Boiler not working, no hot water.', photos: [] },
+    { id: 'TK-1016', source: 'tenant', property: 'Unit 18, Flat 62, 135 Kings Road', subject: 'qweqwe', subline: 'Tenant submitted the ticket', raisedBy: 'Gavy', priority: 'medium', status: 'new',
+      person: 'Gavy', created: '2026-06-01T12:00:00.000000+00:00', category: '', linkedJobs: [], issue: 'qweqwe', photos: [] },
+    { id: 'TK-1015', source: 'tenant', property: 'Flat 2A, Riverside Court', subject: 'Leaking tap in kitchen', subline: 'Ticket closed', raisedBy: 'Priya N.', priority: 'low', status: 'closed',
+      person: 'Priya N.', created: '2026-05-28T10:00:00.000000+00:00', category: 'Plumbing', linkedJobs: [], issue: 'Kitchen tap has been leaking for a few days.', photos: [] },
+    { id: 'TK-1014', source: 'tenant', property: 'Unit 3, Elm House', subject: 'Broken window latch', subline: 'Ticket closed', raisedBy: 'Marcus O.', priority: 'low', status: 'closed',
+      person: 'Marcus O.', created: '2026-05-20T09:00:00.000000+00:00', category: 'Maintenance', linkedJobs: [], issue: 'Window latch in the living room is broken.', photos: [] },
+    { id: 'TK-1013', source: 'tenant', property: 'Flat 7, Oak Court', subject: 'No hot water', subline: 'Completed — job #K-2598', raisedBy: 'Elena V.', priority: 'high', status: 'resolved',
+      person: 'Elena V.', created: '2026-05-15T08:30:00.000000+00:00', category: 'Heating', linkedJobs: ['K-2598'], issue: 'No hot water since this morning.', photos: [] },
+    { id: 'TK-1012', source: 'tenant', property: 'Unit 5, Maple Court', subject: 'Smoke alarm beeping', subline: 'Completed — job #K-2570', raisedBy: 'Tom B.', priority: 'medium', status: 'resolved',
+      person: 'Tom B.', created: '2026-05-10T13:00:00.000000+00:00', category: 'Safety', linkedJobs: ['K-2570'], issue: 'Smoke alarm keeps beeping intermittently, likely a low battery.', photos: [] },
+    { id: 'TK-1011', source: 'tenant', property: 'Flat 12B, Homeland Heights', subject: 'Garden gate broken', subline: 'Ticket raised by tenant', raisedBy: 'Nadia R.', priority: 'low', status: 'new',
+      person: 'Nadia R.', created: '2026-05-05T11:15:00.000000+00:00', category: 'Maintenance', linkedJobs: [], issue: 'Garden gate latch is broken and won\u2019t stay closed.', photos: [] }
+  ];
+
+  var pmtkCurrentTab = 'all';
+  var pmtkSearchQuery = '';
+  var pmtkCurrentPage = 1;
+  var pmtkPageSize = 10;
+  var pmtkDeliveryMethod = 'email';
+  var pmtkInitialized = false;
+
+  var PMTK_STATUS_LABELS = { resolved: 'Resolved', new: 'New', 'waiting-tenant': 'Waiting for Tenant', closed: 'Closed' };
+  var PMTK_PRIORITY_LABELS = { high: 'High', medium: 'Medium', low: 'Low' };
+
+  function pmtkFilteredTickets() {
+    var list = PMTICKET_DATA.slice();
+    if (pmtkCurrentTab !== 'all' && pmtkCurrentTab !== 'unread') {
+      list = list.filter(function (t) { return t.source === pmtkCurrentTab; });
+    }
+    if (pmtkCurrentTab === 'unread') {
+      list = []; // no unread tickets in this demo dataset
+    }
+    if (pmtkSearchQuery) {
+      var q = pmtkSearchQuery.toLowerCase();
+      list = list.filter(function (t) {
+        return t.id.toLowerCase().indexOf(q) !== -1 ||
+          t.property.toLowerCase().indexOf(q) !== -1 ||
+          t.subject.toLowerCase().indexOf(q) !== -1 ||
+          t.raisedBy.toLowerCase().indexOf(q) !== -1 ||
+          (t.linkedJobs || []).some(function (j) { return j.toLowerCase().indexOf(q) !== -1; });
+      });
+    }
+    return list;
+  }
+
+  function pmtkUpdateTabCounts() {
+    document.getElementById('pmtkCountAll').textContent = PMTICKET_DATA.length;
+    document.getElementById('pmtkCountTenant').textContent = PMTICKET_DATA.filter(function (t) { return t.source === 'tenant'; }).length;
+    document.getElementById('pmtkCountSupplier').textContent = PMTICKET_DATA.filter(function (t) { return t.source === 'supplier'; }).length;
+    document.getElementById('pmtkCountSupport').textContent = PMTICKET_DATA.filter(function (t) { return t.source === 'support'; }).length;
+    document.getElementById('pmtkCountUnread').textContent = 0;
+  }
+
+  function pmtkFmtDate(iso) {
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return iso;
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
+  function pmtkRowHtml(t) {
+    var propertyHtml = t.property === '—' ? '<span class="pmtk-empty-property">—</span>' : supjrEscapeHtml(t.property);
+    return '<tr data-pmtk-row="' + t.id + '">' +
+      '<td class="pmtk-ticket-id">' + t.id + '</td>' +
+      '<td><span class="pmtk-source-badge ' + t.source + '">' + (t.source.charAt(0).toUpperCase() + t.source.slice(1)) + '</span></td>' +
+      '<td>' + propertyHtml + '</td>' +
+      '<td><div class="pmtk-subject">' + supjrEscapeHtml(t.subject) + '</div><div class="pmtk-subline">' + supjrEscapeHtml(t.subline) + '</div></td>' +
+      '<td>' + supjrEscapeHtml(t.raisedBy) + '</td>' +
+      '<td><span class="pmtk-chip ' + t.priority + '">' + PMTK_PRIORITY_LABELS[t.priority] + '</span></td>' +
+      '<td><span class="pmtk-chip ' + t.status + '">' + PMTK_STATUS_LABELS[t.status] + '</span></td>' +
+      '<td class="pmtk-chevron-cell"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></td>' +
+      '</tr>';
+  }
+
+  function pmtkRenderTable() {
+    var filtered = pmtkFilteredTickets();
+    var totalPages = Math.max(1, Math.ceil(filtered.length / pmtkPageSize));
+    if (pmtkCurrentPage > totalPages) pmtkCurrentPage = totalPages;
+    var startIdx = (pmtkCurrentPage - 1) * pmtkPageSize;
+    var pageItems = filtered.slice(startIdx, startIdx + pmtkPageSize);
+
+    var tbody = document.getElementById('pmtkTableBody');
+    if (!pageItems.length) {
+      tbody.innerHTML = '<tr><td colspan="8"><div class="pmtk-empty-state">No tickets match this view.</div></td></tr>';
+    } else {
+      tbody.innerHTML = pageItems.map(pmtkRowHtml).join('');
+      tbody.querySelectorAll('tr[data-pmtk-row]').forEach(function (row) {
+        row.addEventListener('click', function () {
+          var ticket = PMTICKET_DATA.find(function (t) { return t.id === row.getAttribute('data-pmtk-row'); });
+          if (ticket) pmtkOpenDetail(ticket);
+        });
+      });
+    }
+
+    var showingFrom = filtered.length ? startIdx + 1 : 0;
+    var showingTo = Math.min(startIdx + pmtkPageSize, filtered.length);
+    document.getElementById('pmtkShowingText').textContent = 'Showing ' + showingFrom + '\u2013' + showingTo + ' of ' + filtered.length + ' ticket' + (filtered.length === 1 ? '' : 's');
+
+    var pageBtnsWrap = document.getElementById('pmtkPageBtns');
+    var html = '<button type="button" class="pmtk-page-btn" data-pmtk-page="prev"' + (pmtkCurrentPage === 1 ? ' disabled' : '') + '><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>';
+    for (var p = 1; p <= totalPages; p++) {
+      html += '<button type="button" class="pmtk-page-btn' + (p === pmtkCurrentPage ? ' active' : '') + '" data-pmtk-page="' + p + '">' + p + '</button>';
+    }
+    html += '<button type="button" class="pmtk-page-btn" data-pmtk-page="next"' + (pmtkCurrentPage === totalPages ? ' disabled' : '') + '><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>';
+    pageBtnsWrap.innerHTML = html;
+    pageBtnsWrap.querySelectorAll('[data-pmtk-page]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (btn.disabled) return;
+        var val = btn.getAttribute('data-pmtk-page');
+        if (val === 'prev') pmtkCurrentPage = Math.max(1, pmtkCurrentPage - 1);
+        else if (val === 'next') pmtkCurrentPage = Math.min(totalPages, pmtkCurrentPage + 1);
+        else pmtkCurrentPage = parseInt(val, 10);
+        pmtkRenderTable();
+      });
+    });
+  }
+
+  function pmtkOpenDetail(t) {
+    document.getElementById('pmtkDetailId').textContent = t.id;
+    var sourceBadge = document.getElementById('pmtkDetailSourceBadge');
+    sourceBadge.textContent = t.source.charAt(0).toUpperCase() + t.source.slice(1);
+    sourceBadge.className = 'pmtk-source-badge ' + t.source;
+    document.getElementById('pmtkDetailSubject').textContent = t.subject;
+
+    var priorityBadge = document.getElementById('pmtkDetailPriorityBadge');
+    priorityBadge.textContent = PMTK_PRIORITY_LABELS[t.priority];
+    priorityBadge.style.background = t.priority === 'high' ? '#fef1f0' : t.priority === 'medium' ? 'var(--icon-tint-bg)' : 'var(--surface-soft)';
+    priorityBadge.style.color = t.priority === 'high' ? '#d92d20' : t.priority === 'medium' ? 'var(--accent-blue)' : 'var(--text-body-muted)';
+
+    var statusBadge = document.getElementById('pmtkDetailStatusBadge');
+    statusBadge.textContent = PMTK_STATUS_LABELS[t.status];
+    var statusColors = {
+      resolved: ['#eafaf0', '#1a7a3e'], new: ['#fef1f0', '#d92d20'],
+      'waiting-tenant': ['#f2edfc', '#7c3aed'], closed: ['var(--surface-soft)', 'var(--text-body-muted)']
+    };
+    statusBadge.style.background = statusColors[t.status][0];
+    statusBadge.style.color = statusColors[t.status][1];
+
+    document.getElementById('pmtkDetailProperty').textContent = t.property;
+    document.getElementById('pmtkDetailPersonLabel').textContent = t.source === 'supplier' ? 'Supplier' : 'Tenant';
+    document.getElementById('pmtkDetailPerson').textContent = t.person;
+    document.getElementById('pmtkDetailCreated').textContent = t.created;
+    document.getElementById('pmtkDetailStatusText').innerHTML = '<span class="pmtk-dot-label"><span class="pmtk-dot ' + t.status + '"></span>' + PMTK_STATUS_LABELS[t.status] + '</span>';
+
+    var catWrap = document.getElementById('pmtkDetailCategoryWrap');
+    if (t.category) { catWrap.style.display = ''; document.getElementById('pmtkDetailCategory').textContent = t.category; }
+    else { catWrap.style.display = 'none'; }
+
+    var jobsWrap = document.getElementById('pmtkDetailLinkedJobWrap');
+    if (t.linkedJobs && t.linkedJobs.length) {
+      jobsWrap.style.display = '';
+      document.getElementById('pmtkDetailLinkedJobs').innerHTML = t.linkedJobs.map(function (j) {
+        return '<span class="pmtk-linked-job-chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>#' + j + '</span>';
+      }).join('');
+    } else {
+      jobsWrap.style.display = 'none';
+    }
+
+    document.getElementById('pmtkDetailIssue').textContent = t.issue;
+
+    var photosWrap = document.getElementById('pmtkDetailPhotosWrap');
+    if (t.photos && t.photos.length) {
+      photosWrap.style.display = '';
+      document.getElementById('pmtkDetailPhotos').innerHTML = t.photos.map(function (name) {
+        return '<div class="pmtk-photo-thumb"><div class="pmtk-photo-thumb-img"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div><div class="pmtk-photo-name">' + supjrEscapeHtml(name) + '</div></div>';
+      }).join('');
+    } else {
+      photosWrap.style.display = 'none';
+    }
+
+    document.getElementById('pmtkDetailOverlay').classList.add('open');
+  }
+
+  function pmtkSwitchTab(tab) {
+    pmtkCurrentTab = tab;
+    pmtkCurrentPage = 1;
+    document.querySelectorAll('#pmtkTabs .pmjr-tab').forEach(function (el) {
+      el.classList.toggle('active', el.getAttribute('data-pmtk-tab') === tab);
+    });
+    pmtkRenderTable();
+  }
+
+  function initPmTicketsOnce() {
+    if (pmtkInitialized) return;
+    pmtkInitialized = true;
+
+    pmtkUpdateTabCounts();
+    pmtkRenderTable();
+
+    document.querySelectorAll('#pmtkTabs .pmjr-tab').forEach(function (tabEl) {
+      tabEl.addEventListener('click', function () { pmtkSwitchTab(tabEl.getAttribute('data-pmtk-tab')); });
+    });
+
+    document.getElementById('pmtkSearchInput').addEventListener('input', function () {
+      pmtkSearchQuery = this.value.trim();
+      pmtkCurrentPage = 1;
+      pmtkRenderTable();
+    });
+
+    document.getElementById('pmtkDetailCloseBtn').addEventListener('click', function () {
+      document.getElementById('pmtkDetailOverlay').classList.remove('open');
+    });
+    document.getElementById('pmtkDetailOverlay').addEventListener('click', function (e) {
+      if (e.target === this) this.classList.remove('open');
+    });
+
+    document.getElementById('pmtkNewTicketBtn').addEventListener('click', function () {
+      document.getElementById('pmtkNewTicketEmail').value = '';
+      document.getElementById('pmtkNewTicketName').value = '';
+      document.getElementById('pmtkNewTicketMessage').value = '';
+      document.getElementById('pmtkNewTicketOverlay').classList.add('open');
+    });
+    document.getElementById('pmtkNewTicketCloseBtn').addEventListener('click', function () {
+      document.getElementById('pmtkNewTicketOverlay').classList.remove('open');
+    });
+    document.getElementById('pmtkNewTicketOverlay').addEventListener('click', function (e) {
+      if (e.target === this) this.classList.remove('open');
+    });
+
+    document.querySelectorAll('.pmtk-delivery-tab').forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        document.querySelectorAll('.pmtk-delivery-tab').forEach(function (t) { t.classList.remove('active'); });
+        tab.classList.add('active');
+        pmtkDeliveryMethod = tab.getAttribute('data-pmtk-delivery');
+        var sendBtn = document.getElementById('pmtkNewTicketSendBtn');
+        if (pmtkDeliveryMethod === 'email') sendBtn.textContent = 'Send via Email';
+        else if (pmtkDeliveryMethod === 'sms') sendBtn.textContent = 'Send via SMS';
+        else sendBtn.textContent = 'Copy Link';
+      });
+    });
+
+    document.getElementById('pmtkNewTicketSendBtn').addEventListener('click', function () {
+      var email = document.getElementById('pmtkNewTicketEmail').value.trim();
+      if (pmtkDeliveryMethod !== 'copy' && !email) {
+        showToast('Enter a tenant email address first.');
+        return;
+      }
+      var propertyBtn = document.querySelector('[data-dd="pmtkNewTicketProperty"] .cdd-value');
+      var propertyName = (propertyBtn && !propertyBtn.classList.contains('cdd-placeholder')) ? propertyBtn.textContent : '\u2014';
+      var nextNum = Math.max.apply(null, PMTICKET_DATA.map(function (t) { return parseInt(t.id.replace('TK-', ''), 10); })) + 1;
+      var newTicket = {
+        id: 'TK-' + nextNum, source: 'tenant', property: propertyName, subject: 'Awaiting tenant submission',
+        subline: 'Magic link created (copy link) to Tenant', raisedBy: 'Tenant', priority: 'medium', status: 'waiting-tenant',
+        person: '\u2014', created: new Date().toISOString(), category: '', linkedJobs: [],
+        issue: 'Awaiting tenant to submit their issue via the secure link that was just sent.', photos: []
+      };
+      PMTICKET_DATA.unshift(newTicket);
+      document.getElementById('pmtkNewTicketOverlay').classList.remove('open');
+      pmtkUpdateTabCounts();
+      pmtkSwitchTab('all');
+      if (pmtkDeliveryMethod === 'copy') showToast('Secure link copied to clipboard.');
+      else showToast('Ticket link sent via ' + (pmtkDeliveryMethod === 'email' ? 'email' : 'SMS') + '.');
+    });
+  }
+
   function initPmpropOnce() {
     if (pmpropInitialized) return;
     pmpropInitialized = true;
@@ -14877,7 +15382,7 @@
 
   /* ---- PM Settings view ---- */
   function showPMView(view) {
-    var viewIds = { home: 'pmHomeView', settings: 'pmSettingsView', explore: 'pmExploreView', responses: 'pmResponsesView', properties: 'pmPropertiesView', propertyform: 'pmPropertyFormView' };
+    var viewIds = { home: 'pmHomeView', settings: 'pmSettingsView', explore: 'pmExploreView', responses: 'pmResponsesView', properties: 'pmPropertiesView', propertyform: 'pmPropertyFormView', tickets: 'pmTicketsView' };
     Object.keys(viewIds).forEach(function (key) {
       var el = document.getElementById(viewIds[key]);
       if (key === view) {
@@ -16152,6 +16657,9 @@
       } else if (item.getAttribute('data-nav') === 'properties') {
         showPMView('properties');
         initPmpropOnce();
+      } else if (item.getAttribute('data-nav') === 'tickets') {
+        showPMView('tickets');
+        initPmTicketsOnce();
       } else {
         showToast(item.querySelector('.nav-label').textContent + ' isn\u2019t wired up in this prototype yet.');
       }
