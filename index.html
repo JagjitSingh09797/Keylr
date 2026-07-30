@@ -6197,11 +6197,11 @@
                       <div class="fd-label">Click to Upload<span class="fd-sub">PDF or image</span></div>
                     </div>
                   </div>
-                  <div class="ob-field"><label>PI insurance provider</label><input class="field-input" type="text" placeholder="e.g. Hiscox, AXA"></div>
+                  <div class="ob-field"><label>PI insurance provider</label><input class="field-input" type="text" id="piProvider" placeholder="e.g. Hiscox, AXA"></div>
                 </div>
                 <div class="ob-row-2">
-                  <div class="ob-field"><label>PI policy number</label><input class="field-input" type="text" placeholder="e.g. PI-12345"></div>
-                  <div class="ob-field"><label>PI coverage amount</label><input class="field-input" type="text" placeholder="e.g. £500,000"></div>
+                  <div class="ob-field"><label>PI policy number</label><input class="field-input" type="text" id="piPolicyNumber" placeholder="e.g. PI-12345"></div>
+                  <div class="ob-field"><label>PI coverage amount</label><input class="field-input" type="text" id="piCoverage" placeholder="e.g. £500,000"></div>
                 </div>
                 <div class="ob-field" style="max-width:calc(50% - 7px);">
                   <label>PI expiry date</label>
@@ -9039,10 +9039,8 @@
               <div class="pm-settings-tabs-row" id="supSettingsTabs" style="margin-top:8px;">
                 <div class="pm-settings-tab-item active" data-supsettingstab="profile">Profile</div>
                 <div class="pm-settings-tab-item" data-supsettingstab="sectors">Sectors</div>
-                <div class="pm-settings-tab-item" data-supsettingstab="identity">Identity</div>
-                <div class="pm-settings-tab-item" data-supsettingstab="insurance">Insurance</div>
-                <div class="pm-settings-tab-item" data-supsettingstab="background">Background</div>
-                <div class="pm-settings-tab-item" data-supsettingstab="questionnaire">Questionnaire</div>
+                <div class="pm-settings-tab-item" data-supsettingstab="insurance">Compliance</div>
+                <div class="pm-settings-tab-item" data-supsettingstab="questionnaire">Portfolio</div>
                 <div class="pm-settings-tab-item" data-supsettingstab="payment">Payment Setup</div>
                 <div class="pm-settings-tab-item" data-supsettingstab="settings">Settings</div>
               </div>
@@ -9096,6 +9094,92 @@
                     </div>
                     <div class="helper">Changing your mobile number requires OTP re-verification.</div>
                   </div>
+
+                  <div class="ob-section-heading">Personal Details</div>
+                  <div class="ob-row-2">
+                    <div class="ob-field">
+                      <label>Full legal name</label>
+                      <input class="field-input" type="text" value="Liam Greenwood" disabled style="background:var(--surface-soft);color:var(--text-body-muted);" id="supIdFullNameInput">
+                      <div class="helper">Contact support to change this. Verification required.</div>
+                    </div>
+                    <div class="ob-field">
+                      <label>Date of birth</label>
+                      <div class="pm-filter-field" style="width:100%;">
+                        <button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="supDob" style="width:100%;height:48px;">
+                          <span class="cdd-value cal-value" data-cal-text="supDob">05/11/1987</span>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                        </button>
+                        <div class="pm-cal-popup" data-cal-popup="supDob">
+                          <div class="pm-cal-head">
+                            <button type="button" class="pm-cal-month-label" data-cal-monthlabel="supDob"><span data-cal-monthtext="supDob">November 1987</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                            <div class="pm-cal-nav">
+                              <button type="button" class="pm-cal-nav-btn" data-cal-prev="supDob" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+                              <button type="button" class="pm-cal-nav-btn" data-cal-next="supDob" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
+                            </div>
+                          </div>
+                          <div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
+                          <div class="pm-cal-grid" data-cal-grid="supDob"></div>
+                          <div class="pm-cal-foot">
+                            <button type="button" class="pm-cal-link" data-cal-clear="supDob">Clear</button>
+                            <button type="button" class="pm-cal-link" data-cal-today="supDob">Today</button>
+                          </div>
+                        </div>
+                        <input type="hidden" id="supDobInput" value="1987-11-05">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="ob-row-2">
+                    <div class="ob-field">
+                      <label>Phone number</label>
+                      <input class="field-input" type="tel" value="+447671542225" id="supIdPhoneInput">
+                    </div>
+                    <div class="ob-field">
+                      <label>Email address</label>
+                      <input class="field-input" type="email" value="greenwood86@gmail.com" id="supIdEmailInput">
+                    </div>
+                  </div>
+                  <div class="ob-row-2">
+                    <div class="ob-field">
+                      <label>NI number</label>
+                      <input class="field-input" type="text" value="enc:131ac863d6307f0599e9f98e" disabled style="background:var(--surface-soft);color:var(--text-body-muted);">
+                      <div class="helper">View only. Contact support to change.</div>
+                    </div>
+                    <div class="ob-field">
+                      <label>Nationality</label>
+                      <input class="field-input" type="text" placeholder="e.g. British" id="supIdNationalityInput">
+                    </div>
+                  </div>
+                  <div class="ob-field">
+                    <label>Home address</label>
+                    <input class="field-input" type="text" value="91 Victoria Road, Manchester" id="supHomeAddressInput">
+                  </div>
+
+                  <div class="ob-toggle-card">
+                    <div class="otc-top">
+                      <div><div class="otc-title">Registered for HMRC self-assessment?</div><div class="otc-desc">Required if you trade as a sole trader.</div></div>
+                      <button type="button" class="toggle-switch on" id="supHmrcToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
+                    </div>
+                    <div class="field-collapsible open" id="supUtrField" style="max-height:1200px;opacity:1;">
+                      <div class="otc-body">
+                        <div class="ob-field" style="margin-bottom:0;">
+                          <label>UTR number</label>
+                          <input class="field-input" type="text" placeholder="10-digit number" id="supIdUtrInput">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="ob-section-heading">Proof of Address</div>
+                  <div class="scf-label" style="font-size:12.5px;font-weight:600;color:var(--text-body-muted);margin-bottom:8px;">Proof of address</div>
+                  <div class="sup-comp-doc-row">
+                    <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                    <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:700;color:var(--text-heading);" id="supProofAddressDocName">Uploaded</div><span class="sup-view-all-link" style="font-size:12px;" id="supProofAddressViewBtn" data-doc-view="Proof of Address">View file</span></div>
+                    <span class="scdr-badge">UPLOADED</span>
+                    <span style="font-size:12.5px;font-weight:600;color:var(--accent-blue);cursor:pointer;" id="supProofAddressReplaceBtn" data-doc-replace="proofAddress">Replace</span>
+                    <input type="file" data-doc-input="proofAddress" style="display:none;">
+                    <span style="cursor:pointer;color:var(--text-body-muted);">&times;</span>
+                  </div>
+
                   <div style="display:flex;justify-content:flex-end;margin-top:20px;"><button type="button" class="btn btn-primary" data-supsettings-save="Profile">Save Changes</button></div>
                 </div>
               </div>
@@ -9130,98 +9214,53 @@
                       <div class="simple-chip selected" data-value="hotels">Hotels &amp; Hostels</div>
                     </div>
                   </div>
+
+                  <div class="ob-section-heading">Categories &amp; Roles</div>
+                  <p class="ob-section-subtext" style="margin-top:-10px;">Pick the categories you work in and the specific roles within each. We route matching jobs to you and decide which certificates to verify based on your role choices.</p>
+
+                  <div class="selected-cat-chips-row" id="stgSelectedCatChipsRow"></div>
+
+                  <div class="cat-role-picker">
+                    <div class="crp-cats">
+                      <div class="crp-cats-label">CATEGORIES <span class="crp-cats-total">16</span></div>
+                      <div class="crp-search"><input class="field-input" type="text" id="stgCategorySearchInput" placeholder="Search categories..."></div>
+                      <div id="stgCategoryList">
+                        <div class="crp-cat-row active" data-cat="Gas & Heating"><span class="crp-checkbox"></span><span class="crp-cat-name">Gas &amp; Heating</span><span class="crp-count" data-role-count="0">0</span></div>
+                        <div class="crp-cat-row" data-cat="HVAC & Air Conditioning"><span class="crp-checkbox"></span><span class="crp-cat-name">HVAC &amp; Air Conditioning</span><span class="crp-count" data-role-count="0">0</span></div>
+                        <div class="crp-cat-row" data-cat="Electrical"><span class="crp-checkbox"></span><span class="crp-cat-name">Electrical</span><span class="crp-count" data-role-count="0">0</span></div>
+                        <div class="crp-cat-row" data-cat="Plumber"><span class="crp-checkbox"></span><span class="crp-cat-name">Plumber</span><span class="crp-count" data-role-count="0">0</span></div>
+                        <div class="crp-cat-row" data-cat="Compliance & Legal"><span class="crp-checkbox"></span><span class="crp-cat-name">Compliance &amp; Legal</span><span class="crp-count" data-role-count="0">0</span></div>
+                        <div class="crp-cat-row" data-cat="Property Marketing & Agency"><span class="crp-checkbox"></span><span class="crp-cat-name">Property Marketing &amp; Agency</span><span class="crp-count" data-role-count="0">0</span></div>
+                        <div class="crp-cat-row" data-cat="Damp, Mould & Structural"><span class="crp-checkbox"></span><span class="crp-cat-name">Damp, Mould &amp; Structural</span><span class="crp-count" data-role-count="0">0</span></div>
+                        <div class="crp-cat-row" data-cat="Security & Access"><span class="crp-checkbox"></span><span class="crp-cat-name">Security &amp; Access</span><span class="crp-count" data-role-count="0">0</span></div>
+                        <div class="crp-cat-row" data-cat="Cleaning"><span class="crp-checkbox"></span><span class="crp-cat-name">Cleaning</span><span class="crp-count" data-role-count="0">0</span></div>
+                        <div class="crp-cat-row" data-cat="General Maintenance"><span class="crp-checkbox"></span><span class="crp-cat-name">General Maintenance</span><span class="crp-count" data-role-count="0">0</span></div>
+                        <div class="crp-cat-row" data-cat="Grounds & Outdoor"><span class="crp-checkbox"></span><span class="crp-cat-name">Grounds &amp; Outdoor</span><span class="crp-count" data-role-count="0">0</span></div>
+                        <div class="crp-cat-row" data-cat="Pest Control"><span class="crp-checkbox"></span><span class="crp-cat-name">Pest Control</span><span class="crp-count" data-role-count="0">0</span></div>
+                        <div class="crp-cat-row" data-cat="Appliances"><span class="crp-checkbox"></span><span class="crp-cat-name">Appliances</span><span class="crp-count" data-role-count="0">0</span></div>
+                        <div class="crp-cat-row" data-cat="Lifts & Accessibility"><span class="crp-checkbox"></span><span class="crp-cat-name">Lifts &amp; Accessibility</span><span class="crp-count" data-role-count="0">0</span></div>
+                        <div class="crp-cat-row" data-cat="Inventory & Inspections"><span class="crp-checkbox"></span><span class="crp-cat-name">Inventory &amp; Inspections</span><span class="crp-count" data-role-count="0">0</span></div>
+                        <div class="crp-cat-row" data-cat="Locksmith"><span class="crp-checkbox"></span><span class="crp-cat-name">Locksmith</span><span class="crp-count" data-role-count="0">0</span></div>
+                      </div>
+                    </div>
+                    <div class="crp-roles">
+                      <div class="crp-roles-head">
+                        <div class="crp-roles-title" id="stgCrpRolesTitle">Gas & Heating</div>
+                        <div class="crp-select-all" id="stgCrpSelectAll">Select All</div>
+                      </div>
+                      <div class="crp-roles-grid" id="stgCrpRolesGrid"></div>
+                    </div>
+                  </div>
+
+                  <div class="ob-section-heading">Certifications for Your Selected Roles</div>
+                  <p class="ob-section-subtext" style="margin-top:-2px;">Verified certifications appear as trust badges on your profile. Add the registration number, expiry and a copy for each.</p>
+                  <div id="stgRoleCertifications">
+                    <div class="dash-empty" style="padding:20px 10px;">
+                      <div class="empty-sub">Select a role that requires certification (e.g. Gas Safe Engineer, Scaffolder) to add its details here.</div>
+                    </div>
+                  </div>
+
                   <div style="display:flex;justify-content:flex-end;margin-top:20px;"><button type="button" class="btn btn-primary" data-supsettings-save="Sectors">Save Changes</button></div>
-                </div>
-              </div>
-
-              <!-- Identity tab -->
-              <div id="supSettingsPanelIdentity" style="display:none;">
-                <div style="margin-top:20px;">
-                  <div class="ob-section-heading" style="margin-top:0;">Personal Details</div>
-                  <div class="ob-row-2">
-                    <div class="ob-field">
-                      <label>Full legal name</label>
-                      <input class="field-input" type="text" value="Liam Greenwood" disabled style="background:var(--surface-soft);color:var(--text-body-muted);">
-                      <div class="helper">Contact support to change this. Verification required.</div>
-                    </div>
-                    <div class="ob-field">
-                      <label>Date of birth</label>
-                      <div class="pm-filter-field" style="width:100%;">
-                        <button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="supDob" style="width:100%;height:48px;">
-                          <span class="cdd-value cal-value" data-cal-text="supDob">05/11/1987</span>
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-                        </button>
-                        <div class="pm-cal-popup" data-cal-popup="supDob">
-                          <div class="pm-cal-head">
-                            <button type="button" class="pm-cal-month-label" data-cal-monthlabel="supDob"><span data-cal-monthtext="supDob">November 1987</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
-                            <div class="pm-cal-nav">
-                              <button type="button" class="pm-cal-nav-btn" data-cal-prev="supDob" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
-                              <button type="button" class="pm-cal-nav-btn" data-cal-next="supDob" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
-                            </div>
-                          </div>
-                          <div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
-                          <div class="pm-cal-grid" data-cal-grid="supDob"></div>
-                          <div class="pm-cal-foot">
-                            <button type="button" class="pm-cal-link" data-cal-clear="supDob">Clear</button>
-                            <button type="button" class="pm-cal-link" data-cal-today="supDob">Today</button>
-                          </div>
-                        </div>
-                        <input type="hidden" id="supDobInput" value="1987-11-05">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="ob-row-2">
-                    <div class="ob-field">
-                      <label>Phone number</label>
-                      <input class="field-input" type="tel" value="+447671542225">
-                    </div>
-                    <div class="ob-field">
-                      <label>Email address</label>
-                      <input class="field-input" type="email" value="greenwood86@gmail.com">
-                    </div>
-                  </div>
-                  <div class="ob-row-2">
-                    <div class="ob-field">
-                      <label>NI number</label>
-                      <input class="field-input" type="text" value="enc:131ac863d6307f0599e9f98e" disabled style="background:var(--surface-soft);color:var(--text-body-muted);">
-                      <div class="helper">View only. Contact support to change.</div>
-                    </div>
-                    <div class="ob-field">
-                      <label>Nationality</label>
-                      <input class="field-input" type="text" placeholder="e.g. British">
-                    </div>
-                  </div>
-                  <div class="ob-field">
-                    <label>Home address</label>
-                    <input class="field-input" type="text" value="91 Victoria Road, Manchester" id="supHomeAddressInput">
-                  </div>
-
-                  <div class="ob-toggle-card">
-                    <div class="otc-top">
-                      <div><div class="otc-title">Registered for HMRC self-assessment?</div><div class="otc-desc">Required if you trade as a sole trader.</div></div>
-                      <button type="button" class="toggle-switch on" id="supHmrcToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
-                    </div>
-                    <div class="field-collapsible open" id="supUtrField" style="max-height:1200px;opacity:1;">
-                      <div class="otc-body">
-                        <div class="ob-field" style="margin-bottom:0;">
-                          <label>UTR number</label>
-                          <input class="field-input" type="text" placeholder="10-digit number">
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="ob-section-heading">Proof of Address</div>
-                  <div class="scf-label" style="font-size:12.5px;font-weight:600;color:var(--text-body-muted);margin-bottom:8px;">Proof of address</div>
-                  <div class="sup-comp-doc-row">
-                    <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
-                    <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:700;color:var(--text-heading);" id="supProofAddressDocName">Uploaded</div><span class="sup-view-all-link" style="font-size:12px;" id="supProofAddressViewBtn" data-doc-view="Proof of Address">View file</span></div>
-                    <span class="scdr-badge">UPLOADED</span>
-                    <span style="font-size:12.5px;font-weight:600;color:var(--accent-blue);cursor:pointer;" id="supProofAddressReplaceBtn" data-doc-replace="proofAddress">Replace</span>
-                    <input type="file" data-doc-input="proofAddress" style="display:none;">
-                    <span style="cursor:pointer;color:var(--text-body-muted);">&times;</span>
-                  </div>
-                  <div style="display:flex;justify-content:flex-end;margin-top:20px;"><button type="button" class="btn btn-primary" data-supsettings-save="Identity">Save Changes</button></div>
                 </div>
               </div>
 
@@ -9229,7 +9268,7 @@
               <div id="supSettingsPanelInsurance" style="display:none;">
                 <div style="margin-top:20px;">
                   <div class="ob-section-heading" style="margin-top:0;">Public Liability Insurance</div>
-                  <div class="ob-toggle-card" style="margin-bottom:0;">
+                  <div class="ob-toggle-card">
                     <div class="otc-top">
                       <div><div class="otc-title">Do you have Public Liability Insurance?</div><div class="otc-desc">Minimum £1,000,000 cover (£2,000,000 for companies).</div></div>
                       <button type="button" class="toggle-switch on" id="supPliToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
@@ -9237,11 +9276,11 @@
                     <div class="field-collapsible open" id="supPliFields" style="max-height:1200px;opacity:1;">
                       <div class="otc-body">
                         <div class="ob-row-2">
-                          <div class="ob-field"><label>Insurance provider</label><input class="field-input" type="text" value="Markel"></div>
-                          <div class="ob-field"><label>Policy number</label><input class="field-input" type="text" value="PL-722800"></div>
+                          <div class="ob-field"><label>Insurance provider</label><input class="field-input" type="text" value="Markel" id="supPliProviderInput"></div>
+                          <div class="ob-field"><label>Policy number</label><input class="field-input" type="text" value="PL-722800" id="supPliPolicyInput"></div>
                         </div>
                         <div class="ob-row-2">
-                          <div class="ob-field" style="margin-bottom:0;"><label>Coverage amount (£)</label><input class="field-input" type="text" value="£2,000,000"></div>
+                          <div class="ob-field" style="margin-bottom:0;"><label>Coverage amount (£)</label><input class="field-input" type="text" value="£2,000,000" id="supPliCoverageInput"></div>
                           <div class="ob-field" style="margin-bottom:0;">
                             <label>Policy expiry date</label>
                             <div class="pm-filter-field" style="width:100%;">
@@ -9283,7 +9322,7 @@
                   </div>
 
                   <div class="ob-section-heading">Professional Indemnity Insurance</div>
-                  <div class="ob-toggle-card" style="margin-bottom:0;">
+                  <div class="ob-toggle-card">
                     <div class="otc-top">
                       <div><div class="otc-title">Professional Indemnity</div><div class="otc-desc">Covers claims of negligence, errors or omissions in professional services</div></div>
                       <button type="button" class="toggle-switch on" id="supPiToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
@@ -9291,11 +9330,11 @@
                     <div class="field-collapsible open" id="supPiFields" style="max-height:1200px;opacity:1;">
                       <div class="otc-body">
                         <div class="ob-row-2">
-                          <div class="ob-field"><label>Indemnity provider</label><input class="field-input" type="text" value="Direct Line for Business"></div>
-                          <div class="ob-field"><label>Policy number</label><input class="field-input" type="text" value="PI-124012"></div>
+                          <div class="ob-field"><label>Indemnity provider</label><input class="field-input" type="text" value="Direct Line for Business" id="supPiProviderInput"></div>
+                          <div class="ob-field"><label>Policy number</label><input class="field-input" type="text" value="PI-124012" id="supPiPolicyInput"></div>
                         </div>
                         <div class="ob-row-2">
-                          <div class="ob-field" style="margin-bottom:0;"><label>Coverage amount (£)</label><input class="field-input" type="text" value="£1,000,000"></div>
+                          <div class="ob-field" style="margin-bottom:0;"><label>Coverage amount (£)</label><input class="field-input" type="text" value="£1,000,000" id="supPiCoverageInput"></div>
                           <div class="ob-field" style="margin-bottom:0;">
                             <label>Expiry date</label>
                             <div class="pm-filter-field" style="width:100%;">
@@ -9334,14 +9373,8 @@
                       </div>
                     </div>
                   </div>
-                  <div style="display:flex;justify-content:flex-end;margin-top:20px;"><button type="button" class="btn btn-primary" data-supsettings-save="Insurance">Save Changes</button></div>
-                </div>
-              </div>
 
-              <!-- Background tab -->
-              <div id="supSettingsPanelBackground" style="display:none;">
-                <div style="margin-top:20px;">
-                  <div class="ob-card-section">
+                <div class="ob-card-section">
                     <div class="ocs-head">
                       <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
                       <div class="ocs-title">DBS Check (Basic)</div>
@@ -9389,7 +9422,7 @@
                     </div>
                   </div>
 
-                  <div class="ob-card-section">
+                  <div class="ob-card-section" style="margin-bottom:0;">
                     <div class="ocs-head">
                       <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg></div>
                       <div class="ocs-title">Right to Work</div>
@@ -9414,24 +9447,6 @@
                     <p class="helper" style="margin-top:12px;margin-bottom:0;font-size:11px;">If a client requires document verification, you can provide your UKVI share code later — verified via the Home Office API.</p>
                   </div>
 
-                  <div class="ob-card-section" style="margin-bottom:0;">
-                    <div class="ocs-head">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="1"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
-                      <div class="ocs-title">Job References &amp; Portfolio</div>
-                      <span class="meta-badge" style="background:#fef3c7;color:#92620a;text-transform:none;">Recommended</span>
-                    </div>
-                    <div class="ocs-desc">References and portfolio photos are displayed on your marketplace profile. They help build trust and improve your search ranking significantly.</div>
-                    <textarea class="ob-textarea" style="margin-bottom:16px;">References available on request from managing agents.</textarea>
-
-                    <div class="scf-label" style="font-size:13px;font-weight:700;color:var(--text-heading);margin-bottom:10px;">Portfolio photos</div>
-                    <input type="file" id="supPortfolioPhotoInput" accept="image/*" multiple style="display:none;">
-                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:600px;" id="supPortfolioPhotoGrid">
-                      <div style="position:relative;border-radius:12px;overflow:hidden;aspect-ratio:1;"><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=300" style="width:100%;height:100%;object-fit:cover;" alt=""><span class="sup-portfolio-remove-btn" style="position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,0.6);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;">&times;</span></div>
-                      <div style="position:relative;border-radius:12px;overflow:hidden;aspect-ratio:1;"><img src="https://images.unsplash.com/photo-1493397212122-2b85dda8106b?w=300" style="width:100%;height:100%;object-fit:cover;" alt=""><span class="sup-portfolio-remove-btn" style="position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,0.6);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;">&times;</span></div>
-                      <div style="border:1px dashed var(--border-subtle);border-radius:12px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;color:var(--text-body-muted);font-size:12.5px;cursor:pointer;" id="supAddPhotoBtn">Add photo</div>
-                    </div>
-                    <p class="helper" style="margin-top:10px;font-size:11px;">Upload photos of completed work — kitchens, bathrooms, electrical panels, before/after shots. High-quality images increase booking rates by up to 40%.</p>
-                  </div>
                   <div style="display:flex;justify-content:flex-end;margin-top:20px;"><button type="button" class="btn btn-primary" data-supsettings-save="Background">Save Changes</button></div>
                 </div>
               </div>
@@ -9439,91 +9454,213 @@
               <!-- Questionnaire tab -->
               <div id="supSettingsPanelQuestionnaire" style="display:none;">
                 <div style="margin-top:20px;">
-                  <div class="supq-dots" id="supqDots"></div>
-
-                  <div class="supq-head-row">
-                    <div>
-                      <div class="supq-step-meta" id="supqStepMeta">1 OF 5</div>
-                      <div class="supq-step-title" id="supqStepTitle">Which trades do you do?</div>
-                      <div class="supq-step-sub" id="supqStepSub">Pick the categories you work in, then tick the specific roles within each. We route matching jobs to you and verify only the certificates your roles need.</div>
+                  <div class="ob-card-section">
+                    <div class="ocs-head">
+                      <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M9 14l-2 7 5-3 5 3-2-7"/></svg></div>
+                      <div class="ocs-title">Experience &amp; track record</div>
                     </div>
-                    <div class="supq-nav-btns">
-                      <button type="button" class="ob-back-btn" id="supqBackBtn" hidden>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                        Back
-                      </button>
-                      <button type="button" class="btn btn-primary" id="supqNextBtn">Next <span class="arrow">→</span></button>
+                    <div class="ocs-desc">Clients often filter by experience and completed jobs — these appear on your marketplace profile.</div>
+
+                    <div id="stgpExpTrackSoleTrader">
+                      <div class="ob-row-2">
+                        <div class="ob-field">
+                          <label>How many years of experience do you have?</label>
+                          <div style="position:relative;">
+                            <button type="button" class="pm-custom-dd-btn ob-select-dd" data-dd="stgpExpYearsSole"><span class="cdd-value cdd-placeholder">Select...</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                            <div class="pm-custom-dd-menu" data-dd-menu="stgpExpYearsSole">
+                              <div class="cdd-item" data-value="Less than 1 year">Less than 1 year</div>
+                              <div class="cdd-item" data-value="1–3 years">1–3 years</div>
+                              <div class="cdd-item" data-value="4–7 years">4–7 years</div>
+                              <div class="cdd-item" data-value="8–15 years">8–15 years</div>
+                              <div class="cdd-item" data-value="15+ years">15+ years</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="ob-field">
+                          <label>How many jobs have you completed?</label>
+                          <div style="position:relative;">
+                            <button type="button" class="pm-custom-dd-btn ob-select-dd" data-dd="stgpJobsSole"><span class="cdd-value cdd-placeholder">Select...</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                            <div class="pm-custom-dd-menu" data-dd-menu="stgpJobsSole">
+                              <div class="cdd-item" data-value="1–10">1–10</div>
+                              <div class="cdd-item" data-value="11–50">11–50</div>
+                              <div class="cdd-item" data-value="51–200">51–200</div>
+                              <div class="cdd-item" data-value="200+">200+</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
-                  <div class="supq-divider"></div>
-
-                  <!-- Step 1: Trades -->
-                  <div class="supq-step" id="supqStep1">
-                    <div class="supq-chiprow" id="supqCategoryChips"></div>
-                    <div class="supq-search-wrap">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-                      <input type="text" class="field-input" style="padding-left:40px;" id="supqSearchInput" placeholder="Search by category or role — e.g. Plumbing, EPC..." autocomplete="off">
+                  <div class="ob-card-section">
+                    <div class="ocs-head">
+                      <div class="ocs-icon" style="background:#fef3c7;color:#92620a;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 6 6 1-4.5 4.5 1 6.5-5.5-3-5.5 3 1-6.5L3 9l6-1z"/></svg></div>
+                      <div class="ocs-title">Job references &amp; portfolio</div>
+                      <span class="meta-badge optional" style="text-transform:none;">Recommended</span>
                     </div>
-                    <div class="supq-suggest-row" id="supqSuggestChips"></div>
-                    <div class="supq-trades-layout">
-                      <div class="supq-cat-list" id="supqCatList"></div>
-                      <div class="supq-role-panel" id="supqRolePanel"></div>
+                    <div class="ocs-desc">References and portfolio photos are displayed on your marketplace profile. They help build trust and improve your search ranking significantly.</div>
+                    <div class="ob-field">
+                      <textarea class="ob-textarea" style="min-height:70px;" id="stgpJobRefsTextarea">References available on request from managing agents.</textarea>
                     </div>
-                  </div>
-
-                  <!-- Step 2: Pricing models -->
-                  <div class="supq-step" id="supqStep2" style="display:none;">
-                    <div class="supq-check-grid" id="supqPricingTiles">
-                      <div class="supq-check-tile selected" data-value="fixed"><div class="supq-role-box"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><div class="supq-check-label">Fixed Price</div></div>
-                      <div class="supq-check-tile selected" data-value="hourly"><div class="supq-role-box"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><div class="supq-check-label">Hourly / Day Rate</div></div>
-                      <div class="supq-check-tile" data-value="tiered"><div class="supq-role-box"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><div class="supq-check-label">Tiered / Banded</div></div>
-                      <div class="supq-check-tile" data-value="estimated"><div class="supq-role-box"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><div class="supq-check-label">Estimated</div></div>
-                      <div class="supq-check-tile" data-value="quotebased"><div class="supq-role-box"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><div class="supq-check-label">Quote Based</div></div>
-                      <div class="supq-check-tile" data-value="subscription"><div class="supq-role-box"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><div class="supq-check-label">Subscription / Bundle</div></div>
+                    <div class="ob-field" style="margin-bottom:0;">
+                      <label>Portfolio Photos</label>
+                      <div class="portfolio-grid" id="stgpPortfolioGrid">
+                        <div class="portfolio-add-tile" id="stgpPortfolioAddTile">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                          Add Photo
+                        </div>
+                      </div>
+                      <div class="helper">Upload photos of completed work — kitchens, bathrooms, electrical panels, before/after shots. High-quality images increase booking rates by up to 40%. <span id="stgpPortfolioCount">0</span> / 10 photos.</div>
                     </div>
                   </div>
 
-                  <!-- Step 3: Experience -->
-                  <div class="supq-step" id="supqStep3" style="display:none;">
-                    <div class="radio-row-list" id="supqExperienceTiles">
-                      <div class="radio-row" data-value="lt1" role="radio" tabindex="0" aria-checked="false"><div class="rr-circle"></div><div><div class="rr-title">Less than 1 year</div><div class="rr-sub">Just starting out or recently qualified</div></div></div>
-                      <div class="radio-row selected" data-value="1-3" role="radio" tabindex="0" aria-checked="true"><div class="rr-circle"></div><div><div class="rr-title">1–3 years</div><div class="rr-sub">Building a client base</div></div></div>
-                      <div class="radio-row" data-value="3-5" role="radio" tabindex="0" aria-checked="false"><div class="rr-circle"></div><div><div class="rr-title">3–5 years</div><div class="rr-sub">Established professional</div></div></div>
-                      <div class="radio-row" data-value="5-10" role="radio" tabindex="0" aria-checked="false"><div class="rr-circle"></div><div><div class="rr-title">5–10 years</div><div class="rr-sub">Experienced professional</div></div></div>
-                      <div class="radio-row" data-value="10-20" role="radio" tabindex="0" aria-checked="false"><div class="rr-circle"></div><div><div class="rr-title">10–20 years</div><div class="rr-sub">Seasoned expert in your field</div></div></div>
-                      <div class="radio-row" data-value="20plus" role="radio" tabindex="0" aria-checked="false"><div class="rr-circle"></div><div><div class="rr-title">20+ years</div><div class="rr-sub">Decades of trusted experience</div></div></div>
+                  <div class="ob-card-section">
+                    <div class="ocs-head">
+                      <div class="ocs-icon" style="background:#eef0f8;color:#5b4fc4;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0112 0v1"/></svg></div>
+                      <div class="ocs-title">Describe yourself to clients</div>
                     </div>
-                    <div style="margin-top:22px;max-width:520px;">
-                      <div class="ob-section-title" style="font-size:13.5px;">Tell clients more about your experience <span class="meta-badge optional">(optional)</span></div>
-                      <textarea class="ob-textarea" id="supqExperienceNotes" placeholder="Describe job details, responsibilities, or any additional notes."></textarea>
+                    <div class="ocs-desc">Write a short bio for your marketplace profile — your chance to make a great first impression, or let AI help.</div>
+                    <div class="ob-field" style="margin-bottom:14px;">
+                      <textarea class="ob-textarea" id="stgpBioTextarea" placeholder="Reliable, fully-insured appliances team based in Manchester. Sole trader with 15 years experience.">Reliable, fully-insured appliances team based in Manchester. Sole trader with 15 years experience.</textarea>
                     </div>
-                  </div>
-
-                  <!-- Step 4: Jobs completed -->
-                  <div class="supq-step" id="supqStep4" style="display:none;">
-                    <div class="radio-row-list" id="supqJobsTiles">
-                      <div class="radio-row" data-value="u50" role="radio" tabindex="0" aria-checked="false"><div class="rr-circle"></div><div><div class="rr-title">Under 50 jobs</div></div></div>
-                      <div class="radio-row selected" data-value="50-200" role="radio" tabindex="0" aria-checked="true"><div class="rr-circle"></div><div><div class="rr-title">50–200 jobs</div></div></div>
-                      <div class="radio-row" data-value="200-500" role="radio" tabindex="0" aria-checked="false"><div class="rr-circle"></div><div><div class="rr-title">200–500 jobs</div></div></div>
-                      <div class="radio-row" data-value="500-1000" role="radio" tabindex="0" aria-checked="false"><div class="rr-circle"></div><div><div class="rr-title">500–1,000 jobs</div></div></div>
-                      <div class="radio-row" data-value="1000plus" role="radio" tabindex="0" aria-checked="false"><div class="rr-circle"></div><div><div class="rr-title">1,000+ jobs</div></div></div>
-                    </div>
-                  </div>
-
-                  <!-- Step 5: Bio -->
-                  <div class="supq-step" id="supqStep5" style="display:none;">
-                    <div style="max-width:640px;">
-                      <textarea class="ob-textarea" id="supqBioTextarea" style="min-height:110px;">Reliable, fully-insured appliances team based in Manchester. Sole trader with 15 years experience.</textarea>
-                      <div class="supq-tips-card">
-                        <div class="supq-tips-title">Tips for a great bio:</div>
-                        <ul>
+                    <div class="callout callout-info" style="margin-bottom:0;">
+                      <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg></div>
+                      <div>
+                        <div class="callout-title">Tips for a Great Bio:</div>
+                        <ul class="callout-bullet-list">
                           <li>Mention your primary trade and years of experience</li>
                           <li>Highlight what makes you different (response time, speciality, reliability)</li>
                           <li>Keep it professional but personable — 2-4 sentences is ideal</li>
                         </ul>
                       </div>
                     </div>
+                  </div>
+
+                  <div class="ob-card-section">
+                    <div class="ocs-head">
+                      <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+                      <div class="ocs-title">Standard availability</div>
+                    </div>
+                    <div class="ocs-desc">Set the days and hours you're available. You can fine-tune per-week availability later from your Schedule.</div>
+
+                    <div class="ob-field">
+                      <label>Days available</label>
+                      <div class="day-pill-row" id="stgpDayPills">
+                        <div class="day-pill selected" data-value="mon">Mon</div>
+                        <div class="day-pill selected" data-value="tue">Tue</div>
+                        <div class="day-pill selected" data-value="wed">Wed</div>
+                        <div class="day-pill selected" data-value="thu">Thu</div>
+                        <div class="day-pill selected" data-value="fri">Fri</div>
+                        <div class="day-pill" data-value="sat">Sat</div>
+                        <div class="day-pill" data-value="sun">Sun</div>
+                      </div>
+                    </div>
+                    <div class="ob-row-2">
+                      <div class="ob-field">
+                        <label>Start time</label>
+                        <div class="pm-filter-field" style="position:relative;">
+                          <button type="button" class="pm-custom-dd-btn ob-select-dd" data-tp="stgpAvailStartTp" style="width:100%;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><span class="cdd-value" data-tp-display="stgpAvailStartTp">09:00</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                          <div class="pm-time-picker-popup" data-tp-popup="stgpAvailStartTp">
+                            <div class="tp-col"><div class="tp-col-label">HH</div><div class="tp-col-scroll" data-tp-scroll="hour"></div></div>
+                            <div class="tp-col-divider">:</div>
+                            <div class="tp-col"><div class="tp-col-label">MM</div><div class="tp-col-scroll" data-tp-scroll="minute"></div></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="ob-field">
+                        <label>End time</label>
+                        <div class="pm-filter-field" style="position:relative;">
+                          <button type="button" class="pm-custom-dd-btn ob-select-dd" data-tp="stgpAvailEndTp" style="width:100%;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><span class="cdd-value" data-tp-display="stgpAvailEndTp">18:00</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                          <div class="pm-time-picker-popup" data-tp-popup="stgpAvailEndTp">
+                            <div class="tp-col"><div class="tp-col-label">HH</div><div class="tp-col-scroll" data-tp-scroll="hour"></div></div>
+                            <div class="tp-col-divider">:</div>
+                            <div class="tp-col"><div class="tp-col-label">MM</div><div class="tp-col-scroll" data-tp-scroll="minute"></div></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="ob-field">
+                      <label>Minimum notice for a booking</label>
+                      <div class="notice-grid" id="stgpNoticeTiles">
+                        <div class="count-tile" data-value="same-day"><div class="range" style="font-size:13px;">Same day</div><div class="cat-label">No notice</div></div>
+                        <div class="count-tile" data-value="24h"><div class="range" style="font-size:13px;">24 hours</div><div class="cat-label">Next day</div></div>
+                        <div class="count-tile" data-value="48h"><div class="range" style="font-size:13px;">48 hours</div><div class="cat-label">2 days</div></div>
+                        <div class="count-tile" data-value="72h"><div class="range" style="font-size:13px;">72 hours</div><div class="cat-label">3 days</div></div>
+                        <div class="count-tile" data-value="1week"><div class="range" style="font-size:13px;">1 week</div><div class="cat-label">Weekly</div></div>
+                        <div class="count-tile" data-value="2weeks"><div class="range" style="font-size:13px;">2+ weeks</div><div class="cat-label">Forward</div></div>
+                      </div>
+                      <div class="helper">You may still receive shorter-notice requests — you're never obliged to accept them. This is a preference shown to clients.</div>
+                    </div>
+
+                    <div class="ob-toggle-card" style="border:1px solid var(--border-subtle);">
+                      <div class="otc-top">
+                        <div>
+                          <div class="otc-title">I am available for out-of-hours jobs</div>
+                          <div class="otc-desc">Evenings · early mornings · weekends · bank holidays</div>
+                        </div>
+                        <button type="button" class="toggle-switch" id="stgpOutOfHoursToggle" role="switch" aria-checked="false"><span class="thumb"></span></button>
+                      </div>
+                    </div>
+                    <div class="callout callout-info" style="padding:12px 16px;margin:12px 0;">
+                      <div class="callout-body" style="font-size:12.5px;">Configure hours and surcharges in full from your <strong style="color:var(--text-heading);">Pricing</strong> settings once your account is active.</div>
+                    </div>
+                    <div class="ob-toggle-card" style="border:1px solid var(--border-subtle);">
+                      <div class="otc-top">
+                        <div>
+                          <div class="otc-title">I accept emergency call-outs</div>
+                          <div class="otc-desc">Rapid response — typically within 1-2 hours</div>
+                        </div>
+                        <button type="button" class="toggle-switch" id="stgpEmergencyToggle" role="switch" aria-checked="false"><span class="thumb"></span></button>
+                      </div>
+                    </div>
+                    <div class="ob-toggle-card" style="border:1px solid var(--border-subtle);">
+                      <div class="otc-top">
+                        <div>
+                          <div class="otc-title">I accept urgent same-day jobs</div>
+                          <div class="otc-desc">Less than 4 hours' notice</div>
+                        </div>
+                        <button type="button" class="toggle-switch" id="stgpUrgentToggle" role="switch" aria-checked="false"><span class="thumb"></span></button>
+                      </div>
+                    </div>
+                    <div class="callout callout-info" style="padding:12px 16px;margin-bottom:0;">
+                      <div class="callout-body" style="font-size:12.5px;">Response SLAs and surcharges configured from <strong style="color:var(--text-heading);">Pricing</strong> settings post-activation.</div>
+                    </div>
+                  </div>
+
+                  <div class="ob-card-section" style="margin-bottom:0;">
+                    <div class="ocs-head">
+                      <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+                      <div class="ocs-title">Service region</div>
+                    </div>
+                    <div class="ocs-desc">Choose where you want to receive jobs. You'll only get requests from the areas you select.</div>
+                    <div class="ob-field">
+                      <label>London zones</label>
+                      <div class="simple-chip-row" id="stgpLondonZones">
+                        <div class="simple-chip" data-value="central">Central</div>
+                        <div class="simple-chip" data-value="north">North</div>
+                        <div class="simple-chip" data-value="west">West</div>
+                        <div class="simple-chip" data-value="northeast">North East</div>
+                        <div class="simple-chip" data-value="east">East</div>
+                        <div class="simple-chip" data-value="southeast">South East</div>
+                        <div class="simple-chip" data-value="south">South</div>
+                        <div class="simple-chip" data-value="southwest">South West</div>
+                        <div class="simple-chip simple-chip-action" data-value="all-london">All London</div>
+                      </div>
+                    </div>
+                    <div class="ob-field" style="margin-bottom:20px;">
+                      <label>Other cities <span class="meta-badge optional">Optional</span></label>
+                      <div class="simple-chip-row" id="stgpOtherCities" style="margin-bottom:12px;">
+                        <div class="simple-chip" data-value="manchester">Manchester</div>
+                        <div class="simple-chip" data-value="birmingham">Birmingham</div>
+                        <div class="simple-chip" data-value="leeds">Leeds</div>
+                        <div class="simple-chip" data-value="liverpool">Liverpool</div>
+                        <div class="simple-chip" data-value="cambridge">Cambridge</div>
+                        <div class="simple-chip" data-value="oxford">Oxford</div>
+                      </div>
+                      <input class="field-input" type="text" id="stgpCustomCityInput" placeholder="Add a city or region, then press Enter">
+                    </div>
+                    <div style="display:flex;justify-content:flex-end;"><button type="button" class="btn btn-primary" data-supsettings-save="Portfolio">Save Changes</button></div>
                   </div>
                 </div>
               </div>
@@ -15708,6 +15845,129 @@
     if (supObCurrentStep > 1) goToSupObStep(supObCurrentStep - 1);
   });
 
+  function supObCollectWizardData() {
+    function val(id) { var el = document.getElementById(id); return el ? el.value : ''; }
+    function selectedTileValue(containerId) {
+      var el = document.getElementById(containerId);
+      if (!el) return '';
+      var sel = el.querySelector('.choice-tile.selected, .radio-tile.selected, .radio-row.selected');
+      return sel ? sel.getAttribute('data-value') : '';
+    }
+    function ddValue(key) {
+      var btn = document.querySelector('[data-dd="' + key + '"]');
+      if (!btn) return '';
+      var span = btn.querySelector('.cdd-value');
+      return (span && !span.classList.contains('cdd-placeholder')) ? span.textContent : '';
+    }
+    function toggleOn(id) {
+      var el = document.getElementById(id);
+      return el ? el.classList.contains('on') : false;
+    }
+    function calValue(key) {
+      var span = document.querySelector('[data-cal-text="' + key + '"]');
+      return (span && !span.classList.contains('cdd-placeholder')) ? span.textContent : '';
+    }
+
+    var isCompany = selectedTileValue('businessTypeTiles') === 'company';
+    supplierCapturedData.businessType = isCompany ? 'company' : 'sole-trader';
+
+    // Step 1: Portfolio
+    supplierCapturedData.sectors = Array.prototype.map.call(document.querySelectorAll('#sectorTypeTiles .choice-tile.selected'), function (t) { return t.getAttribute('data-value'); });
+
+    // Step 2: Identity
+    if (!isCompany) {
+      supplierCapturedData.fullName = val('supFullName') || supplierCapturedData.fullName;
+      supplierCapturedData.phoneNumber = val('supPhone') || supplierCapturedData.phoneNumber;
+      supplierCapturedData.email = val('supEmail') || supplierCapturedData.email;
+      supplierCapturedData.dob = calValue('obSupDob');
+      supplierCapturedData.nationality = ddValue('supNationality');
+      supplierCapturedData.niNumber = val('supNiNumber');
+      supplierCapturedData.hmrcRegistered = toggleOn('selfAssessmentToggle');
+      supplierCapturedData.utrNumber = val('supUtr');
+      supplierCapturedData.homeAddress = val('supHomeAddress');
+    } else {
+      supplierCapturedData.companyFullName = val('supCompanyFullName');
+      supplierCapturedData.companyPhone = val('supCompanyPhone');
+      supplierCapturedData.companyEmail = val('supCompanyEmail');
+      supplierCapturedData.companyRegNo = val('supCompanyRegNo');
+      supplierCapturedData.companyRegName = val('supCompanyRegName');
+      supplierCapturedData.companyTradingName = val('supCompanyTradingName');
+      supplierCapturedData.companyOperAddress = val('supCompanyOperAddress');
+      supplierCapturedData.companyTin = val('supCompanyTin');
+      supplierCapturedData.pscIsSelf = selectedTileValue('supPscTiles') === 'yes';
+      supplierCapturedData.pscName = val('supPscName');
+      supplierCapturedData.pscPhone = val('supPscPhone');
+      supplierCapturedData.pscEmail = val('supPscEmail');
+      supplierCapturedData.pscDob = calValue('obPscDob');
+    }
+
+    // Step 3: Insurance
+    supplierCapturedData.pliRegistered = toggleOn('publicLiabilityToggle');
+    supplierCapturedData.pliProvider = val('insProvider');
+    supplierCapturedData.pliPolicyNumber = val('insPolicyNumber');
+    supplierCapturedData.pliCoverage = val('insCoverage');
+    supplierCapturedData.pliExpiry = calValue('obInsExpiry');
+
+    supplierCapturedData.piRegistered = toggleOn('profIndemnityToggle');
+    supplierCapturedData.piProvider = val('piProvider');
+    supplierCapturedData.piPolicyNumber = val('piPolicyNumber');
+    supplierCapturedData.piCoverage = val('piCoverage');
+    supplierCapturedData.piExpiry = calValue('obPiExpiry');
+
+    if (isCompany) {
+      supplierCapturedData.elRegistered = toggleOn('elInsuranceToggle');
+      supplierCapturedData.elProvider = val('elProvider');
+      supplierCapturedData.elPolicyNumber = val('elPolicyNumber');
+      supplierCapturedData.elCoverage = val('elCoverage');
+      supplierCapturedData.elExpiry = calValue('obElExpiry');
+    }
+
+    // Step 4: Background
+    if (!isCompany) {
+      supplierCapturedData.dbsRegistered = toggleOn('dbsToggle');
+      supplierCapturedData.dbsIssueDate = calValue('obDbsIssueDate');
+      supplierCapturedData.convictionDeclaration = selectedTileValue('convictionTiles');
+      var convictionTextarea = document.querySelector('#convictionDetailsField textarea');
+      supplierCapturedData.convictionDetails = convictionTextarea ? convictionTextarea.value : '';
+      supplierCapturedData.rightToWork = selectedTileValue('rightToWorkTiles');
+    } else {
+      supplierCapturedData.allStaffDbs = selectedTileValue('supAllDbsTiles');
+      supplierCapturedData.companyDbsLevel = selectedTileValue('supDbsLevelTiles');
+      supplierCapturedData.dbsPolicyText = val('supDbsPolicyText');
+      supplierCapturedData.vettingPolicyText = val('supVettingPolicyText');
+      supplierCapturedData.hsPolicyText = val('supHsPolicyText');
+      supplierCapturedData.pscConvictionDeclaration = selectedTileValue('supPscConvictionTiles');
+      supplierCapturedData.companyRightToWork = selectedTileValue('supRtwTiles');
+    }
+
+    // Step 5: Payment
+    supplierCapturedData.vatRegistered = selectedTileValue('vatTiles') === 'yes';
+    supplierCapturedData.vatNumber = val('vatNumberInput');
+
+    // Step 6: Categories & Roles
+    var selectedRoles = [];
+    Object.keys(selectedRolesByCategory).forEach(function (cat) {
+      Object.keys(selectedRolesByCategory[cat]).forEach(function (role) {
+        if (selectedRolesByCategory[cat][role]) selectedRoles.push({ category: cat, role: role });
+      });
+    });
+    supplierCapturedData.selectedRoles = selectedRoles;
+
+    // Step 7: Setup Profile
+    supplierCapturedData.experienceYears = isCompany ? '' : ddValue('supExpYearsSole');
+    supplierCapturedData.jobsCompleted = isCompany ? '' : ddValue('supJobsSole');
+    supplierCapturedData.availabilityDays = Array.prototype.map.call(document.querySelectorAll('#supDayPills .day-pill.selected'), function (d) { return d.getAttribute('data-value'); });
+    var startEl = document.querySelector('[data-tp-display="supAvailStartTp"]');
+    var endEl = document.querySelector('[data-tp-display="supAvailEndTp"]');
+    supplierCapturedData.availabilityStart = startEl ? startEl.textContent : '';
+    supplierCapturedData.availabilityEnd = endEl ? endEl.textContent : '';
+    supplierCapturedData.londonZones = Array.prototype.map.call(document.querySelectorAll('#supLondonZones .simple-chip.selected'), function (c) { return c.getAttribute('data-value'); });
+    supplierCapturedData.otherCities = Array.prototype.map.call(document.querySelectorAll('#supOtherCities .simple-chip.selected'), function (c) {
+      var label = c.querySelector('.custom-chip-label');
+      return label ? label.textContent.trim() : c.textContent.trim();
+    });
+  }
+
   supObNextBtn.addEventListener('click', function () {
     if (supObCurrentStep < TOTAL_SUP_OB_STEPS) {
       goToSupObStep(supObCurrentStep + 1);
@@ -15717,6 +15977,7 @@
       setTimeout(function () {
         supObApp.classList.remove('active');
         document.body.style.overflow = '';
+        supObCollectWizardData();
         showSupplierDashboard(supplierCapturedData, 'new');
         document.querySelectorAll('#supplierDashboard .dash-nav-item').forEach(function (i) { i.classList.remove('active'); });
         showSupplierView('profile-settings');
@@ -15821,33 +16082,6 @@
         showToast('File replaced.');
       }
     });
-  });
-
-  document.getElementById('supAddPhotoBtn').addEventListener('click', function () {
-    document.getElementById('supPortfolioPhotoInput').click();
-  });
-  function wireSupPortfolioRemoveBtns() {
-    document.querySelectorAll('#supPortfolioPhotoGrid .sup-portfolio-remove-btn').forEach(function (btn) {
-      btn.onclick = function (e) {
-        e.stopPropagation();
-        btn.closest('div[style*="position:relative"]').remove();
-      };
-    });
-  }
-  wireSupPortfolioRemoveBtns();
-  document.getElementById('supPortfolioPhotoInput').addEventListener('change', function () {
-    if (!this.files || !this.files.length) return;
-    var grid = document.getElementById('supPortfolioPhotoGrid');
-    var addBtn = document.getElementById('supAddPhotoBtn');
-    Array.prototype.forEach.call(this.files, function (file) {
-      var cell = document.createElement('div');
-      cell.style.cssText = 'position:relative;border-radius:12px;overflow:hidden;aspect-ratio:1;';
-      cell.innerHTML = '<img src="' + URL.createObjectURL(file) + '" style="width:100%;height:100%;object-fit:cover;" alt=""><span class="sup-portfolio-remove-btn" style="position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,0.6);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;">\u00d7</span>';
-      grid.insertBefore(cell, addBtn);
-    });
-    wireSupPortfolioRemoveBtns();
-    showToast('Photo' + (this.files.length > 1 ? 's' : '') + ' added.');
-    this.value = '';
   });
 
   initMultiSelectTiles(document.getElementById('sectorTypeTiles'));
@@ -16080,7 +16314,7 @@
     var totalCats = 0, totalRoles = 0;
     var selectedCats = [];
     var checkSvg = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
-    document.querySelectorAll('.crp-cat-row').forEach(function (row) {
+    document.querySelectorAll('#categoryList .crp-cat-row').forEach(function (row) {
       var cat = row.getAttribute('data-cat');
       var set = getSelectedSet(cat);
       var count = Object.keys(set).filter(function (r) { return set[r]; }).length;
@@ -16199,9 +16433,9 @@
     });
   }
 
-  document.querySelectorAll('.crp-cat-row').forEach(function (row) {
+  document.querySelectorAll('#categoryList .crp-cat-row').forEach(function (row) {
     row.addEventListener('click', function () {
-      document.querySelectorAll('.crp-cat-row').forEach(function (r) { r.classList.remove('active'); });
+      document.querySelectorAll('#categoryList .crp-cat-row').forEach(function (r) { r.classList.remove('active'); });
       row.classList.add('active');
       activeCategory = row.getAttribute('data-cat');
       renderCrpRoles();
@@ -16218,7 +16452,7 @@
   });
   document.getElementById('categorySearchInput').addEventListener('input', function () {
     var q = this.value.trim().toLowerCase();
-    document.querySelectorAll('.crp-cat-row').forEach(function (row) {
+    document.querySelectorAll('#categoryList .crp-cat-row').forEach(function (row) {
       var name = row.getAttribute('data-cat').toLowerCase();
       row.style.display = name.indexOf(q) !== -1 ? '' : 'none';
     });
@@ -16886,6 +17120,108 @@
     return dd + '/' + mm + '/' + d.getFullYear();
   }
 
+  function populateSupSettingsFromOnboarding(signupData) {
+    signupData = signupData || {};
+    var isCompany = signupData.businessType === 'company';
+
+    function setValIf(id, value) { var el = document.getElementById(id); if (el && value) el.value = value; }
+    function setToggle(id, on, fieldId) {
+      if (on === undefined) return;
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.classList.toggle('on', !!on);
+      el.setAttribute('aria-checked', on ? 'true' : 'false');
+      if (fieldId) {
+        var field = document.getElementById(fieldId);
+        if (field) {
+          field.classList.toggle('open', !!on);
+          field.style.maxHeight = on ? '1200px' : '0px';
+          field.style.opacity = on ? '1' : '0';
+        }
+      }
+    }
+    function setTilesSelected(containerId, values) {
+      var container = document.getElementById(containerId);
+      if (!container || !values) return;
+      var arr = Array.isArray(values) ? values : [values];
+      container.querySelectorAll('.choice-tile, .radio-tile, .radio-row').forEach(function (t) {
+        var match = arr.indexOf(t.getAttribute('data-value')) !== -1;
+        t.classList.toggle('selected', match);
+        if (t.hasAttribute('aria-checked')) t.setAttribute('aria-checked', match ? 'true' : 'false');
+      });
+    }
+    function setCalValue(key, isoOrDisplay) {
+      if (!isoOrDisplay) return;
+      var span = document.querySelector('[data-cal-text="' + key + '"]');
+      if (span) { span.textContent = isoOrDisplay; span.classList.remove('cdd-placeholder'); }
+    }
+
+    // Profile tab: business type pill
+    var typePill = document.getElementById('supProfileTypePill');
+    if (typePill) {
+      typePill.textContent = isCompany ? 'Company' : 'Sole Trader';
+      typePill.classList.toggle('sole-trader', !isCompany);
+      typePill.classList.toggle('company', isCompany);
+    }
+
+    // Sectors tab
+    if (signupData.sectors && signupData.sectors.length) {
+      setTilesSelected('supDashSectorTiles', signupData.sectors);
+    }
+
+    // Identity tab
+    if (!isCompany) {
+      setValIf('supIdFullNameInput', signupData.fullName);
+      setValIf('supIdPhoneInput', signupData.phoneNumber);
+      setValIf('supIdEmailInput', signupData.email);
+      setValIf('supIdNationalityInput', signupData.nationality);
+      setValIf('supHomeAddressInput', signupData.homeAddress);
+      if (signupData.dob) { setCalValue('supDob', signupData.dob); var dobInput = document.getElementById('supDobInput'); if (dobInput) dobInput.value = signupData.dob; }
+      setToggle('supHmrcToggle', signupData.hmrcRegistered, 'supUtrField');
+    }
+
+    // Insurance tab
+    setToggle('supPliToggle', signupData.pliRegistered, 'supPliFields');
+    setValIf('supPliProviderInput', signupData.pliProvider);
+    setValIf('supPliPolicyInput', signupData.pliPolicyNumber);
+    setValIf('supPliCoverageInput', signupData.pliCoverage);
+    if (signupData.pliExpiry) { setCalValue('supPliExpiry', signupData.pliExpiry); var pliExpInput = document.getElementById('supPliExpiryInput'); if (pliExpInput) pliExpInput.value = signupData.pliExpiry; }
+
+    setToggle('supPiToggle', signupData.piRegistered, 'supPiFields');
+    setValIf('supPiProviderInput', signupData.piProvider);
+    setValIf('supPiPolicyInput', signupData.piPolicyNumber);
+    setValIf('supPiCoverageInput', signupData.piCoverage);
+    if (signupData.piExpiry) { setCalValue('supPiExpiry', signupData.piExpiry); var piExpInput = document.getElementById('supPiExpiryInput'); if (piExpInput) piExpInput.value = signupData.piExpiry; }
+
+    // Background tab
+    if (!isCompany) {
+      setToggle('supDbsToggle', signupData.dbsRegistered, 'supDbsFields');
+      setTilesSelected('supDashCriminalDeclaration', signupData.convictionDeclaration);
+      setTilesSelected('supRightToWorkTiles', signupData.rightToWork);
+    }
+
+    // Payment tab
+    setTilesSelected('vatRegTiles', signupData.vatRegistered ? 'yes' : 'no');
+    setValIf('supPaymentVatNumberInput', signupData.vatNumber);
+
+    // Sectors tab: Categories & Roles
+    if (signupData.selectedRoles && signupData.selectedRoles.length && typeof stgSelectedRolesByCategory !== 'undefined') {
+      Object.keys(stgSelectedRolesByCategory).forEach(function (cat) { stgSelectedRolesByCategory[cat] = {}; });
+      signupData.selectedRoles.forEach(function (item) {
+        if (!stgSelectedRolesByCategory[item.category]) stgSelectedRolesByCategory[item.category] = {};
+        stgSelectedRolesByCategory[item.category][item.role] = true;
+      });
+      var firstSelectedCat = signupData.selectedRoles[0].category;
+      if (categoryRoles[firstSelectedCat]) {
+        stgActiveCategory = firstSelectedCat;
+        document.querySelectorAll('#stgCategoryList .crp-cat-row').forEach(function (r) { r.classList.toggle('active', r.getAttribute('data-cat') === firstSelectedCat); });
+      }
+      if (typeof renderStgCrpRoles === 'function') renderStgCrpRoles();
+      if (typeof syncStgCategoryCounts === 'function') syncStgCategoryCounts();
+      if (typeof renderStgRoleCertifications === 'function') renderStgRoleCertifications();
+    }
+  }
+
   function showSupplierDashboard(signupData, mode) {
     closeAnyLeakedGlobalModals();
     signupData = signupData || {};
@@ -16906,6 +17242,7 @@
     if (profHeaderName) profHeaderName.textContent = fullName;
     if (profHeaderEmail) profHeaderEmail.textContent = email;
     if (profAvatarInitials) profAvatarInitials.textContent = initials(fullName);
+    populateSupSettingsFromOnboarding(signupData);
     document.getElementById('supDashGreeting').textContent = timeGreeting() + ', ' + firstName + ' \uD83D\uDC4B';
     document.getElementById('supDashDate').textContent = formatFullDateSupplier(new Date());
     var supJobReqCount = document.getElementById('supBadgeJobRequests').textContent || '0';
@@ -18020,7 +18357,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   /* ---- Supplier Profile Settings ---- */
   function switchSupSettingsTab(key) {
     document.querySelectorAll('#supSettingsTabs .pm-settings-tab-item').forEach(function (t) { t.classList.toggle('active', t.getAttribute('data-supsettingstab') === key); });
-    ['profile', 'sectors', 'identity', 'insurance', 'background', 'questionnaire', 'payment', 'settings'].forEach(function (k) {
+    ['profile', 'sectors', 'insurance', 'questionnaire', 'payment', 'settings'].forEach(function (k) {
       var panel = document.getElementById('supSettingsPanel' + k.charAt(0).toUpperCase() + k.slice(1));
       panel.style.display = k === key ? '' : 'none';
       if (k === key) {
@@ -18085,331 +18422,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     showToast('Help centre isn\u2019t wired up in this prototype yet.');
   });
 
-  /* ---- Supplier Settings: Questionnaire wizard ---- */
-  var SUPQ_DATA = {
-    categories: [
-      { id: 'cleaning', name: 'Cleaning', pricedTotal: 6, roles: [
-        { name: 'Cleaner', requires: null, checked: true, uploaded: false }
-      ] },
-      { id: 'compliance-legal', name: 'Compliance & Legal', pricedTotal: 15, roles: [
-        { name: 'DEA Assessor', requires: null, checked: true, uploaded: false },
-        { name: 'Risk Assessor', requires: null, checked: true, uploaded: false },
-        { name: 'Gas Safe Engineer', requires: 'Gas Safe registration', checked: true, uploaded: false },
-        { name: 'Retrofit Assessor', requires: 'TrustMark / Retrofit Academy', checked: true, uploaded: false },
-        { name: 'Retrofit Coordinator', requires: 'TrustMark / Retrofit Academy', checked: true, uploaded: false },
-        { name: 'Thermal Imaging Surveyor', requires: 'ITC Level 1 / BINDT', checked: true, uploaded: false },
-        { name: 'Asbestos Surveyor', requires: 'UKAS / P402', checked: true, uploaded: false },
-        { name: 'Asbestos Removal Contractor', requires: 'HSE Asbestos Licence', checked: true, uploaded: false },
-        { name: 'HMO Inspector', requires: 'Local Authority HMO Licence', checked: true, uploaded: false },
-        { name: 'RICS Surveyor', requires: 'RICS Chartered Surveyor', checked: true, uploaded: false },
-        { name: 'Structural Engineer', requires: 'MRICS / IStructE', checked: true, uploaded: false },
-        { name: 'Party Wall Surveyor', requires: 'RICS / FPWS Member', checked: true, uploaded: false },
-        { name: 'Insulation Contractor', requires: 'TrustMark / CIGA Registered', checked: true, uploaded: false },
-        { name: 'Builder', requires: null, checked: true, uploaded: false },
-        { name: 'Building Control Inspector', requires: 'Registered Building Inspector', checked: true, uploaded: false },
-        { name: 'Planning Consultant', requires: null, checked: true, uploaded: false }
-      ] },
-      { id: 'damp-mould-structural', name: 'Damp, Mould & Structural', pricedTotal: 12, roles: [
-        { name: 'Damp Specialist', requires: 'PCA Membership', checked: true, uploaded: false },
-        { name: 'Ventilation Engineer', requires: null, checked: true, uploaded: false },
-        { name: 'Electrician', requires: null, checked: false, uploaded: false },
-        { name: 'Roofer', requires: null, checked: true, uploaded: false },
-        { name: 'Handyman', requires: null, checked: true, uploaded: false },
-        { name: 'Builder', requires: null, checked: true, uploaded: false },
-        { name: 'Plasterer', requires: null, checked: true, uploaded: false },
-        { name: 'Scaffolder', requires: 'CISRS Card', checked: true, uploaded: false },
-        { name: 'Kitchen Fitter', requires: null, checked: true, uploaded: false }
-      ] },
-      { id: 'electrical', name: 'Electrical', pricedTotal: 14, roles: [
-        { name: 'Electrician', requires: null, checked: true, uploaded: false },
-        { name: 'Handyman', requires: null, checked: true, uploaded: false },
-        { name: 'Smart Home Installer', requires: 'NICEIC / NAPIT', checked: true, uploaded: false },
-        { name: 'EV Charger Installer', requires: 'OZEV Approved Installer', checked: true, uploaded: false },
-        { name: 'Solar Panel Installer', requires: 'MCS Certified Installer', checked: true, uploaded: false },
-        { name: 'Battery Storage Installer', requires: 'MCS Certified Installer', checked: true, uploaded: false },
-        { name: 'Energy Supplier (Smart Meters)', requires: 'DNO / Energy Supplier Licence', checked: true, uploaded: false }
-      ] },
-      { id: 'electrical-compliance-legal', name: 'Electrical + compliance & legal', pricedTotal: 4, roles: [
-        { name: 'Electrician', requires: null, checked: true, uploaded: false },
-        { name: 'PAT Tester', requires: null, checked: true, uploaded: false },
-        { name: 'Handyman', requires: null, checked: true, uploaded: false },
-        { name: 'Inventory Clerk', requires: null, checked: true, uploaded: false }
-      ] },
-      { id: 'electrical-general', name: 'Electrical General', pricedTotal: 1, roles: [] },
-      { id: 'fire-safety', name: 'Fire Safety', pricedTotal: 8, roles: [
-        { name: 'Fire Safety Assessor', requires: 'IFE / IFSM', checked: false, uploaded: false },
-        { name: 'Fire Alarm Engineer', requires: 'FIA / BAFE SP203', checked: false, uploaded: false },
-        { name: 'Fire Door Installer', requires: 'FIRAS / BM TRADA', checked: true, uploaded: false },
-        { name: 'Fire Safety Contractor', requires: 'BAFE / FIA', checked: false, uploaded: false },
-        { name: 'Fire Stopping Contractor', requires: 'IFC SDI 05', checked: false, uploaded: false },
-        { name: 'Dry Riser Engineer', requires: 'BAFE / BS 9990', checked: false, uploaded: false },
-        { name: 'Sprinkler Engineer', requires: 'LPCB / FIRAS / FIA Approved', checked: false, uploaded: false }
-      ] },
-      { id: 'gas-heating', name: 'Gas & Heating', pricedTotal: 12, roles: [
-        { name: 'Gas Safe Engineer', requires: 'Gas Safe registration', checked: true, uploaded: false },
-        { name: 'Plumber', requires: 'Gas Safe Register', checked: true, uploaded: false },
-        { name: 'Heat Pump Installer', requires: 'MCS Certified Installer', checked: true, uploaded: false },
-        { name: 'Air Conditioning Engineer', requires: 'F-Gas Certificate (C&G 2079)', checked: true, uploaded: false }
-      ] },
-      { id: 'gas-heating-compliance-legal', name: 'Gas & Heating + compliance & legal', pricedTotal: 2, roles: [
-        { name: 'Gas Safe Engineer', requires: 'Gas Safe registration', checked: true, uploaded: false }
-      ] },
-      { id: 'plumbing', name: 'Plumbing', pricedTotal: 12, roles: [
-        { name: 'Plumber', requires: 'Gas Safe Register', checked: true, uploaded: false },
-        { name: 'Drainage Engineer', requires: 'Experience', checked: true, uploaded: false },
-        { name: 'Handyman', requires: null, checked: true, uploaded: false },
-        { name: 'Bathroom Fitter', requires: 'Experience', checked: true, uploaded: false }
-      ] },
-      { id: 'smart-home-tech', name: 'Smart Home & Tech', pricedTotal: 2, roles: [
-        { name: 'Smart Home Installer', requires: 'NICEIC / NAPIT', checked: true, uploaded: false },
-        { name: 'Electrician', requires: null, checked: true, uploaded: false },
-        { name: 'IT / Network Engineer', requires: null, checked: true, uploaded: false }
-      ] }
-    ],
-    suggestions: ['Appliances', 'Fire Safety General', 'Gas & Heating General', 'General Maintenance', 'Grounds & Outdoor', 'HVAC & AC', 'Lifts & Accessibility', 'Pest Control', 'Plumbing General', 'Property Marketing & Agency', 'Security & Access', 'Void & Turnover']
-  };
-  var supqSelectedCatId = 'cleaning';
-  var supqSearchQuery = '';
-
-  function supqEscapeHtml(s) {
-    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-  }
-  function supqMatches(text, q) { return text.toLowerCase().indexOf(q) !== -1; }
-  function supqCheckSvg() {
-    return '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
-  }
-  function supqCatCounts(cat) {
-    return { checked: cat.roles.filter(function (r) { return r.checked; }).length, total: cat.roles.length };
-  }
-
-  function renderSupqChips() {
-    var wrap = document.getElementById('supqCategoryChips');
-    if (!wrap) return;
-    var html = '';
-    SUPQ_DATA.categories.forEach(function (cat) {
-      html += '<div class="supq-chip">' + supqEscapeHtml(cat.name) + '<span class="supq-chip-x" data-remove-cat="' + cat.id + '">\u00d7</span></div>';
-    });
-    html += '<div class="supq-add-cat-chip" id="supqAddCatBtn">+ Add category</div>';
-    wrap.innerHTML = html;
-  }
-
-  function renderSupqSuggestions() {
-    var wrap = document.getElementById('supqSuggestChips');
-    if (!wrap) return;
-    var q = supqSearchQuery.trim().toLowerCase();
-    var html = '';
-    SUPQ_DATA.suggestions.forEach(function (name) {
-      if (q && !supqMatches(name, q)) return;
-      html += '<div class="simple-chip simple-chip-action" data-add-suggestion="' + supqEscapeHtml(name) + '">+ ' + supqEscapeHtml(name) + '</div>';
-    });
-    wrap.innerHTML = html;
-  }
-
-  function renderSupqCatList() {
-    var wrap = document.getElementById('supqCatList');
-    if (!wrap) return;
-    var q = supqSearchQuery.trim().toLowerCase();
-    var html = '';
-    var visibleIds = [];
-    SUPQ_DATA.categories.forEach(function (cat) {
-      if (q) {
-        var catMatch = supqMatches(cat.name, q);
-        var roleMatch = cat.roles.some(function (r) { return supqMatches(r.name, q); });
-        if (!catMatch && !roleMatch) return;
-      }
-      visibleIds.push(cat.id);
-      var counts = supqCatCounts(cat);
-      var active = cat.id === supqSelectedCatId;
-      html += '<div class="supq-cat-item' + (active ? ' active' : '') + '" data-cat="' + cat.id + '">' +
-        '<div class="supq-cat-name">' + supqEscapeHtml(cat.name) + '</div>' +
-        '<div class="supq-cat-counts">' + counts.checked + '/' + counts.total + ' roles \u00b7 0/' + cat.pricedTotal + ' priced \u00b7 <span class="supq-quote-link" data-quote-cat="' + cat.id + '">Quote</span></div>' +
-        '</div>';
-    });
-    wrap.innerHTML = html;
-    if (visibleIds.length && visibleIds.indexOf(supqSelectedCatId) === -1) {
-      supqSelectedCatId = visibleIds[0];
-    }
-  }
-
-  function renderSupqRolePanel() {
-    var panel = document.getElementById('supqRolePanel');
-    if (!panel) return;
-    var cat = SUPQ_DATA.categories.find(function (c) { return c.id === supqSelectedCatId; });
-    if (!cat) { panel.innerHTML = ''; return; }
-    var html = '<div class="supq-role-head">' +
-      '<div class="supq-role-head-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M17 11l2 2 4-4"/></svg></div>' +
-      '<div><div class="supq-role-head-title">' + supqEscapeHtml(cat.name) + '</div><div class="supq-role-head-sub1">Your roles in this category</div></div>' +
-      '</div>';
-    if (!cat.roles.length) {
-      html += '<div class="supq-role-head-sub2">Pick at least one role you actually do — the matching jobs and fixed-price cards appear below.</div>';
-      panel.innerHTML = html;
-      return;
-    }
-    html += '<div class="supq-role-head-sub2">Pick at least one role you actually do — the matching jobs and fixed-price cards appear below.</div>';
-    html += '<div class="supq-role-grid">';
-    cat.roles.forEach(function (role, idx) {
-      var spanFull = role.checked && role.requires;
-      html += '<div class="supq-role-tile' + (role.checked ? ' selected' : '') + (spanFull ? ' span-2' : '') + '" data-role-idx="' + idx + '">' +
-        '<div class="supq-role-box">' + supqCheckSvg() + '</div>' +
-        '<div><div class="supq-role-title">' + supqEscapeHtml(role.name) + '</div>' +
-        (role.requires ? '<div class="supq-role-req">Requires: ' + supqEscapeHtml(role.requires) + '</div>' : '') +
-        '</div></div>';
-      if (spanFull) {
-        var done = role.uploaded;
-        html += '<div class="supq-proof-row' + (done ? ' done' : '') + '" data-proof-idx="' + idx + '" data-title="Upload ' + supqEscapeHtml(role.requires) + ' certificate">' +
-          '<span class="supq-proof-badge">' + (done ? 'Uploaded' : 'Not Uploaded') + '</span>' +
-          '<span class="supq-proof-label">' + supqEscapeHtml(role.name) + ' \u2014 ' + supqEscapeHtml(role.requires) + '</span>' +
-          (done
-            ? '<span class="supq-upload-done"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>On file</span>'
-            : '<button type="button" class="supq-upload-btn" data-proof-upload-idx="' + idx + '">Upload proof</button><span class="fd-label" style="display:none;"></span><input type="file" class="supq-proof-input" data-proof-input-idx="' + idx + '" style="display:none;" accept="image/*,application/pdf">') +
-          '</div>';
-      }
-    });
-    html += '</div>';
-    panel.innerHTML = html;
-    wireSupqRolePanelEvents(cat);
-  }
-
-  function wireSupqRolePanelEvents(cat) {
-    var panel = document.getElementById('supqRolePanel');
-    panel.querySelectorAll('.supq-role-tile').forEach(function (tile) {
-      tile.addEventListener('click', function () {
-        var idx = parseInt(tile.getAttribute('data-role-idx'), 10);
-        cat.roles[idx].checked = !cat.roles[idx].checked;
-        renderSupqStep1(true);
-      });
-    });
-    panel.querySelectorAll('[data-proof-upload-idx]').forEach(function (btn) {
-      btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        openUploadMethodPopup(btn.closest('.supq-proof-row'), true);
-      });
-    });
-    panel.querySelectorAll('.supq-proof-input').forEach(function (input) {
-      input.addEventListener('click', function (e) { e.stopPropagation(); });
-      input.addEventListener('change', function () {
-        if (!(input.files && input.files[0])) return;
-        markZoneUploaded(input.closest('.supq-proof-row'), input.files[0].name);
-      });
-    });
-    panel.querySelectorAll('.supq-proof-row').forEach(function (row) {
-      row.addEventListener('click', function (e) { e.stopPropagation(); });
-      row.addEventListener('keylr-uploaded', function () {
-        var idx = parseInt(row.getAttribute('data-proof-idx'), 10);
-        cat.roles[idx].uploaded = true;
-        showToast('Certificate uploaded.');
-        renderSupqStep1(true);
-      });
-    });
-  }
-
-  function wireSupqDynamicEvents() {
-    document.querySelectorAll('#supqCatList .supq-cat-item').forEach(function (item) {
-      item.addEventListener('click', function (e) {
-        if (e.target.closest('.supq-quote-link')) return;
-        supqSelectedCatId = item.getAttribute('data-cat');
-        renderSupqStep1();
-      });
-    });
-    document.querySelectorAll('.supq-quote-link').forEach(function (link) {
-      link.addEventListener('click', function (e) {
-        e.stopPropagation();
-        showToast('Pricing setup isn\u2019t available in this prototype yet.');
-      });
-    });
-    document.querySelectorAll('#supqCategoryChips [data-remove-cat]').forEach(function (x) {
-      x.addEventListener('click', function (e) {
-        e.stopPropagation();
-        var id = x.getAttribute('data-remove-cat');
-        var cat = SUPQ_DATA.categories.find(function (c) { return c.id === id; });
-        SUPQ_DATA.categories = SUPQ_DATA.categories.filter(function (c) { return c.id !== id; });
-        if (cat) { SUPQ_DATA.suggestions.push(cat.name); SUPQ_DATA.suggestions.sort(); }
-        if (supqSelectedCatId === id) supqSelectedCatId = SUPQ_DATA.categories.length ? SUPQ_DATA.categories[0].id : null;
-        renderSupqStep1();
-      });
-    });
-    var addBtn = document.getElementById('supqAddCatBtn');
-    if (addBtn) addBtn.addEventListener('click', function () {
-      var search = document.getElementById('supqSearchInput');
-      search.focus();
-      search.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    });
-    document.querySelectorAll('[data-add-suggestion]').forEach(function (chip) {
-      chip.addEventListener('click', function () {
-        var name = chip.getAttribute('data-add-suggestion');
-        SUPQ_DATA.suggestions = SUPQ_DATA.suggestions.filter(function (n) { return n !== name; });
-        var id = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-        SUPQ_DATA.categories.push({ id: id, name: name, pricedTotal: 0, roles: [] });
-        supqSelectedCatId = id;
-        renderSupqStep1();
-      });
-    });
-  }
-
-  function renderSupqStep1(preserveScroll) {
-    var panelScroll = 0;
-    var pBefore = document.getElementById('supqRolePanel');
-    if (preserveScroll && pBefore) panelScroll = pBefore.scrollTop;
-    renderSupqChips();
-    renderSupqSuggestions();
-    renderSupqCatList();
-    renderSupqRolePanel();
-    wireSupqDynamicEvents();
-    var pAfter = document.getElementById('supqRolePanel');
-    if (pAfter) pAfter.scrollTop = panelScroll;
-  }
-
-  function initSupqSearchOnce() {
-    var search = document.getElementById('supqSearchInput');
-    if (!search) return;
-    search.addEventListener('input', function () {
-      supqSearchQuery = search.value;
-      renderSupqSuggestions();
-      renderSupqCatList();
-      renderSupqRolePanel();
-      wireSupqDynamicEvents();
-    });
-  }
-
-  var SUPQ_STEP_META = [
-    null,
-    { meta: '1 OF 5', title: 'Which trades do you do?', sub: 'Pick the categories you work in, then tick the specific roles within each. We route matching jobs to you and verify only the certificates your roles need.' },
-    { meta: '2 OF 5', title: 'What pricing models do you use?', sub: 'You can combine multiple models.' },
-    { meta: '3 OF 5', title: 'How many years of experience do you have?', sub: 'Displayed on your marketplace profile. Clients often filter by experience level.' },
-    { meta: '4 OF 5', title: 'How many jobs have you completed?', sub: 'An estimate across your career. Helps clients understand your track record.' },
-    { meta: '5 OF 5', title: 'Describe yourself to clients', sub: 'Write a short bio for your marketplace profile — your chance to make a great first impression.' }
-  ];
-  var supqCurrentStep = 1;
-
-  function renderSupqDots() {
-    var wrap = document.getElementById('supqDots');
-    if (!wrap) return;
-    var html = '';
-    for (var i = 1; i < supqCurrentStep; i++) html += '<span class="stepper-dot done"></span>';
-    html += '<span class="stepper-dot current"></span>';
-    wrap.innerHTML = html;
-  }
-
-  function renderSupqHeader() {
-    var meta = SUPQ_STEP_META[supqCurrentStep];
-    document.getElementById('supqStepMeta').textContent = meta.meta;
-    document.getElementById('supqStepTitle').textContent = meta.title;
-    document.getElementById('supqStepSub').textContent = meta.sub;
-    document.getElementById('supqBackBtn').hidden = supqCurrentStep === 1;
-    var nextBtn = document.getElementById('supqNextBtn');
-    nextBtn.innerHTML = supqCurrentStep === 5 ? 'Save' : 'Next <span class="arrow">\u2192</span>';
-  }
-
-  function showSupqStep(n) {
-    supqCurrentStep = n;
-    for (var i = 1; i <= 5; i++) {
-      var el = document.getElementById('supqStep' + i);
-      if (el) el.style.display = i === n ? '' : 'none';
-    }
-    renderSupqDots();
-    renderSupqHeader();
-  }
-
+  /* ---- Supplier Settings: Portfolio tab (formerly Questionnaire) ---- */
   var toastRich = document.getElementById('toastRich');
   var toastRichTitle = document.getElementById('toastRichTitle');
   var toastRichDetail = document.getElementById('toastRichDetail');
@@ -18426,34 +18439,269 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     clearTimeout(toastRichTimer);
   });
 
-  function initSupQuestionnaire() {
-    renderSupqStep1();
-    initSupqSearchOnce();
-    showSupqStep(1);
-    initMultiSelectTiles(document.getElementById('supqPricingTiles'));
-    initSingleSelectTiles(document.getElementById('supqExperienceTiles'));
-    initSingleSelectTiles(document.getElementById('supqJobsTiles'));
-    document.getElementById('supqBackBtn').addEventListener('click', function () {
-      if (supqCurrentStep > 1) showSupqStep(supqCurrentStep - 1);
-    });
-    document.getElementById('supqNextBtn').addEventListener('click', function () {
-      if (supqCurrentStep < 5) {
-        showSupqStep(supqCurrentStep + 1);
-      } else {
-        showRichToast('Questionnaire saved', 'Your responses have been updated.');
-      }
-    });
-  }
-  initSupQuestionnaire();
-
-  initMultiSelectTiles(document.getElementById('supDashSectorTiles'));
-  initMultiSelectTiles(document.getElementById('supResSubChips'));
-  initMultiSelectTiles(document.getElementById('supComSubChips'));
 
   initObToggle('supHmrcToggle', 'supUtrField', true);
   initObToggle('supPliToggle', 'supPliFields', true);
   initObToggle('supPiToggle', 'supPiFields', true);
   initObToggle('supDbsToggle', 'supDbsFields', true);
+
+  initMultiSelectTiles(document.getElementById('supDashSectorTiles'));
+  initMultiSelectTiles(document.getElementById('supResSubChips'));
+  initMultiSelectTiles(document.getElementById('supComSubChips'));
+
+  var stgSelectedRolesByCategory = {}; // { categoryName: Set-like object of role names }
+  var stgActiveCategory = 'Gas & Heating';
+
+  function getStgSelectedSet(cat) {
+    if (!stgSelectedRolesByCategory[cat]) stgSelectedRolesByCategory[cat] = {};
+    return stgSelectedRolesByCategory[cat];
+  }
+
+  function renderStgCrpRoles() {
+    var grid = document.getElementById('stgCrpRolesGrid');
+    if (!grid) return;
+    var roles = categoryRoles[stgActiveCategory] || [];
+    var selectedSet = getStgSelectedSet(stgActiveCategory);
+    document.getElementById('stgCrpRolesTitle').textContent = stgActiveCategory;
+    var selectedCount = Object.keys(selectedSet).filter(function (r) { return selectedSet[r]; }).length;
+    document.getElementById('stgCrpSelectAll').textContent = selectedCount === roles.length ? 'Clear All' : 'Select All';
+
+    grid.innerHTML = roles.map(function (role) {
+      var isSelected = !!selectedSet[role];
+      var cert = CERT_REQUIRED_ROLES[role];
+      var certTag = cert ? '<div class="rc-cert-tag">★ Certificate Required</div>' : '';
+      return '<div class="crp-role-chip' + (isSelected ? ' selected' : '') + '" data-role="' + role + '">' +
+        '<span class="rc-box">' + (isSelected ? '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>' : '') + '</span>' +
+        '<div><span>' + role + '</span>' + certTag + '</div></div>';
+    }).join('');
+
+    grid.querySelectorAll('.crp-role-chip').forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        var role = chip.getAttribute('data-role');
+        var set = getStgSelectedSet(stgActiveCategory);
+        set[role] = !set[role];
+        renderStgCrpRoles();
+        syncStgCategoryCounts();
+        renderStgRoleCertifications();
+      });
+    });
+  }
+
+  function syncStgCategoryCounts() {
+    var totalCats = 0, totalRoles = 0;
+    var selectedCats = [];
+    var checkSvg = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+    document.querySelectorAll('#stgCategoryList .crp-cat-row').forEach(function (row) {
+      var cat = row.getAttribute('data-cat');
+      var set = getStgSelectedSet(cat);
+      var count = Object.keys(set).filter(function (r) { return set[r]; }).length;
+      row.querySelector('.crp-count').textContent = count;
+      row.classList.toggle('has-selection', count > 0);
+      row.querySelector('.crp-checkbox').innerHTML = count > 0 ? checkSvg : '';
+      if (count > 0) { totalCats++; totalRoles += count; selectedCats.push({ name: cat, count: count }); }
+    });
+
+    var chipsRow = document.getElementById('stgSelectedCatChipsRow');
+    var html = '<span class="cat-summary-chip"><strong>' +
+      totalCats + ' categor' + (totalCats === 1 ? 'y' : 'ies') + ' · ' + totalRoles + ' role' + (totalRoles === 1 ? '' : 's') + '</strong></span>';
+    selectedCats.forEach(function (c) {
+      html += '<span class="cat-selected-chip" data-cat="' + c.name + '">' + c.name +
+        ' <strong>' + c.count + '</strong> <button type="button" class="csc-remove" data-cat="' + c.name + '" aria-label="Remove ' + c.name + '">' +
+        '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>';
+    });
+    chipsRow.innerHTML = html;
+    chipsRow.querySelectorAll('.csc-remove').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var cat = btn.getAttribute('data-cat');
+        stgSelectedRolesByCategory[cat] = {};
+        syncStgCategoryCounts();
+        if (stgActiveCategory === cat) renderStgCrpRoles();
+        renderStgRoleCertifications();
+      });
+    });
+  }
+
+  var stgRoleCertEntryCounts = {};
+  var stgRoleCertData = {};
+
+  function getStgRoleCertEntry(role, idx) {
+    if (!stgRoleCertData[role]) stgRoleCertData[role] = [];
+    if (!stgRoleCertData[role][idx]) stgRoleCertData[role][idx] = { certName: idx === 0 ? CERT_REQUIRED_ROLES[role].label : '', regNumber: '', expiryDate: '', fileName: '' };
+    return stgRoleCertData[role][idx];
+  }
+
+  function renderStgRoleCertifications() {
+    var container = document.getElementById('stgRoleCertifications');
+    if (!container) return;
+    var certRoles = [];
+    var seenRoles = {};
+    Object.keys(stgSelectedRolesByCategory).forEach(function (cat) {
+      var set = stgSelectedRolesByCategory[cat];
+      Object.keys(set).forEach(function (role) {
+        if (set[role] && CERT_REQUIRED_ROLES[role] && !seenRoles[role]) {
+          seenRoles[role] = true;
+          certRoles.push(role);
+        }
+      });
+    });
+    if (certRoles.length === 0) {
+      container.innerHTML = '<div class="dash-empty" style="padding:20px 10px;"><div class="empty-sub">Select a role that requires certification (e.g. Gas Safe Engineer, Scaffolder) to add its details here.</div></div>';
+      return;
+    }
+    container.innerHTML = certRoles.map(function (role, roleIdx) {
+      var cert = CERT_REQUIRED_ROLES[role];
+      var entryCount = stgRoleCertEntryCounts[role] || 1;
+      var entriesHtml = '';
+      for (var e = 0; e < entryCount; e++) {
+        var zoneId = 'stgCertUploadZone' + roleIdx + '_' + e;
+        var entryData = getStgRoleCertEntry(role, e);
+        var isUploaded = !!entryData.fileName;
+        entriesHtml += '<div class="crc-cert-entry" data-role="' + supjrEscapeHtml(role) + '" data-entry="' + e + '"' + (e > 0 ? ' style="margin-top:18px;padding-top:18px;border-top:1px solid var(--border-subtle);"' : '') + '>' +
+          (e > 0 ? '<div style="display:flex;justify-content:flex-end;margin-bottom:8px;"><button type="button" class="stg-crc-remove-entry-btn" data-role="' + supjrEscapeHtml(role) + '" style="background:none;border:none;color:#d92d20;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">Remove</button></div>' : '') +
+          '<div class="ob-row-2">' +
+          '<div class="ob-field"><label>Certificate name</label><input class="field-input stg-crc-cert-name-input" type="text" placeholder="e.g. ' + supjrEscapeHtml(cert.label) + '" value="' + supjrEscapeHtml(entryData.certName) + '"></div>' +
+          '<div class="ob-field"><label>Registration number</label><input class="field-input stg-crc-reg-number-input" type="text" placeholder="Enter your registration number" value="' + supjrEscapeHtml(entryData.regNumber) + '"></div>' +
+          '</div>' +
+          '<div class="ob-row-2">' +
+          '<div class="ob-field"><label>Upload Certificate</label><div class="file-dropzone' + (isUploaded ? ' uploaded' : '') + '" id="' + zoneId + '" data-title="Upload Certificate"><input type="file" style="display:none;">' +
+          '<div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>' +
+          '<div class="fd-label">' + (isUploaded ? 'Uploaded ✓' : 'Click to Upload<span class="fd-sub">Photo or PDF</span>') + '</div>' +
+          (isUploaded ? '<div class="fd-uploaded-name"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>' + supjrEscapeHtml(entryData.fileName) + '</div>' : '') +
+          '</div></div>' +
+          '<div class="ob-field"><label>Expiry date</label><input class="field-input stg-crc-expiry-input" type="date" value="' + entryData.expiryDate + '"></div>' +
+          '</div></div>';
+      }
+      return '<div class="cert-required-card">' +
+        '<div class="crc-header"><div class="crc-title">' + supjrEscapeHtml(role) + ' <span class="meta-badge required-badge" style="text-transform:none;background:#fff;">Required</span></div>' +
+        '<div class="crc-sub">Upload the relevant certificates required for your selected role(s). Once verified by the Keylr team, they will enable you to offer the corresponding services on the platform.</div></div>' +
+        '<div class="crc-body">' + entriesHtml +
+        '<button type="button" class="pmprop-add-code-btn stg-crc-add-another-btn" data-role="' + supjrEscapeHtml(role) + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add another certificate</button>' +
+        '</div></div>';
+    }).join('');
+    wireUploadZonesIn(container);
+
+    container.querySelectorAll('.crc-cert-entry').forEach(function (entryEl) {
+      var role = entryEl.getAttribute('data-role');
+      var idx = parseInt(entryEl.getAttribute('data-entry'), 10);
+      entryEl.querySelector('.stg-crc-cert-name-input').addEventListener('input', function () { getStgRoleCertEntry(role, idx).certName = this.value; });
+      entryEl.querySelector('.stg-crc-reg-number-input').addEventListener('input', function () { getStgRoleCertEntry(role, idx).regNumber = this.value; });
+      entryEl.querySelector('.stg-crc-expiry-input').addEventListener('change', function () { getStgRoleCertEntry(role, idx).expiryDate = this.value; });
+      entryEl.querySelector('.file-dropzone').addEventListener('keylr-uploaded', function () {
+        var uploadedNameEl = entryEl.querySelector('.fd-uploaded-name');
+        getStgRoleCertEntry(role, idx).fileName = uploadedNameEl ? uploadedNameEl.textContent.trim() : 'Uploaded document';
+      });
+    });
+
+    container.querySelectorAll('.stg-crc-add-another-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var role = btn.getAttribute('data-role');
+        stgRoleCertEntryCounts[role] = (stgRoleCertEntryCounts[role] || 1) + 1;
+        renderStgRoleCertifications();
+      });
+    });
+    container.querySelectorAll('.stg-crc-remove-entry-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var role = btn.getAttribute('data-role');
+        var newCount = Math.max(1, (stgRoleCertEntryCounts[role] || 1) - 1);
+        stgRoleCertEntryCounts[role] = newCount;
+        if (stgRoleCertData[role]) stgRoleCertData[role].length = newCount;
+        renderStgRoleCertifications();
+      });
+    });
+  }
+
+  function initStgCategoriesRoles() {
+    document.querySelectorAll('#stgCategoryList .crp-cat-row').forEach(function (row) {
+      row.addEventListener('click', function () {
+        document.querySelectorAll('#stgCategoryList .crp-cat-row').forEach(function (r) { r.classList.remove('active'); });
+        row.classList.add('active');
+        stgActiveCategory = row.getAttribute('data-cat');
+        renderStgCrpRoles();
+      });
+    });
+    document.getElementById('stgCrpSelectAll').addEventListener('click', function () {
+      var roles = categoryRoles[stgActiveCategory] || [];
+      var set = getStgSelectedSet(stgActiveCategory);
+      var allSelected = roles.every(function (r) { return set[r]; });
+      roles.forEach(function (r) { set[r] = !allSelected; });
+      renderStgCrpRoles();
+      syncStgCategoryCounts();
+      renderStgRoleCertifications();
+    });
+    document.getElementById('stgCategorySearchInput').addEventListener('input', function () {
+      var q = this.value.trim().toLowerCase();
+      document.querySelectorAll('#stgCategoryList .crp-cat-row').forEach(function (row) {
+        var name = row.getAttribute('data-cat').toLowerCase();
+        row.style.display = name.indexOf(q) !== -1 ? '' : 'none';
+      });
+    });
+    renderStgCrpRoles();
+    syncStgCategoryCounts();
+  }
+  initStgCategoriesRoles();
+
+  /* ---- Supplier Settings: Portfolio tab widgets ---- */
+  wireUploadZonesIn(document.getElementById('supSettingsPanelQuestionnaire'));
+
+  document.querySelectorAll('#stgpDayPills .day-pill').forEach(function (pill) {
+    pill.addEventListener('click', function () { pill.classList.toggle('selected'); });
+  });
+
+  initSingleSelectTiles(document.getElementById('stgpNoticeTiles'));
+
+  ['stgpOutOfHoursToggle', 'stgpEmergencyToggle', 'stgpUrgentToggle'].forEach(function (id) {
+    var toggle = document.getElementById(id);
+    if (!toggle) return;
+    toggle.addEventListener('click', function () {
+      var isOn = toggle.classList.toggle('on');
+      toggle.setAttribute('aria-checked', isOn ? 'true' : 'false');
+    });
+  });
+
+  initMultiSelectTiles(document.getElementById('stgpLondonZones'));
+  initMultiSelectTiles(document.getElementById('stgpOtherCities'));
+
+  var stgpAllLondonChip = document.querySelector('#stgpLondonZones .simple-chip-action');
+  if (stgpAllLondonChip) {
+    stgpAllLondonChip.addEventListener('click', function () {
+      var zoneChips = document.querySelectorAll('#stgpLondonZones .simple-chip:not(.simple-chip-action)');
+      var allSelected = Array.prototype.every.call(zoneChips, function (c) { return c.classList.contains('selected'); });
+      zoneChips.forEach(function (c) { c.classList.toggle('selected', !allSelected); });
+    });
+  }
+
+  var stgpCustomCityInput = document.getElementById('stgpCustomCityInput');
+  stgpCustomCityInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && stgpCustomCityInput.value.trim()) {
+      e.preventDefault();
+      var value = stgpCustomCityInput.value.trim();
+      var esc = value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      var chip = document.createElement('div');
+      chip.className = 'simple-chip selected just-added';
+      chip.style.display = 'inline-flex';
+      chip.style.alignItems = 'center';
+      chip.style.gap = '6px';
+      chip.innerHTML = '<span class="custom-chip-label">' + esc + '</span><button type="button" class="custom-chip-remove" aria-label="Remove ' + esc + '" style="display:flex;align-items:center;justify-content:center;color:inherit;flex-shrink:0;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>';
+      chip.querySelector('.custom-chip-label').addEventListener('click', function () { chip.classList.toggle('selected'); });
+      chip.querySelector('.custom-chip-remove').addEventListener('click', function (ev) {
+        ev.stopPropagation();
+        chip.remove();
+      });
+      document.getElementById('stgpOtherCities').appendChild(chip);
+      stgpCustomCityInput.value = '';
+    }
+  });
+
+  var stgpPortfolioCount = 0;
+  document.getElementById('stgpPortfolioAddTile').addEventListener('click', function () {
+    if (stgpPortfolioCount >= 10) { showToast('Maximum 10 portfolio photos.'); return; }
+    stgpPortfolioCount++;
+    document.getElementById('stgpPortfolioCount').textContent = stgpPortfolioCount;
+    showToast('Photo added (demo — no real upload in this prototype).');
+  });
+
+
 
   document.querySelectorAll('#supDashCriminalDeclaration .radio-tile').forEach(function (tile) {
     tile.addEventListener('click', function () {
@@ -20469,7 +20717,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     stgHoursFrom: { hour: 8, minute: 0 },
     stgHoursTo: { hour: 17, minute: 0 },
     supAvailStartTp: { hour: 9, minute: 0 },
-    supAvailEndTp: { hour: 18, minute: 0 }
+    supAvailEndTp: { hour: 18, minute: 0 },
+    stgpAvailStartTp: { hour: 9, minute: 0 },
+    stgpAvailEndTp: { hour: 18, minute: 0 }
   };
   function tpPad(n) { return n < 10 ? '0' + n : '' + n; }
   function tpRenderDisplay(key) {
