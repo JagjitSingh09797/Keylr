@@ -6629,16 +6629,25 @@
 
           <div class="cat-role-picker">
             <div class="crp-cats">
-              <div class="crp-cats-label">CATEGORIES <span class="crp-cats-total">7</span></div>
+              <div class="crp-cats-label">CATEGORIES <span class="crp-cats-total">16</span></div>
               <div class="crp-search"><input class="field-input" type="text" id="categorySearchInput" placeholder="Search categories..."></div>
               <div id="categoryList">
-                <div class="crp-cat-row active" data-cat="Appliances"><span class="crp-checkbox"></span><span class="crp-cat-name">Appliances</span><span class="crp-count" data-role-count="0">0</span></div>
-                <div class="crp-cat-row" data-cat="Cleaning"><span class="crp-checkbox"></span><span class="crp-cat-name">Cleaning</span><span class="crp-count" data-role-count="0">0</span></div>
-                <div class="crp-cat-row" data-cat="Compliance & Legal"><span class="crp-checkbox"></span><span class="crp-cat-name">Compliance &amp; Legal</span><span class="crp-count" data-role-count="0">0</span></div>
-                <div class="crp-cat-row" data-cat="Damp, Mould & Structural"><span class="crp-checkbox"></span><span class="crp-cat-name">Damp, Mould &amp; Structural</span><span class="crp-count" data-role-count="0">0</span></div>
+                <div class="crp-cat-row active" data-cat="Gas & Heating"><span class="crp-checkbox"></span><span class="crp-cat-name">Gas &amp; Heating</span><span class="crp-count" data-role-count="0">0</span></div>
+                <div class="crp-cat-row" data-cat="HVAC & Air Conditioning"><span class="crp-checkbox"></span><span class="crp-cat-name">HVAC &amp; Air Conditioning</span><span class="crp-count" data-role-count="0">0</span></div>
                 <div class="crp-cat-row" data-cat="Electrical"><span class="crp-checkbox"></span><span class="crp-cat-name">Electrical</span><span class="crp-count" data-role-count="0">0</span></div>
-                <div class="crp-cat-row" data-cat="Fire Safety"><span class="crp-checkbox"></span><span class="crp-cat-name">Fire Safety</span><span class="crp-count" data-role-count="0">0</span></div>
-                <div class="crp-cat-row" data-cat="Gas & Heating"><span class="crp-checkbox"></span><span class="crp-cat-name">Gas &amp; Heating</span><span class="crp-count" data-role-count="0">0</span></div>
+                <div class="crp-cat-row" data-cat="Plumber"><span class="crp-checkbox"></span><span class="crp-cat-name">Plumber</span><span class="crp-count" data-role-count="0">0</span></div>
+                <div class="crp-cat-row" data-cat="Compliance & Legal"><span class="crp-checkbox"></span><span class="crp-cat-name">Compliance &amp; Legal</span><span class="crp-count" data-role-count="0">0</span></div>
+                <div class="crp-cat-row" data-cat="Property Marketing & Agency"><span class="crp-checkbox"></span><span class="crp-cat-name">Property Marketing &amp; Agency</span><span class="crp-count" data-role-count="0">0</span></div>
+                <div class="crp-cat-row" data-cat="Damp, Mould & Structural"><span class="crp-checkbox"></span><span class="crp-cat-name">Damp, Mould &amp; Structural</span><span class="crp-count" data-role-count="0">0</span></div>
+                <div class="crp-cat-row" data-cat="Security & Access"><span class="crp-checkbox"></span><span class="crp-cat-name">Security &amp; Access</span><span class="crp-count" data-role-count="0">0</span></div>
+                <div class="crp-cat-row" data-cat="Cleaning"><span class="crp-checkbox"></span><span class="crp-cat-name">Cleaning</span><span class="crp-count" data-role-count="0">0</span></div>
+                <div class="crp-cat-row" data-cat="General Maintenance"><span class="crp-checkbox"></span><span class="crp-cat-name">General Maintenance</span><span class="crp-count" data-role-count="0">0</span></div>
+                <div class="crp-cat-row" data-cat="Grounds & Outdoor"><span class="crp-checkbox"></span><span class="crp-cat-name">Grounds &amp; Outdoor</span><span class="crp-count" data-role-count="0">0</span></div>
+                <div class="crp-cat-row" data-cat="Pest Control"><span class="crp-checkbox"></span><span class="crp-cat-name">Pest Control</span><span class="crp-count" data-role-count="0">0</span></div>
+                <div class="crp-cat-row" data-cat="Appliances"><span class="crp-checkbox"></span><span class="crp-cat-name">Appliances</span><span class="crp-count" data-role-count="0">0</span></div>
+                <div class="crp-cat-row" data-cat="Lifts & Accessibility"><span class="crp-checkbox"></span><span class="crp-cat-name">Lifts &amp; Accessibility</span><span class="crp-count" data-role-count="0">0</span></div>
+                <div class="crp-cat-row" data-cat="Inventory & Inspections"><span class="crp-checkbox"></span><span class="crp-cat-name">Inventory &amp; Inspections</span><span class="crp-count" data-role-count="0">0</span></div>
+                <div class="crp-cat-row" data-cat="Locksmith"><span class="crp-checkbox"></span><span class="crp-cat-name">Locksmith</span><span class="crp-count" data-role-count="0">0</span></div>
               </div>
             </div>
             <div class="crp-roles">
@@ -16008,21 +16017,30 @@
 
   /* ---- Step 6: Categories & Roles ---- */
   var categoryRoles = {
-    'Appliances': ['Washing Machine', 'Dishwasher', 'Fridge/Freezer', 'Oven & Hob', 'Tumble Dryer', 'Microwave'],
-    'Cleaning': ['End of Tenancy', 'Deep Clean', 'Regular Clean', 'Carpet Cleaner', 'Window Cleaner', 'Communal Areas'],
-    'Compliance & Legal': ['EPC Assessor', 'Legionella Risk Assessor', 'Fire Risk Assessor', 'HMO Inspector'],
-    'Damp, Mould & Structural': ['Damp Specialist', 'Ventilation Engineer', 'Electrician', 'Roofer', 'Handyman', 'Builder', 'Plasterer', 'Scaffolder', 'Kitchen Fitter'],
-    'Electrical': ['Electrician', 'PAT Tester', 'EICR Inspector', 'Smart Home Installer'],
-    'Fire Safety': ['Fire Alarm Engineer', 'Fire Door Installer', 'Extinguisher Servicing', 'Fire Risk Assessor'],
-    'Gas & Heating': ['Gas Safe Engineer', 'Boiler Engineer', 'Heating Installer', 'Plumber']
+    'Gas & Heating': ['Gas Safe Engineer', 'Heating Engineer', 'Heat Pump Installer'],
+    'HVAC & Air Conditioning': ['Air Conditioning Engineer', 'Ventilation Engineer', 'Heat Pump Installer'],
+    'Electrical': ['Electrician', 'PAT Tester', 'EV Charger Installer'],
+    'Plumber': ['Plumber', 'Drainage Engineer', 'Bathroom Fitter', 'Kitchen Fitter'],
+    'Compliance & Legal': ['EPC Assessor', 'Legionella Specialist', 'Asbestos Surveyor', 'Retrofit Assessor', 'Electrician', 'Gas Safe Engineer', 'Inventory Clerk', 'Fire Risk Assessor'],
+    'Property Marketing & Agency': ['Estate Agent', 'Lettings Agent', 'Viewing Agent', 'Photographer', 'Floor Planner', 'Property Videographer / Virtual Tour Specialist', 'Board Contractor', 'Airbnb Agent', 'EPC Assessor (DEA)', 'Check-In Clerk', 'Check-Out Clerk'],
+    'Damp, Mould & Structural': ['Damp & Mould Surveyor', 'Mould Remediation Specialist', 'Roofer'],
+    'Security & Access': ['Locksmith', 'CCTV Engineer'],
+    'Cleaning': ['Cleaner', 'End-of-Tenancy Cleaner', 'Window Cleaner', 'Waste Carrier'],
+    'General Maintenance': ['Handyman', 'General Maintenance', 'Painter & Decorator', 'Decorator', 'Carpenter', 'Joiner', 'Tiler', 'Plasterer', 'Builder', 'Roofer', 'Scaffolder', 'Glazier', 'Insulation Contractor', 'Ventilation Engineer', 'Air Conditioning Engineer', 'Boarding Contractor', 'Flooring Fitter'],
+    'Grounds & Outdoor': ['Gardener', 'Tree Surgeon', 'Window Cleaner', 'Gutter Cleaner', 'Pressure Washer', 'Fencing Contractor', 'Landscaper', 'Grounds Contractor', 'Waste Carrier'],
+    'Pest Control': ['Pest Controller'],
+    'Appliances': ['Appliance Engineer'],
+    'Lifts & Accessibility': ['Lift Engineer', 'Stairlift Engineer', 'Accessibility Contractor'],
+    'Inventory & Inspections': ['Inventory Clerk'],
+    'Locksmith': ['Locksmith']
   };
   var CERT_REQUIRED_ROLES = {
     'Gas Safe Engineer': { label: 'Gas Safe registration', helper: 'For Gas Safe Engineer.' },
     'Scaffolder': { label: 'CISRS Card', helper: 'For Scaffolder.' },
-    'Damp Specialist': { label: 'PCA Membership', helper: 'For Damp Specialist.' }
+    'Damp & Mould Surveyor': { label: 'PCA Membership', helper: 'For Damp & Mould Surveyor.' }
   };
   var selectedRolesByCategory = {}; // { categoryName: Set-like object of role names }
-  var activeCategory = 'Appliances';
+  var activeCategory = 'Gas & Heating';
 
   function getSelectedSet(cat) {
     if (!selectedRolesByCategory[cat]) selectedRolesByCategory[cat] = {};
@@ -16040,7 +16058,7 @@
     grid.innerHTML = roles.map(function (role) {
       var isSelected = !!selectedSet[role];
       var cert = CERT_REQUIRED_ROLES[role];
-      var certTag = cert ? '<div class="rc-cert-tag">★ ' + cert.label + '</div>' : '';
+      var certTag = cert ? '<div class="rc-cert-tag">★ Certificate Required</div>' : '';
       return '<div class="crp-role-chip' + (isSelected ? ' selected' : '') + '" data-role="' + role + '">' +
         '<span class="rc-box">' + (isSelected ? '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>' : '') + '</span>' +
         '<div><span>' + role + '</span>' + certTag + '</div></div>';
@@ -16093,35 +16111,92 @@
     });
   }
 
+  var roleCertEntryCounts = {}; // { role: number of certificate entries added, default 1 }
+  var roleCertData = {}; // { role: [ { certName, regNumber, expiryDate, fileName }, ... ] } — persists across re-renders and across categories
+
+  function getRoleCertEntry(role, idx) {
+    if (!roleCertData[role]) roleCertData[role] = [];
+    if (!roleCertData[role][idx]) roleCertData[role][idx] = { certName: idx === 0 ? CERT_REQUIRED_ROLES[role].label : '', regNumber: '', expiryDate: '', fileName: '' };
+    return roleCertData[role][idx];
+  }
+
   function renderRoleCertifications() {
     var container = document.getElementById('roleCertifications');
     var certRoles = [];
+    var seenRoles = {};
     Object.keys(selectedRolesByCategory).forEach(function (cat) {
       var set = selectedRolesByCategory[cat];
       Object.keys(set).forEach(function (role) {
-        if (set[role] && CERT_REQUIRED_ROLES[role]) certRoles.push(role);
+        if (set[role] && CERT_REQUIRED_ROLES[role] && !seenRoles[role]) {
+          seenRoles[role] = true;
+          certRoles.push(role);
+        }
       });
     });
     if (certRoles.length === 0) {
       container.innerHTML = '<div class="dash-empty" style="padding:20px 10px;"><div class="empty-sub">Select a role that requires certification (e.g. Gas Safe Engineer, Scaffolder) to add its details here.</div></div>';
       return;
     }
-    container.innerHTML = certRoles.map(function (role, i) {
+    container.innerHTML = certRoles.map(function (role, roleIdx) {
       var cert = CERT_REQUIRED_ROLES[role];
-      var zoneId = 'certUploadZone' + i;
+      var entryCount = roleCertEntryCounts[role] || 1;
+      var entriesHtml = '';
+      for (var e = 0; e < entryCount; e++) {
+        var zoneId = 'certUploadZone' + roleIdx + '_' + e;
+        var entryData = getRoleCertEntry(role, e);
+        var isUploaded = !!entryData.fileName;
+        entriesHtml += '<div class="crc-cert-entry" data-role="' + supjrEscapeHtml(role) + '" data-entry="' + e + '"' + (e > 0 ? ' style="margin-top:18px;padding-top:18px;border-top:1px solid var(--border-subtle);"' : '') + '>' +
+          (e > 0 ? '<div style="display:flex;justify-content:flex-end;margin-bottom:8px;"><button type="button" class="crc-remove-entry-btn" data-role="' + supjrEscapeHtml(role) + '" style="background:none;border:none;color:#d92d20;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">Remove</button></div>' : '') +
+          '<div class="ob-row-2">' +
+          '<div class="ob-field"><label>Certificate name</label><input class="field-input crc-cert-name-input" type="text" placeholder="e.g. ' + supjrEscapeHtml(cert.label) + '" value="' + supjrEscapeHtml(entryData.certName) + '"></div>' +
+          '<div class="ob-field"><label>Registration number</label><input class="field-input crc-reg-number-input" type="text" placeholder="Enter your registration number" value="' + supjrEscapeHtml(entryData.regNumber) + '"></div>' +
+          '</div>' +
+          '<div class="ob-row-2">' +
+          '<div class="ob-field"><label>Upload Certificate</label><div class="file-dropzone' + (isUploaded ? ' uploaded' : '') + '" id="' + zoneId + '" data-title="Upload Certificate"><input type="file" style="display:none;">' +
+          '<div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>' +
+          '<div class="fd-label">' + (isUploaded ? 'Uploaded ✓' : 'Click to Upload<span class="fd-sub">Photo or PDF</span>') + '</div>' +
+          (isUploaded ? '<div class="fd-uploaded-name"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>' + supjrEscapeHtml(entryData.fileName) + '</div>' : '') +
+          '</div></div>' +
+          '<div class="ob-field"><label>Expiry date</label><input class="field-input crc-expiry-input" type="date" value="' + entryData.expiryDate + '"></div>' +
+          '</div></div>';
+      }
       return '<div class="cert-required-card">' +
-        '<div class="crc-header"><div class="crc-title">' + cert.label + ' <span class="meta-badge required-badge" style="text-transform:none;background:#fff;">Required</span></div>' +
-        '<div class="crc-sub">' + cert.helper + '</div></div>' +
-        '<div class="crc-body">' +
-        '<div class="ob-row-2">' +
-        '<div class="ob-field"><label>Upload Certificate</label><div class="file-dropzone" id="' + zoneId + '" data-title="Upload ' + cert.label + '"><input type="file" style="display:none;">' +
-        '<div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>' +
-        '<div class="fd-label">Click to Upload<span class="fd-sub">Photo or PDF</span></div></div></div>' +
-        '<div class="ob-field"><label>Registration number</label><input class="field-input" type="text" placeholder="Enter your ' + cert.label + ' number"></div>' +
-        '</div>' +
-        '<div class="ob-field" style="max-width:calc(50% - 7px);"><label>Expiry date</label><input class="field-input" type="date"></div></div></div>';
+        '<div class="crc-header"><div class="crc-title">' + supjrEscapeHtml(role) + ' <span class="meta-badge required-badge" style="text-transform:none;background:#fff;">Required</span></div>' +
+        '<div class="crc-sub">Upload the relevant certificates required for your selected role(s). Once verified by the Keylr team, they will enable you to offer the corresponding services on the platform.</div></div>' +
+        '<div class="crc-body">' + entriesHtml +
+        '<button type="button" class="pmprop-add-code-btn crc-add-another-btn" data-role="' + supjrEscapeHtml(role) + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add another certificate</button>' +
+        '</div></div>';
     }).join('');
     wireUploadZonesIn(container);
+
+    container.querySelectorAll('.crc-cert-entry').forEach(function (entryEl) {
+      var role = entryEl.getAttribute('data-role');
+      var idx = parseInt(entryEl.getAttribute('data-entry'), 10);
+      entryEl.querySelector('.crc-cert-name-input').addEventListener('input', function () { getRoleCertEntry(role, idx).certName = this.value; });
+      entryEl.querySelector('.crc-reg-number-input').addEventListener('input', function () { getRoleCertEntry(role, idx).regNumber = this.value; });
+      entryEl.querySelector('.crc-expiry-input').addEventListener('change', function () { getRoleCertEntry(role, idx).expiryDate = this.value; });
+      entryEl.querySelector('.file-dropzone').addEventListener('keylr-uploaded', function () {
+        var uploadedNameEl = entryEl.querySelector('.fd-uploaded-name');
+        getRoleCertEntry(role, idx).fileName = uploadedNameEl ? uploadedNameEl.textContent.trim() : 'Uploaded document';
+      });
+    });
+
+    container.querySelectorAll('.crc-add-another-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var role = btn.getAttribute('data-role');
+        roleCertEntryCounts[role] = (roleCertEntryCounts[role] || 1) + 1;
+        renderRoleCertifications();
+      });
+    });
+    container.querySelectorAll('.crc-remove-entry-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var role = btn.getAttribute('data-role');
+        var newCount = Math.max(1, (roleCertEntryCounts[role] || 1) - 1);
+        roleCertEntryCounts[role] = newCount;
+        if (roleCertData[role]) roleCertData[role].length = newCount;
+        renderRoleCertifications();
+      });
+    });
   }
 
   document.querySelectorAll('.crp-cat-row').forEach(function (row) {
