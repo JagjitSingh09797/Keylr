@@ -3637,7 +3637,47 @@
   .detail-mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   .dmf-label { font-size: 11.5px; color: var(--text-body-muted); margin-bottom: 4px; }
   .detail-mini-field .dmf-value { font-size: 13.5px; font-weight: 600; color: var(--text-heading); }
-  .detail-chip-tag { display: inline-flex; font-size: 12px; font-weight: 600; color: var(--text-heading); background: var(--surface-soft); padding: 5px 12px; border-radius: 999px; margin: 3px 6px 3px 0; }
+  .detail-chip-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: var(--text-heading); background: var(--surface-soft); padding: 5px 12px; border-radius: 999px; margin: 3px 6px 3px 0; }
+  .acct-settings-tab .detail-chip-tag { background: var(--icon-tint-bg); color: var(--accent-blue); }
+  .acct-settings-tab .detail-chip-tag svg { flex-shrink: 0; }
+  .acct-settings-tab .acct-cert-view-title { display: flex; align-items: center; gap: 6px; }
+  .acct-settings-tab .acct-cert-view-title svg { flex-shrink: 0; color: var(--accent-blue); }
+
+  /* ---------- Supplier Account Settings: view/edit toggle ---------- */
+  .acct-settings-tab .aev-edit-only { display: none; }
+  .acct-settings-tab.editing .aev-view-only { display: none !important; }
+  .acct-settings-tab.editing .aev-edit-only { display: block; }
+  .acct-settings-tab .acct-edit-toolbar { display: flex; justify-content: flex-end; margin: -4px 0 8px; }
+  .acct-settings-tab.editing .acct-edit-toolbar { display: none; }
+  .acct-settings-tab .acct-save-row { display: none; }
+  .acct-settings-tab.editing .acct-save-row { display: flex; }
+  .acct-edit-btn { width: auto; padding: 9px 16px; }
+  .acct-view-empty { font-size: 13px; color: var(--text-body-muted); font-style: italic; }
+  .acct-view-value { font-size: 14.5px; font-weight: 600; color: var(--text-heading); padding: 11px 0; }
+  .acct-view-value.muted { color: #94a3b8; font-weight: 500; font-style: italic; }
+  .acct-view-para { font-size: 13.5px; color: var(--text-heading); line-height: 1.6; padding: 6px 0 0; }
+  .acct-cert-view-card { border: 1px solid var(--border-subtle); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
+  .acct-cert-view-card:last-child { margin-bottom: 0; }
+  .acct-cert-view-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+  .acct-cert-view-title { font-size: 13.5px; font-weight: 700; color: var(--text-heading); }
+  .acct-cert-view-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .acct-cert-view-grid.acct-cert-view-grid-4col { grid-template-columns: repeat(2, 1fr); }
+  .acct-cert-view-grid .dmf-label { margin-bottom: 3px; }
+  .acct-settings-tab:not(.editing) .acct-view-card { background: var(--surface-white); border: 1px solid var(--border-subtle); border-radius: var(--radius-card); padding: 20px 22px; margin-bottom: 16px; }
+  .acct-settings-tab:not(.editing) .acct-view-card:last-child { margin-bottom: 0; }
+  .acct-settings-tab .acct-view-card .detail-mini-grid { margin-bottom: 0; }
+  .acct-settings-tab .acct-view-card .detail-mini-grid-3col { margin-bottom: 12px; }
+  .detail-card-head .dch-icon { width: 26px; height: 26px; border-radius: 7px; flex-shrink: 0; background: var(--icon-tint-bg); color: var(--accent-blue); display: flex; align-items: center; justify-content: center; }
+  .detail-mini-grid-3col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 900px) { .detail-mini-grid-3col { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .detail-mini-grid-3col { grid-template-columns: 1fr; } }
+  .acct-settings-tab .dmf-label { display: flex; align-items: center; gap: 5px; }
+  .acct-settings-tab .dmf-label svg { flex-shrink: 0; }
+  .acct-settings-tab .dfr-label { display: flex; align-items: center; gap: 5px; }
+  .acct-settings-tab .dfr-label svg { flex-shrink: 0; }
+  .acct-settings-tab .ob-field.aev-view-only > label { display: flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 400; color: var(--text-body-muted); }
+  .acct-settings-tab .ob-field.aev-view-only > label svg { flex-shrink: 0; }
+  .acct-view-day-chips { display: flex; flex-wrap: wrap; gap: 6px 0; }
 
   .support-contact-box { background: var(--surface-soft); border-radius: 10px; padding: 14px 16px; margin-top: 16px; }
   .support-contact-box .scb-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; color: #94a3b8; margin-bottom: 6px; }
@@ -4983,6 +5023,11 @@
               <label for="agreeTerms">I agree to the <button type="button" class="as-link">Terms &amp; Conditions</button> and <button type="button" class="as-link">Privacy Policy</button></label>
             </div>
 
+            <div class="check-row" id="agreePlatformRow">
+              <input type="checkbox" id="agreePlatform" name="agreePlatform" required>
+              <label for="agreePlatform">I acknowledge and accept the Keylr <a href="https://www.keylr.com/legal/platform-agreement" target="_blank" rel="noopener">Platform Agreement</a>.</label>
+            </div>
+
             <button type="button" id="signupContinueBtn" class="btn btn-primary">Continue <span class="arrow">→</span></button>
           </form>
 
@@ -5670,6 +5715,7 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
           Back
         </button>
+        <button type="button" class="btn btn-secondary-light" id="supObSaveSkipBtn" style="display:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M20 6L9 17l-5-5"/></svg>Save &amp; skip other steps</button>
         <button type="button" class="btn btn-primary" id="supObNextBtn">Continue <span class="arrow">→</span></button>
       </div>
       </div>
@@ -6273,7 +6319,7 @@
                         <div class="fd-label">Click to Upload<span class="fd-sub">PDF or image</span></div>
                       </div>
                     </div>
-                    <div class="ob-field"><label>Certificate number</label><input class="field-input" type="text" placeholder="12-digit number"></div>
+                    <div class="ob-field"><label>Certificate number</label><input class="field-input" type="text" placeholder="12-digit number" id="obDbsCertNumber"></div>
                   </div>
                   <div class="ob-row-2">
                     <div class="ob-field">
@@ -6803,7 +6849,7 @@
             </div>
             <div class="ocs-desc">References and portfolio photos are displayed on your marketplace profile. They help build trust and improve your search ranking significantly.</div>
             <div class="ob-field">
-              <textarea class="ob-textarea" style="min-height:70px;">References available on request from managing agents.</textarea>
+              <textarea class="ob-textarea" style="min-height:70px;" id="obJobRefsTextarea">References available on request from managing agents.</textarea>
             </div>
             <div class="ob-field" style="margin-bottom:0;">
               <label>Portfolio Photos</label>
@@ -6824,7 +6870,7 @@
             </div>
             <div class="ocs-desc">Write a short bio for your marketplace profile — your chance to make a great first impression, or let AI help.</div>
             <div class="ob-field" style="margin-bottom:14px;">
-              <textarea class="ob-textarea" placeholder="Reliable, fully-insured appliances team based in Manchester. Sole trader with 15 years experience.">Reliable, fully-insured appliances team based in Manchester. Sole trader with 15 years experience.</textarea>
+              <textarea class="ob-textarea" id="obBioTextarea" placeholder="Reliable, fully-insured appliances team based in Manchester. Sole trader with 15 years experience.">Reliable, fully-insured appliances team based in Manchester. Sole trader with 15 years experience.</textarea>
             </div>
             <div class="callout callout-info" style="margin-bottom:0;">
               <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg></div>
@@ -6902,7 +6948,7 @@
                   <div class="otc-title" id="supAvailOutOfHoursTitle">I am available for out-of-hours jobs</div>
                   <div class="otc-desc">Evenings · early mornings · weekends · bank holidays</div>
                 </div>
-                <button type="button" class="toggle-switch" role="switch" aria-checked="false"><span class="thumb"></span></button>
+                <button type="button" class="toggle-switch" id="obOutOfHoursToggle" role="switch" aria-checked="false"><span class="thumb"></span></button>
               </div>
             </div>
             <div class="callout callout-info" style="padding:12px 16px;margin:12px 0;">
@@ -6914,7 +6960,7 @@
                   <div class="otc-title" id="supAvailEmergencyTitle">I accept emergency call-outs</div>
                   <div class="otc-desc">Rapid response — typically within 1-2 hours</div>
                 </div>
-                <button type="button" class="toggle-switch" role="switch" aria-checked="false"><span class="thumb"></span></button>
+                <button type="button" class="toggle-switch" id="obEmergencyToggle" role="switch" aria-checked="false"><span class="thumb"></span></button>
               </div>
             </div>
             <div class="ob-toggle-card" style="border:1px solid var(--border-subtle);">
@@ -6923,7 +6969,7 @@
                   <div class="otc-title" id="supAvailUrgentTitle">I accept urgent same-day jobs</div>
                   <div class="otc-desc">Less than 4 hours' notice</div>
                 </div>
-                <button type="button" class="toggle-switch" role="switch" aria-checked="false"><span class="thumb"></span></button>
+                <button type="button" class="toggle-switch" id="obUrgentToggle" role="switch" aria-checked="false"><span class="thumb"></span></button>
               </div>
             </div>
             <div class="callout callout-info" style="padding:12px 16px;margin-bottom:0;">
@@ -9036,24 +9082,28 @@
                 </div>
               </div>
 
-              <div class="pm-settings-tabs-row" id="supSettingsTabs" style="margin-top:8px;">
-                <div class="pm-settings-tab-item active" data-supsettingstab="profile">Profile</div>
-                <div class="pm-settings-tab-item" data-supsettingstab="sectors">Sectors</div>
-                <div class="pm-settings-tab-item" data-supsettingstab="insurance">Compliance</div>
-                <div class="pm-settings-tab-item" data-supsettingstab="questionnaire">Portfolio</div>
-                <div class="pm-settings-tab-item" data-supsettingstab="payment">Payment Setup</div>
-                <div class="pm-settings-tab-item" data-supsettingstab="settings">Settings</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px;">
+                <div class="pm-settings-tabs-row" id="supSettingsTabs" style="margin-top:0;flex:1;">
+                  <div class="pm-settings-tab-item active" data-supsettingstab="profile">Profile</div>
+                  <div class="pm-settings-tab-item" data-supsettingstab="sectors">Sectors</div>
+                  <div class="pm-settings-tab-item" data-supsettingstab="insurance">Compliance</div>
+                  <div class="pm-settings-tab-item" data-supsettingstab="questionnaire">Portfolio</div>
+                  <div class="pm-settings-tab-item" data-supsettingstab="payment">Payment Setup</div>
+                  <div class="pm-settings-tab-item" data-supsettingstab="settings">Settings</div>
+                </div>
+                <button type="button" class="btn btn-primary" id="supAcctEditBtn" style="flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4z"/></svg>Edit</button>
               </div>
 
               <!-- Profile tab -->
-              <div id="supSettingsPanelProfile">
+              <div id="supSettingsPanelProfile" class="acct-settings-tab">
                 <div style="margin-top:20px;">
-                  <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;">
+                  <div class="acct-view-card">
+                  <div style="display:flex;align-items:center;gap:16px;">
                     <div style="position:relative;width:64px;height:64px;flex-shrink:0;" data-title="Upload Profile Photo">
                       <div id="supProfileAvatarInitials" style="width:64px;height:64px;border-radius:50%;background:var(--navy-900);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;">LG</div>
                       <img src="" alt="" style="display:none;width:64px;height:64px;border-radius:50%;object-fit:cover;position:absolute;inset:0;" id="supProfileAvatarImg">
-                      <input type="file" id="supProfileAvatarInput" accept="image/png,image/jpeg,image/webp" style="display:none;">
-                      <button type="button" style="position:absolute;bottom:-2px;right:-2px;width:24px;height:24px;border-radius:50%;background:var(--accent-blue);color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid #fff;cursor:pointer;" id="supProfileAvatarEditBtn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg></button>
+                      <input type="file" id="supProfileAvatarInput" accept="image/png,image/jpeg,image/webp" style="display:none;" class="aev-edit-only">
+                      <button type="button" style="position:absolute;bottom:-2px;right:-2px;width:24px;height:24px;border-radius:50%;background:var(--accent-blue);color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid #fff;cursor:pointer;" id="supProfileAvatarEditBtn" class="aev-edit-only"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg></button>
                     </div>
                     <div>
                       <h3 style="font-size:18px;font-weight:800;color:var(--text-heading);" id="supProfileHeaderName">Liam Greenwood</h3>
@@ -9061,7 +9111,14 @@
                       <span class="supplier-type-pill sole-trader" id="supProfileTypePill" style="font-size:11px;padding:2px 9px;">Sole Trader</span>
                     </div>
                   </div>
-                  <div class="ob-row-2">
+
+                  <div class="detail-mini-grid-3col aev-view-only" id="supAcctInfoGrid">
+                    <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Full name</div><div class="dmf-value" id="supProfileFullNameView">Liam Greenwood</div></div>
+                    <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>Email address</div><div class="dmf-value" id="supProfileEmailView">greenwood86@gmail.com</div></div>
+                    <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Mobile number</div><div class="dmf-value" id="supAcctInfoMobileView">GB +44 7671542225</div></div>
+                  </div>
+
+                  <div class="ob-row-2 aev-edit-only">
                     <div class="ob-field">
                       <label>Full name</label>
                       <input class="field-input" type="text" value="Liam Greenwood" id="supProfileFullNameInput">
@@ -9071,7 +9128,7 @@
                       <input class="field-input" type="email" value="greenwood86@gmail.com" id="supProfileEmailInput">
                     </div>
                   </div>
-                  <div class="ob-field" style="margin-bottom:0;max-width:50%;">
+                  <div class="ob-field aev-edit-only" style="margin-bottom:0;max-width:50%;">
                     <div style="display:flex;align-items:center;justify-content:space-between;">
                       <label style="margin-bottom:0;">Mobile number</label>
                       <span style="font-size:12.5px;font-weight:700;color:var(--accent-blue);cursor:pointer;" id="supChangeNumberBtn">Change number</span>
@@ -9094,9 +9151,32 @@
                     </div>
                     <div class="helper">Changing your mobile number requires OTP re-verification.</div>
                   </div>
+                  </div>
 
-                  <div class="ob-section-heading">Personal Details</div>
-                  <div class="ob-row-2">
+                  <div class="acct-view-card" id="supPersonalDetailsCardSole">
+                  <div class="detail-card-head aev-view-only"><div class="dch-left"><div class="dch-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><h3>Personal Details</h3></div></div>
+                  <div class="ob-section-heading aev-edit-only" style="margin-top:0;">Personal Details</div>
+
+                  <div class="detail-mini-grid-3col aev-view-only">
+                    <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Full legal name</div><div class="dmf-value">Liam Greenwood</div></div>
+                    <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Date of birth</div><div class="dmf-value" id="supDobView">05/11/1987</div></div>
+                    <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Phone number</div><div class="dmf-value" id="supIdPhoneView">+44 7671 542225</div></div>
+                    <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>Email address</div><div class="dmf-value">greenwood86@gmail.com</div></div>
+                    <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg>NI number</div><div class="dmf-value">QQ 123456 C</div></div>
+                    <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg>Nationality</div><div class="dmf-value muted" id="supIdNationalityView">Not set</div></div>
+                  </div>
+                  <div class="detail-field-row aev-view-only" style="border-top:1px solid var(--border-subtle);border-bottom:none;padding-top:14px;">
+                    <div style="flex:1;min-width:0;"><div class="dfr-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Home address</div><div class="dfr-value" id="supHomeAddressView">91 Victoria Road, Manchester</div></div>
+                  </div>
+                  <div class="detail-field-row aev-view-only" id="supHmrcViewRow" style="border-top:1px solid var(--border-subtle);border-bottom:none;">
+                    <div style="flex:1;min-width:0;">
+                      <div class="dfr-label" style="margin-bottom:7px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>Tax status</div>
+                      <span class="status-pill green" id="supHmrcStatusPill">Registered for HMRC self-assessment</span>
+                      <div style="margin-top:10px;display:none;" id="supUtrRow"><span class="dfr-label" style="display:flex;align-items:center;gap:5px;">UTR number</span><span class="dfr-value" id="supUtrView">Not set</span></div>
+                    </div>
+                  </div>
+
+                  <div class="ob-row-2 aev-edit-only">
                     <div class="ob-field">
                       <label>Full legal name</label>
                       <input class="field-input" type="text" value="Liam Greenwood" disabled style="background:var(--surface-soft);color:var(--text-body-muted);" id="supIdFullNameInput">
@@ -9128,7 +9208,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="ob-row-2">
+                  <div class="ob-row-2 aev-edit-only">
                     <div class="ob-field">
                       <label>Phone number</label>
                       <input class="field-input" type="tel" value="+447671542225" id="supIdPhoneInput">
@@ -9138,7 +9218,7 @@
                       <input class="field-input" type="email" value="greenwood86@gmail.com" id="supIdEmailInput">
                     </div>
                   </div>
-                  <div class="ob-row-2">
+                  <div class="ob-row-2 aev-edit-only">
                     <div class="ob-field">
                       <label>NI number</label>
                       <input class="field-input" type="text" value="enc:131ac863d6307f0599e9f98e" disabled style="background:var(--surface-soft);color:var(--text-body-muted);">
@@ -9149,12 +9229,12 @@
                       <input class="field-input" type="text" placeholder="e.g. British" id="supIdNationalityInput">
                     </div>
                   </div>
-                  <div class="ob-field">
+                  <div class="ob-field aev-edit-only">
                     <label>Home address</label>
                     <input class="field-input" type="text" value="91 Victoria Road, Manchester" id="supHomeAddressInput">
                   </div>
 
-                  <div class="ob-toggle-card">
+                  <div class="ob-toggle-card aev-edit-only">
                     <div class="otc-top">
                       <div><div class="otc-title">Registered for HMRC self-assessment?</div><div class="otc-desc">Required if you trade as a sole trader.</div></div>
                       <button type="button" class="toggle-switch on" id="supHmrcToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
@@ -9162,31 +9242,111 @@
                     <div class="field-collapsible open" id="supUtrField" style="max-height:1200px;opacity:1;">
                       <div class="otc-body">
                         <div class="ob-field" style="margin-bottom:0;">
-                          <label>UTR number</label>
+                          <label>UTR number <span class="req-text" id="supUtrRequiredTag" style="display:none;">Required</span></label>
                           <input class="field-input" type="text" placeholder="10-digit number" id="supIdUtrInput">
+                          <div class="field-error-text" id="supUtrError">UTR number is required when HMRC self-assessment is enabled.</div>
                         </div>
                       </div>
                     </div>
                   </div>
+                  </div>
 
-                  <div class="ob-section-heading">Proof of Address</div>
-                  <div class="scf-label" style="font-size:12.5px;font-weight:600;color:var(--text-body-muted);margin-bottom:8px;">Proof of address</div>
-                  <div class="sup-comp-doc-row">
+                  <div class="acct-view-card" id="supCompanyDetailsCard" style="display:none;">
+                  <div class="detail-card-head aev-view-only"><div class="dch-left"><div class="dch-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></div><h3>Company Details</h3></div></div>
+                  <div class="ob-section-heading aev-edit-only" style="margin-top:0;">Company Details</div>
+
+                  <div class="detail-mini-grid-3col aev-view-only">
+                    <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>Registered company name</div><div class="dmf-value" id="supCompanyRegNameView">Not set</div></div>
+                    <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg>Company registration number</div><div class="dmf-value" id="supCompanyRegNoView">Not set</div></div>
+                    <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9m9 5h-9m9 5h-9M4 7h1m-1 5h1m-1 5h1"/></svg>Trading name</div><div class="dmf-value" id="supCompanyTradingNameView">Not set</div></div>
+                    <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Company type</div><div class="dmf-value" id="supCompanyTypeView">Not set</div></div>
+                    <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Incorporation date</div><div class="dmf-value" id="supCompanyIncorpDateView">Not set</div></div>
+                    <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg>TIN</div><div class="dmf-value" id="supCompanyTinView">Not set</div></div>
+                  </div>
+                  <div class="detail-field-row aev-view-only" style="border-top:1px solid var(--border-subtle);border-bottom:none;padding-top:14px;">
+                    <div style="flex:1;min-width:0;"><div class="dfr-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Registered office address</div><div class="dfr-value" id="supCompanyRegOfficeView">Not set</div></div>
+                  </div>
+                  <div class="detail-field-row aev-view-only" style="border-top:1px solid var(--border-subtle);border-bottom:none;">
+                    <div style="flex:1;min-width:0;"><div class="dfr-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Operational address</div><div class="dfr-value" id="supCompanyOperAddressView">Not set</div></div>
+                  </div>
+
+                  <div class="ob-section-heading aev-view-only" style="font-size:12px;margin-top:20px;">Person of Significant Control (PSC)</div>
+                  <div class="detail-mini-grid-3col aev-view-only">
+                    <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>PSC name</div><div class="dmf-value" id="supPscNameView">Not set</div></div>
+                    <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>PSC phone</div><div class="dmf-value" id="supPscPhoneView">Not set</div></div>
+                    <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>PSC email</div><div class="dmf-value" id="supPscEmailView">Not set</div></div>
+                    <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>PSC date of birth</div><div class="dmf-value" id="supPscDobView">Not set</div>
+                      <div style="margin-top:8px;display:none;" id="supPscConfirmBadgeRow"><span class="status-pill green" style="white-space:normal;text-align:left;">I confirm this person holds 25%+ of company shares</span></div>
+                    </div>
+                  </div>
+
+                  <div class="ob-field aev-edit-only">
+                    <label>Full name</label>
+                    <input class="field-input" type="text" id="supCompanyFullNameInput" placeholder="Full name">
+                  </div>
+                  <div class="ob-row-2 aev-edit-only">
+                    <div class="ob-field"><label>Phone number</label><input class="field-input" type="tel" id="supCompanyPhoneInput" placeholder="+44 7700 900000"></div>
+                    <div class="ob-field"><label>Email address</label><input class="field-input" type="email" id="supCompanyEmailInput" placeholder="name@company.com"></div>
+                  </div>
+                  <div class="ob-row-2 aev-edit-only">
+                    <div class="ob-field"><label>Company registration number</label><input class="field-input" type="text" id="supCompanyRegNoInput" placeholder="e.g. 12345678"></div>
+                    <div class="ob-field"><label>Registered company name</label><input class="field-input" type="text" id="supCompanyRegNameInput" placeholder="Exactly as registered at Companies House"></div>
+                  </div>
+                  <div class="ob-row-2 aev-edit-only">
+                    <div class="ob-field"><label>Trading name</label><input class="field-input" type="text" id="supCompanyTradingNameInput" placeholder="The name clients will see"></div>
+                    <div class="ob-field"><label>Operational address</label><input class="field-input" type="text" id="supCompanyOperAddressInput" placeholder="Main trading / operational address"></div>
+                  </div>
+                  <div class="ob-field aev-edit-only">
+                    <label>TIN (tax identification number)</label>
+                    <input class="field-input" type="text" id="supCompanyTinInput" placeholder="e.g. UTR or company TIN">
+                  </div>
+                  <div class="ob-section-heading aev-edit-only" style="font-size:13px;">Person of Significant Control (PSC)</div>
+                  <div class="ob-field aev-edit-only">
+                    <label>Full legal name of PSC</label>
+                    <input class="field-input" type="text" id="supPscNameInput" placeholder="Full legal name">
+                  </div>
+                  <div class="ob-row-2 aev-edit-only">
+                    <div class="ob-field"><label>PSC phone number</label><input class="field-input" type="tel" id="supPscPhoneInput" placeholder="07700 000000"></div>
+                    <div class="ob-field"><label>PSC email address</label><input class="field-input" type="email" id="supPscEmailInput" placeholder="psc@company.com"></div>
+                  </div>
+                  </div>
+
+                  <div class="acct-view-card">
+                  <div class="detail-card-head aev-view-only"><div class="dch-left"><div class="dch-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg></div><h3 id="supProofAddressHeading">Proof of Address</h3></div></div>
+                  <div class="ob-section-heading aev-edit-only" style="margin-top:0;" id="supProofAddressHeadingEdit">Proof of Address</div>
+                  <div class="scf-label aev-edit-only" style="font-size:12.5px;font-weight:600;color:var(--text-body-muted);margin-bottom:8px;">Proof of address</div>
+                  <div class="sup-comp-doc-row" style="margin-bottom:0;">
                     <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
                     <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:700;color:var(--text-heading);" id="supProofAddressDocName">Uploaded</div><span class="sup-view-all-link" style="font-size:12px;" id="supProofAddressViewBtn" data-doc-view="Proof of Address">View file</span></div>
                     <span class="scdr-badge">UPLOADED</span>
-                    <span style="font-size:12.5px;font-weight:600;color:var(--accent-blue);cursor:pointer;" id="supProofAddressReplaceBtn" data-doc-replace="proofAddress">Replace</span>
+                    <span style="font-size:12.5px;font-weight:600;color:var(--accent-blue);cursor:pointer;" id="supProofAddressReplaceBtn" data-doc-replace="proofAddress" class="aev-edit-only">Replace</span>
                     <input type="file" data-doc-input="proofAddress" style="display:none;">
-                    <span style="cursor:pointer;color:var(--text-body-muted);">&times;</span>
+                    <span style="cursor:pointer;color:var(--text-body-muted);" class="aev-edit-only">&times;</span>
+                  </div>
                   </div>
 
-                  <div style="display:flex;justify-content:flex-end;margin-top:20px;"><button type="button" class="btn btn-primary" data-supsettings-save="Profile">Save Changes</button></div>
+                  <div class="acct-save-row" style="justify-content:flex-end;gap:10px;margin-top:20px;">
+                    <button type="button" class="btn btn-secondary-light" data-acct-discard="Profile">Discard</button>
+                    <button type="button" class="btn btn-primary" data-supsettings-save="Profile">Save Changes</button>
+                  </div>
                 </div>
               </div>
 
               <!-- Sectors tab -->
-              <div id="supSettingsPanelSectors" style="display:none;">
+              <div id="supSettingsPanelSectors" class="acct-settings-tab" style="display:none;">
                 <div style="margin-top:20px;">
+                  <div class="acct-view-card">
+                  <div class="detail-card-head aev-view-only"><div class="dch-left"><div class="dch-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></div><h3>Property Sectors</h3></div></div>
+                  <div class="aev-view-only" id="supSectorsTagsView">
+                    <div class="dfr-label" style="margin-bottom:8px;">Property sectors</div>
+                    <div style="margin-bottom:18px;"><span class="detail-chip-tag">Residential</span><span class="detail-chip-tag">Commercial</span></div>
+                    <div class="dfr-label" style="margin-bottom:8px;">Residential sub-types</div>
+                    <div style="margin-bottom:18px;"><span class="detail-chip-tag">Estate Agents</span></div>
+                    <div class="dfr-label" style="margin-bottom:8px;">Commercial sub-types</div>
+                    <div style="margin-bottom:4px;"><span class="detail-chip-tag">Hotels &amp; Hostels</span></div>
+                  </div>
+
+                  <div class="aev-edit-only">
                   <div class="tile-row-2" id="supDashSectorTiles">
                     <div class="choice-tile selected" data-value="residential" tabindex="0" role="checkbox" aria-checked="true">
                       <div class="tile-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></div>
@@ -9214,13 +9374,19 @@
                       <div class="simple-chip selected" data-value="hotels">Hotels &amp; Hostels</div>
                     </div>
                   </div>
+                  </div>
+                  </div>
 
-                  <div class="ob-section-heading">Categories &amp; Roles</div>
-                  <p class="ob-section-subtext" style="margin-top:-10px;">Pick the categories you work in and the specific roles within each. We route matching jobs to you and decide which certificates to verify based on your role choices.</p>
+                  <div class="acct-view-card">
+                  <div class="detail-card-head aev-view-only"><div class="dch-left"><div class="dch-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div><h3>Categories &amp; Roles</h3></div></div>
+                  <div class="ob-section-heading aev-edit-only" style="margin-top:0;">Categories &amp; Roles</div>
+                  <p class="ob-section-subtext aev-edit-only" style="margin-top:-10px;">Pick the categories you work in and the specific roles within each. We route matching jobs to you and decide which certificates to verify based on your role choices.</p>
 
-                  <div class="selected-cat-chips-row" id="stgSelectedCatChipsRow"></div>
+                  <div class="aev-view-only" id="supSectorsCatRolesView"></div>
 
-                  <div class="cat-role-picker">
+                  <div class="selected-cat-chips-row aev-edit-only" id="stgSelectedCatChipsRow"></div>
+
+                  <div class="cat-role-picker aev-edit-only">
                     <div class="crp-cats">
                       <div class="crp-cats-label">CATEGORIES <span class="crp-cats-total">16</span></div>
                       <div class="crp-search"><input class="field-input" type="text" id="stgCategorySearchInput" placeholder="Search categories..."></div>
@@ -9251,24 +9417,53 @@
                       <div class="crp-roles-grid" id="stgCrpRolesGrid"></div>
                     </div>
                   </div>
+                  </div>
 
-                  <div class="ob-section-heading">Certifications for Your Selected Roles</div>
-                  <p class="ob-section-subtext" style="margin-top:-2px;">Verified certifications appear as trust badges on your profile. Add the registration number, expiry and a copy for each.</p>
-                  <div id="stgRoleCertifications">
+                  <div class="acct-view-card">
+                  <div class="detail-card-head aev-view-only"><div class="dch-left"><div class="dch-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>Certifications</h3></div></div>
+                  <div class="ob-section-heading aev-edit-only" style="margin-top:0;">Certifications for Your Selected Roles</div>
+                  <p class="ob-section-subtext aev-edit-only" style="margin-top:-2px;">Verified certifications appear as trust badges on your profile. Add the registration number, expiry and a copy for each.</p>
+                  <div class="aev-view-only" id="supSectorsCertsView"></div>
+                  <div id="stgRoleCertifications" class="aev-edit-only">
                     <div class="dash-empty" style="padding:20px 10px;">
                       <div class="empty-sub">Select a role that requires certification (e.g. Gas Safe Engineer, Scaffolder) to add its details here.</div>
                     </div>
                   </div>
+                  </div>
 
-                  <div style="display:flex;justify-content:flex-end;margin-top:20px;"><button type="button" class="btn btn-primary" data-supsettings-save="Sectors">Save Changes</button></div>
+                  <div class="acct-save-row" style="justify-content:flex-end;gap:10px;margin-top:20px;">
+                    <button type="button" class="btn btn-secondary-light" data-acct-discard="Sectors">Discard</button>
+                    <button type="button" class="btn btn-primary" data-supsettings-save="Sectors">Save Changes</button>
+                  </div>
                 </div>
               </div>
 
               <!-- Insurance tab -->
-              <div id="supSettingsPanelInsurance" style="display:none;">
+              <div id="supSettingsPanelInsurance" class="acct-settings-tab" style="display:none;">
                 <div style="margin-top:20px;">
-                  <div class="ob-section-heading" style="margin-top:0;">Public Liability Insurance</div>
-                  <div class="ob-toggle-card">
+                  <div class="ob-section-heading aev-edit-only" style="margin-top:0;">Public Liability Insurance</div>
+
+                  <div class="detail-card aev-view-only" style="padding:18px 20px;" id="supPliCardView">
+                    <div class="detail-card-head" style="margin-bottom:14px;">
+                      <div class="dch-left"><div class="dch-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h3>Public Liability Insurance</h3></div>
+                      <span class="status-pill green">Active</span>
+                    </div>
+                    <div class="detail-mini-grid" style="margin-bottom:14px;">
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>Insurance provider</div><div class="dmf-value" id="supPliProviderView">Markel</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg>Policy number</div><div class="dmf-value" id="supPliPolicyView">PL-722800</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15 9.5c0-1.5-1.5-2.5-3-2.5s-3 1-3 2.5 1.5 2 3 2.5 3 1 3 2.5-1.5 2.5-3 2.5-3-1-3-2.5M12 6v12"/></svg>Coverage amount</div><div class="dmf-value" id="supPliCoverageView">£2,000,000</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Policy expiry date</div><div class="dmf-value"><span id="supPliExpiryView">26/11/2026</span> <span class="status-pill green" style="margin-left:4px;">Valid</span></div></div>
+                    </div>
+                    <div class="scf-label" style="font-size:12.5px;font-weight:600;color:var(--text-body-muted);margin-bottom:8px;">Public liability certificate</div>
+                    <div class="sup-comp-doc-row" style="margin-bottom:0;">
+                      <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                      <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:700;color:var(--text-heading);" id="supPliDocNameView">Uploaded certificate</div><span class="sup-view-all-link" style="font-size:12px;" data-doc-view="Public Liability Certificate">View File</span></div>
+                      <span class="scdr-badge">Uploaded</span>
+                    </div>
+                  </div>
+                  <div class="aev-view-only acct-view-empty" id="supPliCardViewEmpty" style="display:none;">No Public Liability Insurance on file.</div>
+
+                  <div class="ob-toggle-card aev-edit-only">
                     <div class="otc-top">
                       <div><div class="otc-title">Do you have Public Liability Insurance?</div><div class="otc-desc">Minimum £1,000,000 cover (£2,000,000 for companies).</div></div>
                       <button type="button" class="toggle-switch on" id="supPliToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
@@ -9321,8 +9516,29 @@
                     </div>
                   </div>
 
-                  <div class="ob-section-heading">Professional Indemnity Insurance</div>
-                  <div class="ob-toggle-card">
+                  <div class="ob-section-heading aev-edit-only">Professional Indemnity Insurance</div>
+
+                  <div class="detail-card aev-view-only" style="padding:18px 20px;" id="supPiCardView">
+                    <div class="detail-card-head" style="margin-bottom:14px;">
+                      <div class="dch-left"><div class="dch-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/></svg></div><h3>Professional Indemnity Insurance</h3></div>
+                      <span class="status-pill green">Active</span>
+                    </div>
+                    <div class="detail-mini-grid" style="margin-bottom:14px;">
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>Indemnity provider</div><div class="dmf-value" id="supPiProviderView">Direct Line for Business</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg>Policy number</div><div class="dmf-value" id="supPiPolicyView">PI-124012</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15 9.5c0-1.5-1.5-2.5-3-2.5s-3 1-3 2.5 1.5 2 3 2.5 3 1 3 2.5-1.5 2.5-3 2.5-3-1-3-2.5M12 6v12"/></svg>Coverage amount</div><div class="dmf-value" id="supPiCoverageView">£1,000,000</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Expiry date</div><div class="dmf-value"><span id="supPiExpiryView">26/09/2026</span> <span class="status-pill green" style="margin-left:4px;">Valid</span></div></div>
+                    </div>
+                    <div class="scf-label" style="font-size:12.5px;font-weight:600;color:var(--text-body-muted);margin-bottom:8px;">PI certificate</div>
+                    <div class="sup-comp-doc-row" style="margin-bottom:0;">
+                      <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                      <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:700;color:var(--text-heading);" id="supPiDocNameView">Uploaded certificate</div><span class="sup-view-all-link" style="font-size:12px;" data-doc-view="Professional Indemnity Certificate">View File</span></div>
+                      <span class="scdr-badge">Uploaded</span>
+                    </div>
+                  </div>
+                  <div class="aev-view-only acct-view-empty" id="supPiCardViewEmpty" style="display:none;">No Professional Indemnity Insurance on file.</div>
+
+                  <div class="ob-toggle-card aev-edit-only">
                     <div class="otc-top">
                       <div><div class="otc-title">Professional Indemnity</div><div class="otc-desc">Covers claims of negligence, errors or omissions in professional services</div></div>
                       <button type="button" class="toggle-switch on" id="supPiToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
@@ -9374,15 +9590,51 @@
                     </div>
                   </div>
 
+                  <div class="ob-section-heading aev-edit-only" id="supElSectionHeading" style="display:none;">Employers' Liability Insurance</div>
+                  <div class="detail-card" id="supElInsuranceCardView" style="display:none;padding:18px 20px;">
+                    <div class="detail-card-head" style="margin-bottom:14px;">
+                      <div class="dch-left"><div class="dch-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div><h3>Employers' Liability Insurance</h3></div>
+                      <span class="status-pill green" id="supElStatusView">Active</span>
+                    </div>
+                    <div class="detail-mini-grid" style="margin-bottom:14px;" id="supElDetailsView">
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>Insurance provider</div><div class="dmf-value" id="supElProviderView">Not set</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg>Policy number</div><div class="dmf-value" id="supElPolicyView">Not set</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15 9.5c0-1.5-1.5-2.5-3-2.5s-3 1-3 2.5 1.5 2 3 2.5 3 1 3 2.5-1.5 2.5-3 2.5-3-1-3-2.5M12 6v12"/></svg>Coverage amount</div><div class="dmf-value" id="supElCoverageView">Not set</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Expiry date</div><div class="dmf-value" id="supElExpiryView">Not set</div></div>
+                    </div>
+                    <div class="scf-label" style="font-size:12.5px;font-weight:600;color:var(--text-body-muted);margin-bottom:8px;">EL insurance certificate</div>
+                    <div class="sup-comp-doc-row" style="margin-bottom:0;">
+                      <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                      <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:700;color:var(--text-heading);" id="supElDocNameView">Uploaded certificate</div><span class="sup-view-all-link" style="font-size:12px;" data-doc-view="Employers Liability Certificate">View File</span></div>
+                      <span class="scdr-badge">Uploaded</span>
+                    </div>
+                  </div>
+                  <div class="acct-view-empty" id="supElInsuranceCardViewEmpty" style="display:none;">No Employers' Liability Insurance on file.</div>
+
+                <div id="supBgCheckSoleView">
                 <div class="ob-card-section">
                     <div class="ocs-head">
                       <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
                       <div class="ocs-title">DBS Check (Basic)</div>
-                      <span class="meta-badge required-badge" style="text-transform:none;">Required</span>
                     </div>
                     <div class="ocs-desc">A Basic DBS certificate confirms you have no unspent criminal convictions. This is a mandatory requirement for all sole traders listing on the marketplace. An Enhanced DBS is <strong>not</strong> required at sign-up — it's only triggered when a client flags a sensitive environment (schools, care homes, hospitals).</div>
 
-                    <div class="ob-toggle-card" style="border:1px solid var(--border-subtle);">
+                    <div class="detail-card aev-view-only" style="padding:16px 18px;margin-bottom:0;" id="supDbsCardView">
+                      <div class="detail-mini-grid" style="margin-bottom:14px;" id="supDbsDetailsView">
+                        <div class="detail-mini-field" id="supDbsCertNumberRow"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg>Certificate number</div><div class="dmf-value" id="supDbsCertNumberView">001234567890</div></div>
+                        <div class="detail-mini-field" id="supDbsLevelRow"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>DBS level</div><div class="dmf-value" id="supDbsLevelView">Basic</div></div>
+                        <div class="detail-mini-field" id="supDbsIssueDateRow"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Issue date</div><div class="dmf-value" id="supDbsIssueDateView">15/01/2025</div></div>
+                      </div>
+                      <div class="scf-label" style="font-size:12.5px;font-weight:600;color:var(--text-body-muted);margin-bottom:8px;">Basic DBS certificate</div>
+                      <div class="sup-comp-doc-row" style="margin-bottom:0;">
+                        <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                        <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:700;color:var(--text-heading);" id="supDbsDocNameView">Uploaded</div><span class="sup-view-all-link" style="font-size:12px;" data-doc-view="DBS Certificate">View file</span></div>
+                        <span class="scdr-badge">Uploaded</span>
+                      </div>
+                    </div>
+                    <div class="aev-view-only acct-view-empty" id="supDbsCardViewEmpty" style="display:none;">No DBS certificate on file.</div>
+
+                    <div class="ob-toggle-card aev-edit-only" style="border:1px solid var(--border-subtle);">
                       <div class="otc-top">
                         <div><div class="otc-title">Do you have a DBS certificate?</div><div class="otc-desc">Basic DBS mandatory for all · Enhanced only triggered by client environment flag.</div></div>
                         <button type="button" class="toggle-switch on" id="supDbsToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
@@ -9399,6 +9651,45 @@
                             <span style="cursor:pointer;color:var(--text-body-muted);">&times;</span>
                           </div>
 
+                          <div class="ob-row-2" style="margin-top:14px;">
+                            <div class="ob-field"><label>Certificate number</label><input class="field-input" type="text" placeholder="12-digit number" value="001234567890" id="supDbsCertNumberInput"></div>
+                            <div class="ob-field">
+                              <label>DBS level</label>
+                              <div style="position:relative;">
+                                <button type="button" class="pm-custom-dd-btn ob-select-dd" data-dd="supDbsLevel"><span class="cdd-value">Basic</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                                <div class="pm-custom-dd-menu" data-dd-menu="supDbsLevel">
+                                  <div class="cdd-item selected" data-value="Basic">Basic</div>
+                                  <div class="cdd-item" data-value="Enhanced">Enhanced</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="ob-field" style="max-width:calc(50% - 7px);margin-bottom:0;">
+                            <label>Issue date</label>
+                            <div class="pm-filter-field" style="width:100%;">
+                              <button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn ob-select-dd" data-cal="supDbsIssueDate" style="width:100%;">
+                                <span class="cdd-value cal-value" data-cal-text="supDbsIssueDate">15/01/2025</span>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                              </button>
+                              <div class="pm-cal-popup" data-cal-popup="supDbsIssueDate">
+                                <div class="pm-cal-head">
+                                  <button type="button" class="pm-cal-month-label" data-cal-monthlabel="supDbsIssueDate"><span data-cal-monthtext="supDbsIssueDate">January 2025</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                                  <div class="pm-cal-nav">
+                                    <button type="button" class="pm-cal-nav-btn" data-cal-prev="supDbsIssueDate" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+                                    <button type="button" class="pm-cal-nav-btn" data-cal-next="supDbsIssueDate" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
+                                  </div>
+                                </div>
+                                <div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
+                                <div class="pm-cal-grid" data-cal-grid="supDbsIssueDate"></div>
+                                <div class="pm-cal-foot">
+                                  <button type="button" class="pm-cal-link" data-cal-clear="supDbsIssueDate">Clear</button>
+                                  <button type="button" class="pm-cal-link" data-cal-today="supDbsIssueDate">Today</button>
+                                </div>
+                              </div>
+                              <input type="hidden" id="supDbsIssueDateInput" value="2025-01-15">
+                            </div>
+                          </div>
+
                           <div class="callout callout-neutral" style="margin-top:14px;margin-bottom:0;">
                             <div><div class="callout-title">Don't have a DBS certificate?</div><div class="callout-body">You can apply for a Basic DBS check online through the official DBS website. It costs £18 and typically arrives within 14 days.<br><a href="#" onclick="return false;" style="color:var(--accent-blue);font-weight:600;">Apply for a Basic DBS check on GOV.UK ↗</a></div></div>
                           </div>
@@ -9407,7 +9698,11 @@
                     </div>
 
                     <div class="scf-label" style="font-size:13px;font-weight:700;color:var(--text-heading);margin:18px 0 10px;">Criminal record declaration</div>
-                    <div class="radio-tile-row cols-1" id="supDashCriminalDeclaration" style="display:grid;gap:10px;">
+
+                    <div class="aev-view-only"><span class="status-pill green" id="supCriminalDeclarationView">No unspent convictions</span></div>
+                    <div class="acct-view-para aev-view-only" id="supConvictionDetailsView" style="display:none;"></div>
+
+                    <div class="radio-tile-row cols-1 aev-edit-only" id="supDashCriminalDeclaration" style="gap:10px;">
                       <div class="radio-tile selected" data-value="none">
                         <div class="rt-icon"><svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><circle class="rt-radio-dot" cx="12" cy="12" r="5" fill="currentColor"/></svg></div>
                         <div class="rt-body"><div class="rt-title">I confirm I have no unspent criminal convictions</div><div style="font-size:12px;color:var(--text-body-muted);margin-top:2px;">This declaration covers unspent offences only under the Rehabilitation of Offenders Act 1974.</div></div>
@@ -9417,7 +9712,7 @@
                         <div class="rt-body"><div class="rt-title">I have unspent convictions to declare</div><div style="font-size:12px;color:var(--text-body-muted);margin-top:2px;">Having a record doesn't automatically disqualify you — we review each case individually.</div></div>
                       </div>
                     </div>
-                    <div class="field-collapsible" id="supDashConvictionDetailsField" style="margin-top:14px;">
+                    <div class="field-collapsible aev-edit-only" id="supDashConvictionDetailsField" style="margin-top:14px;">
                       <textarea class="ob-textarea" placeholder="Provide details including dates, offences, and outcomes."></textarea>
                     </div>
                   </div>
@@ -9426,11 +9721,12 @@
                     <div class="ocs-head">
                       <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg></div>
                       <div class="ocs-title">Right to Work</div>
-                      <span class="meta-badge required-badge" style="text-transform:none;">Required</span>
                     </div>
                     <div class="ocs-desc">You must confirm whether you have the legal right to work in the United Kingdom. Some property managers in regulated sectors (construction, education, healthcare) may require document verification before booking.</div>
 
-                    <div class="radio-tile-row cols-2" id="supRightToWorkTiles" style="text-align:center;">
+                    <div class="aev-view-only"><span class="status-pill green" id="supRightToWorkView">Yes — I have the right to work in the UK</span></div>
+
+                    <div class="radio-tile-row cols-2 aev-edit-only" id="supRightToWorkTiles" style="text-align:center;">
                       <div class="radio-tile selected" data-value="yes" style="border-color:#22c55e;background:#f0fdf4;justify-content:center;">
                         <div class="rt-body" style="text-align:center;width:100%;">
                           <div class="rtw-icon" style="width:26px;height:26px;border-radius:50%;background:#22c55e;color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
@@ -9444,16 +9740,105 @@
                         </div>
                       </div>
                     </div>
-                    <p class="helper" style="margin-top:12px;margin-bottom:0;font-size:11px;">If a client requires document verification, you can provide your UKVI share code later — verified via the Home Office API.</p>
+                    <p class="helper aev-edit-only" style="margin-top:12px;margin-bottom:0;font-size:11px;">If a client requires document verification, you can provide your UKVI share code later — verified via the Home Office API.</p>
+                  </div>
+                </div>
+
+                <div id="supBgCheckCompanyView" style="display:none;">
+                  <div class="ob-card-section">
+                    <div class="ocs-head">
+                      <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+                      <div class="ocs-title">Staff DBS &amp; Background Checks</div>
+                    </div>
+                    <div class="ocs-desc">Shown on your marketplace profile as a trust indicator for property managers.</div>
+                    <div class="detail-mini-grid" style="margin-bottom:0;">
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>All operatives DBS checked?</div><div class="dmf-value"><span class="status-pill green" id="supAllDbsView">Yes</span></div></div>
+                      <div class="detail-mini-field" id="supCompanyDbsLevelRow"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>DBS level</div><div class="dmf-value" id="supCompanyDbsLevelView">Basic</div></div>
+                    </div>
                   </div>
 
-                  <div style="display:flex;justify-content:flex-end;margin-top:20px;"><button type="button" class="btn btn-primary" data-supsettings-save="Background">Save Changes</button></div>
+                  <div class="ob-card-section">
+                    <div class="ocs-head">
+                      <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></div>
+                      <div class="ocs-title">Compliance Policies</div>
+                    </div>
+                    <div class="ocs-desc">A compliant policy means individual certificates aren't needed for every employee.</div>
+                    <div id="supDbsPolicyRow" style="border-bottom:1px solid var(--border-subtle);padding:12px 0;">
+                      <div class="dfr-label" style="margin-bottom:6px;font-size:11px;color:var(--text-body-muted);">DBS policy</div>
+                      <div class="sup-comp-doc-row" id="supDbsPolicyDocRow" style="display:none;margin-bottom:8px;">
+                        <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                        <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:700;color:var(--text-heading);" id="supDbsPolicyDocName">Uploaded</div><span class="sup-view-all-link" style="font-size:12px;" data-doc-view="DBS Policy Document">View file</span></div>
+                        <span class="scdr-badge">Uploaded</span>
+                      </div>
+                      <div class="dfr-value" id="supDbsPolicyView" style="font-weight:400;font-size:12.5px;color:var(--text-heading);">Not set</div>
+                    </div>
+                    <div id="supVettingPolicyRow" style="border-bottom:1px solid var(--border-subtle);padding:12px 0;">
+                      <div class="dfr-label" style="margin-bottom:6px;font-size:11px;color:var(--text-body-muted);">Worker vetting policy</div>
+                      <div class="sup-comp-doc-row" id="supVettingPolicyDocRow" style="display:none;margin-bottom:8px;">
+                        <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                        <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:700;color:var(--text-heading);" id="supVettingPolicyDocName">Uploaded</div><span class="sup-view-all-link" style="font-size:12px;" data-doc-view="Worker Vetting Policy Document">View file</span></div>
+                        <span class="scdr-badge">Uploaded</span>
+                      </div>
+                      <div class="dfr-value" id="supVettingPolicyView" style="font-weight:400;font-size:12.5px;color:var(--text-heading);">Not set</div>
+                    </div>
+                    <div id="supHsPolicyRow" style="border-bottom:none;padding:12px 0;">
+                      <div class="dfr-label" style="margin-bottom:6px;font-size:11px;color:var(--text-body-muted);">Health &amp; Safety policy</div>
+                      <div class="sup-comp-doc-row" id="supHsPolicyDocRow" style="display:none;margin-bottom:8px;">
+                        <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                        <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:700;color:var(--text-heading);" id="supHsPolicyDocName">Uploaded</div><span class="sup-view-all-link" style="font-size:12px;" data-doc-view="H&amp;S Policy Document">View file</span></div>
+                        <span class="scdr-badge">Uploaded</span>
+                      </div>
+                      <div class="dfr-value" id="supHsPolicyView" style="font-weight:400;font-size:12.5px;color:var(--text-heading);">Not set</div>
+                    </div>
+                  </div>
+
+                  <div class="ob-card-section">
+                    <div class="ocs-head">
+                      <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+                      <div class="ocs-title">Director / PSC Criminal Record Declaration</div>
+                    </div>
+                    <div class="ocs-desc">Covers unspent offences only.</div>
+                    <span class="status-pill green" id="supPscConvictionView">No unspent convictions</span>
+                    <div class="acct-view-para" id="supPscConvictionDetailsView" style="display:none;"></div>
+                  </div>
+
+                  <div class="ob-card-section" style="margin-bottom:0;">
+                    <div class="ocs-head">
+                      <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg></div>
+                      <div class="ocs-title">Right to Work</div>
+                    </div>
+                    <div class="ocs-desc">Confirms whether everyone you dispatch has the legal right to work in the UK.</div>
+                    <span class="status-pill green" id="supCompanyRtwView">Yes — all staff have right to work</span>
+                  </div>
+                </div>
+
+                  <div class="acct-save-row" style="justify-content:flex-end;gap:10px;margin-top:20px;">
+                    <button type="button" class="btn btn-secondary-light" data-acct-discard="Insurance">Discard</button>
+                    <button type="button" class="btn btn-primary" data-supsettings-save="Background">Save Changes</button>
+                  </div>
                 </div>
               </div>
 
               <!-- Questionnaire tab -->
               <div id="supSettingsPanelQuestionnaire" style="display:none;">
                 <div style="margin-top:20px;">
+                  <div class="ob-card-section" id="stgpCompanyLogoCard" style="display:none;">
+                    <div class="ocs-head">
+                      <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+                      <div class="ocs-title">Company logo</div>
+                      <span class="meta-badge optional">Optional</span>
+                    </div>
+                    <div class="ocs-desc">Your company logo shown on your public profile and job notifications.</div>
+                    <div class="ob-field" style="margin-bottom:0;">
+                      <label>Upload Company Logo</label>
+                      <div class="file-dropzone" id="stgpCompanyLogoDropzone" style="max-width:280px;" data-title="Upload Company Logo">
+                        <input type="file" style="display:none;">
+                        <div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>
+                        <div class="fd-label">Click to Upload</div>
+                      </div>
+                    </div>
+                  </div>
+
                   <div class="ob-card-section">
                     <div class="ocs-head">
                       <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M9 14l-2 7 5-3 5 3-2-7"/></svg></div>
@@ -9488,6 +9873,59 @@
                             </div>
                           </div>
                         </div>
+                      </div>
+                    </div>
+
+                    <div id="stgpExpTrackCompany" style="display:none;">
+                      <div class="ob-row-2">
+                        <div class="ob-field">
+                          <label>How many years of experience do you have?</label>
+                          <div style="position:relative;">
+                            <button type="button" class="pm-custom-dd-btn ob-select-dd" data-dd="stgpExpYearsCompany"><span class="cdd-value cdd-placeholder">Select...</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                            <div class="pm-custom-dd-menu" data-dd-menu="stgpExpYearsCompany">
+                              <div class="cdd-item" data-value="Less than 1 year">Less than 1 year</div>
+                              <div class="cdd-item" data-value="1–3 years">1–3 years</div>
+                              <div class="cdd-item" data-value="3–5 years">3–5 years</div>
+                              <div class="cdd-item" data-value="5–10 years">5–10 years</div>
+                              <div class="cdd-item" data-value="10+ years">10+ years</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="ob-field">
+                          <label>How many jobs have you completed?</label>
+                          <div style="position:relative;">
+                            <button type="button" class="pm-custom-dd-btn ob-select-dd" data-dd="stgpJobsCompany"><span class="cdd-value cdd-placeholder">Select...</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                            <div class="pm-custom-dd-menu" data-dd-menu="stgpJobsCompany">
+                              <div class="cdd-item" data-value="Under 50 jobs">Under 50 jobs</div>
+                              <div class="cdd-item" data-value="50–200 jobs">50–200 jobs</div>
+                              <div class="cdd-item" data-value="200–500 jobs">200–500 jobs</div>
+                              <div class="cdd-item" data-value="500–1,000 jobs">500–1,000 jobs</div>
+                              <div class="cdd-item" data-value="1,000+ jobs">1,000+ jobs</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="ob-row-2">
+                        <div class="ob-field">
+                          <label>Year established <span class="meta-badge optional">Optional</span></label>
+                          <input class="field-input" type="text" id="stgpCompanyYearEstablished" placeholder="e.g. 2014">
+                        </div>
+                        <div class="ob-field">
+                          <label>Number of operatives</label>
+                          <div style="position:relative;">
+                            <button type="button" class="pm-custom-dd-btn ob-select-dd" data-dd="stgpNumOperatives"><span class="cdd-value cdd-placeholder">Select...</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                            <div class="pm-custom-dd-menu" data-dd-menu="stgpNumOperatives">
+                              <div class="cdd-item" data-value="1–5">1–5</div>
+                              <div class="cdd-item" data-value="6–15">6–15</div>
+                              <div class="cdd-item" data-value="16–50">16–50</div>
+                              <div class="cdd-item" data-value="50+">50+</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="ob-field" style="margin-bottom:0;">
+                        <label>Website <span class="meta-badge optional">Optional</span></label>
+                        <input class="field-input" type="url" id="stgpCompanyWebsite" placeholder="https://yourcompany.co.uk">
                       </div>
                     </div>
                   </div>
@@ -9666,7 +10104,7 @@
               </div>
 
               <!-- Payment Setup tab -->
-              <div id="supSettingsPanelPayment" style="display:none;">
+              <div id="supSettingsPanelPayment" class="acct-settings-tab" style="display:none;">
                 <div style="margin-top:20px;">
                   <div class="callout callout-success">
                     <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
@@ -9678,8 +10116,17 @@
                       <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg></div>
                       <div class="ocs-title">Are you VAT registered?</div>
                     </div>
-                    <div class="ocs-desc">If yes, VAT will be added to your invoices and we'll verify your number with HMRC.</div>
-                    <div class="tile-row-2" id="vatRegTiles">
+                    <div class="ocs-desc aev-edit-only">If yes, VAT will be added to your invoices and we'll verify your number with HMRC.</div>
+
+                    <div class="detail-mini-grid aev-view-only" style="margin-bottom:0;">
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>VAT registration</div><div class="dmf-value"><span class="status-pill green" id="supPaymentVatStatusView">Registered</span></div></div>
+                      <div class="detail-mini-field" id="supPaymentVatNumberRow"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg>VAT number</div><div class="dmf-value" id="supPaymentVatNumberView">GB553557881</div></div>
+                    </div>
+                    <div class="callout callout-success aev-view-only" id="supPaymentVatVerifiedView" style="margin-top:14px;margin-bottom:0;">
+                      <span style="display:flex;align-items:center;gap:8px;color:#145c2e;font-weight:700;font-size:13px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Verified with HMRC</span>
+                    </div>
+
+                    <div class="tile-row-2 aev-edit-only" id="vatRegTiles">
                       <div class="choice-tile selected" data-value="yes">
                         <div class="tile-body">
                           <div class="tile-title">Yes, VAT registered</div>
@@ -9693,7 +10140,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="field-collapsible open" id="vatNumberFields" style="max-height:400px;opacity:1;margin-top:16px;">
+                    <div class="field-collapsible open aev-edit-only" id="vatNumberFields" style="max-height:400px;opacity:1;margin-top:16px;">
                       <input class="field-input" type="text" id="supPaymentVatNumberInput" value="GB553557881" style="margin-bottom:12px;" disabled>
                       <div class="callout callout-success" style="margin-bottom:0;">
                         <div style="display:flex;align-items:center;justify-content:space-between;width:100%;flex-wrap:wrap;gap:8px;">
@@ -12100,15 +12547,13 @@
   function setCollapsibleOpen(el, isOpen) {
     if (!el) return;
     if (isOpen) {
-      el.style.maxHeight = el.scrollHeight + 'px';
       el.classList.add('open');
+      el.style.maxHeight = '1200px';
+      el.style.opacity = '1';
     } else {
-      el.style.maxHeight = el.scrollHeight + 'px';
-      void el.offsetHeight;
+      el.style.maxHeight = '0px';
+      el.style.opacity = '0';
       el.classList.remove('open');
-      requestAnimationFrame(function () {
-        el.style.maxHeight = '0px';
-      });
     }
   }
 
@@ -12726,6 +13171,19 @@
       agreeRow.classList.remove('error');
     }
 
+    var agreePlatform = document.getElementById('agreePlatform');
+    var agreePlatformRow = document.getElementById('agreePlatformRow');
+    if (!agreePlatform.checked) {
+      invalid = true;
+      agreePlatformRow.classList.add('error');
+      agreePlatformRow.classList.remove('shake');
+      void agreePlatformRow.offsetWidth;
+      agreePlatformRow.classList.add('shake');
+      if (!firstInvalidEl) firstInvalidEl = agreePlatform;
+    } else {
+      agreePlatformRow.classList.remove('error');
+    }
+
     return { invalid: invalid, firstInvalidEl: firstInvalidEl };
   }
 
@@ -12784,6 +13242,11 @@
   document.getElementById('agreeTerms').addEventListener('change', function () {
     if (this.checked) {
       document.getElementById('agreeTermsRow').classList.remove('error');
+    }
+  });
+  document.getElementById('agreePlatform').addEventListener('change', function () {
+    if (this.checked) {
+      document.getElementById('agreePlatformRow').classList.remove('error');
     }
   });
 
@@ -15787,6 +16250,8 @@
   var supObContent = supObApp.querySelector('.ob-content');
   var supObCurrentStep = 1;
   var TOTAL_SUP_OB_STEPS = 7;
+  var supObEditFromSettings = false;
+  var supObReturnTabKey = 'profile';
 
   // Categories & Roles moves before Insurance for Sole Trader only; Company keeps the original order.
   var SUP_OB_ORDER_SOLE = ['portfolio', 'identity', 'categories', 'insurance', 'background', 'payment', 'setup-profile'];
@@ -15817,6 +16282,7 @@
     supObStepLabel.textContent = label;
     supObNextBtn.innerHTML = (isLast ? 'Submit for Review' : 'Continue') + ' <span class="arrow">→</span>';
     supObBackBtn.hidden = step === 1;
+    document.getElementById('supObSaveSkipBtn').style.display = supObEditFromSettings ? 'inline-flex' : 'none';
     supObProgressFill.style.width = ((step / TOTAL_SUP_OB_STEPS) * 100) + '%';
 
     var stepper = document.getElementById('supProfileDotStepper');
@@ -15847,10 +16313,15 @@
 
   function supObCollectWizardData() {
     function val(id) { var el = document.getElementById(id); return el ? el.value : ''; }
+    function uploadedFileName(zoneId) {
+      var zone = document.getElementById(zoneId);
+      var nameEl = zone && zone.querySelector('.fd-uploaded-name');
+      return nameEl ? nameEl.textContent.trim() : '';
+    }
     function selectedTileValue(containerId) {
       var el = document.getElementById(containerId);
       if (!el) return '';
-      var sel = el.querySelector('.choice-tile.selected, .radio-tile.selected, .radio-row.selected');
+      var sel = el.querySelector('.choice-tile.selected, .radio-tile.selected, .radio-row.selected, .supbg-yn-tile.selected');
       return sel ? sel.getAttribute('data-value') : '';
     }
     function ddValue(key) {
@@ -15885,6 +16356,7 @@
       supplierCapturedData.hmrcRegistered = toggleOn('selfAssessmentToggle');
       supplierCapturedData.utrNumber = val('supUtr');
       supplierCapturedData.homeAddress = val('supHomeAddress');
+      supplierCapturedData.proofAddressFile = uploadedFileName('supProofAddress');
     } else {
       supplierCapturedData.companyFullName = val('supCompanyFullName');
       supplierCapturedData.companyPhone = val('supCompanyPhone');
@@ -15892,13 +16364,18 @@
       supplierCapturedData.companyRegNo = val('supCompanyRegNo');
       supplierCapturedData.companyRegName = val('supCompanyRegName');
       supplierCapturedData.companyTradingName = val('supCompanyTradingName');
+      supplierCapturedData.companyType = val('supCompanyType');
+      supplierCapturedData.companyIncorpDate = val('supCompanyIncorpDate');
+      supplierCapturedData.companyRegOffice = val('supCompanyRegOffice');
       supplierCapturedData.companyOperAddress = val('supCompanyOperAddress');
       supplierCapturedData.companyTin = val('supCompanyTin');
+      supplierCapturedData.companyProofAddressFile = uploadedFileName('supCompanyProofAddress');
       supplierCapturedData.pscIsSelf = selectedTileValue('supPscTiles') === 'yes';
       supplierCapturedData.pscName = val('supPscName');
       supplierCapturedData.pscPhone = val('supPscPhone');
       supplierCapturedData.pscEmail = val('supPscEmail');
       supplierCapturedData.pscDob = calValue('obPscDob');
+      supplierCapturedData.pscConfirmed = toggleOn('supPscConfirmToggle');
     }
 
     // Step 3: Insurance
@@ -15907,12 +16384,14 @@
     supplierCapturedData.pliPolicyNumber = val('insPolicyNumber');
     supplierCapturedData.pliCoverage = val('insCoverage');
     supplierCapturedData.pliExpiry = calValue('obInsExpiry');
+    supplierCapturedData.pliCertFile = uploadedFileName('insUploadZone');
 
     supplierCapturedData.piRegistered = toggleOn('profIndemnityToggle');
     supplierCapturedData.piProvider = val('piProvider');
     supplierCapturedData.piPolicyNumber = val('piPolicyNumber');
     supplierCapturedData.piCoverage = val('piCoverage');
     supplierCapturedData.piExpiry = calValue('obPiExpiry');
+    supplierCapturedData.piCertFile = uploadedFileName('piUploadZone');
 
     if (isCompany) {
       supplierCapturedData.elRegistered = toggleOn('elInsuranceToggle');
@@ -15920,12 +16399,16 @@
       supplierCapturedData.elPolicyNumber = val('elPolicyNumber');
       supplierCapturedData.elCoverage = val('elCoverage');
       supplierCapturedData.elExpiry = calValue('obElExpiry');
+      supplierCapturedData.elCertFile = uploadedFileName('elUploadZone');
     }
 
     // Step 4: Background
     if (!isCompany) {
       supplierCapturedData.dbsRegistered = toggleOn('dbsToggle');
+      supplierCapturedData.dbsCertNumber = val('obDbsCertNumber');
+      supplierCapturedData.dbsLevel = ddValue('obDbsLevel');
       supplierCapturedData.dbsIssueDate = calValue('obDbsIssueDate');
+      supplierCapturedData.dbsCertFile = uploadedFileName('dbsUploadZone');
       supplierCapturedData.convictionDeclaration = selectedTileValue('convictionTiles');
       var convictionTextarea = document.querySelector('#convictionDetailsField textarea');
       supplierCapturedData.convictionDetails = convictionTextarea ? convictionTextarea.value : '';
@@ -15934,8 +16417,11 @@
       supplierCapturedData.allStaffDbs = selectedTileValue('supAllDbsTiles');
       supplierCapturedData.companyDbsLevel = selectedTileValue('supDbsLevelTiles');
       supplierCapturedData.dbsPolicyText = val('supDbsPolicyText');
+      supplierCapturedData.dbsPolicyFile = uploadedFileName('supDbsPolicyUpload');
       supplierCapturedData.vettingPolicyText = val('supVettingPolicyText');
+      supplierCapturedData.vettingPolicyFile = uploadedFileName('supVettingPolicyUpload');
       supplierCapturedData.hsPolicyText = val('supHsPolicyText');
+      supplierCapturedData.hsPolicyFile = uploadedFileName('supHsPolicyUpload');
       supplierCapturedData.pscConvictionDeclaration = selectedTileValue('supPscConvictionTiles');
       supplierCapturedData.companyRightToWork = selectedTileValue('supRtwTiles');
     }
@@ -15952,15 +16438,35 @@
       });
     });
     supplierCapturedData.selectedRoles = selectedRoles;
+    try {
+      supplierCapturedData.roleCertData = JSON.parse(JSON.stringify(roleCertData || {}));
+      supplierCapturedData.roleCertEntryCounts = JSON.parse(JSON.stringify(roleCertEntryCounts || {}));
+    } catch (e) {
+      supplierCapturedData.roleCertData = {};
+      supplierCapturedData.roleCertEntryCounts = {};
+    }
 
     // Step 7: Setup Profile
-    supplierCapturedData.experienceYears = isCompany ? '' : ddValue('supExpYearsSole');
-    supplierCapturedData.jobsCompleted = isCompany ? '' : ddValue('supJobsSole');
+    supplierCapturedData.experienceYears = isCompany ? ddValue('supExpYearsCompany') : ddValue('supExpYearsSole');
+    supplierCapturedData.jobsCompleted = isCompany ? ddValue('supJobsCompany') : ddValue('supJobsSole');
+    if (isCompany) {
+      supplierCapturedData.companyYearEstablished = val('supCompanyYearEstablished');
+      supplierCapturedData.numOperatives = ddValue('supNumOperatives');
+      supplierCapturedData.companyWebsite = val('supCompanyWebsite');
+    }
+    var obJobRefsEl = document.getElementById('obJobRefsTextarea');
+    supplierCapturedData.jobReferences = obJobRefsEl ? obJobRefsEl.value : '';
+    var obBioEl = document.getElementById('obBioTextarea');
+    supplierCapturedData.bio = obBioEl ? obBioEl.value : '';
     supplierCapturedData.availabilityDays = Array.prototype.map.call(document.querySelectorAll('#supDayPills .day-pill.selected'), function (d) { return d.getAttribute('data-value'); });
     var startEl = document.querySelector('[data-tp-display="supAvailStartTp"]');
     var endEl = document.querySelector('[data-tp-display="supAvailEndTp"]');
     supplierCapturedData.availabilityStart = startEl ? startEl.textContent : '';
     supplierCapturedData.availabilityEnd = endEl ? endEl.textContent : '';
+    supplierCapturedData.minimumNotice = selectedTileValue('noticeTiles');
+    supplierCapturedData.outOfHours = toggleOn('obOutOfHoursToggle');
+    supplierCapturedData.emergencyCallouts = toggleOn('obEmergencyToggle');
+    supplierCapturedData.urgentSameDay = toggleOn('obUrgentToggle');
     supplierCapturedData.londonZones = Array.prototype.map.call(document.querySelectorAll('#supLondonZones .simple-chip.selected'), function (c) { return c.getAttribute('data-value'); });
     supplierCapturedData.otherCities = Array.prototype.map.call(document.querySelectorAll('#supOtherCities .simple-chip.selected'), function (c) {
       var label = c.querySelector('.custom-chip-label');
@@ -15983,6 +16489,222 @@
         showSupplierView('profile-settings');
       }, 200);
     }
+  });
+
+  /* ---- Edit from Account Settings: prefill onboarding fields with current settings values ---- */
+  function prefillSupObFromSettings() {
+    function copyVal(fromId, toId) {
+      var from = document.getElementById(fromId), to = document.getElementById(toId);
+      if (from && to && from.value.trim()) to.value = from.value;
+    }
+    function copyToggle(fromId, toId) {
+      var from = document.getElementById(fromId), to = document.getElementById(toId);
+      if (from && to) to.classList.toggle('on', from.classList.contains('on'));
+    }
+    function copyDdText(fromKey, toKey) {
+      var fromSpan = document.querySelector('[data-dd="' + fromKey + '"] .cdd-value');
+      var toBtn = document.querySelector('[data-dd="' + toKey + '"]');
+      if (fromSpan && toBtn && !fromSpan.classList.contains('cdd-placeholder')) {
+        var toSpan = toBtn.querySelector('.cdd-value');
+        toSpan.textContent = fromSpan.textContent;
+        toSpan.classList.remove('cdd-placeholder');
+      }
+    }
+    function copyCalText(fromKey, toKey) {
+      var fromSpan = document.querySelector('[data-cal-text="' + fromKey + '"]');
+      var toSpan = document.querySelector('[data-cal-text="' + toKey + '"]');
+      if (fromSpan && toSpan && !fromSpan.classList.contains('cdd-placeholder')) {
+        toSpan.textContent = fromSpan.textContent;
+        toSpan.classList.remove('cdd-placeholder');
+        if (calState[toKey] && calState[fromKey]) calState[toKey].selected = calState[fromKey].selected;
+      }
+    }
+    function copyTileSelection(fromContainerId, toContainerId) {
+      var fromSel = document.querySelector('#' + fromContainerId + ' .choice-tile.selected, #' + fromContainerId + ' .radio-tile.selected, #' + fromContainerId + ' .supbg-yn-tile.selected');
+      var toContainer = document.getElementById(toContainerId);
+      if (fromSel && toContainer) {
+        var val = fromSel.getAttribute('data-value');
+        toContainer.querySelectorAll('.choice-tile, .radio-tile, .radio-row, .supbg-yn-tile').forEach(function (t) {
+          t.classList.toggle('selected', t.getAttribute('data-value') === val);
+        });
+      }
+    }
+    function copyDayPills(fromContainerId, toContainerId) {
+      var fromContainer = document.getElementById(fromContainerId);
+      var toContainer = document.getElementById(toContainerId);
+      if (!fromContainer || !toContainer) return;
+      toContainer.querySelectorAll('.day-pill').forEach(function (toPill) {
+        var val = toPill.getAttribute('data-value');
+        var fromPill = fromContainer.querySelector('.day-pill[data-value="' + val + '"]');
+        toPill.classList.toggle('selected', !!(fromPill && fromPill.classList.contains('selected')));
+      });
+    }
+    function copyTpText(fromKey, toKey) {
+      var fromSpan = document.querySelector('[data-tp-display="' + fromKey + '"]');
+      var toSpan = document.querySelector('[data-tp-display="' + toKey + '"]');
+      if (fromSpan && toSpan) toSpan.textContent = fromSpan.textContent;
+    }
+    function copyChipSelection(fromContainerId, toContainerId) {
+      var fromContainer = document.getElementById(fromContainerId);
+      var toContainer = document.getElementById(toContainerId);
+      if (!fromContainer || !toContainer) return;
+      var selectedVals = Array.prototype.map.call(fromContainer.querySelectorAll('.simple-chip.selected'), function (c) { return c.getAttribute('data-value'); });
+      toContainer.querySelectorAll('.simple-chip').forEach(function (chip) {
+        chip.classList.toggle('selected', selectedVals.indexOf(chip.getAttribute('data-value')) !== -1);
+      });
+    }
+
+    // Identity
+    copyVal('supProfileFullNameInput', 'supFullName');
+    copyVal('supIdPhoneInput', 'supPhone');
+    copyVal('supProfileEmailInput', 'supEmail');
+    copyCalText('supDob', 'obSupDob');
+    copyToggle('supHmrcToggle', 'selfAssessmentToggle');
+    copyVal('supIdUtrInput', 'supUtr');
+    copyVal('supHomeAddressInput', 'supHomeAddress');
+
+    // Identity (Company)
+    copyVal('supCompanyFullNameInput', 'supCompanyFullName');
+    copyVal('supCompanyPhoneInput', 'supCompanyPhone');
+    copyVal('supCompanyEmailInput', 'supCompanyEmail');
+    copyVal('supCompanyRegNoInput', 'supCompanyRegNo');
+    copyVal('supCompanyRegNameInput', 'supCompanyRegName');
+    copyVal('supCompanyTradingNameInput', 'supCompanyTradingName');
+    copyVal('supCompanyOperAddressInput', 'supCompanyOperAddress');
+    copyVal('supCompanyTinInput', 'supCompanyTin');
+    copyVal('supPscNameInput', 'supPscName');
+    copyVal('supPscPhoneInput', 'supPscPhone');
+    copyVal('supPscEmailInput', 'supPscEmail');
+
+    // Insurance
+    copyVal('supPliProviderInput', 'insProvider');
+    copyVal('supPliPolicyInput', 'insPolicyNumber');
+    copyVal('supPliCoverageInput', 'insCoverage');
+    copyCalText('supPliExpiry', 'obInsExpiry');
+    copyToggle('supPliToggle', 'publicLiabilityToggle');
+    copyVal('supPiProviderInput', 'piProvider');
+    copyVal('supPiPolicyInput', 'piPolicyNumber');
+    copyVal('supPiCoverageInput', 'piCoverage');
+    copyCalText('supPiExpiry', 'obPiExpiry');
+    copyToggle('supPiToggle', 'profIndemnityToggle');
+
+    // Background
+    copyToggle('supDbsToggle', 'dbsToggle');
+    copyVal('supDbsCertNumberInput', 'obDbsCertNumber');
+    copyDdText('supDbsLevel', 'obDbsLevel');
+    copyCalText('supDbsIssueDate', 'obDbsIssueDate');
+    (function () {
+      var fromSel = document.querySelector('#supDashCriminalDeclaration .radio-tile.selected');
+      var toContainer = document.getElementById('convictionTiles');
+      if (fromSel && toContainer) {
+        var val = fromSel.getAttribute('data-value');
+        var mapped = val === 'unspent' ? 'has-convictions' : val;
+        toContainer.querySelectorAll('.radio-row').forEach(function (t) {
+          t.classList.toggle('selected', t.getAttribute('data-value') === mapped);
+        });
+      }
+    })();
+    var fromConvictionTa = document.querySelector('#supDashConvictionDetailsField textarea');
+    var toConvictionTa = document.querySelector('#convictionDetailsField textarea');
+    if (fromConvictionTa && toConvictionTa && fromConvictionTa.value.trim()) toConvictionTa.value = fromConvictionTa.value;
+    copyTileSelection('supRightToWorkTiles', 'rightToWorkTiles');
+
+    // Sectors
+    copyTileSelection('supDashSectorTiles', 'sectorTypeTiles');
+    if (typeof stgSelectedRolesByCategory !== 'undefined' && typeof selectedRolesByCategory !== 'undefined') {
+      Object.keys(selectedRolesByCategory).forEach(function (cat) { delete selectedRolesByCategory[cat]; });
+      Object.keys(stgSelectedRolesByCategory).forEach(function (cat) {
+        selectedRolesByCategory[cat] = {};
+        Object.keys(stgSelectedRolesByCategory[cat]).forEach(function (role) {
+          selectedRolesByCategory[cat][role] = stgSelectedRolesByCategory[cat][role];
+        });
+      });
+      var firstCat = Object.keys(selectedRolesByCategory).filter(function (c) {
+        return Object.keys(selectedRolesByCategory[c]).some(function (r) { return selectedRolesByCategory[c][r]; });
+      })[0];
+      if (firstCat && typeof categoryRoles !== 'undefined' && categoryRoles[firstCat]) {
+        activeCategory = firstCat;
+        document.querySelectorAll('#categoryList .crp-cat-row').forEach(function (r) { r.classList.toggle('active', r.getAttribute('data-cat') === firstCat); });
+      }
+    }
+    if (typeof stgRoleCertData !== 'undefined' && typeof roleCertData !== 'undefined') {
+      Object.keys(roleCertData).forEach(function (role) { delete roleCertData[role]; });
+      Object.keys(stgRoleCertData).forEach(function (role) { roleCertData[role] = stgRoleCertData[role]; });
+    }
+    if (typeof stgRoleCertEntryCounts !== 'undefined' && typeof roleCertEntryCounts !== 'undefined') {
+      Object.keys(roleCertEntryCounts).forEach(function (role) { delete roleCertEntryCounts[role]; });
+      Object.keys(stgRoleCertEntryCounts).forEach(function (role) { roleCertEntryCounts[role] = stgRoleCertEntryCounts[role]; });
+    }
+    if (typeof renderCrpRoles === 'function') renderCrpRoles();
+    if (typeof syncCategoryCounts === 'function') syncCategoryCounts();
+    if (typeof renderRoleCertifications === 'function') renderRoleCertifications();
+
+    // Payment
+    copyTileSelection('vatRegTiles', 'vatTiles');
+    copyVal('supPaymentVatNumberInput', 'vatNumberInput');
+
+    // Setup Profile
+    copyDdText('stgpExpYearsSole', 'supExpYearsSole');
+    copyDdText('stgpJobsSole', 'supJobsSole');
+    copyDdText('stgpExpYearsCompany', 'supExpYearsCompany');
+    copyDdText('stgpJobsCompany', 'supJobsCompany');
+    copyVal('stgpCompanyYearEstablished', 'supCompanyYearEstablished');
+    copyDdText('stgpNumOperatives', 'supNumOperatives');
+    copyVal('stgpCompanyWebsite', 'supCompanyWebsite');
+    copyVal('stgpJobRefsTextarea', 'obJobRefsTextarea');
+    copyVal('stgpBioTextarea', 'obBioTextarea');
+    copyDayPills('stgpDayPills', 'supDayPills');
+    copyTpText('stgpAvailStartTp', 'supAvailStartTp');
+    copyTpText('stgpAvailEndTp', 'supAvailEndTp');
+    copyTileSelection('stgpNoticeTiles', 'noticeTiles');
+    copyToggle('stgpOutOfHoursToggle', 'obOutOfHoursToggle');
+    copyToggle('stgpEmergencyToggle', 'obEmergencyToggle');
+    copyToggle('stgpUrgentToggle', 'obUrgentToggle');
+    copyChipSelection('stgpLondonZones', 'supLondonZones');
+    copyChipSelection('stgpOtherCities', 'supOtherCities');
+  }
+
+  var SUP_SETTINGS_TO_OB_STEPKEY = { profile: 'identity', sectors: 'categories', insurance: 'insurance', questionnaire: 'setup-profile', payment: 'payment' };
+
+  function openSupOnboardingForEdit(settingsTabKey) {
+    var stepKey = SUP_SETTINGS_TO_OB_STEPKEY[settingsTabKey] || 'identity';
+    var typePill = document.getElementById('supProfileTypePill');
+    var isCompanyNow = !!(typePill && typePill.classList.contains('company'));
+    var targetVal = isCompanyNow ? 'company' : 'sole-trader';
+    document.querySelectorAll('#businessTypeTiles .choice-tile').forEach(function (tile) {
+      tile.classList.toggle('selected', tile.getAttribute('data-value') === targetVal);
+    });
+    supplierBusinessType = targetVal;
+    if (typeof updateSupProfileTypeChip === 'function') updateSupProfileTypeChip();
+    prefillSupObFromSettings();
+    supObEditFromSettings = true;
+    supObReturnTabKey = settingsTabKey;
+    supObApp.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(function () { supObApp.classList.add('visible'); });
+    var order = currentSupObStepOrder();
+    var stepNum = order.indexOf(stepKey) + 1;
+    goToSupObStep(stepNum > 0 ? stepNum : 1);
+  }
+
+  document.getElementById('supAcctEditBtn').addEventListener('click', function () {
+    var activeTab = document.querySelector('#supSettingsTabs .pm-settings-tab-item.active');
+    var key = activeTab ? activeTab.getAttribute('data-supsettingstab') : 'profile';
+    openSupOnboardingForEdit(key);
+  });
+
+  document.getElementById('supObSaveSkipBtn').addEventListener('click', function () {
+    supObApp.classList.remove('visible');
+    setTimeout(function () {
+      supObApp.classList.remove('active');
+      document.body.style.overflow = '';
+      supObCollectWizardData();
+      if (typeof populateSupSettingsFromOnboarding === 'function') populateSupSettingsFromOnboarding(supplierCapturedData);
+      if (typeof refreshAllAcctSettingsViews === 'function') refreshAllAcctSettingsViews();
+      supObEditFromSettings = false;
+      switchSupSettingsTab(supObReturnTabKey);
+      showToast('Changes saved.');
+    }, 200);
   });
 
   /* Generic toggle-switch + collapsible-field pairing helper */
@@ -16063,7 +16785,12 @@
 
   document.querySelectorAll('#supProfileSettingsView [data-doc-view]').forEach(function (btn) {
     btn.addEventListener('click', function () {
-      showToast('Opening ' + btn.getAttribute('data-doc-view') + ' \u2014 preview isn\u2019t available in this prototype.');
+      var label = btn.getAttribute('data-doc-view');
+      var fallbackFile = label.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '') + '.pdf';
+      var nameEl = btn.parentElement ? btn.parentElement.querySelector('div') : null;
+      var nameText = nameEl ? nameEl.textContent.trim() : '';
+      var isGenericName = !nameText || nameText === 'Uploaded' || nameText === 'Uploaded certificate';
+      if (typeof openPreviewModal === 'function') openPreviewModal({ name: label, file: isGenericName ? fallbackFile : nameText });
     });
   });
   var supDocNameMap = { proofAddress: 'supProofAddressDocName', pli: 'supPliDocName', pi: 'supPiDocName', dbs: 'supDbsDocName' };
@@ -16391,7 +17118,7 @@
           '<div class="fd-label">' + (isUploaded ? 'Uploaded ✓' : 'Click to Upload<span class="fd-sub">Photo or PDF</span>') + '</div>' +
           (isUploaded ? '<div class="fd-uploaded-name"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>' + supjrEscapeHtml(entryData.fileName) + '</div>' : '') +
           '</div></div>' +
-          '<div class="ob-field"><label>Expiry date</label><input class="field-input crc-expiry-input" type="date" value="' + entryData.expiryDate + '"></div>' +
+          '<div class="ob-field"><label>Expiry date <span class="meta-badge optional" style="text-transform:none;">Optional</span></label><input class="field-input crc-expiry-input" type="date" value="' + entryData.expiryDate + '"></div>' +
           '</div></div>';
       }
       return '<div class="cert-required-card">' +
@@ -16479,6 +17206,14 @@
 
   document.querySelectorAll('#supObApp .toggle-switch').forEach(function (toggle) {
     if (toggle.id) return; // already wired individually above
+    toggle.addEventListener('click', function () {
+      var isOn = toggle.classList.toggle('on');
+      toggle.setAttribute('aria-checked', isOn ? 'true' : 'false');
+    });
+  });
+  ['obOutOfHoursToggle', 'obEmergencyToggle', 'obUrgentToggle'].forEach(function (id) {
+    var toggle = document.getElementById(id);
+    if (!toggle) return;
     toggle.addEventListener('click', function () {
       var isOn = toggle.classList.toggle('on');
       toggle.setAttribute('aria-checked', isOn ? 'true' : 'false');
@@ -17144,7 +17879,7 @@
       var container = document.getElementById(containerId);
       if (!container || !values) return;
       var arr = Array.isArray(values) ? values : [values];
-      container.querySelectorAll('.choice-tile, .radio-tile, .radio-row').forEach(function (t) {
+      container.querySelectorAll('.choice-tile, .radio-tile, .radio-row, .supbg-yn-tile').forEach(function (t) {
         var match = arr.indexOf(t.getAttribute('data-value')) !== -1;
         t.classList.toggle('selected', match);
         if (t.hasAttribute('aria-checked')) t.setAttribute('aria-checked', match ? 'true' : 'false');
@@ -17154,6 +17889,34 @@
       if (!isoOrDisplay) return;
       var span = document.querySelector('[data-cal-text="' + key + '"]');
       if (span) { span.textContent = isoOrDisplay; span.classList.remove('cdd-placeholder'); }
+    }
+    function setDdText(key, value) {
+      if (!value) return;
+      var btn = document.querySelector('[data-dd="' + key + '"]');
+      if (!btn) return;
+      var span = btn.querySelector('.cdd-value');
+      if (span) { span.textContent = value; span.classList.remove('cdd-placeholder'); }
+    }
+    function setDocName(ids, filename) {
+      if (!filename) return;
+      ids.forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = filename;
+      });
+    }
+    function populatePolicyRow(rowId, docRowId, docNameId, viewId, fileName, text) {
+      var row = document.getElementById(rowId);
+      var docRow = document.getElementById(docRowId);
+      var viewEl = document.getElementById(viewId);
+      row.style.display = (fileName || text) ? '' : 'none';
+      if (fileName) {
+        docRow.style.display = '';
+        document.getElementById(docNameId).textContent = fileName;
+      } else {
+        docRow.style.display = 'none';
+      }
+      viewEl.textContent = text || (fileName ? '' : 'Not set');
+      viewEl.style.display = text ? '' : 'none';
     }
 
     // Profile tab: business type pill
@@ -17171,6 +17934,22 @@
 
     // Identity tab
     if (!isCompany) {
+      var soleName = signupData.fullName || 'Not set';
+      setValIf('supProfileFullNameInput', signupData.fullName);
+      document.getElementById('supProfileHeaderName').textContent = soleName;
+      document.getElementById('supProfileAvatarInitials').textContent = signupData.fullName ? initials(signupData.fullName) : '--';
+      document.getElementById('supAcctName').textContent = soleName;
+      document.getElementById('supAcctInitials').textContent = signupData.fullName ? initials(signupData.fullName) : '--';
+      document.getElementById('supProfileFullNameView').textContent = soleName;
+
+      var soleEmail = signupData.email || 'Not set';
+      setValIf('supProfileEmailInput', signupData.email);
+      document.getElementById('supProfileHeaderEmail').textContent = soleEmail;
+      document.getElementById('supAcctEmail').textContent = soleEmail;
+      document.getElementById('supProfileEmailView').textContent = soleEmail;
+
+      document.getElementById('supAcctInfoMobileView').textContent = signupData.phoneNumber || 'Not set';
+
       setValIf('supIdFullNameInput', signupData.fullName);
       setValIf('supIdPhoneInput', signupData.phoneNumber);
       setValIf('supIdEmailInput', signupData.email);
@@ -17178,6 +17957,42 @@
       setValIf('supHomeAddressInput', signupData.homeAddress);
       if (signupData.dob) { setCalValue('supDob', signupData.dob); var dobInput = document.getElementById('supDobInput'); if (dobInput) dobInput.value = signupData.dob; }
       setToggle('supHmrcToggle', signupData.hmrcRegistered, 'supUtrField');
+      setValIf('supIdUtrInput', signupData.utrNumber);
+      setDocName(['supProofAddressDocName'], signupData.proofAddressFile);
+    } else {
+      var compName = signupData.companyFullName || 'Not set';
+      setValIf('supCompanyFullNameInput', signupData.companyFullName);
+      document.getElementById('supProfileHeaderName').textContent = compName;
+      document.getElementById('supProfileAvatarInitials').textContent = signupData.companyFullName ? initials(signupData.companyFullName) : '--';
+      document.getElementById('supAcctName').textContent = compName;
+      document.getElementById('supAcctInitials').textContent = signupData.companyFullName ? initials(signupData.companyFullName) : '--';
+      document.getElementById('supProfileFullNameView').textContent = compName;
+
+      var compEmail = signupData.companyEmail || 'Not set';
+      setValIf('supProfileEmailInput', signupData.companyEmail);
+      document.getElementById('supProfileHeaderEmail').textContent = compEmail;
+      document.getElementById('supAcctEmail').textContent = compEmail;
+      document.getElementById('supProfileEmailView').textContent = compEmail;
+
+      document.getElementById('supAcctInfoMobileView').textContent = signupData.companyPhone || 'Not set';
+
+      setValIf('supCompanyFullNameInput', signupData.companyFullName);
+      setValIf('supCompanyPhoneInput', signupData.companyPhone);
+      setValIf('supCompanyEmailInput', signupData.companyEmail);
+      setValIf('supCompanyRegNoInput', signupData.companyRegNo);
+      setValIf('supCompanyRegNameInput', signupData.companyRegName);
+      setValIf('supCompanyTradingNameInput', signupData.companyTradingName);
+      setValIf('supCompanyOperAddressInput', signupData.companyOperAddress);
+      setValIf('supCompanyTinInput', signupData.companyTin);
+      setValIf('supPscNameInput', signupData.pscName);
+      setValIf('supPscPhoneInput', signupData.pscPhone);
+      setValIf('supPscEmailInput', signupData.pscEmail);
+      document.getElementById('supCompanyTypeView').textContent = signupData.companyType || 'Not set';
+      document.getElementById('supCompanyIncorpDateView').textContent = signupData.companyIncorpDate || 'Not set';
+      document.getElementById('supCompanyRegOfficeView').textContent = signupData.companyRegOffice || 'Not set';
+      document.getElementById('supPscDobView').textContent = signupData.pscDob || 'Not set';
+      document.getElementById('supPscConfirmBadgeRow').style.display = signupData.pscConfirmed ? '' : 'none';
+      setDocName(['supProofAddressDocName'], signupData.companyProofAddressFile);
     }
 
     // Insurance tab
@@ -17186,18 +18001,88 @@
     setValIf('supPliPolicyInput', signupData.pliPolicyNumber);
     setValIf('supPliCoverageInput', signupData.pliCoverage);
     if (signupData.pliExpiry) { setCalValue('supPliExpiry', signupData.pliExpiry); var pliExpInput = document.getElementById('supPliExpiryInput'); if (pliExpInput) pliExpInput.value = signupData.pliExpiry; }
+    setDocName(['supPliDocNameView', 'supPliDocName'], signupData.pliCertFile);
 
     setToggle('supPiToggle', signupData.piRegistered, 'supPiFields');
     setValIf('supPiProviderInput', signupData.piProvider);
     setValIf('supPiPolicyInput', signupData.piPolicyNumber);
     setValIf('supPiCoverageInput', signupData.piCoverage);
     if (signupData.piExpiry) { setCalValue('supPiExpiry', signupData.piExpiry); var piExpInput = document.getElementById('supPiExpiryInput'); if (piExpInput) piExpInput.value = signupData.piExpiry; }
+    setDocName(['supPiDocNameView', 'supPiDocName'], signupData.piCertFile);
+
+    if (isCompany) {
+      document.getElementById('supElStatusView').textContent = signupData.elRegistered ? 'Active' : 'Not registered';
+      document.getElementById('supElStatusView').className = 'status-pill ' + (signupData.elRegistered ? 'green' : 'gray');
+      document.getElementById('supElProviderView').textContent = signupData.elProvider || 'Not set';
+      document.getElementById('supElPolicyView').textContent = signupData.elPolicyNumber || 'Not set';
+      document.getElementById('supElCoverageView').textContent = signupData.elCoverage || 'Not set';
+      document.getElementById('supElExpiryView').textContent = signupData.elExpiry || 'Not set';
+      if (signupData.elCertFile) document.getElementById('supElDocNameView').textContent = signupData.elCertFile;
+    }
 
     // Background tab
     if (!isCompany) {
       setToggle('supDbsToggle', signupData.dbsRegistered, 'supDbsFields');
-      setTilesSelected('supDashCriminalDeclaration', signupData.convictionDeclaration);
+      setValIf('supDbsCertNumberInput', signupData.dbsCertNumber);
+      setDdText('supDbsLevel', signupData.dbsLevel);
+      if (signupData.dbsIssueDate) { setCalValue('supDbsIssueDate', signupData.dbsIssueDate); var dbsIssueInput = document.getElementById('supDbsIssueDateInput'); if (dbsIssueInput) dbsIssueInput.value = signupData.dbsIssueDate; }
+      setDocName(['supDbsDocNameView', 'supDbsDocName'], signupData.dbsCertFile);
+      setTilesSelected('supDashCriminalDeclaration', signupData.convictionDeclaration === 'has-convictions' ? 'unspent' : signupData.convictionDeclaration);
+      if (signupData.convictionDetails) {
+        var convictionTa = document.querySelector('#supDashConvictionDetailsField textarea');
+        if (convictionTa) convictionTa.value = signupData.convictionDetails;
+      }
       setTilesSelected('supRightToWorkTiles', signupData.rightToWork);
+    } else {
+      var allDbsYes = signupData.allStaffDbs === 'yes';
+      document.getElementById('supAllDbsView').textContent = allDbsYes ? 'Yes' : 'No';
+      document.getElementById('supAllDbsView').className = 'status-pill ' + (allDbsYes ? 'green' : 'gray');
+      var companyDbsLevel = signupData.companyDbsLevel;
+      document.getElementById('supCompanyDbsLevelRow').style.display = companyDbsLevel ? '' : 'none';
+      if (companyDbsLevel) document.getElementById('supCompanyDbsLevelView').textContent = companyDbsLevel === 'enhanced' ? 'Enhanced' : 'Basic';
+
+      populatePolicyRow('supDbsPolicyRow', 'supDbsPolicyDocRow', 'supDbsPolicyDocName', 'supDbsPolicyView', signupData.dbsPolicyFile, signupData.dbsPolicyText);
+      populatePolicyRow('supVettingPolicyRow', 'supVettingPolicyDocRow', 'supVettingPolicyDocName', 'supVettingPolicyView', signupData.vettingPolicyFile, signupData.vettingPolicyText);
+      populatePolicyRow('supHsPolicyRow', 'supHsPolicyDocRow', 'supHsPolicyDocName', 'supHsPolicyView', signupData.hsPolicyFile, signupData.hsPolicyText);
+
+      var pscNoConvictions = signupData.pscConvictionDeclaration !== 'has-convictions';
+      document.getElementById('supPscConvictionView').textContent = pscNoConvictions ? 'No unspent convictions' : 'Unspent convictions declared';
+      document.getElementById('supPscConvictionView').className = 'status-pill ' + (pscNoConvictions ? 'green' : 'amber');
+      var companyRtwYes = signupData.companyRightToWork === 'yes';
+      document.getElementById('supCompanyRtwView').textContent = companyRtwYes ? 'Yes — all staff have right to work' : 'No — not all staff have verified right to work';
+      document.getElementById('supCompanyRtwView').className = 'status-pill ' + (companyRtwYes ? 'green' : 'gray');
+    }
+
+    // Portfolio tab: Setup Profile
+    if (!isCompany) {
+      setDdText('stgpExpYearsSole', signupData.experienceYears);
+      setDdText('stgpJobsSole', signupData.jobsCompleted);
+      setValIf('stgpJobRefsTextarea', signupData.jobReferences);
+      setValIf('stgpBioTextarea', signupData.bio);
+      if (signupData.availabilityDays && signupData.availabilityDays.length) setTilesSelected('stgpDayPills', signupData.availabilityDays);
+      if (signupData.availabilityStart) { var startSpan = document.querySelector('[data-tp-display="stgpAvailStartTp"]'); if (startSpan) startSpan.textContent = signupData.availabilityStart; }
+      if (signupData.availabilityEnd) { var endSpan = document.querySelector('[data-tp-display="stgpAvailEndTp"]'); if (endSpan) endSpan.textContent = signupData.availabilityEnd; }
+      setTilesSelected('stgpNoticeTiles', signupData.minimumNotice);
+      setToggle('stgpOutOfHoursToggle', signupData.outOfHours);
+      setToggle('stgpEmergencyToggle', signupData.emergencyCallouts);
+      setToggle('stgpUrgentToggle', signupData.urgentSameDay);
+      if (signupData.londonZones && signupData.londonZones.length) setTilesSelected('stgpLondonZones', signupData.londonZones);
+    } else {
+      setDdText('stgpExpYearsCompany', signupData.experienceYears);
+      setDdText('stgpJobsCompany', signupData.jobsCompleted);
+      setValIf('stgpCompanyYearEstablished', signupData.companyYearEstablished);
+      setDdText('stgpNumOperatives', signupData.numOperatives);
+      setValIf('stgpCompanyWebsite', signupData.companyWebsite);
+      setValIf('stgpJobRefsTextarea', signupData.jobReferences);
+      setValIf('stgpBioTextarea', signupData.bio);
+      if (signupData.availabilityDays && signupData.availabilityDays.length) setTilesSelected('stgpDayPills', signupData.availabilityDays);
+      if (signupData.availabilityStart) { var startSpanC = document.querySelector('[data-tp-display="stgpAvailStartTp"]'); if (startSpanC) startSpanC.textContent = signupData.availabilityStart; }
+      if (signupData.availabilityEnd) { var endSpanC = document.querySelector('[data-tp-display="stgpAvailEndTp"]'); if (endSpanC) endSpanC.textContent = signupData.availabilityEnd; }
+      setTilesSelected('stgpNoticeTiles', signupData.minimumNotice);
+      setToggle('stgpOutOfHoursToggle', signupData.outOfHours);
+      setToggle('stgpEmergencyToggle', signupData.emergencyCallouts);
+      setToggle('stgpUrgentToggle', signupData.urgentSameDay);
+      if (signupData.londonZones && signupData.londonZones.length) setTilesSelected('stgpLondonZones', signupData.londonZones);
     }
 
     // Payment tab
@@ -17216,10 +18101,20 @@
         stgActiveCategory = firstSelectedCat;
         document.querySelectorAll('#stgCategoryList .crp-cat-row').forEach(function (r) { r.classList.toggle('active', r.getAttribute('data-cat') === firstSelectedCat); });
       }
+      if (signupData.roleCertData && typeof stgRoleCertData !== 'undefined') {
+        Object.keys(stgRoleCertData).forEach(function (role) { delete stgRoleCertData[role]; });
+        Object.keys(signupData.roleCertData).forEach(function (role) { stgRoleCertData[role] = signupData.roleCertData[role]; });
+      }
+      if (signupData.roleCertEntryCounts && typeof stgRoleCertEntryCounts !== 'undefined') {
+        Object.keys(stgRoleCertEntryCounts).forEach(function (role) { delete stgRoleCertEntryCounts[role]; });
+        Object.keys(signupData.roleCertEntryCounts).forEach(function (role) { stgRoleCertEntryCounts[role] = signupData.roleCertEntryCounts[role]; });
+      }
       if (typeof renderStgCrpRoles === 'function') renderStgCrpRoles();
       if (typeof syncStgCategoryCounts === 'function') syncStgCategoryCounts();
       if (typeof renderStgRoleCertifications === 'function') renderStgRoleCertifications();
     }
+    if (typeof updateAcctSettingsBusinessType === 'function') updateAcctSettingsBusinessType(isCompany);
+    if (typeof refreshAllAcctSettingsViews === 'function') refreshAllAcctSettingsViews();
   }
 
   function showSupplierDashboard(signupData, mode) {
@@ -18366,6 +19261,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         panel.classList.add('pm-settings-panel-active');
       }
     });
+    var editBtn = document.getElementById('supAcctEditBtn');
+    if (editBtn) editBtn.style.display = (key === 'profile' || key === 'sectors' || key === 'insurance' || key === 'payment') ? '' : 'none';
   }
   document.querySelectorAll('#supSettingsTabs .pm-settings-tab-item').forEach(function (tab) {
     tab.addEventListener('click', function () { switchSupSettingsTab(tab.getAttribute('data-supsettingstab')); });
@@ -18373,7 +19270,22 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   document.querySelectorAll('[data-supsettings-save]').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var section = btn.getAttribute('data-supsettings-save');
+      if (section === 'Portfolio') {
+        showToast('Changes saved.');
+        return;
+      }
       if (section === 'Profile') {
+        var hmrcToggleCheck = document.getElementById('supHmrcToggle');
+        var utrInputCheck = document.getElementById('supIdUtrInput');
+        var hmrcOnCheck = hmrcToggleCheck && hmrcToggleCheck.classList.contains('on');
+        if (hmrcOnCheck && utrInputCheck && !utrInputCheck.value.trim()) {
+          utrInputCheck.classList.add('error');
+          var supUtrErrorEl = document.getElementById('supUtrError');
+          if (supUtrErrorEl) supUtrErrorEl.classList.add('show');
+          utrInputCheck.focus();
+          showToast('UTR number is required when HMRC self-assessment is enabled.');
+          return;
+        }
         var newName = document.getElementById('supProfileFullNameInput').value.trim();
         var newEmail = document.getElementById('supProfileEmailInput').value.trim();
         if (newName) {
@@ -18381,15 +19293,329 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
           document.getElementById('supProfileAvatarInitials').textContent = initials(newName);
           document.getElementById('supAcctName').textContent = newName;
           document.getElementById('supAcctInitials').textContent = initials(newName);
+          document.getElementById('supProfileFullNameView').textContent = newName;
         }
         if (newEmail) {
           document.getElementById('supProfileHeaderEmail').textContent = newEmail;
           document.getElementById('supAcctEmail').textContent = newEmail;
+          document.getElementById('supProfileEmailView').textContent = newEmail;
         }
       }
+      if (typeof refreshAllAcctSettingsViews === 'function') refreshAllAcctSettingsViews();
+      var tab = btn.closest('.acct-settings-tab');
+      if (tab) tab.classList.remove('editing');
       showToast(section + ' updated.');
     });
   });
+
+  /* ---- Supplier Account Settings: view/edit toggle ---- */
+  document.querySelectorAll('.acct-settings-tab [data-acct-edit]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var tab = btn.closest('.acct-settings-tab');
+      if (tab) tab.classList.add('editing');
+    });
+  });
+  document.querySelectorAll('.acct-settings-tab [data-acct-discard]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var tab = btn.closest('.acct-settings-tab');
+      if (tab) tab.classList.remove('editing');
+      showToast('Changes discarded.');
+    });
+  });
+
+  function acctDdValue(ddKey, fallback) {
+    var span = document.querySelector('[data-dd="' + ddKey + '"] .cdd-value');
+    if (span && !span.classList.contains('cdd-placeholder') && span.textContent.trim()) return span.textContent.trim();
+    return fallback;
+  }
+  function acctSelectedTilesText(containerId) {
+    var container = document.getElementById(containerId);
+    if (!container) return [];
+    return Array.prototype.map.call(container.querySelectorAll('.selected'), function (el) {
+      var t = el.querySelector('.tile-title, .rt-title');
+      return t ? t.textContent.trim() : el.textContent.trim();
+    });
+  }
+  function acctSelectedChipsText(containerId) {
+    var container = document.getElementById(containerId);
+    if (!container) return [];
+    return Array.prototype.map.call(container.querySelectorAll('.simple-chip.selected:not(.simple-chip-action)'), function (el) { return el.textContent.trim(); });
+  }
+
+  var SECTOR_CHIP_ICONS = {
+    'Residential': '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg>',
+    'Commercial': '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>'
+  };
+  var DMF_LABEL_ICON_SECTORS = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg>';
+  var DMF_LABEL_ICON_RES = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 22V12h6v10"/><path d="M3 10l9-7 9 7"/></svg>';
+  var DMF_LABEL_ICON_COM = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>';
+  var CAT_LABEL_ICON = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41L11.42 4.24A2 2 0 0010 3.59H4a1 1 0 00-1 1v6a2 2 0 00.59 1.41l9.17 9.17a2 2 0 002.83 0l5-5a2 2 0 000-2.83z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>';
+  var CERT_TITLE_ICON = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>';
+
+  function chipWithIcon(text, icon) {
+    return '<span class="detail-chip-tag">' + (icon || '') + text + '</span>';
+  }
+
+  function renderSectorsTagsView() {
+    var el = document.getElementById('supSectorsTagsView');
+    if (!el) return;
+    var sectors = acctSelectedTilesText('supDashSectorTiles');
+    var resSub = acctSelectedChipsText('supResSubChips');
+    var comSub = acctSelectedChipsText('supComSubChips');
+
+    var html = '<div class="detail-mini-grid-3col">';
+    html += '<div class="detail-mini-field"><div class="dmf-label" style="font-size:11px;">' + DMF_LABEL_ICON_SECTORS + 'Property sectors</div><div style="margin-top:2px;">' +
+      (sectors.length ? sectors.map(function (s) { return chipWithIcon(s, SECTOR_CHIP_ICONS[s]); }).join('') : '<span class="acct-view-empty">None selected</span>') + '</div></div>';
+    if (sectors.indexOf('Residential') !== -1) {
+      html += '<div class="detail-mini-field"><div class="dmf-label" style="font-size:11px;">' + DMF_LABEL_ICON_RES + 'Residential sub-types</div><div style="margin-top:2px;">' +
+        (resSub.length ? resSub.map(function (s) { return chipWithIcon(s); }).join('') : '<span class="acct-view-empty">None selected</span>') + '</div></div>';
+    }
+    if (sectors.indexOf('Commercial') !== -1) {
+      html += '<div class="detail-mini-field"><div class="dmf-label" style="font-size:11px;">' + DMF_LABEL_ICON_COM + 'Commercial sub-types</div><div style="margin-top:2px;">' +
+        (comSub.length ? comSub.map(function (s) { return chipWithIcon(s); }).join('') : '<span class="acct-view-empty">None selected</span>') + '</div></div>';
+    }
+    html += '</div>';
+    el.innerHTML = html;
+  }
+
+  function renderSectorsCatRolesView() {
+    var el = document.getElementById('supSectorsCatRolesView');
+    if (!el || typeof stgSelectedRolesByCategory === 'undefined') return;
+    var cats = Object.keys(stgSelectedRolesByCategory).filter(function (c) {
+      return Object.keys(stgSelectedRolesByCategory[c]).some(function (r) { return stgSelectedRolesByCategory[c][r]; });
+    });
+    if (!cats.length) { el.innerHTML = '<div class="acct-view-empty" style="margin-bottom:16px;">No categories or roles selected yet.</div>'; return; }
+    el.innerHTML = cats.map(function (cat) {
+      var roles = Object.keys(stgSelectedRolesByCategory[cat]).filter(function (r) { return stgSelectedRolesByCategory[cat][r]; });
+      return '<div style="margin-bottom:16px;"><div class="dfr-label" style="margin-bottom:6px;">' + CAT_LABEL_ICON + cat + '</div>' +
+        roles.map(function (r) { return '<span class="detail-chip-tag">' + r + '</span>'; }).join('') + '</div>';
+    }).join('');
+  }
+
+  function renderSectorsCertsView() {
+    var el = document.getElementById('supSectorsCertsView');
+    if (!el || typeof stgSelectedRolesByCategory === 'undefined') return;
+    var certRoles = [];
+    var seen = {};
+    Object.keys(stgSelectedRolesByCategory).forEach(function (cat) {
+      var set = stgSelectedRolesByCategory[cat];
+      Object.keys(set).forEach(function (role) {
+        if (set[role] && CERT_REQUIRED_ROLES[role] && !seen[role]) { seen[role] = true; certRoles.push(role); }
+      });
+    });
+    if (!certRoles.length) { el.innerHTML = '<div class="dash-empty" style="padding:20px 10px;"><div class="empty-sub">No certifications on file yet.</div></div>'; return; }
+    var EYE_ICON = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+    el.innerHTML = certRoles.map(function (role) {
+      var entryCount = stgRoleCertEntryCounts[role] || 1;
+      var rows = '';
+      for (var e = 0; e < entryCount; e++) {
+        var entry = (stgRoleCertData[role] && stgRoleCertData[role][e]) || { certName: '', regNumber: '', expiryDate: '', fileName: '' };
+        var uploaded = !!entry.fileName;
+        var viewBtn = uploaded ? ' <span class="sup-view-all-link cert-view-file-btn" data-role="' + supjrEscapeHtml(role) + '" data-entry="' + e + '" style="margin-left:8px;">' + EYE_ICON + 'View</span>' : '';
+        var expiryField = entry.expiryDate ? '<div><div class="dmf-label">Expiry date</div><div class="dmf-value">' + entry.expiryDate + '</div></div>' : '';
+        var gridClass = 'acct-cert-view-grid' + (entry.expiryDate ? ' acct-cert-view-grid-4col' : '');
+        rows += '<div class="' + gridClass + '"' + (e > 0 ? ' style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border-subtle);"' : '') + '>' +
+          '<div><div class="dmf-label">Certificate name</div><div class="dmf-value">' + (entry.certName || CERT_REQUIRED_ROLES[role].label) + '</div></div>' +
+          '<div><div class="dmf-label">Registration number</div><div class="dmf-value' + (entry.regNumber ? '' : ' muted') + '">' + (entry.regNumber || 'Not set') + '</div></div>' +
+          expiryField +
+          '<div><div class="dmf-label">Status</div><div class="dmf-value" style="display:flex;align-items:center;flex-wrap:wrap;"><span class="status-pill ' + (uploaded ? 'green' : 'gray') + '">' + (uploaded ? 'Uploaded' : 'Not uploaded') + '</span>' + viewBtn + '</div></div>' +
+          '</div>';
+      }
+      return '<div class="acct-cert-view-card"><div class="acct-cert-view-head"><div class="acct-cert-view-title">' + CERT_TITLE_ICON + role + '</div></div>' + rows + '</div>';
+    }).join('');
+    el.querySelectorAll('.cert-view-file-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var role = btn.getAttribute('data-role');
+        var idx = parseInt(btn.getAttribute('data-entry'), 10);
+        var entry = (stgRoleCertData[role] && stgRoleCertData[role][idx]) || {};
+        var certLabel = entry.certName || (CERT_REQUIRED_ROLES[role] && CERT_REQUIRED_ROLES[role].label) || role;
+        if (typeof openPreviewModal === 'function') {
+          openPreviewModal({ name: certLabel, file: entry.fileName || 'certificate.pdf' });
+        }
+      });
+    });
+  }
+
+
+  function renderProfileViewSync() {
+    var phone = document.getElementById('supIdPhoneInput');
+    if (phone) document.getElementById('supIdPhoneView').textContent = phone.value.trim() || 'Not set';
+    var nat = document.getElementById('supIdNationalityInput');
+    if (nat) {
+      var natView = document.getElementById('supIdNationalityView');
+      natView.textContent = nat.value.trim() || 'Not set';
+      natView.classList.toggle('muted', !nat.value.trim());
+    }
+    var addr = document.getElementById('supHomeAddressInput');
+    if (addr) document.getElementById('supHomeAddressView').textContent = addr.value.trim() || 'Not set';
+    var dobSpan = document.querySelector('[data-cal-text="supDob"]');
+    if (dobSpan && !dobSpan.classList.contains('cdd-placeholder')) document.getElementById('supDobView').textContent = dobSpan.textContent.trim();
+    var hmrcToggle = document.getElementById('supHmrcToggle');
+    var hmrcOn = hmrcToggle && hmrcToggle.classList.contains('on');
+    var hmrcPill = document.getElementById('supHmrcStatusPill');
+    hmrcPill.textContent = hmrcOn ? 'Registered for HMRC self-assessment' : 'Not registered for HMRC self-assessment';
+    hmrcPill.className = 'status-pill ' + (hmrcOn ? 'green' : 'gray');
+    var utrInput = document.getElementById('supIdUtrInput');
+    document.getElementById('supUtrRow').style.display = hmrcOn ? '' : 'none';
+    if (hmrcOn) {
+      document.getElementById('supUtrView').textContent = (utrInput && utrInput.value.trim()) || 'Not set';
+    }
+    if (typeof syncUtrRequiredState === 'function') syncUtrRequiredState();
+  }
+
+  function renderInsuranceViewSync() {
+    [['supPliProviderInput', 'supPliProviderView'], ['supPliPolicyInput', 'supPliPolicyView'], ['supPliCoverageInput', 'supPliCoverageView'],
+     ['supPiProviderInput', 'supPiProviderView'], ['supPiPolicyInput', 'supPiPolicyView'], ['supPiCoverageInput', 'supPiCoverageView']].forEach(function (pair) {
+      var input = document.getElementById(pair[0]);
+      var view = document.getElementById(pair[1]);
+      if (input && view && input.value.trim()) view.textContent = input.value.trim();
+    });
+    var pliExpiry = document.querySelector('[data-cal-text="supPliExpiry"]');
+    if (pliExpiry && !pliExpiry.classList.contains('cdd-placeholder')) document.getElementById('supPliExpiryView').textContent = pliExpiry.textContent.trim();
+    var piExpiry = document.querySelector('[data-cal-text="supPiExpiry"]');
+    if (piExpiry && !piExpiry.classList.contains('cdd-placeholder')) document.getElementById('supPiExpiryView').textContent = piExpiry.textContent.trim();
+
+    var pliToggle = document.getElementById('supPliToggle');
+    var pliOn = pliToggle && pliToggle.classList.contains('on');
+    document.getElementById('supPliCardView').style.display = pliOn ? '' : 'none';
+    document.getElementById('supPliCardViewEmpty').style.display = 'none';
+
+    var piToggle = document.getElementById('supPiToggle');
+    var piOn = piToggle && piToggle.classList.contains('on');
+    document.getElementById('supPiCardView').style.display = piOn ? '' : 'none';
+    document.getElementById('supPiCardViewEmpty').style.display = 'none';
+
+    var elTypePill = document.getElementById('supProfileTypePill');
+    var elIsCompany = !!(elTypePill && elTypePill.classList.contains('company'));
+    var elToggleEl = document.getElementById('elInsuranceToggle');
+    var elOn = elIsCompany && elToggleEl && elToggleEl.classList.contains('on');
+    var elCardEl = document.getElementById('supElInsuranceCardView');
+    var elCardEmptyEl = document.getElementById('supElInsuranceCardViewEmpty');
+    if (elCardEl) elCardEl.style.display = elOn ? '' : 'none';
+    if (elCardEmptyEl) elCardEmptyEl.style.display = 'none';
+
+    var dbsToggle = document.getElementById('supDbsToggle');
+    var dbsOn = dbsToggle && dbsToggle.classList.contains('on');
+    document.getElementById('supDbsCardView').style.display = dbsOn ? '' : 'none';
+    document.getElementById('supDbsCardViewEmpty').style.display = dbsOn ? 'none' : '';
+    var dbsCertInput = document.getElementById('supDbsCertNumberInput');
+    var dbsLevelSpan = document.querySelector('[data-dd="supDbsLevel"] .cdd-value');
+    var dbsIssueSpan = document.querySelector('[data-cal-text="supDbsIssueDate"]');
+    var dbsCertFilled = !!(dbsCertInput && dbsCertInput.value.trim());
+    var dbsLevelFilled = !!(dbsLevelSpan && dbsLevelSpan.textContent.trim());
+    var dbsIssueFilled = !!(dbsIssueSpan && !dbsIssueSpan.classList.contains('cdd-placeholder') && dbsIssueSpan.textContent.trim());
+    document.getElementById('supDbsCertNumberRow').style.display = (dbsOn && dbsCertFilled) ? '' : 'none';
+    document.getElementById('supDbsLevelRow').style.display = (dbsOn && dbsLevelFilled) ? '' : 'none';
+    document.getElementById('supDbsIssueDateRow').style.display = (dbsOn && dbsIssueFilled) ? '' : 'none';
+    document.getElementById('supDbsDetailsView').style.display = (dbsOn && (dbsCertFilled || dbsLevelFilled || dbsIssueFilled)) ? '' : 'none';
+    if (dbsOn && dbsCertFilled) document.getElementById('supDbsCertNumberView').textContent = dbsCertInput.value.trim();
+    if (dbsOn && dbsLevelFilled) document.getElementById('supDbsLevelView').textContent = dbsLevelSpan.textContent.trim();
+    if (dbsOn && dbsIssueFilled) document.getElementById('supDbsIssueDateView').textContent = dbsIssueSpan.textContent.trim();
+
+    var declSelected = document.querySelector('#supDashCriminalDeclaration .radio-tile.selected');
+    if (declSelected) {
+      var declIsNone = declSelected.getAttribute('data-value') === 'none';
+      var declPill = document.getElementById('supCriminalDeclarationView');
+      declPill.textContent = declIsNone ? 'No unspent convictions' : 'Unspent convictions declared';
+      declPill.className = 'status-pill ' + (declIsNone ? 'green' : 'amber');
+      var convictionTextarea = document.querySelector('#supDashConvictionDetailsField textarea');
+      var convictionDetailsView = document.getElementById('supConvictionDetailsView');
+      var convictionText = convictionTextarea && convictionTextarea.value.trim();
+      if (!declIsNone && convictionText) {
+        convictionDetailsView.textContent = convictionText;
+        convictionDetailsView.style.display = '';
+      } else {
+        convictionDetailsView.style.display = 'none';
+      }
+    }
+
+    var rtwSelected = document.querySelector('#supRightToWorkTiles .radio-tile.selected');
+    if (rtwSelected) {
+      var isYes = rtwSelected.getAttribute('data-value') === 'yes';
+      var pill = document.getElementById('supRightToWorkView');
+      pill.textContent = isYes ? 'Yes — I have the right to work in the UK' : 'No — I do not currently have right to work';
+      pill.className = 'status-pill ' + (isYes ? 'green' : 'gray');
+    }
+  }
+
+  function refreshAllAcctSettingsViews() {
+    renderSectorsTagsView();
+    renderSectorsCatRolesView();
+    renderSectorsCertsView();
+    renderProfileViewSync();
+    renderInsuranceViewSync();
+    renderVatViewSync();
+    renderCompanyDetailsViewSync();
+  }
+
+  function renderCompanyDetailsViewSync() {
+    var pairs = [
+      ['supCompanyRegNameInput', 'supCompanyRegNameView'],
+      ['supCompanyRegNoInput', 'supCompanyRegNoView'],
+      ['supCompanyTradingNameInput', 'supCompanyTradingNameView'],
+      ['supCompanyOperAddressInput', 'supCompanyOperAddressView'],
+      ['supCompanyTinInput', 'supCompanyTinView'],
+      ['supPscNameInput', 'supPscNameView'],
+      ['supPscPhoneInput', 'supPscPhoneView'],
+      ['supPscEmailInput', 'supPscEmailView']
+    ];
+    pairs.forEach(function (pair) {
+      var input = document.getElementById(pair[0]);
+      var view = document.getElementById(pair[1]);
+      if (input && view) view.textContent = input.value.trim() || 'Not set';
+    });
+  }
+
+  function updateAcctSettingsBusinessType(isCompany) {
+    var soleCard = document.getElementById('supPersonalDetailsCardSole');
+    var companyCard = document.getElementById('supCompanyDetailsCard');
+    if (soleCard) soleCard.style.display = isCompany ? 'none' : '';
+    if (companyCard) companyCard.style.display = isCompany ? '' : 'none';
+    var proofHeadingView = document.getElementById('supProofAddressHeading');
+    var proofHeadingEdit = document.getElementById('supProofAddressHeadingEdit');
+    if (proofHeadingView) proofHeadingView.textContent = isCompany ? 'Proof of Company Address' : 'Proof of Address';
+    if (proofHeadingEdit) proofHeadingEdit.textContent = isCompany ? 'Proof of Company Address' : 'Proof of Address';
+
+    var elHeading = document.getElementById('supElSectionHeading');
+    var elCard = document.getElementById('supElInsuranceCardView');
+    if (elHeading) elHeading.style.display = isCompany ? '' : 'none';
+    if (elCard) elCard.style.display = isCompany ? '' : 'none';
+
+    var bgSole = document.getElementById('supBgCheckSoleView');
+    var bgCompany = document.getElementById('supBgCheckCompanyView');
+    if (bgSole) bgSole.style.display = isCompany ? 'none' : '';
+    if (bgCompany) bgCompany.style.display = isCompany ? '' : 'none';
+
+    var expSole = document.getElementById('stgpExpTrackSoleTrader');
+    var expCompany = document.getElementById('stgpExpTrackCompany');
+    if (expSole) expSole.style.display = isCompany ? 'none' : '';
+    if (expCompany) expCompany.style.display = isCompany ? '' : 'none';
+
+    var acctInfoGrid = document.getElementById('supAcctInfoGrid');
+    if (acctInfoGrid) acctInfoGrid.style.display = isCompany ? '' : 'none';
+
+    var companyLogoCard = document.getElementById('stgpCompanyLogoCard');
+    if (companyLogoCard) companyLogoCard.style.display = isCompany ? '' : 'none';
+  }
+
+  function renderVatViewSync() {
+    var vatInput = document.getElementById('supPaymentVatNumberInput');
+    var vatSelected = document.querySelector('#vatRegTiles .choice-tile.selected');
+    var isRegistered = vatSelected ? vatSelected.getAttribute('data-value') === 'yes' : true;
+    var statusPill = document.getElementById('supPaymentVatStatusView');
+    if (statusPill) {
+      statusPill.textContent = isRegistered ? 'Registered' : 'Not registered';
+      statusPill.className = 'status-pill ' + (isRegistered ? 'green' : 'gray');
+    }
+    var numberRow = document.getElementById('supPaymentVatNumberRow');
+    var verifiedView = document.getElementById('supPaymentVatVerifiedView');
+    if (numberRow) numberRow.style.display = isRegistered ? '' : 'none';
+    if (verifiedView) verifiedView.style.display = isRegistered ? '' : 'none';
+    if (isRegistered && vatInput && vatInput.value.trim()) {
+      var numberView = document.getElementById('supPaymentVatNumberView');
+      if (numberView) numberView.textContent = vatInput.value.trim();
+    }
+  }
 
   /* ---- Payment Setup tab ---- */
   document.querySelectorAll('#vatRegTiles .choice-tile').forEach(function (tile) {
@@ -18441,6 +19667,40 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
 
   initObToggle('supHmrcToggle', 'supUtrField', true);
+
+  /* ---- Profile tab: UTR required-when-HMRC-on ---- */
+  function syncUtrRequiredState() {
+    var toggle = document.getElementById('supHmrcToggle');
+    var requiredTag = document.getElementById('supUtrRequiredTag');
+    var utrInput = document.getElementById('supIdUtrInput');
+    var on = toggle && toggle.classList.contains('on');
+    if (requiredTag) requiredTag.style.display = on ? 'inline' : 'none';
+    if (utrInput) {
+      if (on) {
+        utrInput.setAttribute('required', 'required');
+      } else {
+        utrInput.removeAttribute('required');
+        utrInput.classList.remove('error');
+        var errEl = document.getElementById('supUtrError');
+        if (errEl) errEl.classList.remove('show');
+      }
+    }
+  }
+  var supHmrcToggleEl = document.getElementById('supHmrcToggle');
+  if (supHmrcToggleEl) {
+    supHmrcToggleEl.addEventListener('click', function () { syncUtrRequiredState(); });
+  }
+  var supIdUtrInputEl = document.getElementById('supIdUtrInput');
+  if (supIdUtrInputEl) {
+    supIdUtrInputEl.addEventListener('input', function () {
+      if (this.value.trim()) {
+        this.classList.remove('error');
+        var errEl = document.getElementById('supUtrError');
+        if (errEl) errEl.classList.remove('show');
+      }
+    });
+  }
+  syncUtrRequiredState();
   initObToggle('supPliToggle', 'supPliFields', true);
   initObToggle('supPiToggle', 'supPiFields', true);
   initObToggle('supDbsToggle', 'supDbsFields', true);
@@ -18569,7 +19829,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
           '<div class="fd-label">' + (isUploaded ? 'Uploaded ✓' : 'Click to Upload<span class="fd-sub">Photo or PDF</span>') + '</div>' +
           (isUploaded ? '<div class="fd-uploaded-name"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>' + supjrEscapeHtml(entryData.fileName) + '</div>' : '') +
           '</div></div>' +
-          '<div class="ob-field"><label>Expiry date</label><input class="field-input stg-crc-expiry-input" type="date" value="' + entryData.expiryDate + '"></div>' +
+          '<div class="ob-field"><label>Expiry date <span class="meta-badge optional" style="text-transform:none;">Optional</span></label><input class="field-input stg-crc-expiry-input" type="date" value="' + entryData.expiryDate + '"></div>' +
           '</div></div>';
       }
       return '<div class="cert-required-card">' +
@@ -18640,6 +19900,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     syncStgCategoryCounts();
   }
   initStgCategoriesRoles();
+  if (typeof refreshAllAcctSettingsViews === 'function') refreshAllAcctSettingsViews();
 
   /* ---- Supplier Settings: Portfolio tab widgets ---- */
   wireUploadZonesIn(document.getElementById('supSettingsPanelQuestionnaire'));
@@ -20834,7 +22095,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     obInsExpiry: { viewYear: null, viewMonth: null, selected: null },
     obPiExpiry: { viewYear: null, viewMonth: null, selected: null },
     obPscDob: { viewYear: null, viewMonth: null, selected: null },
-    obElExpiry: { viewYear: null, viewMonth: null, selected: null }
+    obElExpiry: { viewYear: null, viewMonth: null, selected: null },
+    supDbsIssueDate: { viewYear: null, viewMonth: null, selected: new Date(2025, 0, 15) }
   };
   var calHiddenInputIds = {
     joinedBefore: 'pmFilterJoinedBefore',
