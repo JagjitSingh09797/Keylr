@@ -17,8 +17,8 @@
     --accent-blue: #284890;
     --accent-blue-light: #3a5cad;
     --fill-indigo: #364d8b; /* pixel-sampled: chat 'All messages' pill, sent-message bubble, profile-completion bar fill — distinct from --accent-blue */
-    --btn-grad-start: #5bccff;
-    --btn-grad-end: #0e3c5d;
+    --btn-grad-start: #26709d;
+    --btn-grad-end: #4291ca;
     --surface-white: #ffffff;
     --surface-soft: #f9fafb;
     --border-subtle: #e2e8f0;
@@ -130,11 +130,17 @@
     box-shadow: 0 8px 20px rgba(16, 32, 72, 0.35);
     transform: translateY(-1px);
   }
-  /* Dashboards (PM, Supplier, Admin) use a single flat brand color for buttons instead of the gradient.
-     The landing page, login/signup modals, and the Admin login form keep the gradient. */
-  #pmDashboard, #supplierDashboard, #adminDashboard {
+  /* Dashboards (PM, Supplier, Admin) and the onboarding wizards use a single flat brand color for
+     buttons instead of the gradient. The landing page keeps the gradient. */
+  #pmDashboard, #supplierDashboard, #adminDashboard, #obApp, #supObApp {
     --btn-grad-start: #183060;
     --btn-grad-end: #183060;
+  }
+  /* Login/Signup modals and the Admin login form keep their own gradient, independent of the
+     landing page's gradient. */
+  #signupOverlay, #loginOverlay, #adminLoginApp, #otpPopupOverlay, #adminForgotApp {
+    --btn-grad-start: #5bccff;
+    --btn-grad-end: #0e3c5d;
   }
   .btn-primary:active { transform: translateY(0); filter: brightness(0.98); }
   .btn-primary:focus-visible { outline: 2px solid var(--accent-blue); outline-offset: 2px; }
@@ -840,7 +846,7 @@
     transition: border-color 150ms ease-out, box-shadow 150ms ease-out;
   }
   .field-input::placeholder { color: #a6b0bf; }
-  input.field-input[type="date"] { height: 48px; padding-top: 0; padding-bottom: 0; }
+  input.field-input[type="date"] { height: 43px; padding-top: 0; padding-bottom: 0; }
   input.field-input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(24%) sepia(31%) saturate(1226%) hue-rotate(190deg) brightness(93%) contrast(93%);
     cursor: pointer; padding: 4px; border-radius: 5px; opacity: 0.85;
@@ -3117,7 +3123,7 @@
   /* Compliance flags sidebar (Chat tab) */
   .sup-flags-panel { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 18px 20px; display: flex; flex-direction: column; }
   .sup-flags-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-  .sup-flags-head .sfh-icon { width: 36px; height: 36px; border-radius: 50%; background: #4f46e5; color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .sup-flags-head .sfh-icon { width: 36px; height: 36px; border-radius: 50%; background: #183060; color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
   .sup-flags-head h4 { font-size: 14px; font-weight: 700; color: var(--text-heading); }
   .sup-flags-head p { font-size: 11.5px; color: var(--text-body-muted); margin-top: 2px; }
@@ -3160,26 +3166,27 @@
   .sup-comp-filter-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
   .sup-comp-nav-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 10px; cursor: pointer; margin-bottom: 4px; border-left: 3px solid transparent; }
   .sup-comp-nav-item:hover:not(.active) { background: var(--surface-soft); }
-  .sup-comp-nav-item.active { background: var(--icon-tint-bg); border-left-color: #4f46e5; }
+  .sup-comp-nav-item.active { background: var(--icon-tint-bg); border-left-color: #183060; }
   .sup-comp-nav-item .scni-icon { width: 34px; height: 34px; border-radius: 50%; background: var(--surface-soft); color: var(--text-body-muted); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .sup-comp-nav-item.active .scni-icon { background: #4f46e5; color: #fff; }
+  .sup-comp-nav-item.active .scni-icon { background: #183060; color: #fff; }
   .sup-comp-nav-item .scni-title { font-size: 13.5px; font-weight: 700; color: var(--text-heading); }
   .sup-comp-nav-item .scni-status { font-size: 11.5px; font-weight: 600; color: #1a7a3e; display: flex; align-items: center; gap: 4px; margin-top: 1px; }
   .sup-comp-nav-item .scni-status .dot { width: 5px; height: 5px; border-radius: 50%; background: #22c55e; }
   .sup-comp-nav-item .scni-chevron { margin-left: auto; color: #94a3b8; flex-shrink: 0; }
 
   .sup-comp-content-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 22px; }
-  .sup-comp-content-head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 4px; }
-  .sup-comp-content-head .scch-icon { width: 40px; height: 40px; border-radius: 50%; background: #4f46e5; color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .sup-comp-content-head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 16px; }
+  .sup-comp-content-head .scch-icon { width: 40px; height: 40px; border-radius: 50%; background: #183060; color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .sup-comp-content-head .scch-title-row { display: flex; align-items: center; gap: 10px; }
   .sup-comp-content-head h3 { font-size: 17px; font-weight: 800; color: var(--text-heading); }
   .sup-comp-content-head p { font-size: 12.5px; color: var(--text-body-muted); margin-top: 2px; }
   .sup-comp-status-pill { font-size: 11px; font-weight: 700; color: #1a7a3e; background: #eafaf0; padding: 3px 10px; border-radius: 999px; display: inline-flex; align-items: center; gap: 4px; }
   .sup-comp-status-pill .dot { width: 5px; height: 5px; border-radius: 50%; background: #22c55e; }
   .sup-comp-page-indicator { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--text-body-muted); background: var(--surface-soft); padding: 4px 11px; border-radius: 999px; flex-shrink: 0; }
-  .sup-comp-section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; color: #94a3b8; margin: 24px 0 14px; }
-  .sup-comp-field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
-  .sup-comp-field { margin-bottom: 16px; min-width: 0; }
+  .sup-comp-section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; color: #94a3b8; margin: 24px 0 14px; display: flex; align-items: center; gap: 6px; }
+  .sup-comp-section-label svg { flex-shrink: 0; }
+  .sup-comp-field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .sup-comp-field { margin-top: 16px; margin-bottom: 16px; min-width: 0; }
   .sup-comp-field .scf-label { font-size: 12.5px; font-weight: 600; color: var(--text-body-muted); margin-bottom: 6px; }
   .sup-comp-doc-row { display: flex; align-items: center; gap: 10px; border: 1px solid var(--border-subtle); border-radius: 10px; padding: 10px 12px; }
   .sup-comp-doc-row .scdr-icon { color: #94a3b8; flex-shrink: 0; }
@@ -3318,7 +3325,7 @@
 
   .sup-profile-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 22px; margin-bottom: 16px; }
   .sup-profile-card-head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px; }
-  .sup-profile-card-head .spch-icon { width: 40px; height: 40px; border-radius: 50%; background: #4f46e5; color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .sup-profile-card-head .spch-icon { width: 40px; height: 40px; border-radius: 50%; background: #183060; color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .sup-profile-card-head .spch-info { flex: 1; min-width: 0; }
   .sup-profile-card-head .spch-info h3 { font-size: 15.5px; font-weight: 700; color: var(--text-heading); }
   .sup-profile-card-head .spch-info p { font-size: 12.5px; color: var(--text-body-muted); margin-top: 2px; }
@@ -4522,6 +4529,37 @@
   .svc-role-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 7px; }
   .svc-badge { display: inline-flex; align-items: center; font-size: 10.5px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: var(--icon-tint-bg); color: var(--accent-blue); white-space: nowrap; }
   .svc-badge.na { background: var(--surface-soft); color: #94a3b8; }
+  .svc-manage-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 6px; border-bottom: 1px solid var(--border-subtle); }
+  .svc-manage-row:last-child { border-bottom: none; }
+  .svc-manage-row-name { font-size: 14px; font-weight: 700; color: var(--text-heading); }
+  .svc-manage-row-sub { font-size: 12px; color: var(--text-body-muted); margin-top: 2px; }
+  .svc-manage-delete-btn { flex-shrink: 0; width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border-subtle); background: #fff; color: #b91c1c; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 150ms ease-out; }
+  .svc-manage-delete-btn:hover { background: #fef2f2; }
+  .svc-unlink-cat-btn { background: none; border: none; color: var(--accent-blue); cursor: pointer; font-size: 13px; font-weight: 700; padding: 0; line-height: 1; }
+  .detail-chip-tag-blue { background: var(--icon-tint-bg); color: var(--accent-blue); }
+  .detail-chip-tag-blue .svc-unlink-role-btn { color: var(--accent-blue); }
+  .svc-unlink-role-btn { background: none; border: none; color: var(--accent-blue); cursor: pointer; font-size: 13px; font-weight: 700; padding: 0; line-height: 1; }
+  .svc-manage-sublabel { font-size: 11px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; color: #94a3b8; margin-top: 10px; }
+  .svc-add-link-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding: 4px 10px 4px 12px; border: 1px dashed var(--border-subtle); border-radius: 8px; color: var(--accent-blue); max-width: 260px; transition: border-color 150ms ease-out; }
+  .svc-add-link-row:focus-within { border-color: var(--accent-blue); border-style: solid; }
+  .svc-add-link-row svg { flex-shrink: 0; }
+  .svc-add-link-row select { flex: 1; min-width: 0; border: none; outline: none; background: transparent; font-family: inherit; font-size: 12.5px; font-weight: 600; color: var(--text-heading); height: 32px; cursor: pointer; }
+  .svc-role-drawer-overlay {
+    position: fixed; inset: 0; z-index: 500;
+    background: rgba(8, 13, 22, 0.45);
+    opacity: 0; visibility: hidden;
+    transition: opacity 220ms ease-out, visibility 220ms ease-out;
+  }
+  .svc-role-drawer-overlay.open { opacity: 1; visibility: visible; }
+  .svc-role-drawer {
+    position: absolute; top: 0; right: 0; height: 100%; width: 420px; max-width: 92%;
+    background: #fff; display: flex; flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: -12px 0 36px rgba(16,24,40,0.18);
+  }
+  .svc-role-drawer-overlay.open .svc-role-drawer { transform: translateX(0); }
+  @media (max-width: 640px) { .svc-role-drawer { width: 100%; max-width: 100%; } }
   .pmprop-del-confirm:hover { opacity: 0.9; }
 
 </style>
@@ -10773,6 +10811,7 @@
             </div>
 
             <div class="pm-settings-tabs-row" id="adminServicesTabs" style="margin-top:16px;">
+              <div class="pm-settings-tab-item" data-svctab="service">Service</div>
               <div class="pm-settings-tab-item active" data-svctab="compliance">Compliance</div>
             </div>
 
@@ -10845,6 +10884,119 @@
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            <div id="adminSvcPanelService" style="display:none;margin-top:20px;">
+              <p style="font-size:13.5px;color:var(--text-body-muted);margin-bottom:16px;max-width:720px;">Select a category to see its roles. Add, remove, or create roles from there — click any role to edit its details or move it between categories.</p>
+
+              <div class="cat-role-picker" style="grid-template-columns:300px 1fr;">
+                <div class="crp-cats" style="max-height:680px;">
+                  <div class="crp-cats-label" style="display:flex;align-items:center;gap:6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>CATEGORIES <span class="crp-cats-total" id="adminSvcCatTotal2">0</span></div>
+                  <div class="crp-search">
+                    <input class="field-input" type="text" id="adminSvcCategorySearchInput" placeholder="Search categories...">
+                  </div>
+                  <div style="padding:10px;">
+                    <div style="display:flex;gap:8px;">
+                      <input class="field-input" type="text" id="adminSvcNewCategoryInput" placeholder="New category name" style="flex:1;height:38px;font-size:13px;">
+                      <button type="button" class="btn btn-primary" id="adminSvcAddCategoryBtn" style="flex-shrink:0;width:auto;padding:8px 14px;">Add</button>
+                    </div>
+                  </div>
+                  <div id="adminSvcCategoriesList" style="max-height:460px;overflow-y:auto;"></div>
+                </div>
+
+                <div class="crp-roles" style="padding:22px 24px;">
+                  <div id="adminSvcCatDetailEmpty" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:360px;color:var(--text-body-muted);">
+                    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:14px;opacity:0.5;"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                    <div style="font-size:14px;font-weight:600;color:var(--text-heading);margin-bottom:4px;">Select a category</div>
+                    <div style="font-size:13px;max-width:280px;">Choose a category from the list to see and manage the roles inside it.</div>
+                  </div>
+
+                  <div id="adminSvcCatDetailPanel" style="display:none;">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2px;">
+                      <div style="display:flex;align-items:center;gap:12px;">
+                        <div class="dch-icon" style="width:36px;height:36px;flex-shrink:0;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
+                        <div>
+                          <h3 id="adminSvcCatDetailName" style="font-size:19px;font-weight:800;color:var(--text-heading);">Gas &amp; Heating</h3>
+                          <div style="font-size:12.5px;color:var(--text-body-muted);margin-top:2px;" id="adminSvcCatDetailCount">0 roles assigned</div>
+                        </div>
+                      </div>
+                      <button type="button" class="svc-manage-delete-btn" id="adminSvcDeleteCatBtn" aria-label="Delete category" data-title="Delete category"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>
+                    </div>
+
+                    <div class="ob-section-heading" style="margin-top:22px;">Assigned Roles</div>
+                    <p class="ob-section-subtext" style="margin-top:-8px;">Click a role to edit its details or move it between categories.</p>
+                    <div id="adminSvcCatDetailRoleChips" style="margin-bottom:18px;"></div>
+
+                    <div class="ob-section-heading">Assign a Role</div>
+                    <p class="ob-section-subtext" style="margin-top:-8px;">Search for an existing role, or type a new name to create it.</p>
+                    <div class="svc-add-link-row" style="max-width:420px;border-style:solid;padding:4px 6px 4px 14px;">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                      <input type="text" id="adminSvcAssignRoleInput" list="adminSvcAllRolesDatalist" placeholder="Search or create a role..." style="flex:1;min-width:0;border:none;outline:none;background:transparent;font-family:inherit;font-size:13px;color:var(--text-heading);height:38px;">
+                      <datalist id="adminSvcAllRolesDatalist"></datalist>
+                      <button type="button" class="btn btn-primary" id="adminSvcAssignRoleBtn" style="flex-shrink:0;width:auto;padding:8px 14px;">Assign</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Admin Services: Role detail drawer (opens when a role chip is clicked) -->
+          <div class="svc-role-drawer-overlay" id="adminSvcRoleDrawerOverlay">
+            <div class="svc-role-drawer">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--border-subtle);flex-shrink:0;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div class="dch-icon" style="width:32px;height:32px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+                  <h3 style="font-size:15.5px;font-weight:800;color:var(--text-heading);">Role Details</h3>
+                </div>
+                <button type="button" id="adminSvcDrawerCloseBtn" aria-label="Close" style="background:none;border:none;cursor:pointer;color:var(--text-body-muted);padding:4px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+              </div>
+
+              <div style="padding:22px;flex:1;overflow-y:auto;">
+                <div class="ob-field">
+                  <label>Role name</label>
+                  <input class="field-input" type="text" id="adminSvcDrawerRoleNameInput">
+                </div>
+
+                <div class="ob-section-heading" style="margin-top:6px;">Categories this role belongs to</div>
+                <div id="adminSvcDrawerCategoryChips" style="margin-bottom:16px;"></div>
+
+                <div class="svc-add-link-row" style="max-width:100%;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                  <select id="adminSvcDrawerAddCategorySelect"><option value="">Add this role to a category&hellip;</option></select>
+                </div>
+              </div>
+
+              <div style="padding:16px 22px;border-top:1px solid var(--border-subtle);flex-shrink:0;display:flex;justify-content:space-between;gap:10px;">
+                <button type="button" class="btn btn-secondary-light" id="adminSvcDrawerDeleteBtn" style="color:#b91c1c;">Delete Role</button>
+                <button type="button" class="btn btn-primary" id="adminSvcDrawerSaveBtn">Save</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Admin Services: delete-role confirmation -->
+          <div class="modal-overlay" id="adminSvcDeleteRoleOverlay">
+            <div class="confirm-modal-card">
+              <div class="confirm-modal-icon" style="background:#fef2f2;color:#b91c1c;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></div>
+              <div class="confirm-modal-title">Delete this role?</div>
+              <div class="confirm-modal-desc" id="adminSvcDeleteRoleDesc">This will remove the role from every category it belongs to. This can't be undone.</div>
+              <div class="confirm-modal-btns">
+                <button type="button" class="pmprop-del-cancel" id="adminSvcDeleteRoleCancelBtn">Cancel</button>
+                <button type="button" class="confirm-modal-confirm" id="adminSvcDeleteRoleConfirmBtn" style="background:#b91c1c;">Delete Role</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Admin Services: delete-category confirmation -->
+          <div class="modal-overlay" id="adminSvcDeleteCatOverlay">
+            <div class="confirm-modal-card">
+              <div class="confirm-modal-icon" style="background:#fef2f2;color:#b91c1c;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></div>
+              <div class="confirm-modal-title">Delete this category?</div>
+              <div class="confirm-modal-desc" id="adminSvcDeleteCatDesc">Its roles won't be deleted — they'll stay assigned to any other categories they belong to.</div>
+              <div class="confirm-modal-btns">
+                <button type="button" class="pmprop-del-cancel" id="adminSvcDeleteCatCancelBtn">Cancel</button>
+                <button type="button" class="confirm-modal-confirm" id="adminSvcDeleteCatConfirmBtn" style="background:#b91c1c;">Delete Category</button>
               </div>
             </div>
           </div>
@@ -11341,8 +11493,7 @@
 
             <div class="sup-tabs-row">
               <div class="sup-tab-item active" data-suptab="overview">Overview</div>
-              <div class="sup-tab-item" data-suptab="profile">Profile</div>
-              <div class="sup-tab-item" data-suptab="compliance">Compliance &amp; Documents</div>
+              <div class="sup-tab-item" data-suptab="compliance">Profile</div>
               <div class="sup-tab-item" data-suptab="chat">Chat <span class="pm-count-text" id="supChatCount" style="background:#fef3c7;color:#92620a;padding:1px 8px;border-radius:999px;font-weight:700;">3</span></div>
             </div>
 
@@ -11406,193 +11557,90 @@
                   </div>
                 </div>
 
-                <div id="supTabProfile" style="display:none;">
-                  <div class="sup-jumpto-bar">
-                    <span class="sup-jumpto-label">JUMP TO</span>
-                    <span class="sup-jumpto-pill active" data-jumpto="supSecVerification"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Verification<span class="jump-dot"></span></span>
-                    <span class="sup-jumpto-pill" data-jumpto="supSecPersonal"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Personal<span class="jump-dot"></span></span>
-                    <span class="sup-jumpto-pill" data-jumpto="supSecSectors"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>Sectors<span class="jump-dot"></span></span>
-                    <span class="sup-jumpto-pill" data-jumpto="supSecTrades"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>Trades<span class="jump-dot"></span></span>
-                    <span class="sup-jumpto-pill" data-jumpto="supSecGlance"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>At a Glance<span class="jump-dot"></span></span>
-                    <span class="sup-allsaved-chip"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>All saved</span>
-                  </div>
 
-                  <div class="sup-checklist-card" id="supSecVerification" style="margin-bottom:16px;">
-                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-                      <span class="sup-section-label">VERIFICATION <span style="color:var(--text-heading);">3/3</span></span>
-                      <span style="font-size:11.5px;color:var(--text-body-muted);">Admin override</span>
-                    </div>
-                    <div style="display:flex;gap:6px;flex-wrap:wrap;">
-                      <span class="verif-chip ok sup-chip-sm" style="cursor:default;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Account verified</span>
-                      <span class="verif-chip ok sup-chip-sm" style="cursor:default;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Email verified</span>
-                      <span class="verif-chip ok sup-chip-sm" style="cursor:default;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Phone verified</span>
-                    </div>
-                  </div>
-
-                  <div class="sup-profile-card" id="supSecPersonal">
-                    <div class="sup-profile-card-head">
-                      <div class="spch-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-                      <div class="spch-info"><h3>Personal &amp; Contact</h3><p>Primary identity and reachable contact details.</p></div>
-                      <div class="spch-actions">
-                        <button type="button" class="btn-danger-outline" id="supProfileDeactivateBtn" style="padding:9px 14px;font-size:13px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 11-12.73 0M12 2v10"/></svg>Deactivate</button>
-                        <button type="button" class="btn btn-primary" style="padding:9px 16px;font-size:13px;" data-profile-save="Personal & Contact">Update</button>
-                      </div>
-                    </div>
-                    <div class="sup-profile-input-row">
-                      <div class="spir-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-                      <div class="spir-body"><span class="ssf-label">NAME</span><input type="text" class="field-input" id="supProfileName" value="Nadia Reid"></div>
-                    </div>
-                    <div class="sup-profile-input-row">
-                      <div class="spir-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg></div>
-                      <div class="spir-body"><span class="ssf-label">EMAIL</span><input type="email" class="field-input" id="supProfileEmail" value="nadia.reid07@gmail.com"></div>
-                    </div>
-                    <div class="sup-profile-input-row">
-                      <div class="spir-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
-                      <div class="spir-body"><span class="ssf-label">PHONE</span>
-                        <div class="phone-row">
-                          <div class="phone-code-wrap"><select class="phone-code" id="supProfilePhoneCode"><option value="+44" selected>🇬🇧 +44</option><option value="+1">🇺🇸 +1</option><option value="+353">🇮🇪 +353</option></select></div>
-                          <input type="text" class="field-input" id="supProfilePhoneNumber" value="7974 202021">
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="sup-profile-card" id="supSecSectors">
-                    <div class="sup-profile-card-head">
-                      <div class="spch-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg></div>
-                      <div class="spch-info"><h3>Sectors Served</h3><p>Markets this supplier operates in — drives matchmaking.</p></div>
-                      <div class="spch-actions"><button type="button" class="btn btn-primary" style="padding:9px 16px;font-size:13px;" data-profile-save="Sectors Served">Update</button></div>
-                    </div>
-                    <div class="sup-profile-field-wrap">
-                      <div class="sup-profile-field-label">SECTORS SERVED</div>
-                      <div class="sup-tile-grid-3" id="supSectorTiles">
-                        <div class="choice-tile tile-vertical selected" data-value="residential" tabindex="0" role="radio" aria-checked="true"><div class="tile-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg></div><div class="tile-body" style="text-align:center;padding-right:0;"><div class="tile-title">Residential</div></div><div class="tile-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div></div>
-                        <div class="choice-tile tile-vertical" data-value="commercial" tabindex="0" role="radio" aria-checked="false"><div class="tile-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="1"/><path d="M9 22v-4h6v4M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/></svg></div><div class="tile-body" style="text-align:center;padding-right:0;"><div class="tile-title">Commercial</div></div><div class="tile-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div></div>
-                        <div class="choice-tile tile-vertical" data-value="both" tabindex="0" role="radio" aria-checked="false"><div class="tile-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></div><div class="tile-body" style="text-align:center;padding-right:0;"><div class="tile-title">Both</div></div><div class="tile-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div></div>
-                      </div>
-                    </div>
-                    <div class="sup-profile-field-wrap">
-                      <div class="sup-profile-field-label">Residential sub-types <span style="font-weight:500;color:#94a3b8;">(optional)</span></div>
-                      <div class="simple-chip-row" id="supSubTypeChips">
-                        <div class="simple-chip selected" data-value="str" tabindex="0">STR – Short Term Rentals</div>
-                        <div class="simple-chip" data-value="estate" tabindex="0">Estate Agents</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="sup-profile-card" id="supSecTrades">
-                    <div class="sup-profile-card-head">
-                      <div class="spch-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div>
-                      <div class="spch-info"><h3>Trades &amp; Experience</h3><p>Primary skill, secondary trades and seniority signals.</p></div>
-                      <div class="spch-actions"><button type="button" class="btn btn-primary" style="padding:9px 16px;font-size:13px;" data-profile-save="Trades & Experience">Update</button></div>
-                    </div>
-                    <div class="sup-profile-field-wrap">
-                      <div class="sup-profile-field-label">PRIMARY TRADE</div>
-                      <div class="sup-profile-field-desc">The trade that best describes this supplier's main work — determines the default marketplace category.</div>
-                      <button type="button" class="sup-select-trigger" id="supPrimaryTradeBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg><span id="supPrimaryTradeLabel">Select primary trade</span></button>
-                    </div>
-                    <div class="sup-profile-field-wrap">
-                      <div class="sup-profile-field-label">SECONDARY TRADES</div>
-                      <div class="sup-profile-field-desc">Additional services this supplier can provide. Multi-skilled providers get matched to more jobs.</div>
-                      <button type="button" class="sup-select-trigger" id="supSecondaryTradeBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg><span>Select secondary trades</span></button>
-                      <div class="sup-selected-chip-row" id="supSecondaryTradeChips"></div>
-                    </div>
-                    <div class="sup-profile-field-wrap">
-                      <div class="sup-profile-field-label">EXPERIENCE</div>
-                      <div class="sup-profile-field-desc">How long has this supplier been in their trade?</div>
-                      <div class="sup-tile-grid-2" id="supExperienceTiles">
-                        <div class="count-tile" data-value="0-2" tabindex="0" role="radio" aria-checked="false"><div class="range">0–2 years</div><div class="cat-label">Just starting out or recently qualified</div></div>
-                        <div class="count-tile" data-value="3-5" tabindex="0" role="radio" aria-checked="false"><div class="range">3–5 years</div><div class="cat-label">Established and building a client base</div></div>
-                        <div class="count-tile" data-value="6-10" tabindex="0" role="radio" aria-checked="false"><div class="range">6–10 years</div><div class="cat-label">Experienced professional</div></div>
-                        <div class="count-tile" data-value="11-20" tabindex="0" role="radio" aria-checked="false"><div class="range">11–20 years</div><div class="cat-label">Seasoned expert in your field</div></div>
-                        <div class="count-tile" data-value="20+" tabindex="0" role="radio" aria-checked="false" style="grid-column:1/2;"><div class="range">20+ years</div><div class="cat-label">Decades of trusted experience</div></div>
-                      </div>
-                    </div>
-                    <div class="sup-profile-field-wrap">
-                      <div class="sup-profile-field-label">JOBS COMPLETED</div>
-                      <div class="sup-profile-field-desc">An estimate of total jobs completed across their career.</div>
-                      <div class="sup-tile-grid-2" id="supJobsTiles">
-                        <div class="count-tile" data-value="under50" tabindex="0" role="radio" aria-checked="false"><div class="range">Under 50 jobs</div></div>
-                        <div class="count-tile selected" data-value="50-200" tabindex="0" role="radio" aria-checked="true"><div class="range">50–200 jobs</div></div>
-                        <div class="count-tile" data-value="200-500" tabindex="0" role="radio" aria-checked="false"><div class="range">200–500 jobs</div></div>
-                        <div class="count-tile" data-value="500-1000" tabindex="0" role="radio" aria-checked="false"><div class="range">500–1,000 jobs</div></div>
-                        <div class="count-tile" data-value="1000+" tabindex="0" role="radio" aria-checked="false" style="grid-column:1/2;"><div class="range">1,000+ jobs</div></div>
-                      </div>
-                    </div>
-                    <div class="sup-profile-field-wrap">
-                      <div class="sup-profile-field-label">BIO &amp; AVAILABILITY</div>
-                      <div style="margin-bottom:14px;">
-                        <div class="ssf-label" style="margin-bottom:6px;">Emergency callouts</div>
-                        <select class="sup-mini-select" id="supEmergencyCallouts" style="width:50%;"><option>Available</option><option>Not available</option><option>By arrangement</option></select>
-                      </div>
-                      <div>
-                        <div class="ssf-label" style="margin-bottom:6px;">Bio / description</div>
-                        <textarea class="field-input" id="supBioText" style="min-height:70px;resize:vertical;">Reliable, fully-insured grounds &amp; outdoor team based in Warminster. Sole trader with 5 years experience.</textarea>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="sup-profile-card" id="supSecGlance" style="margin-bottom:0;">
-                    <div class="sup-profile-card-head" style="margin-bottom:16px;">
-                      <div class="spch-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg></div>
-                      <div class="spch-info"><h3>At a Glance</h3><p>Account essentials surfaced for fast scanning.</p></div>
-                    </div>
-                    <div class="sup-glance-grid">
-                      <div class="sup-glance-cell"><div class="sgc-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>TYPE</div><div class="sgc-value" id="supGlanceType">Sole Trader</div></div>
-                      <div class="sup-glance-cell"><div class="sgc-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>STATUS</div><div class="sgc-value"><span class="supplier-approved-pill" id="supGlanceStatus" style="font-size:12px;">Approved</span></div></div>
-                      <div class="sup-glance-cell"><div class="sgc-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/></svg>ACTIVE</div><div class="sgc-value" style="color:#1a7a3e;" id="supGlanceActive">Active</div></div>
-                      <div class="sup-glance-cell"><div class="sgc-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>JOINED</div><div class="sgc-value" id="supGlanceJoined">27 Dec 2025</div></div>
-                    </div>
-                  </div>
-                </div>
                 <div id="supTabCompliance" style="display:none;">
                   <div style="display:grid;grid-template-columns:300px 1fr;gap:20px;align-items:start;">
                     <div class="sup-comp-sidebar">
-                      <div class="sup-comp-sidebar-head"><span>SECTIONS</span><span id="supCompProgressText">5/5</span></div>
+                      <div class="sup-comp-sidebar-head"><span>SECTIONS</span><span id="supCompProgressText">6/6</span></div>
                       <div class="sup-comp-progress-track"><div class="sup-comp-progress-fill" id="supCompProgressFill" style="width:100%;"></div></div>
-                      <div class="sup-comp-stat-row">
-                        <span><span class="dot" style="background:#22c55e;"></span>Complete <strong id="supCompCompleteCount">5</strong></span>
-                        <span><span class="dot" style="background:#f59e0b;"></span>Partial <strong id="supCompPartialCount">0</strong></span>
-                        <span><span class="dot" style="background:#94a3b8;"></span>Empty <strong id="supCompEmptyCount">0</strong></span>
+                      <div id="supCompNavList"></div>
                       </div>
-                      <input type="text" class="sup-comp-search" placeholder="Search sections..." id="supCompSearchInput">
-                      <div class="sup-comp-filter-row" id="supCompFilterTabs">
-                        <span class="sup-flag-tab-pill active" data-compfilter="all"><span class="tab-dot" style="background:#94a3b8;"></span>All <span id="supCompFilterAllCount">5</span></span>
-                        <span class="sup-flag-tab-pill" data-compfilter="complete"><span class="tab-dot" style="background:#22c55e;"></span>Complete <span id="supCompFilterCompleteCount">5</span></span>
-                        <span class="sup-flag-tab-pill" data-compfilter="partial"><span class="tab-dot" style="background:#f59e0b;"></span>Partial <span id="supCompFilterPartialCount">0</span></span>
-                        <span class="sup-flag-tab-pill" data-compfilter="empty"><span class="tab-dot" style="background:#94a3b8;"></span>Empty <span id="supCompFilterEmptyCount">0</span></span>
-                      </div>
-                      <div id="supCompNavList">
-                        <div class="sup-comp-nav-item active" data-compsection="identity">
-                          <div class="scni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-                          <div><div class="scni-title">Identity Verification</div><div class="scni-status"><span class="dot"></span>Complete</div></div>
-                          <svg class="scni-chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-                        </div>
-                        <div class="sup-comp-nav-item" data-compsection="bank">
-                          <div class="scni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></div>
-                          <div><div class="scni-title">Bank Details</div><div class="scni-status"><span class="dot"></span>Complete</div></div>
-                          <svg class="scni-chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-                        </div>
-                        <div class="sup-comp-nav-item" data-compsection="insurance">
-                          <div class="scni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-                          <div><div class="scni-title">Insurance</div><div class="scni-status"><span class="dot"></span>Complete</div></div>
-                          <svg class="scni-chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-                        </div>
-                        <div class="sup-comp-nav-item" data-compsection="trades">
-                          <div class="scni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"/></svg></div>
-                          <div><div class="scni-title">Trade Certifications</div><div class="scni-status"><span class="dot"></span>Complete</div></div>
-                          <svg class="scni-chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-                        </div>
-                        <div class="sup-comp-nav-item" data-compsection="background">
-                          <div class="scni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-                          <div><div class="scni-title">Background Checks</div><div class="scni-status"><span class="dot"></span>Complete</div></div>
-                          <svg class="scni-chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-                        </div>
-                      </div>
-                    </div>
 
                     <div style="min-width:0;">
-                      <div id="supCompPanelIdentity">
+                      <div id="supCompPanelProfile">
+                        <div class="sup-comp-content-card">
+                          <div class="sup-comp-content-head">
+                            <div class="scch-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+                            <div style="flex:1;min-width:0;">
+                              <div class="scch-title-row"><h3>Profile</h3><span class="sup-comp-status-pill"><span class="dot"></span>Complete</span></div>
+                              <p>Contact details, sectors served, and account essentials.</p>
+                            </div>
+                            <span class="sup-comp-page-indicator">1/7</span>
+                          </div>
+
+                          <div id="supProfileSoleFields" style="margin-bottom:16px;">
+                          <div class="sup-comp-field-grid">
+                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Name</div><input type="text" class="field-input" id="supProfileName" value="Nadia Reid"></div>
+                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Email</div><input type="email" class="field-input" id="supProfileEmail" value="nadia.reid07@gmail.com"></div>
+                          </div>
+                          <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Phone</div>
+                            <div class="phone-row">
+                              <div class="phone-code-wrap"><select class="phone-code" id="supProfilePhoneCode"><option value="+44" selected>🇬🇧 +44</option><option value="+1">🇺🇸 +1</option><option value="+353">🇮🇪 +353</option></select></div>
+                              <input type="text" class="field-input" id="supProfilePhoneNumber" value="7974 202021">
+                            </div>
+                          </div>
+                          </div>
+                          <div id="supProfileCompanyFields" style="display:none;">
+                          <div class="sup-comp-field-grid">
+                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Full name</div><input type="text" class="field-input" id="supProfileCompanyName" value="Nadia Reid"></div>
+                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Email</div><input type="email" class="field-input" id="supProfileCompanyEmail" value="nadia.reid07@gmail.com"></div>
+                          </div>
+                          <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Phone</div>
+                            <div class="phone-row">
+                              <div class="phone-code-wrap"><select class="phone-code"><option value="+44" selected>🇬🇧 +44</option><option value="+1">🇺🇸 +1</option><option value="+353">🇮🇪 +353</option></select></div>
+                              <input type="text" class="field-input" value="7974 202021">
+                            </div>
+                          </div>
+                          </div>
+                          <div class="scf-label" style="margin-bottom:8px;margin-top:16px;font-size:11px;">Sectors</div>
+                          <div class="tile-row-2" id="supAdminSectorTiles" style="grid-template-columns:repeat(3,1fr);">
+                            <div class="choice-tile" data-value="residential" tabindex="0" role="radio" aria-checked="false">
+                              <div class="tile-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></div>
+                              <div class="tile-body"><div class="tile-title">Residential</div></div>
+                              <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                            </div>
+                            <div class="choice-tile" data-value="commercial" tabindex="0" role="radio" aria-checked="false">
+                              <div class="tile-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></div>
+                              <div class="tile-body"><div class="tile-title">Commercial</div></div>
+                              <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                            </div>
+                            <div class="choice-tile selected" data-value="both" id="supAdminSectorBothTile" tabindex="0" role="radio" aria-checked="true">
+                              <div class="tile-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></div>
+                              <div class="tile-body"><div class="tile-title">Both</div></div>
+                              <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                            </div>
+                          </div>
+                          <div class="sup-comp-field" id="supAdminResidentialSubTypes" style="margin-top:14px;margin-bottom:0;">
+                            <div class="scf-label">Residential sub-types <span style="font-weight:500;color:#94a3b8;">(optional)</span></div>
+                            <div class="simple-chip-row" id="supSubTypeChips">
+                              <div class="simple-chip selected" data-value="str" tabindex="0">STR – Short Term Rentals</div>
+                              <div class="simple-chip" data-value="estate" tabindex="0">Estate Agents</div>
+                            </div>
+                          </div>
+                          <div class="sup-comp-field" id="supAdminCommercialSubTypes" style="margin-top:14px;margin-bottom:0;">
+                            <div class="scf-label">Commercial sub-types <span style="font-weight:500;color:#94a3b8;">(optional)</span></div>
+                            <div class="simple-chip-row" id="supAdminComSubChips">
+                              <div class="simple-chip" data-value="hotels" tabindex="0">Hotels &amp; Hostels</div>
+                            </div>
+                          </div>
+
+                          <div style="display:flex;justify-content:space-between;align-items:center;margin-top: 32px;">
+                            <button type="button" class="btn-danger-outline" id="supProfileDeactivateBtn" style="padding:9px 14px;font-size:13px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 11-12.73 0M12 2v10"/></svg>Deactivate</button>
+                            <button type="button" class="btn btn-primary" data-comp-update="Profile">Update</button>
+                          </div>
+                        </div>
+                      </div>
+                      <div id="supCompPanelIdentity" style="display:none;">
                         <div class="sup-comp-content-card">
                           <div class="sup-comp-content-head">
                             <div class="scch-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
@@ -11600,37 +11648,63 @@
                               <div class="scch-title-row"><h3>Identity Verification</h3><span class="sup-comp-status-pill"><span class="dot"></span>Complete</span></div>
                               <p>Photo ID, selfie and proof of address.</p>
                             </div>
-                            <span class="sup-comp-page-indicator">1/5</span>
+                            <span class="sup-comp-page-indicator">2/6</span>
                           </div>
-                          <div class="sup-comp-section-label">PERSONAL DETAILS</div>
+                          <div id="supIdSoleFields">
                           <div class="sup-comp-field-grid">
                             <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Full legal name</div><input type="text" class="field-input" value="Nadia Reid"></div>
                             <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Date of birth</div><input type="date" class="field-input" value="1973-07-28"></div>
                           </div>
-                          <div class="sup-comp-field"><div class="scf-label">NI number</div><input type="text" class="field-input" value="enc:55dca86dde93a40166f07dee"></div>
-                          <div class="sup-comp-field"><div class="scf-label">Home address</div><textarea class="field-input" style="min-height:64px;resize:vertical;">116 Church Lane, Warminster</textarea></div>
-                          <div class="sup-comp-section-label">IDENTITY DOCUMENTS</div>
                           <div class="sup-comp-field-grid">
-                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">PHOTO ID</div>
-                              <div class="sup-comp-doc-row">
-                                <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
-                                <span class="scdr-name">c20d20af49284cccad8eef6c8269cd15.png</span>
-                                <span class="scdr-badge">ON FILE</span>
-                                <button type="button" class="scdr-view-btn" data-preview-doc="photoid"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View</button>
-                                <button type="button" class="scdr-upload-btn" data-comp-upload="Photo ID"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg></button>
-                              </div>
+                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Email address</div><input type="email" class="field-input" value="nadia.reid07@gmail.com"></div>
+                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Phone number</div><input type="tel" class="field-input" value="+447974202021"></div>
+                          </div>
+                          <div class="sup-comp-field-grid">
+                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Nationality</div>
+                              <select class="sup-mini-select" style="width:100%;"><option selected>British</option><option>Austrian</option><option>Irish</option><option>Polish</option></select>
                             </div>
-                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">SELFIE VERIFICATION</div>
-                              <div class="sup-comp-doc-row">
-                                <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
-                                <span class="scdr-name">1291e780522a4a2793c437164b374968.pdf</span>
-                                <span class="scdr-badge">ON FILE</span>
-                                <button type="button" class="scdr-view-btn" data-preview-doc="selfie"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View</button>
-                                <button type="button" class="scdr-upload-btn" data-comp-upload="Selfie"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg></button>
-                              </div>
+                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">NI number</div><input type="text" class="field-input" value="enc:55dca86dde93a40166f07dee"></div>
+                          </div>
+                          <div class="sup-comp-field"><div class="scf-label">Home address</div><textarea class="field-input" style="min-height:64px;resize:vertical;">116 Church Lane, Warminster</textarea></div>
+                          <div class="ob-toggle-card" style="margin-bottom:0;">
+                            <div class="otc-top">
+                              <div class="otc-title">Registered for HMRC self-assessment?</div>
+                              <button type="button" class="toggle-switch on" id="supIdHmrcToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
+                            </div>
+                            <div class="otc-body field-collapsible open" id="supIdUtrField" style="max-height:1200px;opacity:1;">
+                              <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">UTR number</div><input type="text" class="field-input" value="4728190356"></div>
                             </div>
                           </div>
-                          <div class="sup-comp-field"><div class="scf-label">PROOF OF ADDRESS</div>
+                          </div>
+                          <div id="supIdCompanyFields" style="display:none;">
+                          <div class="sup-comp-field-grid">
+                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Registered company name</div><input type="text" class="field-input" value="Reid Property Services Ltd"></div>
+                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Company registration number</div><input type="text" class="field-input" value="14829031"></div>
+                          </div>
+                          <div class="sup-comp-field-grid">
+                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Trading name</div><input type="text" class="field-input" value="Reid Property Services"></div>
+                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">TIN (tax identification number)</div><input type="text" class="field-input" value="1478529630"></div>
+                          </div>
+                          <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Operational address</div><textarea class="field-input" style="min-height:64px;resize:vertical;">116 Church Lane, Warminster</textarea></div>
+                          <div class="sup-comp-field-grid">
+                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">PSC full legal name</div><input type="text" class="field-input" value="Nadia Reid"></div>
+                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">PSC date of birth</div><input type="date" class="field-input" value="1973-07-28"></div>
+                          </div>
+                          <div class="sup-comp-field-grid">
+                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">PSC phone number</div><input type="text" class="field-input" value="+447974202021"></div>
+                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">PSC email address</div><input type="email" class="field-input" value="nadia.reid07@gmail.com"></div>
+                          </div>
+                          <div class="ob-toggle-card" style="background:#fff;border:1px solid var(--border-subtle);margin-top:16px;">
+                            <div class="otc-top">
+                              <div>
+                                <div class="otc-title">I confirm this person holds 25%+ of company shares</div>
+                                <div class="otc-desc">This person is a registered PSC at Companies House for this company.</div>
+                              </div>
+                              <button type="button" class="toggle-switch on" id="supAdminPscConfirmToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
+                            </div>
+                          </div>
+                          </div>
+                          <div class="sup-comp-field"><div class="scf-label" id="supIdProofAddressLabel">PROOF OF ADDRESS</div>
                             <div class="sup-comp-doc-row">
                               <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
                               <span class="scdr-name">9b93e539978243eaa47af304af4ab897.pdf</span>
@@ -11648,12 +11722,11 @@
                           <div class="sup-comp-content-head">
                             <div class="scch-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></div>
                             <div style="flex:1;min-width:0;">
-                              <div class="scch-title-row"><h3>Bank Details</h3><span class="sup-comp-status-pill"><span class="dot"></span>Complete</span></div>
-                              <p>Payout account and invoicing preferences.</p>
+                              <div class="scch-title-row"><h3>Payment</h3><span class="sup-comp-status-pill"><span class="dot"></span>Complete</span></div>
+                              <p>Payout account, invoicing preferences, and VAT status.</p>
                             </div>
-                            <span class="sup-comp-page-indicator">2/5</span>
+                            <span class="sup-comp-page-indicator">5/6</span>
                           </div>
-                          <div class="sup-comp-section-label" style="margin-top:20px;">BANK ACCOUNT</div>
                           <div class="sup-comp-field-grid">
                             <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Account holder name</div><input type="text" class="field-input" value="Nadia Reid"></div>
                             <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Bank name</div><input type="text" class="field-input" value="Lloyds Bank"></div>
@@ -11662,7 +11735,7 @@
                             <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Sort code</div><input type="text" class="field-input" value="80-38-72"></div>
                             <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Account number</div><input type="text" class="field-input" value="25452896"></div>
                           </div>
-                          <div class="ob-toggle-card">
+                          <div class="ob-toggle-card" style="margin-top:16px;">
                             <div class="otc-top">
                               <div><div class="otc-title">Business bank account</div><div class="otc-desc">This account is registered to the business, not personal.</div></div>
                               <button type="button" class="toggle-switch on" id="supBankBusinessToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
@@ -11674,7 +11747,6 @@
                               <button type="button" class="toggle-switch" id="supBankMonthlyToggle" role="switch" aria-checked="false"><span class="thumb"></span></button>
                             </div>
                           </div>
-                          <div class="sup-comp-section-label">VAT &amp; BUSINESS</div>
                           <div class="ob-toggle-card" style="margin-bottom:0;">
                             <div class="otc-top">
                               <div class="otc-title">VAT registered</div>
@@ -11684,7 +11756,7 @@
                               <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">VAT number</div><input type="text" class="field-input" value="GB553557881"></div>
                             </div>
                           </div>
-                          <div style="display:flex;justify-content:flex-end;margin-top:16px;"><button type="button" class="btn btn-primary" data-comp-update="Bank Details">Update</button></div>
+                          <div style="display:flex;justify-content:flex-end;margin-top:16px;"><button type="button" class="btn btn-primary" data-comp-update="Payment">Update</button></div>
                         </div>
                       </div>
 
@@ -11696,7 +11768,7 @@
                               <div class="scch-title-row"><h3>Insurance</h3><span class="sup-comp-status-pill"><span class="dot"></span>Complete</span></div>
                               <p>Public liability, PI and employer's liability cover.</p>
                             </div>
-                            <span class="sup-comp-page-indicator">3/5</span>
+                            <span class="sup-comp-page-indicator">3/6</span>
                           </div>
                           <div class="callout callout-info" style="margin-top:20px;">
                             <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg></div>
@@ -11709,16 +11781,32 @@
                               </div>
                             </div>
                           </div>
-                          <div class="sup-comp-section-label" style="margin-top:6px;">PUBLIC LIABILITY INSURANCE</div>
-                          <div class="sup-comp-field-grid">
-                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Insurance provider</div><input type="text" class="field-input" value="Hiscox"></div>
-                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Policy number</div><input type="text" class="field-input" value="PL-330202"></div>
+                          <div class="ob-toggle-card" style="margin-top:6px;margin-bottom:0;">
+                            <div class="otc-top">
+                              <div><div class="otc-title">Public liability insurance</div><div class="otc-desc">Confirms this supplier holds PLI cover — required for all suppliers.</div></div>
+                              <button type="button" class="toggle-switch on" id="supInsurancePliToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
+                            </div>
+                            <div class="otc-body field-collapsible open" id="supInsurancePliField" style="max-height:1200px;opacity:1;">
+                              <div class="sup-comp-field-grid" style="margin-bottom:0;">
+                                <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Insurance provider</div><input type="text" class="field-input" value="Hiscox"></div>
+                                <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Policy number</div><input type="text" class="field-input" value="PL-330202"></div>
+                              </div>
+                              <div class="sup-comp-field-grid" style="margin-bottom:0;">
+                                <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Public liability coverage</div><input type="text" class="field-input" value="£2,000,000"></div>
+                                <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Expiry date</div><input type="date" class="field-input" value="2026-10-26"></div>
+                              </div>
+                              <div class="sup-comp-field" style="margin-top:16px;margin-bottom:0;"><div class="scf-label">PUBLIC LIABILITY CERTIFICATE</div>
+                                <div class="sup-comp-doc-row">
+                                  <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                                  <span class="scdr-name">pli-certificate-hiscox.pdf</span>
+                                  <span class="scdr-badge">ON FILE</span>
+                                  <button type="button" class="scdr-view-btn" data-preview-doc="plicert"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View</button>
+                                  <button type="button" class="scdr-upload-btn" data-comp-upload="Public Liability Certificate"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg></button>
+                                </div>
+                              </div>
+                            </div>
                           </div>
-                          <div class="sup-comp-field-grid">
-                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Public liability coverage</div><input type="text" class="field-input" value="£2,000,000"></div>
-                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Expiry date</div><input type="date" class="field-input" value="2026-10-26"></div>
-                          </div>
-                          <div class="ob-toggle-card" style="margin-bottom:0;">
+                          <div class="ob-toggle-card" style="margin-top:16px;margin-bottom:0;">
                             <div class="otc-top">
                               <div><div class="otc-title">Professional indemnity insurance</div><div class="otc-desc">Required for design, advisory, or consultancy work (architects, surveyors, etc.).</div></div>
                               <button type="button" class="toggle-switch on" id="supInsurancePiToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
@@ -11728,9 +11816,43 @@
                                 <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">PI insurance provider</div><input type="text" class="field-input" value="Markel"></div>
                                 <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">PI policy number</div><input type="text" class="field-input" value="PI-576019"></div>
                               </div>
-                              <div class="sup-comp-field-grid" style="margin-top:16px;margin-bottom:0;">
+                              <div class="sup-comp-field-grid" style="margin-bottom:0;">
                                 <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">PI coverage amount</div><input type="text" class="field-input" value="£1,000,000"></div>
                                 <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">PI expiry date</div><input type="date" class="field-input" value="2026-12-05"></div>
+                              </div>
+                              <div class="sup-comp-field" style="margin-top:16px;margin-bottom:0;"><div class="scf-label">PI CERTIFICATE</div>
+                                <div class="sup-comp-doc-row">
+                                  <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                                  <span class="scdr-name">pi-certificate-markel.pdf</span>
+                                  <span class="scdr-badge">ON FILE</span>
+                                  <button type="button" class="scdr-view-btn" data-preview-doc="picert"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View</button>
+                                  <button type="button" class="scdr-upload-btn" data-comp-upload="PI Certificate"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg></button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="ob-toggle-card" id="supAdminElInsuranceCard" style="display:none;margin-bottom:0;margin-top:16px;">
+                            <div class="otc-top">
+                              <div><div class="otc-title">Employers' Liability Insurance</div><div class="otc-desc">Legally required if the company has employees. Minimum £5,000,000.</div></div>
+                              <button type="button" class="toggle-switch on" id="supAdminInsuranceElToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
+                            </div>
+                            <div class="otc-body field-collapsible open" id="supAdminInsuranceElField" style="max-height:1200px;opacity:1;">
+                              <div class="sup-comp-field-grid" style="margin-bottom:0;">
+                                <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">EL insurance provider</div><input type="text" class="field-input" value="Zurich"></div>
+                                <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">EL policy number</div><input type="text" class="field-input" value="EL-902214"></div>
+                              </div>
+                              <div class="sup-comp-field-grid" style="margin-bottom:0;">
+                                <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">EL coverage amount</div><input type="text" class="field-input" value="£5,000,000"></div>
+                                <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">EL expiry date</div><input type="date" class="field-input" value="2026-11-18"></div>
+                              </div>
+                              <div class="sup-comp-field" style="margin-top:16px;margin-bottom:0;"><div class="scf-label">EL CERTIFICATE</div>
+                                <div class="sup-comp-doc-row">
+                                  <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                                  <span class="scdr-name">el-certificate-zurich.pdf</span>
+                                  <span class="scdr-badge">ON FILE</span>
+                                  <button type="button" class="scdr-view-btn" data-preview-doc="elcert"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View</button>
+                                  <button type="button" class="scdr-upload-btn" data-comp-upload="EL Certificate"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg></button>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -11741,77 +11863,270 @@
                       <div id="supCompPanelTrades" style="display:none;">
                         <div class="sup-comp-content-card">
                           <div class="sup-comp-content-head">
-                            <div class="scch-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"/></svg></div>
+                            <div class="scch-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg></div>
                             <div style="flex:1;min-width:0;">
-                              <div class="scch-title-row"><h3>Trade Certifications</h3><span class="sup-comp-status-pill"><span class="dot"></span>Complete</span></div>
-                              <p>Industry credentials with proof of qualification.</p>
+                              <div class="scch-title-row"><h3>Categories &amp; Roles</h3><span class="sup-comp-status-pill"><span class="dot"></span>Complete</span></div>
+                              <p>Sectors, roles, and the trade certifications behind them.</p>
                             </div>
-                            <span class="sup-comp-page-indicator">4/5</span>
+                            <span class="sup-comp-page-indicator">3/7</span>
                           </div>
-                          <div class="sup-comp-section-label" style="margin-top:20px;">TRADE CERTIFICATIONS</div>
-                          <div style="font-size:12.5px;color:var(--text-body-muted);margin:-8px 0 14px;">Tick the certifications this supplier holds — upload proof and add details for each.</div>
-                          <div class="sup-cert-grid" id="supCertGrid">
-                            <div class="sup-cert-tile selected" data-cert="gassafe"><div class="sup-cert-tile-head"><input type="checkbox" checked><span class="sct-name">Gas Safe</span><span class="sct-auto">AUTO</span></div><div class="sup-cert-tile-desc">Required for any gas work — boilers, cookers, pipework.</div></div>
-                            <div class="sup-cert-tile selected" data-cert="niceic"><div class="sup-cert-tile-head"><input type="checkbox" checked><span class="sct-name">NICEIC / NAPIT</span><span class="sct-auto">AUTO</span></div><div class="sup-cert-tile-desc">Electrical contractor accreditation for domestic and commercial.</div></div>
-                            <div class="sup-cert-tile" data-cert="cscs"><div class="sup-cert-tile-head"><input type="checkbox"><span class="sct-name">CSCS</span><span class="sct-auto">AUTO</span></div><div class="sup-cert-tile-desc">Construction Skills Certification Scheme required on most construction sites.</div></div>
-                            <div class="sup-cert-tile selected" data-cert="fgas"><div class="sup-cert-tile-head"><input type="checkbox" checked><span class="sct-name">F-Gas</span></div><div class="sup-cert-tile-desc">Required for refrigeration, air conditioning, and heat pump work.</div></div>
-                            <div class="sup-cert-tile" data-cert="partp"><div class="sup-cert-tile-head"><input type="checkbox"><span class="sct-name">Part P</span></div><div class="sup-cert-tile-desc">Building regulations competent person scheme for electrical installations.</div></div>
-                            <div class="sup-cert-tile" data-cert="oftec"><div class="sup-cert-tile-head"><input type="checkbox"><span class="sct-name">OFTEC</span></div><div class="sup-cert-tile-desc">Oil firing equipment installation and servicing registration.</div></div>
-                            <div class="sup-cert-tile" data-cert="ciphe"><div class="sup-cert-tile-head"><input type="checkbox"><span class="sct-name">CIPHE</span></div><div class="sup-cert-tile-desc">Chartered Institute of Plumbing and Heating Engineering membership.</div></div>
-                            <div class="sup-cert-tile selected" data-cert="mcs"><div class="sup-cert-tile-head"><input type="checkbox" checked><span class="sct-name">MCS</span></div><div class="sup-cert-tile-desc">Microgeneration Certification Scheme — solar, heat pumps, wind.</div></div>
-                            <div class="sup-cert-tile" data-cert="napitfire"><div class="sup-cert-tile-head"><input type="checkbox"><span class="sct-name">NAPIT Fire</span></div><div class="sup-cert-tile-desc">Fire detection and alarm systems competent person.</div></div>
-                            <div class="sup-cert-tile" data-cert="trustmark"><div class="sup-cert-tile-head"><input type="checkbox"><span class="sct-name">TrustMark</span></div><div class="sup-cert-tile-desc">Government endorsed quality scheme for home improvement.</div></div>
-                            <div class="sup-cert-tile" data-cert="whichtrusted"><div class="sup-cert-tile-head"><input type="checkbox"><span class="sct-name">Which? Trusted Traders</span></div><div class="sup-cert-tile-desc">Consumer endorsement for vetted tradespeople.</div></div>
-                          </div>
-                          <div id="supCertDetailsWrap">
-                            <div class="sup-cert-detail-card" data-cert-detail="gassafe">
-                              <div class="sup-cert-detail-head"><h4>Gas Safe</h4><span class="scdh-badge">Auto-verified</span></div>
-                              <div class="sup-comp-field-grid">
-                                <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Gas Safe registration number</div><input type="text" class="field-input" value="GS-558241"></div>
-                                <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Expiry date</div><input type="date" class="field-input" value="2027-03-31"></div>
-                              </div>
-                              <div class="sup-comp-field" style="margin-top:16px;margin-bottom:0;"><div class="scf-label">UPLOAD CERTIFICATE</div>
-                                <div class="sup-comp-doc-row">
-                                  <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
-                                  <span class="scdr-name">d87646687b324e9e984d0aa4a969a67b.jpeg</span>
-                                  <span class="scdr-badge">ON FILE</span>
-                                  <button type="button" class="scdr-upload-btn" data-preview-doc="gassafe" data-tooltip="View" style="border:none;color:var(--accent-blue);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-                                  <span class="sup-view-all-link" data-comp-upload="Gas Safe Certificate" style="font-size:12.5px;">Replace</span>
-                                </div>
-                              </div>
+                          <div class="cat-role-picker" style="margin-top:20px;">
+                            <div class="crp-cats">
+                              <div class="crp-cats-label">CATEGORIES <span class="crp-cats-total">16</span></div>
+                              <div class="crp-search"><input class="field-input" type="text" id="supAdminCategorySearch" placeholder="Search categories..."></div>
+                              <div id="supAdminCategoryList"></div>
                             </div>
-                            <div class="sup-cert-detail-card" data-cert-detail="fgas">
-                              <div class="sup-cert-detail-head"><h4>F-Gas</h4></div>
-                              <div class="sup-comp-field-grid">
-                                <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">F-Gas registration number</div><input type="text" class="field-input" value="FGC-88312"></div>
-                                <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Expiry date</div><input type="date" class="field-input" value="2026-11-30"></div>
+                            <div class="crp-roles">
+                              <div class="crp-roles-head">
+                                <div class="crp-roles-title" id="supAdminCrpRolesTitle">Gas &amp; Heating</div>
                               </div>
-                              <div class="sup-comp-field" style="margin-top:16px;margin-bottom:0;"><div class="scf-label">UPLOAD CERTIFICATE</div>
-                                <div class="sup-comp-upload-placeholder" data-comp-upload="F-Gas Certificate"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>Click to upload — Photo or PDF</div>
-                              </div>
-                            </div>
-                            <div class="sup-cert-detail-card" data-cert-detail="niceic">
-                              <div class="sup-cert-detail-head"><h4>NICEIC / NAPIT</h4><span class="scdh-badge">Auto-verified</span></div>
-                              <div class="sup-comp-field-grid">
-                                <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">NICEIC / NAPIT registration number</div><input type="text" class="field-input" placeholder=""></div>
-                                <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Expiry date</div><input type="date" class="field-input"></div>
-                              </div>
-                              <div class="sup-comp-field" style="margin-top:16px;margin-bottom:0;"><div class="scf-label">UPLOAD CERTIFICATE</div>
-                                <div class="sup-comp-upload-placeholder" data-comp-upload="NICEIC / NAPIT Certificate"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>Click to upload — Photo or PDF</div>
-                              </div>
-                            </div>
-                            <div class="sup-cert-detail-card" data-cert-detail="mcs" style="margin-bottom:0;">
-                              <div class="sup-cert-detail-head"><h4>MCS</h4></div>
-                              <div class="sup-comp-field-grid">
-                                <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">MCS registration number</div><input type="text" class="field-input"></div>
-                                <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Expiry date</div><input type="date" class="field-input"></div>
-                              </div>
-                              <div class="sup-comp-field" style="margin-top:16px;margin-bottom:0;"><div class="scf-label">UPLOAD CERTIFICATE</div>
-                                <div class="sup-comp-upload-placeholder" data-comp-upload="MCS Certificate"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>Click to upload — Photo or PDF</div>
-                              </div>
+                              <div class="crp-roles-grid" id="supAdminCrpRolesGrid"></div>
                             </div>
                           </div>
-                          <div style="display:flex;justify-content:flex-end;margin-top:16px;"><button type="button" class="btn btn-primary" data-comp-update="Trade Certifications">Update</button></div>
+
+                          <div class="ob-section-heading">Certifications for Selected Roles</div>
+                          <div id="supAdminRoleCertifications"></div>
+                          <div style="display:flex;justify-content:flex-end;margin-top:16px;"><button type="button" class="btn btn-primary" data-comp-update="Categories & Roles">Update</button></div>
+                        </div>
+                      </div>
+
+                      <div id="supCompPanelPortfolio" style="display:none;">
+                        <div class="ob-card-section" id="supPortfolioPhotoSoleFields">
+                          <div class="ocs-head">
+                            <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+                            <div class="ocs-title">Profile photo</div>
+                            <span class="meta-badge optional">Optional</span>
+                          </div>
+                          <div class="ocs-desc">A clear photo of the supplier shown on their public profile and job notifications.</div>
+                          <div class="file-dropzone" style="max-width:280px;" data-title="Upload Profile Photo">
+                            <input type="file" style="display:none;">
+                            <div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0112 0v1"/></svg></div>
+                            <div class="fd-label">Upload Profile Photo</div>
+                          </div>
+                        </div>
+
+                        <div class="ob-card-section" id="supPortfolioLogoCompanyFields" style="display:none;">
+                          <div class="ocs-head">
+                            <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+                            <div class="ocs-title">Company logo</div>
+                            <span class="meta-badge optional">Optional</span>
+                          </div>
+                          <div class="ocs-desc">The company logo shown on their public profile and job notifications.</div>
+                          <div class="ob-field" style="margin-bottom:0;">
+                            <label>Upload Company Logo</label>
+                            <div class="file-dropzone" style="max-width:280px;" data-title="Upload Company Logo">
+                              <input type="file" style="display:none;">
+                              <div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>
+                              <div class="fd-label">Click to Upload</div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="ob-card-section">
+                          <div class="ocs-head">
+                            <div class="ocs-icon" style="background:#eef0f8;color:#5b4fc4;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M9 14l-2 7 5-3 5 3-2-7"/></svg></div>
+                            <div class="ocs-title">Experience &amp; track record</div>
+                          </div>
+                          <div class="ocs-desc">Clients often filter by experience and completed jobs — these appear on the supplier's marketplace profile.</div>
+                          <div id="supPortfolioExpSoleFields">
+                          <div class="ob-row-2">
+                            <div class="ob-field">
+                              <label>How many years of experience do they have?</label>
+                              <select class="sup-mini-select" style="width:100%;">
+                                <option>Less than 1 year</option><option>1&ndash;3 years</option><option>4&ndash;7 years</option><option selected>8&ndash;15 years</option><option>15+ years</option>
+                              </select>
+                            </div>
+                            <div class="ob-field">
+                              <label>How many jobs have they completed?</label>
+                              <select class="sup-mini-select" style="width:100%;">
+                                <option>1&ndash;10</option><option>11&ndash;50</option><option selected>51&ndash;200</option><option>200+</option>
+                              </select>
+                            </div>
+                          </div>
+                          </div>
+                          <div id="supPortfolioExpCompanyFields" style="display:none;">
+                            <div class="ob-row-2">
+                              <div class="ob-field">
+                                <label>How many years of experience do they have?</label>
+                                <select class="sup-mini-select" style="width:100%;">
+                                  <option>Less than 1 year</option><option>1&ndash;3 years</option><option selected>3&ndash;5 years</option><option>5&ndash;10 years</option><option>10+ years</option>
+                                </select>
+                              </div>
+                              <div class="ob-field">
+                                <label>How many jobs have they completed?</label>
+                                <select class="sup-mini-select" style="width:100%;">
+                                  <option>Under 50 jobs</option><option selected>50&ndash;200 jobs</option><option>200&ndash;500 jobs</option><option>500&ndash;1,000 jobs</option><option>1,000+ jobs</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="ob-row-2">
+                              <div class="ob-field">
+                                <label>Year established <span class="meta-badge optional">Optional</span></label>
+                                <input class="field-input" type="text" value="2014">
+                              </div>
+                              <div class="ob-field">
+                                <label>Number of operatives</label>
+                                <select class="sup-mini-select" style="width:100%;">
+                                  <option>1&ndash;5</option><option selected>6&ndash;15</option><option>16&ndash;50</option><option>50+</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="ob-field" style="margin-bottom:0;">
+                              <label>Website <span class="meta-badge optional">Optional</span></label>
+                              <input class="field-input" type="url" value="https://reidpropertyservices.co.uk">
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="ob-card-section">
+                          <div class="ocs-head">
+                            <div class="ocs-icon" style="background:#fef3c7;color:#92620a;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 6 6 1-4.5 4.5 1 6.5-5.5-3-5.5 3 1-6.5L3 9l6-1z"/></svg></div>
+                            <div class="ocs-title">Job references &amp; portfolio</div>
+                            <span class="meta-badge optional" style="text-transform:none;">Recommended</span>
+                          </div>
+                          <div class="ocs-desc">References and portfolio photos are displayed on the supplier's marketplace profile.</div>
+                          <div class="ob-field">
+                            <textarea class="ob-textarea" style="min-height:70px;">References available on request from managing agents.</textarea>
+                          </div>
+                          <div class="ob-field" style="margin-bottom:0;">
+                            <label>Portfolio Photos</label>
+                            <div class="portfolio-grid" id="supPortfolioGrid">
+                              <div class="portfolio-add-tile" id="supPortfolioAddTile">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                                Add Photo
+                              </div>
+                            </div>
+                            <div class="helper">Upload photos of completed work — kitchens, bathrooms, electrical panels, before/after shots. High-quality images increase booking rates by up to 40%. <span id="supPortfolioCount">0</span> / 10 photos.</div>
+                          </div>
+                        </div>
+
+                        <div class="ob-card-section">
+                          <div class="ocs-head">
+                            <div class="ocs-icon" style="background:#eef0f8;color:#5b4fc4;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0112 0v1"/></svg></div>
+                            <div class="ocs-title">Describe yourself to clients</div>
+                          </div>
+                          <div class="ocs-desc">A short bio for the marketplace profile.</div>
+                          <div class="ob-field" style="margin-bottom:14px;">
+                            <textarea class="ob-textarea" id="supBioText">Reliable, fully-insured grounds &amp; outdoor team based in Warminster. Sole trader with 5 years experience.</textarea>
+                          </div>
+                          <div class="callout callout-info" style="margin-bottom:0;">
+                            <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg></div>
+                            <div>
+                              <div class="callout-title">Tips for a Great Bio:</div>
+                              <ul class="callout-bullet-list">
+                                <li>Mention primary trade and years of experience</li>
+                                <li>Highlight what makes them different (response time, speciality, reliability)</li>
+                                <li>Keep it professional but personable — 2-4 sentences is ideal</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="ob-card-section">
+                          <div class="ocs-head">
+                            <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+                            <div class="ocs-title">Standard availability</div>
+                          </div>
+                          <div class="ocs-desc">The days and hours this supplier is available.</div>
+
+                          <div class="ob-field">
+                            <label>Days available</label>
+                            <div class="day-pill-row" id="supAdminDayPills">
+                              <div class="day-pill selected" data-value="mon">Mon</div>
+                              <div class="day-pill selected" data-value="tue">Tue</div>
+                              <div class="day-pill selected" data-value="wed">Wed</div>
+                              <div class="day-pill selected" data-value="thu">Thu</div>
+                              <div class="day-pill selected" data-value="fri">Fri</div>
+                              <div class="day-pill" data-value="sat">Sat</div>
+                              <div class="day-pill" data-value="sun">Sun</div>
+                            </div>
+                          </div>
+                          <div class="ob-row-2">
+                            <div class="ob-field"><label>Start time</label><input class="field-input" type="time" value="09:00"></div>
+                            <div class="ob-field"><label>End time</label><input class="field-input" type="time" value="18:00"></div>
+                          </div>
+
+                          <div class="ob-field">
+                            <label>Minimum notice for a booking</label>
+                            <div class="notice-grid" id="supAdminNoticeTiles">
+                              <div class="count-tile" data-value="same-day"><div class="range" style="font-size:13px;">Same day</div><div class="cat-label">No notice</div></div>
+                              <div class="count-tile" data-value="24h"><div class="range" style="font-size:13px;">24 hours</div><div class="cat-label">Next day</div></div>
+                              <div class="count-tile selected" data-value="48h"><div class="range" style="font-size:13px;">48 hours</div><div class="cat-label">2 days</div></div>
+                              <div class="count-tile" data-value="72h"><div class="range" style="font-size:13px;">72 hours</div><div class="cat-label">3 days</div></div>
+                              <div class="count-tile" data-value="1week"><div class="range" style="font-size:13px;">1 week</div><div class="cat-label">Weekly</div></div>
+                              <div class="count-tile" data-value="2weeks"><div class="range" style="font-size:13px;">2+ weeks</div><div class="cat-label">Forward</div></div>
+                            </div>
+                            <div class="helper">The supplier may still receive shorter-notice requests — they're never obliged to accept them.</div>
+                          </div>
+
+                          <div class="ob-toggle-card" style="border:1px solid var(--border-subtle);">
+                            <div class="otc-top">
+                              <div>
+                                <div class="otc-title">Available for out-of-hours jobs</div>
+                                <div class="otc-desc">Evenings · early mornings · weekends · bank holidays</div>
+                              </div>
+                              <button type="button" class="toggle-switch" id="supAdminOutOfHoursToggle" role="switch" aria-checked="false"><span class="thumb"></span></button>
+                            </div>
+                          </div>
+                          <div class="callout callout-info" style="padding:12px 16px;margin:12px 0;">
+                            <div class="callout-body" style="font-size:12.5px;">Configure hours and surcharges in full from <strong style="color:var(--text-heading);">Pricing</strong> settings once the account is active.</div>
+                          </div>
+                          <div class="ob-toggle-card" style="border:1px solid var(--border-subtle);">
+                            <div class="otc-top">
+                              <div>
+                                <div class="otc-title">Accepts emergency call-outs</div>
+                                <div class="otc-desc">Rapid response — typically within 1-2 hours</div>
+                              </div>
+                              <button type="button" class="toggle-switch" id="supAdminEmergencyToggle" role="switch" aria-checked="false"><span class="thumb"></span></button>
+                            </div>
+                          </div>
+                          <div class="ob-toggle-card" style="border:1px solid var(--border-subtle);">
+                            <div class="otc-top">
+                              <div>
+                                <div class="otc-title">Accepts urgent same-day jobs</div>
+                                <div class="otc-desc">Less than 4 hours' notice</div>
+                              </div>
+                              <button type="button" class="toggle-switch" id="supAdminUrgentToggle" role="switch" aria-checked="false"><span class="thumb"></span></button>
+                            </div>
+                          </div>
+                          <div class="callout callout-info" style="padding:12px 16px;margin-bottom:0;">
+                            <div class="callout-body" style="font-size:12.5px;">Response SLAs and surcharges configured from <strong style="color:var(--text-heading);">Pricing</strong> settings post-activation.</div>
+                          </div>
+                        </div>
+
+                        <div class="ob-card-section" style="margin-bottom:0;">
+                          <div class="ocs-head">
+                            <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+                            <div class="ocs-title">Service region</div>
+                          </div>
+                          <div class="ocs-desc">Where this supplier receives job requests from.</div>
+                          <div class="ob-field">
+                            <label>London zones</label>
+                            <div class="simple-chip-row" id="supAdminLondonZones">
+                              <div class="simple-chip" data-value="central">Central</div>
+                              <div class="simple-chip" data-value="north">North</div>
+                              <div class="simple-chip selected" data-value="west">West</div>
+                              <div class="simple-chip" data-value="northeast">North East</div>
+                              <div class="simple-chip" data-value="east">East</div>
+                              <div class="simple-chip" data-value="southeast">South East</div>
+                              <div class="simple-chip" data-value="south">South</div>
+                              <div class="simple-chip selected" data-value="southwest">South West</div>
+                              <div class="simple-chip simple-chip-action" data-value="all-london">All London</div>
+                            </div>
+                          </div>
+                          <div class="ob-field" style="margin-bottom:20px;">
+                            <label>Other cities <span class="meta-badge optional">Optional</span></label>
+                            <div class="simple-chip-row" id="supAdminOtherCities" style="margin-bottom:12px;">
+                              <div class="simple-chip" data-value="manchester">Manchester</div>
+                              <div class="simple-chip" data-value="birmingham">Birmingham</div>
+                              <div class="simple-chip" data-value="leeds">Leeds</div>
+                              <div class="simple-chip" data-value="liverpool">Liverpool</div>
+                              <div class="simple-chip" data-value="cambridge">Cambridge</div>
+                              <div class="simple-chip" data-value="oxford">Oxford</div>
+                            </div>
+                            <input class="field-input" type="text" id="supAdminCustomCityInput" placeholder="Add a city or region, then press Enter">
+                          </div>
+                          <div style="display:flex;justify-content:flex-end;"><button type="button" class="btn btn-primary" data-comp-update="Portfolio">Update</button></div>
                         </div>
                       </div>
 
@@ -11823,47 +12138,245 @@
                               <div class="scch-title-row"><h3>Background Checks</h3><span class="sup-comp-status-pill"><span class="dot"></span>Complete</span></div>
                               <p>DBS, right-to-work and criminal declarations.</p>
                             </div>
-                            <span class="sup-comp-page-indicator">5/5</span>
+                            <span class="sup-comp-page-indicator">4/6</span>
                           </div>
-                          <h4 style="font-size:17px;font-weight:800;color:var(--text-heading);margin:22px 0 4px;">Background checks &amp; right to work</h4>
-                          <p style="font-size:13px;color:var(--text-body-muted);margin-bottom:16px;">Background checks build trust with property managers and their tenants. Requirements differ for sole traders and companies.</p>
-                          <div class="sup-bg-check-card">
-                            <div class="sup-bg-check-head"><h4>DBS Check (Basic)</h4><span class="sup-required-badge">Required</span></div>
-                            <p style="font-size:12.5px;color:var(--text-body-muted);line-height:1.55;margin-bottom:14px;">A Basic DBS certificate confirms the supplier has no unspent criminal convictions. This is a mandatory requirement for all sole traders listing on the marketplace. An Enhanced DBS is <strong>not</strong> required at sign-up — it's only triggered when a client flags a sensitive environment (schools, care homes, hospitals).</p>
-                            <div class="scf-label" style="margin-bottom:8px;color:var(--text-heading);">Upload Basic DBS certificate</div>
-                            <div class="sup-comp-doc-row" style="margin-bottom:14px;">
-                              <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
-                              <span class="scdr-name">47a8ca0b49834c54bf6c789052c13101.pdf</span>
-                              <span class="scdr-badge">ON FILE</span>
-                              <button type="button" class="scdr-view-btn" data-preview-doc="dbscert"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View</button>
-                              <button type="button" class="scdr-upload-btn" data-comp-upload="DBS Certificate"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg></button>
+                          <div style="margin-top:20px;"></div>
+                          <div id="supBgSoleFields">
+                          <div class="ob-card-section" style="border:1px solid var(--border-subtle);">
+                            <div class="ocs-head">
+                              <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+                              <div class="ocs-title">Basic DBS Check</div>
                             </div>
-                            <div class="sup-info-box">
-                              <h5>Don't have a DBS certificate?</h5>
-                              <p>Suppliers can apply for a Basic DBS check online through the official DBS website. It costs £18 and typically arrives within 14 days. They can continue onboarding and upload it later.</p>
-                              <a href="#" onclick="return false;">Apply for a Basic DBS check on GOV.UK ↗</a>
-                            </div>
-                            <div class="scf-label" style="margin:16px 0 10px;color:var(--text-heading);">Criminal record declaration</div>
-                            <div class="radio-tile-row cols-1" style="display:grid;gap:10px;" id="supCriminalDeclaration">
-                              <div class="radio-tile" data-value="none">
-                                <div class="rt-icon"><svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><circle class="rt-radio-dot" cx="12" cy="12" r="5" fill="currentColor"/></svg></div>
-                                <div class="rt-body"><div class="rt-title">I confirm I have no unspent criminal convictions</div><div style="font-size:12px;color:var(--text-body-muted);margin-top:2px;">This declaration covers unspent offences only under the Rehabilitation of Offenders Act 1974.</div></div>
+                            <div class="ocs-desc">Confirms the supplier has no unspent criminal convictions — mandatory for all sole traders. An Enhanced DBS isn't needed at sign-up; it's only triggered when a client flags a sensitive environment (schools, care homes, hospitals).</div>
+
+                            <div class="ob-toggle-card" style="border:1px solid var(--border-subtle);">
+                              <div class="otc-top">
+                                <div>
+                                  <div class="otc-title" style="font-size:13px;">Do you have a DBS certificate?</div>
+                                  <div class="otc-desc" style="font-size:11.5px;">Basic DBS mandatory for all · Enhanced only triggered by client environment flag.</div>
+                                </div>
+                                <button type="button" class="toggle-switch on" id="supAdminDbsToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
                               </div>
-                              <div class="radio-tile selected" data-value="unspent">
-                                <div class="rt-icon"><svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><circle class="rt-radio-dot" cx="12" cy="12" r="5" fill="currentColor"/></svg></div>
-                                <div class="rt-body"><div class="rt-title">I have unspent convictions to declare</div><div style="font-size:12px;color:var(--text-body-muted);margin-top:2px;">Having a record doesn't automatically disqualify the supplier — every case is reviewed individually.</div></div>
+                              <div class="field-collapsible open" id="supAdminDbsFields" style="max-height:1200px;opacity:1;">
+                                <div class="otc-body">
+                                  <div class="ob-row-2">
+                                    <div class="ob-field"><label>Certificate number</label><input class="field-input" type="text" placeholder="12-digit number" value="847162039485"></div>
+                                    <div class="ob-field"><label>DBS level</label>
+                                      <select class="sup-mini-select" style="width:100%;"><option selected>Basic</option><option>Enhanced</option></select>
+                                    </div>
+                                  </div>
+                                  <div class="ob-field">
+                                    <label>Issue date</label>
+                                    <input class="field-input" type="date" value="2025-01-15" style="width:356.6px;height:43px;">
+                                  </div>
+                                  <div class="ob-field" style="margin-bottom:0;">
+                                    <label>Upload Basic DBS Certificate</label>
+                                    <div class="sup-comp-doc-row" style="margin-bottom:0;">
+                                      <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                                      <span class="scdr-name">47a8ca0b49834c54bf6c789052c13101.pdf</span>
+                                      <span class="scdr-badge">ON FILE</span>
+                                      <button type="button" class="scdr-view-btn" data-preview-doc="dbscert"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View</button>
+                                      <button type="button" class="scdr-upload-btn" data-comp-upload="DBS Certificate"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg></button>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="callout callout-neutral" style="margin-top:14px;margin-bottom:0;">
+                                  <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg></div>
+                                  <div>
+                                    <div class="callout-title">Don't have a DBS certificate yet?</div>
+                                    <div class="callout-body">Apply online via the official DBS website — it costs £18 and typically arrives within 14 days. You can continue onboarding and upload it later.</div>
+                                    <div class="callout-sub"><a href="#" onclick="return false;" style="color:var(--accent-blue);font-weight:600;">Apply for a Basic DBS check on GOV.UK ↗</a></div>
+                                  </div>
+                                </div>
                               </div>
-                            </div>
-                            <div class="sup-comp-field field-collapsible open" id="supConvictionDetailsField" style="margin-top:14px;max-height:1200px;opacity:1;">
-                              <textarea class="field-input" placeholder="Conviction details" style="min-height:70px;resize:vertical;"></textarea>
                             </div>
                           </div>
-                          <div class="sup-bg-check-card" style="margin-bottom:0;">
-                            <h4 style="margin-bottom:4px;">Right to work</h4>
-                            <p style="font-size:12.5px;color:var(--text-body-muted);margin-bottom:12px;">Confirms the supplier has the legal right to work in the UK.</p>
-                            <div class="sup-comp-field" style="margin-bottom:0;max-width:280px;"><div class="scf-label">Right to work</div>
-                              <select class="sup-mini-select"><option>Yes</option><option>No</option></select>
+
+                          <div class="ob-card-section" style="border:1px solid var(--border-subtle);">
+                            <div class="ocs-head">
+                              <div class="ocs-icon" style="background:#eef0f8;color:#5b4fc4;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"/><path d="M12 6v6l3 6M12 12l-3 6M9 10l3-2 3 2"/></svg></div>
+                              <div class="ocs-title" style="font-size:14px;">Criminal Record Declaration</div>
                             </div>
+                            <div class="ocs-desc">Covers unspent offences only, under the Rehabilitation of Offenders Act 1974.</div>
+                            <div class="radio-row-list" id="supCriminalDeclaration">
+                              <div class="radio-row" data-value="none">
+                                <div class="rr-circle"></div>
+                                <div>
+                                  <div class="rr-title">I have no unspent criminal convictions</div>
+                                  <div class="rr-sub">This declaration covers unspent offences only.</div>
+                                </div>
+                              </div>
+                              <div class="radio-row selected" data-value="unspent">
+                                <div class="rr-circle"></div>
+                                <div>
+                                  <div class="rr-title">I have unspent convictions to declare</div>
+                                  <div class="rr-sub">Having a record doesn't automatically disqualify the supplier — every case is reviewed individually.</div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="field-collapsible open" id="supConvictionDetailsField" style="max-height:1200px;opacity:1;">
+                              <div class="radio-row-fields">
+                                <div class="rrf-label">Conviction details</div>
+                                <textarea class="ob-textarea" placeholder="Provide details including dates, offences, and outcomes."></textarea>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="ob-card-section" style="margin-bottom:0;border:1px solid var(--border-subtle);">
+                            <div class="ocs-head">
+                              <div class="ocs-icon" style="background:#eef0f8;color:#5b4fc4;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg></div>
+                              <div class="ocs-title" style="font-size:14px;">Right to Work</div>
+                            </div>
+                            <div class="ocs-desc">Required by UK law before anyone can be dispatched on the platform.</div>
+                            <div class="ob-field-label-plain">Do you have the right to work in the UK?</div>
+                            <div class="radio-tile-row cols-2" id="supAdminRightToWorkTiles">
+                              <div class="radio-tile selected" data-value="yes">
+                                <div class="rt-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                                <div class="rt-body">
+                                  <div class="rt-title">Yes</div>
+                                  <div class="rt-sub">I have the right to work in the UK</div>
+                                </div>
+                              </div>
+                              <div class="radio-tile" data-value="no">
+                                <div class="rt-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+                                <div class="rt-body">
+                                  <div class="rt-title">No</div>
+                                  <div class="rt-sub">I do not currently have right to work</div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="plain-warning-bar" id="supAdminRtwSoleNoWarning" style="display:none;margin-top:14px;">You are legally required to verify your Right to Work before you can be dispatched on the platform. Please resolve this before completing onboarding.</div>
+                            <p class="helper" style="margin-top:12px;margin-bottom:0;font-size:11px;">If a client requires document verification, you can provide your UKVI share code later — verified via the Home Office API.</p>
+                          </div>
+                          </div>
+                          <div id="supBgCompanyFields" style="display:none;">
+                          <div class="ob-card-section" style="border:1px solid var(--border-subtle);">
+                            <div class="ocs-head">
+                              <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+                              <div class="ocs-title">DBS &amp; Background Checks</div>
+                            </div>
+                            <div class="ocs-desc">Shown on the supplier's marketplace profile as a trust indicator for property managers.</div>
+
+                            <div class="ob-field-label-plain">Are all operatives DBS checked?</div>
+                            <div class="supbg-yn-row" id="supAdminAllDbsTiles">
+                              <div class="supbg-yn-tile supbg-yes selected" data-value="yes">
+                                <div class="supbg-yn-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                                <div><div class="supbg-yn-title">Yes</div><div class="supbg-yn-desc">All operatives are DBS checked</div></div>
+                              </div>
+                              <div class="supbg-yn-tile supbg-no" data-value="no">
+                                <div class="supbg-yn-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+                                <div><div class="supbg-yn-title">No</div><div class="supbg-yn-desc">Not all operatives have DBS checks</div></div>
+                              </div>
+                            </div>
+                            <div class="plain-warning-bar" id="supAdminDbsNoWarning" style="display:none;margin-top:14px;">Some property managers require DBS-checked operatives. The profile will indicate that not all staff are DBS verified.</div>
+
+                            <div class="field-collapsible open" id="supAdminDbsLevelField" style="max-height:1200px;opacity:1;">
+                              <div style="margin-top:16px;">
+                                <div class="ob-field-label-plain">What level of DBS check do the operatives hold?</div>
+                                <div class="radio-tile-row cols-2" id="supAdminDbsLevelTiles">
+                                  <div class="radio-tile selected" data-value="basic">
+                                    <div class="rt-body"><div class="rt-title">Basic DBS</div><div class="rt-sub">Shows unspent convictions only. Suitable for most trades.</div></div>
+                                  </div>
+                                  <div class="radio-tile" data-value="enhanced">
+                                    <div class="rt-body"><div class="rt-title">Enhanced DBS</div><div class="rt-sub">Includes spent &amp; unspent convictions, cautions, and barred list checks.</div></div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="ob-card-section" style="border:1px solid var(--border-subtle);">
+                            <div class="ocs-head">
+                              <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></div>
+                              <div class="ocs-title">Compliance Policies</div>
+                              <span class="meta-badge" style="background:var(--surface-soft);color:var(--text-body-muted);text-transform:uppercase;">Recommended</span>
+                            </div>
+                            <div class="ocs-desc">A compliant policy means the supplier doesn't need an individual certificate for every employee.</div>
+
+                            <div class="supbg-policy-block" style="margin-top:16px;padding-top:0;border-top:none;">
+                              <div class="ob-field-label-plain" style="margin-bottom:2px;font-size:11px;">DBS policy document</div>
+                              <div class="ocs-desc" style="margin-bottom:12px;">Cover check frequency, escalation process, named compliance owner, and record retention.</div>
+                              <div class="sup-comp-doc-row" style="margin-bottom:12px;">
+                                <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                                <span class="scdr-name">dbs-policy-reid-property-services.pdf</span>
+                                <span class="scdr-badge">ON FILE</span>
+                                <button type="button" class="scdr-view-btn" data-preview-doc="dbspolicy"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View</button>
+                                <button type="button" class="scdr-upload-btn" data-comp-upload="DBS Policy Document"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg></button>
+                              </div>
+                              <textarea class="ob-textarea" readonly>Basic DBS checks are run for every operative before their first dispatch and re-checked every 3 years. Our office manager, Priya Shah, owns compliance escalations and keeps signed records on file for 6 years.</textarea>
+                            </div>
+
+                            <div class="supbg-policy-block">
+                              <div class="ob-field-label-plain" style="margin-bottom:2px;font-size:11px;">Worker vetting policy document</div>
+                              <div class="ocs-desc" style="margin-bottom:12px;">How the company vets operatives before dispatching them.</div>
+                              <div class="sup-comp-doc-row" style="margin-bottom:12px;">
+                                <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                                <span class="scdr-name">vetting-policy-reid-property-services.pdf</span>
+                                <span class="scdr-badge">ON FILE</span>
+                                <button type="button" class="scdr-view-btn" data-preview-doc="vettingpolicy"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View</button>
+                                <button type="button" class="scdr-upload-btn" data-comp-upload="Worker Vetting Policy Document"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg></button>
+                              </div>
+                              <textarea class="ob-textarea" readonly>All new operatives provide ID and two trade references before their first job. We re-verify trade certifications annually and run spot checks on completed jobs each quarter.</textarea>
+                            </div>
+
+                            <div class="supbg-policy-block">
+                              <div class="ob-field-label-plain" style="margin-bottom:2px;font-size:11px;">Health &amp; Safety policy document</div>
+                              <div class="ocs-desc" style="margin-bottom:12px;">Legally required for companies with 5 or more employees under UK H&amp;S regulations.</div>
+                              <div class="sup-comp-doc-row" style="margin-bottom:12px;">
+                                <svg class="scdr-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                                <span class="scdr-name">hs-policy-reid-property-services.pdf</span>
+                                <span class="scdr-badge">ON FILE</span>
+                                <button type="button" class="scdr-view-btn" data-preview-doc="hspolicy"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View</button>
+                                <button type="button" class="scdr-upload-btn" data-comp-upload="H&amp;S Policy Document"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg></button>
+                              </div>
+                              <textarea class="ob-textarea" readonly>Priya Shah is our named Health &amp; Safety officer. Toolbox talks run monthly, PPE is issued on day one, and RIDDOR-reportable incidents are logged and reviewed within 48 hours.</textarea>
+                            </div>
+                          </div>
+
+                          <div class="ob-card-section" style="border:1px solid var(--border-subtle);">
+                            <div class="ocs-head">
+                              <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+                              <div class="ocs-title" style="font-size:14px;">Director / PSC Criminal Record Declaration</div>
+                            </div>
+                            <div class="ocs-desc">Covers unspent offences only. Having a record doesn't automatically disqualify the supplier — every case is reviewed individually.</div>
+                            <div class="radio-row-list supbg-radio-list" id="supAdminPscConvictionTiles">
+                              <div class="radio-row supbg-radio-row" data-value="none">
+                                <div class="rr-circle"></div>
+                                <div>
+                                  <div class="rr-title">The PSC has no unspent criminal convictions</div>
+                                  <div class="rr-sub">This declaration covers unspent offences only.</div>
+                                </div>
+                              </div>
+                              <div class="radio-row supbg-radio-row supbg-amber-option selected" data-value="has-convictions">
+                                <div class="rr-circle"></div>
+                                <div>
+                                  <div class="rr-title">The PSC has unspent convictions to declare</div>
+                                  <div class="rr-sub">Having a record doesn't automatically disqualify you — we review each case individually.</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="ob-card-section" style="margin-bottom:0;border:1px solid var(--border-subtle);">
+                            <div class="ocs-head">
+                              <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg></div>
+                              <div class="ocs-title" style="font-size:14px;">Right to Work</div>
+                            </div>
+                            <div class="ocs-desc">Required by UK law before anyone can be dispatched on the platform.</div>
+                            <div class="ob-field-label-plain">Does everyone dispatched have the right to work in the UK?</div>
+                            <div class="supbg-yn-row" id="supAdminRtwCompanyTiles">
+                              <div class="supbg-yn-tile supbg-yes selected" data-value="yes">
+                                <div class="supbg-yn-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                                <div><div class="supbg-yn-title">Yes</div><div class="supbg-yn-desc">All staff have right to work in the UK</div></div>
+                              </div>
+                              <div class="supbg-yn-tile supbg-no" data-value="no">
+                                <div class="supbg-yn-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+                                <div><div class="supbg-yn-title">No</div><div class="supbg-yn-desc">Not all staff have verified right to work</div></div>
+                              </div>
+                            </div>
+                            <div class="plain-warning-bar" id="supAdminRtwCompanyNoWarning" style="display:none;margin-top:14px;">The company is legally required to verify Right to Work for all operatives before dispatching them.</div>
+                            <p class="helper" style="margin-top:12px;margin-bottom:0;font-size:11px;">The supplier is responsible for maintaining up-to-date Right to Work records. Keylr may request evidence during periodic audits.</p>
+                          </div>
                           </div>
                           <div style="display:flex;justify-content:flex-end;margin-top:16px;"><button type="button" class="btn btn-primary" data-comp-update="Background Checks">Update</button></div>
                         </div>
@@ -20459,7 +20972,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   function svcRoleCategories(role) {
     return Object.keys(categoryRoles).filter(function (cat) { return categoryRoles[cat].indexOf(role) !== -1; });
   }
-  function svcAllRolesFlat() {
+  var adminSvcRoleRoster = (function () {
     var seen = {};
     var all = [];
     Object.keys(categoryRoles).forEach(function (cat) {
@@ -20467,7 +20980,10 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         if (!seen[role]) { seen[role] = true; all.push(role); }
       });
     });
-    return all.sort(function (a, b) { return a.localeCompare(b); });
+    return all;
+  })();
+  function svcAllRolesFlat() {
+    return adminSvcRoleRoster.slice().sort(function (a, b) { return a.localeCompare(b); });
   }
   var adminSvcRoleSearchTerm = '';
   function renderAdminSvcRolesFlatList() {
@@ -20561,7 +21077,266 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     tab.addEventListener('click', function () {
       document.querySelectorAll('#adminServicesTabs .pm-settings-tab-item').forEach(function (t) { t.classList.remove('active'); });
       tab.classList.add('active');
+      var svcTab = tab.getAttribute('data-svctab');
+      document.getElementById('adminSvcPanelCompliance').style.display = svcTab === 'compliance' ? '' : 'none';
+      document.getElementById('adminSvcPanelService').style.display = svcTab === 'service' ? '' : 'none';
+      if (svcTab === 'service') {
+        renderAdminSvcCategoriesList();
+        refreshAdminSvcRolesDatalist();
+      }
     });
+  });
+
+  /* ---- Service tab: select a Category, manage its Roles; click a Role to open its drawer ---- */
+  var adminSvcActiveManageCategory = null;
+  var adminSvcCategorySearchTerm = '';
+  var adminSvcActiveDrawerRole = null;
+
+  function refreshAdminSvcRolesDatalist() {
+    var datalist = document.getElementById('adminSvcAllRolesDatalist');
+    if (!datalist) return;
+    datalist.innerHTML = adminSvcRoleRoster.slice().sort(function (a, b) { return a.localeCompare(b); })
+      .map(function (r) { return '<option value="' + supjrEscapeHtml(r) + '"></option>'; }).join('');
+  }
+
+  function renderAdminSvcCategoriesList() {
+    var list = document.getElementById('adminSvcCategoriesList');
+    if (!list) return;
+    var allCats = Object.keys(categoryRoles).sort(function (a, b) { return a.localeCompare(b); });
+    document.getElementById('adminSvcCatTotal2').textContent = allCats.length;
+    var term = adminSvcCategorySearchTerm.trim().toLowerCase();
+    var cats = term ? allCats.filter(function (c) { return c.toLowerCase().indexOf(term) !== -1; }) : allCats;
+    if (!allCats.length) {
+      list.innerHTML = '<div style="padding:20px 16px;font-size:13px;color:var(--text-body-muted);">No categories yet. Add one above.</div>';
+      return;
+    }
+    if (!cats.length) {
+      list.innerHTML = '<div style="padding:20px 16px;font-size:13px;color:var(--text-body-muted);">No categories match &ldquo;' + supjrEscapeHtml(adminSvcCategorySearchTerm.trim()) + '&rdquo;.</div>';
+      return;
+    }
+    list.innerHTML = cats.map(function (cat) {
+      var count = categoryRoles[cat].length;
+      return '<div class="crp-cat-row' + (cat === adminSvcActiveManageCategory ? ' active' : '') + '" data-cat="' + supjrEscapeHtml(cat) + '"><span class="crp-cat-name">' + cat + '</span><span class="crp-count">' + count + '</span></div>';
+    }).join('');
+    list.querySelectorAll('.crp-cat-row').forEach(function (row) {
+      row.addEventListener('click', function () { selectAdminSvcManageCategory(row.getAttribute('data-cat')); });
+    });
+  }
+
+  function selectAdminSvcManageCategory(cat) {
+    adminSvcActiveManageCategory = cat;
+    document.getElementById('adminSvcCatDetailEmpty').style.display = 'none';
+    document.getElementById('adminSvcCatDetailPanel').style.display = '';
+    document.getElementById('adminSvcCatDetailName').textContent = cat;
+    document.getElementById('adminSvcAssignRoleInput').value = '';
+    renderAdminSvcCategoriesList();
+    renderAdminSvcCatDetail();
+  }
+
+  function renderAdminSvcCatDetail() {
+    var cat = adminSvcActiveManageCategory;
+    if (!cat || !categoryRoles[cat]) {
+      document.getElementById('adminSvcCatDetailEmpty').style.display = '';
+      document.getElementById('adminSvcCatDetailPanel').style.display = 'none';
+      return;
+    }
+    var roles = categoryRoles[cat];
+    document.getElementById('adminSvcCatDetailCount').textContent = roles.length + (roles.length === 1 ? ' role assigned' : ' roles assigned');
+    var chipsEl = document.getElementById('adminSvcCatDetailRoleChips');
+    chipsEl.innerHTML = roles.length
+      ? roles.map(function (role) {
+          return '<span class="detail-chip-tag detail-chip-tag-blue svc-role-chip" data-role="' + supjrEscapeHtml(role) + '" style="padding-right:6px;cursor:pointer;">' + role + ' <button type="button" class="svc-unlink-role-btn" data-role="' + supjrEscapeHtml(role) + '" aria-label="Remove">&times;</button></span>';
+        }).join('')
+      : '<span class="acct-view-empty">No roles in this category yet &mdash; assign one below.</span>';
+    chipsEl.querySelectorAll('.svc-role-chip').forEach(function (chip) {
+      chip.addEventListener('click', function (e) {
+        if (e.target.closest('.svc-unlink-role-btn')) return;
+        openAdminSvcRoleDrawer(chip.getAttribute('data-role'));
+      });
+    });
+    chipsEl.querySelectorAll('.svc-unlink-role-btn').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var role = btn.getAttribute('data-role');
+        categoryRoles[cat] = categoryRoles[cat].filter(function (r) { return r !== role; });
+        renderAdminSvcCatDetail();
+        renderAdminSvcCategoriesList();
+        renderAdminSvcRolesFlatList();
+      });
+    });
+  }
+
+  document.getElementById('adminSvcCategorySearchInput').addEventListener('input', function () {
+    adminSvcCategorySearchTerm = this.value;
+    renderAdminSvcCategoriesList();
+  });
+
+  document.getElementById('adminSvcAddCategoryBtn').addEventListener('click', function () {
+    var input = document.getElementById('adminSvcNewCategoryInput');
+    var name = input.value.trim();
+    if (!name) { input.focus(); return; }
+    if (categoryRoles[name]) { showToast('That category already exists.'); return; }
+    categoryRoles[name] = [];
+    input.value = '';
+    renderAdminSvcCategoriesList();
+    showToast('"' + name + '" category added.');
+    selectAdminSvcManageCategory(name);
+  });
+  document.getElementById('adminSvcNewCategoryInput').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); document.getElementById('adminSvcAddCategoryBtn').click(); }
+  });
+
+  function handleAdminSvcAssignRole() {
+    var cat = adminSvcActiveManageCategory;
+    if (!cat) return;
+    var input = document.getElementById('adminSvcAssignRoleInput');
+    var name = input.value.trim();
+    if (!name) { input.focus(); return; }
+    var isNew = adminSvcRoleRoster.indexOf(name) === -1;
+    if (isNew) adminSvcRoleRoster.push(name);
+    if (categoryRoles[cat].indexOf(name) === -1) categoryRoles[cat].push(name);
+    input.value = '';
+    renderAdminSvcCatDetail();
+    renderAdminSvcCategoriesList();
+    refreshAdminSvcRolesDatalist();
+    renderAdminSvcRolesFlatList();
+    showToast((isNew ? 'Created and assigned "' : 'Assigned "') + name + '" to ' + cat + '.');
+  }
+  document.getElementById('adminSvcAssignRoleBtn').addEventListener('click', handleAdminSvcAssignRole);
+  document.getElementById('adminSvcAssignRoleInput').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); handleAdminSvcAssignRole(); }
+  });
+
+  /* ---- Delete Category (with confirmation) ---- */
+  var adminSvcDeleteCatModal = initModal(document.getElementById('adminSvcDeleteCatOverlay'), 'adminSvcDeleteCatCancelBtn');
+  document.getElementById('adminSvcDeleteCatBtn').addEventListener('click', function () {
+    if (!adminSvcActiveManageCategory) return;
+    document.getElementById('adminSvcDeleteCatDesc').textContent = 'Its roles won\u2019t be deleted \u2014 they\u2019ll stay assigned to any other categories they belong to. Remove "' + adminSvcActiveManageCategory + '"?';
+    adminSvcDeleteCatModal.open();
+  });
+  document.getElementById('adminSvcDeleteCatConfirmBtn').addEventListener('click', function () {
+    var cat = adminSvcActiveManageCategory;
+    if (!cat) { adminSvcDeleteCatModal.close(); return; }
+    delete categoryRoles[cat];
+    adminSvcActiveManageCategory = null;
+    adminSvcDeleteCatModal.close();
+    renderAdminSvcCategoriesList();
+    renderAdminSvcCatDetail();
+    renderAdminSvcRolesFlatList();
+    showToast('"' + cat + '" category deleted.');
+  });
+
+  /* ---- Role detail drawer ---- */
+  function openAdminSvcRoleDrawer(role) {
+    adminSvcActiveDrawerRole = role;
+    document.getElementById('adminSvcDrawerRoleNameInput').value = role;
+    renderAdminSvcDrawerCategoryChips();
+    renderAdminSvcDrawerAddCategorySelect();
+    document.getElementById('adminSvcRoleDrawerOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeAdminSvcRoleDrawer() {
+    document.getElementById('adminSvcRoleDrawerOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+    adminSvcActiveDrawerRole = null;
+  }
+  document.getElementById('adminSvcDrawerCloseBtn').addEventListener('click', closeAdminSvcRoleDrawer);
+  document.getElementById('adminSvcRoleDrawerOverlay').addEventListener('click', function (e) {
+    if (e.target === this) closeAdminSvcRoleDrawer();
+  });
+
+  function renderAdminSvcDrawerCategoryChips() {
+    var role = adminSvcActiveDrawerRole;
+    var chipsEl = document.getElementById('adminSvcDrawerCategoryChips');
+    var cats = svcRoleCategories(role);
+    chipsEl.innerHTML = cats.length
+      ? cats.map(function (cat) {
+          return '<span class="detail-chip-tag" style="padding-right:6px;">' + cat + ' <button type="button" class="svc-drawer-unlink-cat-btn" data-cat="' + supjrEscapeHtml(cat) + '" aria-label="Remove">&times;</button></span>';
+        }).join('')
+      : '<span class="acct-view-empty">Not assigned to any category yet</span>';
+    chipsEl.querySelectorAll('.svc-drawer-unlink-cat-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var cat = btn.getAttribute('data-cat');
+        var role = adminSvcActiveDrawerRole;
+        if (categoryRoles[cat]) categoryRoles[cat] = categoryRoles[cat].filter(function (r) { return r !== role; });
+        renderAdminSvcDrawerCategoryChips();
+        renderAdminSvcDrawerAddCategorySelect();
+        renderAdminSvcCategoriesList();
+        renderAdminSvcCatDetail();
+        renderAdminSvcRolesFlatList();
+      });
+    });
+  }
+  function renderAdminSvcDrawerAddCategorySelect() {
+    var role = adminSvcActiveDrawerRole;
+    var sel = document.getElementById('adminSvcDrawerAddCategorySelect');
+    var linked = svcRoleCategories(role);
+    var available = Object.keys(categoryRoles).sort(function (a, b) { return a.localeCompare(b); }).filter(function (c) { return linked.indexOf(c) === -1; });
+    sel.innerHTML = '<option value="">Add this role to a category&hellip;</option>' + available.map(function (c) { return '<option value="' + supjrEscapeHtml(c) + '">' + c + '</option>'; }).join('');
+  }
+  document.getElementById('adminSvcDrawerAddCategorySelect').addEventListener('change', function () {
+    var cat = this.value;
+    var role = adminSvcActiveDrawerRole;
+    if (!cat || !role) return;
+    if (!categoryRoles[cat]) categoryRoles[cat] = [];
+    if (categoryRoles[cat].indexOf(role) === -1) categoryRoles[cat].push(role);
+    renderAdminSvcDrawerCategoryChips();
+    renderAdminSvcDrawerAddCategorySelect();
+    renderAdminSvcCategoriesList();
+    renderAdminSvcCatDetail();
+    renderAdminSvcRolesFlatList();
+    showToast('Added "' + role + '" to ' + cat + '.');
+  });
+
+  document.getElementById('adminSvcDrawerSaveBtn').addEventListener('click', function () {
+    var role = adminSvcActiveDrawerRole;
+    if (!role) return;
+    var newName = document.getElementById('adminSvcDrawerRoleNameInput').value.trim();
+    if (newName && newName !== role) {
+      if (adminSvcRoleRoster.indexOf(newName) !== -1) {
+        showToast('A role named "' + newName + '" already exists.');
+        return;
+      }
+      adminSvcRoleRoster = adminSvcRoleRoster.map(function (r) { return r === role ? newName : r; });
+      Object.keys(categoryRoles).forEach(function (cat) {
+        categoryRoles[cat] = categoryRoles[cat].map(function (r) { return r === role ? newName : r; });
+      });
+      if (adminSvcRoleConfig[role]) { adminSvcRoleConfig[newName] = adminSvcRoleConfig[role]; delete adminSvcRoleConfig[role]; }
+      showToast('Renamed "' + role + '" to "' + newName + '".');
+      adminSvcActiveDrawerRole = newName;
+    }
+    closeAdminSvcRoleDrawer();
+    renderAdminSvcCategoriesList();
+    renderAdminSvcCatDetail();
+    renderAdminSvcRolesFlatList();
+  });
+
+  /* ---- Delete Role from drawer (with confirmation) ---- */
+  var adminSvcDeleteRoleModal = initModal(document.getElementById('adminSvcDeleteRoleOverlay'), 'adminSvcDeleteRoleCancelBtn');
+  document.getElementById('adminSvcDrawerDeleteBtn').addEventListener('click', function () {
+    var role = adminSvcActiveDrawerRole;
+    if (!role) return;
+    var catCount = svcRoleCategories(role).length;
+    document.getElementById('adminSvcDeleteRoleDesc').textContent = catCount
+      ? 'This will remove "' + role + '" from all ' + catCount + ' categor' + (catCount === 1 ? 'y' : 'ies') + ' it belongs to. This can\u2019t be undone.'
+      : 'This will permanently delete "' + role + '". This can\u2019t be undone.';
+    adminSvcDeleteRoleModal.open();
+  });
+  document.getElementById('adminSvcDeleteRoleConfirmBtn').addEventListener('click', function () {
+    var role = adminSvcActiveDrawerRole;
+    if (!role) { adminSvcDeleteRoleModal.close(); return; }
+    adminSvcRoleRoster = adminSvcRoleRoster.filter(function (r) { return r !== role; });
+    Object.keys(categoryRoles).forEach(function (cat) {
+      categoryRoles[cat] = categoryRoles[cat].filter(function (r) { return r !== role; });
+    });
+    delete adminSvcRoleConfig[role];
+    adminSvcDeleteRoleModal.close();
+    closeAdminSvcRoleDrawer();
+    renderAdminSvcCategoriesList();
+    renderAdminSvcCatDetail();
+    refreshAdminSvcRolesDatalist();
+    renderAdminSvcRolesFlatList();
+    showToast('"' + role + '" role deleted.');
   });
 
   var adminSvcRoleSearchInput = document.getElementById('adminSvcRoleSearchInput');
@@ -21725,40 +22500,252 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   });
 
 
-  /* ---- Compliance & Documents tab ---- */
-  function switchCompSection(key) {
-    document.querySelectorAll('#supCompNavList .sup-comp-nav-item').forEach(function (item) { item.classList.toggle('active', item.getAttribute('data-compsection') === key); });
-    document.getElementById('supCompPanelIdentity').style.display = key === 'identity' ? '' : 'none';
-    document.getElementById('supCompPanelBank').style.display = key === 'bank' ? '' : 'none';
-    document.getElementById('supCompPanelInsurance').style.display = key === 'insurance' ? '' : 'none';
-    document.getElementById('supCompPanelTrades').style.display = key === 'trades' ? '' : 'none';
-    document.getElementById('supCompPanelBackground').style.display = key === 'background' ? '' : 'none';
-  }
-  document.querySelectorAll('#supCompNavList .sup-comp-nav-item').forEach(function (item) {
-    item.addEventListener('click', function () { switchCompSection(item.getAttribute('data-compsection')); });
-  });
-  document.getElementById('supCompSearchInput').addEventListener('input', function () {
-    var term = this.value.trim().toLowerCase();
-    document.querySelectorAll('#supCompNavList .sup-comp-nav-item').forEach(function (item) {
-      var name = item.querySelector('.scni-title').textContent.toLowerCase();
-      item.style.display = !term || name.indexOf(term) !== -1 ? '' : 'none';
+  /* ---- Supplier Profile tab (merged Profile + Compliance & Documents) ---- */
+  var SUP_COMP_SECTIONS_SOLE = [
+    { key: 'profile', label: 'Profile', icon: '<path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>' },
+    { key: 'identity', label: 'Identity', icon: '<path d="M9 12l2 2 4-4"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>' },
+    { key: 'trades', label: 'Categories & Roles', icon: '<circle cx="12" cy="8" r="6"/><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"/>' },
+    { key: 'insurance', label: 'Insurance', icon: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>' },
+    { key: 'background', label: 'Background Check', icon: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>' },
+    { key: 'bank', label: 'Payment Setup', icon: '<path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/>' },
+    { key: 'portfolio', label: 'Portfolio', icon: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>' }
+  ];
+  var SUP_COMP_SECTIONS_COMPANY = [
+    { key: 'profile', label: 'Profile', icon: '<path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>' },
+    { key: 'identity', label: 'Company Identity', icon: '<path d="M9 12l2 2 4-4"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>' },
+    { key: 'insurance', label: 'Insurance', icon: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>' },
+    { key: 'background', label: 'Background Check', icon: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>' },
+    { key: 'bank', label: 'Payment Setup', icon: '<path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/>' },
+    { key: 'trades', label: 'Categories & Roles', icon: '<circle cx="12" cy="8" r="6"/><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"/>' },
+    { key: 'portfolio', label: 'Portfolio', icon: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>' }
+  ];
+  var supCompActiveSection = 'profile';
+
+  function renderSupCompNavList(isCompany) {
+    var list = document.getElementById('supCompNavList');
+    var sections = isCompany ? SUP_COMP_SECTIONS_COMPANY : SUP_COMP_SECTIONS_SOLE;
+    document.getElementById('supCompProgressText').textContent = sections.length + '/' + sections.length;
+    list.innerHTML = sections.map(function (s, i) {
+      return '<div class="sup-comp-nav-item' + (s.key === supCompActiveSection ? ' active' : '') + '" data-compsection="' + s.key + '">' +
+        '<div class="scni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + s.icon + '</svg></div>' +
+        '<div><div class="scni-title">' + s.label + '</div><div class="scni-status"><span class="dot"></span>Complete</div></div>' +
+        '<svg class="scni-chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>' +
+        '</div>';
+    }).join('');
+    list.querySelectorAll('.sup-comp-nav-item').forEach(function (item) {
+      item.addEventListener('click', function () { switchCompSection(item.getAttribute('data-compsection')); });
     });
-  });
-  document.querySelectorAll('#supCompFilterTabs .sup-flag-tab-pill').forEach(function (pill) {
-    pill.addEventListener('click', function () {
-      document.querySelectorAll('#supCompFilterTabs .sup-flag-tab-pill').forEach(function (p) { p.classList.remove('active'); });
-      pill.classList.add('active');
-      var filter = pill.getAttribute('data-compfilter');
-      document.querySelectorAll('#supCompNavList .sup-comp-nav-item').forEach(function (item) {
-        item.style.display = (filter === 'all' || filter === 'complete') ? '' : 'none';
+  }
+
+  /* ---- Categories & Roles picker (admin view of onboarding's cat-role-picker component) ---- */
+  var supAdminActiveCategory = 'Grounds & Outdoor';
+  var supAdminSelectedRolesByCategory = { 'Grounds & Outdoor': { 'Gardener': true, 'Landscaper': true } };
+  var supAdminRoleCertData = {};
+  var supAdminRoleCertEntryCounts = {};
+
+  function supAdminGetSelectedSet(cat) {
+    if (!supAdminSelectedRolesByCategory[cat]) supAdminSelectedRolesByCategory[cat] = {};
+    return supAdminSelectedRolesByCategory[cat];
+  }
+
+  function renderSupAdminCategoryList() {
+    var list = document.getElementById('supAdminCategoryList');
+    if (!list) return;
+    var cats = Object.keys(categoryRoles).sort(function (a, b) { return a.localeCompare(b); });
+    list.innerHTML = cats.map(function (cat) {
+      var count = Object.keys(supAdminGetSelectedSet(cat)).filter(function (r) { return supAdminGetSelectedSet(cat)[r]; }).length;
+      return '<div class="crp-cat-row' + (cat === supAdminActiveCategory ? ' active' : '') + '" data-cat="' + supjrEscapeHtml(cat) + '"><span class="crp-checkbox"></span><span class="crp-cat-name">' + cat + '</span><span class="crp-count" data-role-count="' + count + '">' + count + '</span></div>';
+    }).join('');
+    list.querySelectorAll('.crp-cat-row').forEach(function (row) {
+      row.addEventListener('click', function () {
+        supAdminActiveCategory = row.getAttribute('data-cat');
+        renderSupAdminCategoryList();
+        renderSupAdminCrpRolesGrid();
       });
+    });
+  }
+
+  function renderSupAdminCrpRolesGrid() {
+    var titleEl = document.getElementById('supAdminCrpRolesTitle');
+    var grid = document.getElementById('supAdminCrpRolesGrid');
+    if (!titleEl || !grid) return;
+    titleEl.textContent = supAdminActiveCategory;
+    var roles = categoryRoles[supAdminActiveCategory] || [];
+    var selectedSet = supAdminGetSelectedSet(supAdminActiveCategory);
+    grid.innerHTML = roles.map(function (role) {
+      var selected = !!selectedSet[role];
+      var cert = CERT_REQUIRED_ROLES[role];
+      var certTag = cert ? '<div class="rc-cert-tag">★ Certificate Required</div>' : '';
+      return '<div class="crp-role-chip' + (selected ? ' selected' : '') + '" data-role="' + supjrEscapeHtml(role) + '">' +
+        '<span class="rc-box">' + (selected ? '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>' : '') + '</span>' +
+        '<div><span>' + role + '</span>' + certTag + '</div></div>';
+    }).join('');
+    grid.querySelectorAll('.crp-role-chip').forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        var role = chip.getAttribute('data-role');
+        var set = supAdminGetSelectedSet(supAdminActiveCategory);
+        set[role] = !set[role];
+        renderSupAdminCategoryList();
+        renderSupAdminCrpRolesGrid();
+        renderSupAdminRoleCertifications();
+      });
+    });
+  }
+
+  function supAdminAllSelectedRoles() {
+    var roles = [];
+    Object.keys(supAdminSelectedRolesByCategory).forEach(function (cat) {
+      Object.keys(supAdminSelectedRolesByCategory[cat]).forEach(function (role) {
+        if (supAdminSelectedRolesByCategory[cat][role] && roles.indexOf(role) === -1) roles.push(role);
+      });
+    });
+    return roles;
+  }
+
+  function renderSupAdminRoleCertifications() {
+    var wrap = document.getElementById('supAdminRoleCertifications');
+    if (!wrap) return;
+    var certRoles = supAdminAllSelectedRoles().filter(function (r) { return CERT_REQUIRED_ROLES[r]; });
+    if (!certRoles.length) {
+      wrap.innerHTML = '<div style="font-size:13px;color:var(--text-body-muted);padding:4px 0 16px;">None of the selected roles require a certificate.</div>';
+      return;
+    }
+    wrap.innerHTML = certRoles.map(function (role, idx) {
+      var info = CERT_REQUIRED_ROLES[role];
+      return '<div class="sup-cert-detail-card"' + (idx === certRoles.length - 1 ? ' style="margin-bottom:0;"' : '') + '>' +
+        '<div class="sup-cert-detail-head"><h4>' + role + '</h4><span class="sup-required-badge">Required</span></div>' +
+        '<div class="sup-comp-field-grid">' +
+        '<div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">' + info.label + '</div><input type="text" class="field-input" placeholder="Registration number"></div>' +
+        '<div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Expiry date</div><input type="date" class="field-input"></div>' +
+        '</div>' +
+        '<div class="sup-comp-field" style="margin-top:16px;margin-bottom:0;"><div class="scf-label">UPLOAD CERTIFICATE</div>' +
+        '<div class="sup-comp-upload-placeholder" data-comp-upload="' + supjrEscapeHtml(role) + ' Certificate"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>Click to upload — Photo or PDF</div>' +
+        '</div></div>';
+    }).join('');
+  }
+
+  document.getElementById('supAdminCategorySearch').addEventListener('input', function () {
+    var term = this.value.trim().toLowerCase();
+    document.querySelectorAll('#supAdminCategoryList .crp-cat-row').forEach(function (row) {
+      var name = row.querySelector('.crp-cat-name').textContent.toLowerCase();
+      row.style.display = !term || name.indexOf(term) !== -1 ? '' : 'none';
     });
   });
 
+  function switchCompSection(key) {
+    supCompActiveSection = key;
+    document.querySelectorAll('#supCompNavList .sup-comp-nav-item').forEach(function (item) { item.classList.toggle('active', item.getAttribute('data-compsection') === key); });
+    var supCompPanelIds = {
+      profile: 'supCompPanelProfile',
+      identity: 'supCompPanelIdentity',
+      bank: 'supCompPanelBank',
+      insurance: 'supCompPanelInsurance',
+      trades: 'supCompPanelTrades',
+      portfolio: 'supCompPanelPortfolio',
+      background: 'supCompPanelBackground'
+    };
+    Object.keys(supCompPanelIds).forEach(function (k) {
+      var el = document.getElementById(supCompPanelIds[k]);
+      if (!el) return;
+      if (k === key) {
+        el.style.display = '';
+        el.classList.remove('pm-view-animate');
+        void el.offsetWidth;
+        el.classList.add('pm-view-animate');
+      } else {
+        el.style.display = 'none';
+      }
+    });
+  }
+
+  function updateSupDetailBusinessType(isCompany) {
+    supCompActiveSection = 'profile';
+    renderSupCompNavList(isCompany);
+    switchCompSection('profile');
+    renderSupAdminCategoryList();
+    renderSupAdminCrpRolesGrid();
+    renderSupAdminRoleCertifications();
+
+    var profSole = document.getElementById('supProfileSoleFields');
+    var profCompany = document.getElementById('supProfileCompanyFields');
+    if (profSole) profSole.style.display = isCompany ? 'none' : '';
+    if (profCompany) profCompany.style.display = isCompany ? '' : 'none';
+
+    var idSole = document.getElementById('supIdSoleFields');
+    var idCompany = document.getElementById('supIdCompanyFields');
+    if (idSole) idSole.style.display = isCompany ? 'none' : '';
+    if (idCompany) idCompany.style.display = isCompany ? '' : 'none';
+    var proofLabel = document.getElementById('supIdProofAddressLabel');
+    if (proofLabel) proofLabel.textContent = isCompany ? 'PROOF OF COMPANY ADDRESS' : 'PROOF OF ADDRESS';
+
+    var elCard = document.getElementById('supAdminElInsuranceCard');
+    if (elCard) elCard.style.display = isCompany ? '' : 'none';
+
+    var bgSole = document.getElementById('supBgSoleFields');
+    var bgCompany = document.getElementById('supBgCompanyFields');
+    if (bgSole) bgSole.style.display = isCompany ? 'none' : '';
+    if (bgCompany) bgCompany.style.display = isCompany ? '' : 'none';
+
+    var portPhotoSole = document.getElementById('supPortfolioPhotoSoleFields');
+    var portLogoCompany = document.getElementById('supPortfolioLogoCompanyFields');
+    if (portPhotoSole) portPhotoSole.style.display = isCompany ? 'none' : '';
+    if (portLogoCompany) portLogoCompany.style.display = isCompany ? '' : 'none';
+
+    var portExpSole = document.getElementById('supPortfolioExpSoleFields');
+    var portExpCompany = document.getElementById('supPortfolioExpCompanyFields');
+    if (portExpSole) portExpSole.style.display = isCompany ? 'none' : '';
+    if (portExpCompany) portExpCompany.style.display = isCompany ? '' : 'none';
+  }
+
+  initObToggle('supAdminPscConfirmToggle', null, true);
+  initObToggle('supIdHmrcToggle', 'supIdUtrField', true);
   initObToggle('supBankBusinessToggle', null, true);
   initObToggle('supBankMonthlyToggle', null, false);
   initObToggle('supBankVatToggle', 'supBankVatField', true);
+  initObToggle('supInsurancePliToggle', 'supInsurancePliField', true);
+  initSingleSelectTiles(document.getElementById('supAdminNoticeTiles'));
+  initObToggle('supAdminOutOfHoursToggle', null, false);
+  initObToggle('supAdminEmergencyToggle', null, false);
+  initObToggle('supAdminUrgentToggle', null, false);
+  document.querySelectorAll('#supAdminDayPills .day-pill').forEach(function (pill) {
+    pill.addEventListener('click', function () { pill.classList.toggle('selected'); });
+  });
+  var supAdminPortfolioCount = 0;
+  var supAdminPortfolioAddTile = document.getElementById('supPortfolioAddTile');
+  if (supAdminPortfolioAddTile) {
+    supAdminPortfolioAddTile.addEventListener('click', function () {
+      if (supAdminPortfolioCount >= 10) { showToast('Maximum 10 portfolio photos.'); return; }
+      supAdminPortfolioCount++;
+      document.getElementById('supPortfolioCount').textContent = supAdminPortfolioCount;
+      showToast('Photo added (demo — no real upload in this prototype).');
+    });
+  }
+  document.querySelectorAll('#supAdminLondonZones .simple-chip, #supAdminOtherCities .simple-chip').forEach(function (chip) {
+    chip.addEventListener('click', function () { chip.classList.toggle('selected'); });
+  });
+  var supAdminCustomCityInput = document.getElementById('supAdminCustomCityInput');
+  supAdminCustomCityInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && supAdminCustomCityInput.value.trim()) {
+      e.preventDefault();
+      var value = supAdminCustomCityInput.value.trim();
+      var esc = value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      var chip = document.createElement('div');
+      chip.className = 'simple-chip selected just-added';
+      chip.style.display = 'inline-flex';
+      chip.style.alignItems = 'center';
+      chip.style.gap = '6px';
+      chip.innerHTML = '<span class="custom-chip-label">' + esc + '</span><button type="button" class="custom-chip-remove" aria-label="Remove ' + esc + '" style="display:flex;align-items:center;justify-content:center;color:inherit;flex-shrink:0;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>';
+      chip.querySelector('.custom-chip-label').addEventListener('click', function () { chip.classList.toggle('selected'); });
+      chip.querySelector('.custom-chip-remove').addEventListener('click', function (ev) {
+        ev.stopPropagation();
+        chip.remove();
+      });
+      document.getElementById('supAdminOtherCities').appendChild(chip);
+      supAdminCustomCityInput.value = '';
+    }
+  });
   initObToggle('supInsurancePiToggle', 'supInsurancePiField', true);
+  initObToggle('supAdminInsuranceElToggle', 'supAdminInsuranceElField', true);
 
   document.querySelectorAll('#supCertGrid .sup-cert-tile').forEach(function (tile) {
     tile.addEventListener('click', function () {
@@ -21769,11 +22756,31 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     });
   });
 
-  document.querySelectorAll('#supCriminalDeclaration .radio-tile').forEach(function (tile) {
+  document.querySelectorAll('#supCriminalDeclaration .radio-row').forEach(function (tile) {
     tile.addEventListener('click', function () {
-      document.querySelectorAll('#supCriminalDeclaration .radio-tile').forEach(function (t) { t.classList.remove('selected'); });
+      document.querySelectorAll('#supCriminalDeclaration .radio-row').forEach(function (t) { t.classList.remove('selected'); });
       tile.classList.add('selected');
       setCollapsibleOpen(document.getElementById('supConvictionDetailsField'), tile.getAttribute('data-value') === 'unspent');
+    });
+  });
+
+  initObToggle('supAdminDbsToggle', 'supAdminDbsFields', true);
+
+  initSingleSelectTiles(document.getElementById('supAdminAllDbsTiles'), function (value) {
+    document.getElementById('supAdminDbsNoWarning').style.display = value === 'no' ? '' : 'none';
+    setCollapsibleOpen(document.getElementById('supAdminDbsLevelField'), value === 'yes');
+  });
+  initSingleSelectTiles(document.getElementById('supAdminDbsLevelTiles'));
+  initSingleSelectTiles(document.getElementById('supAdminPscConvictionTiles'));
+  initSingleSelectTiles(document.getElementById('supAdminRtwCompanyTiles'), function (value) {
+    document.getElementById('supAdminRtwCompanyNoWarning').style.display = value === 'no' ? '' : 'none';
+  });
+
+  document.querySelectorAll('#supAdminRightToWorkTiles .radio-tile').forEach(function (tile) {
+    tile.addEventListener('click', function () {
+      document.querySelectorAll('#supAdminRightToWorkTiles .radio-tile').forEach(function (t) { t.classList.remove('selected'); });
+      tile.classList.add('selected');
+      document.getElementById('supAdminRtwSoleNoWarning').style.display = tile.getAttribute('data-value') === 'no' ? '' : 'none';
     });
   });
 
@@ -21976,7 +22983,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   function switchSupTab(key) {
     document.querySelectorAll('.sup-tabs-row .sup-tab-item').forEach(function (t) { t.classList.toggle('active', t.getAttribute('data-suptab') === key); });
     document.getElementById('supTabOverview').style.display = key === 'overview' ? '' : 'none';
-    document.getElementById('supTabProfile').style.display = key === 'profile' ? '' : 'none';
     document.getElementById('supTabCompliance').style.display = key === 'compliance' ? '' : 'none';
     document.getElementById('supTabChat').style.display = key === 'chat' ? '' : 'none';
     document.getElementById('supDetailSidebar').style.display = key === 'overview' ? '' : 'none';
@@ -22037,10 +23043,19 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     });
   });
 
-  initSingleSelectTiles(document.getElementById('supSectorTiles'));
+  function syncSupAdminSectorSubTypes() {
+    var activeTile = document.querySelector('#supAdminSectorTiles .choice-tile.selected');
+    var value = activeTile ? activeTile.getAttribute('data-value') : null;
+    document.getElementById('supAdminResidentialSubTypes').style.display = (value === 'residential' || value === 'both') ? '' : 'none';
+    document.getElementById('supAdminCommercialSubTypes').style.display = (value === 'commercial' || value === 'both') ? '' : 'none';
+  }
+  initSingleSelectTiles(document.getElementById('supAdminSectorTiles'), syncSupAdminSectorSubTypes);
   initSingleSelectTiles(document.getElementById('supExperienceTiles'));
   initSingleSelectTiles(document.getElementById('supJobsTiles'));
   initMultiSelectTiles(document.getElementById('supSubTypeChips'));
+  initMultiSelectTiles(document.getElementById('supAdminComSubChips'));
+  syncSupAdminSectorSubTypes();
+  syncSupAdminSectorSubTypes();
 
   document.querySelectorAll('[data-profile-save]').forEach(function (btn) {
     btn.addEventListener('click', function () {
@@ -22099,7 +23114,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     });
   }
   function renderSecondaryTradeChips() {
-    document.getElementById('supSecondaryTradeChips').innerHTML = supSecondaryTradeSelected.map(function (t) {
+    var chipsEl = document.getElementById('supSecondaryTradeChips');
+    if (!chipsEl) return;
+    chipsEl.innerHTML = supSecondaryTradeSelected.map(function (t) {
       return '<span class="sup-selected-chip">' + t + '<span class="ssc-remove" data-remove-trade="' + t + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></span></span>';
     }).join('');
     document.querySelectorAll('[data-remove-trade]').forEach(function (btn) {
@@ -22110,16 +23127,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       });
     });
   }
-  document.getElementById('supPrimaryTradeBtn').addEventListener('click', function () {
-    document.getElementById('supPrimaryTradeSearch').value = '';
-    renderTradeList('supPrimaryTradeBody', 'single', '');
-    document.getElementById('supPrimaryTradeOverlay').classList.add('open');
-  });
-  document.getElementById('supSecondaryTradeBtn').addEventListener('click', function () {
-    document.getElementById('supSecondaryTradeSearch').value = '';
-    renderTradeList('supSecondaryTradeBody', 'multi', '');
-    document.getElementById('supSecondaryTradeOverlay').classList.add('open');
-  });
   document.getElementById('supPrimaryTradeSearch').addEventListener('input', function () {
     renderTradeList('supPrimaryTradeBody', 'single', this.value.trim());
   });
@@ -22128,7 +23135,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   });
   document.getElementById('supPrimaryTradeDoneBtn').addEventListener('click', function () {
     document.getElementById('supPrimaryTradeOverlay').classList.remove('open');
-    document.getElementById('supPrimaryTradeLabel').textContent = supPrimaryTradeSelected || 'Select primary trade';
+    var labelEl = document.getElementById('supPrimaryTradeLabel');
+    if (labelEl) labelEl.textContent = supPrimaryTradeSelected || 'Select primary trade';
     if (supPrimaryTradeSelected) showToast('Primary trade set to ' + supPrimaryTradeSelected + '.');
   });
   document.getElementById('supSecondaryTradeDoneBtn').addEventListener('click', function () {
@@ -22175,6 +23183,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     document.getElementById('supDetailPhone').textContent = c.phone || '\u2014';
     document.getElementById('supDetailApplied').textContent = appliedText;
     setPillText('supDetailTypePill', 'supplier-type-pill' + (c.type === 'Sole Trader' ? ' sole-trader' : ''), c.type || '\u2014');
+    updateSupDetailBusinessType(c.type === 'Company');
 
     document.getElementById('supSidebarAvatar').textContent = c.initials;
     document.getElementById('supSidebarAvatar').style.background = c.color;
@@ -22198,12 +23207,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     document.getElementById('supProfileEmail').value = c.email || '';
     document.getElementById('supProfilePhoneCode').value = '+44';
     document.getElementById('supProfilePhoneNumber').value = c.phone ? c.phone.replace(/^\+44/, '').trim() : '';
-    document.getElementById('supGlanceType').textContent = c.type || '\u2014';
-    setPillText('supGlanceStatus', supStatusPillClass(c.status), c.status);
-    document.getElementById('supGlanceStatus').style.fontSize = '12px';
-    document.getElementById('supGlanceActive').textContent = c.activeState;
-    document.getElementById('supGlanceActive').style.color = c.activeState === 'Active' ? '#1a7a3e' : '#c0392b';
-    document.getElementById('supGlanceJoined').textContent = source === 'app' ? 'Not yet joined' : '27 Dec 2025';
 
     document.getElementById('supDeactivateBox').style.display = source === 'app' ? 'none' : '';
     document.getElementById('supApplicantActionBox').style.display = source === 'app' ? '' : 'none';
@@ -22212,13 +23215,19 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
     supPrimaryTradeSelected = null;
     supSecondaryTradeSelected = [];
-    document.getElementById('supPrimaryTradeLabel').textContent = 'Select primary trade';
+    var supPrimaryTradeLabelEl = document.getElementById('supPrimaryTradeLabel');
+    if (supPrimaryTradeLabelEl) supPrimaryTradeLabelEl.textContent = 'Select primary trade';
     renderSecondaryTradeChips();
-    document.querySelectorAll('.sup-jumpto-pill').forEach(function (p, i) { p.classList.toggle('active', i === 0); });
-    document.querySelectorAll('#supSectorTiles .choice-tile').forEach(function (t, i) { t.classList.toggle('selected', i === 0); t.setAttribute('aria-checked', i === 0 ? 'true' : 'false'); });
+    document.querySelectorAll('#supAdminSectorTiles .choice-tile').forEach(function (t) {
+      var isBoth = t.getAttribute('data-value') === 'both';
+      t.classList.toggle('selected', isBoth);
+      t.setAttribute('aria-checked', isBoth ? 'true' : 'false');
+    });
+    if (typeof syncSupAdminSectorSubTypes === 'function') syncSupAdminSectorSubTypes();
     document.querySelectorAll('#supExperienceTiles .count-tile').forEach(function (t) { t.classList.remove('selected'); t.setAttribute('aria-checked', 'false'); });
     document.querySelectorAll('#supJobsTiles .count-tile').forEach(function (t) { var sel = t.getAttribute('data-value') === '50-200'; t.classList.toggle('selected', sel); t.setAttribute('aria-checked', sel ? 'true' : 'false'); });
     document.querySelectorAll('#supSubTypeChips .simple-chip').forEach(function (t) { t.classList.toggle('selected', t.getAttribute('data-value') === 'str'); });
+    document.querySelectorAll('#supAdminComSubChips .simple-chip').forEach(function (t) { t.classList.remove('selected'); });
 
     renderSupDocChips();
     renderChecklistGroups();
