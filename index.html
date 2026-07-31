@@ -17,8 +17,8 @@
     --accent-blue: #284890;
     --accent-blue-light: #3a5cad;
     --fill-indigo: #364d8b; /* pixel-sampled: chat 'All messages' pill, sent-message bubble, profile-completion bar fill — distinct from --accent-blue */
-    --btn-grad-start: #204078;
-    --btn-grad-end: #102048;
+    --btn-grad-start: #5bccff;
+    --btn-grad-end: #0e3c5d;
     --surface-white: #ffffff;
     --surface-soft: #f9fafb;
     --border-subtle: #e2e8f0;
@@ -77,6 +77,12 @@
     text-transform: uppercase;
     color: var(--accent-blue);
     margin-bottom: 14px;
+  }
+  #testimonials .eyebrow {
+    background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 
   .section-head {
@@ -389,7 +395,7 @@
     transition: background 280ms ease-out, color 280ms ease-out, transform 280ms cubic-bezier(0.16, 1, 0.3, 1);
   }
   .card:hover .icon-box {
-    background: linear-gradient(135deg, #3a5aa8 0%, #182c58 100%);
+    background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%);
     color: #fff;
     transform: rotate(-10deg) scale(1.08);
   }
@@ -434,7 +440,7 @@
   .step-num {
     width: 52px; height: 52px;
     border-radius: 50%;
-    background: var(--accent-blue);
+    background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%);
     color: #ffffff;
     display: flex; align-items: center; justify-content: center;
     font-weight: 700;
@@ -476,7 +482,7 @@
   .feature-row-card:hover, body .feature-row-card.reveal.visible:hover { transform: translateY(-6px) scale(1.025); box-shadow: 0 22px 44px rgba(16,24,40,0.16); z-index: 1; }
   .feature-row-card .icon-box { margin-bottom: 0; flex-shrink: 0; }
   .feature-row-card:hover .icon-box {
-    background: linear-gradient(135deg, #3a5aa8 0%, #182c58 100%);
+    background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%);
     color: #fff;
     transform: rotate(-10deg) scale(1.08);
   }
@@ -696,9 +702,9 @@
   .modal-side {
     position: relative;
     background:
-      radial-gradient(650px 520px at 68% 42%, rgba(70,100,165,0.38) 0%, transparent 62%),
-      radial-gradient(520px 420px at 18% 96%, rgba(50,80,145,0.28) 0%, transparent 60%),
-      linear-gradient(165deg, #17223d 0%, #101a2e 60%, #0c1425 100%);
+      radial-gradient(650px 520px at 68% 42%, rgba(91,204,255,0.22) 0%, transparent 62%),
+      radial-gradient(520px 420px at 18% 96%, rgba(91,204,255,0.13) 0%, transparent 60%),
+      linear-gradient(165deg, #17223d 0%, #101a2e 55%, #0e3c5d 100%);
     padding: 32px 26px;
     width: 352px;
     max-height: 90vh;
