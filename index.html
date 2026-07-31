@@ -130,6 +130,12 @@
     box-shadow: 0 8px 20px rgba(16, 32, 72, 0.35);
     transform: translateY(-1px);
   }
+  /* Dashboards (PM, Supplier, Admin) use a single flat brand color for buttons instead of the gradient.
+     The landing page, login/signup modals, and the Admin login form keep the gradient. */
+  #pmDashboard, #supplierDashboard, #adminDashboard {
+    --btn-grad-start: #183060;
+    --btn-grad-end: #183060;
+  }
   .btn-primary:active { transform: translateY(0); filter: brightness(0.98); }
   .btn-primary:focus-visible { outline: 2px solid var(--accent-blue); outline-offset: 2px; }
   .btn-primary:disabled { background: #cbd5e1; color: #94a3b8; cursor: not-allowed; box-shadow: none; transform: none; filter: none; }
@@ -3704,7 +3710,9 @@
 
   .admin-login-left {
     position: relative;
-    background: radial-gradient(1100px 700px at 20% 10%, #16213a 0%, #101828 55%, #0c1420 100%);
+    background:
+      radial-gradient(650px 520px at 25% 15%, rgba(91,204,255,0.20) 0%, transparent 60%),
+      radial-gradient(1100px 700px at 20% 10%, #16213a 0%, #101828 55%, #0e3c5d 100%);
     padding: 48px 64px;
     display: flex; flex-direction: column;
     overflow-y: auto;
@@ -3718,7 +3726,12 @@
   .admin-login-left > * { position: relative; z-index: 1; }
   .admin-login-logo svg { height: 26px; color: #fff; margin-bottom: 64px; }
   .admin-login-left h1 { font-size: 40px; font-weight: 800; color: #fff; line-height: 1.15; margin-bottom: 18px; }
-  .admin-login-left h1 .accent { color: #5a7fd0; }
+  .admin-login-left h1 .accent {
+    background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
   .admin-login-left > p { font-size: 15.5px; color: #94a3b8; line-height: 1.6; max-width: 420px; margin-bottom: 40px; }
   .admin-feature-card {
     display: flex; align-items: center; gap: 14px;
@@ -3761,14 +3774,18 @@
   .admin-forgot-app {
     position: fixed; inset: 0; z-index: 410;
     display: none; align-items: center; justify-content: center;
-    background: var(--app-bg, #eeeff2); opacity: 0; transition: opacity 220ms ease-out; padding: 24px;
+    background: rgba(8, 13, 22, 0.55); backdrop-filter: blur(4px);
+    opacity: 0; visibility: hidden; transition: opacity 220ms ease-out, visibility 220ms ease-out; padding: 24px;
   }
   .admin-forgot-app.active { display: flex; }
-  .admin-forgot-app.visible { opacity: 1; }
+  .admin-forgot-app.visible { opacity: 1; visibility: visible; }
   .admin-forgot-card {
-    width: 100%; max-width: 460px; background: #fff; border: 1px solid var(--border-subtle);
-    border-radius: 16px; padding: 40px; box-shadow: 0 20px 50px rgba(16,24,40,0.08);
+    width: 100%; max-width: 460px; background: #fff; border-radius: 18px;
+    padding: 40px; box-shadow: 0 30px 70px rgba(0,0,0,0.4);
+    transform: translateY(16px) scale(0.97); opacity: 0;
+    transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1), opacity 220ms ease-out;
   }
+  .admin-forgot-app.visible .admin-forgot-card { transform: none; opacity: 1; }
   .admin-forgot-card h2 { font-size: 22px; font-weight: 800; color: var(--text-heading); margin-bottom: 8px; }
   .admin-forgot-card .afc-sub { font-size: 14px; color: var(--text-body-muted); margin-bottom: 24px; }
   .admin-forgot-card .field-group { margin-bottom: 20px; }
@@ -4484,6 +4501,27 @@
   .confirm-modal-btns button { flex: 1; border-radius: 10px; padding: 12px; font-size: 13.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
   .confirm-modal-confirm { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); border: none; color: #fff; }
   .confirm-modal-confirm:hover { opacity: 0.9; }
+
+  /* ---------- Admin Services module: Compliance requirements ---------- */
+  .admin-svc-modal-card {
+    width: 100%; max-width: 560px; background: #fff; border-radius: 18px; padding: 28px 30px;
+    max-height: 88vh; overflow-y: auto;
+    transform: translateY(18px) scale(0.98); opacity: 0;
+    transition: transform 300ms cubic-bezier(0.16,1,0.3,1), opacity 300ms ease-out;
+  }
+  .modal-overlay.open .admin-svc-modal-card { transform: none; opacity: 1; }
+  .svc-req-block { border: 1px solid var(--border-subtle); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
+  .svc-req-title { font-size: 13.5px; font-weight: 700; color: var(--text-heading); margin-bottom: 10px; }
+  .svc-req-checks { display: flex; gap: 22px; flex-wrap: wrap; }
+  .svc-req-check { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--text-heading); cursor: pointer; }
+  .svc-req-check input { width: 16px; height: 16px; accent-color: var(--accent-blue); cursor: pointer; }
+  .svc-role-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 6px; border-bottom: 1px solid var(--border-subtle); cursor: pointer; transition: background 150ms ease-out; }
+  .svc-role-row:last-child { border-bottom: none; }
+  .svc-role-row:hover { background: var(--surface-soft); }
+  .svc-role-name { font-size: 14px; font-weight: 600; color: var(--text-heading); }
+  .svc-role-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 7px; }
+  .svc-badge { display: inline-flex; align-items: center; font-size: 10.5px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: var(--icon-tint-bg); color: var(--accent-blue); white-space: nowrap; }
+  .svc-badge.na { background: var(--surface-soft); color: #94a3b8; }
   .pmprop-del-confirm:hover { opacity: 0.9; }
 
 </style>
@@ -5127,7 +5165,18 @@
               <div class="field-error-text" id="loginIdentifierError">Please enter your email or mobile number.</div>
             </div>
 
-            <button type="button" id="loginContinueBtn" class="btn btn-primary">Continue <span class="arrow">→</span></button>
+            <div class="field-group" id="loginPasswordGroup" style="display:none;">
+              <label for="loginPasswordInput">Password<span class="req">*</span></label>
+              <div class="password-wrap">
+                <input class="field-input" type="password" id="loginPasswordInput" name="loginPassword" placeholder="Enter your password">
+                <button type="button" class="eye-toggle" id="loginEyeToggle" aria-label="Show password">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+              <div class="field-error-text" id="loginPasswordError">Please enter your password.</div>
+            </div>
+
+            <button type="button" id="loginContinueBtn" class="btn btn-primary">Login <span class="arrow">→</span></button>
           </form>
 
           <p class="modal-login-link">Don't have an account? <button type="button" class="as-link" id="loginToSignup">Sign Up</button></p>
@@ -8523,6 +8572,7 @@
             </div>
           </div>
 
+          <!-- Admin Services: Role Requirements Configuration modal -->
         </div>
       </div>
     </div>
@@ -10314,7 +10364,7 @@
             <div class="field-error-text" id="adminPasswordError">Please enter your password.</div>
           </div>
           <div class="admin-forgot-row"><button type="button" id="adminForgotBtn">Forgot password?</button></div>
-          <button type="button" class="btn btn-primary" id="adminSignInBtn" style="width:100%;">Sign In</button>
+          <button type="button" class="btn btn-primary" id="adminSignInBtn" style="width:100%;padding-top:16px;padding-bottom:16px;">Sign In</button>
         </form>
 
         <div class="admin-restricted-label">Restricted Access</div>
@@ -10334,14 +10384,17 @@
 
   <!-- ============ ADMIN FORGOT PASSWORD ============ -->
   <div class="admin-forgot-app" id="adminForgotApp">
-    <div class="admin-forgot-card">
+    <div class="admin-forgot-card" style="position:relative;">
+      <button type="button" class="modal-close" id="adminForgotCloseBtn" aria-label="Close" style="position:absolute;top:16px;right:16px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
       <h2>Forgot Password</h2>
       <p class="afc-sub">Enter your email and we'll send you a reset link.</p>
       <form id="adminForgotForm" novalidate>
         <div class="field-group">
           <input class="field-input" type="email" id="adminForgotEmail" placeholder="Email *" required>
         </div>
-        <button type="button" class="btn btn-primary" id="sendResetLinkBtn">Send Reset Link</button>
+        <button type="button" class="btn btn-primary" id="sendResetLinkBtn" style="padding-top:16px;padding-bottom:16px;">Send Reset Link</button>
       </form>
       <div class="admin-back-login-row"><button type="button" id="backToLoginBtn">Back to Login</button></div>
     </div>
@@ -10711,6 +10764,89 @@
               </div>
             </div>
           </div>
+          </div>
+
+          <!-- ============ SERVICES_VIEW_PLACEHOLDER ============ -->
+          <div id="adminServicesView" style="display:none;">
+            <div class="dash-content-head">
+              <div><h2>Services</h2><div class="dash-content-sub">Manage service categories, roles, and the compliance requirements suppliers must meet.</div></div>
+            </div>
+
+            <div class="pm-settings-tabs-row" id="adminServicesTabs" style="margin-top:16px;">
+              <div class="pm-settings-tab-item active" data-svctab="compliance">Compliance</div>
+            </div>
+
+            <div id="adminSvcPanelCompliance" style="margin-top:20px;">
+              <p style="font-size:13.5px;color:var(--text-body-muted);margin-bottom:16px;max-width:720px;">Select a role to configure which supplier types (Sole Trader, Company, or Both) must hold each certificate and insurance type. If nothing is selected for a requirement, it won't be shown as required for that role.</p>
+              <div class="cat-role-picker" style="grid-template-columns:320px 1fr;">
+                <div class="crp-cats" style="max-height:680px;">
+                  <div class="crp-cats-label" style="display:flex;align-items:center;gap:6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>ROLES <span class="crp-cats-total" id="adminSvcRoleTotal">0</span></div>
+                  <div class="crp-search">
+                    <input class="field-input" type="text" id="adminSvcRoleSearchInput" placeholder="Search roles...">
+                  </div>
+                  <div id="adminSvcRolesFlatList"></div>
+                </div>
+                <div class="crp-roles" style="padding:22px 24px;">
+                  <div id="adminSvcConfigEmpty" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:360px;color:var(--text-body-muted);">
+                    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:14px;opacity:0.5;"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+                    <div style="font-size:14px;font-weight:600;color:var(--text-heading);margin-bottom:4px;">Select a role to configure</div>
+                    <div style="font-size:13px;max-width:280px;">Choose a role from the list to set its certificate and insurance requirements.</div>
+                  </div>
+
+                  <div id="adminSvcConfigPanel" style="display:none;">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:2px;">
+                      <div class="dch-icon" style="width:36px;height:36px;flex-shrink:0;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9m9 5h-9m9 5h-9M4 7h1m-1 5h1m-1 5h1"/></svg></div>
+                      <div>
+                        <h3 id="adminSvcModalRoleName" style="font-size:19px;font-weight:800;color:var(--text-heading);">Gas Safe Engineer</h3>
+                        <div style="font-size:12.5px;color:var(--text-body-muted);margin-top:2px;" id="adminSvcModalCatLabel">Gas &amp; Heating</div>
+                      </div>
+                    </div>
+
+                    <div class="ob-section-heading" style="margin-top:22px;display:flex;align-items:center;gap:8px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent-blue);flex-shrink:0;"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>Certificate Requirement</div>
+                    <p class="ob-section-subtext" style="margin-top:-8px;">Select who must hold this certificate. If nothing is selected, it isn't required for this role.</p>
+                    <div class="svc-req-block">
+                      <div class="svc-req-title">Certificate required for</div>
+                      <div class="svc-req-checks" data-req="cert">
+                        <label class="svc-req-check"><input type="checkbox" data-scope="soleTrader"> Sole Trader</label>
+                        <label class="svc-req-check"><input type="checkbox" data-scope="company"> Company</label>
+                        <label class="svc-req-check"><input type="checkbox" data-scope="both"> Both</label>
+                      </div>
+                    </div>
+
+                    <div class="ob-section-heading" style="display:flex;align-items:center;gap:8px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent-blue);flex-shrink:0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Insurance Requirements</div>
+                    <div class="svc-req-block">
+                      <div class="svc-req-title">Public Liability Insurance</div>
+                      <div class="svc-req-checks" data-req="pli">
+                        <label class="svc-req-check"><input type="checkbox" data-scope="soleTrader"> Sole Trader</label>
+                        <label class="svc-req-check"><input type="checkbox" data-scope="company"> Company</label>
+                        <label class="svc-req-check"><input type="checkbox" data-scope="both"> Both</label>
+                      </div>
+                    </div>
+                    <div class="svc-req-block">
+                      <div class="svc-req-title">Professional Indemnity Insurance</div>
+                      <div class="svc-req-checks" data-req="pi">
+                        <label class="svc-req-check"><input type="checkbox" data-scope="soleTrader"> Sole Trader</label>
+                        <label class="svc-req-check"><input type="checkbox" data-scope="company"> Company</label>
+                        <label class="svc-req-check"><input type="checkbox" data-scope="both"> Both</label>
+                      </div>
+                    </div>
+                    <div class="svc-req-block" style="margin-bottom:0;">
+                      <div class="svc-req-title">Employers' Liability Insurance</div>
+                      <div class="svc-req-checks" data-req="el">
+                        <label class="svc-req-check"><input type="checkbox" data-scope="soleTrader"> Sole Trader</label>
+                        <label class="svc-req-check"><input type="checkbox" data-scope="company"> Company</label>
+                        <label class="svc-req-check"><input type="checkbox" data-scope="both"> Both</label>
+                      </div>
+                    </div>
+
+                    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:22px;">
+                      <button type="button" class="btn btn-secondary-light" id="adminSvcModalCancelBtn">Discard</button>
+                      <button type="button" class="btn btn-primary" id="adminSvcModalSaveBtn">Save Requirements</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- ============ PM_LIST_VIEW_PLACEHOLDER ============ -->
@@ -12663,10 +12799,16 @@
   });
 
   document.getElementById('adminForgotBtn').addEventListener('click', function () {
-    closeAdminLogin(function () { openAdminForgot(); });
+    openAdminForgot();
   });
   document.getElementById('backToLoginBtn').addEventListener('click', function () {
-    closeAdminForgot(function () { openAdminLogin(); });
+    closeAdminForgot();
+  });
+  document.getElementById('adminForgotCloseBtn').addEventListener('click', function () {
+    closeAdminForgot();
+  });
+  adminForgotApp.addEventListener('click', function (e) {
+    if (e.target === adminForgotApp) closeAdminForgot();
   });
 
   function handleSendResetLink(e) {
@@ -13275,6 +13417,11 @@
     loginPicker.setRole(role || 'pm');
     loginIdentifier.value = '';
     document.getElementById('loginCountryCodeWrap').style.display = 'none';
+    document.getElementById('loginPasswordGroup').style.display = 'none';
+    document.getElementById('loginPasswordInput').value = '';
+    document.getElementById('loginPasswordInput').type = 'password';
+    document.getElementById('loginPasswordError').classList.remove('show');
+    document.getElementById('loginPasswordInput').classList.remove('error');
     loginModal.open();
     focusFirstField(loginOverlay);
   }
@@ -13314,6 +13461,19 @@
     loginIdentifier.classList.remove('error');
     errorEl.classList.remove('show');
 
+    var passwordInput = document.getElementById('loginPasswordInput');
+    var passwordErrorEl = document.getElementById('loginPasswordError');
+    var passwordGroupVisible = document.getElementById('loginPasswordGroup').style.display !== 'none';
+    if (passwordGroupVisible && !passwordInput.value) {
+      passwordInput.classList.add('error');
+      passwordErrorEl.classList.add('show');
+      passwordInput.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+      setTimeout(function () { passwordInput.focus(); }, 200);
+      return;
+    }
+    passwordInput.classList.remove('error');
+    passwordErrorEl.classList.remove('show');
+
     var role = loginPicker.getRole();
     openOtpPopup(val, function () {
       loginModal.close();
@@ -13343,6 +13503,28 @@
     var val = loginIdentifier.value.trim();
     var looksLikePhone = /^[0-9+]/.test(val);
     loginCountryCodeWrap.style.display = looksLikePhone ? '' : 'none';
+
+    // Reveal the password field only for email entry — not when a mobile number is being entered.
+    var loginPasswordGroup = document.getElementById('loginPasswordGroup');
+    var showPassword = val && !looksLikePhone;
+    loginPasswordGroup.style.display = showPassword ? '' : 'none';
+    if (!showPassword) {
+      var loginPasswordInputReset = document.getElementById('loginPasswordInput');
+      loginPasswordInputReset.value = '';
+      loginPasswordInputReset.classList.remove('error');
+      document.getElementById('loginPasswordError').classList.remove('show');
+    }
+  });
+  var loginEyeToggle = document.getElementById('loginEyeToggle');
+  var loginPasswordInputEl = document.getElementById('loginPasswordInput');
+  loginEyeToggle.addEventListener('click', function () {
+    var isPassword = loginPasswordInputEl.type === 'password';
+    loginPasswordInputEl.type = isPassword ? 'text' : 'password';
+    loginEyeToggle.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+  });
+  loginPasswordInputEl.addEventListener('input', function () {
+    loginPasswordInputEl.classList.remove('error');
+    document.getElementById('loginPasswordError').classList.remove('show');
   });
 
   /* =========================================================
@@ -14078,7 +14260,7 @@
     document.getElementById('pmexProfileWrap').style.display = 'none';
     document.getElementById('pmexBrowseWrap').style.display = '';
     document.getElementById('pmexHeaderBlock').style.display = '';
-    document.querySelector('#pmDashboard .dash-scroll-area').scrollTop = 0;
+    document.querySelector('#pmDashboard .dash-scroll-area').scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function pmexShowProfile(pid) {
@@ -14091,7 +14273,7 @@
     document.getElementById('pmexBrowseWrap').style.display = 'none';
     document.getElementById('pmexHeaderBlock').style.display = 'none';
     document.getElementById('pmexProfileWrap').style.display = '';
-    document.querySelector('#pmDashboard .dash-scroll-area').scrollTop = 0;
+    document.querySelector('#pmDashboard .dash-scroll-area').scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function pmexRatingDistribution(rating) {
@@ -16012,7 +16194,7 @@
     var pmDashContent = document.querySelector('#pmDashboard .dash-content');
     if (pmDashContent) pmDashContent.classList.toggle('dash-content-full', view === 'responses');
     if (pmDashContent) pmDashContent.classList.toggle('dash-content-narrow-pad', view === 'properties' || view === 'propertyform');
-    document.querySelector('#pmDashboard .dash-scroll-area').scrollTop = 0;
+    document.querySelector('#pmDashboard .dash-scroll-area').scrollTo({ top: 0, behavior: 'smooth' });
     if (view === 'propertyform') {
       var pmpropFormEl = document.getElementById('pmPropertyFormView');
       var pmpropOnAnimEnd = function () {
@@ -20183,14 +20365,30 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   });
 
   function showAdminView(view) {
-    document.getElementById('adminOverviewView').style.display = view === 'overview' ? '' : 'none';
-    document.getElementById('adminPMListView').style.display = view === 'pm-list' ? '' : 'none';
-    document.getElementById('adminPMApplicantsView').style.display = view === 'pm-applicants-list' ? '' : 'none';
-    document.getElementById('adminActiveSuppliersView').style.display = view === 'active-suppliers-list' ? '' : 'none';
-    document.getElementById('adminSupplierApplicantsView').style.display = view === 'supplier-applicants-list' ? '' : 'none';
-    document.getElementById('adminClientDetailView').style.display = view === 'client-detail' ? '' : 'none';
-    document.getElementById('adminSupplierDetailView').style.display = view === 'supplier-detail' ? '' : 'none';
-    document.querySelector('.dash-scroll-area').scrollTop = 0;
+    var adminViewIds = {
+      overview: 'adminOverviewView',
+      services: 'adminServicesView',
+      'pm-list': 'adminPMListView',
+      'pm-applicants-list': 'adminPMApplicantsView',
+      'active-suppliers-list': 'adminActiveSuppliersView',
+      'supplier-applicants-list': 'adminSupplierApplicantsView',
+      'client-detail': 'adminClientDetailView',
+      'supplier-detail': 'adminSupplierDetailView'
+    };
+    Object.keys(adminViewIds).forEach(function (key) {
+      var el = document.getElementById(adminViewIds[key]);
+      if (!el) return;
+      if (key === view) {
+        el.style.display = '';
+        el.classList.remove('pm-view-animate');
+        void el.offsetWidth;
+        el.classList.add('pm-view-animate');
+      } else {
+        el.style.display = 'none';
+      }
+    });
+    var adminScrollArea = document.querySelector('#adminDashboard .dash-scroll-area');
+    if (adminScrollArea) adminScrollArea.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   document.querySelectorAll('#adminDashboard .dash-nav-item[data-nav]').forEach(function (item) {
@@ -20208,6 +20406,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         showAdminView('active-suppliers-list');
       } else if (nav === 'supplier-applicants') {
         showAdminView('supplier-applicants-list');
+      } else if (nav === 'services') {
+        showAdminView('services');
       } else {
         showAdminView('overview');
         document.querySelector('#adminDashboard .dash-nav-item[data-nav="overview"]').classList.add('active');
@@ -20230,6 +20430,149 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   document.querySelectorAll('#adminDashboard .view-all').forEach(function (el) {
     el.addEventListener('click', function () { showToast('This isn\u2019t wired up in this prototype yet.'); });
   });
+  /* =========================================================
+     ADMIN — SERVICES MODULE: COMPLIANCE REQUIREMENTS
+  ========================================================== */
+  var adminSvcActiveRole = null;
+  var adminSvcRoleConfig = {
+    'Gas Safe Engineer': { cert: { soleTrader: true, company: true }, pli: { soleTrader: true, company: true }, pi: { soleTrader: false, company: false }, el: { soleTrader: false, company: true } },
+    'Scaffolder': { cert: { soleTrader: true, company: true }, pli: { soleTrader: true, company: true }, pi: { soleTrader: false, company: false }, el: { soleTrader: false, company: true } },
+    'Damp & Mould Surveyor': { cert: { soleTrader: true, company: true }, pli: { soleTrader: false, company: false }, pi: { soleTrader: true, company: true }, el: { soleTrader: false, company: false } }
+  };
+  function getSvcRoleConfig(role) {
+    if (!adminSvcRoleConfig[role]) {
+      adminSvcRoleConfig[role] = {
+        cert: { soleTrader: false, company: false },
+        pli: { soleTrader: false, company: false },
+        pi: { soleTrader: false, company: false },
+        el: { soleTrader: false, company: false }
+      };
+    }
+    return adminSvcRoleConfig[role];
+  }
+  function svcScopeLabel(scope) {
+    if (scope.soleTrader && scope.company) return 'Both';
+    if (scope.soleTrader) return 'Sole Trader';
+    if (scope.company) return 'Company';
+    return null;
+  }
+  function svcRoleCategories(role) {
+    return Object.keys(categoryRoles).filter(function (cat) { return categoryRoles[cat].indexOf(role) !== -1; });
+  }
+  function svcAllRolesFlat() {
+    var seen = {};
+    var all = [];
+    Object.keys(categoryRoles).forEach(function (cat) {
+      categoryRoles[cat].forEach(function (role) {
+        if (!seen[role]) { seen[role] = true; all.push(role); }
+      });
+    });
+    return all.sort(function (a, b) { return a.localeCompare(b); });
+  }
+  var adminSvcRoleSearchTerm = '';
+  function renderAdminSvcRolesFlatList() {
+    var list = document.getElementById('adminSvcRolesFlatList');
+    if (!list) return;
+    var allRoles = svcAllRolesFlat();
+    document.getElementById('adminSvcRoleTotal').textContent = allRoles.length;
+    var term = adminSvcRoleSearchTerm.trim().toLowerCase();
+    var roles = term ? allRoles.filter(function (r) { return r.toLowerCase().indexOf(term) !== -1; }) : allRoles;
+    if (!roles.length) {
+      list.innerHTML = '<div style="padding:20px 16px;font-size:13px;color:var(--text-body-muted);text-align:center;">No roles match &ldquo;' + supjrEscapeHtml(adminSvcRoleSearchTerm.trim()) + '&rdquo;.</div>';
+      return;
+    }
+    list.innerHTML = roles.map(function (role) {
+      var cfg = getSvcRoleConfig(role);
+      var certLabel = svcScopeLabel(cfg.cert);
+      var badges = certLabel
+        ? '<span class="svc-badge">Certificate &middot; ' + certLabel + '</span>'
+        : '<span class="svc-badge na">No certificate required</span>';
+      [['pli', 'PLI'], ['pi', 'PI'], ['el', 'EL']].forEach(function (pair) {
+        var lbl = svcScopeLabel(cfg[pair[0]]);
+        if (lbl) badges += '<span class="svc-badge">' + pair[1] + ' &middot; ' + lbl + '</span>';
+      });
+      return '<div class="crp-cat-row svc-flat-role-row' + (role === adminSvcActiveRole ? ' active' : '') + '" data-role="' + supjrEscapeHtml(role) + '" style="height:auto;flex-direction:column;align-items:flex-start;padding:12px 16px;gap:6px;">' +
+        '<span class="crp-cat-name" style="font-weight:700;">' + role + '</span>' +
+        '<div class="svc-role-badges" style="margin-top:0;">' + badges + '</div>' +
+        '</div>';
+    }).join('');
+    list.querySelectorAll('.svc-flat-role-row').forEach(function (row) {
+      row.addEventListener('click', function () { selectAdminSvcRole(row.getAttribute('data-role')); });
+    });
+  }
+
+  function fillAdminSvcConfigChecks(role) {
+    var cfg = getSvcRoleConfig(role);
+    document.querySelectorAll('#adminSvcConfigPanel .svc-req-checks').forEach(function (block) {
+      var reqKey = block.getAttribute('data-req');
+      block.querySelectorAll('input[type="checkbox"][data-scope="soleTrader"], input[type="checkbox"][data-scope="company"]').forEach(function (cb) {
+        cb.checked = !!cfg[reqKey][cb.getAttribute('data-scope')];
+      });
+      var bothCb = block.querySelector('input[type="checkbox"][data-scope="both"]');
+      if (bothCb) bothCb.checked = !!(cfg[reqKey].soleTrader && cfg[reqKey].company);
+    });
+  }
+  function svcSyncBothCheckbox(block) {
+    var st = block.querySelector('input[data-scope="soleTrader"]');
+    var co = block.querySelector('input[data-scope="company"]');
+    var both = block.querySelector('input[data-scope="both"]');
+    if (both) both.checked = !!(st.checked && co.checked);
+  }
+  document.querySelectorAll('#adminSvcConfigPanel .svc-req-checks').forEach(function (block) {
+    var st = block.querySelector('input[data-scope="soleTrader"]');
+    var co = block.querySelector('input[data-scope="company"]');
+    var both = block.querySelector('input[data-scope="both"]');
+    st.addEventListener('change', function () { svcSyncBothCheckbox(block); });
+    co.addEventListener('change', function () { svcSyncBothCheckbox(block); });
+    both.addEventListener('change', function () {
+      st.checked = both.checked;
+      co.checked = both.checked;
+    });
+  });
+  function selectAdminSvcRole(role) {
+    adminSvcActiveRole = role;
+    document.getElementById('adminSvcConfigEmpty').style.display = 'none';
+    document.getElementById('adminSvcConfigPanel').style.display = '';
+    document.getElementById('adminSvcModalRoleName').textContent = role;
+    var cats = svcRoleCategories(role);
+    document.getElementById('adminSvcModalCatLabel').textContent = cats.length ? cats.join(', ') : '';
+    fillAdminSvcConfigChecks(role);
+    renderAdminSvcRolesFlatList();
+  }
+  document.getElementById('adminSvcModalCancelBtn').addEventListener('click', function () {
+    if (!adminSvcActiveRole) return;
+    fillAdminSvcConfigChecks(adminSvcActiveRole);
+    showToast('Changes discarded.');
+  });
+  document.getElementById('adminSvcModalSaveBtn').addEventListener('click', function () {
+    if (!adminSvcActiveRole) return;
+    var cfg = getSvcRoleConfig(adminSvcActiveRole);
+    document.querySelectorAll('#adminSvcConfigPanel .svc-req-checks').forEach(function (block) {
+      var reqKey = block.getAttribute('data-req');
+      block.querySelectorAll('input[type="checkbox"][data-scope="soleTrader"], input[type="checkbox"][data-scope="company"]').forEach(function (cb) {
+        cfg[reqKey][cb.getAttribute('data-scope')] = cb.checked;
+      });
+    });
+    renderAdminSvcRolesFlatList();
+    showToast('Requirements saved for ' + adminSvcActiveRole + '.');
+  });
+
+  document.querySelectorAll('#adminServicesTabs .pm-settings-tab-item').forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      document.querySelectorAll('#adminServicesTabs .pm-settings-tab-item').forEach(function (t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+    });
+  });
+
+  var adminSvcRoleSearchInput = document.getElementById('adminSvcRoleSearchInput');
+  if (adminSvcRoleSearchInput) {
+    adminSvcRoleSearchInput.addEventListener('input', function () {
+      adminSvcRoleSearchTerm = adminSvcRoleSearchInput.value;
+      renderAdminSvcRolesFlatList();
+    });
+  }
+
+  renderAdminSvcRolesFlatList();
   /* =========================================================
      ADMIN — PROPERTY MANAGER MODULE DATA + RENDER
   ========================================================== */
