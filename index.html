@@ -2553,6 +2553,36 @@
   @media (max-width: 700px) { .pm-filter-row { grid-template-columns: repeat(2, minmax(140px, 1fr)); max-width: calc(100% - 60px); } }
   @media (max-width: 480px) { .pm-filter-row { grid-template-columns: 1fr; max-width: 100%; } }
   .pm-filter-field { position: relative; }
+  .supapp-filter-bar { align-items: flex-start; }
+  .supapp-daterange-row { display: flex; align-items: stretch; gap: 8px; margin-top: 10px; }
+  .supapp-ms-menu {
+    position: absolute; top: calc(100% + 6px); left: 0; z-index: 40; width: 100%; min-width: 220px;
+    background: #fff; border: 1px solid var(--border-subtle); border-radius: 12px;
+    box-shadow: 0 12px 28px rgba(16, 24, 40, 0.14); padding: 6px; max-height: 260px; overflow-y: auto;
+    display: none;
+  }
+  .supapp-ms-menu.open { display: block; }
+  .supapp-ms-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--text-heading); }
+  .supapp-ms-item:hover { background: var(--surface-soft); }
+  .supapp-ms-check { width: 16px; height: 16px; border-radius: 5px; border: 1.5px solid #c7d0dc; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #fff; transition: background 120ms ease-out, border-color 120ms ease-out; }
+  .supapp-ms-item.selected .supapp-ms-check { background: #183060; border-color: #183060; }
+  .supapp-location-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .supapp-location-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #183060; background: #e7edf6; padding: 5px 8px 5px 12px; border-radius: 999px; }
+  .supapp-invite-chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .supapp-invite-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; color: #183060; background: #e7edf6; padding: 6px 8px 6px 12px; border-radius: 999px; max-width: 100%; }
+  .supapp-invite-chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .supapp-invite-chip button { background: none; border: none; color: #183060; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 2px; opacity: 0.7; flex-shrink: 0; }
+  .supapp-invite-chip button:hover { opacity: 1; }
+  .supapp-location-chip button { background: none; border: none; color: #183060; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 2px; opacity: 0.7; }
+  .supapp-location-chip button:hover { opacity: 1; }
+  @media (max-width: 900px) {
+    #adminSupplierApplicantsView .supapp-filter-bar, #adminActiveSuppliersView .supapp-filter-bar { flex-direction: column; align-items: stretch; }
+    #adminSupplierApplicantsView .supapp-filter-bar .pm-filter-field, #adminActiveSuppliersView .supapp-filter-bar .pm-filter-field { width: 100% !important; }
+  }
+  @media (max-width: 640px) {
+    #adminSupplierApplicantsView .pm-search-row, #adminActiveSuppliersView .pm-search-row { flex-direction: column; align-items: stretch; }
+    #adminSupplierApplicantsView .pm-tab-pills, #adminActiveSuppliersView .pm-tab-pills { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  }
   .pm-filter-field .pff-legend-wrap { position: relative; height: 12px; margin-bottom: 6px; }
   .pm-filter-field label {
     position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 5px;
@@ -2939,11 +2969,48 @@
   .supplier-approved-pill.suspended { color: #c0392b; background: #fdecea; }
   .supplier-approved-pill.incomplete { color: #475569; background: var(--surface-soft); }
   .supplier-approved-pill.pending { color: #92620a; background: #fef3c7; }
-  .supplier-approved-pill.rejected { color: #c0392b; background: #fdecea; }
+  .supplier-approved-pill.rejected { color: #64748b; background: #f1f5f9; }
   .muted-italic { font-style: italic; color: #a6b0bf; }
   .supplier-meta-row { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-body-muted); margin-bottom: 5px; }
   .supplier-meta-row svg { color: #94a3b8; flex-shrink: 0; width: 12px; height: 12px; }
   .supplier-meta-row:last-child { margin-bottom: 0; }
+  .supapp-card-divider { height: 1px; background: var(--border-subtle); margin: 12px 0 10px; }
+  .supapp-category-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 2px; }
+  .supapp-category-chip { font-size: 11px; font-weight: 600; color: #183060; background: #e7edf6; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+  .supapp-category-more { font-size: 11px; font-weight: 700; color: var(--text-body-muted); background: var(--surface-soft); padding: 3px 9px; border-radius: 999px; white-space: nowrap; cursor: default; }
+  .supapp-location-more { font-size: 10.5px; font-weight: 700; color: var(--text-body-muted); background: var(--surface-soft); padding: 1px 6px; border-radius: 999px; white-space: nowrap; cursor: default; }
+  .supapp-table-location-cell { display: inline-block; max-width: 160px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; }
+  .supapp-table-categories-cell { display: flex; align-items: center; gap: 4px; flex-wrap: nowrap; }
+  .supapp-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; }
+  .supapp-info-cell { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-body-muted); min-width: 0; }
+  .supapp-info-cell span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .supapp-info-cell svg { color: #94a3b8; flex-shrink: 0; width: 12px; height: 12px; }
+  .supapp-status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .supapp-status-dot.is-good { background: #22c55e; }
+  .supapp-status-dot.is-warn { background: #f59e0b; }
+  .supapp-status-dot.is-bad { background: #ef4444; }
+  .supapp-card-footer { display: flex; align-items: center; justify-content: flex-start; gap: 10px; }
+  .supapp-submitted { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--text-body-muted); }
+  .supapp-submitted svg { color: #94a3b8; flex-shrink: 0; width: 12px; height: 12px; }
+  .supapp-card { border-left: 1px solid var(--border-subtle); display: flex; flex-direction: column; height: 100%; }
+  .supapp-card-divider-footer { margin-top: auto; }
+  .supnote-item { display: flex; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--border-subtle); }
+  .supnote-item:first-child { padding-top: 2px; }
+  .supnote-item:last-child { border-bottom: none; }
+  .supnote-role-badge { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: #183060; background: #e7edf6; padding: 2px 8px; border-radius: 999px; }
+  .supnote-role-badge.sub-admin { color: #92620a; background: #fef3c7; }
+  .supnote-delete-btn { background: none; border: none; color: #94a3b8; cursor: pointer; padding: 2px; flex-shrink: 0; display: flex; align-items: center; }
+  .supnote-delete-btn:hover { color: #c0392b; }
+  #adminSupplierApplicantsView .pm-card-active-chip.inactive .dot { background: #94a3b8; }
+  #adminSupplierApplicantsView .pm-yes-tag { color: #183060; background: #e7edf6; }
+  #adminSupplierApplicantsView .pm-yes-tag .dot { background: #183060; }
+  #adminSupplierApplicantsView .pm-yes-tag.inactive { color: #64748b; background: #f1f5f9; }
+  #adminSupplierApplicantsView .pm-yes-tag.inactive .dot { background: #94a3b8; }
+  #adminSupplierApplicantsView .pm-card-avatar, #adminActiveSuppliersView .pm-card-avatar { background: rgba(24, 48, 96, 0.12); color: #183060; }
+  #adminSupplierApplicantsView .pm-card-avatar img, #adminActiveSuppliersView .pm-card-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+  #adminSupplierDetailView #supDetailAvatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+  #adminSupplierApplicantsView .supplier-table-row:hover, #adminActiveSuppliersView .supplier-table-row:hover { background: #f8fafc; }
+  #adminSupplierApplicantsView .supplier-card-top, #adminActiveSuppliersView .supplier-card-top { margin-bottom: 0; }
 
   .pm-page-num { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: var(--text-body-muted); cursor: pointer; flex-shrink: 0; }
   .pm-page-num:hover:not(.active) { background: var(--surface-soft); }
@@ -2977,7 +3044,7 @@
   .sup-compliance-stats .scs-na { color: #64748b; background: var(--surface-soft); }
   #supStatPassed, #supStatPending, #supStatIssues, #supStatNA { padding-left: 3px; padding-right: 3px; }
 
-  .sup-trustid-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 18px 22px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .sup-trustid-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 18px 22px; margin-bottom: 16px; margin-top: 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
   .sup-trustid-card h3 { font-size: 15px; font-weight: 700; color: var(--text-heading); margin-bottom: 8px; }
   .sup-trustid-meta { display: flex; align-items: center; gap: 10px; font-size: 12.5px; color: var(--text-body-muted); flex-wrap: wrap; }
   .sup-trustid-meta .stm-pill { font-size: 11px; font-weight: 700; color: var(--accent-blue); background: var(--icon-tint-bg); padding: 3px 10px; border-radius: 999px; }
@@ -3011,6 +3078,9 @@
   .sup-check-row-top .scr-name { font-size: 13.5px; font-weight: 700; color: var(--text-heading); }
   .sup-check-row-top .scr-sub { font-size: 12px; color: var(--text-body-muted); margin-top: 1px; }
   .sup-check-row-top .scr-method { font-size: 10px; font-weight: 700; color: var(--text-body-muted); background: var(--surface-soft); padding: 3px 8px; border-radius: 999px; letter-spacing: 0.03em; flex-shrink: 0; }
+  .scr-expiry-badge { font-size: 10.5px; font-weight: 700; color: #92620a; background: #fef3c7; padding: 3px 9px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
+  .scr-expiry-badge.urgent { color: #c0392b; background: #fdecea; }
+  .scr-expiry-badge.expired { color: #c0392b; background: #fdecea; }
   .sup-check-row-top .scr-eye { color: #94a3b8; flex-shrink: 0; cursor: pointer; }
   .sup-check-row-top .scr-status { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; flex-shrink: 0; white-space: nowrap; }
   .sup-check-row-top .scr-status.verified { color: #1a7a3e; background: #eafaf0; }
@@ -3021,6 +3091,9 @@
   .sup-check-row-detail { display: none; padding: 0 14px 14px 48px; }
   .sup-check-row.expanded .sup-check-row-detail { display: block; }
   .sup-check-row-detail .scrd-method { font-size: 12px; color: var(--text-body-muted); margin-bottom: 10px; }
+  .scrd-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px 16px; background: var(--surface-soft); border-radius: 10px; padding: 12px 14px; margin-bottom: 12px; }
+  .scrd-field-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; color: #94a3b8; margin-bottom: 3px; }
+  .scrd-field-value { font-size: 13px; font-weight: 600; color: var(--text-heading); }
   .sup-check-row-detail .scrd-method strong { color: var(--text-heading); font-weight: 700; }
   .sup-check-actions { display: flex; gap: 8px; flex-wrap: wrap; }
   .sup-check-actions button { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; padding: 7px 13px; border-radius: 8px; border: 1px solid var(--border-subtle); background: #fff; color: var(--text-heading); cursor: pointer; }
@@ -10893,14 +10966,9 @@
               <div class="cat-role-picker" style="grid-template-columns:300px 1fr;">
                 <div class="crp-cats" style="max-height:680px;">
                   <div class="crp-cats-label" style="display:flex;align-items:center;gap:6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>CATEGORIES <span class="crp-cats-total" id="adminSvcCatTotal2">0</span></div>
-                  <div class="crp-search">
-                    <input class="field-input" type="text" id="adminSvcCategorySearchInput" placeholder="Search categories...">
-                  </div>
-                  <div style="padding:10px;">
-                    <div style="display:flex;gap:8px;">
-                      <input class="field-input" type="text" id="adminSvcNewCategoryInput" placeholder="New category name" style="flex:1;height:38px;font-size:13px;">
-                      <button type="button" class="btn btn-primary" id="adminSvcAddCategoryBtn" style="flex-shrink:0;width:auto;padding:8px 14px;">Add</button>
-                    </div>
+                  <div class="crp-search" style="display:flex;gap:8px;">
+                    <input class="field-input" type="text" id="adminSvcCategorySearchInput" placeholder="Search or add a category..." style="flex:1;">
+                    <button type="button" class="btn btn-primary" id="adminSvcAddCategoryBtn" style="flex-shrink:0;width:auto;padding:8px 14px;">Add</button>
                   </div>
                   <div id="adminSvcCategoriesList" style="max-height:460px;overflow-y:auto;"></div>
                 </div>
@@ -11184,9 +11252,8 @@
                   <div class="pm-custom-dd-menu" data-dd-menu="appApproval">
                     <div class="cdd-item selected" data-value="All Statuses">All Statuses</div>
                     <div class="cdd-item" data-value="Incomplete">Incomplete</div>
-                    <div class="cdd-item" data-value="Pending">Pending</div>
-                    <div class="cdd-item" data-value="Approved">Approved</div>
-                    <div class="cdd-item" data-value="Rejected">Rejected</div>
+                    <div class="cdd-item" data-value="Complete">Complete</div>
+                    <div class="cdd-item" data-value="Archived">Archived</div>
                   </div>
                 </div>
                 <div class="pm-filter-field">
@@ -11309,6 +11376,7 @@
                   <div class="pm-search-kbd"><span>Ctrl</span><span>K</span></div>
                 </div>
                 <div class="pm-tab-pills" id="supTabPills">
+                  <div class="pm-tab-pill" data-filter="all">All</div>
                   <div class="pm-tab-pill active" data-filter="approved">Approved</div>
                   <div class="pm-tab-pill" data-filter="suspended">Suspended</div>
                 </div>
@@ -11321,7 +11389,7 @@
                   <button type="button" class="pm-icon-btn-sq" id="supRefreshBtn" aria-label="Refresh"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/></svg></button>
                 </div>
               </div>
-              <div style="display:flex; gap:12px; margin-top:12px; flex-wrap:wrap;">
+              <div class="supapp-filter-bar" style="display:flex; gap:12px; margin-top:12px; flex-wrap:wrap;">
                 <div class="pm-filter-field" style="width:190px;">
                   <div class="pff-legend-wrap"><label>Type</label></div>
                   <button type="button" class="pm-custom-dd-btn" data-dd="supType">
@@ -11335,27 +11403,16 @@
                     <div class="cdd-item" data-value="Company">Company</div>
                   </div>
                 </div>
-                <div class="pm-filter-field" style="width:190px;">
-                  <div class="pff-legend-wrap"><label>Active state</label></div>
-                  <button type="button" class="pm-custom-dd-btn" data-dd="supState">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-                    <span class="cdd-value">Any State</span>
-                    <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-                  </button>
-                  <div class="pm-custom-dd-menu" data-dd-menu="supState">
-                    <div class="cdd-item selected" data-value="Any State">Any State</div>
-                    <div class="cdd-item" data-value="Active">Active</div>
-                    <div class="cdd-item" data-value="Inactive">Inactive</div>
-                  </div>
-                </div>
+                <div id="supDynamicFilters" style="display:contents;"></div>
               </div>
+              <div class="supapp-location-chips" id="supLocationChips" style="display:none;"></div>
             </div>
 
             <div id="supGridView" class="pm-card-grid"></div>
             <div id="supTableViewWrap" class="pm-table-wrap" style="display:none;">
               <div class="pm-table-scroll">
                 <table class="admin-table" style="min-width:900px;">
-                  <thead><tr><th>Name</th><th>Type</th><th>Categories</th><th>Phone</th><th>Status</th><th>Active</th><th>Joined</th></tr></thead>
+                  <thead><tr><th>Name</th><th>Phone</th><th>Type</th><th>Categories</th><th>Location</th><th>Status</th><th>Joined</th></tr></thead>
                   <tbody id="supTableBody"></tbody>
                 </table>
               </div>
@@ -11396,9 +11453,10 @@
                   <div class="pm-search-kbd"><span>Ctrl</span><span>K</span></div>
                 </div>
                 <div class="pm-tab-pills" id="supAppTabPills">
-                  <div class="pm-tab-pill active" data-filter="incomplete">Incomplete</div>
-                  <div class="pm-tab-pill" data-filter="pending">Pending</div>
-                  <div class="pm-tab-pill" data-filter="rejected">Rejected</div>
+                  <div class="pm-tab-pill active" data-filter="all">All</div>
+                  <div class="pm-tab-pill" data-filter="incomplete">Incomplete</div>
+                  <div class="pm-tab-pill" data-filter="complete">Complete</div>
+                  <div class="pm-tab-pill" data-filter="rejected">Archived</div>
                 </div>
                 <div class="pm-count-actions">
                   <span class="pm-count-text" id="supAppResultCount">Showing 25 of 33</span>
@@ -11407,9 +11465,10 @@
                     <button type="button" data-view="table" aria-label="Table view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4"/><rect x="3" y="10" width="18" height="4"/><rect x="3" y="16" width="18" height="4"/></svg></button>
                   </div>
                   <button type="button" class="pm-icon-btn-sq" id="supAppRefreshBtn" aria-label="Refresh"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/></svg></button>
+                  <button type="button" class="btn btn-primary" id="supAppInviteBtn" style="width:auto;padding:9px 16px;white-space:nowrap;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>Invite Supplier</button>
                 </div>
               </div>
-              <div style="display:flex; gap:12px; margin-top:12px; flex-wrap:wrap;">
+              <div class="supapp-filter-bar" style="display:flex; gap:12px; margin-top:12px; flex-wrap:wrap;">
                 <div class="pm-filter-field" style="width:190px;">
                   <div class="pff-legend-wrap"><label>Type</label></div>
                   <button type="button" class="pm-custom-dd-btn" data-dd="supAppType">
@@ -11423,27 +11482,16 @@
                     <div class="cdd-item" data-value="Company">Company</div>
                   </div>
                 </div>
-                <div class="pm-filter-field" style="width:190px;">
-                  <div class="pff-legend-wrap"><label>Active state</label></div>
-                  <button type="button" class="pm-custom-dd-btn" data-dd="supAppState">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-                    <span class="cdd-value">Any State</span>
-                    <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-                  </button>
-                  <div class="pm-custom-dd-menu" data-dd-menu="supAppState">
-                    <div class="cdd-item selected" data-value="Any State">Any State</div>
-                    <div class="cdd-item" data-value="Active">Active</div>
-                    <div class="cdd-item" data-value="Inactive">Inactive</div>
-                  </div>
-                </div>
+                <div id="supAppDynamicFilters" style="display:contents;"></div>
               </div>
+              <div class="supapp-location-chips" id="supAppLocationChips" style="display:none;"></div>
             </div>
 
             <div id="supAppGridView" class="pm-card-grid"></div>
             <div id="supAppTableViewWrap" class="pm-table-wrap" style="display:none;">
               <div class="pm-table-scroll">
                 <table class="admin-table" style="min-width:900px;">
-                  <thead><tr><th>Name</th><th>Type</th><th>Categories</th><th>Phone</th><th>Status</th><th>Active</th><th>Joined</th></tr></thead>
+                  <thead><tr><th>Name</th><th>Phone</th><th>Type</th><th>Categories</th><th>Location</th><th>Status</th><th>Submitted</th></tr></thead>
                   <tbody id="supAppTableBody"></tbody>
                 </table>
               </div>
@@ -11474,6 +11522,28 @@
             </div>
           </div>
 
+          <!-- ============ INVITE SUPPLIER MODAL ============ -->
+          <div class="modal-overlay" id="supAppInviteOverlay">
+            <div class="confirm-modal-card" style="max-width:440px;text-align:left;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+                <div class="confirm-modal-icon" style="margin:0;background:#e7edf6;color:#183060;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg></div>
+                <button type="button" id="supAppInviteCloseBtn" aria-label="Close" style="background:none;border:none;cursor:pointer;color:var(--text-body-muted);padding:4px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+              </div>
+              <div class="confirm-modal-title" style="text-align:left;">Invite suppliers</div>
+              <div class="confirm-modal-desc" style="text-align:left;">Add one or more email addresses. Each person gets an invitation with a link to complete signup and onboarding themselves &mdash; there's nothing further for you to fill in.</div>
+              <div class="ob-field" style="margin-top:16px;margin-bottom:0;">
+                <label>Supplier email addresses</label>
+                <input type="text" class="field-input" id="supAppInviteEmailInput" placeholder="Type an email, then press Enter">
+                <div id="supAppInviteEmailError" style="display:none;color:#c0392b;font-size:12px;margin-top:6px;">Enter a valid email address.</div>
+                <div class="supapp-invite-chip-row" id="supAppInviteChipRow"></div>
+              </div>
+              <div class="confirm-modal-btns" style="margin-top:20px;">
+                <button type="button" class="pmprop-del-cancel" id="supAppInviteCancelBtn">Cancel</button>
+                <button type="button" class="confirm-modal-confirm" id="supAppInviteSendBtn" style="background:#183060;">Send Invite</button>
+              </div>
+            </div>
+          </div>
+
           <!-- ============ SUPPLIER_DETAIL_VIEW_PLACEHOLDER ============ -->
           <div id="adminSupplierDetailView" style="display:none;">
             <div class="pm-breadcrumb">
@@ -11486,21 +11556,28 @@
               <div class="pm-card-avatar" id="supDetailAvatar" style="width:52px;height:52px;font-size:16px;">NR</div>
               <div style="flex:1;min-width:0;">
                 <div class="sdh-name-row"><h1 id="supDetailName">Nadia Reid</h1><span class="supplier-approved-pill" id="supDetailStatusPill">Approved</span></div>
-                <div class="sdh-sub"><span id="supDetailEmail">nadia.reid07@gmail.com</span><span class="dot-sep"></span><span id="supDetailPhone">+447974202021</span><span class="dot-sep"></span>Applied <span id="supDetailApplied">02/07/2026</span></div>
+                <div class="sdh-sub"><span id="supDetailEmail">nadia.reid07@gmail.com</span><span class="dot-sep"></span><span id="supDetailPhone">+447974202021</span><span class="dot-sep"></span>Submitted on <span id="supDetailApplied">02/07/2026</span></div>
               </div>
               <span class="supplier-type-pill" id="supDetailTypePill">Sole Trader</span>
             </div>
 
-            <div class="sup-tabs-row">
-              <div class="sup-tab-item active" data-suptab="overview">Overview</div>
-              <div class="sup-tab-item" data-suptab="compliance">Profile</div>
-              <div class="sup-tab-item" data-suptab="chat">Chat <span class="pm-count-text" id="supChatCount" style="background:#fef3c7;color:#92620a;padding:1px 8px;border-radius:999px;font-weight:700;">3</span></div>
+            <div class="sup-tabs-row" style="display:flex;align-items:center;justify-content:space-between;">
+              <div style="display:flex;gap:16px;">
+                <div class="sup-tab-item active" data-suptab="overview">Overview</div>
+                <div class="sup-tab-item" data-suptab="compliance">Profile</div>
+                <div class="sup-tab-item" data-suptab="chat">Chat <span class="pm-count-text" id="supChatCount" style="background:#fef3c7;color:#92620a;padding:1px 8px;border-radius:999px;font-weight:700;">3</span></div>
+              </div>
+              <button type="button" id="supNotesDrawerBtn" aria-label="Admin notes" data-tooltip="Admin notes" style="position:relative;background:none;border:none;cursor:pointer;color:var(--text-body-muted);padding:8px;margin-right:4px;display:flex;align-items:center;">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                <span class="pm-count-text" id="supNotesCount" style="position:absolute;top:2px;right:2px;background:var(--surface-soft);color:var(--text-body-muted);padding:0px 5px;border-radius:999px;font-weight:700;font-size:10px;min-width:14px;text-align:center;">0</span>
+              </button>
             </div>
 
-            <div style="display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start;" id="supDetailGrid">
+            <div style="display:grid;grid-template-columns:1fr;gap:20px;align-items:start;" id="supDetailGrid">
               <div>
                 <div id="supTabOverview">
-                  <div class="sup-compliance-card">
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:stretch;">
+                  <div class="sup-compliance-card" style="margin-bottom:0;">
                     <div class="sup-ring-wrap">
                       <svg width="92" height="92" viewBox="0 0 92 92">
                         <circle cx="46" cy="46" r="40" fill="none" stroke="var(--surface-soft)" stroke-width="9"/>
@@ -11520,16 +11597,30 @@
                     </div>
                   </div>
 
+                  <div class="sup-compliance-card" style="margin-bottom:0;align-items:flex-start;flex-direction:column;gap:12px;">
+                    <h3 class="sci-label" style="margin:0;font-size:15px;">CATEGORIES &amp; LOCATION</h3>
+                    <div>
+                      <div class="scf-label" style="margin-bottom:6px;font-size:13px;">Categories</div>
+                      <div class="supapp-category-row" id="supOverviewCategoryChips" style="margin-bottom:0;"></div>
+                    </div>
+                    <div>
+                      <div class="scf-label" style="margin-bottom:6px;font-size:13px;">Location</div>
+                      <div class="supapp-location-chips" id="supOverviewLocationChips" style="margin-top:0;display:flex;"></div>
+                    </div>
+                  </div>
+                  </div>
+
                   <div class="sup-trustid-card">
                     <div>
                       <h3>TrustID Identity Verification</h3>
                       <div class="sup-trustid-meta">
-                        <span class="stm-pill">Link Sent</span>
-                        <span>Expires today<span class="dot-sep"></span>ello.ridhi07@gmail.com</span>
+                        <span class="stm-pill" id="supTrustIdSentPill" style="display:none;">Link Sent</span>
+                        <span id="supTrustIdExpiryText" style="display:none;">Expires today<span class="dot-sep"></span></span>
+                        <span>ello.ridhi07@gmail.com</span>
                         <span class="stm-refresh" id="supTrustIdRefresh"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/></svg>Refresh</span>
                       </div>
                     </div>
-                    <button type="button" class="btn btn-primary" id="supResendLinkBtn" style="flex-shrink:0;">Resend Link</button>
+                    <button type="button" class="btn btn-primary" id="supResendLinkBtn" style="flex-shrink:0;">Send Link</button>
                   </div>
 
                   <div class="sup-checklist-card">
@@ -11663,7 +11754,7 @@
                             <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Nationality</div>
                               <select class="sup-mini-select" style="width:100%;"><option selected>British</option><option>Austrian</option><option>Irish</option><option>Polish</option></select>
                             </div>
-                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">NI number</div><input type="text" class="field-input" value="enc:55dca86dde93a40166f07dee"></div>
+                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">NI number</div><input type="text" class="field-input" value="QQ 12 34 56 C"></div>
                           </div>
                           <div class="sup-comp-field"><div class="scf-label">Home address</div><textarea class="field-input" style="min-height:64px;resize:vertical;">116 Church Lane, Warminster</textarea></div>
                           <div class="ob-toggle-card" style="margin-bottom:0;">
@@ -12386,6 +12477,35 @@
                 </div>
 
 
+                <div class="svc-role-drawer-overlay" id="supNotesDrawerOverlay">
+                  <div class="svc-role-drawer">
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--border-subtle);flex-shrink:0;">
+                      <div style="display:flex;align-items:center;gap:10px;">
+                        <div class="dch-icon" style="width:32px;height:32px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+                        <h3 style="font-size:15.5px;font-weight:800;color:var(--text-heading);">Admin Notes</h3>
+                      </div>
+                      <button type="button" id="supNotesDrawerCloseBtn" aria-label="Close" style="background:none;border:none;cursor:pointer;color:var(--text-body-muted);padding:4px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+                    </div>
+                    <div style="padding:22px;flex:1;overflow-y:auto;">
+                      <div class="callout callout-neutral" style="margin-bottom:16px;">
+                        <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+                        <div>
+                          <div class="callout-title">Internal only</div>
+                          <div class="callout-body">Visible to the admin team only &mdash; the supplier can never see these notes. Any assigned admin or sub-admin can add one; permissions for who can review or respond will be refined once roles ship.</div>
+                        </div>
+                      </div>
+                      <div id="supNotesList"></div>
+                      <div id="supNotesEmpty" style="display:none;padding:8px 0 16px;font-size:13px;color:var(--text-body-muted);">No internal notes yet. Be the first to leave one for the team.</div>
+                    </div>
+                    <div style="padding:16px 22px;border-top:1px solid var(--border-subtle);flex-shrink:0;">
+                      <textarea id="supNoteInput" class="ob-textarea" placeholder="Add an internal note about this applicant \u2014 e.g. follow-up needed, call summary, risk flag..." style="min-height:70px;"></textarea>
+                      <div style="display:flex;justify-content:flex-end;margin-top:10px;">
+                        <button type="button" class="btn btn-primary" id="supAddNoteBtn">Add Note</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <div id="supTabChat" style="display:none;">
                   <div style="display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:stretch;">
                     <div class="chat-window-card">
@@ -12429,52 +12549,7 @@
                 </div>
               </div>
 
-              <div id="supDetailSidebar">
-                <div class="sup-sidebar-card">
-                  <div class="sup-sidebar-contact">
-                    <div class="pm-card-avatar" id="supSidebarAvatar" style="width:52px;height:52px;font-size:16px;">NR</div>
-                    <div><h3 id="supSidebarName">Nadia Reid</h3><div style="display:flex;gap:6px;margin-top:2px;"><span class="supplier-type-pill" id="supSidebarTypePill" style="font-size:11px;padding:2px 8px;">Sole Trader</span><span class="supplier-approved-pill" id="supSidebarStatusPill" style="font-size:11px;padding:2px 8px;">Approved</span></div></div>
-                  </div>
-                  <div class="sup-sidebar-field"><div class="ssf-label">EMAIL</div><div class="ssf-value" id="supSidebarEmail">nadia.reid07@gmail.com</div></div>
-                  <div class="sup-sidebar-field"><div class="ssf-label">PHONE</div><div class="ssf-value" id="supSidebarPhone">+447974202021</div></div>
-                  <div class="sup-sidebar-field"><div class="ssf-label">APPLIED</div><div class="ssf-value" id="supSidebarApplied">2 Jul 2026</div></div>
-                  <div class="sup-sidebar-field" style="border-bottom:1px solid var(--border-subtle);padding-bottom:16px;margin-bottom:14px;"><div class="ssf-label">JOINED</div><div class="ssf-value" id="supSidebarJoined">27 Dec 2025</div></div>
-                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-                    <span class="sup-section-label">DOCUMENTS ON FILE</span>
-                    <span class="sup-view-all-link" id="supViewAllDocsBtn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>View all</span>
-                  </div>
-                  <div class="sup-doc-chip-row" id="supDocChipRow"></div>
-                </div>
 
-                <div class="sup-sidebar-card">
-                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-                    <span class="sup-section-label">VERIFICATION <span style="color:var(--text-heading);">3/3</span></span>
-                    <span style="font-size:11.5px;color:var(--text-body-muted);">Admin override</span>
-                  </div>
-                  <div style="display:flex;gap:6px;flex-wrap:wrap;">
-                    <span class="verif-chip ok sup-chip-sm" style="cursor:default;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Account verified</span>
-                    <span class="verif-chip ok sup-chip-sm" style="cursor:default;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Email verified</span>
-                    <span class="verif-chip ok sup-chip-sm" style="cursor:default;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Phone verified</span>
-                  </div>
-                </div>
-
-                <div class="sup-sidebar-card">
-                  <div style="display:flex;align-items:center;justify-content:space-between;"><span class="sup-section-label">ADMIN NOTES</span><span class="sup-private-chip">PRIVATE</span></div>
-                  <textarea id="supAdminNotes" placeholder="Internal notes (visible to admins only)..." style="width:100%;min-height:80px;margin-top:8px;border:1px solid var(--border-subtle);border-radius:8px;padding:10px;font-family:inherit;font-size:13px;resize:vertical;"></textarea>
-                  <div style="font-size:11px;color:#94a3b8;margin-top:6px;">Captured locally — backend persistence pending.</div>
-                </div>
-
-                <div class="sup-sidebar-card sup-account-box" id="supDeactivateBox">
-                  <div class="sab-row"><span class="dot"></span><span id="supAccountSummary">73%<span class="dot-sep"></span>0 issues</span></div>
-                  <button type="button" class="sup-deactivate-btn-full" id="supDeactivateBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 11-12.73 0M12 2v10"/></svg>Deactivate</button>
-                </div>
-                <div class="sup-sidebar-card" id="supApplicantActionBox" style="display:none;">
-                  <div style="display:flex;gap:8px;">
-                    <button type="button" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:11px;border-radius:10px;background:#1a7a3e;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;" id="supApplicantApproveBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Approve</button>
-                    <button type="button" class="sup-deactivate-btn-full" style="flex:1;" id="supApplicantRejectBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>Reject</button>
-                  </div>
-                </div>
-              </div>
             </div>
 
             <div class="sup-sticky-bar">
@@ -12482,7 +12557,7 @@
               <button type="button" class="sup-deactivate-btn-full" id="supDeactivateBtn2" style="width:auto;padding:9px 20px;">Deactivate</button>
               <div id="supApplicantActionBtns" style="display:none;gap:10px;">
                 <button type="button" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 20px;border-radius:10px;background:#1a7a3e;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;" id="supApplicantApproveBtn2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Approve</button>
-                <button type="button" class="sup-deactivate-btn-full" style="width:auto;padding:9px 20px;" id="supApplicantRejectBtn2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>Reject</button>
+                <button type="button" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 20px;border-radius:10px;background:#64748b;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;border:none;" id="supApplicantRejectBtn2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13V7a2 2 0 00-2-2H6a2 2 0 00-2 2v6M4 13h16v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6zM10 17h4"/></svg>Archive</button>
               </div>
             </div>
           </div>
@@ -20794,7 +20869,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       { name: 'Verified', color: '#284890', value: 105, valueLabel: '105' },
       { name: 'Pending review', color: '#22c55e', value: 5, valueLabel: '5' },
       { name: 'Incomplete', color: '#f59e0b', value: 33, valueLabel: '33' },
-      { name: 'Rejected', color: '#e8482c', value: 1, valueLabel: '1' }
+      { name: 'Archived', color: '#e8482c', value: 1, valueLabel: '1' }
     ];
     document.getElementById('supplierNetworkContent').innerHTML = buildRingChart(segments, '144', 'suppliers');
   }
@@ -21111,7 +21186,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       return;
     }
     if (!cats.length) {
-      list.innerHTML = '<div style="padding:20px 16px;font-size:13px;color:var(--text-body-muted);">No categories match &ldquo;' + supjrEscapeHtml(adminSvcCategorySearchTerm.trim()) + '&rdquo;.</div>';
+      list.innerHTML = '<div style="padding:20px 16px;font-size:13px;color:var(--text-body-muted);">No categories match &ldquo;' + supjrEscapeHtml(adminSvcCategorySearchTerm.trim()) + '&rdquo;. Press <strong>Add</strong> to create it.</div>';
       return;
     }
     list.innerHTML = cats.map(function (cat) {
@@ -21171,19 +21246,21 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     renderAdminSvcCategoriesList();
   });
 
-  document.getElementById('adminSvcAddCategoryBtn').addEventListener('click', function () {
-    var input = document.getElementById('adminSvcNewCategoryInput');
+  function handleAdminSvcAddCategory() {
+    var input = document.getElementById('adminSvcCategorySearchInput');
     var name = input.value.trim();
     if (!name) { input.focus(); return; }
-    if (categoryRoles[name]) { showToast('That category already exists.'); return; }
+    if (categoryRoles[name]) { showToast('That category already exists.'); selectAdminSvcManageCategory(name); return; }
     categoryRoles[name] = [];
     input.value = '';
+    adminSvcCategorySearchTerm = '';
     renderAdminSvcCategoriesList();
     showToast('"' + name + '" category added.');
     selectAdminSvcManageCategory(name);
-  });
-  document.getElementById('adminSvcNewCategoryInput').addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') { e.preventDefault(); document.getElementById('adminSvcAddCategoryBtn').click(); }
+  }
+  document.getElementById('adminSvcAddCategoryBtn').addEventListener('click', handleAdminSvcAddCategory);
+  document.getElementById('adminSvcCategorySearchInput').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); handleAdminSvcAddCategory(); }
   });
 
   function handleAdminSvcAssignRole() {
@@ -21390,29 +21467,29 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
   var activeSuppliers = [
     { initials: 'RA', color: '#16a34a', name: 'rajat', email: 'nopod62636@icotz.com', phone: '+447555281444', type: 'Company', joined: '3 Jul 2026', status: 'Approved', activeState: 'Active' },
-    { initials: 'NR', color: '#0d9488', name: 'Nadia Reid', email: 'nadia.reid07@gmail.com', phone: '+447974202021', type: 'Sole Trader', joined: '2 Jul 2026', status: 'Approved', activeState: 'Active' },
+    { initials: 'NR', color: '#0d9488', name: 'Nadia Reid', email: 'nadia.reid07@gmail.com', phone: '+447974202021', type: 'Sole Trader', joined: '2 Jul 2026', status: 'Approved', activeState: 'Active', photo: 'https://i.pravatar.cc/150?img=25' },
     { initials: 'DO', color: '#f2542d', name: 'doefy', email: 'rekifi5103@doefy.com', phone: '+447864537263', type: 'Sole Trader', joined: '2 Jul 2026', status: 'Approved', activeState: 'Active' },
     { initials: 'TI', color: '#0ea5e9', name: 'tibaf', email: 'tibaf21779@icotz.com', phone: '+447222542811', type: 'Company', joined: '2 Jul 2026', status: 'Approved', activeState: 'Active' },
     { initials: 'SO', color: '#7c3aed', name: 'sorogam', email: 'sorogam354@jctoto.com', phone: '+447888542877', type: 'Company', joined: '29 Jun 2026', status: 'Approved', activeState: 'Active' },
     { initials: 'KO', color: '#f2542d', name: 'komamax', email: 'komamax670@fishnone.com', phone: '+447888542888', type: 'Sole Trader', joined: '29 Jun 2026', status: 'Approved', activeState: 'Active' },
-    { initials: 'LG', color: '#2563eb', name: 'Liam Greenwood', email: 'greenwood86@gmail.com', phone: '+447671542225', type: 'Sole Trader', joined: '25 Jun 2026', status: 'Approved', activeState: 'Active' },
-    { initials: 'AS', color: '#ec4899', name: 'Aaron Shah', email: 'sup.shah.54@keylr-seed.co.uk', phone: '+447532615617', type: 'Company', joined: '23 Apr 2026', status: 'Approved', activeState: 'Active' },
+    { initials: 'LG', color: '#2563eb', name: 'Liam Greenwood', email: 'greenwood86@gmail.com', phone: '+447671542225', type: 'Sole Trader', joined: '25 Jun 2026', status: 'Approved', activeState: 'Active', photo: 'https://i.pravatar.cc/150?img=3' },
+    { initials: 'AS', color: '#ec4899', name: 'Aaron Shah', email: 'sup.shah.54@keylr-seed.co.uk', phone: '+447532615617', type: 'Company', joined: '23 Apr 2026', status: 'Approved', activeState: 'Active', photo: 'https://i.pravatar.cc/150?img=15' },
     { initials: 'LD', color: '#16a34a', name: 'Lucy Doyle', email: 'sup.doyle.2@keylr-seed.co.uk', phone: '+447231132179', type: 'Sole Trader', joined: '20 Apr 2026', status: 'Approved', activeState: 'Active' },
     { initials: 'ON', color: '#0d9488', name: 'Oliver Nwosu', email: 'sup.nwosu.68@keylr-seed.co.uk', phone: '+447538311263', type: 'Sole Trader', joined: '16 Apr 2026', status: 'Approved', activeState: 'Active' },
     { initials: 'CB', color: '#7c3aed', name: 'Callum Bennett', email: 'sup.bennett.12@keylr-seed.co.uk', phone: '+447754793886', type: 'Sole Trader', joined: '14 Apr 2026', status: 'Approved', activeState: 'Active' },
-    { initials: 'GO', color: '#f97316', name: 'Gareth Okafor', email: 'sup.okafor.5@keylr-seed.co.uk', phone: '+447368493752', type: 'Sole Trader', joined: '13 Apr 2026', status: 'Approved', activeState: 'Active' },
+    { initials: 'GO', color: '#f97316', name: 'Gareth Okafor', email: 'sup.okafor.5@keylr-seed.co.uk', phone: '+447368493752', type: 'Sole Trader', joined: '13 Apr 2026', status: 'Suspended', activeState: 'Inactive', photo: 'https://i.pravatar.cc/150?img=18' },
     { initials: 'AC', color: '#0ea5e9', name: 'Aiden Campbell', email: 'sup.campbell.9@keylr-seed.co.uk', phone: '+447171943490', type: 'Company', joined: '10 Apr 2026', status: 'Approved', activeState: 'Active' },
-    { initials: 'SM', color: '#f2542d', name: 'Sean Morgan', email: 'sup.morgan.3@keylr-seed.co.uk', phone: '+447703778458', type: 'Sole Trader', joined: '8 Apr 2026', status: 'Approved', activeState: 'Active' },
-    { initials: 'EM', color: '#2563eb', name: 'Emma Marsh', email: 'sup.marsh.41@keylr-seed.co.uk', phone: '+447587625797', type: 'Company', joined: '5 Apr 2026', status: 'Approved', activeState: 'Active' },
+    { initials: 'SM', color: '#f2542d', name: 'Sean Morgan', email: 'sup.morgan.3@keylr-seed.co.uk', phone: '+447703778458', type: 'Sole Trader', joined: '8 Apr 2026', status: 'Suspended', activeState: 'Inactive' },
+    { initials: 'EM', color: '#2563eb', name: 'Emma Marsh', email: 'sup.marsh.41@keylr-seed.co.uk', phone: '+447587625797', type: 'Company', joined: '5 Apr 2026', status: 'Approved', activeState: 'Active', photo: 'https://i.pravatar.cc/150?img=36' },
     { initials: 'MP', color: '#ec4899', name: 'Marcus Patel', email: 'sup.patel.30@keylr-seed.co.uk', phone: '+447838617114', type: 'Sole Trader', joined: '24 Mar 2026', status: 'Approved', activeState: 'Active' },
-    { initials: 'NY', color: '#16a34a', name: 'Nathan Yates', email: 'sup.yates.7@keylr-seed.co.uk', phone: '+447949578363', type: 'Sole Trader', joined: '22 Mar 2026', status: 'Approved', activeState: 'Active' },
-    { initials: 'OW', color: '#7c3aed', name: 'Oliver Wright', email: 'sup.wright.6@keylr-seed.co.uk', phone: '+447533024559', type: 'Company', joined: '22 Mar 2026', status: 'Approved', activeState: 'Active' },
+    { initials: 'NY', color: '#16a34a', name: 'Nathan Yates', email: 'sup.yates.7@keylr-seed.co.uk', phone: '+447949578363', type: 'Sole Trader', joined: '22 Mar 2026', status: 'Suspended', activeState: 'Inactive' },
+    { initials: 'OW', color: '#7c3aed', name: 'Oliver Wright', email: 'sup.wright.6@keylr-seed.co.uk', phone: '+447533024559', type: 'Company', joined: '22 Mar 2026', status: 'Approved', activeState: 'Active', photo: 'https://i.pravatar.cc/150?img=40' },
     { initials: 'NT', color: '#0d9488', name: 'Nathan Thompson', email: 'sup.thompson.14@keylr-seed.co.uk', phone: '+447610644584', type: 'Company', joined: '20 Mar 2026', status: 'Approved', activeState: 'Active' },
     { initials: 'CB', color: '#f97316', name: 'Callum Bennett', email: 'sup.bennett.28@keylr-seed.co.uk', phone: '+447474446003', type: 'Sole Trader', joined: '19 Mar 2026', status: 'Approved', activeState: 'Active' },
-    { initials: 'RS', color: '#0ea5e9', name: 'Rhys Stewart', email: 'sup.stewart.11@keylr-seed.co.uk', phone: '+447993141843', type: 'Sole Trader', joined: '18 Mar 2026', status: 'Approved', activeState: 'Active' },
+    { initials: 'RS', color: '#0ea5e9', name: 'Rhys Stewart', email: 'sup.stewart.11@keylr-seed.co.uk', phone: '+447993141843', type: 'Sole Trader', joined: '18 Mar 2026', status: 'Approved', activeState: 'Active', photo: 'https://i.pravatar.cc/150?img=50' },
     { initials: 'MN', color: '#2563eb', name: 'Marcus Nowak', email: 'sup.nowak.19@keylr-seed.co.uk', phone: '+447392535235', type: 'Company', joined: '15 Mar 2026', status: 'Approved', activeState: 'Active' },
     { initials: 'KW', color: '#ec4899', name: 'Katie Walsh', email: 'sup.walsh.16@keylr-seed.co.uk', phone: '+447362973928', type: 'Company', joined: '12 Mar 2026', status: 'Approved', activeState: 'Active' },
-    { initials: 'EB', color: '#16a34a', name: 'Emma Buckley', email: 'sup.buckley.22@keylr-seed.co.uk', phone: '+447167451249', type: 'Company', joined: '7 Mar 2026', status: 'Approved', activeState: 'Active' },
+    { initials: 'EB', color: '#16a34a', name: 'Emma Buckley', email: 'sup.buckley.22@keylr-seed.co.uk', phone: '+447167451249', type: 'Company', joined: '7 Mar 2026', status: 'Approved', activeState: 'Active', photo: 'https://i.pravatar.cc/150?img=65' },
     { initials: 'AC', color: '#7c3aed', name: 'Amelia Costa', email: 'sup.costa.5@keylr-seed.co.uk', phone: '+447165230941', type: 'Company', joined: '6 Mar 2026', status: 'Approved', activeState: 'Active' }
   ];
 
@@ -21420,61 +21497,84 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
      every other supplier reuses this as placeholder detail data, same precedent as John John in the PM module. */
   var supplierApplicants = [
     { initials: 'TE', color: '#f2542d', name: 'Test', email: 'test@gmail.com', type: '', phone: '+441234657982', activeState: 'Active', status: 'Incomplete' },
-    { initials: 'FE', color: '#16a34a', name: 'Ferna', email: 'greenwood86@gmail.com', type: 'Sole Trader', phone: '+447671542225', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'FE', color: '#16a34a', name: 'Ferna', email: 'greenwood86@gmail.com', type: 'Sole Trader', phone: '+447671542225', activeState: 'Active', status: 'Incomplete', photo: 'https://i.pravatar.cc/150?img=5' },
     { initials: 'FE', color: '#0ea5e9', name: 'fern', email: 'fern@gmail.com', type: 'Sole Trader', phone: '+441234589844', activeState: 'Active', status: 'Incomplete' },
-    { initials: 'FT', color: '#ec4899', name: 'Fernando Arenas Testing', email: 'fernando@keylr.com', type: 'Sole Trader', phone: '+4407395664384', activeState: 'Active', status: 'Incomplete' },
-    { initials: 'JJ', color: '#7c3aed', name: 'john john', email: 'johnjohn@john.com', type: 'Company', phone: '+4407124536780', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'FT', color: '#ec4899', name: 'Fernando Arenas Testing', email: 'fernando@keylr.com', type: 'Sole Trader', phone: '+4407395664384', activeState: 'Active', status: 'Approved', photo: 'https://i.pravatar.cc/150?img=12' },
+    { initials: 'JJ', color: '#7c3aed', name: 'john john', email: 'johnjohn@john.com', type: 'Company', phone: '+4407124536780', activeState: 'Active', status: 'Incomplete', photo: 'https://i.pravatar.cc/150?img=13' },
     { initials: 'JJ', color: '#7c3aed', name: 'jane jane', email: 'jane@trade.com', type: 'Sole Trader', phone: '+4407199237568', activeState: 'Active', status: 'Incomplete' },
-    { initials: 'SU', color: '#f2542d', name: 'Supplier testing UK', email: 'Sptest@keylr.com', type: 'Company', phone: '+4407000000003', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'SU', color: '#f2542d', name: 'Supplier testing UK', email: 'Sptest@keylr.com', type: 'Company', phone: '+4407000000003', activeState: 'Active', status: 'Incomplete', photo: 'https://i.pravatar.cc/150?img=21' },
     { initials: 'KE', color: '#ec4899', name: 'Keylr', email: 'testingkey@test.com', type: 'Company', phone: '+447777777798', activeState: 'Active', status: 'Incomplete' },
     { initials: 'TE', color: '#0ea5e9', name: 'Testingaccount', email: 'testinguk@keylr.com', type: 'Company', phone: '+4407000000008', activeState: 'Active', status: 'Incomplete' },
     { initials: 'FT', color: '#ec4899', name: 'Fernando testing', email: 'test@uktest1.com', type: 'Sole Trader', phone: '+4407997884738', activeState: 'Active', status: 'Incomplete' },
-    { initials: 'GE', color: '#16a34a', name: 'gexeki', email: 'gexeki8305@test.com', type: 'Company', phone: '+447979797977', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'GE', color: '#16a34a', name: 'gexeki', email: 'gexeki8305@test.com', type: 'Company', phone: '+447979797977', activeState: 'Active', status: 'Approved', photo: 'https://i.pravatar.cc/150?img=33' },
     { initials: 'TE', color: '#16a34a', name: 'test', email: 'testing@gm.com', type: 'Sole Trader', phone: '+447654312569', activeState: 'Active', status: 'Incomplete' },
-    { initials: 'TE', color: '#f2542d', name: 'testingun', email: 'testing@123.com', type: 'Company', phone: '+4407837434672', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'TE', color: '#f2542d', name: 'testingun', email: 'testing@123.com', type: 'Company', phone: '+4407837434672', activeState: 'Active', status: 'Approved' },
     { initials: 'TE', color: '#7c3aed', name: 'Testeruk', email: '', type: 'Sole Trader', phone: '+4402073728888', activeState: 'Active', status: 'Incomplete' },
     { initials: 'UK', color: '#0ea5e9', name: 'Uktest', email: '', type: 'Sole Trader', phone: '+44800000001', activeState: 'Active', status: 'Incomplete' },
     { initials: 'TS', color: '#f2542d', name: 'Testing supplier', email: '', type: 'Company', phone: '+440800000000', activeState: 'Active', status: 'Incomplete' },
-    { initials: 'SS', color: '#e8482c', name: 'Simranpreet', email: '', type: 'Sole Trader', phone: '+447788990099', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'SS', color: '#e8482c', name: 'Simranpreet', email: '', type: 'Sole Trader', phone: '+447788990099', activeState: 'Active', status: 'Incomplete', photo: 'https://i.pravatar.cc/150?img=29' },
     { initials: 'RO', color: '#0ea5e9', name: 'rommy', email: '', type: 'Sole Trader', phone: '+447778887777', activeState: 'Active', status: 'Incomplete' },
-    { initials: 'NS', color: '#0d9488', name: 'navneet singh', email: '', type: 'Sole Trader', phone: '+447986543244', activeState: 'Active', status: 'Incomplete' },
+    { initials: 'NS', color: '#0d9488', name: 'navneet singh', email: '', type: 'Sole Trader', phone: '+447986543244', activeState: 'Active', status: 'Incomplete', photo: 'https://i.pravatar.cc/150?img=52' },
     { initials: 'JA', color: '#0ea5e9', name: 'jack', email: '', type: 'Company', phone: '+447778887778', activeState: 'Active', status: 'Incomplete' },
     { initials: 'TL', color: '#7c3aed', name: 'Test supplier', email: '', type: 'Company', phone: '+4407999999823', activeState: 'Active', status: 'Incomplete' },
     { initials: 'TU', color: '#7c3aed', name: 'Testing UK', email: '', type: 'Sole Trader', phone: '+4407837483748', activeState: 'Active', status: 'Incomplete' },
     { initials: 'FE', color: '#0ea5e9', name: 'Fernando', email: '', type: 'Sole Trader', phone: '+4407700000987', activeState: 'Active', status: 'Incomplete' },
     { initials: 'FA', color: '#f2542d', name: 'Fernando Costa', email: '', type: 'Sole Trader', phone: '+4407999999980', activeState: 'Active', status: 'Incomplete' },
     { initials: 'FA', color: '#f2542d', name: 'Fernando Silva', email: '', type: 'Sole Trader', phone: '+4407788888888', activeState: 'Active', status: 'Incomplete' },
-    { initials: 'MA', color: '#16a34a', name: 'Marcus Ade', email: 'marcus.ade@test.com', type: 'Sole Trader', phone: '+447700112233', activeState: 'Active', status: 'Pending' },
-    { initials: 'RH', color: '#0ea5e9', name: 'Rhea Holt', email: 'rhea.holt@test.com', type: 'Company', phone: '+447700112234', activeState: 'Active', status: 'Pending' },
-    { initials: 'DK', color: '#7c3aed', name: 'Deepak Kumar', email: '', type: 'Sole Trader', phone: '+447700112235', activeState: 'Active', status: 'Pending' },
+    { initials: 'MA', color: '#16a34a', name: 'Marcus Ade', email: 'marcus.ade@test.com', type: 'Sole Trader', phone: '+447700112233', activeState: 'Active', status: 'Approved', photo: 'https://i.pravatar.cc/150?img=8' },
+    { initials: 'RH', color: '#0ea5e9', name: 'Rhea Holt', email: 'rhea.holt@test.com', type: 'Company', phone: '+447700112234', activeState: 'Active', status: 'Approved', photo: 'https://i.pravatar.cc/150?img=45' },
+    { initials: 'DK', color: '#7c3aed', name: 'Deepak Kumar', email: '', type: 'Sole Trader', phone: '+447700112235', activeState: 'Active', status: 'Incomplete' },
     { initials: 'LW', color: '#ec4899', name: 'Lena Wood', email: 'lena.wood@test.com', type: 'Sole Trader', phone: '+447700112236', activeState: 'Active', status: 'Rejected' },
     { initials: 'OB', color: '#f2542d', name: 'Owen Bright', email: '', type: 'Company', phone: '+447700112237', activeState: 'Inactive', status: 'Rejected' },
-    { initials: 'SA', color: '#0d9488', name: 'Sana Ahmed', email: 'sana.ahmed@test.com', type: 'Sole Trader', phone: '+447700112238', activeState: 'Active', status: 'Incomplete' },
-    { initials: 'PK', color: '#16a34a', name: 'Priya Kaur', email: '', type: 'Sole Trader', phone: '+447700112239', activeState: 'Active', status: 'Incomplete' },
-    { initials: 'DW', color: '#7c3aed', name: 'Dan Walsh', email: 'dan.walsh@test.com', type: 'Company', phone: '+447700112240', activeState: 'Active', status: 'Incomplete' }
+    { initials: 'SA', color: '#0d9488', name: 'Sana Ahmed', email: 'sana.ahmed@test.com', type: 'Sole Trader', phone: '+447700112238', activeState: 'Active', status: 'Approved', photo: 'https://i.pravatar.cc/150?img=47' },
+    { initials: 'PK', color: '#16a34a', name: 'Priya Kaur', email: '', type: 'Sole Trader', phone: '+447700112239', activeState: 'Active', status: 'Approved', photo: 'https://i.pravatar.cc/150?img=44' },
+    { initials: 'DW', color: '#7c3aed', name: 'Dan Walsh', email: 'dan.walsh@test.com', type: 'Company', phone: '+447700112240', activeState: 'Active', status: 'Approved', photo: 'https://i.pravatar.cc/150?img=59' }
   ];
 
-  function supplierComplianceTemplate() {
+  function supplierComplianceTemplate(allVerified) {
+    var pendingStatus = allVerified ? 'verified' : 'pending';
     return [
       { category: 'Identity & Address', items: [
         { id: 'photoId', name: 'Photo ID Verification', sub: 'Nadia Reid', method: 'auto', status: 'verified' },
         { id: 'selfie', name: 'Selfie Biometric Match', sub: 'Selfie uploaded \u2014 awaiting match', method: 'auto', status: 'verified' },
         { id: 'address', name: 'Proof of Address', sub: '116 Church Lane, Warminster', method: 'manual', status: 'verified' },
-        { id: 'ni', name: 'NI number', sub: 'enc:55dca86dde93a40166f07dee', method: 'manual', status: 'verified', noActions: true }
+        { id: 'ni', name: 'NI number', sub: 'QQ 12 34 56 C', method: 'manual', status: 'verified', noActions: true }
       ] },
       { category: 'Business Legitimacy', items: [
         { id: 'vat', name: 'VAT registration', sub: 'GB553557881', method: 'auto', status: 'verified' }
       ] },
       { category: 'Insurance', items: [
-        { id: 'pli', name: 'Public Liability Insurance', sub: 'Hiscox<span class="dot-sep"></span>policy #PL-330202', method: 'manual', status: 'verified' },
-        { id: 'pi', name: 'Professional Indemnity', sub: 'Declared', method: 'manual', status: 'verified' }
+        { id: 'pli', name: 'Public Liability Insurance', sub: 'Hiscox<span class="dot-sep"></span>policy #PL-330202', method: 'manual', status: 'verified', expiryDate: new Date(2026, 7, 8), details: [
+          { label: 'Insurance Provider', value: 'Hiscox' },
+          { label: 'Policy Number', value: 'PL-330202' },
+          { label: 'Public Liability Coverage', value: '\u00a32,000,000' },
+          { label: 'Expiry Date', value: '8 Aug 2026' }
+        ] },
+        { id: 'pi', name: 'Professional Indemnity', sub: 'Declared', method: 'manual', status: 'verified', expiryDate: new Date(2026, 8, 17), details: [
+          { label: 'PI Insurance Provider', value: 'Markel' },
+          { label: 'PI Policy Number', value: 'PI-576019' },
+          { label: 'PI Coverage Amount', value: '\u00a31,000,000' },
+          { label: 'PI Expiry Date', value: '17 Sep 2026' }
+        ] }
       ] },
       { category: 'Trade Certifications', items: [
-        { id: 'gassafe', name: 'Gas Safe', sub: 'Self-declared', method: 'manual', status: 'pending' },
-        { id: 'fgas', name: 'F-Gas', sub: 'Self-declared', method: 'manual', status: 'pending' }
+        { id: 'gassafe', name: 'Gas Safe', sub: 'Self-declared', method: 'manual', status: pendingStatus, expiryDate: new Date(2026, 7, 23), details: [
+          { label: 'Certificate Name', value: 'Gas Safe' },
+          { label: 'Registration Number', value: 'GS-558241' },
+          { label: 'Expiry Date', value: '23 Aug 2026' }
+        ] },
+        { id: 'fgas', name: 'F-Gas', sub: 'Self-declared', method: 'manual', status: pendingStatus, expiryDate: new Date(2026, 10, 2), details: [
+          { label: 'Certificate Name', value: 'F-Gas' },
+          { label: 'Registration Number', value: 'FGC-88312' },
+          { label: 'Expiry Date', value: '30 Nov 2026' }
+        ] }
       ] },
       { category: 'Background Checks', items: [
-        { id: 'dbs', name: 'DBS certificate', sub: 'Not declared', method: 'manual', status: 'pending' },
+        { id: 'dbs', name: 'DBS certificate', sub: 'Not declared', method: 'manual', status: pendingStatus, details: [
+          { label: 'Certificate Number', value: '847162039485' },
+          { label: 'DBS Level', value: 'Basic' },
+          { label: 'Issue Date', value: '15 Jan 2025' }
+        ] },
         { id: 'rtw', name: 'Right to Work', sub: 'Status: Yes', method: 'manual', status: 'verified', noActions: true }
       ] }
     ];
@@ -21663,38 +21763,48 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
   function renderSupplierCard(c, i) {
     var typeIcon = c.type === 'Company' ? companyIconSvg : personIconSvg;
-    return '<div class="supplier-card" data-idx="' + i + '">' +
+    return '<div class="supplier-card supapp-card" data-idx="' + i + '">' +
       '<div class="supplier-card-top">' +
-        '<div class="pm-card-avatar" style="background:' + c.color + ';">' + c.initials + '</div>' +
+        '<div class="pm-card-avatar">' + supAppAvatarHtml(c) + '</div>' +
         '<div class="supplier-name-wrap">' +
           '<div class="supplier-name">' + c.name + '</div>' +
-          '<div class="supplier-email">' + (c.email || '\u2014') + '</div>' +
+          '<div class="supplier-email' + (c.email ? '' : ' muted-italic') + '">' + (c.email || 'No email provided') + '</div>' +
         '</div>' +
-        '<div class="pm-card-active-chip' + (c.activeState === 'Active' ? '' : ' inactive') + '"><span class="dot"></span>' + c.activeState + '</div>' +
         '<div class="pm-card-actions">' +
           '<button type="button" class="supplier-action-btn supplier-impersonate-btn" data-idx="' + i + '" data-tooltip="Impersonate">' + arrowOpenSvg + '</button>' +
           '<button type="button" class="supplier-action-btn supplier-card-menu-btn" data-idx="' + i + '" data-tooltip="More actions">' + menuDotsSvg + '</button>' +
         '</div>' +
         supplierDropdownHtml(i) +
       '</div>' +
+      '<div class="supapp-card-divider"></div>' +
+      '<div class="supapp-category-row">' + supAppCategoryChipsHtml(c.categories, 3) + '</div>' +
+      '<div class="supapp-card-divider"></div>' +
+      '<div class="supapp-info-grid">' +
+        '<div class="supapp-info-cell' + (c.phone ? '' : ' muted-italic') + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg><span>' + (c.phone || 'No phone provided') + '</span></div>' +
+        '<div class="supapp-info-cell" data-tooltip="' + supjrEscapeHtml((c.locations || []).join(', ')) + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><span>' + supAppLocationsText(c.locations) + '</span></div>' +
+      '</div>' +
+      '<div class="supapp-info-cell" style="margin-top:8px;"><span class="supapp-status-dot ' + supAppVerificationDotClass(c.verificationStatus) + '"></span><span>' + c.verificationStatus + '</span></div>' +
+      '<div class="supapp-card-divider"></div>' +
       '<div class="supplier-pill-row">' +
         '<span class="supplier-approved-pill' + (c.status === 'Approved' ? '' : ' suspended') + '">' + c.status + '</span>' +
         '<span class="supplier-type-pill' + (c.type === 'Sole Trader' ? ' sole-trader' : '') + '">' + typeIcon + c.type + '</span>' +
       '</div>' +
-      (c.phone ? '<div class="supplier-meta-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>' + c.phone + '</div>' : '') +
-      '<div class="supplier-meta-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Joined ' + c.joined + '</div>' +
+      '<div class="supapp-card-divider supapp-card-divider-footer"></div>' +
+      '<div class="supapp-card-footer">' +
+        '<span class="supapp-submitted"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Joined ' + c.joined + '</span>' +
+      '</div>' +
     '</div>';
   }
 
   function renderSupplierTableRow(c, i) {
     var typeIcon = c.type === 'Company' ? companyIconSvg : personIconSvg;
     return '<tr class="pm-table-row supplier-table-row" data-idx="' + i + '">' +
-      '<td><div class="pm-name-cell"><div class="pm-card-avatar" style="background:' + c.color + ';">' + c.initials + '</div><div><div class="nm-name">' + c.name + '</div><div class="nm-email">' + (c.email || '') + '</div></div></div></td>' +
+      '<td><div class="pm-name-cell"><div class="pm-card-avatar">' + supAppAvatarHtml(c) + '</div><div><div class="nm-name">' + c.name + '</div><div class="nm-email">' + (c.email || 'No email') + '</div></div></div></td>' +
+      '<td>' + (c.phone || '\u2014') + '</td>' +
       '<td><span class="supplier-type-pill' + (c.type === 'Sole Trader' ? ' sole-trader' : '') + '">' + typeIcon + c.type + '</span></td>' +
-      '<td>\u2014</td>' +
-      '<td>' + (c.phone || '—') + '</td>' +
+      '<td><div class="supapp-table-categories-cell">' + supAppCategoryChipsHtml(c.categories, 1) + '</div></td>' +
+      '<td>' + supAppLocationsTableCellHtml(c.locations) + '</td>' +
       '<td><span class="supplier-approved-pill' + (c.status === 'Approved' ? '' : ' suspended') + '">' + c.status + '</span></td>' +
-      '<td>' + activeStatusTag(c.activeState) + '</td>' +
       '<td>' + c.joined + '</td>' +
     '</tr>';
   }
@@ -21986,7 +22096,12 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   var supActiveTab = 'approved';
   var supSearchTerm = '';
   var supTypeFilter = 'All Types';
-  var supStateFilter = 'Any State';
+  var supVerificationFilter = 'All';
+  var supCategoryFilter = 'All Categories';
+  var supLocationFilter = [];
+  var supDateJoinedFilter = 'All Time';
+  var supDateJoinedFrom = null;
+  var supDateJoinedTo = null;
 
   function getFilteredSuppliers() {
     return activeSuppliers.map(function (c, origIdx) { return { c: c, origIdx: origIdx }; }).filter(function (entry) {
@@ -21994,13 +22109,185 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       if (supActiveTab === 'approved' && c.status !== 'Approved') return false;
       if (supActiveTab === 'suspended' && c.status !== 'Suspended') return false;
       if (supTypeFilter !== 'All Types' && c.type !== supTypeFilter) return false;
-      if (supStateFilter !== 'Any State' && c.activeState !== supStateFilter) return false;
+      if (supVerificationFilter !== 'All' && c.verificationStatus !== supVerificationFilter) return false;
+      if (supDateJoinedFilter === 'Today' && (!c.joinedDate || c.joinedDate < daysAgo(0))) return false;
+      if (supDateJoinedFilter === 'Last 7 Days' && (!c.joinedDate || c.joinedDate < daysAgo(7))) return false;
+      if (supDateJoinedFilter === 'Last 30 Days' && (!c.joinedDate || c.joinedDate < daysAgo(30))) return false;
+      if (supDateJoinedFilter === 'Custom Date Range') {
+        if (supDateJoinedFrom && (!c.joinedDate || c.joinedDate < supDateJoinedFrom)) return false;
+        if (supDateJoinedTo && (!c.joinedDate || c.joinedDate > supDateJoinedTo)) return false;
+      }
+      if (supCategoryFilter !== 'All Categories' && (!c.categories || c.categories.indexOf(supCategoryFilter) === -1)) return false;
+      if (supLocationFilter.length && (!c.locations || !c.locations.some(function (loc) { return supLocationFilter.indexOf(loc) !== -1; }))) return false;
       if (supSearchTerm) {
         var term = supSearchTerm.toLowerCase();
         var haystack = (c.name + ' ' + (c.email || '') + ' ' + (c.phone || '')).toLowerCase();
         if (haystack.indexOf(term) === -1) return false;
       }
       return true;
+    });
+  }
+
+  var SUP_FILTER_DEFS = [
+    { key: 'supVerification', label: 'Verification Status', type: 'select', allValue: 'All',
+      options: ['All', 'Verification Pending', 'Verification Complete'] },
+    { key: 'supDateJoined', label: 'Date Joined', type: 'dateRange', allValue: 'All Time',
+      options: ['All Time', 'Today', 'Last 7 Days', 'Last 30 Days', 'Custom Date Range'] },
+    { key: 'supCategory', label: 'Service Category', type: 'select', allValue: 'All Categories', searchable: true,
+      options: ['All Categories'].concat(Object.keys(categoryRoles).length ? Object.keys(categoryRoles) : ['Appliances', 'Cleaning', 'Electrical', 'Gas & Heating', 'Plumbing']) },
+    { key: 'supLocation', label: 'Location', type: 'location' }
+  ];
+
+  function renderSupFilterBar() {
+    var wrap = document.getElementById('supDynamicFilters');
+    if (!wrap) return;
+    wrap.innerHTML = SUP_FILTER_DEFS.map(function (def) {
+      if (def.type === 'select' || def.type === 'dateRange') {
+        var opts = def.options.map(function (o, i) {
+          return '<div class="cdd-item' + (i === 0 ? ' selected' : '') + '" data-value="' + supjrEscapeHtml(o) + '">' + o + '</div>';
+        }).join('');
+        var extra = def.type === 'dateRange'
+          ? '<div class="supapp-daterange-row" id="' + def.key + 'CustomRange" style="display:none;flex-direction:column;gap:10px;">' +
+            '<div class="pm-filter-field" style="width:100%;">' +
+              '<div class="pff-legend-wrap"><label style="font-size:11px;">From</label></div>' +
+              '<button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="' + def.key + 'From" style="width:100%;height:38px;">' +
+                '<span class="cdd-value cal-value" data-cal-text="' + def.key + 'From" style="font-size:12.5px;">dd/mm/yyyy</span>' +
+                '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>' +
+              '</button>' +
+              '<div class="pm-cal-popup" data-cal-popup="' + def.key + 'From">' +
+                '<div class="pm-cal-head">' +
+                  '<button type="button" class="pm-cal-month-label" data-cal-monthlabel="' + def.key + 'From"><span data-cal-monthtext="' + def.key + 'From"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>' +
+                  '<div class="pm-cal-nav">' +
+                    '<button type="button" class="pm-cal-nav-btn" data-cal-prev="' + def.key + 'From" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>' +
+                    '<button type="button" class="pm-cal-nav-btn" data-cal-next="' + def.key + 'From" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>' +
+                  '</div>' +
+                '</div>' +
+                '<div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>' +
+                '<div class="pm-cal-grid" data-cal-grid="' + def.key + 'From"></div>' +
+                '<div class="pm-cal-foot">' +
+                  '<button type="button" class="pm-cal-link" data-cal-clear="' + def.key + 'From">Clear</button>' +
+                  '<button type="button" class="pm-cal-link" data-cal-today="' + def.key + 'From">Today</button>' +
+                '</div>' +
+              '</div>' +
+              '<input type="hidden" id="' + def.key + 'FromInput">' +
+            '</div>' +
+            '<div class="pm-filter-field" style="width:100%;">' +
+              '<div class="pff-legend-wrap"><label style="font-size:11px;">To</label></div>' +
+              '<button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="' + def.key + 'To" style="width:100%;height:38px;">' +
+                '<span class="cdd-value cal-value" data-cal-text="' + def.key + 'To" style="font-size:12.5px;">dd/mm/yyyy</span>' +
+                '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>' +
+              '</button>' +
+              '<div class="pm-cal-popup" data-cal-popup="' + def.key + 'To">' +
+                '<div class="pm-cal-head">' +
+                  '<button type="button" class="pm-cal-month-label" data-cal-monthlabel="' + def.key + 'To"><span data-cal-monthtext="' + def.key + 'To"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>' +
+                  '<div class="pm-cal-nav">' +
+                    '<button type="button" class="pm-cal-nav-btn" data-cal-prev="' + def.key + 'To" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>' +
+                    '<button type="button" class="pm-cal-nav-btn" data-cal-next="' + def.key + 'To" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>' +
+                  '</div>' +
+                '</div>' +
+                '<div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>' +
+                '<div class="pm-cal-grid" data-cal-grid="' + def.key + 'To"></div>' +
+                '<div class="pm-cal-foot">' +
+                  '<button type="button" class="pm-cal-link" data-cal-clear="' + def.key + 'To">Clear</button>' +
+                  '<button type="button" class="pm-cal-link" data-cal-today="' + def.key + 'To">Today</button>' +
+                '</div>' +
+              '</div>' +
+              '<input type="hidden" id="' + def.key + 'ToInput">' +
+            '</div>' +
+            '</div>'
+          : '';
+        return '<div class="pm-filter-field" style="width:190px;">' +
+          '<div class="pff-legend-wrap"><label>' + def.label + '</label></div>' +
+          '<button type="button" class="pm-custom-dd-btn" data-dd="' + def.key + '">' +
+            '<span class="cdd-value">' + def.options[0] + '</span>' +
+            '<svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' +
+          '</button>' +
+          '<div class="pm-custom-dd-menu" data-dd-menu="' + def.key + '">' +
+            (def.searchable ? '<input type="text" class="field-input supapp-dd-search" id="' + def.key + 'SearchInput" placeholder="Search ' + def.label.toLowerCase() + '..." style="height:30px;font-size:12.5px;margin-bottom:6px;">' : '') +
+            '<div>' + opts + '</div>' +
+          '</div>' +
+          extra +
+          '</div>';
+      }
+      if (def.type === 'location') {
+        var locOpts = UK_LOCATIONS.map(function (loc) {
+          return '<div class="supapp-ms-item" data-value="' + loc + '"><span class="supapp-ms-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>' + loc + '</div>';
+        }).join('');
+        return '<div class="pm-filter-field" style="width:220px;">' +
+          '<div class="pff-legend-wrap"><label>' + def.label + '</label></div>' +
+          '<button type="button" class="pm-custom-dd-btn" id="supLocationDdBtn">' +
+            '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>' +
+            '<span class="cdd-value" id="supLocationDdLabel">All Locations</span>' +
+            '<svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' +
+          '</button>' +
+          '<div class="supapp-ms-menu" id="supLocationDdMenu">' +
+            '<input type="text" class="field-input" id="supCityInput" placeholder="Search UK locations..." style="height:30px;font-size:12.5px;margin-bottom:6px;">' +
+            '<div id="supLocationOptionsList">' + locOpts + '</div>' +
+          '</div>' +
+          '</div>';
+      }
+      return '';
+    }).join('');
+
+    SUP_FILTER_DEFS.forEach(function (def) {
+      if (!def.searchable) return;
+      var searchInput = document.getElementById(def.key + 'SearchInput');
+      var menu = document.querySelector('.pm-custom-dd-menu[data-dd-menu="' + def.key + '"]');
+      if (!searchInput || !menu) return;
+      searchInput.addEventListener('click', function (e) { e.stopPropagation(); });
+      searchInput.addEventListener('input', function () {
+        var term = this.value.trim().toLowerCase();
+        menu.querySelectorAll('.cdd-item').forEach(function (item) {
+          var name = item.getAttribute('data-value').toLowerCase();
+          item.style.display = !term || name.indexOf(term) !== -1 ? '' : 'none';
+        });
+      });
+    });
+
+    var locDdBtn = document.getElementById('supLocationDdBtn');
+    var locDdMenu = document.getElementById('supLocationDdMenu');
+    locDdBtn.addEventListener('click', function (e) { e.stopPropagation(); locDdMenu.classList.toggle('open'); });
+    locDdMenu.addEventListener('click', function (e) { e.stopPropagation(); });
+    document.getElementById('supCityInput').addEventListener('input', function () {
+      var term = this.value.trim().toLowerCase();
+      document.querySelectorAll('#supLocationOptionsList .supapp-ms-item').forEach(function (item) {
+        var name = item.getAttribute('data-value').toLowerCase();
+        item.style.display = !term || name.indexOf(term) !== -1 ? '' : 'none';
+      });
+    });
+    document.querySelectorAll('#supLocationOptionsList .supapp-ms-item').forEach(function (item) {
+      item.addEventListener('click', function () {
+        var loc = item.getAttribute('data-value');
+        var idx = supLocationFilter.indexOf(loc);
+        if (idx === -1) supLocationFilter.push(loc); else supLocationFilter.splice(idx, 1);
+        item.classList.toggle('selected', idx === -1);
+        updateSupLocationUI();
+        supCurrentPage = 1;
+        renderSupplierList();
+      });
+    });
+  }
+  function updateSupLocationUI() {
+    var labelEl = document.getElementById('supLocationDdLabel');
+    if (labelEl) labelEl.textContent = supLocationFilter.length ? supLocationFilter.length + ' selected' : 'All Locations';
+    var chipsWrap = document.getElementById('supLocationChips');
+    if (!chipsWrap) return;
+    if (!supLocationFilter.length) { chipsWrap.style.display = 'none'; chipsWrap.innerHTML = ''; return; }
+    chipsWrap.style.display = '';
+    chipsWrap.innerHTML = supLocationFilter.map(function (loc) {
+      return '<span class="supapp-location-chip">' + loc + '<button type="button" data-remove-loc="' + supjrEscapeHtml(loc) + '" aria-label="Remove ' + supjrEscapeHtml(loc) + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>';
+    }).join('');
+    chipsWrap.querySelectorAll('[data-remove-loc]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var loc = btn.getAttribute('data-remove-loc');
+        var idx = supLocationFilter.indexOf(loc);
+        if (idx !== -1) supLocationFilter.splice(idx, 1);
+        var optItem = document.querySelector('#supLocationOptionsList .supapp-ms-item[data-value="' + loc + '"]');
+        if (optItem) optItem.classList.remove('selected');
+        updateSupLocationUI();
+        supCurrentPage = 1;
+        renderSupplierList();
+      });
     });
   }
 
@@ -22036,30 +22323,30 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   }
 
   function wireSupplierCardEvents() {
-    document.querySelectorAll('.supplier-impersonate-btn').forEach(function (btn) {
+    document.querySelectorAll('#adminActiveSuppliersView .supplier-impersonate-btn').forEach(function (btn) {
       btn.addEventListener('click', function (e) {
         e.stopPropagation();
         impersonateSupplier(parseInt(btn.getAttribute('data-idx'), 10));
       });
     });
-    document.querySelectorAll('.supplier-card-menu-btn').forEach(function (btn) {
+    document.querySelectorAll('#adminActiveSuppliersView .supplier-card-menu-btn').forEach(function (btn) {
       btn.addEventListener('click', function (e) {
         e.stopPropagation();
         var idx = btn.getAttribute('data-idx');
-        var menu = document.querySelector('.supplier-dropdown-menu[data-idx="' + idx + '"]');
+        var menu = document.querySelector('#adminActiveSuppliersView .supplier-dropdown-menu[data-idx="' + idx + '"]');
         var wasOpen = menu.classList.contains('open');
         closeAllSupplierDropdowns();
         if (!wasOpen) menu.classList.add('open');
       });
     });
-    document.querySelectorAll('.supplier-dropdown-menu button').forEach(function (btn) {
+    document.querySelectorAll('#adminActiveSuppliersView .supplier-dropdown-menu button').forEach(function (btn) {
       btn.addEventListener('click', function (e) {
         e.stopPropagation();
         var action = btn.getAttribute('data-action');
         var idx = parseInt(btn.closest('.supplier-dropdown-menu').getAttribute('data-idx'), 10);
         closeAllSupplierDropdowns();
         if (action === 'view') {
-          openSupplierDetail(idx);
+          openSupplierDetail(idx, 'supplier');
         } else if (action === 'impersonate') {
           impersonateSupplier(idx);
         } else if (action === 'copyemail') {
@@ -22071,14 +22358,14 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         }
       });
     });
-    document.querySelectorAll('.supplier-card').forEach(function (card) {
+    document.querySelectorAll('#adminActiveSuppliersView .supplier-card').forEach(function (card) {
       card.addEventListener('click', function () {
-        openSupplierDetail(parseInt(card.getAttribute('data-idx'), 10));
+        openSupplierDetail(parseInt(card.getAttribute('data-idx'), 10), 'supplier');
       });
     });
-    document.querySelectorAll('.supplier-table-row').forEach(function (row) {
+    document.querySelectorAll('#adminActiveSuppliersView .supplier-table-row').forEach(function (row) {
       row.addEventListener('click', function () {
-        openSupplierDetail(parseInt(row.getAttribute('data-idx'), 10));
+        openSupplierDetail(parseInt(row.getAttribute('data-idx'), 10), 'supplier');
       });
     });
   }
@@ -22094,6 +22381,73 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   var supDocsFilterTab = 'all';
   var supDocsSelected = {};
   var supFlagsFilterTab = 'all';
+
+  /* ---- Admin Notes (internal only, never visible to the supplier) ---- */
+  var CURRENT_ADMIN_USER = { name: 'You', role: 'Admin', initials: 'YO' };
+  var supplierAdminNotes = {}; // keyed by supplier name (stand-in for a real applicant ID)
+  function supNotesKeyFor(c) { return c ? c.name : ''; }
+  function seedAdminNotesIfNeeded(c) {
+    var key = supNotesKeyFor(c);
+    if (supplierAdminNotes[key]) return;
+    if (c && c.name === 'Nadia Reid') {
+      var d1 = new Date(); d1.setDate(d1.getDate() - 3);
+      var d2 = new Date(); d2.setDate(d2.getDate() - 1);
+      supplierAdminNotes[key] = [
+        { author: 'Priya Shah', role: 'Sub-admin', initials: 'PS', text: 'Called to confirm PLI policy number \u2014 matches what\u2019s on file. Gas Safe cert still self-declared, following up for the certificate upload.', timestamp: d1 },
+        { author: 'Marcus Webb', role: 'Admin', initials: 'MW', text: 'Reviewed background check \u2014 looks fine to proceed once trade certifications are in.', timestamp: d2 }
+      ];
+    } else {
+      supplierAdminNotes[key] = [];
+    }
+  }
+  function supNoteRelativeTime(d) {
+    var diffMs = new Date() - new Date(d);
+    var diffHours = Math.round(diffMs / 3600000);
+    if (diffHours < 1) return 'Just now';
+    if (diffHours < 24) return diffHours + (diffHours === 1 ? ' hour ago' : ' hours ago');
+    var diffDays = Math.round(diffHours / 24);
+    return diffDays === 1 ? '1 day ago' : diffDays + ' days ago';
+  }
+  function renderSupNotesList() {
+    var c = supDetailCurrentSupplier;
+    seedAdminNotesIfNeeded(c);
+    var notes = supplierAdminNotes[supNotesKeyFor(c)] || [];
+    var listEl = document.getElementById('supNotesList');
+    var emptyEl = document.getElementById('supNotesEmpty');
+    if (!listEl) return;
+    if (!notes.length) {
+      listEl.innerHTML = '';
+      if (emptyEl) emptyEl.style.display = '';
+    } else {
+      if (emptyEl) emptyEl.style.display = 'none';
+      listEl.innerHTML = notes.slice().reverse().map(function (n, revIdx) {
+        var idx = notes.length - 1 - revIdx;
+        var roleClass = n.role === 'Sub-admin' ? ' sub-admin' : '';
+        return '<div class="supnote-item">' +
+          '<div class="pm-card-avatar" style="width:32px;height:32px;font-size:12px;background:rgba(24,48,96,0.12);color:#183060;flex-shrink:0;">' + n.initials + '</div>' +
+          '<div style="flex:1;min-width:0;">' +
+            '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
+              '<span style="font-weight:700;font-size:13px;color:var(--text-heading);">' + n.author + '</span>' +
+              '<span class="supnote-role-badge' + roleClass + '">' + n.role + '</span>' +
+              '<span style="font-size:11.5px;color:var(--text-body-muted);">' + supNoteRelativeTime(n.timestamp) + '</span>' +
+            '</div>' +
+            '<div style="font-size:13px;color:var(--text-heading);margin-top:4px;line-height:1.5;white-space:pre-wrap;">' + n.text + '</div>' +
+          '</div>' +
+          (n.author === CURRENT_ADMIN_USER.name ? '<button type="button" class="supnote-delete-btn" data-note-idx="' + idx + '" aria-label="Delete note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>' : '') +
+        '</div>';
+      }).join('');
+      listEl.querySelectorAll('.supnote-delete-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var idx = parseInt(btn.getAttribute('data-note-idx'), 10);
+          supplierAdminNotes[supNotesKeyFor(c)].splice(idx, 1);
+          renderSupNotesList();
+        });
+      });
+    }
+    var countEl = document.getElementById('supNotesCount');
+    if (countEl) countEl.textContent = notes.length;
+  }
+
 
   function flattenChecklist(checklist) {
     var flat = [];
@@ -22119,6 +22473,10 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
   function renderComplianceSummary() {
     var stats = computeComplianceStats();
+    if (supDetailCurrentSupplier) {
+      supDetailCurrentSupplier.docsVerified = stats.pending === 0 && stats.issues === 0;
+      supDetailCurrentSupplier.verificationStatus = supDetailCurrentSupplier.docsVerified ? 'Verification Complete' : 'Verification Pending';
+    }
     document.getElementById('supCompliancePct').textContent = stats.pct + '%';
     document.getElementById('supStatPassed').textContent = stats.verified;
     document.getElementById('supStatPending').textContent = stats.pending;
@@ -22131,7 +22489,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     document.getElementById('supTabIssueCount').textContent = stats.issues;
     document.getElementById('supTabVerifiedCount').textContent = stats.verified;
     document.getElementById('supTabNACount').textContent = stats.na;
-    document.getElementById('supAccountSummary').innerHTML = stats.pct + '%<span class="dot-sep"></span>' + stats.issues + (stats.issues === 1 ? ' issue' : ' issues');
     document.getElementById('supStickyScore').textContent = stats.pct + '%';
     document.getElementById('supStickyChecks').textContent = stats.verified + '/' + stats.total + ' checks passed';
 
@@ -22166,11 +22523,26 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     return '<div class="scr-icon pending"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14M5 2h14M17 22v-4.17a2 2 0 00-.59-1.42L12 12l-4.41 4.41a2 2 0 00-.59 1.42V22M7 2v4.17a2 2 0 00.59 1.42L12 12l4.41-4.41A2 2 0 0017 6.17V2"/></svg></div>';
   }
 
+  function checklistExpiryBadgeHtml(item) {
+    if (!item.expiryDate) return '';
+    var diffDays = Math.round((item.expiryDate.setHours(0, 0, 0, 0) - new Date().setHours(0, 0, 0, 0)) / 86400000);
+    if (diffDays < 0) return '<span class="scr-expiry-badge expired">Expired</span>';
+    var text = diffDays === 0 ? 'Expires today' : diffDays === 1 ? 'Expiring in 1 day' : 'Expiring in ' + diffDays + ' days';
+    var urgentClass = diffDays <= 14 ? ' urgent' : '';
+    return '<span class="scr-expiry-badge' + urgentClass + '">' + text + '</span>';
+  }
   function checklistRowHtml(item) {
     var statusLabel = item.status === 'verified' ? 'Verified' : item.status === 'issue' ? 'Issue' : 'Pending';
     var detailHtml = '';
     if (!item.noActions) {
+      var fieldsHtml = '';
+      if (item.details && item.details.length) {
+        fieldsHtml = '<div class="scrd-fields">' + item.details.map(function (f) {
+          return '<div class="scrd-field"><div class="scrd-field-label">' + f.label + '</div><div class="scrd-field-value">' + f.value + '</div></div>';
+        }).join('') + '</div>';
+      }
       detailHtml = '<div class="sup-check-row-detail"><div class="scrd-method">Method: <strong>' + item.method + '</strong><span class="dot-sep"></span>' + item.sub + '</div>' +
+        fieldsHtml +
         '<div class="sup-check-actions">' +
           '<button type="button" class="sca-verify" data-check-action="verify" data-check-id="' + item.id + '"' + (item.status === 'verified' ? ' disabled' : '') + '><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Mark verified</button>' +
           '<button type="button" class="sca-flag" data-check-action="flag" data-check-id="' + item.id + '"' + (item.status === 'issue' ? ' disabled' : '') + '><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>Flag issue</button>' +
@@ -22181,6 +22553,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       '<div class="sup-check-row-top"' + (item.noActions ? '' : ' data-check-toggle="' + item.id + '"') + '>' +
         checklistIconHtml(item.status) +
         '<div class="scr-info"><div class="scr-name">' + item.name + '</div><div class="scr-sub">' + item.sub + '</div></div>' +
+        checklistExpiryBadgeHtml(item) +
         '<span class="scr-method">' + item.method.toUpperCase() + '</span>' +
         (item.noActions ? '' : '<svg class="scr-eye" data-check-preview="' + item.id + '" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>') +
         '<span class="scr-status ' + item.status + '">' + statusLabel + '</span>' +
@@ -22262,7 +22635,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   });
 
   function renderSupDocChips() {
-    document.getElementById('supDocChipRow').innerHTML = supDetailDocuments.map(function (d) {
+    var chipRow = document.getElementById('supDocChipRow');
+    if (!chipRow) return;
+    chipRow.innerHTML = supDetailDocuments.map(function (d) {
       return '<span class="sup-doc-chip" data-doc-chip="' + d.id + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>' + d.name + '</span>';
     }).join('');
     document.querySelectorAll('[data-doc-chip]').forEach(function (chip) {
@@ -22386,7 +22761,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     renderDocsModal();
     document.getElementById('supDocsOverlay').classList.add('open');
   }
-  document.getElementById('supViewAllDocsBtn').addEventListener('click', openDocsModal);
+  var supViewAllDocsBtnEl = document.getElementById('supViewAllDocsBtn');
+  if (supViewAllDocsBtnEl) supViewAllDocsBtnEl.addEventListener('click', openDocsModal);
 
   document.getElementById('supDocsSendChatBtn').addEventListener('click', function () {
     if (this.disabled) return;
@@ -22799,9 +23175,17 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
   /* ---- Supplier Applicants module ---- */
   function supAppStatusClass(status) {
-    if (status === 'Pending') return 'pending';
     if (status === 'Rejected') return 'rejected';
-    return 'incomplete';
+    if (status === 'Incomplete') return 'incomplete';
+    return '';
+  }
+  function supStatusDisplayText(status) {
+    return status === 'Rejected' ? 'Archived' : status;
+  }
+  function supAppStatusDisplayText(status) {
+    if (status === 'Approved') return 'Complete';
+    if (status === 'Rejected') return 'Archived';
+    return status;
   }
   function supAppDropdownHtml(idx) {
     return '<div class="app-dropdown-menu" data-idx="' + idx + '">' +
@@ -22811,58 +23195,350 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       '<button type="button" data-action="copyphone"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy Phone</button>' +
     '</div>';
   }
+  function supAppAvatarHtml(c) {
+    return c.photo ? '<img src="' + c.photo + '" alt="' + c.name + '">' : c.initials;
+  }
+  function supAppRelativeDate(d) {
+    if (!d) return '\u2014';
+    var diffDays = Math.round((new Date().setHours(0, 0, 0, 0) - new Date(d).setHours(0, 0, 0, 0)) / 86400000);
+    if (diffDays <= 0) return 'Today';
+    if (diffDays === 1) return 'Yesterday';
+    if (diffDays < 30) return diffDays + ' days ago';
+    var months = Math.round(diffDays / 30);
+    return months === 1 ? '1 month ago' : months + ' months ago';
+  }
+  function supAppVerificationDotClass(v) {
+    return v === 'Verification Complete' ? 'is-good' : 'is-warn';
+  }
+  function supAppCategoryChipsHtml(categories, maxVisible) {
+    if (!categories || !categories.length) return '<span class="acct-view-empty" style="font-size:12px;">No category set</span>';
+    maxVisible = maxVisible || 3;
+    var visible = categories.slice(0, maxVisible);
+    var remaining = categories.length - visible.length;
+    return visible.map(function (cat) { return '<span class="supapp-category-chip">' + cat + '</span>'; }).join('') +
+      (remaining > 0 ? '<span class="supapp-category-more" data-tooltip="' + categories.slice(maxVisible).join(', ') + '">+' + remaining + '</span>' : '');
+  }
+  /* Renders every category as a chip, then removes whichever trailing chips don't actually fit within the
+     cell's fixed width, folding them into a "+N" badge instead of letting a chip get visually clipped. */
+  function supAppLocationsText(locations) {
+    if (!locations || !locations.length) return '\u2014';
+    var maxVisible = 3;
+    var visible = locations.slice(0, maxVisible);
+    var remaining = locations.length - visible.length;
+    return visible.join(', ') + (remaining > 0 ? ' <span class="supapp-location-more">+' + remaining + '</span>' : '');
+  }
+  function supAppLocationsTableCellHtml(locations) {
+    if (!locations || !locations.length) return '\u2014';
+    var visible = locations.slice(0, 2).join(', ');
+    var full = locations.join(', ');
+    return '<span class="supapp-table-location-cell" data-tooltip="' + supjrEscapeHtml(full) + '">' + visible + (locations.length > 2 ? '\u2026' : '') + '</span>';
+  }
   function renderSupAppCard(c, i) {
     var typeIcon = c.type === 'Company' ? companyIconSvg : personIconSvg;
-    return '<div class="supplier-card" data-idx="' + i + '">' +
+    return '<div class="supplier-card supapp-card" data-idx="' + i + '">' +
       '<div class="supplier-card-top">' +
-        '<div class="pm-card-avatar" style="background:' + c.color + ';">' + c.initials + '</div>' +
+        '<div class="pm-card-avatar">' + supAppAvatarHtml(c) + '</div>' +
         '<div class="supplier-name-wrap">' +
           '<div class="supplier-name">' + c.name + '</div>' +
-          '<div class="supplier-email' + (c.email ? '' : ' muted-italic') + '">' + (c.email || 'No email') + '</div>' +
+          '<div class="supplier-email' + (c.email ? '' : ' muted-italic') + '">' + (c.email || 'No email provided') + '</div>' +
         '</div>' +
-        '<div class="pm-card-active-chip' + (c.activeState === 'Active' ? '' : ' inactive') + '"><span class="dot"></span>' + c.activeState + '</div>' +
         '<div class="pm-card-actions">' +
           '<button type="button" class="supplier-action-btn supplier-impersonate-btn" data-idx="' + i + '" data-tooltip="Impersonate">' + arrowOpenSvg + '</button>' +
           '<button type="button" class="supplier-action-btn app-card-menu-btn" data-idx="' + i + '" data-tooltip="More actions">' + menuDotsSvg + '</button>' +
         '</div>' +
         supAppDropdownHtml(i) +
       '</div>' +
+      '<div class="supapp-card-divider"></div>' +
+      '<div class="supapp-category-row">' + supAppCategoryChipsHtml(c.categories) + '</div>' +
+      '<div class="supapp-card-divider"></div>' +
+      '<div class="supapp-info-grid">' +
+        '<div class="supapp-info-cell' + (c.phone ? '' : ' muted-italic') + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg><span>' + (c.phone || 'No phone provided') + '</span></div>' +
+        '<div class="supapp-info-cell" data-tooltip="' + supjrEscapeHtml((c.locations || []).join(', ')) + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><span>' + supAppLocationsText(c.locations) + '</span></div>' +
+      '</div>' +
+      '<div class="supapp-info-cell" style="margin-top:8px;"><span class="supapp-status-dot ' + supAppVerificationDotClass(c.verificationStatus) + '"></span><span>' + c.verificationStatus + '</span></div>' +
+      '<div class="supapp-card-divider"></div>' +
       '<div class="supplier-pill-row">' +
-        '<span class="supplier-approved-pill ' + supAppStatusClass(c.status) + '">' + c.status + '</span>' +
+        '<span class="supplier-approved-pill ' + supAppStatusClass(c.status) + '">' + supAppStatusDisplayText(c.status) + '</span>' +
         (c.type ? '<span class="supplier-type-pill' + (c.type === 'Sole Trader' ? ' sole-trader' : '') + '">' + typeIcon + c.type + '</span>' : '') +
       '</div>' +
-      (c.phone ? '<div class="supplier-meta-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>' + c.phone + '</div>' : '') +
-      '<div class="supplier-meta-row muted-italic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Not submitted yet</div>' +
+      '<div class="supapp-card-divider supapp-card-divider-footer"></div>' +
+      '<div class="supapp-card-footer">' +
+        '<span class="supapp-submitted"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Submitted ' + supAppRelativeDate(c.dateSubmitted) + '</span>' +
+      '</div>' +
     '</div>';
   }
   function renderSupAppTableRow(c, i) {
     var typeIcon = c.type === 'Company' ? companyIconSvg : personIconSvg;
     return '<tr class="pm-table-row supplier-table-row" data-idx="' + i + '">' +
-      '<td><div class="pm-name-cell"><div class="pm-card-avatar" style="background:' + c.color + ';">' + c.initials + '</div><div><div class="nm-name">' + c.name + '</div><div class="nm-email">' + (c.email || 'No email') + '</div></div></div></td>' +
-      '<td>' + (c.type ? '<span class="supplier-type-pill' + (c.type === 'Sole Trader' ? ' sole-trader' : '') + '">' + typeIcon + c.type + '</span>' : '\u2014') + '</td>' +
-      '<td>\u2014</td>' +
+      '<td><div class="pm-name-cell"><div class="pm-card-avatar">' + supAppAvatarHtml(c) + '</div><div><div class="nm-name">' + c.name + '</div><div class="nm-email">' + (c.email || 'No email') + '</div></div></div></td>' +
       '<td>' + (c.phone || '\u2014') + '</td>' +
-      '<td><span class="supplier-approved-pill ' + supAppStatusClass(c.status) + '">' + c.status + '</span></td>' +
-      '<td>' + activeStatusTag(c.activeState) + '</td>' +
-      '<td>\u2014</td>' +
+      '<td>' + (c.type ? '<span class="supplier-type-pill' + (c.type === 'Sole Trader' ? ' sole-trader' : '') + '">' + typeIcon + c.type + '</span>' : '\u2014') + '</td>' +
+      '<td><div class="supapp-table-categories-cell">' + supAppCategoryChipsHtml(c.categories, 1) + '</div></td>' +
+      '<td>' + supAppLocationsTableCellHtml(c.locations) + '</td>' +
+      '<td><span class="supplier-approved-pill ' + supAppStatusClass(c.status) + '">' + supAppStatusDisplayText(c.status) + '</span></td>' +
+      '<td>' + supAppRelativeDate(c.dateSubmitted) + '</td>' +
     '</tr>';
   }
 
   var supAppCurrentPage = 1;
   var supAppRowsPerPage = 25;
-  var supAppActiveTab = 'incomplete';
+  var supAppActiveTab = 'all';
   var supAppSearchTerm = '';
   var supAppTypeFilter = 'All Types';
-  var supAppStateFilter = 'Any State';
+  var supAppVerificationFilter = 'All';
+  var supAppDateFilter = 'All Time';
+  var supAppDateFrom = null;
+  var supAppDateTo = null;
+  var supAppCategoryFilter = 'All Categories';
+  var supAppLocationFilter = [];
+  var UK_LOCATIONS = ['London', 'Manchester', 'Birmingham', 'Leeds', 'Bristol', 'Glasgow', 'Liverpool', 'Sheffield', 'Edinburgh', 'Newcastle', 'Nottingham', 'Cardiff', 'Leicester', 'Southampton', 'Oxford', 'Cambridge'];
+
+  /* Enrich demo data with the fields the dynamic filter bar below needs.
+     Deterministic (index-based) so re-loading the page gives the same results. */
+  (function enrichSupApplicantsForFilters() {
+    var categoryCycle = Object.keys(categoryRoles).length ? Object.keys(categoryRoles) : ['Appliances', 'Cleaning', 'Electrical', 'Gas & Heating', 'Plumbing'];
+    supplierApplicants.forEach(function (c, i) {
+      if (c.docsVerified === undefined) c.docsVerified = (i % 3 !== 0); // ~2/3 fully verified, 1/3 still pending — mirrors their Compliance Checklist completion
+      if (!c.verificationStatus) c.verificationStatus = c.docsVerified ? 'Verification Complete' : 'Verification Pending';
+      if (!c.categories) {
+        var catCount = 1 + (i % 5); // 1 to 5 categories, varied so the card's overflow ("+N") is testable
+        var cats = [];
+        for (var k = 0; k < catCount; k++) cats.push(categoryCycle[(i + k) % categoryCycle.length]);
+        c.categories = cats;
+        c.category = cats[0];
+      }
+      if (!c.locations) {
+        var locCount = 1 + (i % 4); // 1 to 4 locations, varied so the card's overflow ("+N") is testable
+        var locs = [];
+        for (var m = 0; m < locCount; m++) locs.push(UK_LOCATIONS[(i + m * 3) % UK_LOCATIONS.length]);
+        c.locations = locs;
+        c.city = locs[0];
+      }
+      if (!c.dateSubmitted) {
+        var d = new Date();
+        d.setDate(d.getDate() - ((i * 4) % 60));
+        c.dateSubmitted = d;
+      }
+    });
+  })();
+
+  (function enrichActiveSuppliersForFilters() {
+    var categoryCycle = Object.keys(categoryRoles).length ? Object.keys(categoryRoles) : ['Appliances', 'Cleaning', 'Electrical', 'Gas & Heating', 'Plumbing'];
+    activeSuppliers.forEach(function (c, i) {
+      if (c.docsVerified === undefined) c.docsVerified = (i % 4 !== 0); // most active suppliers stay fully compliant
+      if (!c.verificationStatus) c.verificationStatus = c.docsVerified ? 'Verification Complete' : 'Verification Pending';
+      if (!c.categories) {
+        var catCount = 1 + (i % 5);
+        var cats = [];
+        for (var k = 0; k < catCount; k++) cats.push(categoryCycle[(i + k) % categoryCycle.length]);
+        c.categories = cats;
+        c.category = cats[0];
+      }
+      if (!c.locations) {
+        var locCount = 1 + (i % 4);
+        var locs = [];
+        for (var m = 0; m < locCount; m++) locs.push(UK_LOCATIONS[(i + m * 2) % UK_LOCATIONS.length]);
+        c.locations = locs;
+        c.city = locs[0];
+      }
+      if (!c.joinedDate && c.joined) c.joinedDate = new Date(c.joined);
+    });
+  })();
+
+  /* ---- Dynamic filter bar config — add a new entry here to add a new filter, no other wiring needed ---- */
+  var SUP_APP_FILTER_DEFS = [
+    { key: 'supAppVerification', label: 'Verification Status', type: 'select', allValue: 'All',
+      options: ['All', 'Verification Pending', 'Verification Complete'] },
+    { key: 'supAppDateSubmitted', label: 'Date Submitted', type: 'dateRange', allValue: 'All Time',
+      options: ['All Time', 'Today', 'Last 7 Days', 'Last 30 Days', 'Custom Date Range'] },
+    { key: 'supAppCategory', label: 'Service Category', type: 'select', allValue: 'All Categories', searchable: true,
+      options: ['All Categories'].concat(Object.keys(categoryRoles).length ? Object.keys(categoryRoles) : ['Appliances', 'Cleaning', 'Electrical', 'Gas & Heating', 'Plumbing']) },
+    { key: 'supAppLocation', label: 'Location', type: 'location' }
+  ];
+
+  function renderSupAppFilterBar() {
+    var wrap = document.getElementById('supAppDynamicFilters');
+    if (!wrap) return;
+    wrap.innerHTML = SUP_APP_FILTER_DEFS.map(function (def) {
+      if (def.type === 'select' || def.type === 'dateRange') {
+        var opts = def.options.map(function (o, i) {
+          return '<div class="cdd-item' + (i === 0 ? ' selected' : '') + '" data-value="' + supjrEscapeHtml(o) + '">' + o + '</div>';
+        }).join('');
+        var extra = def.type === 'dateRange'
+          ? '<div class="supapp-daterange-row" id="' + def.key + 'CustomRange" style="display:none;flex-direction:column;gap:10px;">' +
+            '<div class="pm-filter-field" style="width:100%;">' +
+              '<div class="pff-legend-wrap"><label style="font-size:11px;">From</label></div>' +
+              '<button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="' + def.key + 'From" style="width:100%;height:38px;">' +
+                '<span class="cdd-value cal-value" data-cal-text="' + def.key + 'From" style="font-size:12.5px;">dd/mm/yyyy</span>' +
+                '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>' +
+              '</button>' +
+              '<div class="pm-cal-popup" data-cal-popup="' + def.key + 'From">' +
+                '<div class="pm-cal-head">' +
+                  '<button type="button" class="pm-cal-month-label" data-cal-monthlabel="' + def.key + 'From"><span data-cal-monthtext="' + def.key + 'From"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>' +
+                  '<div class="pm-cal-nav">' +
+                    '<button type="button" class="pm-cal-nav-btn" data-cal-prev="' + def.key + 'From" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>' +
+                    '<button type="button" class="pm-cal-nav-btn" data-cal-next="' + def.key + 'From" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>' +
+                  '</div>' +
+                '</div>' +
+                '<div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>' +
+                '<div class="pm-cal-grid" data-cal-grid="' + def.key + 'From"></div>' +
+                '<div class="pm-cal-foot">' +
+                  '<button type="button" class="pm-cal-link" data-cal-clear="' + def.key + 'From">Clear</button>' +
+                  '<button type="button" class="pm-cal-link" data-cal-today="' + def.key + 'From">Today</button>' +
+                '</div>' +
+              '</div>' +
+              '<input type="hidden" id="' + def.key + 'FromInput">' +
+            '</div>' +
+            '<div class="pm-filter-field" style="width:100%;">' +
+              '<div class="pff-legend-wrap"><label style="font-size:11px;">To</label></div>' +
+              '<button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="' + def.key + 'To" style="width:100%;height:38px;">' +
+                '<span class="cdd-value cal-value" data-cal-text="' + def.key + 'To" style="font-size:12.5px;">dd/mm/yyyy</span>' +
+                '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>' +
+              '</button>' +
+              '<div class="pm-cal-popup" data-cal-popup="' + def.key + 'To">' +
+                '<div class="pm-cal-head">' +
+                  '<button type="button" class="pm-cal-month-label" data-cal-monthlabel="' + def.key + 'To"><span data-cal-monthtext="' + def.key + 'To"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>' +
+                  '<div class="pm-cal-nav">' +
+                    '<button type="button" class="pm-cal-nav-btn" data-cal-prev="' + def.key + 'To" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>' +
+                    '<button type="button" class="pm-cal-nav-btn" data-cal-next="' + def.key + 'To" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>' +
+                  '</div>' +
+                '</div>' +
+                '<div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>' +
+                '<div class="pm-cal-grid" data-cal-grid="' + def.key + 'To"></div>' +
+                '<div class="pm-cal-foot">' +
+                  '<button type="button" class="pm-cal-link" data-cal-clear="' + def.key + 'To">Clear</button>' +
+                  '<button type="button" class="pm-cal-link" data-cal-today="' + def.key + 'To">Today</button>' +
+                '</div>' +
+              '</div>' +
+              '<input type="hidden" id="' + def.key + 'ToInput">' +
+            '</div>' +
+            '</div>'
+          : '';
+        return '<div class="pm-filter-field" style="width:190px;">' +
+          '<div class="pff-legend-wrap"><label>' + def.label + '</label></div>' +
+          '<button type="button" class="pm-custom-dd-btn" data-dd="' + def.key + '">' +
+            '<span class="cdd-value">' + def.options[0] + '</span>' +
+            '<svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' +
+          '</button>' +
+          '<div class="pm-custom-dd-menu" data-dd-menu="' + def.key + '">' +
+            (def.searchable ? '<input type="text" class="field-input supapp-dd-search" id="' + def.key + 'SearchInput" placeholder="Search ' + def.label.toLowerCase() + '..." style="height:30px;font-size:12.5px;margin-bottom:6px;">' : '') +
+            '<div class="' + (def.searchable ? def.key + 'OptionsList' : '') + '">' + opts + '</div>' +
+          '</div>' +
+          extra +
+          '</div>';
+      }
+      if (def.type === 'location') {
+        var locOpts = UK_LOCATIONS.map(function (loc) {
+          return '<div class="supapp-ms-item" data-value="' + loc + '"><span class="supapp-ms-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>' + loc + '</div>';
+        }).join('');
+        return '<div class="pm-filter-field" style="width:220px;">' +
+          '<div class="pff-legend-wrap"><label>' + def.label + '</label></div>' +
+          '<button type="button" class="pm-custom-dd-btn" id="supAppLocationDdBtn">' +
+            '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>' +
+            '<span class="cdd-value" id="supAppLocationDdLabel">All Locations</span>' +
+            '<svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' +
+          '</button>' +
+          '<div class="supapp-ms-menu" id="supAppLocationDdMenu">' +
+            '<input type="text" class="field-input" id="supAppCityInput" placeholder="Search UK locations..." style="height:30px;font-size:12.5px;margin-bottom:6px;">' +
+            '<div id="supAppLocationOptionsList">' + locOpts + '</div>' +
+          '</div>' +
+          '</div>';
+      }
+      return '';
+    }).join('');
+
+    SUP_APP_FILTER_DEFS.forEach(function (def) {
+      if (!def.searchable) return;
+      var searchInput = document.getElementById(def.key + 'SearchInput');
+      var menu = document.querySelector('.pm-custom-dd-menu[data-dd-menu="' + def.key + '"]');
+      if (!searchInput || !menu) return;
+      searchInput.addEventListener('click', function (e) { e.stopPropagation(); });
+      searchInput.addEventListener('input', function () {
+        var term = this.value.trim().toLowerCase();
+        menu.querySelectorAll('.cdd-item').forEach(function (item) {
+          var name = item.getAttribute('data-value').toLowerCase();
+          item.style.display = !term || name.indexOf(term) !== -1 ? '' : 'none';
+        });
+      });
+    });
+
+    var locDdBtn = document.getElementById('supAppLocationDdBtn');
+    var locDdMenu = document.getElementById('supAppLocationDdMenu');
+    locDdBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      locDdMenu.classList.toggle('open');
+    });
+    locDdMenu.addEventListener('click', function (e) { e.stopPropagation(); });
+    document.getElementById('supAppCityInput').addEventListener('input', function () {
+      var term = this.value.trim().toLowerCase();
+      document.querySelectorAll('#supAppLocationOptionsList .supapp-ms-item').forEach(function (item) {
+        var name = item.getAttribute('data-value').toLowerCase();
+        item.style.display = !term || name.indexOf(term) !== -1 ? '' : 'none';
+      });
+    });
+    document.querySelectorAll('#supAppLocationOptionsList .supapp-ms-item').forEach(function (item) {
+      item.addEventListener('click', function () {
+        var loc = item.getAttribute('data-value');
+        var idx = supAppLocationFilter.indexOf(loc);
+        if (idx === -1) supAppLocationFilter.push(loc); else supAppLocationFilter.splice(idx, 1);
+        item.classList.toggle('selected', idx === -1);
+        updateSupAppLocationUI();
+        supAppCurrentPage = 1;
+        renderSupAppList();
+      });
+    });
+  }
+
+  function updateSupAppLocationUI() {
+    var labelEl = document.getElementById('supAppLocationDdLabel');
+    if (labelEl) labelEl.textContent = supAppLocationFilter.length ? supAppLocationFilter.length + ' selected' : 'All Locations';
+    var chipsWrap = document.getElementById('supAppLocationChips');
+    if (!chipsWrap) return;
+    if (!supAppLocationFilter.length) { chipsWrap.style.display = 'none'; chipsWrap.innerHTML = ''; return; }
+    chipsWrap.style.display = '';
+    chipsWrap.innerHTML = supAppLocationFilter.map(function (loc) {
+      return '<span class="supapp-location-chip">' + loc + '<button type="button" data-remove-loc="' + supjrEscapeHtml(loc) + '" aria-label="Remove ' + supjrEscapeHtml(loc) + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>';
+    }).join('');
+    chipsWrap.querySelectorAll('[data-remove-loc]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var loc = btn.getAttribute('data-remove-loc');
+        var idx = supAppLocationFilter.indexOf(loc);
+        if (idx !== -1) supAppLocationFilter.splice(idx, 1);
+        var optItem = document.querySelector('#supAppLocationOptionsList .supapp-ms-item[data-value="' + loc + '"]');
+        if (optItem) optItem.classList.remove('selected');
+        updateSupAppLocationUI();
+        supAppCurrentPage = 1;
+        renderSupAppList();
+      });
+    });
+  }
+  document.addEventListener('click', function () {
+    var menu = document.getElementById('supAppLocationDdMenu');
+    if (menu) menu.classList.remove('open');
+    var menu2 = document.getElementById('supLocationDdMenu');
+    if (menu2) menu2.classList.remove('open');
+  });
+
+  function daysAgo(n) { var d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - n); return d; }
 
   function getFilteredSupApplicants() {
     return supplierApplicants.map(function (c, origIdx) { return { c: c, origIdx: origIdx }; }).filter(function (entry) {
       var c = entry.c;
+      if (!c.type) return false;
       if (supAppActiveTab === 'incomplete' && c.status !== 'Incomplete') return false;
-      if (supAppActiveTab === 'pending' && c.status !== 'Pending') return false;
+      if (supAppActiveTab === 'complete' && c.status !== 'Approved') return false;
       if (supAppActiveTab === 'rejected' && c.status !== 'Rejected') return false;
       if (supAppTypeFilter !== 'All Types' && c.type !== supAppTypeFilter) return false;
-      if (supAppStateFilter !== 'Any State' && c.activeState !== supAppStateFilter) return false;
+      if (supAppVerificationFilter !== 'All' && c.verificationStatus !== supAppVerificationFilter) return false;
+      if (supAppCategoryFilter !== 'All Categories' && (!c.categories || c.categories.indexOf(supAppCategoryFilter) === -1)) return false;
+      if (supAppDateFilter === 'Today' && c.dateSubmitted < daysAgo(0)) return false;
+      if (supAppDateFilter === 'Last 7 Days' && c.dateSubmitted < daysAgo(7)) return false;
+      if (supAppDateFilter === 'Last 30 Days' && c.dateSubmitted < daysAgo(30)) return false;
+      if (supAppDateFilter === 'Custom Date Range') {
+        if (supAppDateFrom && c.dateSubmitted < supAppDateFrom) return false;
+        if (supAppDateTo && c.dateSubmitted > supAppDateTo) return false;
+      }
+      if (supAppLocationFilter.length && (!c.locations || !c.locations.some(function (loc) { return supAppLocationFilter.indexOf(loc) !== -1; }))) return false;
       if (supAppSearchTerm) {
         var term = supAppSearchTerm.toLowerCase();
         var haystack = (c.name + ' ' + (c.email || '') + ' ' + (c.phone || '')).toLowerCase();
@@ -22972,6 +23648,60 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     renderSupAppList();
     showToast('List refreshed.');
   });
+
+  var supAppInviteModal = initModal(document.getElementById('supAppInviteOverlay'), 'supAppInviteCloseBtn');
+  var supAppInviteEmails = [];
+  var EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  function renderSupAppInviteChips() {
+    var row = document.getElementById('supAppInviteChipRow');
+    row.innerHTML = supAppInviteEmails.map(function (email, idx) {
+      return '<span class="supapp-invite-chip"><span>' + supjrEscapeHtml(email) + '</span><button type="button" data-remove-invite-idx="' + idx + '" aria-label="Remove ' + supjrEscapeHtml(email) + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>';
+    }).join('');
+    row.querySelectorAll('[data-remove-invite-idx]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        supAppInviteEmails.splice(parseInt(btn.getAttribute('data-remove-invite-idx'), 10), 1);
+        renderSupAppInviteChips();
+      });
+    });
+  }
+  function supAppAddInviteEmail() {
+    var input = document.getElementById('supAppInviteEmailInput');
+    var errorEl = document.getElementById('supAppInviteEmailError');
+    var email = input.value.trim().replace(/,$/, '');
+    if (!email) return true;
+    if (!EMAIL_REGEX.test(email)) { errorEl.textContent = 'Enter a valid email address.'; errorEl.style.display = ''; input.focus(); return false; }
+    if (supAppInviteEmails.indexOf(email) === -1) supAppInviteEmails.push(email);
+    input.value = '';
+    errorEl.style.display = 'none';
+    renderSupAppInviteChips();
+    return true;
+  }
+  document.getElementById('supAppInviteBtn').addEventListener('click', function () {
+    supAppInviteEmails = [];
+    document.getElementById('supAppInviteEmailInput').value = '';
+    document.getElementById('supAppInviteEmailError').style.display = 'none';
+    renderSupAppInviteChips();
+    supAppInviteModal.open();
+    setTimeout(function () { document.getElementById('supAppInviteEmailInput').focus(); }, 50);
+  });
+  document.getElementById('supAppInviteCancelBtn').addEventListener('click', function () { supAppInviteModal.close(); });
+  document.getElementById('supAppInviteEmailInput').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); supAppAddInviteEmail(); }
+  });
+  document.getElementById('supAppInviteSendBtn').addEventListener('click', function () {
+    var input = document.getElementById('supAppInviteEmailInput');
+    if (input.value.trim() && !supAppAddInviteEmail()) return;
+    if (!supAppInviteEmails.length) {
+      document.getElementById('supAppInviteEmailError').textContent = 'Add at least one email address.';
+      document.getElementById('supAppInviteEmailError').style.display = '';
+      input.focus();
+      return;
+    }
+    var count = supAppInviteEmails.length;
+    supAppInviteModal.close();
+    showToast(count === 1 ? 'Invitation sent to ' + supAppInviteEmails[0] + '.' : 'Invitations sent to ' + count + ' suppliers.');
+  });
+
   document.getElementById('supAppPagePrev').addEventListener('click', function () {
     if (supAppCurrentPage > 1) { supAppCurrentPage--; renderSupAppList(); }
   });
@@ -22985,41 +23715,61 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     document.getElementById('supTabOverview').style.display = key === 'overview' ? '' : 'none';
     document.getElementById('supTabCompliance').style.display = key === 'compliance' ? '' : 'none';
     document.getElementById('supTabChat').style.display = key === 'chat' ? '' : 'none';
-    document.getElementById('supDetailSidebar').style.display = key === 'overview' ? '' : 'none';
-    document.getElementById('supDetailGrid').style.gridTemplateColumns = key === 'overview' ? '1fr 340px' : '1fr';
   }
   document.querySelectorAll('.sup-tabs-row .sup-tab-item').forEach(function (tab) {
     tab.addEventListener('click', function () { switchSupTab(tab.getAttribute('data-suptab')); });
   });
 
-  document.getElementById('supResendLinkBtn').addEventListener('click', function () { showToast('Verification link resent.'); });
+  document.getElementById('supResendLinkBtn').addEventListener('click', function () {
+    document.getElementById('supTrustIdSentPill').style.display = '';
+    document.getElementById('supTrustIdExpiryText').style.display = '';
+    this.textContent = 'Resend Link';
+    showToast('Verification link sent.');
+  });
+  document.getElementById('supNotesDrawerBtn').addEventListener('click', function () {
+    document.getElementById('supNotesDrawerOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    renderSupNotesList();
+  });
+  function closeSupNotesDrawer() {
+    document.getElementById('supNotesDrawerOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('supNotesDrawerCloseBtn').addEventListener('click', closeSupNotesDrawer);
+  document.getElementById('supNotesDrawerOverlay').addEventListener('click', function (e) { if (e.target === this) closeSupNotesDrawer(); });
+  document.getElementById('supAddNoteBtn').addEventListener('click', function () {
+    var input = document.getElementById('supNoteInput');
+    var text = input.value.trim();
+    if (!text) { input.focus(); return; }
+    var c = supDetailCurrentSupplier;
+    var key = supNotesKeyFor(c);
+    if (!supplierAdminNotes[key]) supplierAdminNotes[key] = [];
+    supplierAdminNotes[key].push({ author: CURRENT_ADMIN_USER.name, role: CURRENT_ADMIN_USER.role, initials: CURRENT_ADMIN_USER.initials, text: text, timestamp: new Date() });
+    input.value = '';
+    renderSupNotesList();
+    showToast('Note added \u2014 visible to the admin team only.');
+  });
   document.getElementById('supTrustIdRefresh').addEventListener('click', function () { showToast('Status refreshed.'); });
   document.getElementById('supBackBtn').addEventListener('click', function () { showAdminView(currentSupplierDetailSource === 'app' ? 'supplier-applicants-list' : 'active-suppliers-list'); });
-  ['supDeactivateBtn', 'supDeactivateBtn2'].forEach(function (id) {
-    document.getElementById(id).addEventListener('click', function () {
-      document.getElementById('deactivateClientName').textContent = document.getElementById('supDetailName').textContent;
-      document.getElementById('deactivateConfirmInput').value = '';
-      document.getElementById('deactivateConfirmBtn').disabled = true;
-      document.getElementById('deactivateOverlay').classList.add('open');
-    });
+  document.getElementById('supDeactivateBtn2').addEventListener('click', function () {
+    document.getElementById('deactivateClientName').textContent = document.getElementById('supDetailName').textContent;
+    document.getElementById('deactivateConfirmInput').value = '';
+    document.getElementById('deactivateConfirmBtn').disabled = true;
+    document.getElementById('deactivateOverlay').classList.add('open');
   });
-  ['supApplicantApproveBtn', 'supApplicantApproveBtn2'].forEach(function (id) {
-    document.getElementById(id).addEventListener('click', function () {
-      var c = supDetailCurrentSupplier;
-      c.status = 'Approved';
-      showToast(c.name + ' approved as a supplier.');
-      renderSupAppList();
-      showAdminView('supplier-applicants-list');
-    });
+  document.getElementById('supApplicantApproveBtn2').addEventListener('click', function () {
+    var c = supDetailCurrentSupplier;
+    c.status = 'Approved';
+    showToast(c.name + ' approved as a supplier.');
+    renderSupAppList();
+    showAdminView('supplier-applicants-list');
   });
-  ['supApplicantRejectBtn', 'supApplicantRejectBtn2'].forEach(function (id) {
-    document.getElementById(id).addEventListener('click', function () {
-      var c = supDetailCurrentSupplier;
-      c.status = 'Rejected';
-      showToast(c.name + '\u2019s application was rejected.');
-      renderSupAppList();
-      showAdminView('supplier-applicants-list');
-    });
+  document.getElementById('supApplicantRejectBtn2').addEventListener('click', function () {
+    var c = supDetailCurrentSupplier;
+    c.status = 'Rejected';
+    showToast(c.name + '\u2019s application was archived.');
+    renderSupAppList();
+    showAdminView('supplier-applicants-list');
   });
 
   /* ---- Profile tab ---- */
@@ -23067,12 +23817,10 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         if (newName) {
           document.getElementById('supDetailName').textContent = newName;
           document.getElementById('supDetailBreadcrumbName').textContent = newName;
-          document.getElementById('supSidebarName').textContent = newName;
           document.getElementById('supChatMessageInput').placeholder = 'Reply to ' + newName + '...';
         }
-        if (newEmail) { document.getElementById('supDetailEmail').textContent = newEmail; document.getElementById('supSidebarEmail').textContent = newEmail; }
+        if (newEmail) { document.getElementById('supDetailEmail').textContent = newEmail; }
         document.getElementById('supDetailPhone').textContent = newPhone;
-        document.getElementById('supSidebarPhone').textContent = newPhone;
       }
       showToast(section + ' updated.');
     });
@@ -23164,40 +23912,48 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var c = source === 'app' ? supplierApplicants[idx] : activeSuppliers[idx];
     currentSupplierDetailSource = source || 'supplier';
     supDetailCurrentSupplier = c;
-    supDetailChecklist = supplierComplianceTemplate();
+    supDetailChecklist = supplierComplianceTemplate(c.docsVerified !== false);
     supDetailDocuments = supplierDocumentsTemplate();
+    seedAdminNotesIfNeeded(c);
+    var notesCountEl = document.getElementById('supNotesCount');
+    if (notesCountEl) notesCountEl.textContent = (supplierAdminNotes[supNotesKeyFor(c)] || []).length;
+    document.getElementById('supNoteInput').value = '';
+    document.getElementById('supTrustIdSentPill').style.display = 'none';
+    document.getElementById('supTrustIdExpiryText').style.display = 'none';
+    document.getElementById('supResendLinkBtn').textContent = 'Send Link';
     supDetailChecklistTab = 'all'; supDetailMethodTab = 'all'; supDetailSearchTerm = ''; supFlagsFilterTab = 'all';
     document.getElementById('supChecklistSearch').value = '';
     document.querySelectorAll('#supChecklistTabs .sup-check-tab-pill').forEach(function (p, i) { p.classList.toggle('active', i === 0); });
     document.querySelectorAll('#supMethodTabs button').forEach(function (p, i) { p.classList.toggle('active', i === 0); });
     document.querySelectorAll('#supFlagsTabs .sup-flag-tab-pill').forEach(function (p, i) { p.classList.toggle('active', i === 0); });
 
-    var appliedText = c.joined || 'Not submitted yet';
+    var MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    var appliedText = c.joined || (c.dateSubmitted ? c.dateSubmitted.getDate() + ' ' + MONTH_NAMES[c.dateSubmitted.getMonth()] + ' ' + c.dateSubmitted.getFullYear() : 'Not submitted yet');
     document.getElementById('supBackBtn').lastChild.textContent = source === 'app' ? 'Supplier Applicants' : 'Active Suppliers';
     document.getElementById('supDetailBreadcrumbName').textContent = c.name;
-    document.getElementById('supDetailAvatar').textContent = c.initials;
-    document.getElementById('supDetailAvatar').style.background = c.color;
+    document.getElementById('supDetailAvatar').innerHTML = supAppAvatarHtml(c);
+    document.getElementById('supDetailAvatar').style.background = c.photo ? 'transparent' : 'rgba(24, 48, 96, 0.12)';
+    document.getElementById('supDetailAvatar').style.color = '#183060';
     document.getElementById('supDetailName').textContent = c.name;
-    setPillText('supDetailStatusPill', supStatusPillClass(c.status), c.status);
+    setPillText('supDetailStatusPill', supStatusPillClass(c.status), supStatusDisplayText(c.status));
     document.getElementById('supDetailEmail').textContent = c.email || 'No email';
     document.getElementById('supDetailPhone').textContent = c.phone || '\u2014';
     document.getElementById('supDetailApplied').textContent = appliedText;
     setPillText('supDetailTypePill', 'supplier-type-pill' + (c.type === 'Sole Trader' ? ' sole-trader' : ''), c.type || '\u2014');
     updateSupDetailBusinessType(c.type === 'Company');
 
-    document.getElementById('supSidebarAvatar').textContent = c.initials;
-    document.getElementById('supSidebarAvatar').style.background = c.color;
-    document.getElementById('supSidebarName').textContent = c.name;
-    setPillText('supSidebarTypePill', 'supplier-type-pill' + (c.type === 'Sole Trader' ? ' sole-trader' : ''), c.type || '\u2014');
-    document.getElementById('supSidebarTypePill').style.fontSize = '11px';
-    document.getElementById('supSidebarTypePill').style.padding = '2px 8px';
-    setPillText('supSidebarStatusPill', supStatusPillClass(c.status), c.status);
-    document.getElementById('supSidebarStatusPill').style.fontSize = '11px';
-    document.getElementById('supSidebarStatusPill').style.padding = '2px 8px';
-    document.getElementById('supSidebarEmail').textContent = c.email || 'No email';
-    document.getElementById('supSidebarPhone').textContent = c.phone || '\u2014';
-    document.getElementById('supSidebarApplied').textContent = appliedText;
-    document.getElementById('supSidebarJoined').textContent = source === 'app' ? 'Not yet joined' : '27 Dec 2025';
+    var overviewCatEl = document.getElementById('supOverviewCategoryChips');
+    if (overviewCatEl) {
+      overviewCatEl.innerHTML = (c.categories && c.categories.length)
+        ? c.categories.map(function (cat) { return '<span class="supapp-category-chip">' + cat + '</span>'; }).join('')
+        : '<span class="acct-view-empty" style="font-size:12px;">No category set</span>';
+    }
+    var overviewLocEl = document.getElementById('supOverviewLocationChips');
+    if (overviewLocEl) {
+      overviewLocEl.innerHTML = (c.locations && c.locations.length)
+        ? c.locations.map(function (loc) { return '<span class="supapp-category-chip">' + supjrEscapeHtml(loc) + '</span>'; }).join('')
+        : '<span class="acct-view-empty" style="font-size:12px;">No location set</span>';
+    }
 
     document.getElementById('supChatMessageInput').placeholder = 'Reply to ' + c.name + '...';
     document.getElementById('supChatFlagBanner').style.display = 'none';
@@ -23208,8 +23964,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     document.getElementById('supProfilePhoneCode').value = '+44';
     document.getElementById('supProfilePhoneNumber').value = c.phone ? c.phone.replace(/^\+44/, '').trim() : '';
 
-    document.getElementById('supDeactivateBox').style.display = source === 'app' ? 'none' : '';
-    document.getElementById('supApplicantActionBox').style.display = source === 'app' ? '' : 'none';
     document.getElementById('supDeactivateBtn2').style.display = source === 'app' ? 'none' : '';
     document.getElementById('supApplicantActionBtns').style.display = source === 'app' ? 'flex' : 'none';
 
@@ -23266,13 +24020,31 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
   var ddSideEffects = {
     supType: function (v) { supTypeFilter = v; supCurrentPage = 1; renderSupplierList(); },
-    supState: function (v) { supStateFilter = v; supCurrentPage = 1; renderSupplierList(); },
+    supVerification: function (v) { supVerificationFilter = v; supCurrentPage = 1; renderSupplierList(); },
+    supCategory: function (v) { supCategoryFilter = v; supCurrentPage = 1; renderSupplierList(); },
     pmRowsPerPage: function (v) { pmRowsPerPage = parseInt(v, 10); pmCurrentPage = 1; renderPMList(); },
     appRowsPerPage: function (v) { appRowsPerPage = parseInt(v, 10); appCurrentPage = 1; renderApplicantList(); },
     supRowsPerPage: function (v) { supRowsPerPage = parseInt(v, 10); supCurrentPage = 1; renderSupplierList(); },
     supAppType: function (v) { supAppTypeFilter = v; supAppCurrentPage = 1; renderSupAppList(); },
-    supAppState: function (v) { supAppStateFilter = v; supAppCurrentPage = 1; renderSupAppList(); },
     supAppRowsPerPage: function (v) { supAppRowsPerPage = parseInt(v, 10); supAppCurrentPage = 1; renderSupAppList(); },
+    supAppVerification: function (v) { supAppVerificationFilter = v; supAppCurrentPage = 1; renderSupAppList(); },
+    supAppCategory: function (v) { supAppCategoryFilter = v; supAppCurrentPage = 1; renderSupAppList(); },
+    supAppDateSubmitted: function (v) {
+      supAppDateFilter = v;
+      var rangeRow = document.getElementById('supAppDateSubmittedCustomRange');
+      if (rangeRow) rangeRow.style.display = v === 'Custom Date Range' ? 'flex' : 'none';
+      if (v !== 'Custom Date Range') { supAppDateFrom = null; supAppDateTo = null; }
+      supAppCurrentPage = 1;
+      renderSupAppList();
+    },
+    supDateJoined: function (v) {
+      supDateJoinedFilter = v;
+      var rangeRow = document.getElementById('supDateJoinedCustomRange');
+      if (rangeRow) rangeRow.style.display = v === 'Custom Date Range' ? 'flex' : 'none';
+      if (v !== 'Custom Date Range') { supDateJoinedFrom = null; supDateJoinedTo = null; }
+      supCurrentPage = 1;
+      renderSupplierList();
+    },
     pmexRatingFilter: function (v) {
       var map = { 'Any rating': 0, '3.0+ \u2605': 3, '4.0+ \u2605': 4, '4.5+ \u2605': 4.5 };
       pmexApplyFilter(map[v] !== undefined ? map[v] : 0);
@@ -23303,6 +24075,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     },
     pmpropRowsPerPage: function (v) { pmpropRowsPerPage = parseInt(v, 10); pmpropCurrentPage = 1; pmpropRenderList(); }
   };
+  renderSupFilterBar();
+  renderSupAppFilterBar();
   document.querySelectorAll('.cdd-item[data-value]').forEach(function (item) {
     var menu = item.closest('.pm-custom-dd-menu');
     if (!menu) return;
@@ -23324,7 +24098,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     supSearchTerm = '';
     supActiveTab = 'approved';
     supCurrentPage = 1;
-    document.querySelectorAll('#supTabPills .pm-tab-pill').forEach(function (p, i) { p.classList.toggle('active', i === 0); });
+    document.querySelectorAll('#supTabPills .pm-tab-pill').forEach(function (p) { p.classList.toggle('active', p.getAttribute('data-filter') === 'approved'); });
     renderSupplierList();
     showToast('List refreshed.');
   });
@@ -23454,7 +24228,11 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     obPiExpiry: { viewYear: null, viewMonth: null, selected: null },
     obPscDob: { viewYear: null, viewMonth: null, selected: null },
     obElExpiry: { viewYear: null, viewMonth: null, selected: null },
-    supDbsIssueDate: { viewYear: null, viewMonth: null, selected: new Date(2025, 0, 15) }
+    supDbsIssueDate: { viewYear: null, viewMonth: null, selected: new Date(2025, 0, 15) },
+    supAppDateSubmittedFrom: { viewYear: null, viewMonth: null, selected: null },
+    supAppDateSubmittedTo: { viewYear: null, viewMonth: null, selected: null },
+    supDateJoinedFrom: { viewYear: null, viewMonth: null, selected: null },
+    supDateJoinedTo: { viewYear: null, viewMonth: null, selected: null }
   };
   var calHiddenInputIds = {
     joinedBefore: 'pmFilterJoinedBefore',
@@ -23469,7 +24247,11 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     cp12Expiry: 'cp12ExpiryInput',
     eicrExpiry: 'eicrExpiryInput',
     epcExpiry: 'epcExpiryInput',
-    lolerExpiry: 'lolerExpiryInput'
+    lolerExpiry: 'lolerExpiryInput',
+    supAppDateSubmittedFrom: 'supAppDateSubmittedFromInput',
+    supAppDateSubmittedTo: 'supAppDateSubmittedToInput',
+    supDateJoinedFrom: 'supDateJoinedFromInput',
+    supDateJoinedTo: 'supDateJoinedToInput'
   };
   function calPad2(n) { return n < 10 ? '0' + n : '' + n; }
   function calFormatDMY(d) { return calPad2(d.getDate()) + '/' + calPad2(d.getMonth() + 1) + '/' + d.getFullYear(); }
@@ -23603,6 +24385,38 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     });
   });
   document.addEventListener('click', closeAllCalendarPopups);
+
+  /* Sync the Date Submitted custom-range Keylr calendar fields into the applicant filter state.
+     Runs after the generic calendar wiring above, so calState[key].selected is already up to date. */
+  function syncSupAppDateRangeFilter() {
+    supAppDateFrom = calState.supAppDateSubmittedFrom.selected;
+    supAppDateTo = calState.supAppDateSubmittedTo.selected;
+    supAppCurrentPage = 1;
+    renderSupAppList();
+  }
+  ['supAppDateSubmittedFrom', 'supAppDateSubmittedTo'].forEach(function (key) {
+    var grid = document.querySelector('.pm-cal-grid[data-cal-grid="' + key + '"]');
+    if (grid) grid.addEventListener('click', function (e) { if (e.target.closest('.pm-cal-day')) syncSupAppDateRangeFilter(); });
+    var clearBtn = document.querySelector('[data-cal-clear="' + key + '"]');
+    if (clearBtn) clearBtn.addEventListener('click', syncSupAppDateRangeFilter);
+    var todayBtn = document.querySelector('[data-cal-today="' + key + '"]');
+    if (todayBtn) todayBtn.addEventListener('click', syncSupAppDateRangeFilter);
+  });
+
+  function syncSupDateJoinedRangeFilter() {
+    supDateJoinedFrom = calState.supDateJoinedFrom.selected;
+    supDateJoinedTo = calState.supDateJoinedTo.selected;
+    supCurrentPage = 1;
+    renderSupplierList();
+  }
+  ['supDateJoinedFrom', 'supDateJoinedTo'].forEach(function (key) {
+    var grid = document.querySelector('.pm-cal-grid[data-cal-grid="' + key + '"]');
+    if (grid) grid.addEventListener('click', function (e) { if (e.target.closest('.pm-cal-day')) syncSupDateJoinedRangeFilter(); });
+    var clearBtn = document.querySelector('[data-cal-clear="' + key + '"]');
+    if (clearBtn) clearBtn.addEventListener('click', syncSupDateJoinedRangeFilter);
+    var todayBtn = document.querySelector('[data-cal-today="' + key + '"]');
+    if (todayBtn) todayBtn.addEventListener('click', syncSupDateJoinedRangeFilter);
+  });
 
   /* Verification chip popovers (Account / Email / Phone) + Payment verification modal */
   var verifCheckSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
