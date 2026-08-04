@@ -2584,7 +2584,7 @@
   .supapp-location-chip button:hover { opacity: 1; }
   @media (max-width: 900px) {
     #adminSupplierApplicantsView .supapp-filter-bar, #adminActiveSuppliersView .supapp-filter-bar { flex-direction: column; align-items: stretch; }
-    #adminSupplierApplicantsView .supapp-filter-bar .pm-filter-field, #adminActiveSuppliersView .supapp-filter-bar .pm-filter-field { width: 100% !important; }
+    #adminSupplierApplicantsView .supapp-filter-bar .pm-filter-field, #adminActiveSuppliersView .supapp-filter-bar .pm-filter-field { width: 100% !important; flex: 1 1 100% !important; }
   }
   @media (max-width: 640px) {
     #adminSupplierApplicantsView .pm-search-row, #adminActiveSuppliersView .pm-search-row { flex-direction: column; align-items: stretch; }
@@ -3811,6 +3811,13 @@
   .acct-cert-view-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
   .acct-cert-view-grid.acct-cert-view-grid-4col { grid-template-columns: repeat(2, 1fr); }
   .acct-cert-view-grid .dmf-label { margin-bottom: 3px; }
+  /* Sectors tab (Property Sectors, Categories & Roles, Certifications) view mode should match the
+     same label/value sizing used on the Profile and Compliance tabs. */
+  #supSectorsTagsView .dfr-label, #supSectorsCatRolesView .dfr-label { font-size: 11.5px; }
+  #supSectorsTagsView .detail-chip-tag, #supSectorsCatRolesView .detail-chip-tag { font-size: 12px; }
+  #supSectorsCertsView .acct-cert-view-title { font-size: 13.5px; }
+  #supSectorsCertsView .dmf-label { font-size: 11.5px; }
+  #supSectorsCertsView .dmf-value { font-size: 13.5px; font-weight: 600; }
   .acct-settings-tab:not(.editing) .acct-view-card { background: var(--surface-white); border: 1px solid var(--border-subtle); border-radius: var(--radius-card); padding: 20px 22px; margin-bottom: 16px; }
   .acct-settings-tab:not(.editing) .acct-view-card:last-child { margin-bottom: 0; }
   .acct-settings-tab .acct-view-card .detail-mini-grid { margin-bottom: 0; }
@@ -5341,6 +5348,7 @@
                 </button>
               </div>
               <div class="field-error-text" id="loginPasswordError">Please enter your password.</div>
+              <div style="text-align:right;margin-top:8px;"><button type="button" id="loginForgotBtn" style="font-size:12.5px;font-weight:600;color:var(--accent-blue);background:none;border:none;cursor:pointer;font-family:inherit;">Forgot password?</button></div>
             </div>
 
             <button type="button" id="loginContinueBtn" class="btn btn-primary">Login <span class="arrow">→</span></button>
@@ -8943,7 +8951,6 @@
             <div class="dash-header">
               <div>
                 <h2>Dashboard</h2>
-                <div class="dash-content-sub" id="supDashDate">Tuesday, 14 July 2026</div>
               </div>
             </div>
           </div>
@@ -9290,18 +9297,21 @@
             <div class="dash-section">
               <div class="dash-header">
                 <div><h2>Account Settings</h2><div class="dash-content-sub">Manage your profile, business &amp; subscription.</div></div>
-                <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
-                  <div style="position:relative;width:64px;height:64px;">
-                    <svg width="64" height="64" viewBox="0 0 64 64">
-                      <circle cx="32" cy="32" r="27" fill="none" stroke="var(--surface-soft)" stroke-width="5"/>
-                      <circle cx="32" cy="32" r="27" fill="none" stroke="#f59e0b" stroke-width="5" stroke-linecap="round" stroke-dasharray="169.6" stroke-dashoffset="0" id="supProfileCompleteRing" transform="rotate(-90 32 32)"/>
-                    </svg>
-                    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-                      <span style="font-size:13px;font-weight:800;color:#b5891a;" id="supProfileCompletePct">100%</span>
-                      <span style="font-size:8px;font-weight:700;color:#94a3b8;">done</span>
+                <div style="display:flex;align-items:start;gap:14px;">
+                  <span class="status-pill green" id="supAcctStatusPill" style="font-size:11px;">Active</span>
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+                    <div style="position:relative;width:64px;height:64px;">
+                      <svg width="64" height="64" viewBox="0 0 64 64">
+                        <circle cx="32" cy="32" r="27" fill="none" stroke="var(--surface-soft)" stroke-width="5"/>
+                        <circle cx="32" cy="32" r="27" fill="none" stroke="#f59e0b" stroke-width="5" stroke-linecap="round" stroke-dasharray="169.6" stroke-dashoffset="0" id="supProfileCompleteRing" transform="rotate(-90 32 32)"/>
+                      </svg>
+                      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+                        <span style="font-size:13px;font-weight:800;color:#b5891a;" id="supProfileCompletePct">100%</span>
+                        <span style="font-size:8px;font-weight:700;color:#94a3b8;">done</span>
+                      </div>
                     </div>
+                    <span style="font-size:11.5px;color:var(--text-body-muted);">Profile complete</span>
                   </div>
-                  <span style="font-size:11.5px;color:var(--text-body-muted);">Profile complete</span>
                 </div>
               </div>
 
@@ -9339,9 +9349,9 @@
                     <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Full name</div><div class="dmf-value" id="supProfileFullNameView">Liam Greenwood</div></div>
                     <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>Email address</div><div class="dmf-value" id="supProfileEmailView">greenwood86@gmail.com</div></div>
                     <div class="detail-mini-field" id="supAcctMobileFieldWrap">
-                      <div class="dmf-label" style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                      <div class="dmf-label" style="display:flex;align-items:center;gap:12px;">
                         <span style="display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Mobile number</span>
-                        <span style="font-size:11px;font-weight:700;color:var(--accent-blue);cursor:pointer;" id="supAcctChangeNumberLink">Change</span>
+                        <span style="font-size:11px;font-weight:700;color:var(--accent-blue);cursor:pointer;text-decoration:underline;" id="supAcctChangeNumberLink">Change Phone Number</span>
                       </div>
                       <div class="dmf-value" id="supAcctInfoMobileView">GB +44 7671542225</div>
                       <div id="supAcctChangeNumberForm" style="display:none;margin-top:8px;">
@@ -9400,9 +9410,9 @@
                     <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Full legal name</div><div class="dmf-value">Liam Greenwood</div></div>
                     <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Date of birth</div><div class="dmf-value" id="supDobView">05/11/1987</div></div>
                     <div class="detail-mini-field" id="supIdPhoneFieldWrap">
-                      <div class="dmf-label" style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                      <div class="dmf-label" style="display:flex;align-items:center;gap:12px;">
                         <span style="display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Phone number</span>
-                        <span style="font-size:11px;font-weight:700;color:var(--accent-blue);cursor:pointer;" id="supIdChangeNumberLink">Change</span>
+                        <span style="font-size:11px;font-weight:700;color:var(--accent-blue);cursor:pointer;text-decoration:underline;" id="supIdChangeNumberLink">Change Phone Number</span>
                       </div>
                       <div class="dmf-value" id="supIdPhoneView">+44 7671 542225</div>
                       <div id="supIdChangeNumberForm" style="display:none;margin-top:8px;">
@@ -9701,13 +9711,12 @@
                   <div class="detail-card aev-view-only" style="padding:18px 20px;" id="supPliCardView">
                     <div class="detail-card-head" style="margin-bottom:14px;">
                       <div class="dch-left"><div class="dch-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h3>Public Liability Insurance</h3></div>
-                      <span class="status-pill green">Active</span>
                     </div>
                     <div class="detail-mini-grid" style="margin-bottom:14px;">
                       <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>Insurance provider</div><div class="dmf-value" id="supPliProviderView">Markel</div></div>
                       <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg>Policy number</div><div class="dmf-value" id="supPliPolicyView">PL-722800</div></div>
                       <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15 9.5c0-1.5-1.5-2.5-3-2.5s-3 1-3 2.5 1.5 2 3 2.5 3 1 3 2.5-1.5 2.5-3 2.5-3-1-3-2.5M12 6v12"/></svg>Coverage amount</div><div class="dmf-value" id="supPliCoverageView">£2,000,000</div></div>
-                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Policy expiry date</div><div class="dmf-value"><span id="supPliExpiryView">26/11/2026</span> <span class="status-pill green" style="margin-left:4px;">Valid</span></div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Policy expiry date</div><div class="dmf-value"><span id="supPliExpiryView">26/11/2026</span></div></div>
                     </div>
                     <div class="scf-label" style="font-size:12.5px;font-weight:600;color:var(--text-body-muted);margin-bottom:8px;">Public liability certificate</div>
                     <div class="sup-comp-doc-row" style="margin-bottom:0;">
@@ -9776,13 +9785,12 @@
                   <div class="detail-card aev-view-only" style="padding:18px 20px;" id="supPiCardView">
                     <div class="detail-card-head" style="margin-bottom:14px;">
                       <div class="dch-left"><div class="dch-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/></svg></div><h3>Professional Indemnity Insurance</h3></div>
-                      <span class="status-pill green">Active</span>
                     </div>
                     <div class="detail-mini-grid" style="margin-bottom:14px;">
                       <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>Indemnity provider</div><div class="dmf-value" id="supPiProviderView">Direct Line for Business</div></div>
                       <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg>Policy number</div><div class="dmf-value" id="supPiPolicyView">PI-124012</div></div>
                       <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15 9.5c0-1.5-1.5-2.5-3-2.5s-3 1-3 2.5 1.5 2 3 2.5 3 1 3 2.5-1.5 2.5-3 2.5-3-1-3-2.5M12 6v12"/></svg>Coverage amount</div><div class="dmf-value" id="supPiCoverageView">£1,000,000</div></div>
-                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Expiry date</div><div class="dmf-value"><span id="supPiExpiryView">26/09/2026</span> <span class="status-pill green" style="margin-left:4px;">Valid</span></div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Expiry date</div><div class="dmf-value"><span id="supPiExpiryView">26/09/2026</span></div></div>
                     </div>
                     <div class="scf-label" style="font-size:12.5px;font-weight:600;color:var(--text-body-muted);margin-bottom:8px;">PI certificate</div>
                     <div class="sup-comp-doc-row" style="margin-bottom:0;">
@@ -10583,7 +10591,7 @@
 
   <!-- ============ ADMIN FORGOT PASSWORD ============ -->
   <div class="admin-forgot-app" id="adminForgotApp">
-    <div class="admin-forgot-card" style="position:relative;">
+    <div class="admin-forgot-card" style="position:relative;" id="forgotStep1">
       <button type="button" class="modal-close" id="adminForgotCloseBtn" aria-label="Close" style="position:absolute;top:16px;right:16px;">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
       </button>
@@ -10596,6 +10604,46 @@
         <button type="button" class="btn btn-primary" id="sendResetLinkBtn" style="padding-top:16px;padding-bottom:16px;">Send Reset Link</button>
       </form>
       <div class="admin-back-login-row"><button type="button" id="backToLoginBtn">Back to Login</button></div>
+    </div>
+
+    <div class="admin-forgot-card" style="position:relative;display:none;" id="forgotStep2">
+      <button type="button" class="modal-close" id="forgotStep2CloseBtn" aria-label="Close" style="position:absolute;top:16px;right:16px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <h2>Set New Password</h2>
+      <p class="afc-sub">You clicked the reset link from your email. Choose a new password for your account.</p>
+      <form id="setNewPasswordForm" novalidate>
+        <div class="field-group">
+          <label for="newPasswordInput">New password<span class="req">*</span></label>
+          <div class="password-wrap">
+            <input class="field-input" type="password" id="newPasswordInput" placeholder="Enter new password">
+            <button type="button" class="eye-toggle" id="newPasswordEyeToggle" aria-label="Show password">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="field-error-text" id="newPasswordError">Please enter a new password (minimum 8 characters).</div>
+        </div>
+        <div class="field-group">
+          <label for="confirmNewPasswordInput">Confirm password<span class="req">*</span></label>
+          <div class="password-wrap">
+            <input class="field-input" type="password" id="confirmNewPasswordInput" placeholder="Re-enter new password">
+            <button type="button" class="eye-toggle" id="confirmNewPasswordEyeToggle" aria-label="Show password">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="field-error-text" id="confirmNewPasswordError">Passwords don't match.</div>
+        </div>
+        <button type="button" class="btn btn-primary" id="resetPasswordBtn" style="padding-top:16px;padding-bottom:16px;">Reset Password</button>
+      </form>
+    </div>
+
+    <div class="admin-forgot-card" style="position:relative;text-align:center;display:none;" id="forgotStep3">
+      <div style="width:56px;height:56px;border-radius:50%;background:#eafaf0;color:#1a7a3e;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <h2>Password Reset</h2>
+      <p class="afc-sub">Your password has been reset successfully. You can now log in with your new password.</p>
+      <button type="button" class="btn btn-primary" id="forgotStep3BackBtn" style="width:100%;padding-top:16px;padding-bottom:16px;">Back to Login</button>
     </div>
   </div>
 
@@ -11548,17 +11596,6 @@
                 </div>
                 <div class="pm-count-actions">
                   <span class="pm-count-text" id="supAppResultCount">Showing 25 of 33</span>
-                  <div class="pm-filter-field" style="width:150px;position:relative;">
-                    <button type="button" class="pm-custom-dd-btn" data-dd="supAppSort" style="height:36px;">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5h10M11 9h7M11 13h4M3 17l3 3 3-3M6 18V4"/></svg>
-                      <span class="cdd-value">Newest</span>
-                      <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-                    </button>
-                    <div class="pm-custom-dd-menu" data-dd-menu="supAppSort">
-                      <div class="cdd-item selected" data-value="Newest">Newest first</div>
-                      <div class="cdd-item" data-value="Oldest">Oldest first</div>
-                    </div>
-                  </div>
                   <div class="pm-view-toggle" id="supAppViewToggle">
                     <button type="button" class="active" data-view="grid" aria-label="Grid view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
                     <button type="button" data-view="table" aria-label="Table view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4"/><rect x="3" y="10" width="18" height="4"/><rect x="3" y="16" width="18" height="4"/></svg></button>
@@ -11567,8 +11604,8 @@
                   <button type="button" class="btn btn-primary" id="supAppInviteBtn" style="width:auto;padding:9px 16px;white-space:nowrap;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>Invite Supplier</button>
                 </div>
               </div>
-              <div class="supapp-filter-bar" style="display:flex; gap:12px; margin-top:12px; flex-wrap:wrap;">
-                <div class="pm-filter-field" style="width:190px;">
+              <div class="supapp-filter-bar" style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap;">
+                <div class="pm-filter-field" style="flex:1 1 130px; min-width:110px;">
                   <div class="pff-legend-wrap"><label>Type</label></div>
                   <button type="button" class="pm-custom-dd-btn" data-dd="supAppType">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>
@@ -11582,6 +11619,18 @@
                   </div>
                 </div>
                 <div id="supAppDynamicFilters" style="display:contents;"></div>
+                <div class="pm-filter-field" style="flex:1 1 110px; min-width:100px;">
+                  <div class="pff-legend-wrap"><label>Sort</label></div>
+                  <button type="button" class="pm-custom-dd-btn" data-dd="supAppSort">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5h10M11 9h7M11 13h4M3 17l3 3 3-3M6 18V4"/></svg>
+                    <span class="cdd-value">Newest</span>
+                    <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                  </button>
+                  <div class="pm-custom-dd-menu" data-dd-menu="supAppSort">
+                    <div class="cdd-item selected" data-value="Newest">Newest first</div>
+                    <div class="cdd-item" data-value="Oldest">Oldest first</div>
+                  </div>
+                </div>
               </div>
               <div class="supapp-location-chips" id="supAppLocationChips" style="display:none;"></div>
             </div>
@@ -13439,6 +13488,12 @@
     }, 220);
   }
   function openAdminForgot() {
+    document.getElementById('forgotStep1').style.display = '';
+    document.getElementById('forgotStep2').style.display = 'none';
+    document.getElementById('forgotStep3').style.display = 'none';
+    document.getElementById('adminForgotEmail').value = '';
+    document.getElementById('newPasswordInput').value = '';
+    document.getElementById('confirmNewPasswordInput').value = '';
     adminForgotApp.classList.add('active');
     document.body.style.overflow = 'hidden';
     requestAnimationFrame(function () { adminForgotApp.classList.add('visible'); });
@@ -13447,9 +13502,14 @@
     adminForgotApp.classList.remove('visible');
     setTimeout(function () {
       adminForgotApp.classList.remove('active');
-      if (!adminLoginApp.classList.contains('active')) document.body.style.overflow = '';
+      if (!adminLoginApp.classList.contains('active') && !loginOverlay.classList.contains('open')) document.body.style.overflow = '';
       if (cb) cb();
     }, 220);
+  }
+  function showForgotStep(stepNum) {
+    document.getElementById('forgotStep1').style.display = stepNum === 1 ? '' : 'none';
+    document.getElementById('forgotStep2').style.display = stepNum === 2 ? '' : 'none';
+    document.getElementById('forgotStep3').style.display = stepNum === 3 ? '' : 'none';
   }
 
   document.getElementById('adminNavBtn').addEventListener('click', function () {
@@ -13523,10 +13583,19 @@
   document.getElementById('adminForgotBtn').addEventListener('click', function () {
     openAdminForgot();
   });
+  document.getElementById('loginForgotBtn').addEventListener('click', function () {
+    openAdminForgot();
+  });
   document.getElementById('backToLoginBtn').addEventListener('click', function () {
     closeAdminForgot();
   });
   document.getElementById('adminForgotCloseBtn').addEventListener('click', function () {
+    closeAdminForgot();
+  });
+  document.getElementById('forgotStep2CloseBtn').addEventListener('click', function () {
+    closeAdminForgot();
+  });
+  document.getElementById('forgotStep3BackBtn').addEventListener('click', function () {
     closeAdminForgot();
   });
   adminForgotApp.addEventListener('click', function (e) {
@@ -13540,13 +13609,77 @@
       showToast('Please enter your email address.');
       return;
     }
-    showToast('If that email is registered, a reset link is on its way.');
+    showToast('Reset link sent \u2014 opening it now for this demo.');
+    setTimeout(function () { showForgotStep(2); }, 300);
   }
   document.getElementById('sendResetLinkBtn').addEventListener('click', handleSendResetLink);
   document.getElementById('adminForgotForm').addEventListener('keydown', function (e) {
     if (e.key === 'Enter') { e.preventDefault(); handleSendResetLink(e); }
   });
   document.getElementById('adminForgotForm').addEventListener('submit', function (e) { e.preventDefault(); });
+
+  document.getElementById('newPasswordEyeToggle').addEventListener('click', function () {
+    var input = document.getElementById('newPasswordInput');
+    var isPassword = input.type === 'password';
+    input.type = isPassword ? 'text' : 'password';
+    this.classList.toggle('showing', isPassword);
+  });
+  document.getElementById('confirmNewPasswordEyeToggle').addEventListener('click', function () {
+    var input = document.getElementById('confirmNewPasswordInput');
+    var isPassword = input.type === 'password';
+    input.type = isPassword ? 'text' : 'password';
+    this.classList.toggle('showing', isPassword);
+  });
+  function handleResetPassword(e) {
+    if (e) e.preventDefault();
+    var newPwInput = document.getElementById('newPasswordInput');
+    var confirmPwInput = document.getElementById('confirmNewPasswordInput');
+    var newPw = newPwInput.value;
+    var confirmPw = confirmPwInput.value;
+    var newPwError = document.getElementById('newPasswordError');
+    var confirmPwError = document.getElementById('confirmNewPasswordError');
+    var invalid = false;
+    var firstInvalidField = null;
+
+    if (!newPw || newPw.length < 8) {
+      newPwInput.classList.add('error');
+      newPwError.classList.add('show');
+      invalid = true;
+      firstInvalidField = firstInvalidField || newPwInput;
+    } else {
+      newPwInput.classList.remove('error');
+      newPwError.classList.remove('show');
+    }
+
+    if (!confirmPw || confirmPw !== newPw) {
+      confirmPwInput.classList.add('error');
+      confirmPwError.classList.add('show');
+      invalid = true;
+      firstInvalidField = firstInvalidField || confirmPwInput;
+    } else {
+      confirmPwInput.classList.remove('error');
+      confirmPwError.classList.remove('show');
+    }
+
+    if (invalid) {
+      firstInvalidField.focus();
+      return;
+    }
+    showForgotStep(3);
+  }
+  document.getElementById('resetPasswordBtn').addEventListener('click', handleResetPassword);
+  document.getElementById('setNewPasswordForm').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); handleResetPassword(e); }
+  });
+  document.getElementById('setNewPasswordForm').addEventListener('submit', function (e) { e.preventDefault(); });
+  document.querySelectorAll('#setNewPasswordForm .field-input').forEach(function (field) {
+    field.addEventListener('input', function () {
+      field.classList.remove('error');
+      var group = field.closest('.field-group');
+      var errorEl = group && group.querySelector('.field-error-text');
+      if (errorEl) errorEl.classList.remove('show');
+    });
+  });
 
   document.getElementById('contactAdminBtn').addEventListener('click', function () {
     showToast('This would open a request-access form for your team admin.');
@@ -17687,6 +17820,12 @@
     ring.style.stroke = pct >= 100 ? '#22c55e' : pct >= 50 ? '#f59e0b' : '#e8482c';
     document.getElementById('supProfileCompletePct').textContent = pct + '%';
     document.getElementById('supProfileCompletePct').style.color = pct >= 100 ? '#1a7a3e' : pct >= 50 ? '#b5891a' : '#c0392b';
+    var statusPill = document.getElementById('supAcctStatusPill');
+    if (statusPill) {
+      var isActive = pct >= 100;
+      statusPill.textContent = isActive ? 'Active' : 'Under Review';
+      statusPill.className = 'status-pill ' + (isActive ? 'green' : 'amber');
+    }
   }
   document.getElementById('supProfileSettingsView').addEventListener('input', computeSupProfileCompletion);
   document.getElementById('supProfileSettingsView').addEventListener('click', function () { setTimeout(computeSupProfileCompletion, 0); });
@@ -19048,9 +19187,7 @@
     if (profAvatarInitials) profAvatarInitials.textContent = initials(fullName);
     populateSupSettingsFromOnboarding(signupData);
     document.getElementById('supDashGreeting').textContent = timeGreeting() + ', ' + firstName + ' \uD83D\uDC4B';
-    document.getElementById('supDashDate').textContent = formatFullDateSupplier(new Date());
-    var supJobReqCount = document.getElementById('supBadgeJobRequests').textContent || '0';
-    document.getElementById('supDashTopbarSub').innerHTML = formatFullDateSupplier(new Date()) + '<span class="dot-sep"></span><strong style="color:#1a7a3e;">' + supJobReqCount + ' new requests</strong> waiting';
+    document.getElementById('supDashTopbarSub').textContent = formatFullDateSupplier(new Date());
 
     renderSupplierDashboardState(mode || 'new');
 
@@ -20332,7 +20469,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
           '<div><div class="dmf-label">Certificate name</div><div class="dmf-value">' + (entry.certName || CERT_REQUIRED_ROLES[role].label) + '</div></div>' +
           '<div><div class="dmf-label">Registration number</div><div class="dmf-value' + (entry.regNumber ? '' : ' muted') + '">' + (entry.regNumber || 'Not set') + '</div></div>' +
           expiryField +
-          '<div><div class="dmf-label">Status</div><div class="dmf-value" style="display:flex;align-items:center;flex-wrap:wrap;"><span class="status-pill ' + (uploaded ? 'green' : 'gray') + '">' + (uploaded ? 'Uploaded' : 'Not uploaded') + '</span>' + viewBtn + '</div></div>' +
+          '<div><div class="dmf-label">Status</div><div class="dmf-value" style="display:flex;align-items:center;flex-wrap:wrap;">' + '<span class="status-pill ' + (uploaded ? 'green' : 'gray') + '">' + (uploaded ? 'Uploaded' : 'Not uploaded') + '</span>' + viewBtn + '</div></div>' +
           '</div>';
       }
       return '<div class="acct-cert-view-card"><div class="acct-cert-view-head"><div class="acct-cert-view-title">' + CERT_TITLE_ICON + role + '</div></div>' + rows + '</div>';
@@ -22697,7 +22834,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
           { section: 'Background Check', fieldLabel: 'DBS certificate number', oldValue: 'Not set', newValue: '561203984471' },
           { section: 'Background Check', fieldLabel: 'DBS issue date', oldValue: 'Not set', newValue: '3 Jan 2026' },
           { section: 'Background Check', fieldLabel: 'DBS certificate document', oldValue: 'Not uploaded', newValue: 'dbs-basic-2026.pdf (new upload)', isDocument: true },
-          { section: 'Background Check', fieldLabel: 'Criminal Record Declaration', oldValue: 'Not declared', newValue: 'I have no unspent criminal convictions' },
+          { section: 'Background Check', fieldLabel: 'Criminal Record Declaration', oldValue: 'Not declared', newValue: 'I have unspent convictions to declare' },
+          { section: 'Background Check', fieldLabel: 'Criminal Record description', oldValue: 'Not set', newValue: 'Caution for minor motoring offence (speeding), issued 2023. No custodial sentence, no impact on trade work.' },
           { section: 'Background Check', fieldLabel: 'Right to Work', oldValue: 'Not confirmed', newValue: 'Yes' },
           { section: 'Business Legitimacy', fieldLabel: 'VAT registered', oldValue: 'Not registered', newValue: 'Registered \u2014 GB331204587' }
         ] }
@@ -22766,6 +22904,55 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         { id: 'batch3', submittedDate: g3, status: 'pending', changes: [
           { section: 'Background Check', fieldLabel: 'Right to Work', oldValue: 'Not confirmed', newValue: 'Yes \u2014 all staff verified' },
           { section: 'Business Legitimacy', fieldLabel: 'VAT registered', oldValue: 'Not registered', newValue: 'Registered \u2014 GB118827364' }
+        ] }
+      ];
+    } else if (c && c.name === 'Testing supplier') {
+      // Company variant of the full-profile example — mirrors what Ferna shows for Sole Trader,
+      // but with Company Identity, PSC details, and the extra EL Insurance that only Companies need.
+      var tsDate = new Date(); tsDate.setHours(tsDate.getHours() - 3);
+      supplierChangeRequests[key] = [
+        { id: 'batch1', submittedDate: tsDate, status: 'pending', changes: [
+          { section: 'Company Identity', fieldLabel: 'Company name', oldValue: 'Testing supplier', newValue: 'Testing Supplier Services Ltd' },
+          { section: 'Company Identity', fieldLabel: 'Company registration number', oldValue: 'Not set', newValue: '14229104' },
+          { section: 'Company Identity', fieldLabel: 'Trading name', oldValue: 'Not set', newValue: 'TS Property Services' },
+          { section: 'Company Identity', fieldLabel: 'Operational address', oldValue: '22 Dockside Road, Cardiff', newValue: '7 Bute Terrace, Cardiff' },
+          { section: 'Company Identity', fieldLabel: 'PSC full legal name', oldValue: 'Not set', newValue: 'Owen Bevan' },
+          { section: 'Company Identity', fieldLabel: 'PSC date of birth', oldValue: 'Not set', newValue: '08/02/1985' },
+          { section: 'Company Identity', fieldLabel: 'PSC phone number', oldValue: 'Not set', newValue: '+447812445920' },
+          { section: 'Company Identity', fieldLabel: 'PSC email address', oldValue: 'Not set', newValue: 'owen.bevan@tsproperty.co.uk' },
+          { section: 'Company Identity', fieldLabel: 'I confirm this person holds 25%+ of company shares', oldValue: 'Off', newValue: 'On' },
+          { section: 'Company Identity', fieldLabel: 'Proof of Company Address document', oldValue: 'Not uploaded', newValue: 'proof-of-company-address-2026.pdf (new upload)', isDocument: true },
+          { section: 'Tell us about yourself', fieldLabel: 'Sectors served', oldValue: 'Commercial', newValue: 'Residential, Commercial' },
+          { section: 'Categories & Roles', fieldLabel: 'Plumber \u2014 Certificate name', oldValue: 'Not set', newValue: 'City & Guilds Plumbing' },
+          { section: 'Categories & Roles', fieldLabel: 'Plumber \u2014 Registration number', oldValue: 'Not set', newValue: 'PLB-660214' },
+          { section: 'Categories & Roles', fieldLabel: 'Plumber \u2014 Certificate uploaded', oldValue: 'Not uploaded', newValue: 'plumbing-cert-2026.pdf (new upload)', isDocument: true },
+          { section: 'Categories & Roles', fieldLabel: 'Plumber \u2014 Expiry date', oldValue: 'Not set', newValue: '9 Jul 2027' },
+          { section: 'Insurance', fieldLabel: 'PL Insurance provider', oldValue: 'Not set', newValue: 'Hiscox' },
+          { section: 'Insurance', fieldLabel: 'PL Policy number', oldValue: 'Not set', newValue: 'PL-773410' },
+          { section: 'Insurance', fieldLabel: 'PL Coverage amount', oldValue: 'Not set', newValue: '\u00a35,000,000' },
+          { section: 'Insurance', fieldLabel: 'PL Expiry date', oldValue: 'Not set', newValue: '15 Feb 2027' },
+          { section: 'Insurance', fieldLabel: 'PL Certificate document', oldValue: 'Not uploaded', newValue: 'pl-certificate-2026.pdf (new upload)', isDocument: true },
+          { section: 'Insurance', fieldLabel: 'PI Insurance provider', oldValue: 'Not set', newValue: 'Markel' },
+          { section: 'Insurance', fieldLabel: 'PI Policy number', oldValue: 'Not set', newValue: 'PI-118827' },
+          { section: 'Insurance', fieldLabel: 'PI Coverage amount', oldValue: 'Not set', newValue: '\u00a31,000,000' },
+          { section: 'Insurance', fieldLabel: 'PI Expiry date', oldValue: 'Not set', newValue: '3 Nov 2026' },
+          { section: 'Insurance', fieldLabel: 'PI Insurance certificate document', oldValue: 'Not uploaded', newValue: 'pi-certificate-2026.pdf (new upload)', isDocument: true },
+          { section: 'Insurance', fieldLabel: 'EL Insurance provider', oldValue: 'Not set', newValue: 'AXA Business Insurance' },
+          { section: 'Insurance', fieldLabel: 'EL Policy number', oldValue: 'Not set', newValue: 'EL-902317' },
+          { section: 'Insurance', fieldLabel: 'EL Coverage amount', oldValue: 'Not set', newValue: '\u00a310,000,000' },
+          { section: 'Insurance', fieldLabel: 'EL Expiry date', oldValue: 'Not set', newValue: '21 May 2027' },
+          { section: 'Insurance', fieldLabel: 'EL Insurance certificate document', oldValue: 'Not uploaded', newValue: 'el-certificate-2026.pdf (new upload)', isDocument: true },
+          { section: 'Background Check', fieldLabel: 'Are all operatives DBS checked?', oldValue: 'No', newValue: 'Yes' },
+          { section: 'Background Check', fieldLabel: 'DBS level', oldValue: 'Not set', newValue: 'Basic' },
+          { section: 'Background Check', fieldLabel: 'DBS policy document', oldValue: 'Not uploaded', newValue: 'dbs-policy-2026.pdf (new upload)', isDocument: true },
+          { section: 'Background Check', fieldLabel: 'DBS policy description', oldValue: 'Not set', newValue: 'All field-based operatives undergo a Basic DBS check before their first job. Records are re-checked every 3 years and kept on file with HR.' },
+          { section: 'Background Check', fieldLabel: 'Worker vetting policy document', oldValue: 'Not uploaded', newValue: 'vetting-policy-2026.pdf (new upload)', isDocument: true },
+          { section: 'Background Check', fieldLabel: 'Worker vetting policy description', oldValue: 'Not set', newValue: 'Right to work, references, and identity documents are verified for every new hire before they are assigned to a job.' },
+          { section: 'Background Check', fieldLabel: 'Health & Safety policy document', oldValue: 'Not uploaded', newValue: 'hs-policy-2026.pdf (new upload)', isDocument: true },
+          { section: 'Background Check', fieldLabel: 'Health & Safety policy description', oldValue: 'Not set', newValue: 'RAMS are completed for every job type, PPE is provided to all operatives, and incidents are logged and reviewed monthly.' },
+          { section: 'Background Check', fieldLabel: 'Director / PSC Criminal Record Declaration', oldValue: 'Not declared', newValue: 'The PSC has no unspent criminal convictions' },
+          { section: 'Background Check', fieldLabel: 'Right to Work', oldValue: 'Not confirmed', newValue: 'Yes \u2014 all staff have right to work in the UK' },
+          { section: 'Business Legitimacy', fieldLabel: 'VAT registered', oldValue: 'Not registered', newValue: 'Registered \u2014 GB204817663' }
         ] }
       ];
     } else if (c && c.name === 'Marcus Ade') {
@@ -22865,7 +23052,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
               '</div>'
             : '<div class="suprq-item-actions"><span class="suprq-status-pill ' + ch.status + '" style="white-space:nowrap;">' + chStatusText + '</span></div>';
           return '<div class="suprq-field-row">' +
-            '<div class="suprq-field-name" style="font-size:13px;margin-bottom:6px;">(' + ch.fieldLabel + ')</div>' +
+            '<div class="suprq-field-name" style="font-size:13px;margin-bottom:6px;">' + ch.fieldLabel + '</div>' +
             '<div class="suprq-compare">' +
               '<div class="suprq-compare-box old"><div class="suprq-compare-label">Current</div><div class="suprq-compare-value">' + docValueHtml(ch, ch.oldValue, 'old') + '</div></div>' +
               '<div class="suprq-compare-box new"><div class="suprq-compare-label">Requested</div><div class="suprq-compare-value">' + docValueHtml(ch, ch.newValue, 'new') + '</div></div>' +
@@ -23943,7 +24130,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
             '</div>' +
             '</div>'
           : '';
-        return '<div class="pm-filter-field" style="width:190px;">' +
+        return '<div class="pm-filter-field" style="flex:1 1 130px; min-width:110px;">' +
           '<div class="pff-legend-wrap"><label>' + def.label + '</label></div>' +
           '<button type="button" class="pm-custom-dd-btn" data-dd="' + def.key + '">' +
             '<span class="cdd-value">' + def.options[0] + '</span>' +
@@ -23960,7 +24147,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         var locOpts = UK_LOCATIONS.map(function (loc) {
           return '<div class="supapp-ms-item" data-value="' + loc + '"><span class="supapp-ms-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>' + loc + '</div>';
         }).join('');
-        return '<div class="pm-filter-field" style="width:220px;">' +
+        return '<div class="pm-filter-field" style="flex:1 1 150px; min-width:130px;">' +
           '<div class="pff-legend-wrap"><label>' + def.label + '</label></div>' +
           '<button type="button" class="pm-custom-dd-btn" id="supAppLocationDdBtn">' +
             '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>' +
