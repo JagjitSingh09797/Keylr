@@ -133,14 +133,20 @@
   /* Dashboards (PM, Supplier, Admin) and the onboarding wizards use a single flat brand color for
      buttons instead of the gradient. The landing page keeps the gradient. */
   #pmDashboard, #supplierDashboard, #adminDashboard, #obApp, #supObApp {
-    --btn-grad-start: #183060;
-    --btn-grad-end: #183060;
+    --btn-grad-start: #22447f;
+    --btn-grad-end: #0d1b3d;
   }
-  /* Login/Signup modals and the Admin login form keep their own gradient, independent of the
-     landing page's gradient. */
+  /* Login/Signup modals, the Admin login form, and the OTP popup now share the same gradient as the
+     landing page's Sign Up button, for consistency across the platform. */
   #signupOverlay, #loginOverlay, #adminLoginApp, #otpPopupOverlay, #adminForgotApp {
-    --btn-grad-start: #5bccff;
-    --btn-grad-end: #0e3c5d;
+    --btn-grad-start: #26709d;
+    --btn-grad-end: #4291ca;
+  }
+  /* When the OTP popup is triggered from within a dashboard (e.g. phone number verification),
+     it uses the dashboard's gradient instead of the landing page's. */
+  #otpPopupOverlay.otp-dashboard-context {
+    --btn-grad-start: #22447f;
+    --btn-grad-end: #0d1b3d;
   }
   .btn-primary:active { transform: translateY(0); filter: brightness(0.98); }
   .btn-primary:focus-visible { outline: 2px solid var(--accent-blue); outline-offset: 2px; }
@@ -1096,7 +1102,7 @@
     align-items: center;
     justify-content: center;
     padding: 24px;
-    z-index: 150;
+    z-index: 400;
     opacity: 0;
     visibility: hidden;
     transition: opacity 220ms ease-out, visibility 220ms ease-out;
@@ -1229,6 +1235,7 @@
   .ob-field .helper { font-size: 11.5px; color: var(--text-body-muted); margin-top: 4px; line-height: 1.45; }
   .ob-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   @media (max-width: 640px) { .ob-row-2 { grid-template-columns: 1fr; } }
+  @media (max-width: 720px) { .sup-detail-header-card div[style*="grid-template-columns:1fr 1fr"] { grid-template-columns: 1fr !important; gap: 16px !important; } }
 
   /* Metadata badges */
   .meta-badge {
@@ -1964,7 +1971,7 @@
     transition: background-color 150ms ease-out, color 150ms ease-out;
   }
   .dash-nav-item:hover:not(.active) { background: #eef1f5; }
-  .dash-nav-item.active { background: var(--sidebar-active-bg, #183060); color: #fff; font-weight: 600; }
+  .dash-nav-item.active { background: linear-gradient(135deg, #22447f 0%, #0d1b3d 100%); color: #fff; font-weight: 600; }
   .dash-nav-item svg { flex-shrink: 0; width: 17px; height: 17px; }
   .dash-nav-item .nav-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .dash-sidebar.collapsed .dash-nav-item .nav-label { display: none; }
@@ -1997,7 +2004,7 @@
   .dash-account-avatar svg.ring { position: absolute; inset: 0; transform: rotate(-90deg); }
   .dash-account-avatar .initials {
     position: absolute; inset: 4px; border-radius: 50%;
-    background: var(--accent-blue); color: #fff;
+    background: linear-gradient(135deg, #22447f 0%, #0d1b3d 100%); color: #fff;
     display: flex; align-items: center; justify-content: center;
     font-size: 12px; font-weight: 700;
   }
@@ -2388,7 +2395,7 @@
   .admin-icon-btn:hover { background: var(--surface-soft); }
   .admin-icon-btn .aib-dot { position: absolute; top: 6px; right: 7px; width: 8px; height: 8px; border-radius: 50%; background: #e8482c; border: 2px solid #fff; }
   .admin-avatar-btn {
-    width: 36px; height: 36px; border-radius: 50%; background: var(--navy-900, #101828); color: #fff;
+    width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #22447f 0%, #0d1b3d 100%); color: #fff;
     display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0;
   }
 
@@ -2534,7 +2541,7 @@
   .pm-search-kbd span { font-size: 9.5px; font-weight: 700; color: #94a3b8; background: #fff; border: 1px solid var(--border-subtle); border-radius: 4px; padding: 1px 4px; }
   .pm-tab-pills { display: flex; gap: 5px; flex-wrap: wrap; }
   .pm-tab-pill { font-size: 12px; font-weight: 600; color: var(--text-body-muted); padding: 6px 13px; border-radius: 999px; border: 1px solid var(--border-subtle); white-space: nowrap; cursor: pointer; }
-  .pm-tab-pill.active { background: var(--accent-blue); color: #fff; }
+  .pm-tab-pill.active { background: linear-gradient(135deg, #22447f 0%, #0d1b3d 100%); color: #fff; }
   .pm-tab-pill:not(.active):hover { background: var(--surface-soft); }
   .pm-count-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; margin-left: auto; flex-wrap: wrap; }
   .pm-count-text { font-size: 12.5px; color: var(--text-body-muted); white-space: nowrap; }
@@ -2995,6 +3002,55 @@
   .supapp-card { border-left: 1px solid var(--border-subtle); display: flex; flex-direction: column; height: 100%; }
   .supapp-card-divider-footer { margin-top: auto; }
   .supnote-item { display: flex; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--border-subtle); }
+  .suprq-grid { display: flex; flex-direction: column; gap: 12px; }
+  .suprq-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 16px 18px; cursor: pointer; transition: border-color 180ms ease-out, box-shadow 180ms ease-out, transform 180ms ease-out; opacity: 0; animation: suprqCardIn 320ms ease-out forwards; }
+  .suprq-card:hover { border-color: #c7d0dc; box-shadow: 0 4px 14px rgba(16, 24, 40, 0.06); transform: translateY(-1px); }
+  .suprq-card-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .suprq-field-name { font-size: 14px; font-weight: 700; color: var(--text-heading); }
+  .suprq-sub { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--text-body-muted); margin-top: 3px; }
+  .suprq-status-pill { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+  .suprq-status-pill.pending { color: #92620a; background: #fef3c7; }
+  .suprq-status-pill.approved { color: #1a7a3e; background: #eafaf0; }
+  .suprq-status-pill.resubmit { color: #64748b; background: #f1f5f9; }
+  .suprq-chevron { color: #94a3b8; flex-shrink: 0; transition: transform 220ms ease-out; }
+  .suprq-card.expanded .suprq-chevron { transform: rotate(90deg); }
+  .suprq-detail { max-height: 0; opacity: 0; overflow: hidden; transition: max-height 320ms ease-out, opacity 220ms ease-out, margin-top 320ms ease-out; }
+  .suprq-card.expanded .suprq-detail { opacity: 1; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border-subtle); }
+  @keyframes suprqCardIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .suprq-section-group { margin-bottom: 18px; }
+  .suprq-section-group:last-child { margin-bottom: 0; }
+  .suprq-section-heading { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: #183060; background: #e7edf6; display: inline-block; padding: 4px 10px; border-radius: 6px; margin-bottom: 12px; }
+  .suprq-field-row { padding-bottom: 14px; margin-bottom: 14px; border-bottom: 1px dashed var(--border-subtle); }
+  .suprq-field-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .suprq-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .suprq-compare-box { border-radius: 10px; padding: 10px 12px; }
+  .suprq-compare-box.old { background: #fdecea; }
+  .suprq-compare-box.new { background: #eafaf0; }
+  .suprq-compare-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 4px; }
+  .suprq-compare-box.old .suprq-compare-label { color: #c0392b; }
+  .suprq-compare-box.new .suprq-compare-label { color: #1a7a3e; }
+  .suprq-compare-value { font-size: 13.5px; font-weight: 600; color: var(--text-heading); word-break: break-word; }
+  .suprq-doc-value { display: flex; align-items: center; gap: 6px; min-width: 0; }
+  .suprq-doc-value svg { flex-shrink: 0; }
+  .suprq-doc-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .suprq-doc-view-btn { flex-shrink: 0; margin-left: auto; padding: 4px; border-radius: 6px; background: none; border: none; cursor: pointer; color: var(--accent-blue); display: flex; align-items: center; }
+  .suprq-doc-view-btn:hover { background: rgba(40, 72, 144, 0.12); }
+  .sup-view-public-btn {
+    display: inline-flex; align-items: center; gap: 7px; padding: 9px 16px; border-radius: 10px;
+    background: #fff; border: 1.5px solid var(--border-subtle); color: var(--text-heading);
+    font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit;
+    transition: border-color 160ms ease-out, color 160ms ease-out;
+  }
+  .sup-view-public-btn:hover { border-color: #22447f; color: #22447f; }
+  .sup-view-public-btn:hover .svpb-label {
+    background: linear-gradient(135deg, #22447f 0%, #0d1b3d 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .suprq-item-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+  .suprq-approve-btn, .suprq-resubmit-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 9px; cursor: pointer; font-size: 12.5px; font-weight: 700; white-space: nowrap; }
+  .suprq-approve-btn { background: linear-gradient(135deg, #22447f 0%, #0d1b3d 100%); color: #fff; border: none; }
+  .suprq-resubmit-btn { background: #fff; color: #475569; border: 1px solid var(--border-subtle); }
+  .suprq-resubmit-btn:hover { border-color: #c7d0dc; }
   .supnote-item:first-child { padding-top: 2px; }
   .supnote-item:last-child { border-bottom: none; }
   .supnote-role-badge { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: #183060; background: #e7edf6; padding: 2px 8px; border-radius: 999px; }
@@ -3241,7 +3297,7 @@
   .sup-comp-nav-item:hover:not(.active) { background: var(--surface-soft); }
   .sup-comp-nav-item.active { background: var(--icon-tint-bg); border-left-color: #183060; }
   .sup-comp-nav-item .scni-icon { width: 34px; height: 34px; border-radius: 50%; background: var(--surface-soft); color: var(--text-body-muted); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .sup-comp-nav-item.active .scni-icon { background: #183060; color: #fff; }
+  .sup-comp-nav-item.active .scni-icon { background: linear-gradient(135deg, #22447f 0%, #0d1b3d 100%); color: #fff; }
   .sup-comp-nav-item .scni-title { font-size: 13.5px; font-weight: 700; color: var(--text-heading); }
   .sup-comp-nav-item .scni-status { font-size: 11.5px; font-weight: 600; color: #1a7a3e; display: flex; align-items: center; gap: 4px; margin-top: 1px; }
   .sup-comp-nav-item .scni-status .dot { width: 5px; height: 5px; border-radius: 50%; background: #22c55e; }
@@ -3249,7 +3305,7 @@
 
   .sup-comp-content-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 22px; }
   .sup-comp-content-head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 16px; }
-  .sup-comp-content-head .scch-icon { width: 40px; height: 40px; border-radius: 50%; background: #183060; color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .sup-comp-content-head .scch-icon { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #22447f 0%, #0d1b3d 100%); color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .sup-comp-content-head .scch-title-row { display: flex; align-items: center; gap: 10px; }
   .sup-comp-content-head h3 { font-size: 17px; font-weight: 800; color: var(--text-heading); }
   .sup-comp-content-head p { font-size: 12.5px; color: var(--text-body-muted); margin-top: 2px; }
@@ -5321,7 +5377,7 @@
           <input class="otp-box" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" aria-label="Digit 6">
         </div>
 
-        <button type="button" id="otpPopupConfirmBtn" class="btn btn-primary" style="width:100%;">Confirm Code <span class="arrow">→</span></button>
+        <button type="button" id="otpPopupConfirmBtn" class="btn btn-primary" style="width:100%;height:44px;">Confirm Code <span class="arrow">→</span></button>
       </form>
 
       <button type="button" class="resend-link" id="otpPopupResendLink" style="margin-top:16px;">Resend code</button>
@@ -9267,10 +9323,10 @@
                   <div class="acct-view-card">
                   <div style="display:flex;align-items:center;gap:16px;">
                     <div style="position:relative;width:64px;height:64px;flex-shrink:0;" data-title="Upload Profile Photo">
-                      <div id="supProfileAvatarInitials" style="width:64px;height:64px;border-radius:50%;background:var(--navy-900);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;">LG</div>
+                      <div id="supProfileAvatarInitials" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg, #22447f 0%, #0d1b3d 100%);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;">LG</div>
                       <img src="" alt="" style="display:none;width:64px;height:64px;border-radius:50%;object-fit:cover;position:absolute;inset:0;" id="supProfileAvatarImg">
                       <input type="file" id="supProfileAvatarInput" accept="image/png,image/jpeg,image/webp" style="display:none;" class="aev-edit-only">
-                      <button type="button" style="position:absolute;bottom:-2px;right:-2px;width:24px;height:24px;border-radius:50%;background:var(--accent-blue);color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid #fff;cursor:pointer;" id="supProfileAvatarEditBtn" class="aev-edit-only"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg></button>
+                      <button type="button" style="position:absolute;bottom:-2px;right:-2px;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg, #22447f 0%, #0d1b3d 100%);color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid #fff;cursor:pointer;" id="supProfileAvatarEditBtn" class="aev-edit-only"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg></button>
                     </div>
                     <div>
                       <h3 style="font-size:18px;font-weight:800;color:var(--text-heading);" id="supProfileHeaderName">Liam Greenwood</h3>
@@ -9282,7 +9338,23 @@
                   <div class="detail-mini-grid-3col aev-view-only" id="supAcctInfoGrid">
                     <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Full name</div><div class="dmf-value" id="supProfileFullNameView">Liam Greenwood</div></div>
                     <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>Email address</div><div class="dmf-value" id="supProfileEmailView">greenwood86@gmail.com</div></div>
-                    <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Mobile number</div><div class="dmf-value" id="supAcctInfoMobileView">GB +44 7671542225</div></div>
+                    <div class="detail-mini-field" id="supAcctMobileFieldWrap">
+                      <div class="dmf-label" style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                        <span style="display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Mobile number</span>
+                        <span style="font-size:11px;font-weight:700;color:var(--accent-blue);cursor:pointer;" id="supAcctChangeNumberLink">Change</span>
+                      </div>
+                      <div class="dmf-value" id="supAcctInfoMobileView">GB +44 7671542225</div>
+                      <div id="supAcctChangeNumberForm" style="display:none;margin-top:8px;">
+                        <div class="settings-input-embed">
+                          <span style="display:flex;align-items:center;gap:4px;font-size:13px;color:var(--text-body-muted);font-weight:600;padding-right:10px;border-right:1px solid var(--border-subtle);flex-shrink:0;">GB +44</span>
+                          <input type="tel" placeholder="New mobile number" id="supAcctNewNumberInput" style="flex:1;min-width:0;border:none;outline:none;font-size:13.5px;color:var(--text-heading);background:transparent;">
+                        </div>
+                        <div style="display:flex;gap:8px;margin-top:8px;">
+                          <button type="button" class="btn btn-primary" id="supAcctVerifyNewNumberBtn" style="padding:7px 14px;font-size:12.5px;">Verify new number</button>
+                          <button type="button" class="btn btn-secondary-light" id="supAcctCancelChangeNumberBtn" style="padding:7px 14px;font-size:12.5px;">Cancel</button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
                   <div class="ob-row-2 aev-edit-only">
@@ -9327,7 +9399,23 @@
                   <div class="detail-mini-grid-3col aev-view-only">
                     <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Full legal name</div><div class="dmf-value">Liam Greenwood</div></div>
                     <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Date of birth</div><div class="dmf-value" id="supDobView">05/11/1987</div></div>
-                    <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Phone number</div><div class="dmf-value" id="supIdPhoneView">+44 7671 542225</div></div>
+                    <div class="detail-mini-field" id="supIdPhoneFieldWrap">
+                      <div class="dmf-label" style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                        <span style="display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Phone number</span>
+                        <span style="font-size:11px;font-weight:700;color:var(--accent-blue);cursor:pointer;" id="supIdChangeNumberLink">Change</span>
+                      </div>
+                      <div class="dmf-value" id="supIdPhoneView">+44 7671 542225</div>
+                      <div id="supIdChangeNumberForm" style="display:none;margin-top:8px;">
+                        <div class="settings-input-embed">
+                          <span style="display:flex;align-items:center;gap:4px;font-size:13px;color:var(--text-body-muted);font-weight:600;padding-right:10px;border-right:1px solid var(--border-subtle);flex-shrink:0;">GB +44</span>
+                          <input type="tel" placeholder="New mobile number" id="supIdNewNumberInput" style="flex:1;min-width:0;border:none;outline:none;font-size:13.5px;color:var(--text-heading);background:transparent;">
+                        </div>
+                        <div style="display:flex;gap:8px;margin-top:8px;">
+                          <button type="button" class="btn btn-primary" id="supIdVerifyNewNumberBtn" style="padding:7px 14px;font-size:12.5px;">Verify new number</button>
+                          <button type="button" class="btn btn-secondary-light" id="supIdCancelChangeNumberBtn" style="padding:7px 14px;font-size:12.5px;">Cancel</button>
+                        </div>
+                      </div>
+                    </div>
                     <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>Email address</div><div class="dmf-value">greenwood86@gmail.com</div></div>
                     <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg>NI number</div><div class="dmf-value">QQ 123456 C</div></div>
                     <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg>Nationality</div><div class="dmf-value muted" id="supIdNationalityView">Not set</div></div>
@@ -10540,11 +10628,11 @@
         <div class="dash-nav-group">
           <div class="dash-nav-group-label">Network</div>
           <div class="dash-nav-item" data-nav="property-manager">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 012-2h8a2 2 0 012 2v18Z"/><path d="M6 12H4a2 2 0 00-2 2v6a2 2 0 002 2h2"/><path d="M18 9h2a2 2 0 012 2v9a2 2 0 01-2 2h-2"/><path d="M10 6h4M10 10h4M10 14h4M10 18h4"/></svg>
             <span class="nav-label">Property Manager</span>
           </div>
           <div class="dash-nav-item" data-nav="pm-applicants">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="5"/><path d="M2 21v-2a6 6 0 0112 0"/><path d="M16 18l2 2 4-4"/></svg>
             <span class="nav-label">PM Applicants</span>
           </div>
           <div class="dash-nav-item" data-nav="active-suppliers">
@@ -10568,11 +10656,11 @@
             <span class="nav-label">Quotes</span>
           </div>
           <div class="dash-nav-item" data-nav="disputes">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.5 12.5-8 8a2.119 2.119 0 11-3-3l8-8"/><path d="m16 16 6-6"/><path d="m8 8 6-6"/><path d="m9 7 8 8"/><path d="m21 11-8-8"/></svg>
             <span class="nav-label">Disputes</span>
           </div>
           <div class="dash-nav-item" data-nav="services">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
             <span class="nav-label">Services</span>
           </div>
         </div>
@@ -10584,7 +10672,7 @@
             <span class="nav-label">Invoices</span>
           </div>
           <div class="dash-nav-item" data-nav="keylr-earnings">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
             <span class="nav-label">Keylr Earnings</span>
           </div>
           <div class="dash-nav-item" data-nav="markup-tiers">
@@ -10600,7 +10688,7 @@
             <span class="nav-label">Messages</span>
           </div>
           <div class="dash-nav-item" data-nav="activity-logs">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 106 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>
             <span class="nav-label">Activity Logs</span>
           </div>
         </div>
@@ -10884,7 +10972,7 @@
             </div>
 
             <div class="pm-settings-tabs-row" id="adminServicesTabs" style="margin-top:16px;">
-              <div class="pm-settings-tab-item" data-svctab="service">Service</div>
+              <div class="pm-settings-tab-item" data-svctab="service">Trade</div>
               <div class="pm-settings-tab-item active" data-svctab="compliance">Compliance</div>
             </div>
 
@@ -11460,6 +11548,17 @@
                 </div>
                 <div class="pm-count-actions">
                   <span class="pm-count-text" id="supAppResultCount">Showing 25 of 33</span>
+                  <div class="pm-filter-field" style="width:150px;position:relative;">
+                    <button type="button" class="pm-custom-dd-btn" data-dd="supAppSort" style="height:36px;">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5h10M11 9h7M11 13h4M3 17l3 3 3-3M6 18V4"/></svg>
+                      <span class="cdd-value">Newest</span>
+                      <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="pm-custom-dd-menu" data-dd-menu="supAppSort">
+                      <div class="cdd-item selected" data-value="Newest">Newest first</div>
+                      <div class="cdd-item" data-value="Oldest">Oldest first</div>
+                    </div>
+                  </div>
                   <div class="pm-view-toggle" id="supAppViewToggle">
                     <button type="button" class="active" data-view="grid" aria-label="Grid view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
                     <button type="button" data-view="table" aria-label="Table view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4"/><rect x="3" y="10" width="18" height="4"/><rect x="3" y="16" width="18" height="4"/></svg></button>
@@ -11530,7 +11629,7 @@
                 <button type="button" id="supAppInviteCloseBtn" aria-label="Close" style="background:none;border:none;cursor:pointer;color:var(--text-body-muted);padding:4px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
               </div>
               <div class="confirm-modal-title" style="text-align:left;">Invite suppliers</div>
-              <div class="confirm-modal-desc" style="text-align:left;">Add one or more email addresses. Each person gets an invitation with a link to complete signup and onboarding themselves &mdash; there's nothing further for you to fill in.</div>
+              <div class="confirm-modal-desc" style="text-align:left;">Enter one or more supplier email addresses. Each supplier will receive an invitation email with a secure link to create their account and complete the onboarding process.</div>
               <div class="ob-field" style="margin-top:16px;margin-bottom:0;">
                 <label>Supplier email addresses</label>
                 <input type="text" class="field-input" id="supAppInviteEmailInput" placeholder="Type an email, then press Enter">
@@ -11539,32 +11638,54 @@
               </div>
               <div class="confirm-modal-btns" style="margin-top:20px;">
                 <button type="button" class="pmprop-del-cancel" id="supAppInviteCancelBtn">Cancel</button>
-                <button type="button" class="confirm-modal-confirm" id="supAppInviteSendBtn" style="background:#183060;">Send Invite</button>
+                <button type="button" class="confirm-modal-confirm" id="supAppInviteSendBtn" style="background:linear-gradient(135deg, #22447f 0%, #0d1b3d 100%);">Send Invite</button>
               </div>
             </div>
           </div>
 
           <!-- ============ SUPPLIER_DETAIL_VIEW_PLACEHOLDER ============ -->
           <div id="adminSupplierDetailView" style="display:none;">
-            <div class="pm-breadcrumb">
-              <button type="button" id="supBackBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Active Suppliers</button>
-              <span class="sep">/</span>
-              <span class="current" id="supDetailBreadcrumbName">Nadia Reid</span>
+            <div class="pm-breadcrumb" style="display:flex;align-items:center;justify-content:space-between;">
+              <div style="display:flex;align-items:center;">
+                <button type="button" id="supBackBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Active Suppliers</button>
+                <span class="sep">/</span>
+                <span class="current" id="supDetailBreadcrumbName">Nadia Reid</span>
+              </div>
+              <button type="button" class="sup-view-public-btn" id="supViewPublicProfileBtn" style="flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span class="svpb-label">View Public Profile</span></button>
             </div>
 
-            <div class="sup-detail-header-card">
-              <div class="pm-card-avatar" id="supDetailAvatar" style="width:52px;height:52px;font-size:16px;">NR</div>
-              <div style="flex:1;min-width:0;">
-                <div class="sdh-name-row"><h1 id="supDetailName">Nadia Reid</h1><span class="supplier-approved-pill" id="supDetailStatusPill">Approved</span></div>
-                <div class="sdh-sub"><span id="supDetailEmail">nadia.reid07@gmail.com</span><span class="dot-sep"></span><span id="supDetailPhone">+447974202021</span><span class="dot-sep"></span>Submitted on <span id="supDetailApplied">02/07/2026</span></div>
+            <div class="sup-detail-header-card" style="flex-direction:column;align-items:stretch;gap:16px;">
+              <div style="display:flex;align-items:center;gap:16px;">
+                <div class="pm-card-avatar" id="supDetailAvatar" style="width:52px;height:52px;font-size:16px;">NR</div>
+                <div style="flex:1;min-width:0;">
+                  <div class="sdh-name-row"><h1 id="supDetailName">Nadia Reid</h1><span class="supplier-approved-pill" id="supDetailStatusPill">Approved</span></div>
+                  <div class="sdh-sub"><span id="supDetailEmail">nadia.reid07@gmail.com</span><span class="dot-sep"></span><span id="supDetailPhone">+447974202021</span><span class="dot-sep"></span>Submitted on <span id="supDetailApplied">02/07/2026</span></div>
+                </div>
+                <span class="supplier-type-pill" id="supDetailTypePill">Sole Trader</span>
               </div>
-              <span class="supplier-type-pill" id="supDetailTypePill">Sole Trader</span>
+              <div style="border-top:1px solid var(--border-subtle);padding-top:16px;">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+                  <div>
+                    <div class="scf-label" style="margin-bottom:6px;font-size:13px;">Categories</div>
+                    <div class="supapp-category-row" id="supOverviewCategoryChips" style="margin-bottom:0;"></div>
+                  </div>
+                  <div>
+                    <div class="scf-label" style="margin-bottom:6px;font-size:13px;">Roles</div>
+                    <div class="supapp-category-row" id="supOverviewRoleChips" style="margin-bottom:0;"></div>
+                  </div>
+                </div>
+                <div style="margin-top:16px;">
+                  <div class="scf-label" style="margin-bottom:6px;font-size:13px;">Location</div>
+                  <div class="supapp-location-chips" id="supOverviewLocationChips" style="margin-top:0;display:flex;"></div>
+                </div>
+              </div>
             </div>
 
             <div class="sup-tabs-row" style="display:flex;align-items:center;justify-content:space-between;">
               <div style="display:flex;gap:16px;">
                 <div class="sup-tab-item active" data-suptab="overview">Overview</div>
                 <div class="sup-tab-item" data-suptab="compliance">Profile</div>
+                <div class="sup-tab-item" data-suptab="requests">Requests <span class="pm-count-text" id="supRequestsCount" style="background:#fef3c7;color:#92620a;padding:1px 8px;border-radius:999px;font-weight:700;">0</span></div>
                 <div class="sup-tab-item" data-suptab="chat">Chat <span class="pm-count-text" id="supChatCount" style="background:#fef3c7;color:#92620a;padding:1px 8px;border-radius:999px;font-weight:700;">3</span></div>
               </div>
               <button type="button" id="supNotesDrawerBtn" aria-label="Admin notes" data-tooltip="Admin notes" style="position:relative;background:none;border:none;cursor:pointer;color:var(--text-body-muted);padding:8px;margin-right:4px;display:flex;align-items:center;">
@@ -11576,8 +11697,7 @@
             <div style="display:grid;grid-template-columns:1fr;gap:20px;align-items:start;" id="supDetailGrid">
               <div>
                 <div id="supTabOverview">
-                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:stretch;">
-                  <div class="sup-compliance-card" style="margin-bottom:0;">
+                  <div class="sup-compliance-card">
                     <div class="sup-ring-wrap">
                       <svg width="92" height="92" viewBox="0 0 92 92">
                         <circle cx="46" cy="46" r="40" fill="none" stroke="var(--surface-soft)" stroke-width="9"/>
@@ -11595,19 +11715,6 @@
                         <span class="scs-na"><span id="supStatNA">0</span> N/A</span>
                       </div>
                     </div>
-                  </div>
-
-                  <div class="sup-compliance-card" style="margin-bottom:0;align-items:flex-start;flex-direction:column;gap:12px;">
-                    <h3 class="sci-label" style="margin:0;font-size:15px;">CATEGORIES &amp; LOCATION</h3>
-                    <div>
-                      <div class="scf-label" style="margin-bottom:6px;font-size:13px;">Categories</div>
-                      <div class="supapp-category-row" id="supOverviewCategoryChips" style="margin-bottom:0;"></div>
-                    </div>
-                    <div>
-                      <div class="scf-label" style="margin-bottom:6px;font-size:13px;">Location</div>
-                      <div class="supapp-location-chips" id="supOverviewLocationChips" style="margin-top:0;display:flex;"></div>
-                    </div>
-                  </div>
                   </div>
 
                   <div class="sup-trustid-card">
@@ -12506,6 +12613,18 @@
                   </div>
                 </div>
 
+                <div id="supTabRequests" style="display:none;">
+                  <div class="callout callout-neutral" style="margin-bottom:16px;">
+                    <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4z"/></svg></div>
+                    <div>
+                      <div class="callout-title">Profile edit requests</div>
+                      <div class="callout-body">When the supplier edits their profile from their dashboard, changes appear here for review rather than applying immediately. Approve to update their record, or send back for resubmission.</div>
+                    </div>
+                  </div>
+                  <div id="supRequestsList" class="suprq-grid"></div>
+                  <div id="supRequestsEmpty" style="display:none;padding:24px 0;font-size:13px;color:var(--text-body-muted);text-align:center;">No pending edit requests from this supplier.</div>
+                </div>
+
                 <div id="supTabChat" style="display:none;">
                   <div style="display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:stretch;">
                     <div class="chat-window-card">
@@ -12552,7 +12671,7 @@
 
             </div>
 
-            <div class="sup-sticky-bar">
+            <div class="sup-sticky-bar" id="supStickyBar">
               <span class="ssb-score"><span class="dot"></span>Compliance score: <span id="supStickyScore">73%</span><span class="dot-sep"></span><span id="supStickyChecks">8/11 checks passed</span></span>
               <button type="button" class="sup-deactivate-btn-full" id="supDeactivateBtn2" style="width:auto;padding:9px 20px;">Deactivate</button>
               <div id="supApplicantActionBtns" style="display:none;gap:10px;">
@@ -12654,6 +12773,21 @@
                 </div>
               </div>
             </div>
+          </div>
+
+          <!-- ============ SUPPLIER PUBLIC PROFILE (admin preview of the PM-facing profile) ============ -->
+          <div id="adminSupplierPublicProfileView" style="display:none;">
+            <button type="button" id="adminSupPublicProfileBackBtn" style="display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;color:var(--text-body-muted);font-size:13px;font-weight:600;margin-bottom:16px;padding:6px 0;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back to supplier details
+            </button>
+            <div class="callout callout-neutral" style="margin-bottom:16px;">
+              <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+              <div>
+                <div class="callout-title">Viewing as a Property Manager would see it</div>
+                <div class="callout-body">This is the same public profile shown when a Property Manager views this supplier from Explore Services.</div>
+              </div>
+            </div>
+            <div id="adminSupPublicProfileContent"></div>
           </div>
 
           <!-- ============ CLIENT_DETAIL_VIEW_PLACEHOLDER ============ -->
@@ -13582,10 +13716,11 @@
     showToast('A new code has been sent.');
   });
 
-  function openOtpPopup(destination, onConfirm) {
+  function openOtpPopup(destination, onConfirm, useDashboardGradient) {
     otpPopupDestination.textContent = destination;
     otpPopupConfirmCallback = onConfirm;
     otpPopupOtp.reset();
+    otpPopupOverlay.classList.toggle('otp-dashboard-context', !!useDashboardGradient);
     otpPopupOverlay.classList.add('open');
     otpPopupResend.start();
     setTimeout(function () { otpPopupOtp.focusFirst(); }, reduceMotion ? 50 : 260);
@@ -17029,10 +17164,9 @@
   var supObEditFromSettings = false;
   var supObReturnTabKey = 'profile';
 
-  // Categories & Roles moves before Insurance for Sole Trader only; Company keeps the original order.
+  // Categories & Roles sits right after Identity, before Insurance, for both Sole Trader and Company.
   var SUP_OB_ORDER_SOLE = ['portfolio', 'identity', 'categories', 'insurance', 'background', 'payment', 'setup-profile'];
-  var SUP_OB_ORDER_COMPANY = ['portfolio', 'identity', 'insurance', 'background', 'payment', 'categories', 'setup-profile'];
-  var SUP_OB_PROFILE_KEYS = ['payment', 'categories', 'setup-profile'];
+  var SUP_OB_ORDER_COMPANY = ['portfolio', 'identity', 'categories', 'insurance', 'background', 'payment', 'setup-profile'];
 
   function currentSupObStepOrder() {
     var companyTile = document.querySelector('#businessTypeTiles .choice-tile[data-value="company"]');
@@ -17062,10 +17196,9 @@
     supObProgressFill.style.width = ((step / TOTAL_SUP_OB_STEPS) * 100) + '%';
 
     var stepper = document.getElementById('supProfileDotStepper');
-    var isCompanyType = order === SUP_OB_ORDER_COMPANY;
-    var profileKeys = isCompanyType ? SUP_OB_PROFILE_KEYS : ['payment', 'setup-profile'];
+    var profileKeys = ['payment', 'setup-profile'];
     var allDots = stepper.querySelectorAll('.stepper-dot');
-    if (allDots[2]) allDots[2].style.display = isCompanyType ? '' : 'none';
+    if (allDots[2]) allDots[2].style.display = 'none';
     if (profileKeys.indexOf(key) !== -1) {
       stepper.classList.add('show');
       var currentPos = order.indexOf(key);
@@ -19000,6 +19133,11 @@
   function supjrEscapeHtml(s) {
     return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
+  function supjrHashCode(str) {
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) { hash = ((hash << 5) - hash + str.charCodeAt(i)) | 0; }
+    return Math.abs(hash);
+  }
   function supjrFmtMoney(n) { return '\u00a3' + (Math.round(n * 100) / 100).toFixed(2); }
   function supjrFmtWhole(n) { var r = Math.round(n * 100) / 100; return '\u00a3' + (r % 1 === 0 ? r.toFixed(0) : r.toFixed(2)); }
   function supjrFmtDate(iso) {
@@ -20776,7 +20914,71 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   document.getElementById('supVerifyNewNumberBtn').addEventListener('click', function () {
     var newNumber = document.getElementById('supNewNumberInput').value.trim();
     if (!newNumber) { showToast('Enter a new mobile number first.'); return; }
-    showToast('OTP sent \u2014 verify to confirm your new number.');
+    openOtpPopup('+44 ' + newNumber, function () {
+      document.getElementById('supMobileNumberRow').querySelector('.sie-text').textContent = newNumber;
+      document.getElementById('supAcctInfoMobileView').textContent = 'GB +44 ' + newNumber;
+      document.getElementById('supChangeNumberForm').style.display = 'none';
+      document.getElementById('supMobileNumberRow').style.display = '';
+      document.getElementById('supChangeNumberBtn').style.display = '';
+      document.getElementById('supNewNumberInput').value = '';
+      showToast('Mobile number updated and verified.');
+    });
+  });
+
+  document.getElementById('supAcctChangeNumberLink').addEventListener('click', function () {
+    document.getElementById('supAcctInfoMobileView').style.display = 'none';
+    document.getElementById('supAcctChangeNumberLink').style.display = 'none';
+    document.getElementById('supAcctChangeNumberForm').style.display = '';
+    setTimeout(function () { document.getElementById('supAcctNewNumberInput').focus(); }, 50);
+  });
+  document.getElementById('supAcctCancelChangeNumberBtn').addEventListener('click', function () {
+    document.getElementById('supAcctChangeNumberForm').style.display = 'none';
+    document.getElementById('supAcctInfoMobileView').style.display = '';
+    document.getElementById('supAcctChangeNumberLink').style.display = '';
+    document.getElementById('supAcctNewNumberInput').value = '';
+  });
+  document.getElementById('supAcctVerifyNewNumberBtn').addEventListener('click', function () {
+    var newNumber = document.getElementById('supAcctNewNumberInput').value.trim();
+    if (!newNumber) { showToast('Enter a new mobile number first.'); return; }
+    openOtpPopup('+44 ' + newNumber, function () {
+      document.getElementById('supAcctInfoMobileView').textContent = 'GB +44 ' + newNumber;
+      var mobileRow = document.getElementById('supMobileNumberRow');
+      if (mobileRow) mobileRow.querySelector('.sie-text').textContent = newNumber;
+      document.getElementById('supAcctChangeNumberForm').style.display = 'none';
+      document.getElementById('supAcctInfoMobileView').style.display = '';
+      document.getElementById('supAcctChangeNumberLink').style.display = '';
+      document.getElementById('supAcctNewNumberInput').value = '';
+      showToast('Mobile number updated and verified.');
+    }, true);
+  });
+
+  document.getElementById('supIdChangeNumberLink').addEventListener('click', function () {
+    document.getElementById('supIdPhoneView').style.display = 'none';
+    document.getElementById('supIdChangeNumberLink').style.display = 'none';
+    document.getElementById('supIdChangeNumberForm').style.display = '';
+    setTimeout(function () { document.getElementById('supIdNewNumberInput').focus(); }, 50);
+  });
+  document.getElementById('supIdCancelChangeNumberBtn').addEventListener('click', function () {
+    document.getElementById('supIdChangeNumberForm').style.display = 'none';
+    document.getElementById('supIdPhoneView').style.display = '';
+    document.getElementById('supIdChangeNumberLink').style.display = '';
+    document.getElementById('supIdNewNumberInput').value = '';
+  });
+  document.getElementById('supIdVerifyNewNumberBtn').addEventListener('click', function () {
+    var newNumber = document.getElementById('supIdNewNumberInput').value.trim();
+    if (!newNumber) { showToast('Enter a new mobile number first.'); return; }
+    openOtpPopup('+44 ' + newNumber, function () {
+      document.getElementById('supIdPhoneView').textContent = '+44 ' + newNumber;
+      var mobileRow = document.getElementById('supMobileNumberRow');
+      if (mobileRow) mobileRow.querySelector('.sie-text').textContent = newNumber;
+      var acctView = document.getElementById('supAcctInfoMobileView');
+      if (acctView) acctView.textContent = 'GB +44 ' + newNumber;
+      document.getElementById('supIdChangeNumberForm').style.display = 'none';
+      document.getElementById('supIdPhoneView').style.display = '';
+      document.getElementById('supIdChangeNumberLink').style.display = '';
+      document.getElementById('supIdNewNumberInput').value = '';
+      showToast('Mobile number updated and verified.');
+    }, true);
   });
 
   document.getElementById('supProfileAvatarEditBtn').addEventListener('click', function (e) {
@@ -20961,7 +21163,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       'active-suppliers-list': 'adminActiveSuppliersView',
       'supplier-applicants-list': 'adminSupplierApplicantsView',
       'client-detail': 'adminClientDetailView',
-      'supplier-detail': 'adminSupplierDetailView'
+      'supplier-detail': 'adminSupplierDetailView',
+      'supplier-public-profile': 'adminSupplierPublicProfileView'
     };
     Object.keys(adminViewIds).forEach(function (key) {
       var el = document.getElementById(adminViewIds[key]);
@@ -22448,6 +22651,309 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (countEl) countEl.textContent = notes.length;
   }
 
+  /* ---- Profile Edit Requests: supplier-submitted changes awaiting admin review ---- */
+  var supplierChangeRequests = {}; // keyed by supplier name
+  function supRequestsKeyFor(c) { return c ? c.name : ''; }
+  function seedChangeRequestsIfNeeded(c) {
+    var key = supRequestsKeyFor(c);
+    if (supplierChangeRequests[key]) return;
+    if (c && c.name === 'Ferna') {
+      // This applicant updated everything on their profile in one go, then submitted — demonstrates
+      // what a full-profile request looks like with every field type represented in a single card.
+      var allDate = new Date(); allDate.setHours(allDate.getHours() - 2);
+      supplierChangeRequests[key] = [
+        { id: 'batch1', submittedDate: allDate, status: 'pending', changes: [
+          { section: 'Identity', fieldLabel: 'Full legal name', oldValue: 'Ferna', newValue: 'Fernanda Wright' },
+          { section: 'Identity', fieldLabel: 'Date of birth', oldValue: '12/05/1990', newValue: '12/05/1991' },
+          { section: 'Identity', fieldLabel: 'Home address', oldValue: '14 Rowan Street, Leeds', newValue: '3 Aspen Court, Leeds' },
+          { section: 'Identity', fieldLabel: 'Nationality', oldValue: 'Not set', newValue: 'British' },
+          { section: 'Identity', fieldLabel: 'NI number', oldValue: 'Not set', newValue: 'QQ 778823 A' },
+          { section: 'Identity', fieldLabel: 'HMRC registered (toggle)', oldValue: 'Off', newValue: 'On \u2014 UTR: 5561287403' },
+          { section: 'Identity', fieldLabel: 'Proof of Address document', oldValue: 'Not uploaded', newValue: 'proof-of-address-2026.pdf (new upload)', isDocument: true },
+          { section: 'Tell us about yourself', fieldLabel: 'Sectors served', oldValue: 'Residential', newValue: 'Residential, Commercial' },
+          { section: 'Categories & Roles', fieldLabel: 'Gas Safe Engineer \u2014 Certificate name', oldValue: 'Not set', newValue: 'Gas Safe' },
+          { section: 'Categories & Roles', fieldLabel: 'Gas Safe Engineer \u2014 Registration number', oldValue: 'Not set', newValue: 'GS-448821' },
+          { section: 'Categories & Roles', fieldLabel: 'Gas Safe Engineer \u2014 Certificate uploaded', oldValue: 'Not uploaded', newValue: 'gas-safe-cert-2026.pdf (new upload)', isDocument: true },
+          { section: 'Categories & Roles', fieldLabel: 'Gas Safe Engineer \u2014 Expiry date', oldValue: 'Not set', newValue: '14 Mar 2027' },
+          { section: 'Categories & Roles', fieldLabel: 'Electrician \u2014 Certificate 1 name', oldValue: 'Not set', newValue: '18th Edition Wiring Regulations' },
+          { section: 'Categories & Roles', fieldLabel: 'Electrician \u2014 Certificate 1 registration number', oldValue: 'Not set', newValue: 'EL-18ED-5729' },
+          { section: 'Categories & Roles', fieldLabel: 'Electrician \u2014 Certificate 1 uploaded', oldValue: 'Not uploaded', newValue: '18th-edition-cert-2026.pdf (new upload)', isDocument: true },
+          { section: 'Categories & Roles', fieldLabel: 'Electrician \u2014 Certificate 1 expiry date', oldValue: 'Not set', newValue: '2 Jun 2027' },
+          { section: 'Categories & Roles', fieldLabel: 'Electrician \u2014 Certificate 2 name', oldValue: 'Not set', newValue: 'Part P Certification' },
+          { section: 'Categories & Roles', fieldLabel: 'Electrician \u2014 Certificate 2 registration number', oldValue: 'Not set', newValue: 'PP-90214' },
+          { section: 'Categories & Roles', fieldLabel: 'Electrician \u2014 Certificate 2 uploaded', oldValue: 'Not uploaded', newValue: 'part-p-cert-2026.pdf (new upload)', isDocument: true },
+          { section: 'Categories & Roles', fieldLabel: 'Electrician \u2014 Certificate 2 expiry date', oldValue: 'Not set', newValue: '19 Sep 2026' },
+          { section: 'Insurance', fieldLabel: 'PL Insurance provider', oldValue: 'Not set', newValue: 'Zurich Insurance' },
+          { section: 'Insurance', fieldLabel: 'PL Policy number', oldValue: 'Not set', newValue: 'PL-227719' },
+          { section: 'Insurance', fieldLabel: 'PL Coverage amount', oldValue: 'Not set', newValue: '\u00a32,000,000' },
+          { section: 'Insurance', fieldLabel: 'PL Expiry date', oldValue: 'Not set', newValue: '11 Aug 2026' },
+          { section: 'Insurance', fieldLabel: 'PL Certificate document', oldValue: 'Not uploaded', newValue: 'pl-certificate-2026.pdf (new upload)', isDocument: true },
+          { section: 'Insurance', fieldLabel: 'PI Insurance provider', oldValue: 'Not set', newValue: 'Markel' },
+          { section: 'Insurance', fieldLabel: 'PI Policy number', oldValue: 'Not set', newValue: 'PI-663018' },
+          { section: 'Insurance', fieldLabel: 'PI Coverage amount', oldValue: 'Not set', newValue: '\u00a3500,000' },
+          { section: 'Insurance', fieldLabel: 'PI Expiry date', oldValue: 'Not set', newValue: '27 Oct 2026' },
+          { section: 'Insurance', fieldLabel: 'PI Insurance certificate document', oldValue: 'Not uploaded', newValue: 'pi-certificate-2026.pdf (new upload)', isDocument: true },
+          { section: 'Background Check', fieldLabel: 'DBS level', oldValue: 'Not set', newValue: 'Basic' },
+          { section: 'Background Check', fieldLabel: 'DBS certificate number', oldValue: 'Not set', newValue: '561203984471' },
+          { section: 'Background Check', fieldLabel: 'DBS issue date', oldValue: 'Not set', newValue: '3 Jan 2026' },
+          { section: 'Background Check', fieldLabel: 'DBS certificate document', oldValue: 'Not uploaded', newValue: 'dbs-basic-2026.pdf (new upload)', isDocument: true },
+          { section: 'Background Check', fieldLabel: 'Criminal Record Declaration', oldValue: 'Not declared', newValue: 'I have no unspent criminal convictions' },
+          { section: 'Background Check', fieldLabel: 'Right to Work', oldValue: 'Not confirmed', newValue: 'Yes' },
+          { section: 'Business Legitimacy', fieldLabel: 'VAT registered', oldValue: 'Not registered', newValue: 'Registered \u2014 GB331204587' }
+        ] }
+      ];
+    } else if (c && c.name === 'Nadia Reid') {
+      var d1 = new Date(); d1.setDate(d1.getDate() - 1); d1.setHours(10, 24, 0, 0);
+      var d2 = new Date(); d2.setDate(d2.getDate() - 3); d2.setHours(15, 52, 0, 0);
+      var d3 = new Date(); d3.setDate(d3.getDate() - 4); d3.setHours(9, 15, 0, 0);
+      var d4 = new Date(); d4.setDate(d4.getDate() - 6); d4.setHours(17, 3, 0, 0);
+      var d5 = new Date(); d5.setDate(d5.getDate() - 9); d5.setHours(11, 41, 0, 0);
+      supplierChangeRequests[key] = [
+        { id: 'batch1', submittedDate: d1, status: 'pending', changes: [
+          { section: 'Identity', fieldLabel: 'Home address', oldValue: '116 Church Lane, Warminster', newValue: '42 Elm Grove, Warminster' },
+          { section: 'Identity', fieldLabel: 'HMRC registered (toggle)', oldValue: 'Off', newValue: 'On \u2014 UTR: 4029917364' },
+          { section: 'Identity', fieldLabel: 'Proof of Address document', oldValue: 'utility-bill-2024.pdf', newValue: 'council-tax-2026.pdf (new upload)', isDocument: true }
+        ] },
+        { id: 'batch2', submittedDate: d2, status: 'pending', changes: [
+          { section: 'Categories & Roles', fieldLabel: 'Gas Safe registration number', oldValue: 'GS-558241', newValue: 'GS-701934' },
+          { section: 'Categories & Roles', fieldLabel: 'Trade certificate document', oldValue: 'gas-safe-cert-2024.pdf', newValue: 'gas-safe-cert-2026-renewed.pdf (new upload)', isDocument: true }
+        ] },
+        { id: 'batch3', submittedDate: d3, status: 'pending', changes: [
+          { section: 'Insurance', fieldLabel: 'Public Liability Insurance provider', oldValue: 'Hiscox', newValue: 'Zurich Insurance' },
+          { section: 'Insurance', fieldLabel: 'Public Liability policy number', oldValue: 'PL-330202', newValue: 'PL-441098' },
+          { section: 'Insurance', fieldLabel: 'Insurance certificate document', oldValue: 'pli-certificate-2024.pdf', newValue: 'pli-certificate-2026.pdf (new upload)', isDocument: true }
+        ] },
+        { id: 'batch4', submittedDate: d4, status: 'pending', changes: [
+          { section: 'Background Check', fieldLabel: 'DBS level', oldValue: 'Basic', newValue: 'Enhanced' },
+          { section: 'Background Check', fieldLabel: 'DBS certificate number', oldValue: '847162039485', newValue: '902847561123' },
+          { section: 'Background Check', fieldLabel: 'DBS certificate document', oldValue: '47a8ca0b49834c54bf6c789052c13101.pdf', newValue: 'dbs-enhanced-2026.pdf (new upload)', isDocument: true },
+          { section: 'Background Check', fieldLabel: 'Right to Work', oldValue: 'Yes', newValue: 'Yes \u2014 updated visa expiry' }
+        ] },
+        { id: 'batch5', submittedDate: d5, status: 'pending', changes: [
+          { section: 'Business Legitimacy', fieldLabel: 'VAT registered', oldValue: 'Not registered', newValue: 'Registered \u2014 GB553557881' }
+        ] }
+      ];
+    } else if (c && c.name === 'Fernando Arenas Testing') {
+      var f1 = new Date(); f1.setDate(f1.getDate() - 1); f1.setHours(14, 8, 0, 0);
+      var f2 = new Date(); f2.setDate(f2.getDate() - 4); f2.setHours(10, 33, 0, 0);
+      supplierChangeRequests[key] = [
+        { id: 'batch1', submittedDate: f1, status: 'pending', changes: [
+          { section: 'Insurance', fieldLabel: 'Professional Indemnity coverage amount', oldValue: '\u00a3500,000', newValue: '\u00a31,000,000' },
+          { section: 'Identity', fieldLabel: 'Home address', oldValue: '8 Riverside Court, Leeds', newValue: '21 Kirkgate, Leeds' }
+        ] },
+        { id: 'batch2', submittedDate: f2, status: 'pending', changes: [
+          { section: 'Background Check', fieldLabel: 'Criminal Record Declaration', oldValue: 'No unspent convictions', newValue: 'No unspent convictions (re-declared)' },
+          { section: 'Business Legitimacy', fieldLabel: 'VAT number', oldValue: 'GB294857103', newValue: 'GB294857199' }
+        ] }
+      ];
+    } else if (c && c.name === 'gexeki') {
+      var g1 = new Date(); g1.setHours(g1.getHours() - 4);
+      var g2 = new Date(); g2.setDate(g2.getDate() - 2); g2.setHours(13, 47, 0, 0);
+      var g3 = new Date(); g3.setDate(g3.getDate() - 6); g3.setHours(16, 20, 0, 0);
+      supplierChangeRequests[key] = [
+        { id: 'batch1', submittedDate: g1, status: 'pending', changes: [
+          { section: 'Identity', fieldLabel: 'Company registration number', oldValue: '13847562', newValue: '13847599' },
+          { section: 'Identity', fieldLabel: 'Operational address', oldValue: '5 Trinity Way, Birmingham', newValue: '19 Colmore Row, Birmingham' }
+        ] },
+        { id: 'batch2', submittedDate: g2, status: 'pending', changes: [
+          { section: 'Categories & Roles', fieldLabel: 'Electrician registration number', oldValue: 'EL-220914', newValue: 'EL-330771' },
+          { section: 'Insurance', fieldLabel: 'EL Insurance provider', oldValue: 'Not set', newValue: 'AXA Business Insurance' },
+          { section: 'Insurance', fieldLabel: 'EL Policy number', oldValue: 'Not set', newValue: 'EL-556291' },
+          { section: 'Insurance', fieldLabel: 'EL Coverage amount', oldValue: '\u00a35,000,000', newValue: '\u00a310,000,000' },
+          { section: 'Insurance', fieldLabel: 'EL Expiry date', oldValue: 'Not set', newValue: '30 Apr 2027' },
+          { section: 'Insurance', fieldLabel: 'EL Insurance certificate document', oldValue: 'Not uploaded', newValue: 'el-certificate-2026.pdf (new upload)', isDocument: true }
+        ] },
+        { id: 'batch3', submittedDate: g3, status: 'pending', changes: [
+          { section: 'Background Check', fieldLabel: 'Right to Work', oldValue: 'Not confirmed', newValue: 'Yes \u2014 all staff verified' },
+          { section: 'Business Legitimacy', fieldLabel: 'VAT registered', oldValue: 'Not registered', newValue: 'Registered \u2014 GB118827364' }
+        ] }
+      ];
+    } else if (c && c.name === 'Marcus Ade') {
+      var h1 = new Date(); h1.setDate(h1.getDate() - 2); h1.setHours(9, 50, 0, 0);
+      supplierChangeRequests[key] = [
+        { id: 'batch1', submittedDate: h1, status: 'pending', changes: [
+          { section: 'Identity', fieldLabel: 'Home address', oldValue: '12 Grange Road, Sheffield', newValue: '3 Meadow Close, Sheffield' },
+          { section: 'Background Check', fieldLabel: 'DBS certificate document', oldValue: 'Not uploaded', newValue: 'dbs-basic-2026.pdf (new upload)', isDocument: true }
+        ] }
+      ];
+    } else if (c) {
+      var templates = [
+        { section: 'Identity', fieldLabel: 'Home address', oldValue: '9 Mill Lane, Bristol', newValue: '27 Orchard Street, Bristol' },
+        { section: 'Identity', fieldLabel: 'Proof of Address document', oldValue: 'bank-statement-2024.pdf', newValue: 'utility-bill-2026.pdf (new upload)', isDocument: true },
+        { section: 'Categories & Roles', fieldLabel: 'Trade certificate registration number', oldValue: 'REG-' + (10000 + supjrHashCode(c.name) % 89999), newValue: 'REG-' + (10000 + (supjrHashCode(c.name) + 777) % 89999) },
+        { section: 'Categories & Roles', fieldLabel: 'Trade certificate document', oldValue: 'gas-safe-cert-2024.pdf', newValue: 'gas-safe-cert-2026-renewed.pdf (new upload)', isDocument: true },
+        { section: 'Insurance', fieldLabel: 'Public Liability Insurance provider', oldValue: 'Aviva', newValue: 'AXA Business Insurance' },
+        { section: 'Insurance', fieldLabel: 'Public Liability policy number', oldValue: 'PL-' + (100000 + supjrHashCode(c.name) % 899999), newValue: 'PL-' + (100000 + (supjrHashCode(c.name) + 42) % 899999) },
+        { section: 'Insurance', fieldLabel: 'Insurance certificate document', oldValue: 'pli-certificate-2024.pdf', newValue: 'pli-certificate-2026.pdf (new upload)', isDocument: true },
+        { section: 'Background Check', fieldLabel: 'DBS level', oldValue: 'Basic', newValue: 'Enhanced' },
+        { section: 'Background Check', fieldLabel: 'DBS certificate document', oldValue: 'dbs-basic-2023.pdf', newValue: 'dbs-enhanced-2026.pdf (new upload)', isDocument: true },
+        { section: 'Background Check', fieldLabel: 'Right to Work', oldValue: 'Yes', newValue: 'Yes \u2014 updated visa expiry' },
+        { section: 'Business Legitimacy', fieldLabel: 'VAT registered', oldValue: 'Not registered', newValue: 'Registered \u2014 GB' + (100000000 + supjrHashCode(c.name) % 899999999) }
+      ];
+      var changeCount = 1 + (supjrHashCode(c.name) % 3); // 1 to 3 field changes in this single submission
+      var changes = [];
+      for (var t = 0; t < changeCount; t++) {
+        var tmpl = templates[(supjrHashCode(c.name) + t * 3) % templates.length];
+        changes.push({ section: tmpl.section, fieldLabel: tmpl.fieldLabel, oldValue: tmpl.oldValue, newValue: tmpl.newValue, isDocument: !!tmpl.isDocument });
+      }
+      var batchDate = new Date(); batchDate.setDate(batchDate.getDate() - (1 + (supjrHashCode(c.name) % 8)));
+      supplierChangeRequests[key] = [
+        { id: 'batch1', submittedDate: batchDate, status: 'pending', changes: changes }
+      ];
+    } else {
+      supplierChangeRequests[key] = [];
+    }
+    (supplierChangeRequests[key] || []).forEach(function (batch) {
+      batch.changes.forEach(function (ch, i) {
+        if (!ch.id) ch.id = batch.id + '-c' + i;
+        if (!ch.status) ch.status = 'pending';
+      });
+    });
+  }
+  function suprqToggleCard(card, forceOpen) {
+    var detail = card.querySelector('.suprq-detail');
+    var willOpen = forceOpen !== undefined ? forceOpen : !card.classList.contains('expanded');
+    if (willOpen) {
+      card.classList.add('expanded');
+      detail.style.maxHeight = detail.scrollHeight + 'px';
+      // Once open, let it grow freely so re-expanding after a re-render (different content) never clips.
+      setTimeout(function () { if (card.classList.contains('expanded')) detail.style.maxHeight = 'none'; }, 340);
+    } else {
+      // Lock in the current pixel height first so the collapse transition has something to animate from.
+      detail.style.maxHeight = detail.scrollHeight + 'px';
+      void detail.offsetHeight;
+      card.classList.remove('expanded');
+      detail.style.maxHeight = '0px';
+    }
+  }
+  function suprqFormatDateTime(d) {
+    var MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    var h = d.getHours(); var ampm = h >= 12 ? 'PM' : 'AM'; var h12 = h % 12 || 12;
+    var mins = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes();
+    return d.getDate() + ' ' + MONTH_NAMES[d.getMonth()] + ' ' + d.getFullYear() + ' \u00b7 ' + h12 + ':' + mins + ' ' + ampm;
+  }
+  function renderSupRequestsList() {
+    var c = supDetailCurrentSupplier;
+    seedChangeRequestsIfNeeded(c);
+    var batches = supplierChangeRequests[supRequestsKeyFor(c)] || [];
+    var listEl = document.getElementById('supRequestsList');
+    var emptyEl = document.getElementById('supRequestsEmpty');
+    if (!listEl) return;
+    if (!batches.length) {
+      listEl.innerHTML = '';
+      if (emptyEl) emptyEl.style.display = '';
+    } else {
+      if (emptyEl) emptyEl.style.display = 'none';
+      // Batches are seeded newest-first already; sort defensively by date so "latest on top" always holds.
+      var sorted = batches.slice().sort(function (a, b) { return b.submittedDate - a.submittedDate; });
+      listEl.innerHTML = sorted.map(function (b, idx) {
+        var pendingCount = b.changes.filter(function (ch) { return ch.status === 'pending'; }).length;
+        var aggStatus = pendingCount === 0 ? (b.changes.every(function (ch) { return ch.status === 'approved'; }) ? 'approved' : 'resubmit') : 'pending';
+        var aggText = pendingCount === 0 ? (aggStatus === 'approved' ? 'All approved' : 'Reviewed') : pendingCount + ' of ' + b.changes.length + ' pending';
+        var docIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>';
+        function docValueHtml(ch, value, which) {
+          if (!ch.isDocument) return supjrEscapeHtml(value);
+          return '<span class="suprq-doc-value">' + docIcon + '<span class="suprq-doc-name">' + supjrEscapeHtml(value) + '</span>' +
+            '<button type="button" class="suprq-doc-view-btn" data-view-doc="' + b.id + '|' + ch.id + '|' + which + '" data-tooltip="View document"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></span>';
+        }
+        function changeRowHtml(ch) {
+          var chStatusText = ch.status === 'approved' ? 'Approved' : ch.status === 'resubmit' ? 'Sent back' : 'Pending';
+          var chActionsHtml = ch.status === 'pending'
+            ? '<div class="suprq-item-actions">' +
+                '<button type="button" class="suprq-approve-btn" data-request-action="approve" data-batch-id="' + b.id + '" data-change-id="' + ch.id + '"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Approve</button>' +
+                '<button type="button" class="suprq-resubmit-btn" data-request-action="resubmit" data-batch-id="' + b.id + '" data-change-id="' + ch.id + '"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>Ask to resubmit</button>' +
+              '</div>'
+            : '<div class="suprq-item-actions"><span class="suprq-status-pill ' + ch.status + '" style="white-space:nowrap;">' + chStatusText + '</span></div>';
+          return '<div class="suprq-field-row">' +
+            '<div class="suprq-field-name" style="font-size:13px;margin-bottom:6px;">(' + ch.fieldLabel + ')</div>' +
+            '<div class="suprq-compare">' +
+              '<div class="suprq-compare-box old"><div class="suprq-compare-label">Current</div><div class="suprq-compare-value">' + docValueHtml(ch, ch.oldValue, 'old') + '</div></div>' +
+              '<div class="suprq-compare-box new"><div class="suprq-compare-label">Requested</div><div class="suprq-compare-value">' + docValueHtml(ch, ch.newValue, 'new') + '</div></div>' +
+            '</div>' +
+            chActionsHtml +
+          '</div>';
+        }
+        // Group this batch's changes by section, preserving first-seen order, so the section
+        // heading shows once with all of its fields listed beneath it.
+        var sectionOrder = [];
+        var sectionMap = {};
+        b.changes.forEach(function (ch) {
+          if (!sectionMap[ch.section]) { sectionMap[ch.section] = []; sectionOrder.push(ch.section); }
+          sectionMap[ch.section].push(ch);
+        });
+        var changesHtml = sectionOrder.map(function (sectionName) {
+          return '<div class="suprq-section-group">' +
+            '<div class="suprq-section-heading">' + sectionName + '</div>' +
+            sectionMap[sectionName].map(changeRowHtml).join('') +
+          '</div>';
+        }).join('');
+        return '<div class="suprq-card" data-request-card="' + b.id + '" style="animation-delay:' + Math.min(idx * 45, 360) + 'ms;">' +
+          '<div class="suprq-card-top">' +
+            '<div style="display:flex;align-items:center;gap:10px;">' +
+              '<svg class="suprq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>' +
+              '<div><div class="suprq-field-name">' + b.changes.length + ' change' + (b.changes.length === 1 ? '' : 's') + ' requested</div><div class="suprq-sub"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>' + suprqFormatDateTime(b.submittedDate) + '</div></div>' +
+            '</div>' +
+            '<span class="suprq-status-pill ' + aggStatus + '">' + aggText + '</span>' +
+          '</div>' +
+          '<div class="suprq-detail">' +
+            changesHtml +
+          '</div>' +
+        '</div>';
+      }).join('');
+      listEl.querySelectorAll('.suprq-card').forEach(function (card) {
+        card.addEventListener('click', function (e) {
+          if (e.target.closest('[data-request-action]') || e.target.closest('[data-view-doc]')) return;
+          suprqToggleCard(card);
+        });
+      });
+      listEl.querySelectorAll('[data-view-doc]').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var parts = btn.getAttribute('data-view-doc').split('|');
+          var list = supplierChangeRequests[supRequestsKeyFor(c)];
+          var batch = list.filter(function (b) { return b.id === parts[0]; })[0];
+          if (!batch) return;
+          var change = batch.changes.filter(function (ch) { return ch.id === parts[1]; })[0];
+          if (!change) return;
+          var which = parts[2];
+          var fileValue = which === 'old' ? change.oldValue : change.newValue;
+          var labelPrefix = which === 'old' ? 'Current \u2014 ' : 'Requested \u2014 ';
+          openPreviewModal({ name: labelPrefix + change.fieldLabel, file: fileValue });
+        });
+      });
+      listEl.querySelectorAll('[data-request-action]').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var action = btn.getAttribute('data-request-action');
+          var batchId = btn.getAttribute('data-batch-id');
+          var changeId = btn.getAttribute('data-change-id');
+          var list = supplierChangeRequests[supRequestsKeyFor(c)];
+          var batch = list.filter(function (b) { return b.id === batchId; })[0];
+          if (!batch) return;
+          var change = batch.changes.filter(function (ch) { return ch.id === changeId; })[0];
+          if (!change) return;
+          if (action === 'approve') {
+            change.status = 'approved';
+            showToast(change.fieldLabel + ' updated on ' + c.name + '\u2019s profile.');
+          } else {
+            change.status = 'resubmit';
+            showToast('Sent back to ' + c.name + ' for resubmission.');
+          }
+          // Keep the card expanded after reviewing an item, unless it only had one item to begin with —
+          // in that case there's nothing left to review, so it's fine to collapse it back.
+          var keepExpandedId = batch.changes.length > 1 ? batchId : null;
+          renderSupRequestsList();
+          if (keepExpandedId) {
+            var reopened = listEl.querySelector('.suprq-card[data-request-card="' + keepExpandedId + '"]');
+            if (reopened) suprqToggleCard(reopened, true);
+          }
+        });
+      });
+    }
+    var countEl = document.getElementById('supRequestsCount');
+    if (countEl) countEl.textContent = batches.filter(function (b) { return b.changes.some(function (ch) { return ch.status === 'pending'; }); }).length;
+  }
+
 
   function flattenChecklist(checklist) {
     var flat = [];
@@ -22882,17 +23388,17 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     { key: 'identity', label: 'Identity', icon: '<path d="M9 12l2 2 4-4"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>' },
     { key: 'trades', label: 'Categories & Roles', icon: '<circle cx="12" cy="8" r="6"/><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"/>' },
     { key: 'insurance', label: 'Insurance', icon: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>' },
-    { key: 'background', label: 'Background Check', icon: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>' },
+    { key: 'background', label: 'Background Check', icon: '<circle cx="10" cy="10" r="7"/><path d="M21 21l-4.35-4.35"/>' },
     { key: 'bank', label: 'Payment Setup', icon: '<path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/>' },
     { key: 'portfolio', label: 'Portfolio', icon: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>' }
   ];
   var SUP_COMP_SECTIONS_COMPANY = [
     { key: 'profile', label: 'Profile', icon: '<path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>' },
     { key: 'identity', label: 'Company Identity', icon: '<path d="M9 12l2 2 4-4"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>' },
-    { key: 'insurance', label: 'Insurance', icon: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>' },
-    { key: 'background', label: 'Background Check', icon: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>' },
-    { key: 'bank', label: 'Payment Setup', icon: '<path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/>' },
     { key: 'trades', label: 'Categories & Roles', icon: '<circle cx="12" cy="8" r="6"/><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"/>' },
+    { key: 'insurance', label: 'Insurance', icon: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>' },
+    { key: 'background', label: 'Background Check', icon: '<circle cx="10" cy="10" r="7"/><path d="M21 21l-4.35-4.35"/>' },
+    { key: 'bank', label: 'Payment Setup', icon: '<path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/>' },
     { key: 'portfolio', label: 'Portfolio', icon: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>' }
   ];
   var supCompActiveSection = 'profile';
@@ -23284,6 +23790,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   var supAppRowsPerPage = 25;
   var supAppActiveTab = 'all';
   var supAppSearchTerm = '';
+  var supAppSortOrder = 'Newest';
   var supAppTypeFilter = 'All Types';
   var supAppVerificationFilter = 'All';
   var supAppDateFilter = 'All Time';
@@ -23306,6 +23813,17 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         for (var k = 0; k < catCount; k++) cats.push(categoryCycle[(i + k) % categoryCycle.length]);
         c.categories = cats;
         c.category = cats[0];
+      }
+      if (!c.roles) {
+        var roleSet = [];
+        c.categories.forEach(function (cat, catIdx) {
+          var roleOptions = categoryRoles[cat] || [];
+          if (roleOptions.length) {
+            var role = roleOptions[(i + catIdx) % roleOptions.length];
+            if (roleSet.indexOf(role) === -1) roleSet.push(role);
+          }
+        });
+        c.roles = roleSet;
       }
       if (!c.locations) {
         var locCount = 1 + (i % 4); // 1 to 4 locations, varied so the card's overflow ("+N") is testable
@@ -23333,6 +23851,17 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         for (var k = 0; k < catCount; k++) cats.push(categoryCycle[(i + k) % categoryCycle.length]);
         c.categories = cats;
         c.category = cats[0];
+      }
+      if (!c.roles) {
+        var roleSet = [];
+        c.categories.forEach(function (cat, catIdx) {
+          var roleOptions = categoryRoles[cat] || [];
+          if (roleOptions.length) {
+            var role = roleOptions[(i + catIdx) % roleOptions.length];
+            if (roleSet.indexOf(role) === -1) roleSet.push(role);
+          }
+        });
+        c.roles = roleSet;
       }
       if (!c.locations) {
         var locCount = 1 + (i % 4);
@@ -23545,6 +24074,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         if (haystack.indexOf(term) === -1) return false;
       }
       return true;
+    }).sort(function (a, b) {
+      var diff = b.c.dateSubmitted - a.c.dateSubmitted;
+      return supAppSortOrder === 'Oldest' ? -diff : diff;
     });
   }
 
@@ -23712,9 +24244,21 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
   function switchSupTab(key) {
     document.querySelectorAll('.sup-tabs-row .sup-tab-item').forEach(function (t) { t.classList.toggle('active', t.getAttribute('data-suptab') === key); });
-    document.getElementById('supTabOverview').style.display = key === 'overview' ? '' : 'none';
-    document.getElementById('supTabCompliance').style.display = key === 'compliance' ? '' : 'none';
-    document.getElementById('supTabChat').style.display = key === 'chat' ? '' : 'none';
+    var panelIds = { overview: 'supTabOverview', compliance: 'supTabCompliance', requests: 'supTabRequests', chat: 'supTabChat' };
+    Object.keys(panelIds).forEach(function (k) {
+      var el = document.getElementById(panelIds[k]);
+      if (!el) return;
+      if (k === key) {
+        el.style.display = '';
+        el.classList.remove('pm-view-animate');
+        void el.offsetWidth;
+        el.classList.add('pm-view-animate');
+      } else {
+        el.style.display = 'none';
+      }
+    });
+    document.getElementById('supStickyBar').style.display = (key === 'requests' || key === 'chat') ? 'none' : '';
+    if (key === 'requests') renderSupRequestsList();
   }
   document.querySelectorAll('.sup-tabs-row .sup-tab-item').forEach(function (tab) {
     tab.addEventListener('click', function () { switchSupTab(tab.getAttribute('data-suptab')); });
@@ -23751,6 +24295,26 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   });
   document.getElementById('supTrustIdRefresh').addEventListener('click', function () { showToast('Status refreshed.'); });
   document.getElementById('supBackBtn').addEventListener('click', function () { showAdminView(currentSupplierDetailSource === 'app' ? 'supplier-applicants-list' : 'active-suppliers-list'); });
+
+  document.getElementById('supViewPublicProfileBtn').addEventListener('click', function () {
+    var c = supDetailCurrentSupplier;
+    if (!c) return;
+    var template = PMEX_PROVIDERS[supjrHashCode(c.name) % PMEX_PROVIDERS.length];
+    var p = Object.assign({}, template, {
+      name: c.name,
+      businessType: c.type || template.businessType,
+      role: (c.roles && c.roles.length) ? c.roles.join(' \u00b7 ') : template.role,
+      areas: (c.locations && c.locations.length) ? c.locations.join(', ') : template.areas
+    });
+    var idx = PMEX_PROVIDERS.indexOf(template);
+    var content = document.getElementById('adminSupPublicProfileContent');
+    content.innerHTML = pmexProviderProfileHtml(p, idx);
+    pmexWireProfilePageEvents(content);
+    showAdminView('supplier-public-profile');
+  });
+  document.getElementById('adminSupPublicProfileBackBtn').addEventListener('click', function () {
+    showAdminView('supplier-detail');
+  });
   document.getElementById('supDeactivateBtn2').addEventListener('click', function () {
     document.getElementById('deactivateClientName').textContent = document.getElementById('supDetailName').textContent;
     document.getElementById('deactivateConfirmInput').value = '';
@@ -23918,6 +24482,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var notesCountEl = document.getElementById('supNotesCount');
     if (notesCountEl) notesCountEl.textContent = (supplierAdminNotes[supNotesKeyFor(c)] || []).length;
     document.getElementById('supNoteInput').value = '';
+    seedChangeRequestsIfNeeded(c);
+    var requestsCountEl = document.getElementById('supRequestsCount');
+    if (requestsCountEl) requestsCountEl.textContent = (supplierChangeRequests[supRequestsKeyFor(c)] || []).filter(function (r) { return r.status === 'pending'; }).length;
     document.getElementById('supTrustIdSentPill').style.display = 'none';
     document.getElementById('supTrustIdExpiryText').style.display = 'none';
     document.getElementById('supResendLinkBtn').textContent = 'Send Link';
@@ -23947,6 +24514,12 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       overviewCatEl.innerHTML = (c.categories && c.categories.length)
         ? c.categories.map(function (cat) { return '<span class="supapp-category-chip">' + cat + '</span>'; }).join('')
         : '<span class="acct-view-empty" style="font-size:12px;">No category set</span>';
+    }
+    var overviewRoleEl = document.getElementById('supOverviewRoleChips');
+    if (overviewRoleEl) {
+      overviewRoleEl.innerHTML = (c.roles && c.roles.length)
+        ? c.roles.map(function (role) { return '<span class="supapp-category-chip">' + supjrEscapeHtml(role) + '</span>'; }).join('')
+        : '<span class="acct-view-empty" style="font-size:12px;">No role set</span>';
     }
     var overviewLocEl = document.getElementById('supOverviewLocationChips');
     if (overviewLocEl) {
@@ -24028,6 +24601,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     supAppType: function (v) { supAppTypeFilter = v; supAppCurrentPage = 1; renderSupAppList(); },
     supAppRowsPerPage: function (v) { supAppRowsPerPage = parseInt(v, 10); supAppCurrentPage = 1; renderSupAppList(); },
     supAppVerification: function (v) { supAppVerificationFilter = v; supAppCurrentPage = 1; renderSupAppList(); },
+    supAppSort: function (v) { supAppSortOrder = v; supAppCurrentPage = 1; renderSupAppList(); },
     supAppCategory: function (v) { supAppCategoryFilter = v; supAppCurrentPage = 1; renderSupAppList(); },
     supAppDateSubmitted: function (v) {
       supAppDateFilter = v;
