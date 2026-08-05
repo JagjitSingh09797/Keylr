@@ -2576,6 +2576,8 @@
   .supapp-ms-menu.open { display: block; }
   .supapp-ms-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--text-heading); }
   .supapp-ms-item-nested { padding-left: 30px; font-size: 12.5px; color: var(--text-body-muted); }
+  .cdd-item-category { font-weight: 700; color: var(--text-heading); }
+  .cdd-item-nested { padding-left: 26px; font-size: 12.5px; color: var(--text-body-muted); }
   .supapp-ms-item:hover { background: var(--surface-soft); }
   .supapp-ms-check { width: 16px; height: 16px; border-radius: 5px; border: 1.5px solid #c7d0dc; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #fff; transition: background 120ms ease-out, border-color 120ms ease-out; }
   .supapp-ms-item.selected .supapp-ms-check { background: #183060; border-color: #183060; }
@@ -2677,7 +2679,7 @@
     max-height: 240px; overflow-y: auto;
   }
   .pm-custom-dd-menu.drop-up { top: auto; bottom: calc(100% + 6px); transform: translateY(6px); }
-  .pm-custom-dd-menu.open { opacity: 1; visibility: visible; transform: none; }
+  .pm-custom-dd-menu.open { opacity: 1; visibility: visible; transform: none; width: 250px; right: auto; }
   .cdd-item { padding: 9px 12px; border-radius: 7px; font-size: 13px; color: var(--text-heading); cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
   .cdd-item:hover { background: var(--surface-soft); }
   .cdd-item.selected { background: var(--surface-soft); font-weight: 600; }
@@ -11714,8 +11716,8 @@
                   <button type="button" class="pm-icon-btn-sq" id="supRefreshBtn" aria-label="Refresh"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/></svg></button>
                 </div>
               </div>
-              <div class="supapp-filter-bar" style="display:flex; gap:12px; margin-top:12px; flex-wrap:wrap;">
-                <div class="pm-filter-field" style="width:190px;">
+              <div class="supapp-filter-bar" style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap;">
+                <div class="pm-filter-field" style="flex:1 1 130px; min-width:110px;">
                   <div class="pff-legend-wrap"><label>Type</label></div>
                   <button type="button" class="pm-custom-dd-btn" data-dd="supType">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>
@@ -11729,6 +11731,18 @@
                   </div>
                 </div>
                 <div id="supDynamicFilters" style="display:contents;"></div>
+                <div class="pm-filter-field" style="flex:1 1 110px; min-width:100px;">
+                  <div class="pff-legend-wrap"><label>Sort</label></div>
+                  <button type="button" class="pm-custom-dd-btn" data-dd="supSort">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5h10M11 9h7M11 13h4M3 17l3 3 3-3M6 18V4"/></svg>
+                    <span class="cdd-value">Newest</span>
+                    <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                  </button>
+                  <div class="pm-custom-dd-menu" data-dd-menu="supSort">
+                    <div class="cdd-item selected" data-value="Newest">Newest first</div>
+                    <div class="cdd-item" data-value="Oldest">Oldest first</div>
+                  </div>
+                </div>
               </div>
               <div class="supapp-location-chips" id="supLocationChips" style="display:none;"></div>
             </div>
@@ -23473,7 +23487,12 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         if (supDateJoinedFrom && (!c.joinedDate || c.joinedDate < supDateJoinedFrom)) return false;
         if (supDateJoinedTo && (!c.joinedDate || c.joinedDate > supDateJoinedTo)) return false;
       }
-      if (supCategoryFilter !== 'All Categories' && (!c.categories || c.categories.indexOf(supCategoryFilter) === -1)) return false;
+      if (supCategoryFilter !== 'All Categories') {
+        if (supCategoryFilter.indexOf(': ') !== -1) {
+          var roleOnly = supCategoryFilter.split(': ')[1];
+          if (!c.roles || c.roles.indexOf(roleOnly) === -1) return false;
+        } else if (!c.categories || c.categories.indexOf(supCategoryFilter) === -1) return false;
+      }
       if (supLocationFilter.length && (!c.locations || !c.locations.some(function (loc) { return supLocationFilter.indexOf(loc) !== -1; }))) return false;
       if (supSearchTerm) {
         var term = supSearchTerm.toLowerCase();
@@ -23481,6 +23500,10 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         if (haystack.indexOf(term) === -1) return false;
       }
       return true;
+    }).sort(function (a, b) {
+      var da = a.c.joinedDate ? a.c.joinedDate.getTime() : 0;
+      var db = b.c.joinedDate ? b.c.joinedDate.getTime() : 0;
+      return supSortOrder === 'Oldest' ? da - db : db - da;
     });
   }
 
@@ -23489,8 +23512,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       options: ['All', 'Verification Pending', 'Verification Complete'] },
     { key: 'supDateJoined', label: 'Date Joined', type: 'dateRange', allValue: 'All Time',
       options: ['All Time', 'Today', 'Last 7 Days', 'Last 30 Days', 'Custom Date Range'] },
-    { key: 'supCategory', label: 'Service Category', type: 'select', allValue: 'All Categories', searchable: true,
-      options: ['All Categories'].concat(Object.keys(categoryRoles).length ? Object.keys(categoryRoles) : ['Appliances', 'Cleaning', 'Electrical', 'Gas & Heating', 'Plumbing']) },
+    { key: 'supCategory', label: 'Service Category & Role', type: 'categoryRole', allValue: 'All Categories', searchable: true },
     { key: 'supLocation', label: 'Location', type: 'location' }
   ];
 
@@ -23552,7 +23574,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
             '</div>' +
             '</div>'
           : '';
-        return '<div class="pm-filter-field" style="width:190px;">' +
+        return '<div class="pm-filter-field" style="flex:1 1 130px; min-width:110px;">' +
           '<div class="pff-legend-wrap"><label>' + def.label + '</label></div>' +
           '<button type="button" class="pm-custom-dd-btn" data-dd="' + def.key + '">' +
             '<span class="cdd-value">' + def.options[0] + '</span>' +
@@ -23565,11 +23587,39 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
           extra +
           '</div>';
       }
+      if (def.type === 'categoryRole') {
+        var catNames = Object.keys(categoryRoles).sort(function (a, b) { return a.localeCompare(b); });
+        var catRoleOpts = '<div class="cdd-item selected" data-value="All Categories">All Categories</div>' +
+          catNames.map(function (cat) {
+            var catItem = '<div class="cdd-item cdd-item-category" data-value="' + supjrEscapeHtml(cat) + '">' + supjrEscapeHtml(cat) + '</div>';
+            var roleItems = (categoryRoles[cat] || []).map(function (role) {
+              return '<div class="cdd-item cdd-item-nested" data-value="' + supjrEscapeHtml(cat) + ': ' + supjrEscapeHtml(role) + '">' + supjrEscapeHtml(role) + '</div>';
+            }).join('');
+            return catItem + roleItems;
+          }).join('');
+        return '<div class="pm-filter-field" style="flex:1 1 170px; min-width:150px;">' +
+          '<div class="pff-legend-wrap"><label>' + def.label + '</label></div>' +
+          '<button type="button" class="pm-custom-dd-btn" data-dd="' + def.key + '">' +
+            '<span class="cdd-value">All Categories</span>' +
+            '<svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' +
+          '</button>' +
+          '<div class="pm-custom-dd-menu" data-dd-menu="' + def.key + '">' +
+            '<input type="text" class="field-input supapp-dd-search" id="' + def.key + 'SearchInput" placeholder="Search categories or roles..." style="height:30px;font-size:12.5px;margin-bottom:6px;">' +
+            '<div class="' + def.key + 'OptionsList">' + catRoleOpts + '</div>' +
+          '</div>' +
+          '</div>';
+      }
       if (def.type === 'location') {
         var locOpts = UK_LOCATIONS.map(function (loc) {
-          return '<div class="supapp-ms-item" data-value="' + loc + '"><span class="supapp-ms-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>' + loc + '</div>';
+          var mainItem = '<div class="supapp-ms-item" data-value="' + loc + '"><span class="supapp-ms-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>' + loc + '</div>';
+          if (loc !== 'London') return mainItem;
+          var zoneItems = LONDON_ZONES.map(function (zone) {
+            var zoneLabel = zone.replace('London \u2014 ', '');
+            return '<div class="supapp-ms-item supapp-ms-item-nested" data-value="' + zone + '"><span class="supapp-ms-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>' + zoneLabel + '</div>';
+          }).join('');
+          return mainItem + zoneItems;
         }).join('');
-        return '<div class="pm-filter-field" style="width:220px;">' +
+        return '<div class="pm-filter-field" style="flex:1 1 150px; min-width:130px;">' +
           '<div class="pff-legend-wrap"><label>' + def.label + '</label></div>' +
           '<button type="button" class="pm-custom-dd-btn" id="supLocationDdBtn">' +
             '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>' +
@@ -25321,6 +25371,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   var supAppActiveTab = 'all';
   var supAppSearchTerm = '';
   var supAppSortOrder = 'Newest';
+  var supSortOrder = 'Newest';
   var supAppTypeFilter = 'All Types';
   var supAppVerificationFilter = 'All';
   var supAppDateFilter = 'All Time';
@@ -25412,8 +25463,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       options: ['All', 'Verification Pending', 'Verification Complete'] },
     { key: 'supAppDateSubmitted', label: 'Date Submitted', type: 'dateRange', allValue: 'All Time',
       options: ['All Time', 'Today', 'Last 7 Days', 'Last 30 Days', 'Custom Date Range'] },
-    { key: 'supAppCategory', label: 'Service Category', type: 'select', allValue: 'All Categories', searchable: true,
-      options: ['All Categories'].concat(Object.keys(categoryRoles).length ? Object.keys(categoryRoles) : ['Appliances', 'Cleaning', 'Electrical', 'Gas & Heating', 'Plumbing']) },
+    { key: 'supAppCategory', label: 'Service Category & Role', type: 'categoryRole', allValue: 'All Categories', searchable: true },
     { key: 'supAppLocation', label: 'Location', type: 'location' }
   ];
 
@@ -25486,6 +25536,28 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
             '<div class="' + (def.searchable ? def.key + 'OptionsList' : '') + '">' + opts + '</div>' +
           '</div>' +
           extra +
+          '</div>';
+      }
+      if (def.type === 'categoryRole') {
+        var catNames2 = Object.keys(categoryRoles).sort(function (a, b) { return a.localeCompare(b); });
+        var catRoleOpts2 = '<div class="cdd-item selected" data-value="All Categories">All Categories</div>' +
+          catNames2.map(function (cat) {
+            var catItem = '<div class="cdd-item cdd-item-category" data-value="' + supjrEscapeHtml(cat) + '">' + supjrEscapeHtml(cat) + '</div>';
+            var roleItems = (categoryRoles[cat] || []).map(function (role) {
+              return '<div class="cdd-item cdd-item-nested" data-value="' + supjrEscapeHtml(cat) + ': ' + supjrEscapeHtml(role) + '">' + supjrEscapeHtml(role) + '</div>';
+            }).join('');
+            return catItem + roleItems;
+          }).join('');
+        return '<div class="pm-filter-field" style="flex:1 1 170px; min-width:150px;">' +
+          '<div class="pff-legend-wrap"><label>' + def.label + '</label></div>' +
+          '<button type="button" class="pm-custom-dd-btn" data-dd="' + def.key + '">' +
+            '<span class="cdd-value">All Categories</span>' +
+            '<svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' +
+          '</button>' +
+          '<div class="pm-custom-dd-menu" data-dd-menu="' + def.key + '">' +
+            '<input type="text" class="field-input supapp-dd-search" id="' + def.key + 'SearchInput" placeholder="Search categories or roles..." style="height:30px;font-size:12.5px;margin-bottom:6px;">' +
+            '<div class="' + def.key + 'OptionsList">' + catRoleOpts2 + '</div>' +
+          '</div>' +
           '</div>';
       }
       if (def.type === 'location') {
@@ -26134,6 +26206,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     supType: function (v) { supTypeFilter = v; supCurrentPage = 1; renderSupplierList(); },
     supVerification: function (v) { supVerificationFilter = v; supCurrentPage = 1; renderSupplierList(); },
     supCategory: function (v) { supCategoryFilter = v; supCurrentPage = 1; renderSupplierList(); },
+    supSort: function (v) { supSortOrder = v; supCurrentPage = 1; renderSupplierList(); },
     pmRowsPerPage: function (v) { pmRowsPerPage = parseInt(v, 10); pmCurrentPage = 1; renderPMList(); },
     appRowsPerPage: function (v) { appRowsPerPage = parseInt(v, 10); appCurrentPage = 1; renderApplicantList(); },
     supRowsPerPage: function (v) { supRowsPerPage = parseInt(v, 10); supCurrentPage = 1; renderSupplierList(); },
