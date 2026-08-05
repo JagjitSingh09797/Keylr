@@ -4547,20 +4547,13 @@
 
   @media (max-width: 900px) {
     .pmprop-table-wrap { overflow-x: auto; }
-    .pmprop-map-legend { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; font-size: 11.5px; font-weight: 600; color: var(--text-body-muted); }
-    .pmprop-map-legend span { display: inline-flex; align-items: center; }
-    .pmprop-map-legend .dot { display: inline-block; flex-shrink: 0; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; }
-    .pmprop-map-card { min-width: 240px; font-family: inherit; }
-    .pmprop-map-card .pmc-head { display: flex; align-items: flex-start; gap: 10px; }
-    .pmprop-map-card .pmc-head-text { min-width: 0; }
-    .pmprop-map-card .pmc-name { font-size: 13.5px; font-weight: 800; color: var(--text-heading); margin-bottom: 2px; }
-    .pmprop-map-card .pmc-addr { font-size: 11px; color: var(--text-body-muted); line-height: 1.4; }
-    .pmprop-map-card .pmc-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border-subtle); }
-    .pmprop-map-card .pmc-label { font-size: 10.5px; color: var(--text-body-muted); margin-bottom: 2px; }
-    .pmprop-map-card .pmc-val { font-size: 12px; font-weight: 700; color: var(--text-heading); }
-    .leaflet-popup-content-wrapper { border-radius: 10px; }
-    .leaflet-popup-content { margin: 12px 14px; }
   }
+  .pmprop-map-legend { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; font-size: 10.5px; font-weight: 600; color: var(--text-body-muted); }
+  .pmprop-map-legend span { display: inline-flex; align-items: center; }
+  .pmprop-map-legend .dot { display: inline-block; flex-shrink: 0; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
+  .leaflet-popup-content-wrapper { border-radius: 12px; box-shadow: 0 12px 32px rgba(16,24,40,0.18); }
+  .leaflet-popup-content { margin: 14px 16px; line-height: normal; }
+  .leaflet-popup-tip { box-shadow: 0 4px 10px rgba(16,24,40,0.08); }
 
   /* Property form (shared: New Property / Edit Property) */
   .pmprop-form-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 14px 0; flex-wrap: wrap; }
@@ -16467,16 +16460,28 @@
     if (occupancy === 'void') return 'Void / Vacant';
     return 'Not set';
   }
+  function pmpropOccPillColors(occupancy) {
+    if (occupancy === 'occupied') return { bg: '#e8f0f8', fg: '#284890' };
+    if (occupancy === 'void') return { bg: '#fff7e0', fg: '#92720c' };
+    return { bg: '#f1f5f9', fg: '#64748b' };
+  }
   function pmpropBuildMapCardHtml(p) {
-    return '<div class="pmprop-map-card">' +
-      '<div class="pmc-head">' +
-        '<div class="pmprop-avatar">' + pmpropEscapeHtml(p.initials || pmpropInitials(p.name)) + '</div>' +
-        '<div class="pmc-head-text"><div class="pmc-name">' + pmpropEscapeHtml(p.name) + '</div><div class="pmc-addr">' + pmpropEscapeHtml(p.addr) + '</div></div>' +
+    var pillColors = pmpropOccPillColors(p.occupancy);
+    var cleanAddr = [p.street, p.city, p.postcode].filter(Boolean).join(', ');
+    return '<div style="font-family:inherit;min-width:236px;max-width:260px;">' +
+      '<div style="display:flex;align-items:center;gap:10px;">' +
+        '<div style="width:38px;height:38px;border-radius:10px;background:#e8f0f8;color:#284890;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;">' + pmpropEscapeHtml(p.initials || pmpropInitials(p.name)) + '</div>' +
+        '<div style="min-width:0;">' +
+          '<div style="font-size:14px;font-weight:800;color:#0f172a;line-height:1.25;">' + pmpropEscapeHtml(p.name) + '</div>' +
+        '</div>' +
       '</div>' +
-      '<span class="pmprop-occ-badge' + (p.occupancy ? ' ' + p.occupancy : '') + '" style="margin-top:10px;"><span class="dot"></span>' + pmpropOccLabel(p.occupancy) + '</span>' +
-      '<div class="pmc-info-grid">' +
-        '<div><div class="pmc-label">Type</div><div class="pmc-val">' + pmpropEscapeHtml(p.type) + '</div></div>' +
-        '<div><div class="pmc-label">Updated</div><div class="pmc-val">' + pmpropEscapeHtml(p.lastUpdated) + '</div></div>' +
+      '<div style="font-size:11.5px;color:#64748b;line-height:1.45;margin-top:6px;">' + pmpropEscapeHtml(cleanAddr) + '</div>' +
+      '<div style="display:inline-flex;align-items:center;gap:5px;background:' + pillColors.bg + ';color:' + pillColors.fg + ';font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;margin-top:10px;">' +
+        '<span style="width:6px;height:6px;border-radius:50%;background:' + pillColors.fg + ';display:inline-block;"></span>' + pmpropOccLabel(p.occupancy) +
+      '</div>' +
+      '<div style="display:flex;gap:16px;margin-top:12px;padding-top:10px;border-top:1px solid #e5e9f0;">' +
+        '<div style="flex:1;min-width:0;"><div style="font-size:10px;font-weight:700;letter-spacing:0.03em;color:#94a3b8;text-transform:uppercase;margin-bottom:3px;">Type</div><div style="font-size:12px;font-weight:700;color:#0f172a;">' + pmpropEscapeHtml(p.type) + '</div></div>' +
+        '<div style="flex:1;min-width:0;"><div style="font-size:10px;font-weight:700;letter-spacing:0.03em;color:#94a3b8;text-transform:uppercase;margin-bottom:3px;">Updated</div><div style="font-size:12px;font-weight:700;color:#0f172a;">' + pmpropEscapeHtml(p.lastUpdated) + '</div></div>' +
       '</div>' +
     '</div>';
   }
