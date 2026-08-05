@@ -136,6 +136,12 @@
     --btn-grad-start: #22447f;
     --btn-grad-end: #0d1b3d;
   }
+  /* The bulk request confirmation modal sits outside the admin dashboard's DOM (so it can render
+     above it), but should still use the same dashboard gradient rather than the landing page's. */
+  #suprqBulkConfirmOverlay {
+    --btn-grad-start: #22447f;
+    --btn-grad-end: #0d1b3d;
+  }
   /* Login/Signup modals, the Admin login form, and the OTP popup now share the same gradient as the
      landing page's Sign Up button, for consistency across the platform. */
   #signupOverlay, #loginOverlay, #adminLoginApp, #otpPopupOverlay, #adminForgotApp {
@@ -700,6 +706,7 @@
     transition: opacity 250ms ease-out, visibility 250ms ease-out;
   }
   .modal-overlay.open { opacity: 1; visibility: visible; }
+  #suprqBulkConfirmOverlay { z-index: 900; }
 
   .modal-card {
     display: grid;
@@ -2028,7 +2035,6 @@
     padding: 0 32px;
   }
   .dash-topbar h1 { font-size: 18.5px; font-weight: 800; color: var(--text-heading); }
-  .dash-topbar .bell-btn { margin-left: auto; }
   .dash-topbar .admin-header-actions { margin-left: auto; }
 
   .dash-scroll-area { flex: 1; overflow-y: auto; scroll-behavior: smooth; }
@@ -2116,9 +2122,7 @@
   }
   .bell-btn:hover { background: var(--surface-soft); }
   .bell-btn .bell-dot {
-    position: absolute; top: 7px; right: 8px;
-    width: 7px; height: 7px; border-radius: 50%; background: #e8482c;
-    border: 1.5px solid #fff;
+    display: none !important;
   }
 
   /* ---- Section rhythm: consistent spacing for every dashboard block ---- */
@@ -2393,7 +2397,8 @@
     transition: background-color 150ms ease-out;
   }
   .admin-icon-btn:hover { background: var(--surface-soft); }
-  .admin-icon-btn .aib-dot { position: absolute; top: 6px; right: 7px; width: 8px; height: 8px; border-radius: 50%; background: #e8482c; border: 2px solid #fff; }
+  .admin-icon-btn .aib-dot { display: none !important; }
+  .suprq-bell-badge { position: absolute; top: -4px; right: -4px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 999px; background: #e8482c; color: #fff; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #fff; }
   .admin-avatar-btn {
     width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #22447f 0%, #0d1b3d 100%); color: #fff;
     display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0;
@@ -2570,6 +2575,7 @@
   }
   .supapp-ms-menu.open { display: block; }
   .supapp-ms-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--text-heading); }
+  .supapp-ms-item-nested { padding-left: 30px; font-size: 12.5px; color: var(--text-body-muted); }
   .supapp-ms-item:hover { background: var(--surface-soft); }
   .supapp-ms-check { width: 16px; height: 16px; border-radius: 5px; border: 1.5px solid #c7d0dc; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #fff; transition: background 120ms ease-out, border-color 120ms ease-out; }
   .supapp-ms-item.selected .supapp-ms-check { background: #183060; border-color: #183060; }
@@ -3012,6 +3018,63 @@
   .suprq-status-pill.pending { color: #92620a; background: #fef3c7; }
   .suprq-status-pill.approved { color: #1a7a3e; background: #eafaf0; }
   .suprq-status-pill.resubmit { color: #64748b; background: #f1f5f9; }
+  .suprq-status-pill.resubmitted { color: #183060; background: #e7edf6; }
+  .suprq-status-pill.needs-review { color: #183060; background: #e7edf6; }
+  .suprq-status-pill.resubmit-needed { color: #183060; background: #e7edf6; }
+  .suprq-card-flagged { border-color: #a8bcdd; box-shadow: 0 0 0 1px #a8bcdd; }
+  .suprq-card-action-needed { }
+  .suprq-field-row-highlight { border-bottom: none !important; }
+  .own-resubmit-upload-zone { display: flex; align-items: center; gap: 10px; padding: 14px; border: 1.5px dashed var(--border-subtle); border-radius: 10px; cursor: pointer; color: var(--text-body-muted); transition: border-color 150ms ease-out, background 150ms ease-out; }
+  .own-resubmit-upload-zone:hover { border-color: var(--accent-blue); background: var(--surface-soft); }
+  .own-resubmit-upload-zone svg { flex-shrink: 0; color: var(--accent-blue); }
+  .own-resubmit-upload-text { font-size: 12.5px; font-weight: 600; }
+  .rr-title { font-size: 13px; font-weight: 700; color: var(--text-heading); }
+  .rr-sub { font-size: 11.5px; color: var(--text-body-muted); margin-top: 2px; line-height: 1.4; }
+  .rr-detail-label { display: block; font-size: 12px; font-weight: 700; color: var(--text-heading); margin-bottom: 6px; }
+  .own-resubmit-cr-row.selected { background: #fef9e7; border-color: #eab84d; }
+  .own-resubmit-cr-detail { background: #fef9e7; border: 1.5px solid #eab84d; border-radius: 10px; padding: 12px 14px; margin-top: 10px; }
+  .own-resubmit-cr-textarea { min-height: 70px; resize: vertical; }
+  .own-resubmit-cr-inline-desc { font-size: 12px; color: var(--text-heading); background: #fff; border: 1px solid #eab84d; border-radius: 8px; padding: 8px 10px; margin-top: 8px; line-height: 1.5; }
+  .suprq-cr-detail-text { font-size: 12px; font-weight: 500; color: var(--text-body-muted); margin-top: 6px; padding-top: 6px; border-top: 1px dashed rgba(0,0,0,0.08); line-height: 1.4; }
+  .own-resubmit-yn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .own-resubmit-yn-row-2col .own-resubmit-yn-tile { min-height: auto; }
+  .own-resubmit-yn-tile { display: flex; align-items: flex-start; gap: 8px; padding: 12px 14px; border: 1.5px solid var(--border-subtle); border-radius: 10px; cursor: pointer; transition: border-color 150ms ease-out, background 150ms ease-out; }
+  .own-resubmit-yn-tile:hover { border-color: #c7d0dc; }
+  .own-resubmit-yn-tile.selected { border-color: var(--accent-blue); background: var(--surface-soft); }
+  .own-resubmit-yn-row-2col .own-resubmit-yn-tile[data-radio-value="Registered"].selected { border-color: #1a7a3e; background: #eafaf0; }
+  .own-resubmit-yn-icon { width: 18px; height: 18px; border-radius: 50%; background: var(--surface-soft); color: var(--text-body-muted); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .own-resubmit-yn-tile.selected .own-resubmit-yn-icon { background: var(--accent-blue); color: #fff; }
+  .own-resubmit-vat-detail input.field-input { height: 40px; }
+  .own-resubmit-sector-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .own-resubmit-sector-tile { position: relative; display: flex; align-items: center; gap: 8px; padding: 14px; border: 1.5px solid var(--border-subtle); border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 700; color: var(--text-heading); transition: border-color 150ms ease-out, background 150ms ease-out; }
+  .own-resubmit-sector-tile:hover { border-color: #c7d0dc; }
+  .own-resubmit-sector-tile.selected { border-color: var(--accent-blue); background: var(--surface-soft); color: var(--accent-blue); }
+  .own-resubmit-sector-check { position: absolute; right: 12px; width: 18px; height: 18px; border-radius: 50%; background: var(--accent-blue); display: flex; align-items: center; justify-content: center; }
+  .own-resubmit-subtype-label { font-size: 11.5px; font-weight: 700; color: var(--text-heading); margin-bottom: 8px; }
+  .own-resubmit-optional-tag { font-size: 10px; font-weight: 700; color: var(--text-body-muted); background: var(--surface-soft); padding: 2px 8px; border-radius: 999px; margin-left: 6px; }
+  .own-resubmit-utr-detail input.field-input { height: 40px; }
+  .suprq-count-tag { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 5px; margin-left: 7px; border-radius: 999px; background: var(--surface-soft); color: var(--text-body-muted); font-size: 10.5px; font-weight: 700; }
+  .suprq-progress-track { height: 4px; border-radius: 999px; background: var(--surface-soft); margin-top: 12px; overflow: hidden; }
+  .suprq-progress-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #22447f 0%, #0d1b3d 100%); transition: width 260ms ease-out; }
+  .suprq-bulk-actions { display: flex; gap: 10px; margin-top: 16px; padding-top: 16px; border-top: 1.5px solid var(--border-subtle); }
+  .suprq-bulk-actions .suprq-approve-btn, .suprq-bulk-actions .suprq-resubmit-btn { flex: 1; justify-content: center; padding: 10px; }
+  .suprq-float-notif {
+    position: fixed; bottom: 24px; right: 24px; z-index: 380;
+    display: flex; align-items: flex-start; gap: 12px;
+    background: #fff; border-radius: 14px; padding: 14px 16px;
+    box-shadow: 0 12px 32px rgba(16, 24, 40, 0.18), 0 0 0 1px var(--border-subtle);
+    max-width: 320px; cursor: pointer;
+    opacity: 0; visibility: hidden; transform: translateY(12px);
+    transition: opacity 220ms ease-out, visibility 220ms ease-out, transform 220ms ease-out;
+  }
+  .suprq-float-notif.show { opacity: 1; visibility: visible; transform: translateY(0); }
+  .suprq-float-notif-icon { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #22447f 0%, #0d1b3d 100%); color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .suprq-float-notif-body { flex: 1; min-width: 0; }
+  .suprq-float-notif-title { font-size: 13.5px; font-weight: 700; color: var(--text-heading); }
+  .suprq-float-notif-sub { font-size: 12px; color: var(--text-body-muted); margin-top: 2px; }
+  .suprq-float-notif-close { flex-shrink: 0; background: none; border: none; cursor: pointer; color: var(--text-body-muted); padding: 2px; margin: -2px -2px 0 0; }
+  .suprq-float-notif-close:hover { color: var(--text-heading); }
+  @media (max-width: 640px) { .suprq-float-notif { left: 16px; right: 16px; bottom: 16px; max-width: none; } }
   .suprq-chevron { color: #94a3b8; flex-shrink: 0; transition: transform 220ms ease-out; }
   .suprq-card.expanded .suprq-chevron { transform: rotate(90deg); }
   .suprq-detail { max-height: 0; opacity: 0; overflow: hidden; transition: max-height 320ms ease-out, opacity 220ms ease-out, margin-top 320ms ease-out; }
@@ -3538,6 +3601,7 @@
     pointer-events: none;
   }
   [data-tooltip]:hover::after { opacity: 1; visibility: visible; }
+  .suprq-doc-view-btn[data-tooltip]::after { left: auto; right: 0; transform: none; }
 
   /* 3-dot dropdown menu */
   .pm-dropdown-menu, .app-dropdown-menu, .supplier-dropdown-menu {
@@ -4448,6 +4512,7 @@
 
   .pmprop-header-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
   .pmprop-quickadd-btn { display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 1.5px solid var(--border-subtle); border-radius: 9px; padding: 10px 16px; font-size: 12.5px; font-weight: 700; color: var(--text-heading); cursor: pointer; font-family: inherit; }
+  .pmprop-quickadd-btn.active-toggle { background: var(--surface-soft); border-color: var(--accent-blue); color: var(--accent-blue); }
   .pmprop-quickadd-btn:hover { border-color: #90a8c8; background: var(--surface-soft); }
   .pmprop-create-btn { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); color: #fff; border: none; border-radius: 9px; padding: 10px 18px; font-size: 12.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
   .pmprop-create-btn:hover { opacity: 0.9; }
@@ -4482,6 +4547,17 @@
 
   @media (max-width: 900px) {
     .pmprop-table-wrap { overflow-x: auto; }
+    .pmprop-map-legend { display: flex; gap: 18px; margin-top: 12px; font-size: 12.5px; font-weight: 600; color: var(--text-body-muted); }
+    .pmprop-map-legend .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+    .pmprop-map-card { min-width: 220px; font-family: inherit; }
+    .pmprop-map-card .pmc-name { font-size: 13.5px; font-weight: 800; color: var(--text-heading); margin-bottom: 4px; }
+    .pmprop-map-card .pmc-addr { font-size: 11.5px; color: var(--text-body-muted); line-height: 1.4; margin-bottom: 8px; }
+    .pmprop-map-card .pmc-row { display: flex; align-items: center; justify-content: space-between; font-size: 11.5px; padding: 3px 0; border-top: 1px solid var(--border-subtle); }
+    .pmprop-map-card .pmc-row:first-of-type { border-top: none; padding-top: 0; }
+    .pmprop-map-card .pmc-label { color: var(--text-body-muted); }
+    .pmprop-map-card .pmc-val { font-weight: 700; color: var(--text-heading); }
+    .leaflet-popup-content-wrapper { border-radius: 10px; }
+    .leaflet-popup-content { margin: 12px 14px; }
   }
 
   /* Property form (shared: New Property / Edit Property) */
@@ -5392,6 +5468,70 @@
     </div>
   </div>
 
+  <!-- ============ FLOATING REQUEST NOTIFICATIONS (top-level, bottom-right, work from any tab) ============ -->
+  <div class="suprq-float-notif" id="supRequestFloatNotif">
+    <div class="suprq-float-notif-icon">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
+    </div>
+    <div class="suprq-float-notif-body">
+      <div class="suprq-float-notif-title" id="supRequestFloatNotifTitle">Changes requested</div>
+      <div class="suprq-float-notif-sub">Tap to review and resubmit</div>
+    </div>
+    <button type="button" class="suprq-float-notif-close" id="supRequestFloatNotifClose" aria-label="Dismiss"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+
+  <div class="suprq-float-notif" id="adminRequestFloatNotif">
+    <div class="suprq-float-notif-icon">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4z"/></svg>
+    </div>
+    <div class="suprq-float-notif-body">
+      <div class="suprq-float-notif-title" id="adminRequestFloatNotifTitle">New profile request</div>
+      <div class="suprq-float-notif-sub" id="adminRequestFloatNotifSub">Tap to review</div>
+    </div>
+    <button type="button" class="suprq-float-notif-close" id="adminRequestFloatNotifClose" aria-label="Dismiss"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+
+  <!-- ============ BULK ACTION CONFIRMATION MODAL (Approve All / Resubmit All) ============ -->
+  <div class="modal-overlay" id="suprqBulkConfirmOverlay">
+    <div class="confirm-modal-card">
+      <div class="confirm-modal-icon" id="suprqBulkConfirmIcon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <div class="confirm-modal-title" id="suprqBulkConfirmTitle">Approve all changes?</div>
+      <div class="confirm-modal-desc" id="suprqBulkConfirmDesc">This will approve every pending item in this request and apply the changes to the supplier's profile.</div>
+      <div class="confirm-modal-btns">
+        <button type="button" class="pmprop-del-cancel" id="suprqBulkConfirmCancelBtn">Cancel</button>
+        <button type="button" class="confirm-modal-confirm" id="suprqBulkConfirmActionBtn">Approve all</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SHARED DOCUMENT PREVIEW MODAL (top-level so it works from both Admin and Supplier dashboards) ============ -->
+  <div class="sup-preview-overlay" id="supPreviewOverlay">
+    <div class="sup-preview-card">
+      <div class="sup-preview-head">
+        <div>
+          <h2 id="supPreviewName">Photo ID</h2>
+          <div class="sph-sub" id="supPreviewFile">c20d20af49284cccad8eef6c8269cd15.png</div>
+        </div>
+        <div class="sup-preview-head-actions">
+          <div class="sup-preview-zoom">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M8 11h6"/></svg>
+            <span>100%</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>
+          </div>
+          <span class="sup-preview-link-action" id="supPreviewDownloadBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>Download</span>
+          <span class="sup-preview-link-action accent" id="supPreviewNewTabBtn">Open in new tab</span>
+          <span class="sup-preview-close" id="supPreviewCloseBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></span>
+        </div>
+      </div>
+      <div class="sup-preview-body">
+        <div class="spb-placeholder">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+          <span id="supPreviewPlaceholderText">Preview not available in this prototype.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ============ SHARED UPLOAD-METHOD POPUP ============ -->
   <div class="upload-method-overlay" id="uploadMethodOverlay">
     <div class="upload-method-card">
@@ -5945,7 +6085,7 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
           Back
         </button>
-        <button type="button" class="btn btn-secondary-light" id="supObSaveSkipBtn" style="display:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M20 6L9 17l-5-5"/></svg>Save &amp; skip other steps</button>
+        <button type="button" class="btn btn-secondary-light" id="supObSaveSkipBtn" style="display:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M20 6L9 17l-5-5"/></svg>Submit &amp; skip other steps</button>
         <button type="button" class="btn btn-primary" id="supObNextBtn">Continue <span class="arrow">→</span></button>
       </div>
       </div>
@@ -8428,6 +8568,7 @@
                   <div class="dash-content-sub">Manage your portfolio, compliance, and tenant access in one place.</div>
                 </div>
                 <div class="pmprop-header-actions">
+                  <button type="button" class="pmprop-quickadd-btn" id="pmpropViewMapBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4z"/><path d="M8 2v16M16 6v16"/></svg> View Map</button>
                   <button type="button" class="pmprop-quickadd-btn" id="pmpropQuickAddEntryBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M13 2L3 14h7l-1 8 11-14h-7l1-6z"/></svg> Quick Add</button>
                   <button type="button" class="pmprop-create-btn" id="pmpropCreateEntryBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Create Property</button>
                 </div>
@@ -8441,7 +8582,16 @@
                 <div class="pmprop-count-pill" id="pmpropCountPill">21 properties</div>
               </div>
 
-              <div class="pm-table-wrap pmprop-table-wrap">
+              <div id="pmpropMapWrap" style="display:none;">
+                <div id="pmpropMapEl" style="height:520px;border-radius:14px;overflow:hidden;border:1px solid var(--border-subtle);"></div>
+                <div class="pmprop-map-legend">
+                  <span><span class="dot" style="background:#22c55e;"></span>Occupied</span>
+                  <span><span class="dot" style="background:#f59e0b;"></span>Void / Vacant</span>
+                  <span><span class="dot" style="background:#94a3b8;"></span>Not set</span>
+                </div>
+              </div>
+
+              <div class="pm-table-wrap pmprop-table-wrap" id="pmpropTableWrap">
                 <div class="pm-table-scroll">
                   <table class="admin-table" style="min-width:760px;">
                     <thead><tr><th>Property</th><th>Type</th><th>Occupancy</th><th>Last Updated</th><th></th></tr></thead>
@@ -8450,7 +8600,7 @@
                 </div>
               </div>
 
-              <div class="dash-header" style="margin-top:16px;flex-wrap:wrap;gap:12px;">
+              <div class="dash-header" style="margin-top:16px;flex-wrap:wrap;gap:12px;" id="pmpropPaginationRow">
                 <span class="pm-count-text" style="display:flex;align-items:center;gap:8px;">Rows per page
                   <div class="pm-filter-field" style="width:76px;">
                     <button type="button" class="pm-custom-dd-btn" data-dd="pmpropRowsPerPage" style="padding:6px 10px;">
@@ -8883,7 +9033,7 @@
         </div>
         <div class="dash-account-info">
           <div class="acc-name" id="supAcctName">Fern Whitfield</div>
-          <div class="acc-email" id="supAcctEmail">fern@gmail.com</div>
+          <div class="acc-email" id="supAcctEmail">liam.greenwood@keylr-demo.co.uk</div>
         </div>
         <button type="button" class="dash-logout-btn" id="supDashLogoutBtn" aria-label="Log out">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
@@ -8922,10 +9072,20 @@
           <h1 id="supDashGreeting">Good afternoon, Fern 👋</h1>
           <div class="dash-content-sub" id="supDashTopbarSub">Tuesday, 14 July 2026</div>
         </div>
-        <button type="button" class="bell-btn" aria-label="Notifications">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-          <span class="bell-dot" id="supBellDot"></span>
-        </button>
+        <div style="position:relative;margin-left:auto;">
+          <button type="button" class="bell-btn" id="supBellBtn" aria-label="Notifications">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+            <span class="bell-dot" id="supBellDot"></span>
+            <span class="suprq-bell-badge" id="supRequestBellBadge" style="display:none;">0</span>
+          </button>
+          <div class="notif-panel" id="supNotifPanel">
+            <div class="notif-panel-head">
+              <h3>Notifications</h3>
+            </div>
+            <div id="supNotifListContent"></div>
+            <div id="supNotifEmpty" style="display:none;padding:32px 20px;text-align:center;font-size:13px;color:var(--text-body-muted);">No new notifications.</div>
+          </div>
+        </div>
       </div>
 
       <div class="dash-scroll-area">
@@ -9322,6 +9482,7 @@
                   <div class="pm-settings-tab-item" data-supsettingstab="insurance">Compliance</div>
                   <div class="pm-settings-tab-item" data-supsettingstab="questionnaire">Portfolio</div>
                   <div class="pm-settings-tab-item" data-supsettingstab="payment">Payment Setup</div>
+                  <div class="pm-settings-tab-item" data-supsettingstab="requests">Requests <span class="pm-count-text" id="supOwnRequestsCount" style="background:#fef3c7;color:#92620a;padding:1px 8px;border-radius:999px;font-weight:700;">0</span></div>
                   <div class="pm-settings-tab-item" data-supsettingstab="settings">Settings</div>
                 </div>
                 <button type="button" class="btn btn-primary" id="supAcctEditBtn" style="flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4z"/></svg>Edit</button>
@@ -9340,14 +9501,14 @@
                     </div>
                     <div>
                       <h3 style="font-size:18px;font-weight:800;color:var(--text-heading);" id="supProfileHeaderName">Liam Greenwood</h3>
-                      <div style="font-size:13px;color:var(--text-body-muted);margin:2px 0 8px;" id="supProfileHeaderEmail">greenwood86@gmail.com</div>
+                      <div style="font-size:13px;color:var(--text-body-muted);margin:2px 0 8px;" id="supProfileHeaderEmail">liam.greenwood@keylr-demo.co.uk</div>
                       <span class="supplier-type-pill sole-trader" id="supProfileTypePill" style="font-size:11px;padding:2px 9px;">Sole Trader</span>
                     </div>
                   </div>
 
                   <div class="detail-mini-grid-3col aev-view-only" id="supAcctInfoGrid">
                     <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Full name</div><div class="dmf-value" id="supProfileFullNameView">Liam Greenwood</div></div>
-                    <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>Email address</div><div class="dmf-value" id="supProfileEmailView">greenwood86@gmail.com</div></div>
+                    <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>Email address</div><div class="dmf-value" id="supProfileEmailView">liam.greenwood@keylr-demo.co.uk</div></div>
                     <div class="detail-mini-field" id="supAcctMobileFieldWrap">
                       <div class="dmf-label" style="display:flex;align-items:center;gap:12px;">
                         <span style="display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Mobile number</span>
@@ -9374,7 +9535,7 @@
                     </div>
                     <div class="ob-field">
                       <label>Email address</label>
-                      <input class="field-input" type="email" value="greenwood86@gmail.com" id="supProfileEmailInput">
+                      <input class="field-input" type="email" value="liam.greenwood@keylr-demo.co.uk" id="supProfileEmailInput">
                     </div>
                   </div>
                   <div class="ob-field aev-edit-only" style="margin-bottom:0;max-width:50%;">
@@ -9426,7 +9587,24 @@
                         </div>
                       </div>
                     </div>
-                    <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>Email address</div><div class="dmf-value">greenwood86@gmail.com</div></div>
+                    <div class="detail-mini-field" id="supIdEmailFieldWrap">
+                      <div class="dmf-label" style="display:flex;align-items:center;gap:12px;">
+                        <span style="display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>Email address</span>
+                        <span style="font-size:11px;font-weight:700;color:var(--accent-blue);cursor:pointer;text-decoration:underline;" id="supAcctChangeEmailLink">Change Email</span>
+                      </div>
+                      <div class="dmf-value" id="supIdEmailView">liam.greenwood@keylr-demo.co.uk</div>
+                      <div id="supAcctChangeEmailForm" style="display:none;margin-top:8px;">
+                        <div style="display:flex;align-items:flex-start;gap:8px;background:var(--surface-soft);border-radius:8px;padding:10px 12px;margin-bottom:10px;">
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1a7a3e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px;"><path d="M20 6L9 17l-5-5"/></svg>
+                          <span style="font-size:12px;color:var(--text-body-muted);">A confirmation email has been sent to your current address<span id="supAcctChangeEmailOldAddr"></span>. Enter your new email below to update it.</span>
+                        </div>
+                        <input type="email" class="field-input" placeholder="New email address" id="supAcctNewEmailInput" style="font-size:13.5px;">
+                        <div style="display:flex;gap:8px;margin-top:8px;">
+                          <button type="button" class="btn btn-primary" id="supAcctSendEmailVerifyBtn" style="padding:7px 14px;font-size:12.5px;">Update Email</button>
+                          <button type="button" class="btn btn-secondary-light" id="supAcctCancelChangeEmailBtn" style="padding:7px 14px;font-size:12.5px;">Cancel</button>
+                        </div>
+                      </div>
+                    </div>
                     <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg>NI number</div><div class="dmf-value">QQ 123456 C</div></div>
                     <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg>Nationality</div><div class="dmf-value muted" id="supIdNationalityView">Not set</div></div>
                   </div>
@@ -9480,7 +9658,7 @@
                     </div>
                     <div class="ob-field">
                       <label>Email address</label>
-                      <input class="field-input" type="email" value="greenwood86@gmail.com" id="supIdEmailInput">
+                      <input class="field-input" type="email" value="liam.greenwood@keylr-demo.co.uk" id="supIdEmailInput">
                     </div>
                   </div>
                   <div class="ob-row-2 aev-edit-only">
@@ -9520,7 +9698,7 @@
                   <div class="detail-card-head aev-view-only"><div class="dch-left"><div class="dch-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></div><h3>Company Details</h3></div></div>
                   <div class="ob-section-heading aev-edit-only" style="margin-top:0;">Company Details</div>
 
-                  <div class="detail-mini-grid-3col aev-view-only">
+                  <div class="detail-mini-grid-3col aev-view-only" style="margin-top:16px;">
                     <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>Registered company name</div><div class="dmf-value" id="supCompanyRegNameView">Not set</div></div>
                     <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg>Company registration number</div><div class="dmf-value" id="supCompanyRegNoView">Not set</div></div>
                     <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9m9 5h-9m9 5h-9M4 7h1m-1 5h1m-1 5h1"/></svg>Trading name</div><div class="dmf-value" id="supCompanyTradingNameView">Not set</div></div>
@@ -10079,6 +10257,21 @@
                     <button type="button" class="btn btn-secondary-light" data-acct-discard="Insurance">Discard</button>
                     <button type="button" class="btn btn-primary" data-supsettings-save="Background">Save Changes</button>
                   </div>
+                </div>
+              </div>
+
+              <!-- Requests tab -->
+              <div id="supSettingsPanelRequests" style="display:none;">
+                <div style="margin-top:20px;">
+                  <div class="callout callout-neutral" style="margin-bottom:16px;">
+                    <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4z"/></svg></div>
+                    <div>
+                      <div class="callout-title">Your profile update requests</div>
+                      <div class="callout-body">When you update fields on your profile, they're sent here for the Keylr team to review before going live. If something needs a fix, it'll be flagged for you to edit and resubmit.</div>
+                    </div>
+                  </div>
+                  <div id="supOwnRequestsList" class="suprq-grid"></div>
+                  <div id="supOwnRequestsEmpty" style="display:none;padding:24px 0;font-size:13px;color:var(--text-body-muted);text-align:center;">You haven't submitted any profile changes yet.</div>
                 </div>
               </div>
 
@@ -10767,6 +10960,7 @@
           <button type="button" class="admin-icon-btn" id="adminBellBtn" aria-label="Notifications">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
             <span class="aib-dot"></span>
+            <span class="suprq-bell-badge" id="adminRequestBellBadge" style="display:none;">0</span>
           </button>
           <button type="button" class="admin-avatar-btn" id="adminAvatarBtn">A</button>
 
@@ -12797,33 +12991,6 @@
           </div>
 
           <!-- ============ DOCUMENT PREVIEW MODAL ============ -->
-          <div class="sup-preview-overlay" id="supPreviewOverlay">
-            <div class="sup-preview-card">
-              <div class="sup-preview-head">
-                <div>
-                  <h2 id="supPreviewName">Photo ID</h2>
-                  <div class="sph-sub" id="supPreviewFile">c20d20af49284cccad8eef6c8269cd15.png</div>
-                </div>
-                <div class="sup-preview-head-actions">
-                  <div class="sup-preview-zoom">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M8 11h6"/></svg>
-                    <span>100%</span>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>
-                  </div>
-                  <span class="sup-preview-link-action" id="supPreviewDownloadBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>Download</span>
-                  <span class="sup-preview-link-action accent" id="supPreviewNewTabBtn">Open in new tab</span>
-                  <span class="sup-preview-close" id="supPreviewCloseBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></span>
-                </div>
-              </div>
-              <div class="sup-preview-body">
-                <div class="spb-placeholder">
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
-                  <span id="supPreviewPlaceholderText">Preview not available in this prototype.</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
           <!-- ============ SUPPLIER PUBLIC PROFILE (admin preview of the PM-facing profile) ============ -->
           <div id="adminSupplierPublicProfileView" style="display:none;">
             <button type="button" id="adminSupPublicProfileBackBtn" style="display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;color:var(--text-body-muted);font-size:13px;font-weight:600;margin-bottom:16px;padding:6px 0;">
@@ -14339,7 +14506,7 @@
         }, 300);
       } else {
         setTimeout(function () {
-          showSupplierDashboard({ fullName: 'Liam Greenwood', email: 'liam.greenwood@keylr-demo.co.uk' }, 'populated');
+          showSupplierDashboard({ fullName: 'Ferna', email: 'greenwood86@gmail.com' }, 'populated');
         }, 300);
       }
     });
@@ -16284,9 +16451,105 @@
       '</tr>';
   }
 
+  var pmpropMapInstance = null;
+  var pmpropMapMarkers = [];
+  var pmpropMapMode = false;
+
+  function pmpropOccColor(occupancy) {
+    if (occupancy === 'occupied') return '#22c55e';
+    if (occupancy === 'void') return '#f59e0b';
+    return '#94a3b8';
+  }
+  function pmpropOccLabel(occupancy) {
+    if (occupancy === 'occupied') return 'Occupied';
+    if (occupancy === 'void') return 'Void / Vacant';
+    return 'Not set';
+  }
+  function pmpropBuildMapCardHtml(p) {
+    return '<div class="pmprop-map-card">' +
+      '<div class="pmc-name">' + pmpropEscapeHtml(p.name) + '</div>' +
+      '<div class="pmc-addr">' + pmpropEscapeHtml(p.addr) + '</div>' +
+      '<div class="pmc-row"><span class="pmc-label">Type</span><span class="pmc-val">' + pmpropEscapeHtml(p.type) + '</span></div>' +
+      '<div class="pmc-row"><span class="pmc-label">Occupancy</span><span class="pmc-val" style="color:' + pmpropOccColor(p.occupancy) + ';">' + pmpropOccLabel(p.occupancy) + '</span></div>' +
+      '<div class="pmc-row"><span class="pmc-label">Updated</span><span class="pmc-val">' + pmpropEscapeHtml(p.lastUpdated) + '</span></div>' +
+    '</div>';
+  }
+  function pmpropRenderMap() {
+    if (typeof supsaEnsureLeaflet !== 'function') return;
+    supsaEnsureLeaflet(function () {
+      var el = document.getElementById('pmpropMapEl');
+      if (!el) return;
+      var list = pmpropFilteredList();
+      var byPrefixCount = {};
+      var prefixOf = function (p) { return (p.postcode || '').trim().split(' ')[0] || 'XX'; };
+      list.forEach(function (p) { var pre = prefixOf(p); byPrefixCount[pre] = (byPrefixCount[pre] || 0) + 1; });
+      var seenCount = {};
+      var points = list.map(function (p) {
+        var pre = prefixOf(p);
+        var idx = seenCount[pre] || 0;
+        seenCount[pre] = idx + 1;
+        var ll = supsaCodeLatLng(pre, idx, byPrefixCount[pre]);
+        return { p: p, lat: ll[0], lng: ll[1] };
+      });
+      if (!pmpropMapInstance) {
+        pmpropMapInstance = L.map(el, { scrollWheelZoom: true });
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap contributors',
+          maxZoom: 19
+        }).addTo(pmpropMapInstance);
+      }
+      pmpropMapMarkers.forEach(function (m) { pmpropMapInstance.removeLayer(m); });
+      pmpropMapMarkers = [];
+      if (points.length) {
+        var bounds = [];
+        points.forEach(function (pt) {
+          var color = pmpropOccColor(pt.p.occupancy);
+          var icon = L.divIcon({
+            className: '',
+            html: '<div style="width:16px;height:16px;border-radius:50%;background:' + color + ';border:2.5px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.35);"></div>',
+            iconSize: [16, 16],
+            iconAnchor: [8, 8]
+          });
+          var marker = L.marker([pt.lat, pt.lng], { icon: icon }).addTo(pmpropMapInstance);
+          marker.bindPopup(pmpropBuildMapCardHtml(pt.p), { closeButton: true, offset: [0, -6] });
+          marker.on('mouseover', function () { marker.openPopup(); });
+          marker.on('mouseout', function () { marker.closePopup(); });
+          marker.on('click', function () { pmpropOpenEdit(pt.p.id); });
+          pmpropMapMarkers.push(marker);
+          bounds.push([pt.lat, pt.lng]);
+        });
+        pmpropMapInstance.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
+      } else {
+        pmpropMapInstance.setView([54.5, -3.0], 5.5);
+      }
+      setTimeout(function () { if (pmpropMapInstance) pmpropMapInstance.invalidateSize(); }, 100);
+    });
+  }
+  function pmpropShowMapView() {
+    pmpropMapMode = true;
+    document.getElementById('pmpropMapWrap').style.display = '';
+    document.getElementById('pmpropTableWrap').style.display = 'none';
+    document.getElementById('pmpropPaginationRow').style.display = 'none';
+    document.getElementById('pmpropViewMapBtn').classList.add('active-toggle');
+    document.getElementById('pmpropViewMapBtn').innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M9 4v18"/></svg> View List';
+    pmpropRenderMap();
+  }
+  function pmpropShowTableView() {
+    pmpropMapMode = false;
+    document.getElementById('pmpropMapWrap').style.display = 'none';
+    document.getElementById('pmpropTableWrap').style.display = '';
+    document.getElementById('pmpropPaginationRow').style.display = '';
+    document.getElementById('pmpropViewMapBtn').classList.remove('active-toggle');
+    document.getElementById('pmpropViewMapBtn').innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4z"/><path d="M8 2v16M16 6v16"/></svg> View Map';
+  }
+  document.getElementById('pmpropViewMapBtn').addEventListener('click', function () {
+    if (pmpropMapMode) pmpropShowTableView(); else pmpropShowMapView();
+  });
+
   function pmpropRenderList() {
     var list = pmpropFilteredList();
     document.getElementById('pmpropCountPill').textContent = list.length + ' propert' + (list.length === 1 ? 'y' : 'ies');
+    if (pmpropMapMode) { pmpropRenderMap(); return; }
     var totalPages = Math.max(1, Math.ceil(list.length / pmpropRowsPerPage));
     if (pmpropCurrentPage > totalPages) pmpropCurrentPage = totalPages;
     var start = (pmpropCurrentPage - 1) * pmpropRowsPerPage;
@@ -17295,6 +17558,33 @@
   var supObCurrentStep = 1;
   var TOTAL_SUP_OB_STEPS = 7;
   var supObEditFromSettings = false;
+  var supObEditSnapshot = null;
+  var SUP_OB_FIELD_MAP = {
+    fullName: { label: 'Full legal name', section: 'Identity' },
+    homeAddress: { label: 'Home address', section: 'Identity' },
+    nationality: { label: 'Nationality', section: 'Identity', fieldType: 'nationality', selectOptions: ['British', 'Austrian', 'Irish', 'Polish', 'Other'] },
+    niNumber: { label: 'NI number', section: 'Identity' },
+    hmrcRegistered: { label: 'HMRC registered', section: 'Identity', fieldType: 'hmrc-toggle' },
+    utrNumber: { label: 'UTR number', section: 'Identity' },
+    dob: { label: 'Date of birth', section: 'Identity', fieldType: 'date' },
+    proofAddressFile: { label: 'Proof of Address document', section: 'Identity', isDocument: true },
+    sectors: { label: 'Sectors served', section: 'Tell us about yourself', fieldType: 'sectors', isArray: true },
+    pliProvider: { label: 'PL Insurance provider', section: 'Insurance' },
+    pliPolicyNumber: { label: 'PL Policy number', section: 'Insurance' },
+    piProvider: { label: 'PI Insurance provider', section: 'Insurance' },
+    piPolicyNumber: { label: 'PI Policy number', section: 'Insurance' },
+    dbsLevel: { label: 'DBS level', section: 'Background Check', fieldType: 'select', selectOptions: ['Basic', 'Enhanced'] },
+    rightToWork: { label: 'Right to Work', section: 'Background Check', fieldType: 'right-to-work' },
+    vatRegistered: { label: 'VAT registered', section: 'Business Legitimacy', fieldType: 'vat' },
+    companyRegName: { label: 'Registered company name', section: 'Company Identity' },
+    companyRegNo: { label: 'Company registration number', section: 'Company Identity' },
+    companyTradingName: { label: 'Trading name', section: 'Company Identity' },
+    companyRegOffice: { label: 'Registered office address', section: 'Company Identity' },
+    companyOperAddress: { label: 'Operational address', section: 'Company Identity' },
+    pscName: { label: 'PSC full legal name', section: 'Company Identity' },
+    pscPhone: { label: 'PSC phone number', section: 'Company Identity' },
+    pscEmail: { label: 'PSC email address', section: 'Company Identity' }
+  };
   var supObReturnTabKey = 'profile';
 
   // Categories & Roles sits right after Identity, before Insurance, for both Sole Trader and Company.
@@ -17719,6 +18009,8 @@
     supplierBusinessType = targetVal;
     if (typeof updateSupProfileTypeChip === 'function') updateSupProfileTypeChip();
     prefillSupObFromSettings();
+    supObCollectWizardData();
+    supObEditSnapshot = JSON.parse(JSON.stringify(supplierCapturedData));
     supObEditFromSettings = true;
     supObReturnTabKey = settingsTabKey;
     supObApp.classList.add('active');
@@ -17727,6 +18019,40 @@
     var order = currentSupObStepOrder();
     var stepNum = order.indexOf(stepKey) + 1;
     goToSupObStep(stepNum > 0 ? stepNum : 1);
+  }
+
+  function supObValueToDisplay(key, val) {
+    var map = SUP_OB_FIELD_MAP[key];
+    if (map && map.isArray) return Array.isArray(val) ? val.join(', ') : (val || '');
+    if (map && map.fieldType === 'toggle') return val ? 'On' : 'Off';
+    if (typeof val === 'boolean') return val ? 'Yes' : 'No';
+    return val || 'Not set';
+  }
+  function supObBuildChangeRequestFromEdits() {
+    if (!supObEditSnapshot) return null;
+    var changes = [];
+    Object.keys(SUP_OB_FIELD_MAP).forEach(function (key) {
+      var map = SUP_OB_FIELD_MAP[key];
+      var oldVal = supObEditSnapshot[key];
+      var newVal = supplierCapturedData[key];
+      var oldDisplay = supObValueToDisplay(key, oldVal);
+      var newDisplay = supObValueToDisplay(key, newVal);
+      if (oldDisplay === newDisplay) return;
+      if (!newDisplay || newDisplay === 'Not set') return;
+      changes.push({
+        section: map.section,
+        fieldLabel: map.label,
+        oldValue: oldDisplay,
+        newValue: newDisplay,
+        fieldType: map.fieldType,
+        selectOptions: map.selectOptions,
+        isDocument: !!map.isDocument
+      });
+    });
+    if (!changes.length) return null;
+    var batchId = 'ownbatch' + Date.now();
+    changes.forEach(function (ch, i) { ch.id = batchId + '-c' + i; ch.status = 'pending'; });
+    return { id: batchId, displayId: (typeof suprqNextId === 'function' ? suprqNextId() : Date.now() % 10000), submittedDate: new Date(), changes: changes };
   }
 
   document.getElementById('supAcctEditBtn').addEventListener('click', function () {
@@ -17741,11 +18067,19 @@
       supObApp.classList.remove('active');
       document.body.style.overflow = '';
       supObCollectWizardData();
-      if (typeof populateSupSettingsFromOnboarding === 'function') populateSupSettingsFromOnboarding(supplierCapturedData);
-      if (typeof refreshAllAcctSettingsViews === 'function') refreshAllAcctSettingsViews();
+      var newBatch = supObBuildChangeRequestFromEdits();
+      if (newBatch) {
+        if (typeof seedChangeRequestsIfNeeded === 'function') seedChangeRequestsIfNeeded({ name: SUP_OWN_DEMO_NAME });
+        if (!supplierChangeRequests[SUP_OWN_DEMO_NAME]) supplierChangeRequests[SUP_OWN_DEMO_NAME] = [];
+        supplierChangeRequests[SUP_OWN_DEMO_NAME].push(newBatch);
+        if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
+        showToast(newBatch.changes.length + ' change' + (newBatch.changes.length === 1 ? '' : 's') + ' submitted for review.');
+      } else {
+        showToast('No changes to submit.');
+      }
       supObEditFromSettings = false;
-      switchSupSettingsTab(supObReturnTabKey);
-      showToast('Changes saved.');
+      supObEditSnapshot = null;
+      switchSupSettingsTab(newBatch ? 'requests' : supObReturnTabKey);
     }, 200);
   });
 
@@ -18995,6 +19329,8 @@
       document.getElementById('supProfileHeaderEmail').textContent = soleEmail;
       document.getElementById('supAcctEmail').textContent = soleEmail;
       document.getElementById('supProfileEmailView').textContent = soleEmail;
+      var soleIdEmailView = document.getElementById('supIdEmailView');
+      if (soleIdEmailView) soleIdEmailView.textContent = soleEmail;
 
       document.getElementById('supAcctInfoMobileView').textContent = signupData.phoneNumber || 'Not set';
 
@@ -20303,7 +20639,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   /* ---- Supplier Profile Settings ---- */
   function switchSupSettingsTab(key) {
     document.querySelectorAll('#supSettingsTabs .pm-settings-tab-item').forEach(function (t) { t.classList.toggle('active', t.getAttribute('data-supsettingstab') === key); });
-    ['profile', 'sectors', 'insurance', 'questionnaire', 'payment', 'settings'].forEach(function (k) {
+    ['profile', 'sectors', 'insurance', 'requests', 'questionnaire', 'payment', 'settings'].forEach(function (k) {
       var panel = document.getElementById('supSettingsPanel' + k.charAt(0).toUpperCase() + k.slice(1));
       panel.style.display = k === key ? '' : 'none';
       if (k === key) {
@@ -20314,10 +20650,625 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     });
     var editBtn = document.getElementById('supAcctEditBtn');
     if (editBtn) editBtn.style.display = (key === 'profile' || key === 'sectors' || key === 'insurance' || key === 'payment') ? '' : 'none';
+    if (key === 'requests' && typeof renderSupOwnRequestsList === 'function') renderSupOwnRequestsList();
   }
   document.querySelectorAll('#supSettingsTabs .pm-settings-tab-item').forEach(function (tab) {
     tab.addEventListener('click', function () { switchSupSettingsTab(tab.getAttribute('data-supsettingstab')); });
   });
+
+  /* ---- Supplier's own view of their submitted profile update requests ----
+     Reads from the SAME supplierChangeRequests store the admin side uses (keyed by name),
+     so an admin action (e.g. "Ask to resubmit") and a supplier resubmission are visible on
+     both sides immediately \u2014 this is not a separate copy of the data. */
+  var SUP_OWN_DEMO_NAME = 'Ferna';
+  function getSupOwnChangeRequests() {
+    if (typeof loadChangeRequestsFromStorage === 'function') loadChangeRequestsFromStorage();
+    if (typeof seedChangeRequestsIfNeeded === 'function' && typeof supplierChangeRequests === 'object') {
+      seedChangeRequestsIfNeeded({ name: SUP_OWN_DEMO_NAME });
+      return supplierChangeRequests[SUP_OWN_DEMO_NAME] || [];
+    }
+    return [];
+  }
+
+  function suprqOwnFormatDateTime(d) { return typeof suprqFormatDateTime === 'function' ? suprqFormatDateTime(d) : d.toLocaleDateString(); }
+  function supRqParseDateForInput(str) {
+    if (!str) return '';
+    var parsed = new Date(str);
+    if (isNaN(parsed.getTime())) return '';
+    var mm = ('0' + (parsed.getMonth() + 1)).slice(-2);
+    var dd = ('0' + parsed.getDate()).slice(-2);
+    return parsed.getFullYear() + '-' + mm + '-' + dd;
+  }
+  function supRqFormatDateForDisplay(isoStr) {
+    if (!isoStr) return '';
+    var parsed = new Date(isoStr + 'T00:00:00');
+    if (isNaN(parsed.getTime())) return isoStr;
+    var MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return parsed.getDate() + ' ' + MONTH_NAMES[parsed.getMonth()] + ' ' + parsed.getFullYear();
+  }
+
+  document.addEventListener('click', function () {
+    document.querySelectorAll('.own-resubmit-select-menu.open').forEach(function (m) { m.classList.remove('open'); });
+    document.querySelectorAll('.own-resubmit-select-btn.open').forEach(function (b) { b.classList.remove('open'); });
+  });
+  function renderSupOwnRequestsList() {
+    var listEl = document.getElementById('supOwnRequestsList');
+    var emptyEl = document.getElementById('supOwnRequestsEmpty');
+    var countEl = document.getElementById('supOwnRequestsCount');
+    if (!listEl) return;
+    var batches = getSupOwnChangeRequests();
+    var actionableCount = 0;
+    batches.forEach(function (b) { b.changes.forEach(function (ch) { if (ch.status === 'resubmit') actionableCount++; }); });
+    if (countEl) countEl.textContent = actionableCount;
+
+    if (!batches.length) {
+      listEl.innerHTML = '';
+      if (emptyEl) emptyEl.style.display = '';
+      return;
+    }
+    if (emptyEl) emptyEl.style.display = 'none';
+
+    var sorted = batches.slice().sort(function (a, b) { return b.submittedDate - a.submittedDate; });
+    listEl.innerHTML = sorted.map(function (b, idx) {
+      var needsFixCount = b.changes.filter(function (ch) { return ch.status === 'resubmit'; }).length;
+      var pendingCount = b.changes.filter(function (ch) { return ch.status === 'pending'; }).length;
+      var resubmittedCount = b.changes.filter(function (ch) { return ch.status === 'resubmitted'; }).length;
+      var aggStatus, aggText;
+      if (needsFixCount > 0) { aggStatus = 'resubmit-needed'; aggText = needsFixCount + ' need' + (needsFixCount === 1 ? 's' : '') + ' your attention'; }
+      else if (resubmittedCount > 0) { aggStatus = 'needs-review'; aggText = 'Resubmitted \u2014 under review'; }
+      else if (pendingCount > 0) { aggStatus = 'pending'; aggText = 'Under review'; }
+      else { aggStatus = 'approved'; aggText = 'All approved'; }
+
+      var docIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>';
+      function ownDocValueHtml(ch, value, which) {
+        return '<span class="suprq-doc-value">' + docIcon + '<span class="suprq-doc-name">' + supjrEscapeHtml(value) + '</span>' +
+          '<button type="button" class="suprq-doc-view-btn" data-own-view-doc="' + b.id + '|' + ch.id + '|' + which + '" data-tooltip="View document"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></span>';
+      }
+      function buildResubmitInputHtml(ch) {
+        var type = ch.fieldType || (ch.isDocument ? 'document' : 'text');
+        if (type === 'document') {
+          return '<div class="own-resubmit-upload-zone" data-own-resubmit-upload="' + ch.id + '">' +
+            '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>' +
+            '<span class="own-resubmit-upload-text" data-own-resubmit-upload-label="' + ch.id + '">Click to choose a replacement file</span>' +
+            '</div>' +
+            '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
+        }
+        if (type === 'date') {
+          var calKey = 'own-' + ch.id;
+          var initialDisplay = ch.newValue || 'dd/mm/yyyy';
+          return '<div class="pm-filter-field" style="width:100%;position:relative;">' +
+            '<button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="' + calKey + '" style="width:100%;height:40px;">' +
+              '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>' +
+              '<span class="cdd-value cal-value" data-cal-text="' + calKey + '">' + supjrEscapeHtml(initialDisplay) + '</span>' +
+              '<svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' +
+            '</button>' +
+            '<div class="pm-cal-popup" data-cal-popup="' + calKey + '" style="left:0;right:auto;">' +
+              '<div class="pm-cal-head">' +
+                '<button type="button" class="pm-cal-month-label" data-cal-monthlabel="' + calKey + '"><span data-cal-monthtext="' + calKey + '"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>' +
+                '<div class="pm-cal-nav">' +
+                  '<button type="button" class="pm-cal-nav-btn" data-cal-prev="' + calKey + '" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>' +
+                  '<button type="button" class="pm-cal-nav-btn" data-cal-next="' + calKey + '" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>' +
+                '</div>' +
+              '</div>' +
+              '<div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>' +
+              '<div class="pm-cal-grid" data-cal-grid="' + calKey + '"></div>' +
+              '<div class="pm-cal-foot">' +
+                '<button type="button" class="pm-cal-link" data-cal-today="' + calKey + '">Today</button>' +
+              '</div>' +
+            '</div>' +
+            '<input type="hidden" id="' + calKey + 'Hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">' +
+          '</div>';
+        }
+        if (type === 'criminal-record') {
+          var crOptions = [
+            { value: 'I have no unspent criminal convictions', sub: 'This declaration covers unspent offences only.' },
+            { value: 'I have unspent convictions to declare', sub: 'Having a record doesn\u2019t automatically disqualify you \u2014 we review each case individually.' }
+          ];
+          var crSelected = ch.newValue;
+          var crShowDetail = crSelected === 'I have unspent convictions to declare';
+          return '<div class="radio-row-list own-resubmit-cr" data-own-resubmit-radio="' + ch.id + '">' +
+            crOptions.map(function (opt) {
+              var selected = opt.value === crSelected;
+              var showInlineDesc = selected && opt.value === 'I have unspent convictions to declare';
+              return '<div class="radio-row own-resubmit-cr-row' + (selected ? ' selected' : '') + '" data-radio-value="' + supjrEscapeHtml(opt.value) + '">' +
+                '<div class="rr-circle"></div>' +
+                '<div><div class="rr-title">' + supjrEscapeHtml(opt.value) + '</div><div class="rr-sub">' + opt.sub + '</div>' +
+                (showInlineDesc ? '<div class="own-resubmit-cr-inline-desc" data-own-resubmit-cr-inline="' + ch.id + '" style="display:' + (ch.crDetail ? '' : 'none') + ';">' + supjrEscapeHtml(ch.crDetail || '') + '</div>' : '') +
+                '</div>' +
+              '</div>';
+            }).join('') +
+            '</div>' +
+            '<div class="own-resubmit-cr-detail" data-own-resubmit-cr-detail="' + ch.id + '" style="display:' + (crShowDetail ? '' : 'none') + ';">' +
+              '<label class="rr-detail-label">Please describe your unspent convictions</label>' +
+              '<textarea class="field-input own-resubmit-cr-textarea" data-own-resubmit-cr-text="' + ch.id + '" rows="3" placeholder="Provide details including dates, offences, and outcomes. This information is kept confidential and reviewed by our compliance team.">' + supjrEscapeHtml(ch.crDetail || '') + '</textarea>' +
+            '</div>' +
+            '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
+        }
+        if (type === 'right-to-work') {
+          var rtwOptions = [
+            { value: 'Yes', sub: 'I have the right to work in the UK' },
+            { value: 'No', sub: 'I do not currently have right to work' }
+          ];
+          return '<div class="own-resubmit-yn-row" data-own-resubmit-radio="' + ch.id + '">' +
+            rtwOptions.map(function (opt) {
+              var selected = opt.value === ch.newValue;
+              return '<div class="own-resubmit-yn-tile' + (selected ? ' selected' : '') + '" data-radio-value="' + opt.value + '">' +
+                '<span class="own-resubmit-yn-icon">' + (selected ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>' : '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>') + '</span>' +
+                '<div><div class="rr-title">' + opt.value + '</div><div class="rr-sub">' + opt.sub + '</div></div>' +
+              '</div>';
+            }).join('') +
+            '</div>' +
+            '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
+        }
+        if (type === 'vat') {
+          var vatIsRegistered = /^registered/i.test(ch.newValue) || ch.newValue.indexOf('GB') === 0 || ch.newValue.indexOf('Registered') === 0;
+          var vatNum = ch.vatNumber || (ch.newValue.indexOf('GB') !== -1 ? ch.newValue.substring(ch.newValue.indexOf('GB')) : '');
+          return '<div class="own-resubmit-yn-row own-resubmit-yn-row-2col" data-own-resubmit-radio="' + ch.id + '">' +
+            '<div class="own-resubmit-yn-tile' + (vatIsRegistered ? ' selected' : '') + '" data-radio-value="Registered">' +
+              '<div class="rr-title">Yes, VAT registered</div><div class="rr-sub">I charge VAT on my invoices</div>' +
+            '</div>' +
+            '<div class="own-resubmit-yn-tile' + (!vatIsRegistered ? ' selected' : '') + '" data-radio-value="Not registered">' +
+              '<div class="rr-title">No, not registered</div><div class="rr-sub">Below the VAT threshold or exempt</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="own-resubmit-vat-detail" data-own-resubmit-vat-detail="' + ch.id + '" style="display:' + (vatIsRegistered ? 'flex' : 'none') + ';gap:8px;margin-top:10px;">' +
+            '<input type="text" class="field-input" data-own-resubmit-vat-number="' + ch.id + '" placeholder="GB 123 4567 89" value="' + supjrEscapeHtml(vatNum) + '" style="flex:1;">' +
+            '<button type="button" class="btn btn-secondary-light" style="flex-shrink:0;padding:0 16px;">Verify with HMRC</button>' +
+          '</div>' +
+          '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
+        }
+        if (type === 'sectors') {
+          var SECTOR_SUBTYPES = { Residential: ['STR \u2013 Short Term Rentals', 'Estate Agents'], Commercial: ['Hotels & Hostels'] };
+          var selectedSectors = ch.newValue.split(',').map(function (s) { return s.trim(); });
+          var selectedSubtypes = ch.sectorSubtypes || [];
+          return '<div class="own-resubmit-sector-row" data-own-resubmit-chips="' + ch.id + '">' +
+            ['Residential', 'Commercial'].map(function (sector) {
+              var isSelected = selectedSectors.indexOf(sector) !== -1;
+              return '<div class="own-resubmit-sector-tile' + (isSelected ? ' selected' : '') + '" data-chip-value="' + sector + '">' +
+                '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>' +
+                '<span>' + sector + '</span>' +
+                (isSelected ? '<span class="own-resubmit-sector-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>' : '') +
+              '</div>';
+            }).join('') +
+          '</div>' +
+          Object.keys(SECTOR_SUBTYPES).map(function (sector) {
+            var visible = selectedSectors.indexOf(sector) !== -1;
+            return '<div class="own-resubmit-subtype-group" data-own-resubmit-subtype-group="' + ch.id + '|' + sector + '" style="display:' + (visible ? 'block' : 'none') + ';margin-top:10px;">' +
+              '<div class="own-resubmit-subtype-label">' + sector + ' Sub-Types <span class="own-resubmit-optional-tag">Optional</span></div>' +
+              '<div class="simple-chip-row">' +
+                SECTOR_SUBTYPES[sector].map(function (sub) {
+                  var subSelected = selectedSubtypes.indexOf(sub) !== -1;
+                  return '<div class="simple-chip' + (subSelected ? ' selected' : '') + '" data-own-resubmit-subtype="' + ch.id + '" data-subtype-value="' + supjrEscapeHtml(sub) + '">' + supjrEscapeHtml(sub) + '</div>';
+                }).join('') +
+              '</div>' +
+            '</div>';
+          }).join('') +
+          '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
+        }
+        if (type === 'hmrc-toggle') {
+          var hmrcIsOn = /^on/i.test(ch.newValue);
+          var utrVal = ch.utrNumber || (ch.newValue.indexOf('UTR:') !== -1 ? ch.newValue.split('UTR:')[1].trim() : '');
+          return '<button type="button" class="toggle-switch' + (hmrcIsOn ? ' on' : '') + '" data-own-resubmit-toggle="' + ch.id + '"><span class="thumb"></span></button>' +
+            '<span style="font-size:12.5px;color:var(--text-body-muted);margin-left:10px;vertical-align:2px;" data-own-resubmit-toggle-label="' + ch.id + '">' + (hmrcIsOn ? 'On' : 'Off') + '</span>' +
+            '<div class="own-resubmit-utr-detail" data-own-resubmit-utr-detail="' + ch.id + '" style="display:' + (hmrcIsOn ? 'block' : 'none') + ';margin-top:10px;">' +
+              '<label class="rr-detail-label">UTR number</label>' +
+              '<input type="text" class="field-input" data-own-resubmit-utr="' + ch.id + '" placeholder="10-digit number" value="' + supjrEscapeHtml(utrVal) + '">' +
+            '</div>' +
+            '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
+        }
+        if (type === 'nationality') {
+          var natOptions = ch.selectOptions || ['British', 'Austrian', 'Irish', 'Polish', 'Other'];
+          return '<div class="pm-filter-field" style="width:100%;position:relative;">' +
+            '<button type="button" class="pm-custom-dd-btn ob-select-dd own-resubmit-select-btn" data-own-resubmit-select="' + ch.id + '" style="width:100%;height:40px;">' +
+              '<span class="cdd-value">' + supjrEscapeHtml(ch.newValue) + '</span>' +
+              '<svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' +
+            '</button>' +
+            '<div class="pm-custom-dd-menu own-resubmit-select-menu" data-own-resubmit-select-menu="' + ch.id + '">' +
+              natOptions.map(function (opt) {
+                return '<div class="cdd-item' + (opt === ch.newValue ? ' selected' : '') + '" data-value="' + supjrEscapeHtml(opt) + '">' + supjrEscapeHtml(opt) + '</div>';
+              }).join('') +
+            '</div>' +
+            '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">' +
+          '</div>';
+        }
+        if (type === 'toggle') {
+          var isOn = /^(on|yes)/i.test(ch.newValue);
+          return '<button type="button" class="toggle-switch' + (isOn ? ' on' : '') + '" data-own-resubmit-toggle="' + ch.id + '"><span class="thumb"></span></button>' +
+            '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">' +
+            '<span style="font-size:12.5px;color:var(--text-body-muted);margin-left:10px;vertical-align:2px;" data-own-resubmit-toggle-label="' + ch.id + '">' + (isOn ? 'On' : 'Off') + '</span>';
+        }
+        if (type === 'radio') {
+          var options = ch.radioOptions || [ch.oldValue, ch.newValue];
+          return '<div class="radio-row-list" data-own-resubmit-radio="' + ch.id + '">' +
+            options.map(function (opt) {
+              var selected = opt === ch.newValue;
+              return '<div class="radio-row' + (selected ? ' selected' : '') + '" data-radio-value="' + supjrEscapeHtml(opt) + '">' +
+                '<div class="rr-circle"></div>' +
+                '<div><div class="rr-title">' + supjrEscapeHtml(opt) + '</div></div>' +
+              '</div>';
+            }).join('') +
+            '</div>' +
+            '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
+        }
+        if (type === 'select') {
+          var selOptions = ch.selectOptions || [ch.oldValue, ch.newValue];
+          return '<div class="pm-filter-field" style="width:100%;position:relative;">' +
+            '<button type="button" class="pm-custom-dd-btn ob-select-dd own-resubmit-select-btn" data-own-resubmit-select="' + ch.id + '" style="width:100%;height:40px;">' +
+              '<span class="cdd-value">' + supjrEscapeHtml(ch.newValue) + '</span>' +
+              '<svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' +
+            '</button>' +
+            '<div class="pm-custom-dd-menu own-resubmit-select-menu" data-own-resubmit-select-menu="' + ch.id + '">' +
+              selOptions.map(function (opt) {
+                return '<div class="cdd-item' + (opt === ch.newValue ? ' selected' : '') + '" data-value="' + supjrEscapeHtml(opt) + '">' + supjrEscapeHtml(opt) + '</div>';
+              }).join('') +
+            '</div>' +
+            '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">' +
+          '</div>';
+        }
+        if (type === 'chips') {
+          var allChips = ch.chipOptions || ch.newValue.split(',').map(function (s) { return s.trim(); });
+          var selectedChips = ch.newValue.split(',').map(function (s) { return s.trim(); });
+          return '<div class="simple-chip-row" data-own-resubmit-chips="' + ch.id + '">' +
+            allChips.map(function (opt) {
+              var isSelected = selectedChips.indexOf(opt) !== -1;
+              return '<div class="simple-chip' + (isSelected ? ' selected' : '') + '" data-chip-value="' + supjrEscapeHtml(opt) + '">' + supjrEscapeHtml(opt) + '</div>';
+            }).join('') +
+            '</div>' +
+            '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
+        }
+        return '<input type="text" class="field-input" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
+      }
+      function ownRowHtml(ch) {
+        if (ch.status === 'resubmit') {
+          return '<div class="suprq-field-row suprq-field-row-highlight">' +
+            '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><div class="suprq-field-name" style="font-size:13px;margin-bottom:0;">' + ch.fieldLabel + '</div><span class="suprq-status-pill resubmit-needed">Resubmit requested</span></div>' +
+            '<div class="suprq-compare" style="grid-template-columns:1fr;margin-bottom:10px;">' +
+              '<div class="suprq-compare-box old"><div class="suprq-compare-label">Current</div><div class="suprq-compare-value">' + (ch.isDocument ? ownDocValueHtml(ch, ch.oldValue, 'old') : supjrEscapeHtml(ch.oldValue)) + '</div></div>' +
+            '</div>' +
+            '<div class="ob-field" style="margin-bottom:10px;">' +
+              '<label style="font-size:11.5px;">Update ' + ch.fieldLabel.toLowerCase() + '</label>' +
+              buildResubmitInputHtml(ch) +
+            '</div>' +
+            '<div class="suprq-item-actions">' +
+              '<button type="button" class="suprq-approve-btn" data-own-resubmit="' + b.id + '|' + ch.id + '"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>Resubmit</button>' +
+            '</div>' +
+          '</div>';
+        }
+        var chStatusText = ch.status === 'approved' ? 'Approved' : ch.status === 'resubmitted' ? 'Resubmitted' : 'Pending review';
+        var ownCrDetailHtml = (ch.fieldType === 'criminal-record' && ch.crDetail && /unspent convictions to declare/i.test(ch.newValue))
+          ? '<div class="suprq-cr-detail-text">' + supjrEscapeHtml(ch.crDetail) + '</div>'
+          : '';
+        return '<div class="suprq-field-row' + (ch.status === 'resubmitted' ? ' suprq-field-row-highlight' : '') + '">' +
+          '<div class="suprq-field-name" style="font-size:13px;margin-bottom:6px;">' + ch.fieldLabel + '</div>' +
+          '<div class="suprq-compare">' +
+            '<div class="suprq-compare-box old"><div class="suprq-compare-label">Current</div><div class="suprq-compare-value">' + (ch.isDocument ? ownDocValueHtml(ch, ch.oldValue, 'old') : supjrEscapeHtml(ch.oldValue)) + '</div></div>' +
+            '<div class="suprq-compare-box new"><div class="suprq-compare-label">Requested</div><div class="suprq-compare-value">' + (ch.isDocument ? ownDocValueHtml(ch, ch.newValue, 'new') : supjrEscapeHtml(ch.newValue)) + ownCrDetailHtml + '</div></div>' +
+          '</div>' +
+          '<div class="suprq-item-actions"><span class="suprq-status-pill ' + ch.status + '" style="white-space:nowrap;">' + chStatusText + '</span></div>' +
+        '</div>';
+      }
+      var sectionOrder = [];
+      var sectionMap = {};
+      b.changes.forEach(function (ch) {
+        if (!sectionMap[ch.section]) { sectionMap[ch.section] = []; sectionOrder.push(ch.section); }
+        sectionMap[ch.section].push(ch);
+      });
+      var changesHtml = sectionOrder.map(function (sectionName) {
+        return '<div class="suprq-section-group">' +
+          '<div class="suprq-section-heading">' + sectionName + '</div>' +
+          sectionMap[sectionName].map(ownRowHtml).join('') +
+        '</div>';
+      }).join('');
+      return '<div class="suprq-card' + (needsFixCount > 0 ? ' suprq-card-action-needed' : '') + '" data-request-card="' + b.id + '" style="animation-delay:' + Math.min(idx * 45, 360) + 'ms;">' +
+        '<div class="suprq-card-top">' +
+          '<div style="display:flex;align-items:center;gap:10px;">' +
+            '<svg class="suprq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>' +
+            '<div><div class="suprq-field-name">#' + (b.displayId || (b.displayId = suprqNextId())) + '<span class="suprq-count-tag">' + b.changes.length + '</span></div><div class="suprq-sub"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>' + suprqOwnFormatDateTime(b.submittedDate) + '</div></div>' +
+          '</div>' +
+          '<span class="suprq-status-pill ' + aggStatus + '">' + aggText + '</span>' +
+        '</div>' +
+        '<div class="suprq-detail">' +
+          changesHtml +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    listEl.querySelectorAll('.suprq-card').forEach(function (card) {
+      card.addEventListener('click', function (e) {
+        if (e.target.closest('[data-own-resubmit]') || e.target.closest('[data-own-resubmit-input]') || e.target.closest('[data-own-view-doc]') ||
+            e.target.closest('[data-own-resubmit-toggle]') || e.target.closest('[data-own-resubmit-chips]') || e.target.closest('[data-own-resubmit-radio]') || e.target.closest('[data-own-resubmit-upload]') ||
+            e.target.closest('[data-own-resubmit-select]') || e.target.closest('[data-own-resubmit-select-menu]')) return;
+        suprqToggleCard(card);
+      });
+    });
+    listEl.querySelectorAll('[data-own-resubmit-input]').forEach(function (input) {
+      input.addEventListener('click', function (e) { e.stopPropagation(); });
+      input.addEventListener('change', function (e) { e.stopPropagation(); });
+    });
+    listEl.querySelectorAll('.pm-cal-trigger-btn[data-cal^="own-"]').forEach(function (btn) {
+      var key = btn.getAttribute('data-cal');
+      if (!calState[key]) {
+        var parsedDate = new Date(btn.closest('.pm-filter-field').querySelector('[data-own-resubmit-input]').value);
+        var hasValidDate = !isNaN(parsedDate.getTime());
+        calState[key] = { viewYear: hasValidDate ? parsedDate.getFullYear() : new Date().getFullYear(), viewMonth: hasValidDate ? parsedDate.getMonth() : new Date().getMonth(), selected: hasValidDate ? parsedDate : null };
+        calHiddenInputIds[key] = key + 'Hidden';
+      }
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var wasOpen = btn.classList.contains('open');
+        closeAllCalendarPopups();
+        if (wasOpen) return;
+        var st = calState[key];
+        var base = st.selected || new Date();
+        st.viewYear = base.getFullYear();
+        st.viewMonth = base.getMonth();
+        renderCalendarGrid(key);
+        btn.classList.add('open');
+        var popup = document.querySelector('.pm-cal-popup[data-cal-popup="' + key + '"]');
+        if (popup) popup.classList.add('open');
+      });
+    });
+    listEl.querySelectorAll('.pm-cal-popup[data-cal-popup^="own-"]').forEach(function (popup) {
+      popup.addEventListener('click', function (e) { e.stopPropagation(); });
+    });
+    listEl.querySelectorAll('.pm-cal-grid[data-cal-grid^="own-"]').forEach(function (grid) {
+      grid.addEventListener('click', function (e) {
+        var dayBtn = e.target.closest('.pm-cal-day');
+        if (!dayBtn) return;
+        e.stopPropagation();
+        var key = grid.getAttribute('data-cal-grid');
+        var parts = dayBtn.getAttribute('data-cal-daynum').split('-');
+        calState[key].selected = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10), parseInt(parts[2], 10));
+        updateCalFieldDisplay(key);
+        closeAllCalendarPopups();
+      });
+    });
+    listEl.querySelectorAll('[data-cal-prev^="own-"]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var key = btn.getAttribute('data-cal-prev');
+        var st = calState[key];
+        st.viewMonth--; if (st.viewMonth < 0) { st.viewMonth = 11; st.viewYear--; }
+        renderCalendarGrid(key);
+      });
+    });
+    listEl.querySelectorAll('[data-cal-next^="own-"]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var key = btn.getAttribute('data-cal-next');
+        var st = calState[key];
+        st.viewMonth++; if (st.viewMonth > 11) { st.viewMonth = 0; st.viewYear++; }
+        renderCalendarGrid(key);
+      });
+    });
+    listEl.querySelectorAll('[data-cal-today^="own-"]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var key = btn.getAttribute('data-cal-today');
+        calState[key].selected = new Date();
+        updateCalFieldDisplay(key);
+        closeAllCalendarPopups();
+      });
+    });
+    listEl.querySelectorAll('[data-own-resubmit-select]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var id = btn.getAttribute('data-own-resubmit-select');
+        var menu = listEl.querySelector('[data-own-resubmit-select-menu="' + id + '"]');
+        var wasOpen = menu.classList.contains('open');
+        listEl.querySelectorAll('.own-resubmit-select-menu.open').forEach(function (m) { m.classList.remove('open'); });
+        listEl.querySelectorAll('.own-resubmit-select-btn.open').forEach(function (b) { b.classList.remove('open'); });
+        if (!wasOpen) { menu.classList.add('open'); btn.classList.add('open'); }
+      });
+    });
+    listEl.querySelectorAll('[data-own-resubmit-select-menu] .cdd-item').forEach(function (item) {
+      item.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var menu = item.closest('[data-own-resubmit-select-menu]');
+        var id = menu.getAttribute('data-own-resubmit-select-menu');
+        var val = item.getAttribute('data-value');
+        menu.querySelectorAll('.cdd-item').forEach(function (i) { i.classList.remove('selected'); });
+        item.classList.add('selected');
+        var btn = listEl.querySelector('[data-own-resubmit-select="' + id + '"]');
+        if (btn) { btn.querySelector('.cdd-value').textContent = val; btn.classList.remove('open'); }
+        menu.classList.remove('open');
+        var hidden = listEl.querySelector('input[data-own-resubmit-input="' + id + '"]');
+        if (hidden) hidden.value = val;
+      });
+    });
+    listEl.querySelectorAll('[data-own-resubmit-toggle]').forEach(function (toggle) {
+      toggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var id = toggle.getAttribute('data-own-resubmit-toggle');
+        var isOn = !toggle.classList.contains('on');
+        toggle.classList.toggle('on', isOn);
+        var hidden = listEl.querySelector('input[data-own-resubmit-input="' + id + '"]');
+        if (hidden) hidden.value = isOn ? 'On' : 'Off';
+        var label = listEl.querySelector('[data-own-resubmit-toggle-label="' + id + '"]');
+        if (label) label.textContent = isOn ? 'On' : 'Off';
+        var utrDetail = listEl.querySelector('[data-own-resubmit-utr-detail="' + id + '"]');
+        if (utrDetail) utrDetail.style.display = isOn ? '' : 'none';
+      });
+    });
+    listEl.querySelectorAll('[data-own-resubmit-chips]').forEach(function (chipRow) {
+      chipRow.querySelectorAll('.simple-chip').forEach(function (chip) {
+        chip.addEventListener('click', function (e) {
+          e.stopPropagation();
+          chip.classList.toggle('selected');
+          var id = chipRow.getAttribute('data-own-resubmit-chips');
+          var selectedVals = Array.prototype.slice.call(chipRow.querySelectorAll('.simple-chip.selected')).map(function (c) { return c.getAttribute('data-chip-value'); });
+          var hidden = listEl.querySelector('input[data-own-resubmit-input="' + id + '"]');
+          if (hidden) hidden.value = selectedVals.join(', ');
+        });
+      });
+    });
+    listEl.querySelectorAll('[data-own-resubmit-radio]').forEach(function (radioGroup) {
+      radioGroup.querySelectorAll('.radio-row, .own-resubmit-yn-tile').forEach(function (row) {
+        row.addEventListener('click', function (e) {
+          e.stopPropagation();
+          radioGroup.querySelectorAll('.radio-row, .own-resubmit-yn-tile').forEach(function (r) { r.classList.remove('selected'); });
+          row.classList.add('selected');
+          var id = radioGroup.getAttribute('data-own-resubmit-radio');
+          var val = row.getAttribute('data-radio-value');
+          var hidden = listEl.querySelector('input[data-own-resubmit-input="' + id + '"]');
+          if (hidden) hidden.value = val;
+          // Criminal Record: reveal/hide the description textarea depending on which option is picked.
+          var crDetail = listEl.querySelector('[data-own-resubmit-cr-detail="' + id + '"]');
+          if (crDetail) crDetail.style.display = /unspent convictions to declare/i.test(val) ? '' : 'none';
+          // VAT: reveal/hide the VAT number + verify row depending on Yes/No.
+          var vatDetail = listEl.querySelector('[data-own-resubmit-vat-detail="' + id + '"]');
+          if (vatDetail) {
+            var isRegistered = val === 'Registered';
+            vatDetail.style.display = isRegistered ? 'flex' : 'none';
+            if (hidden) hidden.value = isRegistered ? 'Registered' : 'Not registered';
+          }
+        });
+      });
+    });
+    listEl.querySelectorAll('[data-own-resubmit-cr-text]').forEach(function (textarea) {
+      textarea.addEventListener('input', function (e) {
+        e.stopPropagation();
+        var id = textarea.getAttribute('data-own-resubmit-cr-text');
+        var hidden = listEl.querySelector('input[data-own-resubmit-input="' + id + '"]');
+        if (hidden) hidden.setAttribute('data-cr-detail', textarea.value);
+        var inlineDesc = listEl.querySelector('[data-own-resubmit-cr-inline="' + id + '"]');
+        if (inlineDesc) {
+          inlineDesc.textContent = textarea.value;
+          inlineDesc.style.display = textarea.value ? '' : 'none';
+        }
+      });
+      textarea.addEventListener('click', function (e) { e.stopPropagation(); });
+    });
+    listEl.querySelectorAll('[data-own-resubmit-vat-number]').forEach(function (input) {
+      input.addEventListener('click', function (e) { e.stopPropagation(); });
+      input.addEventListener('input', function (e) {
+        e.stopPropagation();
+        var id = input.getAttribute('data-own-resubmit-vat-number');
+        var hidden = listEl.querySelector('input[data-own-resubmit-input="' + id + '"]');
+        if (hidden && hidden.value === 'Registered') hidden.setAttribute('data-vat-number', input.value);
+      });
+    });
+    listEl.querySelectorAll('.own-resubmit-sector-row').forEach(function (sectorRow) {
+      sectorRow.querySelectorAll('.own-resubmit-sector-tile').forEach(function (tile) {
+        tile.addEventListener('click', function (e) {
+          e.stopPropagation();
+          tile.classList.toggle('selected');
+          var id = sectorRow.getAttribute('data-own-resubmit-chips');
+          var sector = tile.getAttribute('data-chip-value');
+          var subGroup = listEl.querySelector('[data-own-resubmit-subtype-group="' + id + '|' + sector + '"]');
+          if (subGroup) subGroup.style.display = tile.classList.contains('selected') ? '' : 'none';
+          var selected = Array.prototype.slice.call(sectorRow.querySelectorAll('.own-resubmit-sector-tile.selected')).map(function (t) { return t.getAttribute('data-chip-value'); });
+          var hidden = listEl.querySelector('input[data-own-resubmit-input="' + id + '"]');
+          if (hidden) hidden.value = selected.join(', ');
+        });
+      });
+    });
+    listEl.querySelectorAll('[data-own-resubmit-subtype]').forEach(function (chip) {
+      chip.addEventListener('click', function (e) {
+        e.stopPropagation();
+        chip.classList.toggle('selected');
+      });
+    });
+    listEl.querySelectorAll('[data-own-resubmit-utr]').forEach(function (input) {
+      input.addEventListener('click', function (e) { e.stopPropagation(); });
+    });
+    listEl.querySelectorAll('[data-own-resubmit-upload]').forEach(function (zone) {
+      zone.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var id = zone.getAttribute('data-own-resubmit-upload');
+        var fakeFileName = 'new-document-' + new Date().getFullYear() + '.pdf';
+        var label = listEl.querySelector('[data-own-resubmit-upload-label="' + id + '"]');
+        if (label) label.textContent = fakeFileName + ' selected';
+        var hidden = listEl.querySelector('input[data-own-resubmit-input="' + id + '"]');
+        if (hidden) hidden.value = fakeFileName;
+        showToast('Demo file selected \u2014 file picking isn\u2019t wired up in this prototype.');
+      });
+    });
+    listEl.querySelectorAll('[data-own-view-doc]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var parts = btn.getAttribute('data-own-view-doc').split('|');
+        var batch = getSupOwnChangeRequests().filter(function (b) { return b.id === parts[0]; })[0];
+        if (!batch) return;
+        var change = batch.changes.filter(function (ch) { return ch.id === parts[1]; })[0];
+        if (!change) return;
+        var which = parts[2];
+        var fileValue = which === 'old' ? change.oldValue : change.newValue;
+        var labelPrefix = which === 'old' ? 'Current \u2014 ' : 'Requested \u2014 ';
+        openPreviewModal({ name: labelPrefix + change.fieldLabel, file: fileValue });
+      });
+    });
+    listEl.querySelectorAll('[data-own-resubmit]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var parts = btn.getAttribute('data-own-resubmit').split('|');
+        var batch = getSupOwnChangeRequests().filter(function (b) { return b.id === parts[0]; })[0];
+        if (!batch) return;
+        var change = batch.changes.filter(function (ch) { return ch.id === parts[1]; })[0];
+        if (!change) return;
+        var input = listEl.querySelector('[data-own-resubmit-input="' + parts[1] + '"]');
+        var newVal = input ? input.value.trim() : '';
+        if (!newVal) { showToast('Enter a value before resubmitting.'); return; }
+        if (change.fieldType === 'date') {
+          change.newValue = supRqFormatDateForDisplay(newVal);
+        } else if (change.isDocument) {
+          change.newValue = newVal.indexOf('(new upload)') !== -1 ? newVal : newVal + ' (new upload)';
+        } else if (change.fieldType === 'criminal-record') {
+          change.newValue = newVal;
+          if (/unspent convictions to declare/i.test(newVal)) {
+            var crDetailVal = input.getAttribute('data-cr-detail') || '';
+            change.crDetail = crDetailVal;
+          }
+        } else if (change.fieldType === 'vat') {
+          if (newVal === 'Registered') {
+            var vatNumVal = input.getAttribute('data-vat-number') || '';
+            change.vatNumber = vatNumVal;
+            change.newValue = 'Registered' + (vatNumVal ? ' \u2014 ' + vatNumVal : '');
+          } else {
+            change.newValue = 'Not registered';
+          }
+        } else if (change.fieldType === 'hmrc-toggle') {
+          if (newVal === 'On') {
+            var utrInput = listEl.querySelector('[data-own-resubmit-utr="' + parts[1] + '"]');
+            var utrVal2 = utrInput ? utrInput.value.trim() : '';
+            change.utrNumber = utrVal2;
+            change.newValue = 'On' + (utrVal2 ? ' \u2014 UTR: ' + utrVal2 : '');
+          } else {
+            change.newValue = 'Off';
+          }
+        } else {
+          change.newValue = newVal;
+        }
+        change.status = 'resubmitted';
+        if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
+        showToast(change.fieldLabel + ' resubmitted for review.');
+        // Always keep the card expanded after resubmitting — never auto-collapse it.
+        var keepExpandedId = parts[0];
+        function doRebuild() {
+          renderSupOwnRequestsList();
+          if (keepExpandedId) {
+            var reopened = listEl.querySelector('.suprq-card[data-request-card="' + keepExpandedId + '"]');
+            if (reopened) suprqToggleCard(reopened, true);
+          }
+        }
+        if (typeof suprqPreserveScroll === 'function') {
+          suprqPreserveScroll(btn, doRebuild);
+        } else {
+          doRebuild();
+        }
+      });
+    });
+  }
+  setTimeout(function () {
+    var initCountEl = document.getElementById('supOwnRequestsCount');
+    if (initCountEl) {
+      var initBatches = getSupOwnChangeRequests();
+      var initCount = 0;
+      initBatches.forEach(function (b) { b.changes.forEach(function (ch) { if (ch.status === 'resubmit') initCount++; }); });
+      initCountEl.textContent = initCount;
+    }
+  }, 0);
+
   document.querySelectorAll('[data-supsettings-save]').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var section = btn.getAttribute('data-supsettings-save');
@@ -20350,6 +21301,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
           document.getElementById('supProfileHeaderEmail').textContent = newEmail;
           document.getElementById('supAcctEmail').textContent = newEmail;
           document.getElementById('supProfileEmailView').textContent = newEmail;
+          var editIdEmailView = document.getElementById('supIdEmailView');
+          if (editIdEmailView) editIdEmailView.textContent = newEmail;
         }
       }
       if (typeof refreshAllAcctSettingsViews === 'function') refreshAllAcctSettingsViews();
@@ -21074,6 +22027,39 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     document.getElementById('supAcctChangeNumberLink').style.display = '';
     document.getElementById('supAcctNewNumberInput').value = '';
   });
+
+  document.getElementById('supAcctChangeEmailLink').addEventListener('click', function () {
+    var oldEmail = document.getElementById('supIdEmailView').textContent.trim();
+    document.getElementById('supAcctChangeEmailOldAddr').textContent = ' (' + oldEmail + ')';
+    document.getElementById('supIdEmailView').style.display = 'none';
+    document.getElementById('supAcctChangeEmailLink').style.display = 'none';
+    document.getElementById('supAcctChangeEmailForm').style.display = '';
+    showToast('Confirmation email sent to ' + oldEmail + '.');
+    setTimeout(function () { document.getElementById('supAcctNewEmailInput').focus(); }, 50);
+  });
+  document.getElementById('supAcctCancelChangeEmailBtn').addEventListener('click', function () {
+    document.getElementById('supAcctChangeEmailForm').style.display = 'none';
+    document.getElementById('supIdEmailView').style.display = '';
+    document.getElementById('supAcctChangeEmailLink').style.display = '';
+    document.getElementById('supAcctNewEmailInput').value = '';
+  });
+  document.getElementById('supAcctSendEmailVerifyBtn').addEventListener('click', function () {
+    var newEmail = document.getElementById('supAcctNewEmailInput').value.trim();
+    if (!newEmail || newEmail.indexOf('@') === -1) { showToast('Enter a valid new email address first.'); return; }
+    document.getElementById('supIdEmailView').textContent = newEmail;
+    var profEmailView = document.getElementById('supProfileEmailView');
+    if (profEmailView) profEmailView.textContent = newEmail;
+    var profHeaderEmail = document.getElementById('supProfileHeaderEmail');
+    if (profHeaderEmail) profHeaderEmail.textContent = newEmail;
+    var acctEmailFooter = document.getElementById('supAcctEmail');
+    if (acctEmailFooter) acctEmailFooter.textContent = newEmail;
+    document.getElementById('supAcctChangeEmailForm').style.display = 'none';
+    document.getElementById('supIdEmailView').style.display = '';
+    document.getElementById('supAcctChangeEmailLink').style.display = '';
+    document.getElementById('supAcctNewEmailInput').value = '';
+    showToast('Email address updated.');
+  });
+
   document.getElementById('supAcctVerifyNewNumberBtn').addEventListener('click', function () {
     var newNumber = document.getElementById('supAcctNewNumberInput').value.trim();
     if (!newNumber) { showToast('Enter a new mobile number first.'); return; }
@@ -21228,7 +22214,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   function renderNotifications() {
     var list = document.getElementById('notifListContent');
     list.innerHTML = adminNotifications.map(function (n) {
-      return '<div class="notif-row' + (n.unread ? ' unread' : '') + '">' +
+      return '<div class="notif-row' + (n.unread ? ' unread' : '') + '"' + (n.reqType ? ' data-notif-req="' + n.reqType + '"' : '') + '>' +
         '<div class="nr-icon type-' + n.type + '">' + (n.type === 'job' ? jobIcon : alertIcon) + '</div>' +
         '<div class="nr-body"><div class="nr-title">' + n.title + '</div><div class="nr-desc">' + n.desc + '</div><div class="nr-date">' + n.date + '</div></div>' +
         (n.unread ? '<div class="nr-dot"></div>' : '') +
@@ -21236,6 +22222,25 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     }).join('');
     var unreadCount = adminNotifications.filter(function (n) { return n.unread; }).length;
     document.querySelector('#adminBellBtn .aib-dot').style.display = unreadCount > 0 ? '' : 'none';
+    list.querySelectorAll('[data-notif-req="profile-request"]').forEach(function (row, i) {
+      row.addEventListener('click', function () {
+        var n = adminNotifications.filter(function (x) { return x.reqType === 'profile-request'; })[i] || adminNotifications.filter(function (x) { return x.reqType === 'profile-request'; })[0];
+        var supplierName = n ? n.supplierName : suprqAdminFocusName();
+        var actionable = suprqComputeAdminActionable();
+        suprqSetSeenSignature('admin', actionable.sort().join(','));
+        document.getElementById('adminRequestFloatNotif').classList.remove('show');
+        document.getElementById('notifPanel').classList.remove('open');
+        if (typeof supplierApplicants !== 'undefined') {
+          var idx = -1;
+          for (var j = 0; j < supplierApplicants.length; j++) { if (supplierApplicants[j].name === supplierName) { idx = j; break; } }
+          if (idx !== -1 && typeof openSupplierDetail === 'function' && typeof showAdminView === 'function') {
+            showAdminView('supplier-applicants-list');
+            openSupplierDetail(idx, 'app');
+            setTimeout(function () { if (typeof switchSupTab === 'function') switchSupTab('requests'); }, 50);
+          }
+        }
+      });
+    });
   }
 
   var notifPanel = document.getElementById('notifPanel');
@@ -22790,6 +23795,220 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
   /* ---- Profile Edit Requests: supplier-submitted changes awaiting admin review ---- */
   var supplierChangeRequests = {}; // keyed by supplier name
+  var suprqIdCounter = 480000;
+  function suprqNextId() { suprqIdCounter++; return suprqIdCounter; }
+  var SUPRQ_STORAGE_KEY = 'keylrDemoSupplierChangeRequests_v4';
+  function saveChangeRequestsToStorage() {
+    try {
+      window.localStorage.setItem(SUPRQ_STORAGE_KEY, JSON.stringify(supplierChangeRequests));
+    } catch (e) { /* storage unavailable — in-memory state still works within this tab */ }
+  }
+  function loadChangeRequestsFromStorage() {
+    try {
+      var raw = window.localStorage.getItem(SUPRQ_STORAGE_KEY);
+      if (!raw) return;
+      var parsed = JSON.parse(raw);
+      Object.keys(parsed).forEach(function (key) {
+        parsed[key].forEach(function (batch) { batch.submittedDate = new Date(batch.submittedDate); });
+        supplierChangeRequests[key] = parsed[key];
+      });
+    } catch (e) { /* ignore malformed/unavailable storage and fall back to fresh seed data */ }
+  }
+  loadChangeRequestsFromStorage();
+
+  /* ---- Floating notifications: alert supplier when admin asks for a resubmit, and alert admin
+     when a supplier submits or resubmits a request. Works across separate browser tabs too, since
+     it re-reads from the same localStorage-backed store the request data itself uses. ---- */
+  var SUPRQ_NOTIF_SEEN_KEY = 'keylrDemoSuprqNotifSeen_v2';
+  function suprqGetSeenSignatures() {
+    try {
+      var raw = window.localStorage.getItem(SUPRQ_NOTIF_SEEN_KEY);
+      return raw ? JSON.parse(raw) : { supplier: '', admin: '' };
+    } catch (e) { return { supplier: '', admin: '' }; }
+  }
+  function suprqSetSeenSignature(who, sig) {
+    var seen = suprqGetSeenSignatures();
+    seen[who] = sig;
+    try { window.localStorage.setItem(SUPRQ_NOTIF_SEEN_KEY, JSON.stringify(seen)); } catch (e) { /* ignore */ }
+  }
+  function updateSupNotifBellBadge(count) {
+    var badge = document.getElementById('supRequestBellBadge');
+    if (!badge) return;
+    if (count > 0) { badge.textContent = count > 9 ? '9+' : count; badge.style.display = 'flex'; }
+    else { badge.style.display = 'none'; }
+  }
+  function updateAdminNotifBellBadge(hasNew, count, supplierName) {
+    var badge = document.getElementById('adminRequestBellBadge');
+    if (!badge) return;
+    if (count > 0) {
+      badge.textContent = count > 9 ? '9+' : count;
+      badge.style.display = 'flex';
+      badge.setAttribute('data-notif-supplier', supplierName || '');
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+  function checkSupResubmitNotification() {
+    var notif = document.getElementById('supRequestFloatNotif');
+    if (!notif) return;
+    // Only relevant while the supplier dashboard is actually the active view.
+    var supDash = document.getElementById('supplierDashboard');
+    if (!supDash || !supDash.classList.contains('active')) { notif.classList.remove('show'); return; }
+    loadChangeRequestsFromStorage();
+    var batches = (typeof getSupOwnChangeRequests === 'function') ? getSupOwnChangeRequests() : [];
+    var needsFix = [];
+    batches.forEach(function (b) { b.changes.forEach(function (ch) { if (ch.status === 'resubmit') needsFix.push(ch.id); }); });
+    updateSupNotifBellBadge(needsFix.length);
+    suprqSyncSupNotifPanel(needsFix.length);
+    if (!needsFix.length) { notif.classList.remove('show'); return; }
+    var sig = needsFix.sort().join(',');
+    var seen = suprqGetSeenSignatures();
+    if (sig === seen.supplier) return; // already dismissed/clicked for this exact set
+    var titleEl = document.getElementById('supRequestFloatNotifTitle');
+    if (titleEl) titleEl.textContent = needsFix.length === 1 ? '1 change needs your attention' : needsFix.length + ' changes need your attention';
+    notif.classList.add('show');
+  }
+  function suprqSyncSupNotifPanel(count) {
+    var list = document.getElementById('supNotifListContent');
+    var empty = document.getElementById('supNotifEmpty');
+    if (!list) return;
+    if (!count) {
+      list.innerHTML = '';
+      if (empty) empty.style.display = '';
+      return;
+    }
+    if (empty) empty.style.display = 'none';
+    list.innerHTML = '<div class="notif-row unread" id="supNotifReqRow">' +
+      '<div class="nr-icon type-alert"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg></div>' +
+      '<div class="nr-body"><div class="nr-title">Resubmit requested</div><div class="nr-desc">' + count + ' change' + (count === 1 ? '' : 's') + ' need' + (count === 1 ? 's' : '') + ' your attention</div><div class="nr-date">Just now</div></div>' +
+      '<div class="nr-dot"></div>' +
+    '</div>';
+    var row = document.getElementById('supNotifReqRow');
+    if (row) {
+      row.addEventListener('click', function () {
+        var batches = (typeof getSupOwnChangeRequests === 'function') ? getSupOwnChangeRequests() : [];
+        var needsFix = [];
+        batches.forEach(function (b) { b.changes.forEach(function (ch) { if (ch.status === 'resubmit') needsFix.push(ch.id); }); });
+        suprqSetSeenSignature('supplier', needsFix.sort().join(','));
+        document.getElementById('supRequestFloatNotif').classList.remove('show');
+        document.getElementById('supNotifPanel').classList.remove('open');
+        suprqNavigateToSupRequests();
+      });
+    }
+  }
+  function checkAdminNewRequestNotification() {
+    var notif = document.getElementById('adminRequestFloatNotif');
+    if (!notif) return;
+    var adminDash = document.getElementById('adminDashboard');
+    if (!adminDash || !adminDash.classList.contains('active')) { notif.classList.remove('show'); return; }
+    loadChangeRequestsFromStorage();
+    // Scoped to Ferna for now, since that's the supplier identity used for testing the admin/supplier sync loop.
+    var focusName = suprqAdminFocusName();
+    var actionable = suprqComputeAdminActionable();
+    if (!actionable.length) { notif.classList.remove('show'); updateAdminNotifBellBadge(false, 0); suprqSyncAdminNotifPanel(); return; }
+    updateAdminNotifBellBadge(true, actionable.length, focusName);
+    suprqSyncAdminNotifPanel();
+    var sig = actionable.sort().join(',');
+    var seen = suprqGetSeenSignatures();
+    if (sig === seen.admin) return;
+    var latestName = focusName;
+    var titleEl = document.getElementById('adminRequestFloatNotifTitle');
+    var subEl = document.getElementById('adminRequestFloatNotifSub');
+    if (titleEl) titleEl.textContent = actionable.length === 1 ? 'New profile request' : actionable.length + ' profile requests need review';
+    if (subEl) subEl.textContent = latestName + ' \u2014 tap to review';
+    notif.setAttribute('data-notif-supplier', latestName);
+    notif.classList.add('show');
+  }
+  document.getElementById('supRequestFloatNotif').addEventListener('click', function (e) {
+    if (e.target.closest('#supRequestFloatNotifClose')) return;
+    var batches = (typeof getSupOwnChangeRequests === 'function') ? getSupOwnChangeRequests() : [];
+    var needsFix = [];
+    batches.forEach(function (b) { b.changes.forEach(function (ch) { if (ch.status === 'resubmit') needsFix.push(ch.id); }); });
+    suprqSetSeenSignature('supplier', needsFix.sort().join(','));
+    this.classList.remove('show');
+    suprqNavigateToSupRequests();
+  });
+  document.getElementById('supRequestFloatNotifClose').addEventListener('click', function (e) {
+    e.stopPropagation();
+    var batches = (typeof getSupOwnChangeRequests === 'function') ? getSupOwnChangeRequests() : [];
+    var needsFix = [];
+    batches.forEach(function (b) { b.changes.forEach(function (ch) { if (ch.status === 'resubmit') needsFix.push(ch.id); }); });
+    suprqSetSeenSignature('supplier', needsFix.sort().join(','));
+    document.getElementById('supRequestFloatNotif').classList.remove('show');
+  });
+  function suprqNavigateToSupRequests() {
+    if (typeof showSupplierView === 'function') showSupplierView('profile-settings');
+    setTimeout(function () { if (typeof switchSupSettingsTab === 'function') switchSupSettingsTab('requests'); }, 50);
+  }
+  function suprqAdminFocusName() { return (typeof SUP_OWN_DEMO_NAME !== 'undefined') ? SUP_OWN_DEMO_NAME : 'Ferna'; }
+  function suprqComputeAdminActionable() {
+    var focusName = suprqAdminFocusName();
+    var actionable = [];
+    (supplierChangeRequests[focusName] || []).forEach(function (b) {
+      var hasActionable = b.changes.some(function (ch) { return ch.status === 'pending' || ch.status === 'resubmitted'; });
+      if (hasActionable) actionable.push(focusName + ':' + b.id);
+    });
+    return actionable;
+  }
+  document.getElementById('adminRequestFloatNotif').addEventListener('click', function (e) {
+    if (e.target.closest('#adminRequestFloatNotifClose')) return;
+    var actionable = suprqComputeAdminActionable();
+    suprqSetSeenSignature('admin', actionable.sort().join(','));
+    this.classList.remove('show');
+    var supplierName = this.getAttribute('data-notif-supplier');
+    if (supplierName && typeof supplierApplicants !== 'undefined') {
+      var idx = -1;
+      for (var i = 0; i < supplierApplicants.length; i++) { if (supplierApplicants[i].name === supplierName) { idx = i; break; } }
+      if (idx !== -1 && typeof openSupplierDetail === 'function' && typeof showAdminView === 'function') {
+        showAdminView('supplier-applicants-list');
+        openSupplierDetail(idx, 'app');
+        setTimeout(function () { if (typeof switchSupTab === 'function') switchSupTab('requests'); }, 50);
+      }
+    }
+  });
+  document.getElementById('adminRequestFloatNotifClose').addEventListener('click', function (e) {
+    e.stopPropagation();
+    var actionable = suprqComputeAdminActionable();
+    suprqSetSeenSignature('admin', actionable.sort().join(','));
+    document.getElementById('adminRequestFloatNotif').classList.remove('show');
+  });
+  function suprqSyncAdminNotifPanel() {
+    var actionable = suprqComputeAdminActionable();
+    // Remove any previous request-notification row so we don't stack duplicates on re-sync.
+    adminNotifications = adminNotifications.filter(function (n) { return n.reqType !== 'profile-request'; });
+    if (actionable.length) {
+      var focusName = suprqAdminFocusName();
+      adminNotifications.unshift({
+        type: 'alert',
+        reqType: 'profile-request',
+        title: 'Profile update request',
+        desc: focusName + ' \u2014 ' + actionable.length + ' item' + (actionable.length === 1 ? '' : 's') + ' need review',
+        date: 'Just now',
+        unread: true,
+        supplierName: focusName
+      });
+    }
+    if (typeof renderNotifications === 'function') renderNotifications();
+  }
+  document.getElementById('supBellBtn').addEventListener('click', function (e) {
+    e.stopPropagation();
+    document.getElementById('supNotifPanel').classList.toggle('open');
+  });
+  document.addEventListener('click', function (e) {
+    var supNotifPanel = document.getElementById('supNotifPanel');
+    if (supNotifPanel && supNotifPanel.classList.contains('open') && !supNotifPanel.contains(e.target) && e.target.id !== 'supBellBtn') {
+      supNotifPanel.classList.remove('open');
+    }
+  });
+  setInterval(function () {
+    checkSupResubmitNotification();
+    checkAdminNewRequestNotification();
+  }, 3000);
+  setTimeout(function () {
+    checkSupResubmitNotification();
+    checkAdminNewRequestNotification();
+  }, 1500);
+
   function supRequestsKeyFor(c) { return c ? c.name : ''; }
   function seedChangeRequestsIfNeeded(c) {
     var key = supRequestsKeyFor(c);
@@ -22801,43 +24020,42 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       supplierChangeRequests[key] = [
         { id: 'batch1', submittedDate: allDate, status: 'pending', changes: [
           { section: 'Identity', fieldLabel: 'Full legal name', oldValue: 'Ferna', newValue: 'Fernanda Wright' },
-          { section: 'Identity', fieldLabel: 'Date of birth', oldValue: '12/05/1990', newValue: '12/05/1991' },
+          { section: 'Identity', fieldLabel: 'Date of birth', oldValue: '12/05/1990', newValue: '12/05/1991', fieldType: 'date' },
           { section: 'Identity', fieldLabel: 'Home address', oldValue: '14 Rowan Street, Leeds', newValue: '3 Aspen Court, Leeds' },
-          { section: 'Identity', fieldLabel: 'Nationality', oldValue: 'Not set', newValue: 'British' },
+          { section: 'Identity', fieldLabel: 'Nationality', oldValue: 'Not set', newValue: 'British', fieldType: 'nationality', selectOptions: ['British', 'Austrian', 'Irish', 'Polish', 'Other'] },
           { section: 'Identity', fieldLabel: 'NI number', oldValue: 'Not set', newValue: 'QQ 778823 A' },
-          { section: 'Identity', fieldLabel: 'HMRC registered (toggle)', oldValue: 'Off', newValue: 'On \u2014 UTR: 5561287403' },
+          { section: 'Identity', fieldLabel: 'HMRC registered', oldValue: 'Off', newValue: 'On \u2014 UTR: 5561287403', fieldType: 'hmrc-toggle' },
           { section: 'Identity', fieldLabel: 'Proof of Address document', oldValue: 'Not uploaded', newValue: 'proof-of-address-2026.pdf (new upload)', isDocument: true },
-          { section: 'Tell us about yourself', fieldLabel: 'Sectors served', oldValue: 'Residential', newValue: 'Residential, Commercial' },
+          { section: 'Tell us about yourself', fieldLabel: 'Sectors served', oldValue: 'Residential', newValue: 'Residential, Commercial', fieldType: 'sectors', sectorSubtypes: ['Estate Agents'] },
           { section: 'Categories & Roles', fieldLabel: 'Gas Safe Engineer \u2014 Certificate name', oldValue: 'Not set', newValue: 'Gas Safe' },
           { section: 'Categories & Roles', fieldLabel: 'Gas Safe Engineer \u2014 Registration number', oldValue: 'Not set', newValue: 'GS-448821' },
           { section: 'Categories & Roles', fieldLabel: 'Gas Safe Engineer \u2014 Certificate uploaded', oldValue: 'Not uploaded', newValue: 'gas-safe-cert-2026.pdf (new upload)', isDocument: true },
-          { section: 'Categories & Roles', fieldLabel: 'Gas Safe Engineer \u2014 Expiry date', oldValue: 'Not set', newValue: '14 Mar 2027' },
+          { section: 'Categories & Roles', fieldLabel: 'Gas Safe Engineer \u2014 Expiry date', oldValue: 'Not set', newValue: '14 Mar 2027', fieldType: 'date' },
           { section: 'Categories & Roles', fieldLabel: 'Electrician \u2014 Certificate 1 name', oldValue: 'Not set', newValue: '18th Edition Wiring Regulations' },
           { section: 'Categories & Roles', fieldLabel: 'Electrician \u2014 Certificate 1 registration number', oldValue: 'Not set', newValue: 'EL-18ED-5729' },
           { section: 'Categories & Roles', fieldLabel: 'Electrician \u2014 Certificate 1 uploaded', oldValue: 'Not uploaded', newValue: '18th-edition-cert-2026.pdf (new upload)', isDocument: true },
-          { section: 'Categories & Roles', fieldLabel: 'Electrician \u2014 Certificate 1 expiry date', oldValue: 'Not set', newValue: '2 Jun 2027' },
+          { section: 'Categories & Roles', fieldLabel: 'Electrician \u2014 Certificate 1 expiry date', oldValue: 'Not set', newValue: '2 Jun 2027', fieldType: 'date' },
           { section: 'Categories & Roles', fieldLabel: 'Electrician \u2014 Certificate 2 name', oldValue: 'Not set', newValue: 'Part P Certification' },
           { section: 'Categories & Roles', fieldLabel: 'Electrician \u2014 Certificate 2 registration number', oldValue: 'Not set', newValue: 'PP-90214' },
           { section: 'Categories & Roles', fieldLabel: 'Electrician \u2014 Certificate 2 uploaded', oldValue: 'Not uploaded', newValue: 'part-p-cert-2026.pdf (new upload)', isDocument: true },
-          { section: 'Categories & Roles', fieldLabel: 'Electrician \u2014 Certificate 2 expiry date', oldValue: 'Not set', newValue: '19 Sep 2026' },
+          { section: 'Categories & Roles', fieldLabel: 'Electrician \u2014 Certificate 2 expiry date', oldValue: 'Not set', newValue: '19 Sep 2026', fieldType: 'date' },
           { section: 'Insurance', fieldLabel: 'PL Insurance provider', oldValue: 'Not set', newValue: 'Zurich Insurance' },
           { section: 'Insurance', fieldLabel: 'PL Policy number', oldValue: 'Not set', newValue: 'PL-227719' },
           { section: 'Insurance', fieldLabel: 'PL Coverage amount', oldValue: 'Not set', newValue: '\u00a32,000,000' },
-          { section: 'Insurance', fieldLabel: 'PL Expiry date', oldValue: 'Not set', newValue: '11 Aug 2026' },
+          { section: 'Insurance', fieldLabel: 'PL Expiry date', oldValue: 'Not set', newValue: '11 Aug 2026', fieldType: 'date' },
           { section: 'Insurance', fieldLabel: 'PL Certificate document', oldValue: 'Not uploaded', newValue: 'pl-certificate-2026.pdf (new upload)', isDocument: true },
           { section: 'Insurance', fieldLabel: 'PI Insurance provider', oldValue: 'Not set', newValue: 'Markel' },
           { section: 'Insurance', fieldLabel: 'PI Policy number', oldValue: 'Not set', newValue: 'PI-663018' },
           { section: 'Insurance', fieldLabel: 'PI Coverage amount', oldValue: 'Not set', newValue: '\u00a3500,000' },
-          { section: 'Insurance', fieldLabel: 'PI Expiry date', oldValue: 'Not set', newValue: '27 Oct 2026' },
+          { section: 'Insurance', fieldLabel: 'PI Expiry date', oldValue: 'Not set', newValue: '27 Oct 2026', fieldType: 'date' },
           { section: 'Insurance', fieldLabel: 'PI Insurance certificate document', oldValue: 'Not uploaded', newValue: 'pi-certificate-2026.pdf (new upload)', isDocument: true },
-          { section: 'Background Check', fieldLabel: 'DBS level', oldValue: 'Not set', newValue: 'Basic' },
+          { section: 'Background Check', fieldLabel: 'DBS level', oldValue: 'Not set', newValue: 'Basic', fieldType: 'select', selectOptions: ['Basic', 'Enhanced'] },
           { section: 'Background Check', fieldLabel: 'DBS certificate number', oldValue: 'Not set', newValue: '561203984471' },
-          { section: 'Background Check', fieldLabel: 'DBS issue date', oldValue: 'Not set', newValue: '3 Jan 2026' },
+          { section: 'Background Check', fieldLabel: 'DBS issue date', oldValue: 'Not set', newValue: '3 Jan 2026', fieldType: 'date' },
           { section: 'Background Check', fieldLabel: 'DBS certificate document', oldValue: 'Not uploaded', newValue: 'dbs-basic-2026.pdf (new upload)', isDocument: true },
-          { section: 'Background Check', fieldLabel: 'Criminal Record Declaration', oldValue: 'Not declared', newValue: 'I have unspent convictions to declare' },
-          { section: 'Background Check', fieldLabel: 'Criminal Record description', oldValue: 'Not set', newValue: 'Caution for minor motoring offence (speeding), issued 2023. No custodial sentence, no impact on trade work.' },
-          { section: 'Background Check', fieldLabel: 'Right to Work', oldValue: 'Not confirmed', newValue: 'Yes' },
-          { section: 'Business Legitimacy', fieldLabel: 'VAT registered', oldValue: 'Not registered', newValue: 'Registered \u2014 GB331204587' }
+          { section: 'Background Check', fieldLabel: 'Criminal Record Declaration', oldValue: 'Not declared', newValue: 'I have unspent convictions to declare', fieldType: 'criminal-record', crDetail: 'Caution for minor motoring offence (speeding), issued 2023. No custodial sentence, no impact on trade work.' },
+          { section: 'Background Check', fieldLabel: 'Right to Work', oldValue: 'Not confirmed', newValue: 'Yes', fieldType: 'right-to-work' },
+          { section: 'Business Legitimacy', fieldLabel: 'VAT registered', oldValue: 'Not registered', newValue: 'Registered \u2014 GB331204587', fieldType: 'vat', vatNumber: 'GB331204587' }
         ] }
       ];
     } else if (c && c.name === 'Nadia Reid') {
@@ -22849,7 +24067,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       supplierChangeRequests[key] = [
         { id: 'batch1', submittedDate: d1, status: 'pending', changes: [
           { section: 'Identity', fieldLabel: 'Home address', oldValue: '116 Church Lane, Warminster', newValue: '42 Elm Grove, Warminster' },
-          { section: 'Identity', fieldLabel: 'HMRC registered (toggle)', oldValue: 'Off', newValue: 'On \u2014 UTR: 4029917364' },
+          { section: 'Identity', fieldLabel: 'HMRC registered', oldValue: 'Off', newValue: 'On \u2014 UTR: 4029917364' },
           { section: 'Identity', fieldLabel: 'Proof of Address document', oldValue: 'utility-bill-2024.pdf', newValue: 'council-tax-2026.pdf (new upload)', isDocument: true }
         ] },
         { id: 'batch2', submittedDate: d2, status: 'pending', changes: [
@@ -22862,7 +24080,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
           { section: 'Insurance', fieldLabel: 'Insurance certificate document', oldValue: 'pli-certificate-2024.pdf', newValue: 'pli-certificate-2026.pdf (new upload)', isDocument: true }
         ] },
         { id: 'batch4', submittedDate: d4, status: 'pending', changes: [
-          { section: 'Background Check', fieldLabel: 'DBS level', oldValue: 'Basic', newValue: 'Enhanced' },
+          { section: 'Background Check', fieldLabel: 'DBS level', oldValue: 'Basic', newValue: 'Enhanced', fieldType: 'select', selectOptions: ['Basic', 'Enhanced'] },
           { section: 'Background Check', fieldLabel: 'DBS certificate number', oldValue: '847162039485', newValue: '902847561123' },
           { section: 'Background Check', fieldLabel: 'DBS certificate document', oldValue: '47a8ca0b49834c54bf6c789052c13101.pdf', newValue: 'dbs-enhanced-2026.pdf (new upload)', isDocument: true },
           { section: 'Background Check', fieldLabel: 'Right to Work', oldValue: 'Yes', newValue: 'Yes \u2014 updated visa expiry' }
@@ -22943,7 +24161,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
           { section: 'Insurance', fieldLabel: 'EL Expiry date', oldValue: 'Not set', newValue: '21 May 2027' },
           { section: 'Insurance', fieldLabel: 'EL Insurance certificate document', oldValue: 'Not uploaded', newValue: 'el-certificate-2026.pdf (new upload)', isDocument: true },
           { section: 'Background Check', fieldLabel: 'Are all operatives DBS checked?', oldValue: 'No', newValue: 'Yes' },
-          { section: 'Background Check', fieldLabel: 'DBS level', oldValue: 'Not set', newValue: 'Basic' },
+          { section: 'Background Check', fieldLabel: 'DBS level', oldValue: 'Not set', newValue: 'Basic', fieldType: 'select', selectOptions: ['Basic', 'Enhanced'] },
           { section: 'Background Check', fieldLabel: 'DBS policy document', oldValue: 'Not uploaded', newValue: 'dbs-policy-2026.pdf (new upload)', isDocument: true },
           { section: 'Background Check', fieldLabel: 'DBS policy description', oldValue: 'Not set', newValue: 'All field-based operatives undergo a Basic DBS check before their first job. Records are re-checked every 3 years and kept on file with HR.' },
           { section: 'Background Check', fieldLabel: 'Worker vetting policy document', oldValue: 'Not uploaded', newValue: 'vetting-policy-2026.pdf (new upload)', isDocument: true },
@@ -22972,7 +24190,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         { section: 'Insurance', fieldLabel: 'Public Liability Insurance provider', oldValue: 'Aviva', newValue: 'AXA Business Insurance' },
         { section: 'Insurance', fieldLabel: 'Public Liability policy number', oldValue: 'PL-' + (100000 + supjrHashCode(c.name) % 899999), newValue: 'PL-' + (100000 + (supjrHashCode(c.name) + 42) % 899999) },
         { section: 'Insurance', fieldLabel: 'Insurance certificate document', oldValue: 'pli-certificate-2024.pdf', newValue: 'pli-certificate-2026.pdf (new upload)', isDocument: true },
-        { section: 'Background Check', fieldLabel: 'DBS level', oldValue: 'Basic', newValue: 'Enhanced' },
+        { section: 'Background Check', fieldLabel: 'DBS level', oldValue: 'Basic', newValue: 'Enhanced', fieldType: 'select', selectOptions: ['Basic', 'Enhanced'] },
         { section: 'Background Check', fieldLabel: 'DBS certificate document', oldValue: 'dbs-basic-2023.pdf', newValue: 'dbs-enhanced-2026.pdf (new upload)', isDocument: true },
         { section: 'Background Check', fieldLabel: 'Right to Work', oldValue: 'Yes', newValue: 'Yes \u2014 updated visa expiry' },
         { section: 'Business Legitimacy', fieldLabel: 'VAT registered', oldValue: 'Not registered', newValue: 'Registered \u2014 GB' + (100000000 + supjrHashCode(c.name) % 899999999) }
@@ -22991,6 +24209,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       supplierChangeRequests[key] = [];
     }
     (supplierChangeRequests[key] || []).forEach(function (batch) {
+      if (!batch.displayId) batch.displayId = suprqNextId();
       batch.changes.forEach(function (ch, i) {
         if (!ch.id) ch.id = batch.id + '-c' + i;
         if (!ch.status) ch.status = 'pending';
@@ -23019,8 +24238,30 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var mins = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes();
     return d.getDate() + ' ' + MONTH_NAMES[d.getMonth()] + ' ' + d.getFullYear() + ' \u00b7 ' + h12 + ':' + mins + ' ' + ampm;
   }
+  function suprqPreserveScroll(triggerEl, rebuildFn) {
+    var scrollHost = triggerEl.closest('.dash-scroll-area') || document.scrollingElement || document.documentElement;
+    var savedTop = scrollHost ? scrollHost.scrollTop : 0;
+    var savedWinTop = window.pageYOffset || document.documentElement.scrollTop || 0;
+    // Blur the button before it gets destroyed by the rebuild, so the browser never needs to
+    // reassign focus itself (which is what triggers an unwanted scroll-to-top in some browsers).
+    if (triggerEl && typeof triggerEl.blur === 'function') triggerEl.blur();
+    if (document.activeElement && typeof document.activeElement.blur === 'function') document.activeElement.blur();
+    rebuildFn();
+    function restore() {
+      if (scrollHost) scrollHost.scrollTop = savedTop;
+      window.scrollTo(0, savedWinTop);
+    }
+    restore();
+    setTimeout(restore, 0);
+    requestAnimationFrame(function () {
+      restore();
+      requestAnimationFrame(restore);
+    });
+  }
+
   function renderSupRequestsList() {
     var c = supDetailCurrentSupplier;
+    loadChangeRequestsFromStorage();
     seedChangeRequestsIfNeeded(c);
     var batches = supplierChangeRequests[supRequestsKeyFor(c)] || [];
     var listEl = document.getElementById('supRequestsList');
@@ -23035,8 +24276,22 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       var sorted = batches.slice().sort(function (a, b) { return b.submittedDate - a.submittedDate; });
       listEl.innerHTML = sorted.map(function (b, idx) {
         var pendingCount = b.changes.filter(function (ch) { return ch.status === 'pending'; }).length;
-        var aggStatus = pendingCount === 0 ? (b.changes.every(function (ch) { return ch.status === 'approved'; }) ? 'approved' : 'resubmit') : 'pending';
-        var aggText = pendingCount === 0 ? (aggStatus === 'approved' ? 'All approved' : 'Reviewed') : pendingCount + ' of ' + b.changes.length + ' pending';
+        var resubmittedCount = b.changes.filter(function (ch) { return ch.status === 'resubmitted'; }).length;
+        var reviewedCount = b.changes.length - pendingCount;
+        var aggStatus, aggText;
+        if (resubmittedCount > 0) {
+          aggStatus = 'needs-review';
+          aggText = resubmittedCount + ' resubmitted \u2014 needs review';
+        } else if (pendingCount > 0) {
+          aggStatus = 'pending';
+          aggText = reviewedCount === 0 ? 'Pending review' : reviewedCount + ' of ' + b.changes.length + ' reviewed';
+        } else if (b.changes.every(function (ch) { return ch.status === 'approved'; })) {
+          aggStatus = 'approved';
+          aggText = 'All approved';
+        } else {
+          aggStatus = 'resubmit';
+          aggText = 'Reviewed';
+        }
         var docIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>';
         function docValueHtml(ch, value, which) {
           if (!ch.isDocument) return supjrEscapeHtml(value);
@@ -23044,18 +24299,23 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
             '<button type="button" class="suprq-doc-view-btn" data-view-doc="' + b.id + '|' + ch.id + '|' + which + '" data-tooltip="View document"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></span>';
         }
         function changeRowHtml(ch) {
-          var chStatusText = ch.status === 'approved' ? 'Approved' : ch.status === 'resubmit' ? 'Sent back' : 'Pending';
-          var chActionsHtml = ch.status === 'pending'
+          var chStatusText = ch.status === 'approved' ? 'Approved' : ch.status === 'resubmit' ? 'Resubmit requested' : ch.status === 'resubmitted' ? 'Resubmitted' : 'Pending';
+          var needsAction = ch.status === 'pending' || ch.status === 'resubmitted';
+          var chActionsHtml = needsAction
             ? '<div class="suprq-item-actions">' +
+                (ch.status === 'resubmitted' ? '<span class="suprq-status-pill resubmitted" style="white-space:nowrap;">Resubmitted</span>' : '') +
                 '<button type="button" class="suprq-approve-btn" data-request-action="approve" data-batch-id="' + b.id + '" data-change-id="' + ch.id + '"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Approve</button>' +
                 '<button type="button" class="suprq-resubmit-btn" data-request-action="resubmit" data-batch-id="' + b.id + '" data-change-id="' + ch.id + '"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>Ask to resubmit</button>' +
               '</div>'
             : '<div class="suprq-item-actions"><span class="suprq-status-pill ' + ch.status + '" style="white-space:nowrap;">' + chStatusText + '</span></div>';
-          return '<div class="suprq-field-row">' +
+          var crDetailHtml = (ch.fieldType === 'criminal-record' && ch.crDetail && /unspent convictions to declare/i.test(ch.newValue))
+            ? '<div class="suprq-cr-detail-text">' + supjrEscapeHtml(ch.crDetail) + '</div>'
+            : '';
+          return '<div class="suprq-field-row' + (ch.status === 'resubmitted' ? ' suprq-field-row-highlight' : '') + '">' +
             '<div class="suprq-field-name" style="font-size:13px;margin-bottom:6px;">' + ch.fieldLabel + '</div>' +
             '<div class="suprq-compare">' +
               '<div class="suprq-compare-box old"><div class="suprq-compare-label">Current</div><div class="suprq-compare-value">' + docValueHtml(ch, ch.oldValue, 'old') + '</div></div>' +
-              '<div class="suprq-compare-box new"><div class="suprq-compare-label">Requested</div><div class="suprq-compare-value">' + docValueHtml(ch, ch.newValue, 'new') + '</div></div>' +
+              '<div class="suprq-compare-box new"><div class="suprq-compare-label">Requested</div><div class="suprq-compare-value">' + docValueHtml(ch, ch.newValue, 'new') + crDetailHtml + '</div></div>' +
             '</div>' +
             chActionsHtml +
           '</div>';
@@ -23074,22 +24334,34 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
             sectionMap[sectionName].map(changeRowHtml).join('') +
           '</div>';
         }).join('');
-        return '<div class="suprq-card" data-request-card="' + b.id + '" style="animation-delay:' + Math.min(idx * 45, 360) + 'ms;">' +
+        var progressPct = Math.round((reviewedCount / b.changes.length) * 100);
+        var progressBarHtml = (pendingCount > 0 && reviewedCount > 0)
+          ? '<div class="suprq-progress-track"><div class="suprq-progress-fill" style="width:' + progressPct + '%;"></div></div>'
+          : '';
+        var bulkActionsHtml = (pendingCount + resubmittedCount) > 0
+          ? '<div class="suprq-bulk-actions">' +
+              '<button type="button" class="suprq-approve-btn" data-bulk-action="approve" data-bulk-batch="' + b.id + '"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Approve all</button>' +
+              '<button type="button" class="suprq-resubmit-btn" data-bulk-action="resubmit" data-bulk-batch="' + b.id + '"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>Ask to resubmit all</button>' +
+            '</div>'
+          : '';
+        return '<div class="suprq-card' + (resubmittedCount > 0 ? ' suprq-card-flagged' : '') + '" data-request-card="' + b.id + '" style="animation-delay:' + Math.min(idx * 45, 360) + 'ms;">' +
           '<div class="suprq-card-top">' +
             '<div style="display:flex;align-items:center;gap:10px;">' +
               '<svg class="suprq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>' +
-              '<div><div class="suprq-field-name">' + b.changes.length + ' change' + (b.changes.length === 1 ? '' : 's') + ' requested</div><div class="suprq-sub"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>' + suprqFormatDateTime(b.submittedDate) + '</div></div>' +
+              '<div><div class="suprq-field-name">#' + (b.displayId || (b.displayId = suprqNextId())) + '<span class="suprq-count-tag">' + b.changes.length + '</span></div><div class="suprq-sub"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>' + suprqFormatDateTime(b.submittedDate) + '</div></div>' +
             '</div>' +
             '<span class="suprq-status-pill ' + aggStatus + '">' + aggText + '</span>' +
           '</div>' +
+          progressBarHtml +
           '<div class="suprq-detail">' +
             changesHtml +
+            bulkActionsHtml +
           '</div>' +
         '</div>';
       }).join('');
       listEl.querySelectorAll('.suprq-card').forEach(function (card) {
         card.addEventListener('click', function (e) {
-          if (e.target.closest('[data-request-action]') || e.target.closest('[data-view-doc]')) return;
+          if (e.target.closest('[data-request-action]') || e.target.closest('[data-view-doc]') || e.target.closest('[data-bulk-action]')) return;
           suprqToggleCard(card);
         });
       });
@@ -23126,16 +24398,76 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
             change.status = 'resubmit';
             showToast('Sent back to ' + c.name + ' for resubmission.');
           }
-          // Keep the card expanded after reviewing an item, unless it only had one item to begin with —
-          // in that case there's nothing left to review, so it's fine to collapse it back.
-          var keepExpandedId = batch.changes.length > 1 ? batchId : null;
-          renderSupRequestsList();
-          if (keepExpandedId) {
-            var reopened = listEl.querySelector('.suprq-card[data-request-card="' + keepExpandedId + '"]');
-            if (reopened) suprqToggleCard(reopened, true);
-          }
+          saveChangeRequestsToStorage();
+          // Always keep the card expanded after reviewing an item — never auto-collapse it.
+          var keepExpandedId = batchId;
+          suprqPreserveScroll(btn, function () {
+            renderSupRequestsList();
+            if (keepExpandedId) {
+              var reopened = listEl.querySelector('.suprq-card[data-request-card="' + keepExpandedId + '"]');
+              if (reopened) suprqToggleCard(reopened, true);
+            }
+          });
         });
       });
+      var suprqPendingBulkAction = null;
+      listEl.querySelectorAll('[data-bulk-action]').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var action = btn.getAttribute('data-bulk-action');
+          var batchId = btn.getAttribute('data-bulk-batch');
+          var list = supplierChangeRequests[supRequestsKeyFor(c)];
+          var batch = list.filter(function (b) { return b.id === batchId; })[0];
+          if (!batch) return;
+          var pendingCountForBatch = batch.changes.filter(function (ch) { return ch.status === 'pending' || ch.status === 'resubmitted'; }).length;
+          if (!pendingCountForBatch) return;
+          suprqPendingBulkAction = { action: action, batchId: batchId, triggerBtn: btn };
+          var titleEl = document.getElementById('suprqBulkConfirmTitle');
+          var descEl = document.getElementById('suprqBulkConfirmDesc');
+          var actionBtn = document.getElementById('suprqBulkConfirmActionBtn');
+          if (action === 'approve') {
+            if (titleEl) titleEl.textContent = 'Approve all changes?';
+            if (descEl) descEl.textContent = 'This will approve ' + pendingCountForBatch + ' item' + (pendingCountForBatch === 1 ? '' : 's') + ' in this request and apply the changes to ' + c.name + '\u2019s profile.';
+            if (actionBtn) actionBtn.textContent = 'Approve all';
+          } else {
+            if (titleEl) titleEl.textContent = 'Ask to resubmit all?';
+            if (descEl) descEl.textContent = 'This will send ' + pendingCountForBatch + ' item' + (pendingCountForBatch === 1 ? '' : 's') + ' in this request back to ' + c.name + ' for resubmission.';
+            if (actionBtn) actionBtn.textContent = 'Ask to resubmit all';
+          }
+          document.getElementById('suprqBulkConfirmOverlay').classList.add('open');
+        });
+      });
+      document.getElementById('suprqBulkConfirmActionBtn').onclick = function () {
+        if (!suprqPendingBulkAction) return;
+        var action = suprqPendingBulkAction.action;
+        var batchId = suprqPendingBulkAction.batchId;
+        var btn = suprqPendingBulkAction.triggerBtn;
+        document.getElementById('suprqBulkConfirmOverlay').classList.remove('open');
+        var list = supplierChangeRequests[supRequestsKeyFor(c)];
+        var batch = list.filter(function (b) { return b.id === batchId; })[0];
+        if (!batch) return;
+        var actioned = 0;
+        batch.changes.forEach(function (ch) {
+          if (ch.status === 'pending' || ch.status === 'resubmitted') {
+            ch.status = action === 'approve' ? 'approved' : 'resubmit';
+            actioned++;
+          }
+        });
+        saveChangeRequestsToStorage();
+        showToast(action === 'approve'
+          ? actioned + ' change' + (actioned === 1 ? '' : 's') + ' approved on ' + c.name + '\u2019s profile.'
+          : 'Sent ' + actioned + ' item' + (actioned === 1 ? '' : 's') + ' back to ' + c.name + ' for resubmission.');
+        suprqPreserveScroll(btn, function () {
+          renderSupRequestsList();
+          var reopened = listEl.querySelector('.suprq-card[data-request-card="' + batchId + '"]');
+          if (reopened) suprqToggleCard(reopened, true);
+        });
+        suprqPendingBulkAction = null;
+      };
+      document.getElementById('suprqBulkConfirmCancelBtn').onclick = function () {
+        document.getElementById('suprqBulkConfirmOverlay').classList.remove('open');
+        suprqPendingBulkAction = null;
+      };
     }
     var countEl = document.getElementById('supRequestsCount');
     if (countEl) countEl.textContent = batches.filter(function (b) { return b.changes.some(function (ch) { return ch.status === 'pending'; }); }).length;
@@ -23986,6 +25318,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   var supAppCategoryFilter = 'All Categories';
   var supAppLocationFilter = [];
   var UK_LOCATIONS = ['London', 'Manchester', 'Birmingham', 'Leeds', 'Bristol', 'Glasgow', 'Liverpool', 'Sheffield', 'Edinburgh', 'Newcastle', 'Nottingham', 'Cardiff', 'Leicester', 'Southampton', 'Oxford', 'Cambridge'];
+  var LONDON_ZONES = ['London \u2014 Central', 'London \u2014 North', 'London \u2014 West', 'London \u2014 North East', 'London \u2014 East', 'London \u2014 South East', 'London \u2014 South', 'London \u2014 South West'];
 
   /* Enrich demo data with the fields the dynamic filter bar below needs.
      Deterministic (index-based) so re-loading the page gives the same results. */
@@ -24018,6 +25351,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         for (var m = 0; m < locCount; m++) locs.push(UK_LOCATIONS[(i + m * 3) % UK_LOCATIONS.length]);
         c.locations = locs;
         c.city = locs[0];
+        if (locs.indexOf('London') !== -1) c.locations.push(LONDON_ZONES[i % LONDON_ZONES.length]);
       }
       if (!c.dateSubmitted) {
         var d = new Date();
@@ -24145,7 +25479,13 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       }
       if (def.type === 'location') {
         var locOpts = UK_LOCATIONS.map(function (loc) {
-          return '<div class="supapp-ms-item" data-value="' + loc + '"><span class="supapp-ms-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>' + loc + '</div>';
+          var mainItem = '<div class="supapp-ms-item" data-value="' + loc + '"><span class="supapp-ms-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>' + loc + '</div>';
+          if (loc !== 'London') return mainItem;
+          var zoneItems = LONDON_ZONES.map(function (zone) {
+            var zoneLabel = zone.replace('London \u2014 ', '');
+            return '<div class="supapp-ms-item supapp-ms-item-nested" data-value="' + zone + '"><span class="supapp-ms-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>' + zoneLabel + '</div>';
+          }).join('');
+          return mainItem + zoneItems;
         }).join('');
         return '<div class="pm-filter-field" style="flex:1 1 150px; min-width:130px;">' +
           '<div class="pff-legend-wrap"><label>' + def.label + '</label></div>' +
@@ -24726,6 +26066,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
     document.getElementById('supDeactivateBtn2').style.display = source === 'app' ? 'none' : '';
     document.getElementById('supApplicantActionBtns').style.display = source === 'app' ? 'flex' : 'none';
+    document.getElementById('supViewPublicProfileBtn').style.display = source === 'app' ? 'none' : '';
 
     supPrimaryTradeSelected = null;
     supSecondaryTradeSelected = [];
