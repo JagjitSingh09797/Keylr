@@ -12875,7 +12875,7 @@
                     <span class="client-role-badge">Property Manager</span>
                   </div>
                   <div class="client-status-row">
-                    <span class="live-dot"><span class="dot"></span>Active</span>
+                    <span class="live-dot" id="clientActiveChip"><span class="dot"></span>Active</span>
                     <span class="client-pending-pill" id="clientPendingPill">PENDING REVIEW</span>
                     <span>🕐 Last active —</span>
                   </div>
@@ -27124,6 +27124,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var outerRing = document.getElementById('clientAvatarRingOuter');
     if (outerRing) outerRing.classList.toggle('app-avatar-ring', source === 'app');
     document.getElementById('clientAvatarRing').style.background = source === 'app' ? '' : c.color;
+    var activeChip = document.getElementById('clientActiveChip');
+    if (activeChip) activeChip.style.display = source === 'app' ? 'none' : '';
     document.getElementById('clientProfileCompletionValue').textContent = c.completion + '%';
     var bar = document.getElementById('clientProfileCompletionBar');
     bar.style.width = c.completion + '%';
