@@ -1495,6 +1495,11 @@
   .simple-chip-action { border-style: dashed; color: var(--accent-blue); font-weight: 700; }
   .simple-chip-action:hover { border-color: var(--accent-blue); background: var(--icon-tint-bg); }
   .simple-chip.selected { background: var(--tile-selected-bg, #e8f0f8); border-color: var(--accent-blue); color: var(--accent-blue); }
+  .simple-chip-removable { display: inline-flex; align-items: center; gap: 7px; cursor: default; transition: opacity 150ms ease-out, transform 150ms ease-out; }
+  .simple-chip-removable .scr-label { cursor: pointer; }
+  .simple-chip-removable .scr-remove { display: flex; align-items: center; justify-content: center; background: none; border: none; padding: 0; cursor: pointer; color: inherit; opacity: 0.6; }
+  .simple-chip-removable .scr-remove:hover { opacity: 1; }
+  .simple-chip-removable.removing { opacity: 0; transform: scale(0.9); }
 
   /* Contact card (Step 5) */
   .contact-card {
@@ -2575,6 +2580,10 @@
   }
   .supapp-ms-menu.open { display: block; }
   #supCategoryDdMenu.open, #supAppCategoryDdMenu.open { width: 300px; }
+  .pm-custom-dd-menu[data-dd-menu="supAppVerification"].open { width: 180px; }
+  .pm-custom-dd-menu[data-dd-menu="supVerification"].open { width: 180px; }
+  .pm-custom-dd-menu[data-dd-menu="appDateJoined"].open { width: 160px; }
+  .pm-custom-dd-menu[data-dd-menu="pmDateJoined"].open { width: 160px; }
   .supapp-ms-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--text-heading); }
   .supapp-ms-item-nested { padding-left: 30px; font-size: 12.5px; color: var(--text-body-muted); }
   .cdd-item-category { font-weight: 700; color: var(--text-heading); }
@@ -2962,7 +2971,7 @@
   .pm-card-actions button { width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; color: #94a3b8; border-radius: 6px; position: relative; cursor: pointer; }
   .pm-card-actions button:hover { background: var(--surface-soft); color: var(--text-heading); }
   .pm-verified-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 600; color: #1a7a3e; background: #eafaf0; padding: 3px 9px; border-radius: 999px; margin-bottom: 10px; }
-  #adminPMApplicantsView .app-client-card .pm-verified-badge.unverified { margin-bottom: 0; }
+  #adminPMApplicantsView .app-client-card .pm-verified-badge, #adminPMListView .app-client-card .pm-verified-badge { margin-bottom: 0; }
   .pm-verified-badge.unverified { color: #64748b; background: var(--surface-soft); }
   .pm-yes-tag.inactive { color: #c0392b; background: #fdecea; }
   .pm-yes-tag.inactive .dot { background: #e8482c; }
@@ -2992,6 +3001,7 @@
   .supplier-meta-row svg { color: #94a3b8; flex-shrink: 0; width: 12px; height: 12px; }
   .supplier-meta-row:last-child { margin-bottom: 0; }
   .supapp-card-divider { height: 1px; background: var(--border-subtle); margin: 12px 0 10px; }
+  #pmContactsViewCard .supapp-card-divider { margin: 14px 0; }
   .supapp-category-row { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; margin-bottom: 2px; }
   .supapp-category-chip { font-size: 11px; font-weight: 600; color: #183060; background: #e7edf6; padding: 3px 9px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
   .supapp-role-chip { font-size: 11px; font-weight: 600; color: #183060; background: #e7edf6; padding: 3px 9px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
@@ -3859,7 +3869,9 @@
 
   .detail-mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   .dmf-label { font-size: 11.5px; color: var(--text-body-muted); margin-bottom: 4px; }
+  .detail-mini-grid-3col .detail-mini-field, .detail-mini-grid-4col .detail-mini-field { min-width: 0; }
   .detail-mini-field .dmf-value { font-size: 13.5px; font-weight: 600; color: var(--text-heading); }
+  .detail-mini-field .dmf-value[data-tooltip] { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .detail-chip-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: var(--text-heading); background: var(--surface-soft); padding: 5px 12px; border-radius: 999px; margin: 3px 6px 3px 0; }
   .acct-settings-tab .detail-chip-tag { background: var(--icon-tint-bg); color: var(--accent-blue); }
   .acct-settings-tab .detail-chip-tag svg { flex-shrink: 0; }
@@ -3896,11 +3908,16 @@
   .acct-settings-tab:not(.editing) .acct-view-card { background: var(--surface-white); border: 1px solid var(--border-subtle); border-radius: var(--radius-card); padding: 20px 22px; margin-bottom: 16px; }
   .acct-settings-tab:not(.editing) .acct-view-card:last-child { margin-bottom: 0; }
   .acct-settings-tab .acct-view-card .detail-mini-grid { margin-bottom: 0; }
-  .acct-settings-tab .acct-view-card .detail-mini-grid-3col { margin-bottom: 12px; }
+  .acct-settings-tab .acct-view-card .detail-mini-grid-3col, .acct-settings-tab .acct-view-card .detail-mini-grid-4col { margin-bottom: 12px; }
+  #pmContactsViewCard .detail-mini-grid-4col { row-gap: 8px; margin-bottom: 0; }
+  #pmCompanyDetailsViewCard .detail-mini-grid-3col { row-gap: 16px; }
   .detail-card-head .dch-icon { width: 26px; height: 26px; border-radius: 7px; flex-shrink: 0; background: var(--icon-tint-bg); color: var(--accent-blue); display: flex; align-items: center; justify-content: center; }
   .detail-mini-grid-3col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
   @media (max-width: 900px) { .detail-mini-grid-3col { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 560px) { .detail-mini-grid-3col { grid-template-columns: 1fr; } }
+  .detail-mini-grid-4col { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  @media (max-width: 900px) { .detail-mini-grid-4col { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .detail-mini-grid-4col { grid-template-columns: 1fr; } }
   .acct-settings-tab .dmf-label { display: flex; align-items: center; gap: 5px; }
   .acct-settings-tab .dmf-label svg { flex-shrink: 0; }
   .acct-settings-tab .dfr-label { display: flex; align-items: center; gap: 5px; }
@@ -7719,11 +7736,7 @@
               <div class="pm-settings-tabs-row" id="pmSettingsTabs" style="margin-top:8px;display:flex;align-items:center;">
                 <div class="pm-settings-tab-item active" data-settingstab="profile">Profile</div>
                 <div class="pm-settings-tab-item" data-settingstab="portfolio">Portfolio</div>
-                <div class="pm-settings-tab-item" data-settingstab="company">Company</div>
-                <div class="pm-settings-tab-item" data-settingstab="locations">Locations</div>
-                <div class="pm-settings-tab-item" data-settingstab="billing">Billing</div>
-                <div class="pm-settings-tab-item" data-settingstab="billingpayments">Billing &amp; Payments</div>
-                <div class="pm-settings-tab-item" data-settingstab="contacts">Contacts</div>
+                <div class="pm-settings-tab-item" data-settingstab="billingpayments">Payment Setup</div>
                 <button type="button" class="btn btn-primary" id="pmAcctEditBtn" style="margin-left:auto;flex-shrink:0;padding:9px 18px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4z"/></svg>Edit</button>
               </div>
 
@@ -7781,6 +7794,56 @@
                       </div>
                     </div>
                   </div>
+
+                  <div class="acct-view-card" id="pmCompanyDetailsViewCard">
+                    <div class="detail-card-head"><div class="dch-left"><div class="dch-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></div><h3>Company Details</h3></div></div>
+                    <div class="detail-mini-grid-3col aev-view-only">
+                      <div class="detail-mini-field" style="grid-column:span 3;"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>Is this your only location or part of a wider group?</div><div class="dmf-value">Single location</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>Trading name</div><div class="dmf-value">KEY RIDERS LTD</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/></svg>Company reg. number</div><div class="dmf-value">15019055</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>Legal company name</div><div class="dmf-value">KEY RIDERS LTD</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Registered address</div><div class="dmf-value">60 Tottenham Court Road, Suite 3260a, Fitzrovia, London, W1T 2EW, United Kingdom</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Trading address</div><div class="dmf-value">60 Tottenham Court Road, Suite 3260a, Fitzrovia, London, W1T 2EW, United Kingdom</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Operating address</div><div class="dmf-value acct-view-empty">Not set</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>VAT registered</div><div class="dmf-value">Yes — GB868776770</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>Website</div><div class="dmf-value acct-view-empty">Not set</div></div>
+                    </div>
+                  </div>
+
+                  <div class="acct-view-card">
+                    <div class="detail-card-head"><div class="dch-left"><div class="dch-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><h3>Billing Preference</h3></div></div>
+                    <div class="detail-mini-grid-3col aev-view-only">
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Billing cycle</div><div class="dmf-value">Fortnightly <span style="font-size:10.5px;font-weight:700;color:#1a7a3e;">✓ Approved</span></div></div>
+                      <div class="detail-mini-field" style="grid-column:span 2;"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>Billing email</div><div class="dmf-value acct-view-empty">Not set</div></div>
+                    </div>
+                  </div>
+
+                  <div class="acct-view-card" id="pmContactsViewCard">
+                    <div class="detail-card-head"><div class="dch-left"><div class="dch-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div><h3>Contacts</h3></div></div>
+                    <div class="detail-mini-grid-4col aev-view-only">
+                      <div class="detail-mini-field" style="grid-column:span 4;"><div class="dmf-label" style="font-size:11px;font-weight:700;color:var(--text-body-muted);">CUSTOMER SUPPORT CONTACT</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label">Full name</div><div class="dmf-value" data-tooltip="Thomas Davies">Thomas Davies</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label">Job title</div><div class="dmf-value acct-view-empty">Not set</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label">Phone</div><div class="dmf-value" data-tooltip="+44 7888 542811">+44 7888 542811</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label">Email</div><div class="dmf-value" data-tooltip="pm.thomas.davies.6@keylr-seed.co.uk">pm.thomas.davies.6@keylr-seed.co.uk</div></div>
+                    </div>
+                    <div class="supapp-card-divider"></div>
+                    <div class="detail-mini-grid-4col aev-view-only">
+                      <div class="detail-mini-field" style="grid-column:span 4;"><div class="dmf-label" style="font-size:11px;font-weight:700;color:var(--text-body-muted);">FINANCE &amp; INVOICING CONTACT</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label">Full name</div><div class="dmf-value" data-tooltip="Thomas Davies">Thomas Davies</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label">Job title</div><div class="dmf-value acct-view-empty">Not set</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label">Phone</div><div class="dmf-value" data-tooltip="+44 7888 542811">+44 7888 542811</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label">Email</div><div class="dmf-value" data-tooltip="pm.thomas.davies.6@keylr-seed.co.uk">pm.thomas.davies.6@keylr-seed.co.uk</div></div>
+                    </div>
+                    <div class="supapp-card-divider"></div>
+                    <div class="detail-mini-grid-4col aev-view-only">
+                      <div class="detail-mini-field" style="grid-column:span 4;"><div class="dmf-label" style="font-size:11px;font-weight:700;color:var(--text-body-muted);">MANAGER / OFFICE CONTACT</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label">Full name</div><div class="dmf-value" data-tooltip="Thomas Davies">Thomas Davies</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label">Job title</div><div class="dmf-value acct-view-empty">Not set</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label">Phone</div><div class="dmf-value" data-tooltip="+44 7888 542811">+44 7888 542811</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label">Email</div><div class="dmf-value" data-tooltip="pm.thomas.davies.6@keylr-seed.co.uk">pm.thomas.davies.6@keylr-seed.co.uk</div></div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -7834,88 +7897,6 @@
                       <div class="helper">This helps us set up the right number of seats for your team.</div>
                     </div>
                   </div>
-                  <div style="display:flex;justify-content:flex-start;margin-top:20px;"><button type="button" class="btn btn-primary" data-settings-save="Portfolio">Save Changes</button></div>
-                </div>
-              </div>
-
-              <!-- Company tab -->
-              <div id="pmSettingsPanelCompany" style="display:none;">
-                <div style="margin-top:20px;">
-                  <div class="ob-field">
-                    <label>Commercial / trading name</label>
-                    <input class="field-input" type="text" value="KEY RIDERS LTD">
-                    <div class="ai-hint-pill"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg>Pre-filled from sign up — editable</div>
-                  </div>
-
-                  <div class="ob-section">
-                    <div class="ob-section-title">Is this your only location or part of a wider group?</div>
-                    <div class="tile-row-2" id="stgLocationTypeTiles">
-                      <div class="choice-tile selected" data-value="single" tabindex="0" role="radio" aria-checked="true">
-                        <div class="tile-body"><div class="tile-title">Single location</div><div class="tile-desc">One office or operating location</div></div>
-                        <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
-                      </div>
-                      <div class="choice-tile" data-value="branch" tabindex="0" role="radio" aria-checked="false">
-                        <div class="tile-body"><div class="tile-title">Branch / part of a group</div><div class="tile-desc">One of multiple offices or franchises</div></div>
-                        <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="ob-section-heading">Registered Company Details</div>
-                  <div class="ob-row-2">
-                    <div class="ob-field">
-                      <label>Company registration number</label>
-                      <input class="field-input" type="text" value="15019055">
-                      <div style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:#1a7a3e;margin-top:6px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Company found — details auto-filled.</div>
-                    </div>
-                    <div class="ob-field">
-                      <label>Legal company name <span class="meta-badge auto">Auto</span></label>
-                      <input class="field-input" type="text" value="KEY RIDERS LTD">
-                    </div>
-                  </div>
-
-                  <div class="ob-field">
-                    <label>Registered address <span class="meta-badge auto">Auto</span></label>
-                    <input class="field-input" type="text" value="60 Tottenham Court Road, Suite 3260a, Fitzrovia, London, W1T 2EW, United Kingdom">
-                    <div class="helper">Official registered business address — auto-filled, editable.</div>
-                  </div>
-
-                  <div class="ob-section-heading" style="margin-bottom:14px;">Trading address <span class="meta-badge optional" style="text-transform:none;font-size:11px;">If different</span></div>
-                  <div class="same-as-row" style="border-bottom:none;padding-bottom:0;">
-                    <input type="checkbox" id="stgSameAsRegistered">
-                    <label for="stgSameAsRegistered">Same as registered address</label>
-                  </div>
-                  <div class="ob-field" style="margin-top:14px;">
-                    <label>Trading address</label>
-                    <input class="field-input" type="text" value="60 Tottenham Court Road, Suite 3260a, Fitzrovia, London, W1T 2EW, United Kingdom">
-                  </div>
-
-                  <div class="ob-section-heading" style="margin-bottom:14px;">Operating address</div>
-                  <div class="ob-field">
-                    <input class="field-input" type="text" placeholder="Start typing a postcode or address">
-                  </div>
-
-                  <div class="ob-toggle-card">
-                    <div class="otc-top">
-                      <div><div class="otc-title">Are you VAT registered?</div><div class="otc-desc">Your VAT number will be added to all invoices</div></div>
-                      <button type="button" class="toggle-switch on" id="stgVatToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
-                    </div>
-                    <div class="field-collapsible open" id="stgVatField" style="max-height:1200px;opacity:1;">
-                      <div class="otc-body">
-                        <div class="ob-field" style="margin-bottom:0;">
-                          <label>VAT number</label>
-                          <input class="field-input" type="text" value="GB868776770" id="stgVatNumberInput">
-                          <div class="helper">Format: GB followed by 9 digits.</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="ob-field">
-                    <label>Website <span class="meta-badge optional">Optional</span></label>
-                    <input class="field-input" type="url" placeholder="https://yourcompany.co.uk">
-                  </div>
-
                   <div class="ob-section-heading">Operating Hours</div>
                   <p class="ob-section-subtext" style="margin-top:-2px;">Helps service providers understand when your team is reachable for job coordination.</p>
                   <div class="ob-field">
@@ -7954,7 +7935,7 @@
                     </div>
                   </div>
 
-                  <div class="ob-section" style="margin-top:24px;margin-bottom:0;">
+                  <div class="ob-section" style="margin-top:24px;">
                     <div class="ob-field" style="margin-bottom:0;">
                       <label>Company logo <span class="meta-badge optional">Optional</span></label>
                       <input type="file" id="stgLogoInput" accept="image/png,image/svg+xml" style="display:none;">
@@ -7967,14 +7948,8 @@
                       <div class="helper">PNG or SVG. Shown to service providers.</div>
                     </div>
                   </div>
-                  <div style="display:flex;justify-content:flex-start;margin-top:20px;"><button type="button" class="btn btn-primary" data-settings-save="Company">Save Changes</button></div>
-                </div>
-              </div>
 
-              <!-- Locations tab -->
-              <div id="pmSettingsPanelLocations" style="display:none;">
-                <div style="margin-top:20px;">
-                  <div class="ob-section">
+                  <div class="ob-section" style="margin-top:24px;">
                     <div class="ob-section-title">Where are your properties located?</div>
                     <div class="ob-section-subtext">London — select the zones you cover</div>
                     <div class="simple-chip-row" id="stgLondonZones" style="margin-bottom:22px;">
@@ -8003,7 +7978,7 @@
                     <input class="field-input" type="text" id="stgCustomRegionInput" placeholder="Add city or region... (press Enter)">
                   </div>
 
-                  <div class="ob-section" style="margin-bottom:0;">
+                  <div class="ob-section" style="margin-bottom:0;margin-top:24px;">
                     <div class="ob-section-title">Do you use any PMS or CRM tools? <span class="meta-badge optional">Optional</span></div>
                     <div class="chip-multiselect" id="stgPmsMultiselect">
                       <div class="chip-search-input">
@@ -8031,76 +8006,8 @@
                       <div class="helper" style="font-size:10.5px;padding-top:6px;">e.g. Fixflo, Arthur Online, Re-Leased, Yardi, MRI, Hostaway, Guesty. Helps us understand integrations you may need.</div>
                     </div>
                   </div>
-                  <div style="display:flex;justify-content:flex-start;margin-top:20px;"><button type="button" class="btn btn-primary" data-settings-save="Locations">Save Changes</button></div>
-                </div>
-              </div>
 
-              <!-- Billing tab -->
-              <div id="pmSettingsPanelBilling" style="display:none;">
-                <div style="margin-top:20px;">
-                  <div class="callout callout-info" style="margin-bottom:10px;">
-                    <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg></div>
-                    <div>
-                      <div class="callout-title">A payment card is required to activate your account</div>
-                      <div class="callout-body">Once your account is approved, you'll be asked to add a card on file. This is used for pay-upfront jobs. Your card is never charged without your approval.</div>
-                    </div>
-                  </div>
-
-                  <div class="callout callout-success">
-                    <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
-                    <div>
-                      <div class="callout-title" style="color:#145c2e;">Billing Cycle Approved &amp; Active</div>
-                      <div class="callout-body" style="color:#145c2e;">Your Direct Debit has been approved and activated. Your selected billing cycle is now live.</div>
-                    </div>
-                  </div>
-
-                  <div class="ob-section">
-                    <div class="ob-section-title">What's your preferred billing cycle?</div>
-                    <div id="stgBillingCycleCards">
-                      <div class="billing-card" data-value="upfront">
-                        <div class="bc-top"><div class="bc-radio"></div><div class="bc-title">Pay upfront</div><span class="meta-badge default" style="margin-left:auto;">Default · Instant</span></div>
-                        <div class="bc-desc">Pay per job at the time of booking using your card on file. Available immediately on activation — no approval needed.</div>
-                        <div class="bc-sub">🛡 Payment held in escrow until job is completed</div>
-                      </div>
-                      <div class="billing-card selected" data-value="fortnightly">
-                        <div class="bc-top"><div class="bc-radio"></div><div class="bc-title">Fortnightly</div><span class="meta-badge" style="margin-left:auto;background:#eafaf0;color:#1a7a3e;">✓ Approved</span></div>
-                        <div class="bc-desc">Consolidated invoice every 2 weeks settled by Direct Debit. Balanced for steady-volume operations. Our team will contact you to activate.</div>
-                      </div>
-                      <div class="billing-card" data-value="monthly">
-                        <div class="bc-top"><div class="bc-radio"></div><div class="bc-title">Monthly (4 weeks)</div><span class="meta-badge approval" style="margin-left:auto;">Approval required</span></div>
-                        <div class="bc-desc">Single monthly consolidated invoice via Direct Debit. Most common for established operators. Our team will contact you to activate.</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="callout callout-neutral">
-                    <div><div class="callout-title">About Supplier Deposits</div><div class="callout-body">Some suppliers may request a deposit for certain jobs. In these cases Keylr generates an option to pay the deposit upfront and leaves the remaining amount for your billing cycle. This is always shown clearly before you confirm a job.</div></div>
-                  </div>
-
-                  <div class="callout callout-warning">
-                    <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg></div>
-                    <div style="width:100%;">
-                      <div class="callout-title">Billing Cycle Approval Process</div>
-                      <div class="callout-body" style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
-                        <div style="display:flex;gap:10px;align-items:flex-start;"><span style="background:#102048;color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">1</span> Your preferred billing cycle is noted when you submit your profile</div>
-                        <div style="display:flex;gap:10px;align-items:flex-start;"><span style="background:#102048;color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">2</span> Keylr reviews your account — one of our team members will contact you directly</div>
-                        <div style="display:flex;gap:10px;align-items:flex-start;"><span style="background:#102048;color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">3</span> Once approved, your Direct Debit is activated and your billing cycle goes live</div>
-                        <div style="display:flex;gap:10px;align-items:flex-start;"><span style="background:#102048;color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">4</span> You can book services on pay-upfront immediately while approval is in progress</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="callout callout-success">
-                    <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
-                    <div class="callout-body" style="color:#145c2e;">You approve every job before it starts. All charges are shown clearly — no surprise fees regardless of billing cycle.</div>
-                  </div>
-
-                  <div class="ob-field" style="margin-top:8px;">
-                    <label>Billing email address <span class="meta-badge optional">Optional</span></label>
-                    <input class="field-input" type="email" placeholder="finance@company.com">
-                    <div class="helper">Add a dedicated email for invoices if your finance team handles payments separately.</div>
-                  </div>
-                  <div style="display:flex;justify-content:flex-start;margin-top:20px;"><button type="button" class="btn btn-primary" data-settings-save="Billing">Save Changes</button></div>
+                  <div style="display:flex;justify-content:flex-start;margin-top:20px;"><button type="button" class="btn btn-primary" data-settings-save="Portfolio">Save Changes</button></div>
                 </div>
               </div>
 
@@ -8138,73 +8045,6 @@
                 </div>
               </div>
 
-              <!-- Contacts tab -->
-              <div id="pmSettingsPanelContacts" style="display:none;">
-                <div style="margin-top:20px;">
-                  <div class="contact-card">
-                    <div class="cc-head"><div class="cc-title">Customer support contact<span class="req">*</span></div></div>
-                    <div class="cc-subtext">Who handles day-to-day queries and job issues</div>
-                    <div class="same-as-row">
-                      <input type="checkbox" id="stgSameAsSupport" checked>
-                      <label for="stgSameAsSupport">Same person as onboarding contact</label>
-                    </div>
-                    <div class="contact-fields locked" id="stgSupportFields">
-                      <div class="ob-row-2">
-                        <div class="ob-field"><label>Full name</label><input class="field-input" type="text" placeholder="Full name"></div>
-                        <div class="ob-field"><label>Job title</label><input class="field-input" type="text" placeholder="e.g. Lettings Manager"></div>
-                      </div>
-                      <div class="ob-row-2">
-                        <div class="ob-field"><label>Phone</label><input class="field-input" type="tel" placeholder="+44 7700 000000"></div>
-                        <div class="ob-field"><label>Email</label><input class="field-input" type="email" placeholder="name@company.com"></div>
-                      </div>
-                    </div>
-                    <div class="ai-hint-pill"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg>Pre-filled from sign up · untick to enter a different person</div>
-                  </div>
-
-                  <div class="contact-card">
-                    <div class="cc-head"><div class="cc-title">Finance &amp; invoicing contact</div><span class="meta-badge optional">Optional</span></div>
-                    <div class="cc-subtext">Who handles billing, invoices, and payments</div>
-                    <div class="same-as-row">
-                      <input type="checkbox" id="stgSameAsFinance">
-                      <label for="stgSameAsFinance">Same person as onboarding contact</label>
-                    </div>
-                    <div class="contact-fields" id="stgFinanceFields">
-                      <div class="ob-row-2">
-                        <div class="ob-field"><label>Full name</label><input class="field-input" type="text" value="Thomas Davies"></div>
-                        <div class="ob-field"><label>Job title</label><input class="field-input" type="text" placeholder="e.g. Lettings Manager"></div>
-                      </div>
-                      <div class="ob-row-2">
-                        <div class="ob-field"><label>Phone</label><input class="field-input" type="tel" value="+447888542811"></div>
-                        <div class="ob-field"><label>Email</label><input class="field-input" type="email" value="pm.thomas.davies.6@keylr-seed.co.uk"></div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="contact-card">
-                    <div class="cc-head"><div class="cc-title">Manager / office contact</div><span class="meta-badge optional">Optional</span></div>
-                    <div class="cc-subtext">Branch manager or office lead for escalations</div>
-                    <div class="same-as-row">
-                      <input type="checkbox" id="stgSameAsManager">
-                      <label for="stgSameAsManager">Same person as onboarding contact</label>
-                    </div>
-                    <div class="contact-fields" id="stgManagerFields">
-                      <div class="ob-row-2">
-                        <div class="ob-field"><label>Full name</label><input class="field-input" type="text" value="Thomas Davies"></div>
-                        <div class="ob-field"><label>Job title</label><input class="field-input" type="text" placeholder="e.g. Lettings Manager"></div>
-                      </div>
-                      <div class="ob-row-2">
-                        <div class="ob-field"><label>Phone</label><input class="field-input" type="tel" value="+447888542811"></div>
-                        <div class="ob-field"><label>Email</label><input class="field-input" type="email" value="pm.thomas.davies.6@keylr-seed.co.uk"></div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="callout callout-neutral" style="margin-bottom:0;">
-                    <div class="callout-body">By submitting, you confirm that all information provided is accurate. Keylr will review your account and contact you within 1-2 business days. You can explore the platform in the meantime.</div>
-                  </div>
-                  <div style="display:flex;justify-content:flex-start;margin-top:20px;"><button type="button" class="btn btn-primary" data-settings-save="Contacts">Save Changes</button></div>
-                </div>
-              </div>
             </div>
           </div>
 
@@ -11403,8 +11243,9 @@
                 </div>
                 <div class="pm-tab-pills" id="pmTabPills">
                   <div class="pm-tab-pill active" data-filter="all">All</div>
-                  <div class="pm-tab-pill" data-filter="complete">Profile Complete</div>
-                  <div class="pm-tab-pill" data-filter="incomplete">Profile Incomplete</div>
+                  <div class="pm-tab-pill" data-filter="complete">Complete</div>
+                  <div class="pm-tab-pill" data-filter="incomplete">Incomplete</div>
+                  <div class="pm-tab-pill" data-filter="archived">Archive</div>
                 </div>
                 <div class="pm-count-actions">
                   <span class="pm-count-text"><span id="pmResultCount">41</span> property managers</span>
@@ -11416,21 +11257,6 @@
                 </div>
               </div>
               <div class="pm-filter-row">
-                <div class="pm-filter-field">
-                  <div class="pff-legend-wrap"><label>Status</label></div>
-                  <button type="button" class="pm-custom-dd-btn" data-dd="approval">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
-                    <span class="cdd-value">All Statuses</span>
-                    <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-                  </button>
-                  <div class="pm-custom-dd-menu" data-dd-menu="approval">
-                    <div class="cdd-item selected" data-value="All Statuses">All Statuses</div>
-                    <div class="cdd-item" data-value="Incomplete">Incomplete</div>
-                    <div class="cdd-item" data-value="Pending">Pending</div>
-                    <div class="cdd-item" data-value="Approved">Approved</div>
-                    <div class="cdd-item" data-value="Rejected">Rejected</div>
-                  </div>
-                </div>
                 <div class="pm-filter-field">
                   <div class="pff-legend-wrap"><label>Date Joined</label></div>
                   <button type="button" class="pm-custom-dd-btn" data-dd="pmDateJoined">
@@ -11526,7 +11352,7 @@
             <div id="pmTableViewWrap" class="pm-table-wrap" style="display:none;">
               <div class="pm-table-scroll">
                 <table class="admin-table" style="min-width:720px;">
-                  <thead><tr><th>Name</th><th>Verified</th><th>Company</th><th>Contact</th><th>Profile</th><th>Joined</th></tr></thead>
+                  <thead><tr><th>Name</th><th>Verified</th><th>Company</th><th>Contact</th><th>Status</th><th>Joined</th></tr></thead>
                   <tbody id="pmTableBody"></tbody>
                 </table>
               </div>
@@ -11568,8 +11394,9 @@
                 </div>
                 <div class="pm-tab-pills" id="appTabPills">
                   <div class="pm-tab-pill active" data-filter="all">All</div>
-                  <div class="pm-tab-pill" data-filter="complete">Profile Complete</div>
-                  <div class="pm-tab-pill" data-filter="incomplete">Profile Incomplete</div>
+                  <div class="pm-tab-pill" data-filter="complete">Complete</div>
+                  <div class="pm-tab-pill" data-filter="incomplete">Incomplete</div>
+                  <div class="pm-tab-pill" data-filter="archived">Archive</div>
                 </div>
                 <div class="pm-count-actions">
                   <span class="pm-count-text"><span id="appResultCount">6</span> applicants</span>
@@ -11581,20 +11408,6 @@
                 </div>
               </div>
               <div class="pm-filter-row">
-                <div class="pm-filter-field">
-                  <div class="pff-legend-wrap"><label>Status</label></div>
-                  <button type="button" class="pm-custom-dd-btn" data-dd="appApproval">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
-                    <span class="cdd-value">All Statuses</span>
-                    <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-                  </button>
-                  <div class="pm-custom-dd-menu" data-dd-menu="appApproval">
-                    <div class="cdd-item selected" data-value="All Statuses">All Statuses</div>
-                    <div class="cdd-item" data-value="Incomplete">Incomplete</div>
-                    <div class="cdd-item" data-value="Complete">Complete</div>
-                    <div class="cdd-item" data-value="Archived">Archived</div>
-                  </div>
-                </div>
                 <div class="pm-filter-field">
                   <div class="pff-legend-wrap"><label>Date Joined</label></div>
                   <button type="button" class="pm-custom-dd-btn" data-dd="appDateJoined">
@@ -11690,7 +11503,7 @@
             <div id="appTableViewWrap" class="pm-table-wrap" style="display:none;">
               <div class="pm-table-scroll">
                 <table class="admin-table" style="min-width:720px;">
-                  <thead><tr><th>Name</th><th>Verified</th><th>Company</th><th>Contact</th><th>Profile</th><th>Joined</th></tr></thead>
+                  <thead><tr><th>Name</th><th>Verified</th><th>Company</th><th>Contact</th><th>Status</th><th>Joined</th></tr></thead>
                   <tbody id="appTableBody"></tbody>
                 </table>
               </div>
@@ -17480,7 +17293,7 @@
 
   function switchPMSettingsTab(key) {
     document.querySelectorAll('#pmSettingsTabs .pm-settings-tab-item').forEach(function (t) { t.classList.toggle('active', t.getAttribute('data-settingstab') === key); });
-    ['profile', 'portfolio', 'company', 'locations', 'billing', 'billingpayments', 'contacts'].forEach(function (k) {
+    ['profile', 'portfolio', 'billingpayments'].forEach(function (k) {
       var panel = document.getElementById('pmSettingsPanel' + k.charAt(0).toUpperCase() + k.slice(1));
       panel.style.display = k === key ? '' : 'none';
       if (k === key) {
@@ -17536,21 +17349,8 @@
 
   initMultiSelectTiles(document.getElementById('stgSectorTiles'));
   initSingleSelectTiles(document.getElementById('stgCountTiles'));
-  initSingleSelectTiles(document.getElementById('stgLocationTypeTiles'));
-  initSingleSelectTiles(document.getElementById('stgBillingCycleCards'));
   initMultiSelectTiles(document.getElementById('stgLondonZones'));
   initMultiSelectTiles(document.getElementById('stgOtherRegions'));
-
-  var stgSameAsRegistered = document.getElementById('stgSameAsRegistered');
-  stgSameAsRegistered.addEventListener('change', function () {
-    showToast(stgSameAsRegistered.checked ? 'Trading address synced with registered address.' : 'You can now enter a different trading address.');
-  });
-
-  document.getElementById('stgVatToggle').addEventListener('click', function () {
-    var isOn = this.classList.toggle('on');
-    this.setAttribute('aria-checked', isOn ? 'true' : 'false');
-    setCollapsibleOpen(document.getElementById('stgVatField'), isOn);
-  });
 
   document.querySelectorAll('#stgDayPills .day-pill').forEach(function (pill) {
     pill.addEventListener('click', function () { pill.classList.toggle('selected'); });
@@ -17567,10 +17367,16 @@
   document.getElementById('stgCustomRegionInput').addEventListener('keydown', function (e) {
     if (e.key === 'Enter' && this.value.trim()) {
       e.preventDefault();
-      var chip = document.createElement('div');
-      chip.className = 'simple-chip selected just-added';
-      chip.textContent = this.value.trim();
-      chip.addEventListener('click', function () { chip.classList.toggle('selected'); });
+      var chip = document.createElement('span');
+      chip.className = 'simple-chip selected just-added simple-chip-removable';
+      chip.setAttribute('data-value', this.value.trim());
+      chip.innerHTML = '<span class="scr-label">' + this.value.trim() + '</span><button type="button" class="scr-remove" aria-label="Remove ' + this.value.trim() + '"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>';
+      chip.querySelector('.scr-label').addEventListener('click', function () { chip.classList.toggle('selected'); });
+      chip.querySelector('.scr-remove').addEventListener('click', function (e) {
+        e.stopPropagation();
+        chip.classList.add('removing');
+        setTimeout(function () { chip.remove(); }, 150);
+      });
       document.getElementById('stgOtherRegions').appendChild(chip);
       this.value = '';
     }
@@ -17617,11 +17423,6 @@
     document.addEventListener('click', function (e) { if (!wrap.contains(e.target)) dropdown.classList.remove('open'); });
     syncRowChecks();
   })();
-
-  initSameAsContact('stgSameAsSupport', 'stgSupportFields');
-  initSameAsContact('stgSameAsFinance', 'stgFinanceFields');
-  initSameAsContact('stgSameAsManager', 'stgManagerFields');
-  document.getElementById('stgSupportFields').classList.toggle('locked', document.getElementById('stgSameAsSupport').checked);
 
   function startPMOnboarding(signupData) {
     signupData = signupData || {};
@@ -22984,12 +22785,16 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   ];
 
   var pmApplicants = [
-    { initials: 'JJ', color: '#2563eb', name: 'John John', email: 'john@house.com', company: 'johnhouseltd', phone: '+4407991197253', joined: '7 Jul 2026', business: true, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 25, status: 'Active', locations: ['London', 'Oxford'] },
-    { initials: 'RA', color: '#7c3aed', name: 'raman', email: 'naman@gmail.com', company: 'raman ltd', phone: '+447999542811', joined: '3 Jul 2026', business: true, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 25, status: 'Active', photo: 'https://i.pravatar.cc/150?img=33', locations: ['Manchester', 'Leeds'] },
-    { initials: 'VK', color: '#f2542d', name: 'veera kumari', email: 'veera@gmail.com', company: 'kumari pvt ltd', phone: '+447766885588', joined: '30 Jun 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 100, status: 'Active', photo: 'https://i.pravatar.cc/150?img=47', locations: ['Birmingham', 'Coventry', 'Leicester'] },
-    { initials: 'TE', color: '#2563eb', name: 'Testing', email: 'tt@gmail.com', company: '', phone: '+44 7543 218992', joined: '26 Jun 2026', business: false, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 15, status: 'Active', locations: ['London'] },
-    { initials: 'GS', color: '#f2542d', name: 'Gurpreet Singh', email: 'inderbb9@gmail.com', company: '123123', phone: '', joined: '24 Jun 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 27, status: 'Active', photo: 'https://i.pravatar.cc/150?img=52', locations: ['Leeds', 'Bradford'] },
-    { initials: 'PR', color: '#7c3aed', name: 'PropertiesItd', email: 'propertieslt@gg.com', company: 'KEY RIDERS LTD', phone: '', joined: '11 Jun 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 27, status: 'Inactive', locations: ['Bristol', 'Bath', 'Cardiff'] }
+    { initials: 'JJ', color: '#2563eb', name: 'John John', email: 'john@house.com', company: 'johnhouseltd', phone: '+4407991197253', joined: '7 Jul 2026', business: true, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 25, status: 'Incomplete', locations: ['London', 'Oxford'] },
+    { initials: 'RA', color: '#7c3aed', name: 'raman', email: 'naman@gmail.com', company: 'raman ltd', phone: '+447999542811', joined: '3 Jul 2026', business: true, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 25, status: 'Incomplete', photo: 'https://i.pravatar.cc/150?img=33', locations: ['Manchester', 'Leeds'] },
+    { initials: 'VK', color: '#f2542d', name: 'veera kumari', email: 'veera@gmail.com', company: 'kumari pvt ltd', phone: '+447766885588', joined: '30 Jun 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 100, status: 'Approved', photo: 'https://i.pravatar.cc/150?img=47', locations: ['Birmingham', 'Coventry', 'Leicester'] },
+    { initials: 'TE', color: '#2563eb', name: 'Testing', email: 'tt@gmail.com', company: '', phone: '+44 7543 218992', joined: '26 Jun 2026', business: false, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 15, status: 'Incomplete', locations: ['London'] },
+    { initials: 'GS', color: '#f2542d', name: 'Gurpreet Singh', email: 'inderbb9@gmail.com', company: '123123', phone: '', joined: '24 Jun 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 27, status: 'Rejected', photo: 'https://i.pravatar.cc/150?img=52', locations: ['Leeds', 'Bradford'] },
+    { initials: 'PR', color: '#7c3aed', name: 'PropertiesItd', email: 'propertieslt@gg.com', company: 'KEY RIDERS LTD', phone: '', joined: '11 Jun 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 27, status: 'Incomplete', locations: ['Bristol', 'Bath', 'Cardiff'] },
+    { initials: 'AM', color: '#2563eb', name: 'Amara Osei', email: 'amara.osei@propman.co.uk', company: 'Osei Property Group', phone: '+447712345098', joined: '9 Jul 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 100, status: 'Approved', photo: 'https://i.pravatar.cc/150?img=25', locations: ['Nottingham', 'Sheffield'] },
+    { initials: 'DW', color: '#f2542d', name: 'Daniel Wren', email: 'daniel.wren@wrenlets.com', company: 'Wren Lettings', phone: '+447890123456', joined: '5 Jul 2026', business: true, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 100, status: 'Approved', locations: ['Cambridge'] },
+    { initials: 'HC', color: '#7c3aed', name: 'Harriet Cole', email: 'harriet.cole@colepm.co.uk', company: 'Cole Property Management', phone: '+447701998877', joined: '2 Jul 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 100, status: 'Approved', photo: 'https://i.pravatar.cc/150?img=36', locations: ['Edinburgh', 'Glasgow'] },
+    { initials: 'MK', color: '#2563eb', name: 'Marcus King', email: '', company: 'King Estates', phone: '+447655221190', joined: '28 Jun 2026', business: false, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 12, status: 'Rejected', locations: ['Newcastle'] }
   ];
 
   var activeSuppliers = [
@@ -23146,10 +22951,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   }
 
   function renderPMCard(c, i) {
-    var completionHtml = c.completion >= 100
-      ? '<div class="pm-complete-pill"><span style="display:flex;align-items:center;gap:6px;">' + checkSvgSm + 'Profile complete</span><span>100%</span></div>'
-      : '<div class="pm-completion-row"><div class="pm-completion-label-row"><span>Profile Completion</span><span class="pct">' + c.completion + '%</span></div><div class="pm-completion-track"><div class="pm-completion-fill" style="width:' + c.completion + '%;background:' + getCompletionColor(c.completion) + ';"></div></div></div>';
-
     return '<div class="pm-client-card app-client-card supapp-card" data-idx="' + i + '">' +
       '<div class="pm-card-top">' +
         '<div class="pm-card-avatar">' + supAppAvatarHtml(c) + '</div>' +
@@ -23170,27 +22971,24 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         '<div class="supapp-info-cell" data-tooltip="' + supjrEscapeHtml((c.locations || []).join(', ')) + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><span>' + supAppLocationsText(c.locations) + '</span></div>' +
       '</div>' +
       '<div class="supapp-card-divider"></div>' +
-      completionHtml +
+      '<div class="supplier-pill-row">' +
+        '<span class="supplier-approved-pill ' + supAppStatusClass(c.status) + '">' + supAppStatusDisplayText(c.status) + '</span>' +
+        '<div class="pm-verified-badge">' + checkSvgSm + 'Verified</div>' +
+      '</div>' +
       '<div class="supapp-card-divider supapp-card-divider-footer"></div>' +
       '<div class="supapp-card-footer" style="justify-content:space-between;">' +
         '<span class="supapp-submitted"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Joined ' + c.joined + '</span>' +
-        '<div class="pm-verified-badge">' + checkSvgSm + 'Verified</div>' +
       '</div>' +
     '</div>';
   }
 
   function renderPMTableRow(c, i) {
-    var barColor = getCompletionColor(c.completion);
-    var profileCell = c.completion >= 100
-      ? '<span style="display:inline-flex;align-items:center;gap:6px;color:#1a7a3e;font-weight:700;">' + checkSvgSm + '100%</span>'
-      : '<div class="pm-table-progress"><div class="tp-toprow"><span class="tp-label">' + (c.completion === 0 ? 'Not started' : 'On track') + '</span><span class="tp-pct">' + c.completion + '%</span></div><div class="tp-track"><div class="tp-fill" style="width:' + c.completion + '%;background:' + barColor + ';"></div></div></div>';
-
     return '<tr class="pm-table-row" data-idx="' + i + '">' +
       '<td><div class="pm-name-cell"><div class="pm-card-avatar">' + supAppAvatarHtml(c) + '</div><div><div class="nm-name">' + c.name + '</div><div class="nm-email">' + (c.email || '') + '</div></div></div></td>' +
       '<td><span class="pm-yes-tag">' + checkSvgSm + 'Yes</span></td>' +
       '<td>' + (c.company || '—') + '</td>' +
       '<td>' + (c.phone || '—') + '</td>' +
-      '<td>' + profileCell + '</td>' +
+      '<td><span class="supplier-approved-pill ' + supAppStatusClass(c.status) + '">' + supAppStatusDisplayText(c.status) + '</span></td>' +
       '<td>' + c.joined + '</td>' +
     '</tr>';
   }
@@ -23214,10 +23012,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   }
 
   function renderApplicantCard(c, i) {
-    var completionHtml = c.completion >= 100
-      ? '<div class="pm-complete-pill"><span style="display:flex;align-items:center;gap:6px;">' + checkSvgSm + 'Profile complete</span><span>100%</span></div>'
-      : '<div class="pm-completion-row"><div class="pm-completion-label-row"><span>Profile Completion</span><span class="pct">' + c.completion + '%</span></div><div class="pm-completion-track"><div class="pm-completion-fill" style="width:' + c.completion + '%;background:' + getCompletionColor(c.completion) + ';"></div></div></div>';
-
     return '<div class="pm-client-card app-client-card supapp-card" data-idx="' + i + '">' +
       '<div class="pm-card-top">' +
         '<div class="pm-card-avatar">' + supAppAvatarHtml(c) + '</div>' +
@@ -23238,26 +23032,24 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         '<div class="supapp-info-cell" data-tooltip="' + supjrEscapeHtml((c.locations || []).join(', ')) + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><span>' + supAppLocationsText(c.locations) + '</span></div>' +
       '</div>' +
       '<div class="supapp-card-divider"></div>' +
-      completionHtml +
+      '<div class="supplier-pill-row">' +
+        '<span class="supplier-approved-pill ' + supAppStatusClass(c.status) + '">' + supAppStatusDisplayText(c.status) + '</span>' +
+        '<div class="pm-verified-badge unverified">' + unverifiedIconSvg + 'Unverified</div>' +
+      '</div>' +
       '<div class="supapp-card-divider supapp-card-divider-footer"></div>' +
       '<div class="supapp-card-footer" style="justify-content:space-between;">' +
         '<span class="supapp-submitted"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Joined ' + c.joined + '</span>' +
-        '<div class="pm-verified-badge unverified">' + unverifiedIconSvg + 'Unverified</div>' +
       '</div>' +
     '</div>';
   }
 
   function renderApplicantTableRow(c, i) {
-    var profileCell = c.completion >= 100
-      ? '<span style="display:inline-flex;align-items:center;gap:6px;color:#1a7a3e;font-weight:700;">' + checkSvgSm + '100%</span>'
-      : '<div class="pm-table-progress"><div class="tp-toprow"><span class="tp-label">' + (c.completion === 0 ? 'Not started' : 'On track') + '</span><span class="tp-pct">' + c.completion + '%</span></div><div class="tp-track"><div class="tp-fill" style="width:' + c.completion + '%;background:' + getCompletionColor(c.completion) + ';"></div></div></div>';
-
     return '<tr class="pm-table-row app-table-row" data-idx="' + i + '">' +
       '<td><div class="pm-name-cell"><div class="pm-card-avatar">' + supAppAvatarHtml(c) + '</div><div><div class="nm-name">' + c.name + '</div><div class="nm-email">' + (c.email || '') + '</div></div></div></td>' +
       '<td><span class="pm-unverified-tag">' + unverifiedIconSvg + 'No</span></td>' +
       '<td>' + (c.company || '—') + '</td>' +
       '<td>' + (c.phone || '—') + '</td>' +
-      '<td>' + profileCell + '</td>' +
+      '<td><span class="supplier-approved-pill ' + supAppStatusClass(c.status) + '">' + supAppStatusDisplayText(c.status) + '</span></td>' +
       '<td>' + c.joined + '</td>' +
     '</tr>';
   }
@@ -23353,8 +23145,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   function getFilteredPMClients() {
     return pmClients.map(function (c, origIdx) { return { c: c, origIdx: origIdx }; }).filter(function (entry) {
       var c = entry.c;
-      if (pmActiveTab === 'complete' && c.completion < 100) return false;
-      if (pmActiveTab === 'incomplete' && c.completion >= 100) return false;
+      if (pmActiveTab === 'complete' && c.status !== 'Approved') return false;
+      if (pmActiveTab === 'incomplete' && c.status !== 'Incomplete') return false;
+      if (pmActiveTab === 'archived' && c.status !== 'Rejected') return false;
       var joinedDate = c.joined ? new Date(c.joined) : null;
       if (pmDateJoinedFilter === 'Today' && (!joinedDate || joinedDate < daysAgo(0))) return false;
       if (pmDateJoinedFilter === 'Last 7 Days' && (!joinedDate || joinedDate < daysAgo(7))) return false;
@@ -23505,8 +23298,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   function getFilteredApplicants() {
     return pmApplicants.map(function (c, origIdx) { return { c: c, origIdx: origIdx }; }).filter(function (entry) {
       var c = entry.c;
-      if (appActiveTab === 'complete' && c.completion < 100) return false;
-      if (appActiveTab === 'incomplete' && c.completion >= 100) return false;
+      if (appActiveTab === 'complete' && c.status !== 'Approved') return false;
+      if (appActiveTab === 'incomplete' && c.status !== 'Incomplete') return false;
+      if (appActiveTab === 'archived' && c.status !== 'Rejected') return false;
       var joinedDate = c.joined ? new Date(c.joined) : null;
       if (appDateJoinedFilter === 'Today' && (!joinedDate || joinedDate < daysAgo(0))) return false;
       if (appDateJoinedFilter === 'Last 7 Days' && (!joinedDate || joinedDate < daysAgo(7))) return false;
@@ -25859,6 +25653,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
           c.locations.push(LONDON_ZONES[i % LONDON_ZONES.length]);
         }
         if (!c.photo && i % 3 === 1) c.photo = 'https://i.pravatar.cc/150?img=' + PM_DEMO_PHOTOS[i % PM_DEMO_PHOTOS.length];
+        if (!c.status) {
+          c.status = i % 7 === 6 ? 'Rejected' : (c.completion >= 100 ? 'Approved' : 'Incomplete');
+        }
       });
     }
     if (typeof pmApplicants !== 'undefined') {
