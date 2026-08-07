@@ -11865,6 +11865,7 @@
                     <button type="button" data-view="table" aria-label="Table view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4"/><rect x="3" y="10" width="18" height="4"/><rect x="3" y="16" width="18" height="4"/></svg></button>
                   </div>
                   <button type="button" class="pm-icon-btn-sq" id="appRefreshBtn" aria-label="Refresh"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/></svg></button>
+                  <button type="button" class="btn btn-primary" id="appInviteBtn" style="width:auto;padding:9px 16px;white-space:nowrap;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>Invite Applicant</button>
                 </div>
               </div>
               <div class="pm-filter-row">
@@ -12183,10 +12184,10 @@
                 <div class="confirm-modal-icon" style="margin:0;background:#e7edf6;color:#183060;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg></div>
                 <button type="button" id="supAppInviteCloseBtn" aria-label="Close" style="background:none;border:none;cursor:pointer;color:var(--text-body-muted);padding:4px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
               </div>
-              <div class="confirm-modal-title" style="text-align:left;">Invite suppliers</div>
-              <div class="confirm-modal-desc" style="text-align:left;">Enter one or more supplier email addresses. Each supplier will receive an invitation email with a secure link to create their account and complete the onboarding process.</div>
+              <div class="confirm-modal-title" style="text-align:left;" id="supAppInviteTitle">Invite suppliers</div>
+              <div class="confirm-modal-desc" style="text-align:left;" id="supAppInviteDesc">Enter one or more supplier email addresses. Each supplier will receive an invitation email with a secure link to create their account and complete the onboarding process.</div>
               <div class="ob-field" style="margin-top:16px;margin-bottom:0;">
-                <label>Supplier email addresses</label>
+                <label id="supAppInviteLabel">Supplier email addresses</label>
                 <input type="text" class="field-input" id="supAppInviteEmailInput" placeholder="Type an email, then press Enter">
                 <div id="supAppInviteEmailError" style="display:none;color:#c0392b;font-size:12px;margin-top:6px;">Enter a valid email address.</div>
                 <div class="supapp-invite-chip-row" id="supAppInviteChipRow"></div>
@@ -13229,7 +13230,7 @@
             <div class="sup-sticky-bar" id="supStickyBar">
               <span class="ssb-score"><span class="dot"></span>Compliance score: <span id="supStickyScore">73%</span><span class="dot-sep"></span><span id="supStickyChecks">8/11 checks passed</span></span>
               <button type="button" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 20px;border-radius:10px;background:#64748b;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;border:none;" id="supArchiveBtn2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13V7a2 2 0 00-2-2H6a2 2 0 00-2 2v6M4 13h16v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6zM10 17h4"/></svg>Archive</button>
-              <button type="button" style="display:none;align-items:center;justify-content:center;gap:7px;padding:9px 20px;border-radius:10px;background:#1a7a3e;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;border:none;" id="supUnarchiveBtn2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>Unarchive</button>
+              <button type="button" style="display:none;align-items:center;justify-content:center;gap:7px;padding:9px 20px;border-radius:10px;background:#64748b;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;border:none;" id="supUnarchiveBtn2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>Unarchive</button>
               <div id="supApplicantActionBtns" style="display:none;gap:10px;">
                 <button type="button" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 20px;border-radius:10px;background:#1a7a3e;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;" id="supApplicantApproveBtn2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Approve</button>
                 <button type="button" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 20px;border-radius:10px;background:#64748b;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;border:none;" id="supApplicantRejectBtn2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13V7a2 2 0 00-2-2H6a2 2 0 00-2 2v6M4 13h16v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6zM10 17h4"/></svg><span id="supApplicantRejectBtnText">Archive</span></button>
@@ -13333,12 +13334,20 @@
                 <div>
                   <div class="client-name-row">
                     <h1 id="clientDetailName">john john</h1>
-                    <span class="client-role-badge">Property Manager</span>
+                    <span class="client-role-badge" id="clientRoleBadge">Property Manager</span>
+                    <span class="supplier-approved-pill incomplete" id="clientAppStatusChip" style="display:none;">Incomplete</span>
                   </div>
                   <div class="client-status-row">
                     <span class="live-dot" id="clientActiveChip"><span class="dot"></span>Active</span>
                     <span class="client-pending-pill" id="clientPendingPill">PENDING REVIEW</span>
-                    <span>🕐 Last active —</span>
+                    <span id="clientLastActiveText">🕐 Last active —</span>
+                  </div>
+                  <div class="client-status-row" id="clientAppContactRow" style="display:none;margin-top:6px;">
+                    <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg><span id="clientAppEmailText">\u2014</span></span>
+                    <span class="dot-sep"></span>
+                    <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg><span id="clientAppPhoneText">\u2014</span></span>
+                    <span class="dot-sep"></span>
+                    <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Joined <span id="clientAppJoinedText">\u2014</span></span>
                   </div>
                 </div>
                 <div class="client-header-actions" id="clientHeaderActionsView">
@@ -13360,7 +13369,7 @@
                   <button type="button" class="btn btn-primary" id="clientSaveBtnTop">Save Changes</button>
                 </div>
               </div>
-              <div class="client-stat-row">
+              <div class="client-stat-row" id="clientStatRow">
                 <div class="client-stat-cell">
                   <div class="csc-label">PROFILE COMPLETION</div>
                   <div class="csc-value" id="clientProfileCompletionValue">100%</div>
@@ -13397,7 +13406,7 @@
             </div>
 
             <div id="clientTabProfile">
-              <div class="client-show-filter">
+              <div class="client-show-filter" id="clientShowFilter">
                 <span class="csf-label">SHOW</span>
                 <div class="client-show-pill active" data-show="all">All Sections</div>
                 <div class="client-show-pill" data-show="verification">Verification</div>
@@ -27343,7 +27352,25 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     renderSupAppInviteChips();
     return true;
   }
+  var supAppInviteContext = 'supplier';
   document.getElementById('supAppInviteBtn').addEventListener('click', function () {
+    supAppInviteContext = 'supplier';
+    document.getElementById('supAppInviteTitle').textContent = 'Invite suppliers';
+    document.getElementById('supAppInviteDesc').textContent = 'Enter one or more supplier email addresses. Each supplier will receive an invitation email with a secure link to create their account and complete the onboarding process.';
+    document.getElementById('supAppInviteLabel').textContent = 'Supplier email addresses';
+    supAppInviteEmails = [];
+    document.getElementById('supAppInviteEmailInput').value = '';
+    document.getElementById('supAppInviteEmailError').style.display = 'none';
+    renderSupAppInviteChips();
+    supAppInviteModal.open();
+    setTimeout(function () { document.getElementById('supAppInviteEmailInput').focus(); }, 50);
+  });
+  var appInviteBtnEl = document.getElementById('appInviteBtn');
+  if (appInviteBtnEl) appInviteBtnEl.addEventListener('click', function () {
+    supAppInviteContext = 'applicant';
+    document.getElementById('supAppInviteTitle').textContent = 'Invite applicants';
+    document.getElementById('supAppInviteDesc').textContent = 'Enter one or more property manager email addresses. Each applicant will receive an invitation email with a secure link to create their account and complete onboarding.';
+    document.getElementById('supAppInviteLabel').textContent = 'Applicant email addresses';
     supAppInviteEmails = [];
     document.getElementById('supAppInviteEmailInput').value = '';
     document.getElementById('supAppInviteEmailError').style.display = 'none';
@@ -27366,7 +27393,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     }
     var count = supAppInviteEmails.length;
     supAppInviteModal.close();
-    showToast(count === 1 ? 'Invitation sent to ' + supAppInviteEmails[0] + '.' : 'Invitations sent to ' + count + ' suppliers.');
+    var noun = supAppInviteContext === 'applicant' ? 'applicants' : 'suppliers';
+    showToast(count === 1 ? 'Invitation sent to ' + supAppInviteEmails[0] + '.' : 'Invitations sent to ' + count + ' ' + noun + '.');
   });
 
   document.getElementById('supAppPagePrev').addEventListener('click', function () {
@@ -28346,7 +28374,35 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     document.getElementById('clientAvatarRing').style.background = source === 'app' ? '' : c.color;
     var activeChip = document.getElementById('clientActiveChip');
     if (activeChip) activeChip.style.display = source === 'app' ? 'none' : '';
+    var roleBadge = document.getElementById('clientRoleBadge');
+    if (roleBadge) roleBadge.style.display = source === 'app' ? 'none' : '';
+    var appStatusChip = document.getElementById('clientAppStatusChip');
+    if (appStatusChip) {
+      appStatusChip.style.display = source === 'app' ? '' : 'none';
+      if (source === 'app' && typeof supAppStatusClass === 'function' && typeof supAppStatusDisplayText === 'function') {
+        appStatusChip.className = 'supplier-approved-pill ' + supAppStatusClass(c.status);
+        appStatusChip.textContent = supAppStatusDisplayText(c.status);
+      }
+    }
+    var headerActionsView = document.getElementById('clientHeaderActionsView');
+    if (headerActionsView) headerActionsView.style.display = source === 'app' ? 'none' : '';
+    var statRow = document.getElementById('clientStatRow');
+    if (statRow) statRow.style.display = source === 'app' ? 'none' : '';
+    var lastActiveText = document.getElementById('clientLastActiveText');
+    if (lastActiveText) lastActiveText.style.display = source === 'app' ? 'none' : '';
+    var appContactRow = document.getElementById('clientAppContactRow');
+    if (appContactRow) {
+      appContactRow.style.display = source === 'app' ? 'flex' : 'none';
+      var emailText = document.getElementById('clientAppEmailText');
+      if (emailText) emailText.textContent = c.email || 'Not provided';
+      var phoneText = document.getElementById('clientAppPhoneText');
+      if (phoneText) phoneText.textContent = c.phone || 'Not provided';
+      var joinedText = document.getElementById('clientAppJoinedText');
+      if (joinedText) joinedText.textContent = c.joined || 'Not set';
+    }
     var appStickyBar = document.getElementById('clientAppStickyBar');
+    var showFilterEl = document.getElementById('clientShowFilter');
+    if (showFilterEl) showFilterEl.style.display = source === 'app' ? 'none' : '';
     if (appStickyBar) {
       appStickyBar.style.display = source === 'app' ? 'flex' : 'none';
       var stickyScore = document.getElementById('clientAppStickyScore');
