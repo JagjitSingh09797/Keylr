@@ -1562,6 +1562,15 @@
   .sup-settings-section-label { font-size: 11.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-body-muted); margin: 26px 0 10px; }
   .sup-settings-section-label:first-child { margin-top: 0; }
   .sup-settings-row { display: flex; align-items: center; gap: 14px; padding: 15px 18px; border: 1px solid var(--border-subtle); border-radius: 12px; margin-bottom: 10px; background: #fff; }
+  .sup-settings-about-card { border: 1px solid var(--border-subtle); border-radius: 12px; padding: 15px 18px; margin-bottom: 10px; background: #fff; }
+  .sup-legal-doc-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  @media (max-width: 640px) { .sup-legal-doc-row { grid-template-columns: 1fr; } }
+  .sup-legal-doc-card { display: flex; align-items: center; gap: 10px; padding: 13px 14px; border: 1px solid var(--border-subtle); border-radius: 10px; background: var(--surface-soft); text-decoration: none; transition: border-color 150ms ease-out, background-color 150ms ease-out; }
+  .sup-legal-doc-card:hover { border-color: var(--accent-blue); background: var(--icon-tint-bg); }
+  .sup-legal-doc-card .sldc-icon { width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0; background: var(--icon-tint-bg); color: var(--accent-blue); display: flex; align-items: center; justify-content: center; }
+  .sup-legal-doc-card .sldc-label { flex: 1; font-size: 12.5px; font-weight: 700; color: var(--text-heading); line-height: 1.3; }
+  .sup-legal-doc-card .sldc-arrow { color: var(--text-body-muted); flex-shrink: 0; }
+  .sup-legal-doc-card:hover .sldc-arrow { color: var(--accent-blue); }
   .sup-settings-row-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .sup-settings-row-icon.blue { background: var(--icon-tint-bg); color: var(--accent-blue); }
   .sup-settings-row-icon.green { background: #e3f8ea; color: #1a7a3e; }
@@ -2285,6 +2294,18 @@
     .dash-content { padding: 20px 16px 50px; }
   }
 
+  .dash-mobile-menu-btn {
+    display: none; flex-shrink: 0;
+    width: 38px; height: 38px; border-radius: 10px; background: #fff;
+    border: 1px solid var(--border-subtle); margin-right: 12px;
+    align-items: center; justify-content: center; cursor: pointer; color: var(--text-heading);
+  }
+  @media (max-width: 450px) {
+    .dash-sidebar { transform: translateX(-100%); transition: transform 220ms ease-out; }
+    .dash-sidebar.mobile-open { transform: translateX(0); box-shadow: 0 0 0 9999px rgba(8,13,22,0.45); }
+    .dash-mobile-menu-btn { display: flex; }
+  }
+
   /* =========================================================
      SUPPLIER DASHBOARD — unique components
   ========================================================== */
@@ -2583,6 +2604,7 @@
   .pm-custom-dd-menu[data-dd-menu="supAppVerification"].open { width: 180px; }
   .pm-custom-dd-menu[data-dd-menu="supVerification"].open { width: 180px; }
   .pm-custom-dd-menu[data-dd-menu="appDateJoined"].open { width: 160px; }
+  #supcalFilterMenu.open { width: 120px; left: auto; right: 0; }
   .pm-custom-dd-menu[data-dd-menu="pmDateJoined"].open { width: 160px; }
   .supapp-ms-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--text-heading); }
   .supapp-ms-item-nested { padding-left: 30px; font-size: 12.5px; color: var(--text-body-muted); }
@@ -3508,7 +3530,7 @@
   .sup-cert-detail-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
   .sup-cert-detail-head h4 { font-size: 14.5px; font-weight: 700; color: var(--text-heading); }
   .sup-cert-detail-head .scdh-badge { font-size: 10.5px; font-weight: 700; color: var(--accent-blue); background: var(--icon-tint-bg); padding: 3px 9px; border-radius: 999px; }
-  .sup-bg-check-card { border: 1px solid var(--border-subtle); border-radius: 12px; padding: 18px; margin-bottom: 16px; }
+  .sup-bg-check-card { border: 1px solid var(--border-subtle); border-radius: 12px; padding: 18px; margin-bottom: 16px; background: #fff; }
   .sup-bg-check-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
   .sup-bg-check-head h4 { font-size: 14.5px; font-weight: 700; color: var(--text-heading); }
   .sup-required-badge { font-size: 10.5px; font-weight: 700; color: #c0392b; background: #fdecea; padding: 3px 9px; border-radius: 999px; }
@@ -4736,6 +4758,180 @@
   /* Generic small confirmation modal (Log Out, etc.) — same visual language as the property delete modal */
   .confirm-modal-card { width: 100%; max-width: 420px; background: #fff; border-radius: 18px; padding: 32px; text-align: center; box-shadow: 0 30px 80px rgba(0,0,0,0.35); transform: translateY(18px) scale(0.98); opacity: 0; transition: transform 300ms cubic-bezier(0.16,1,0.3,1), opacity 300ms ease-out; }
   .modal-overlay.open .confirm-modal-card { transform: none; opacity: 1; }
+
+  /* ---- Supplier Calendar module ---- */
+  .supcal-tabs { display: flex; gap: 22px; border-bottom: 1px solid var(--border-subtle); margin: 18px 0 20px; }
+  .supcal-tab { display: flex; align-items: center; gap: 6px; padding: 0 0 12px; font-size: 13.5px; font-weight: 700; color: var(--text-body-muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+  .supcal-tab.active { color: var(--accent-blue); border-bottom-color: var(--accent-blue); }
+  .supcal-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+  .supcal-toolbar-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .supcal-today-btn { padding: 9px 16px; border-radius: 9px; border: 1.5px solid var(--border-subtle); background: #fff; font-size: 12.5px; font-weight: 700; color: var(--text-heading); cursor: pointer; font-family: inherit; transition: border-color 150ms ease-out, background-color 150ms ease-out; }
+  .supcal-today-btn:hover { border-color: var(--accent-blue); background: var(--icon-tint-bg); color: var(--accent-blue); }
+  .supcal-nav-btn { width: 34px; height: 34px; border-radius: 9px; border: 1.5px solid var(--border-subtle); background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-heading); flex-shrink: 0; }
+  .supcal-nav-btn:hover { border-color: #90a8c8; }
+  .supcal-date-label { font-size: 14px; font-weight: 800; color: var(--text-heading); min-width: 140px; text-align: center; }
+  .supcal-view-toggle { display: flex; background: var(--surface-soft); border-radius: 9px; padding: 3px; }
+  .supcal-view-toggle button { padding: 7px 16px; border-radius: 7px; border: none; background: none; font-size: 12.5px; font-weight: 700; color: var(--text-body-muted); cursor: pointer; font-family: inherit; }
+  .supcal-view-toggle button.active { background: #22447f; color: #fff; }
+  .supcal-body-row { display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
+  .supcal-grid-wrap { flex: 1; min-width: 280px; background: #fff; border: 1px solid var(--border-subtle); border-radius: 12px; overflow-x: auto; overscroll-behavior-x: contain; }
+  .supcal-upcoming-panel { flex: 1 1 400px; max-width: 100%; background: #fff; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 16px; }
+  .supcal-upcoming-head { display: flex; align-items: center; justify-content: space-between; font-size: 14px; font-weight: 800; color: var(--text-heading); margin-bottom: 10px; }
+  .supcal-upcoming-head a { font-size: 12px; font-weight: 700; color: var(--accent-blue); text-decoration: none; }
+  .supcal-upcoming-empty { font-size: 12.5px; color: var(--text-body-muted); text-align: center; padding: 20px 0; }
+  .supcal-tip-bar { margin-top: 14px; padding: 12px 16px; background: var(--surface-soft); border-radius: 10px; font-size: 12.5px; color: var(--text-body-muted); }
+
+  /* Month grid */
+  .supcal-month-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+  .supcal-month-dow { padding: 12px 10px; font-size: 11.5px; font-weight: 700; color: var(--text-body-muted); text-align: center; border-bottom: 1px solid var(--border-subtle); text-transform: uppercase; }
+  .supcal-month-cell { min-height: 110px; padding: 8px; border-right: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle); position: relative; }
+  .supcal-month-cell:nth-child(7n) { border-right: none; }
+  .supcal-month-cell .cell-date { font-size: 12.5px; font-weight: 700; color: var(--text-heading); margin-bottom: 6px; }
+  .supcal-month-cell.other-month .cell-date { color: #cbd5e1; }
+  .supcal-month-cell.is-today { background: var(--icon-tint-bg); }
+  .supcal-month-cell.is-today .cell-date { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: #22447f; color: #fff; }
+  .supcal-job-chip { display: block; font-size: 10.5px; font-weight: 600; padding: 3px 6px; border-radius: 5px; border-left: 2.5px solid; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+  .supcal-job-chip.confirmed { background: #e8f0f8; border-color: #22447f; color: #183060; }
+  .supcal-job-chip.scheduled { background: #e6eefc; border-color: #2563eb; color: #1e40af; }
+  .supcal-job-chip.completed { background: #eafaf0; border-color: #22c55e; color: #15803d; }
+  .supcal-more-link { font-size: 10.5px; font-weight: 700; color: var(--text-body-muted); cursor: pointer; }
+  @media (max-width: 500px) {
+    .supcal-month-cell .supcal-job-chip, .supcal-month-cell .supcal-more-link { display: none; }
+    .supcal-month-cell { cursor: pointer; }
+    .supcal-week-hourrow .supcal-job-chip { display: none; }
+  }
+  .supcal-month-cell.is-unavailable { background: #fef2f2; }
+  .supcal-unavail-chip { display: inline-block; font-size: 10px; font-weight: 700; color: #b91c1c; background: #fecaca; padding: 2px 7px; border-radius: 999px; margin-bottom: 4px; }
+  .supcal-mobile-jobs-list { margin-top: 12px; background: #fff; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 16px; }
+  .supcal-mobile-jobs-list .smjl-head { font-size: 13.5px; font-weight: 800; color: var(--text-heading); margin-bottom: 10px; }
+  .supcal-mobile-jobs-list .smjl-empty { font-size: 12.5px; color: var(--text-body-muted); text-align: center; padding: 16px 0; }
+  .supcal-mobile-jobs-list .smjl-job { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-top: 1px solid var(--border-subtle); cursor: pointer; }
+  .supcal-mobile-jobs-list .smjl-job:first-child { border-top: none; }
+  .supcal-mobile-jobs-list .smjl-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+  .supcal-mobile-jobs-list .smjl-job.confirmed .smjl-dot { background: #22447f; }
+  .supcal-mobile-jobs-list .smjl-job.scheduled .smjl-dot { background: #2563eb; }
+  .supcal-mobile-jobs-list .smjl-job.completed .smjl-dot { background: #22c55e; }
+  .supcal-mobile-jobs-list .smjl-time { font-size: 11.5px; font-weight: 700; color: var(--text-body-muted); }
+  .supcal-mobile-jobs-list .smjl-title { font-size: 12.5px; font-weight: 700; color: var(--text-heading); }
+  @media (max-width: 640px) {
+    .supcal-month-cell { min-height: 60px; padding: 4px; }
+    .supcal-month-dow { padding: 6px 2px; font-size: 9.5px; }
+    .supcal-job-chip { font-size: 9.5px; padding: 2px 4px; margin-bottom: 2px; }
+    .supcal-month-cell .cell-date { font-size: 11px; margin-bottom: 3px; }
+    .supcal-more-link { font-size: 9.5px; }
+    .supcal-date-label { min-width: auto; font-size: 12.5px; }
+    .supcal-toolbar-left { gap: 6px; }
+    .supcal-today-btn { padding: 7px 11px; font-size: 11.5px; }
+  }
+  @media (max-width: 500px) {
+    .supcal-month-cell { min-height: 44px; padding: 3px; }
+    .supcal-month-cell .cell-date { font-size: 10px; margin-bottom: 2px; }
+    .supcal-month-dow { padding: 5px 2px; font-size: 9px; }
+    .supcal-unavail-chip { font-size: 8px; padding: 1px 4px; }
+  }
+  .supcal-month-cell .supcal-job-dots { display: none; }
+  @media (max-width: 500px) {
+    .supcal-month-cell .supcal-job-dots { display: flex; gap: 3px; flex-wrap: wrap; }
+    .supcal-job-dots .jd { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .supcal-job-dots .jd.confirmed { background: #22447f; }
+    .supcal-job-dots .jd.scheduled { background: #2563eb; }
+    .supcal-job-dots .jd.completed { background: #22c55e; }
+  }
+
+  /* Job popover */
+  .supcal-popover { position: fixed; z-index: 500; width: 260px; max-width: calc(100vw - 24px); background: #fff; border-radius: 12px; box-shadow: 0 20px 50px rgba(16,24,40,0.22); padding: 16px; display: none; cursor: pointer; }
+  .supcal-popover.open { display: block; }
+  .supcal-popover .status-pill { display: inline-flex; font-size: 10.5px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: #eafaf0; color: #1a7a3e; margin-bottom: 8px; }
+  .supcal-popover .status-pill.confirmed { background: #e8f0f8; color: #183060; }
+  .supcal-popover .status-pill.scheduled { background: #e6eefc; color: #1e40af; }
+  .supcal-popover .status-pill.completed { background: #eafaf0; color: #1a7a3e; }
+  .supcal-popover .pop-title { font-size: 15px; font-weight: 800; color: var(--text-heading); margin-bottom: 10px; }
+  .supcal-popover .pop-row { display: flex; align-items: flex-start; gap: 8px; font-size: 12.5px; color: var(--text-body-muted); margin-bottom: 8px; }
+  .supcal-popover .pop-row svg { flex-shrink: 0; margin-top: 1px; color: var(--text-body-muted); }
+  .supcal-popover .pop-foot { border-top: 1px solid var(--border-subtle); margin-top: 8px; padding-top: 10px; font-size: 11.5px; color: var(--text-body-muted); text-align: center; }
+
+  /* Week grid */
+  .supcal-week-grid { display: grid; grid-template-columns: 56px repeat(7, 1fr); }
+  .supcal-week-dow { padding: 12px 4px; text-align: center; font-size: 11.5px; font-weight: 700; color: var(--text-body-muted); text-transform: uppercase; border-bottom: 1px solid var(--border-subtle); }
+  .supcal-week-dow .wd-num { display: block; font-size: 14px; font-weight: 800; color: var(--text-heading); margin-top: 2px; }
+  .supcal-week-dow.is-today { color: var(--accent-blue); }
+  .supcal-week-dow.is-today .wd-num { color: var(--accent-blue); }
+  .supcal-week-timecol { font-size: 10.5px; color: var(--text-body-muted); text-align: right; padding: 0 8px; position: relative; top: -6px; }
+  .supcal-week-hourrow { min-height: 52px; border-bottom: 1px solid var(--border-subtle); border-right: 1px solid var(--border-subtle); padding: 1px 0; }
+  .supcal-week-daycol.is-today { background: rgba(24,48,96,0.03); }
+
+  /* Empty day state */
+  .supcal-day-empty { text-align: center; padding: 60px 20px; }
+  .supcal-day-empty h3 { font-size: 16px; font-weight: 800; color: var(--text-heading); margin-bottom: 6px; }
+  .supcal-day-empty p { font-size: 13px; color: var(--text-body-muted); margin-bottom: 18px; }
+  .supcal-alldayrow { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--border-subtle); font-size: 12px; }
+  .supcal-alldayrow .label { font-weight: 700; color: var(--text-body-muted); }
+  .supcal-alldayrow .val { color: #cbd5e1; }
+
+  /* Availability tab */
+  .supcal-avail-head { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 16px; }
+  .supcal-avail-head-actions { display: flex; align-items: center; gap: 12px; }
+  .supcal-status-pill { display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid var(--border-subtle); border-radius: 10px; padding: 9px 14px; }
+  .supcal-status-pill .dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; flex-shrink: 0; }
+  .supcal-status-pill .sp-title { font-size: 12.5px; font-weight: 700; color: var(--text-heading); }
+  .supcal-status-pill .sp-sub { font-size: 11px; color: var(--text-body-muted); }
+  .supcal-avail-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 18px; }
+  .supcal-avail-card-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 8px; }
+  .supcal-avail-month-label { font-size: 15px; font-weight: 800; color: var(--text-heading); }
+  .supcal-unavail-legend { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text-body-muted); }
+  .supcal-unavail-legend .dot { width: 9px; height: 9px; border-radius: 3px; background: #fecaca; }
+  .supcal-avail-hint { font-size: 12px; color: var(--text-body-muted); margin-bottom: 14px; }
+  .supcal-avail-week-row { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
+  .supcal-day-card { border: 1.5px solid var(--border-subtle); border-radius: 10px; padding: 14px 8px; text-align: center; cursor: pointer; background: #fff; }
+  .supcal-day-card.selected { border-color: var(--accent-blue); box-shadow: 0 0 0 1px var(--accent-blue); }
+  .supcal-day-card.unavailable { background: #fef2f2; border-color: #fecaca; }
+  .supcal-day-card .dc-dow { font-size: 11px; font-weight: 700; color: var(--text-body-muted); text-transform: uppercase; }
+  .supcal-day-card .dc-num { font-size: 17px; font-weight: 800; color: var(--text-heading); margin: 4px 0; }
+  .supcal-day-card .dc-status { font-size: 11px; font-weight: 700; color: #1a7a3e; }
+  .supcal-day-card .dc-status.closed { color: var(--text-body-muted); }
+  .supcal-avail-month-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+  .supcal-avail-month-cell { min-height: 60px; padding: 8px; border-right: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle); font-size: 13px; font-weight: 700; color: var(--text-heading); cursor: pointer; }
+  .supcal-avail-month-cell:nth-child(7n) { border-right: none; }
+  .supcal-avail-month-cell.selected { background: var(--icon-tint-bg); }
+  .supcal-avail-month-cell.unavailable { background: #fef2f2; color: #b91c1c; position: relative; }
+  .supcal-avail-month-dot { position: absolute; bottom: 6px; right: 8px; width: 6px; height: 6px; border-radius: 50%; background: #ef4444; }
+  .supcal-avail-day-card { border: 1px solid var(--border-subtle); border-radius: 10px; padding: 18px; margin-top: 14px; }
+  .supcal-avail-day-title { font-size: 14px; font-weight: 800; color: var(--text-heading); margin-bottom: 12px; }
+  .supcal-avail-day-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-radius: 9px; font-size: 12.5px; font-weight: 700; margin-bottom: 8px; }
+  .supcal-avail-day-row.avail { background: #eafaf0; color: #1a7a3e; }
+  .supcal-avail-day-row.toggle { background: var(--surface-soft); color: var(--text-heading); cursor: pointer; }
+  .supcal-info-banner { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(12px); z-index: 900; display: flex; align-items: flex-start; gap: 12px; background: #fff; border: 1px solid var(--border-subtle); border-left: 4px solid var(--accent-blue); border-radius: 12px; padding: 14px 18px; box-shadow: 0 16px 40px rgba(16,24,40,0.18); max-width: 420px; opacity: 0; transition: opacity 200ms ease-out, transform 200ms ease-out; }
+  .supcal-info-banner.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .supcal-info-banner svg:first-child { color: var(--accent-blue); flex-shrink: 0; margin-top: 1px; }
+  .supcal-info-banner div { font-size: 13px; color: var(--text-heading); line-height: 1.5; }
+  .supcal-info-banner strong { font-weight: 700; }
+  .supcal-info-banner button { background: none; border: none; cursor: pointer; color: var(--text-body-muted); flex-shrink: 0; margin-left: auto; padding: 2px; }
+
+  .supcal-hours-card { flex: 1; background: #fff; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 18px; }
+  .supcal-hours-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .supcal-hours-title { font-size: 14px; font-weight: 800; color: var(--text-heading); }
+  .supcal-hours-sub { font-size: 11.5px; color: var(--text-body-muted); }
+  .supcal-hours-row { display: flex; align-items: center; justify-content: space-between; padding: 11px 0; border-top: 1px solid var(--border-subtle); font-size: 13px; }
+  .supcal-hours-row:first-child { border-top: none; }
+  .supcal-hours-row .day-name { font-weight: 700; color: var(--text-heading); }
+  .supcal-hours-row .day-time { font-weight: 700; color: var(--text-heading); }
+  .supcal-hours-row .day-time.closed { color: var(--text-body-muted); font-weight: 600; }
+
+  /* Modal form structure (shared, generic) */
+  .modal-card-head { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; border-bottom: 1px solid var(--border-subtle); }
+  .modal-card-head h3 { font-size: 16px; font-weight: 800; color: var(--text-heading); }
+  .modal-close-btn { width: 30px; height: 30px; border-radius: 8px; border: none; background: var(--surface-soft); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-body-muted); flex-shrink: 0; }
+  .modal-card-body { padding: 20px 22px; }
+  .modal-card-foot { display: flex; justify-content: flex-end; gap: 10px; padding: 16px 22px; border-top: 1px solid var(--border-subtle); }
+  #supcalEditHoursOverlay .modal-card, #supcalTimeOffOverlay .modal-card { width: 100%; background: #fff; border-radius: 16px; padding: 0; display: block; overflow: visible; box-shadow: 0 30px 80px rgba(0,0,0,0.3); transform: translateY(18px) scale(0.98); opacity: 0; transition: transform 300ms cubic-bezier(0.16,1,0.3,1), opacity 300ms ease-out; }
+  #supcalEditHoursOverlay.open .modal-card, #supcalTimeOffOverlay.open .modal-card { transform: none; opacity: 1; }
+  .supcal-hours-toggle-row { display: flex; align-items: center; gap: 14px; padding: 10px 0; }
+  .supcal-hours-toggle-row .day-label { width: 90px; flex-shrink: 0; font-size: 13px; font-weight: 700; color: var(--text-heading); }
+  .supcal-hours-toggle-row select.field-input { height: 36px; font-size: 12.5px; padding: 6px 10px; }
+  .supcal-time-dd-btn { justify-content: space-between; }
+  .supcal-time-dd-btn.disabled { opacity: 0.5; cursor: default; background: var(--surface-soft); }
+  .supcal-time-dd-menu { position: fixed; right: auto; max-height: 220px; overflow-y: auto; z-index: 600; }
+  .supcal-time-dd-menu .cdd-item { font-size: 12.5px; padding: 7px 10px; }
   .confirm-modal-icon { width: 64px; height: 64px; border-radius: 50%; background: var(--icon-tint-bg); color: var(--navy-900); display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; }
   .confirm-modal-title { font-size: 18px; font-weight: 800; color: var(--text-heading); margin-bottom: 10px; }
   .confirm-modal-desc { font-size: 13.5px; color: var(--text-body-muted); line-height: 1.6; margin-bottom: 22px; }
@@ -6215,7 +6411,7 @@
             <input class="field-input" type="text" id="supFullName" placeholder="Fern Whitfield">
           </div>
 
-          <div class="ob-row-2">
+          <div class="ob-row-2" id="supIdentityPhoneEmailRow">
             <div class="ob-field">
               <label for="supPhone">Phone number <span class="req-text">Required</span></label>
               <div class="phone-row">
@@ -7737,6 +7933,7 @@
                 <div class="pm-settings-tab-item active" data-settingstab="profile">Profile</div>
                 <div class="pm-settings-tab-item" data-settingstab="portfolio">Portfolio</div>
                 <div class="pm-settings-tab-item" data-settingstab="billingpayments">Payment Setup</div>
+                <div class="pm-settings-tab-item" data-settingstab="settings">Settings</div>
                 <button type="button" class="btn btn-primary" id="pmAcctEditBtn" style="margin-left:auto;flex-shrink:0;padding:9px 18px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4z"/></svg>Edit</button>
               </div>
 
@@ -7822,26 +8019,26 @@
                     <div class="detail-card-head"><div class="dch-left"><div class="dch-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div><h3>Contacts</h3></div></div>
                     <div class="detail-mini-grid-4col aev-view-only">
                       <div class="detail-mini-field" style="grid-column:span 4;"><div class="dmf-label" style="font-size:11px;font-weight:700;color:var(--text-body-muted);">CUSTOMER SUPPORT CONTACT</div></div>
-                      <div class="detail-mini-field"><div class="dmf-label">Full name</div><div class="dmf-value" data-tooltip="Thomas Davies">Thomas Davies</div></div>
-                      <div class="detail-mini-field"><div class="dmf-label">Job title</div><div class="dmf-value acct-view-empty">Not set</div></div>
-                      <div class="detail-mini-field"><div class="dmf-label">Phone</div><div class="dmf-value" data-tooltip="+44 7888 542811">+44 7888 542811</div></div>
-                      <div class="detail-mini-field"><div class="dmf-label">Email</div><div class="dmf-value" data-tooltip="pm.thomas.davies.6@keylr-seed.co.uk">pm.thomas.davies.6@keylr-seed.co.uk</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Full name</div><div class="dmf-value" data-tooltip="Thomas Davies">Thomas Davies</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>Job title</div><div class="dmf-value acct-view-empty">Not set</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Phone</div><div class="dmf-value" data-tooltip="+44 7888 542811">+44 7888 542811</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>Email</div><div class="dmf-value" data-tooltip="pm.thomas.davies.6@keylr-seed.co.uk">pm.thomas.davies.6@keylr-seed.co.uk</div></div>
                     </div>
                     <div class="supapp-card-divider"></div>
                     <div class="detail-mini-grid-4col aev-view-only">
                       <div class="detail-mini-field" style="grid-column:span 4;"><div class="dmf-label" style="font-size:11px;font-weight:700;color:var(--text-body-muted);">FINANCE &amp; INVOICING CONTACT</div></div>
-                      <div class="detail-mini-field"><div class="dmf-label">Full name</div><div class="dmf-value" data-tooltip="Thomas Davies">Thomas Davies</div></div>
-                      <div class="detail-mini-field"><div class="dmf-label">Job title</div><div class="dmf-value acct-view-empty">Not set</div></div>
-                      <div class="detail-mini-field"><div class="dmf-label">Phone</div><div class="dmf-value" data-tooltip="+44 7888 542811">+44 7888 542811</div></div>
-                      <div class="detail-mini-field"><div class="dmf-label">Email</div><div class="dmf-value" data-tooltip="pm.thomas.davies.6@keylr-seed.co.uk">pm.thomas.davies.6@keylr-seed.co.uk</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Full name</div><div class="dmf-value" data-tooltip="Thomas Davies">Thomas Davies</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>Job title</div><div class="dmf-value acct-view-empty">Not set</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Phone</div><div class="dmf-value" data-tooltip="+44 7888 542811">+44 7888 542811</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>Email</div><div class="dmf-value" data-tooltip="pm.thomas.davies.6@keylr-seed.co.uk">pm.thomas.davies.6@keylr-seed.co.uk</div></div>
                     </div>
                     <div class="supapp-card-divider"></div>
                     <div class="detail-mini-grid-4col aev-view-only">
                       <div class="detail-mini-field" style="grid-column:span 4;"><div class="dmf-label" style="font-size:11px;font-weight:700;color:var(--text-body-muted);">MANAGER / OFFICE CONTACT</div></div>
-                      <div class="detail-mini-field"><div class="dmf-label">Full name</div><div class="dmf-value" data-tooltip="Thomas Davies">Thomas Davies</div></div>
-                      <div class="detail-mini-field"><div class="dmf-label">Job title</div><div class="dmf-value acct-view-empty">Not set</div></div>
-                      <div class="detail-mini-field"><div class="dmf-label">Phone</div><div class="dmf-value" data-tooltip="+44 7888 542811">+44 7888 542811</div></div>
-                      <div class="detail-mini-field"><div class="dmf-label">Email</div><div class="dmf-value" data-tooltip="pm.thomas.davies.6@keylr-seed.co.uk">pm.thomas.davies.6@keylr-seed.co.uk</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Full name</div><div class="dmf-value" data-tooltip="Thomas Davies">Thomas Davies</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>Job title</div><div class="dmf-value acct-view-empty">Not set</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Phone</div><div class="dmf-value" data-tooltip="+44 7888 542811">+44 7888 542811</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>Email</div><div class="dmf-value" data-tooltip="pm.thomas.davies.6@keylr-seed.co.uk">pm.thomas.davies.6@keylr-seed.co.uk</div></div>
                     </div>
                   </div>
                 </div>
@@ -8041,6 +8238,49 @@
                       <p style="font-size:12.5px;color:var(--text-body-muted);">Update your card details or switch the bank account on file. Opens the Stripe customer portal in a new tab.</p>
                     </div>
                     <button type="button" class="btn btn-primary" id="stgOpenStripePortalBtn" style="flex-shrink:0;">Open Portal <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Settings tab -->
+              <div id="pmSettingsPanelSettings" style="display:none;">
+                <div style="margin-top:20px;">
+                  <div class="sup-settings-section-label">Support</div>
+                  <div class="sup-settings-row clickable" id="pmSettingsHelpCentreRow">
+                    <div class="sup-settings-row-icon gray"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 015 .5c0 1.5-2 1.7-2 3.3"/><path d="M12 17h.01"/></svg></div>
+                    <div class="sup-settings-row-body">
+                      <div class="sup-settings-row-title">Help centre</div>
+                      <div class="sup-settings-row-desc">Browse guides and contact support</div>
+                    </div>
+                    <svg class="sup-settings-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                  </div>
+
+                  <div class="sup-settings-about-card" style="margin-top:10px;">
+                    <div class="sup-settings-row" style="padding:0;border:none;margin-bottom:14px;">
+                      <div class="sup-settings-row-icon gray"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M12 11v5"/></svg></div>
+                      <div class="sup-settings-row-body">
+                        <div class="sup-settings-row-title">About Keylr</div>
+                        <div class="sup-settings-row-desc">Terms, privacy, version info</div>
+                      </div>
+                      <div class="sup-settings-row-version">v1.0.0</div>
+                    </div>
+                    <div class="sup-legal-doc-row">
+                      <a class="sup-legal-doc-card" href="https://www.keylr.com/legal/terms" target="_blank" rel="noopener">
+                        <div class="sldc-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6M9 9h1"/></svg></div>
+                        <div class="sldc-label">Terms &amp; Conditions</div>
+                        <svg class="sldc-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+                      </a>
+                      <a class="sup-legal-doc-card" href="https://www.keylr.com/legal/privacy" target="_blank" rel="noopener">
+                        <div class="sldc-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                        <div class="sldc-label">Privacy Policy</div>
+                        <svg class="sldc-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+                      </a>
+                      <a class="sup-legal-doc-card" href="https://www.keylr.com/legal/platform-agreement" target="_blank" rel="noopener">
+                        <div class="sldc-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 1-1 3-9 9-8-6-9-8-9-9V5l9-3 9 3z"/></svg></div>
+                        <div class="sldc-label">Platform Agreement</div>
+                        <svg class="sldc-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -8901,6 +9141,7 @@
       </div>
 
       <div class="dash-topbar">
+        <button type="button" class="dash-mobile-menu-btn" id="supMobileMenuBtn" aria-label="Open menu"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
         <div>
           <h1 id="supDashGreeting">Good afternoon, Fern 👋</h1>
           <div class="dash-content-sub" id="supDashTopbarSub">Tuesday, 14 July 2026</div>
@@ -9285,7 +9526,167 @@
             </div>
           </div>
 
-          <!-- ============ SUPPLIER PROFILE SETTINGS VIEW ============ -->
+          <!-- ============ SUPPLIER CALENDAR VIEW ============ -->
+          <div id="supCalendarView" style="display:none;">
+            <div class="dash-header" style="align-items:flex-start;">
+              <div>
+                <h1 style="font-size:22px;font-weight:800;color:var(--text-heading);margin-bottom:4px;">Calendar</h1>
+                <p style="font-size:13.5px;color:var(--text-body-muted);">Manage your jobs and availability.</p>
+              </div>
+            </div>
+            <div class="supcal-tabs">
+              <div class="supcal-tab active" data-supcal-tab="schedule"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Calendar</div>
+              <div class="supcal-tab" data-supcal-tab="availability"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Availability</div>
+            </div>
+
+            <!-- Schedule panel -->
+            <div id="supcalPanelSchedule">
+              <div class="supcal-toolbar">
+                <div class="supcal-toolbar-left">
+                  <button type="button" class="supcal-today-btn" id="supcalTodayBtn">Today</button>
+                  <button type="button" class="supcal-nav-btn" id="supcalPrevBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+                  <div class="supcal-date-label" id="supcalDateLabel">July 2026</div>
+                  <button type="button" class="supcal-nav-btn" id="supcalNextBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+                  <div class="supcal-view-toggle">
+                    <button type="button" class="active" data-supcal-view="week">Week</button>
+                    <button type="button" data-supcal-view="month">Month</button>
+                  </div>
+                </div>
+                <div class="pm-filter-field" style="width:auto;">
+                  <button type="button" class="pm-custom-dd-btn" id="supcalFilterBtn" style="width:auto;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg><span class="cdd-value">Filter</span></button>
+                  <div class="pm-custom-dd-menu" id="supcalFilterMenu">
+                    <div class="cdd-item selected" data-supcal-filter="all">All Jobs</div>
+                    <div class="cdd-item" data-supcal-filter="confirmed">Confirmed</div>
+                    <div class="cdd-item" data-supcal-filter="scheduled">Scheduled</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="supcal-grid-wrap" id="supcalGridWrap"></div>
+              <div class="supcal-mobile-jobs-list" id="supcalMobileJobsList" style="display:none;"></div>
+
+              <div class="supcal-tip-bar"><strong>Tip:</strong> Switch to the Availability tab to add time off or update your working hours.</div>
+            </div>
+
+            <!-- Availability panel -->
+            <div id="supcalPanelAvailability" style="display:none;">
+              <div class="supcal-avail-head">
+                <div>
+                  <h2 style="font-size:19px;font-weight:800;color:var(--text-heading);margin-bottom:4px;">Availability</h2>
+                  <p style="font-size:13px;color:var(--text-body-muted);">Manage your working availability and time off.</p>
+                </div>
+                <div class="supcal-avail-head-actions">
+                  <div class="supcal-status-pill"><span class="dot"></span><div><div class="sp-title">Available</div><div class="sp-sub">Open to new job requests</div></div></div>
+                  <button type="button" class="btn btn-primary" id="supcalAddTimeOffBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Add Time Off</button>
+                </div>
+              </div>
+
+              <div class="supcal-avail-card">
+                <div class="supcal-avail-card-head">
+                  <div class="supcal-avail-month-label" id="supcalAvailMonthLabel">July 2026</div>
+                  <div style="display:flex;align-items:center;gap:14px;">
+                    <span class="supcal-unavail-legend"><span class="dot"></span>Unavailable</span>
+                    <div class="supcal-view-toggle">
+                      <button type="button" data-supcal-avail-view="month">Month</button>
+                      <button type="button" class="active" data-supcal-avail-view="week">Week</button>
+                      <button type="button" data-supcal-avail-view="day">Day</button>
+                    </div>
+                  </div>
+                </div>
+                <p class="supcal-avail-hint" id="supcalAvailHint">Tap a day to mark it unavailable. Use Add Time Off for longer periods.</p>
+                <div id="supcalAvailBody"></div>
+              </div>
+
+              <div class="supcal-body-row" style="margin-top:16px;align-items:stretch;">
+                <div class="supcal-hours-card">
+                  <div class="supcal-hours-head">
+                    <div><div class="supcal-hours-title">Working Hours</div><div class="supcal-hours-sub">Your default weekly availability.</div></div>
+                    <button type="button" class="btn btn-secondary-light" id="supcalEditHoursBtn">Edit</button>
+                  </div>
+                  <div id="supcalHoursList"></div>
+                </div>
+                <div class="supcal-upcoming-panel" style="flex:0 0 280px;">
+                  <div class="supcal-upcoming-head"><span>Upcoming Time Off</span></div>
+                  <div class="supcal-upcoming-empty" id="supcalTimeOffList">No time off scheduled.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Edit Working Hours modal -->
+          <div class="modal-overlay" id="supcalEditHoursOverlay">
+            <div class="modal-card" style="max-width:520px;">
+              <div class="modal-card-head"><h3>Edit Working Hours</h3><button type="button" class="modal-close-btn" id="supcalEditHoursCloseBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+              <div class="modal-card-body" id="supcalEditHoursBody" style="max-height:60vh;overflow-y:auto;"></div>
+              <div class="modal-card-foot">
+                <button type="button" class="btn btn-secondary-light" id="supcalEditHoursCancelBtn">Cancel</button>
+                <button type="button" class="btn btn-primary" id="supcalEditHoursSaveBtn">Save</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mark Time Off modal -->
+          <div class="modal-overlay" id="supcalTimeOffOverlay">
+            <div class="modal-card" style="max-width:460px;">
+              <div class="modal-card-head"><h3>Mark Time Off</h3><button type="button" class="modal-close-btn" id="supcalTimeOffCloseBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+              <div class="modal-card-body">
+                <div style="display:flex;gap:12px;">
+                  <div class="pm-filter-field" style="flex:1;">
+                    <div class="pff-legend-wrap"><label>From</label></div>
+                    <button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="supcalTimeOffFrom" style="width:100%;height:38px;">
+                      <span class="cdd-value cal-value placeholder" data-cal-text="supcalTimeOffFrom">dd/mm/yyyy</span>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                    </button>
+                    <div class="pm-cal-popup" data-cal-popup="supcalTimeOffFrom">
+                      <div class="pm-cal-head">
+                        <button type="button" class="pm-cal-month-label" data-cal-monthlabel="supcalTimeOffFrom"><span data-cal-monthtext="supcalTimeOffFrom"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                        <div class="pm-cal-nav">
+                          <button type="button" class="pm-cal-nav-btn" data-cal-prev="supcalTimeOffFrom" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+                          <button type="button" class="pm-cal-nav-btn" data-cal-next="supcalTimeOffFrom" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
+                        </div>
+                      </div>
+                      <div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
+                      <div class="pm-cal-grid" data-cal-grid="supcalTimeOffFrom"></div>
+                      <div class="pm-cal-foot">
+                        <button type="button" class="pm-cal-link" data-cal-clear="supcalTimeOffFrom">Clear</button>
+                        <button type="button" class="pm-cal-link" data-cal-today="supcalTimeOffFrom">Today</button>
+                      </div>
+                    </div>
+                    <input type="hidden" id="supcalTimeOffFromInput">
+                  </div>
+                  <div class="pm-filter-field" style="flex:1;">
+                    <div class="pff-legend-wrap"><label>To</label></div>
+                    <button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="supcalTimeOffTo" style="width:100%;height:38px;">
+                      <span class="cdd-value cal-value placeholder" data-cal-text="supcalTimeOffTo">dd/mm/yyyy</span>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                    </button>
+                    <div class="pm-cal-popup" data-cal-popup="supcalTimeOffTo">
+                      <div class="pm-cal-head">
+                        <button type="button" class="pm-cal-month-label" data-cal-monthlabel="supcalTimeOffTo"><span data-cal-monthtext="supcalTimeOffTo"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                        <div class="pm-cal-nav">
+                          <button type="button" class="pm-cal-nav-btn" data-cal-prev="supcalTimeOffTo" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+                          <button type="button" class="pm-cal-nav-btn" data-cal-next="supcalTimeOffTo" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
+                        </div>
+                      </div>
+                      <div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
+                      <div class="pm-cal-grid" data-cal-grid="supcalTimeOffTo"></div>
+                      <div class="pm-cal-foot">
+                        <button type="button" class="pm-cal-link" data-cal-clear="supcalTimeOffTo">Clear</button>
+                        <button type="button" class="pm-cal-link" data-cal-today="supcalTimeOffTo">Today</button>
+                      </div>
+                    </div>
+                    <input type="hidden" id="supcalTimeOffToInput">
+                  </div>
+                </div>
+              </div>
+              <div class="modal-card-foot">
+                <button type="button" class="btn btn-secondary-light" id="supcalTimeOffCancelBtn">Cancel</button>
+                <button type="button" class="btn btn-primary" id="supcalTimeOffSaveBtn" disabled>Save</button>
+              </div>
+            </div>
+          </div>
+
+
           <div id="supProfileSettingsView" style="display:none;">
             <div class="dash-section">
               <div class="dash-header">
@@ -9341,7 +9742,24 @@
 
                   <div class="detail-mini-grid-3col aev-view-only" id="supAcctInfoGrid">
                     <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Full name</div><div class="dmf-value" id="supProfileFullNameView">Liam Greenwood</div></div>
-                    <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>Email address</div><div class="dmf-value" id="supProfileEmailView">liam.greenwood@keylr-demo.co.uk</div></div>
+                    <div class="detail-mini-field" id="supAcctTopEmailFieldWrap">
+                      <div class="dmf-label" style="display:flex;align-items:center;gap:12px;">
+                        <span style="display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>Email address</span>
+                        <span style="font-size:11px;font-weight:700;color:var(--accent-blue);cursor:pointer;text-decoration:underline;" id="supAcctTopChangeEmailLink">Change Email</span>
+                      </div>
+                      <div class="dmf-value" id="supProfileEmailView">liam.greenwood@keylr-demo.co.uk</div>
+                      <div id="supAcctTopChangeEmailForm" style="display:none;margin-top:8px;">
+                        <div style="display:flex;align-items:flex-start;gap:8px;background:var(--surface-soft);border-radius:8px;padding:10px 12px;margin-bottom:10px;">
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1a7a3e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px;"><path d="M20 6L9 17l-5-5"/></svg>
+                          <span style="font-size:12px;color:var(--text-body-muted);">A confirmation email has been sent to your current address<span id="supAcctTopChangeEmailOldAddr"></span>. Enter your new email below to update it.</span>
+                        </div>
+                        <input type="email" class="field-input" placeholder="New email address" id="supAcctTopNewEmailInput" style="font-size:13.5px;">
+                        <div style="display:flex;gap:8px;margin-top:8px;">
+                          <button type="button" class="btn btn-primary" id="supAcctTopSendEmailVerifyBtn" style="padding:7px 14px;font-size:12.5px;">Update Email</button>
+                          <button type="button" class="btn btn-secondary-light" id="supAcctTopCancelChangeEmailBtn" style="padding:7px 14px;font-size:12.5px;">Cancel</button>
+                        </div>
+                      </div>
+                    </div>
                     <div class="detail-mini-field" id="supAcctMobileFieldWrap">
                       <div class="dmf-label" style="display:flex;align-items:center;gap:12px;">
                         <span style="display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Mobile number</span>
@@ -10440,6 +10858,29 @@
                     </div>
                   </div>
 
+                  <div class="ob-card-section" style="margin-bottom:16px;">
+                    <div class="ocs-head">
+                      <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 15h6M9 11h3"/></svg></div>
+                      <div class="ocs-title">Self-billing agreement</div>
+                      <span class="version-badge" style="margin-left:auto;">v1 · Current</span>
+                    </div>
+                    <div class="ocs-desc">So we can pay you, Keylr issues VAT invoices on your behalf for each period's completed jobs.</div>
+
+                    <div class="callout callout-success" style="margin-bottom:14px;">
+                      <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                      <div class="callout-body" style="font-weight:700;">Signed as <span id="supPaymentSelfBillingName">Fern Whitfield</span> · 14 Jun 2026</div>
+                    </div>
+
+                    <div class="agreement-link-row" id="supPaymentReadAgreementRow">
+                      <div class="alr-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 15h6M9 11h3"/></svg></div>
+                      <div>
+                        <div class="alr-title">Read the full self-billing agreement</div>
+                        <div class="alr-sub">Opens in a new tab</div>
+                      </div>
+                      <span class="alr-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></span>
+                    </div>
+                  </div>
+
                   <div class="ob-card-section" style="margin-bottom:0;">
                     <div class="ocs-head">
                       <div class="ocs-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
@@ -10502,13 +10943,32 @@
                     </div>
                     <svg class="sup-settings-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
                   </div>
-                  <div class="sup-settings-row">
-                    <div class="sup-settings-row-icon gray"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M12 11v5"/></svg></div>
-                    <div class="sup-settings-row-body">
-                      <div class="sup-settings-row-title">About Keylr</div>
-                      <div class="sup-settings-row-desc">Terms, privacy, version info</div>
+                  <div class="sup-settings-about-card">
+                    <div class="sup-settings-row" style="padding:0;border:none;margin-bottom:14px;">
+                      <div class="sup-settings-row-icon gray"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M12 11v5"/></svg></div>
+                      <div class="sup-settings-row-body">
+                        <div class="sup-settings-row-title">About Keylr</div>
+                        <div class="sup-settings-row-desc">Terms, privacy, version info</div>
+                      </div>
+                      <div class="sup-settings-row-version">v1.0.0</div>
                     </div>
-                    <div class="sup-settings-row-version">v1.0.0</div>
+                    <div class="sup-legal-doc-row">
+                      <a class="sup-legal-doc-card" href="https://www.keylr.com/legal/terms" target="_blank" rel="noopener">
+                        <div class="sldc-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6M9 9h1"/></svg></div>
+                        <div class="sldc-label">Terms &amp; Conditions</div>
+                        <svg class="sldc-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+                      </a>
+                      <a class="sup-legal-doc-card" href="https://www.keylr.com/legal/privacy" target="_blank" rel="noopener">
+                        <div class="sldc-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                        <div class="sldc-label">Privacy Policy</div>
+                        <svg class="sldc-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+                      </a>
+                      <a class="sup-legal-doc-card" href="https://www.keylr.com/legal/platform-agreement" target="_blank" rel="noopener">
+                        <div class="sldc-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 1-1 3-9 9-8-6-9-8-9-9V5l9-3 9 3z"/></svg></div>
+                        <div class="sldc-label">Platform Agreement</div>
+                        <svg class="sldc-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+                      </a>
+                    </div>
                   </div>
 
                   <div class="sup-settings-section-label">Session</div>
@@ -11546,7 +12006,7 @@
                 <div class="pm-tab-pills" id="supTabPills">
                   <div class="pm-tab-pill" data-filter="all">All</div>
                   <div class="pm-tab-pill active" data-filter="approved">Approved</div>
-                  <div class="pm-tab-pill" data-filter="suspended">Suspended</div>
+                  <div class="pm-tab-pill" data-filter="archived">Archived</div>
                 </div>
                 <div class="pm-count-actions">
                   <span class="pm-count-text" id="supResultCount">Showing 25 of 25</span>
@@ -12768,10 +13228,11 @@
 
             <div class="sup-sticky-bar" id="supStickyBar">
               <span class="ssb-score"><span class="dot"></span>Compliance score: <span id="supStickyScore">73%</span><span class="dot-sep"></span><span id="supStickyChecks">8/11 checks passed</span></span>
-              <button type="button" class="sup-deactivate-btn-full" id="supDeactivateBtn2" style="width:auto;padding:9px 20px;">Deactivate</button>
+              <button type="button" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 20px;border-radius:10px;background:#64748b;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;border:none;" id="supArchiveBtn2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13V7a2 2 0 00-2-2H6a2 2 0 00-2 2v6M4 13h16v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6zM10 17h4"/></svg>Archive</button>
+              <button type="button" style="display:none;align-items:center;justify-content:center;gap:7px;padding:9px 20px;border-radius:10px;background:#1a7a3e;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;border:none;" id="supUnarchiveBtn2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>Unarchive</button>
               <div id="supApplicantActionBtns" style="display:none;gap:10px;">
                 <button type="button" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 20px;border-radius:10px;background:#1a7a3e;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;" id="supApplicantApproveBtn2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Approve</button>
-                <button type="button" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 20px;border-radius:10px;background:#64748b;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;border:none;" id="supApplicantRejectBtn2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13V7a2 2 0 00-2-2H6a2 2 0 00-2 2v6M4 13h16v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6zM10 17h4"/></svg>Archive</button>
+                <button type="button" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 20px;border-radius:10px;background:#64748b;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;border:none;" id="supApplicantRejectBtn2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13V7a2 2 0 00-2-2H6a2 2 0 00-2 2v6M4 13h16v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6zM10 17h4"/></svg><span id="supApplicantRejectBtnText">Archive</span></button>
               </div>
             </div>
           </div>
@@ -13305,6 +13766,14 @@
                   <button type="button" class="chat-send-btn" id="chatSendBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>Send</button>
                 </div>
                 <div class="chat-input-hint">Enter to send<span class="dot-sep"></span>Shift + Enter for a new line<span class="dot-sep"></span>PNG, JPEG, WEBP, PDF up to 10 MB.</div>
+              </div>
+            </div>
+
+            <div class="sup-sticky-bar" id="clientAppStickyBar" style="display:none;">
+              <span class="ssb-score"><span class="dot"></span>Profile completion: <span id="clientAppStickyScore">25%</span></span>
+              <div style="display:flex;gap:10px;">
+                <button type="button" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 20px;border-radius:10px;background:#1a7a3e;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;border:none;" id="clientAppApproveBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Approve</button>
+                <button type="button" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 20px;border-radius:10px;background:#64748b;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;border:none;" id="clientAppArchiveBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13V7a2 2 0 00-2-2H6a2 2 0 00-2 2v6M4 13h16v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6zM10 17h4"/></svg>Archive</button>
               </div>
             </div>
           </div>
@@ -17293,7 +17762,7 @@
 
   function switchPMSettingsTab(key) {
     document.querySelectorAll('#pmSettingsTabs .pm-settings-tab-item').forEach(function (t) { t.classList.toggle('active', t.getAttribute('data-settingstab') === key); });
-    ['profile', 'portfolio', 'billingpayments'].forEach(function (k) {
+    ['profile', 'portfolio', 'billingpayments', 'settings'].forEach(function (k) {
       var panel = document.getElementById('pmSettingsPanel' + k.charAt(0).toUpperCase() + k.slice(1));
       panel.style.display = k === key ? '' : 'none';
       if (k === key) {
@@ -17462,10 +17931,10 @@
   var supObProgressFill = document.getElementById('supObProgressFill');
   var supObContent = supObApp.querySelector('.ob-content');
   var supObCurrentStep = 1;
-  var TOTAL_SUP_OB_STEPS = 7;
   var supObEditFromSettings = false;
   var supObEditSnapshot = null;
   var SUP_OB_FIELD_MAP = {
+    businessType: { label: 'How do you operate', section: 'Business Type', fieldType: 'business-type' },
     fullName: { label: 'Full legal name', section: 'Identity' },
     homeAddress: { label: 'Home address', section: 'Identity' },
     nationality: { label: 'Nationality', section: 'Identity', fieldType: 'nationality', selectOptions: ['British', 'Austrian', 'Irish', 'Polish', 'Other'] },
@@ -17475,6 +17944,7 @@
     dob: { label: 'Date of birth', section: 'Identity', fieldType: 'date' },
     proofAddressFile: { label: 'Proof of Address document', section: 'Identity', isDocument: true },
     sectors: { label: 'Sectors served', section: 'Tell us about yourself', fieldType: 'sectors', isArray: true },
+    selectedRoles: { label: 'Categories & roles', section: 'Categories & Roles', fieldType: 'category-roles', isArray: true },
     pliProvider: { label: 'PL Insurance provider', section: 'Insurance' },
     pliPolicyNumber: { label: 'PL Policy number', section: 'Insurance' },
     piProvider: { label: 'PI Insurance provider', section: 'Insurance' },
@@ -17482,16 +17952,35 @@
     dbsLevel: { label: 'DBS level', section: 'Background Check', fieldType: 'select', selectOptions: ['Basic', 'Enhanced'] },
     rightToWork: { label: 'Right to Work', section: 'Background Check', fieldType: 'right-to-work' },
     vatRegistered: { label: 'VAT registered', section: 'Business Legitimacy', fieldType: 'vat' },
+    companyFullName: { label: 'Company full name', section: 'Company Identity' },
+    companyPhone: { label: 'Company phone number', section: 'Company Identity' },
+    companyEmail: { label: 'Company email address', section: 'Company Identity' },
     companyRegName: { label: 'Registered company name', section: 'Company Identity' },
     companyRegNo: { label: 'Company registration number', section: 'Company Identity' },
     companyTradingName: { label: 'Trading name', section: 'Company Identity' },
+    companyType: { label: 'Company type', section: 'Company Identity' },
+    companyIncorpDate: { label: 'Incorporation date', section: 'Company Identity' },
     companyRegOffice: { label: 'Registered office address', section: 'Company Identity' },
     companyOperAddress: { label: 'Operational address', section: 'Company Identity' },
+    companyTin: { label: 'Tax Identification Number', section: 'Company Identity' },
+    companyProofAddressFile: { label: 'Proof of Address document', section: 'Company Identity', isDocument: true },
+    pscIsSelf: { label: 'PSC is the applicant', section: 'Company Identity', fieldType: 'toggle' },
     pscName: { label: 'PSC full legal name', section: 'Company Identity' },
     pscPhone: { label: 'PSC phone number', section: 'Company Identity' },
-    pscEmail: { label: 'PSC email address', section: 'Company Identity' }
+    pscEmail: { label: 'PSC email address', section: 'Company Identity' },
+    pscDob: { label: 'PSC date of birth', section: 'Company Identity', fieldType: 'date' },
+    pscConfirmed: { label: 'PSC details confirmed', section: 'Company Identity', fieldType: 'toggle' }
   };
   var supObReturnTabKey = 'profile';
+
+  var supObOriginalBusinessType = null;
+  function supObIsBusinessTypeChanging() {
+    if (!supObEditFromSettings || !supObOriginalBusinessType) return false;
+    var companyTile = document.querySelector('#businessTypeTiles .choice-tile[data-value="company"]');
+    var isCompanyNow = companyTile && companyTile.classList.contains('selected');
+    var currentVal = isCompanyNow ? 'company' : 'sole-trader';
+    return currentVal !== supObOriginalBusinessType;
+  }
 
   // Categories & Roles sits right after Identity, before Insurance, for both Sole Trader and Company.
   var SUP_OB_ORDER_SOLE = ['portfolio', 'identity', 'categories', 'insurance', 'background', 'payment', 'setup-profile'];
@@ -17500,7 +17989,13 @@
   function currentSupObStepOrder() {
     var companyTile = document.querySelector('#businessTypeTiles .choice-tile[data-value="company"]');
     var isCompany = companyTile && companyTile.classList.contains('selected');
-    return isCompany ? SUP_OB_ORDER_COMPANY : SUP_OB_ORDER_SOLE;
+    var baseOrder = isCompany ? SUP_OB_ORDER_COMPANY : SUP_OB_ORDER_SOLE;
+    // When editing from Account Settings (not switching business type), Setup Profile is edited
+    // directly from the Portfolio tab instead, so it's dropped from the wizard entirely.
+    if (supObEditFromSettings && !supObIsBusinessTypeChanging()) {
+      return baseOrder.filter(function (key) { return key !== 'setup-profile'; });
+    }
+    return baseOrder;
   }
 
   function findSupStepEl(key) {
@@ -17517,18 +18012,19 @@
 
     supObNextBtn.hidden = false;
     var label = step === 1 ? 'Setup' : (step >= 5 ? 'Profile' : 'Verification');
-    var isLast = step === TOTAL_SUP_OB_STEPS;
+    var isLast = step === order.length;
     supObStepLabel.textContent = label;
     supObNextBtn.innerHTML = (isLast ? 'Submit for Review' : 'Continue') + ' <span class="arrow">→</span>';
     supObBackBtn.hidden = step === 1;
-    document.getElementById('supObSaveSkipBtn').style.display = supObEditFromSettings ? 'inline-flex' : 'none';
-    supObProgressFill.style.width = ((step / TOTAL_SUP_OB_STEPS) * 100) + '%';
+    var canSkip = supObEditFromSettings && !supObIsBusinessTypeChanging();
+    document.getElementById('supObSaveSkipBtn').style.display = canSkip ? 'inline-flex' : 'none';
+    supObProgressFill.style.width = ((step / order.length) * 100) + '%';
 
     var stepper = document.getElementById('supProfileDotStepper');
     var profileKeys = ['payment', 'setup-profile'];
     var allDots = stepper.querySelectorAll('.stepper-dot');
     if (allDots[2]) allDots[2].style.display = 'none';
-    if (profileKeys.indexOf(key) !== -1) {
+    if (order.indexOf('setup-profile') !== -1 && profileKeys.indexOf(key) !== -1) {
       stepper.classList.add('show');
       var currentPos = order.indexOf(key);
       Array.prototype.slice.call(allDots, 0, profileKeys.length).forEach(function (dot, i) {
@@ -17713,8 +18209,30 @@
   }
 
   supObNextBtn.addEventListener('click', function () {
-    if (supObCurrentStep < TOTAL_SUP_OB_STEPS) {
+    if (supObCurrentStep < currentSupObStepOrder().length) {
       goToSupObStep(supObCurrentStep + 1);
+    } else if (supObEditFromSettings) {
+      // Editing from Account Settings and completed every step (e.g. a business-type switch) —
+      // submit the full set of edits as a change request for admin review, same as Save & Skip.
+      supObApp.classList.remove('visible');
+      setTimeout(function () {
+        supObApp.classList.remove('active');
+        document.body.style.overflow = '';
+        supObCollectWizardData();
+        var newBatch = supObBuildChangeRequestFromEdits();
+        if (newBatch) {
+          if (typeof seedChangeRequestsIfNeeded === 'function') seedChangeRequestsIfNeeded({ name: SUP_OWN_DEMO_NAME });
+          if (!supplierChangeRequests[SUP_OWN_DEMO_NAME]) supplierChangeRequests[SUP_OWN_DEMO_NAME] = [];
+          supplierChangeRequests[SUP_OWN_DEMO_NAME].push(newBatch);
+          if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
+          showToast(newBatch.changes.length + ' change' + (newBatch.changes.length === 1 ? '' : 's') + ' submitted for review.');
+        } else {
+          showToast('No changes to submit.');
+        }
+        supObEditFromSettings = false;
+        supObEditSnapshot = null;
+        switchSupSettingsTab(newBatch ? 'requests' : supObReturnTabKey, newBatch ? newBatch.id : undefined);
+      }, 200);
     } else {
       // Final step submit — go straight to the Supplier Dashboard, landing on Account Settings
       supObApp.classList.remove('visible');
@@ -17913,12 +18431,15 @@
       tile.classList.toggle('selected', tile.getAttribute('data-value') === targetVal);
     });
     supplierBusinessType = targetVal;
+    supObOriginalBusinessType = targetVal;
     if (typeof updateSupProfileTypeChip === 'function') updateSupProfileTypeChip();
     prefillSupObFromSettings();
     supObCollectWizardData();
     supObEditSnapshot = JSON.parse(JSON.stringify(supplierCapturedData));
     supObEditFromSettings = true;
     supObReturnTabKey = settingsTabKey;
+    var phoneEmailRow = document.getElementById('supIdentityPhoneEmailRow');
+    if (phoneEmailRow) phoneEmailRow.style.display = 'none';
     supObApp.classList.add('active');
     document.body.style.overflow = 'hidden';
     requestAnimationFrame(function () { supObApp.classList.add('visible'); });
@@ -17929,36 +18450,91 @@
 
   function supObValueToDisplay(key, val) {
     var map = SUP_OB_FIELD_MAP[key];
+    if (map && map.fieldType === 'category-roles') {
+      if (!Array.isArray(val) || !val.length) return '';
+      return val.map(function (item) { return item.category + ': ' + item.role; }).join(', ');
+    }
     if (map && map.isArray) return Array.isArray(val) ? val.join(', ') : (val || '');
     if (map && map.fieldType === 'toggle') return val ? 'On' : 'Off';
+    if (map && map.fieldType === 'business-type') return val === 'company' ? 'Company' : (val === 'sole-trader' ? 'Sole Trader' : (val || ''));
     if (typeof val === 'boolean') return val ? 'Yes' : 'No';
     return val || 'Not set';
   }
+  var suprqConvIdCounter = 0;
   function supObBuildChangeRequestFromEdits() {
     if (!supObEditSnapshot) return null;
     var changes = [];
+    var isBizTypeChange = typeof supObIsBusinessTypeChanging === 'function' && supObIsBusinessTypeChanging();
+    // When converting business type, the whole profile is being re-verified for the new status,
+    // not just what changed — so these sections are always included in full, not just diffs.
+    var ALWAYS_INCLUDE_ON_CONVERSION = ['Insurance', 'Background Check', 'Business Legitimacy'];
+
     Object.keys(SUP_OB_FIELD_MAP).forEach(function (key) {
+      if (key === 'selectedRoles') return; // certificates handled separately below, with full per-field detail
       var map = SUP_OB_FIELD_MAP[key];
       var oldVal = supObEditSnapshot[key];
       var newVal = supplierCapturedData[key];
       var oldDisplay = supObValueToDisplay(key, oldVal);
       var newDisplay = supObValueToDisplay(key, newVal);
-      if (oldDisplay === newDisplay) return;
+      var alwaysInclude = isBizTypeChange && ALWAYS_INCLUDE_ON_CONVERSION.indexOf(map.section) !== -1;
+      if (!alwaysInclude && oldDisplay === newDisplay) return;
       if (!newDisplay || newDisplay === 'Not set') return;
       changes.push({
         section: map.section,
         fieldLabel: map.label,
-        oldValue: oldDisplay,
+        oldValue: alwaysInclude ? newDisplay : oldDisplay,
         newValue: newDisplay,
         fieldType: map.fieldType,
         selectOptions: map.selectOptions,
         isDocument: !!map.isDocument
       });
+      // VAT number rides alongside VAT registered, only shown when registration is Yes.
+      if (key === 'vatRegistered' && newVal === true) {
+        var oldVatNum = supObEditSnapshot.vatNumber || '';
+        var newVatNum = supplierCapturedData.vatNumber || '';
+        if (newVatNum && (alwaysInclude || newVatNum !== oldVatNum)) {
+          changes.push({ section: map.section, fieldLabel: 'VAT number', oldValue: alwaysInclude ? newVatNum : (oldVatNum || 'Not set'), newValue: newVatNum, fieldType: 'text', isDocument: false });
+        }
+      }
     });
+
+    // Categories & Roles: the role list itself, plus every certificate field for every role,
+    // shown with the same level of detail as when an admin reviews a supplier directly.
+    var oldRoles = supObValueToDisplay('selectedRoles', supObEditSnapshot.selectedRoles);
+    var newRoles = supObValueToDisplay('selectedRoles', supplierCapturedData.selectedRoles);
+    if (newRoles && newRoles !== oldRoles) {
+      changes.push({ section: 'Categories & Roles', fieldLabel: 'Categories & roles', oldValue: oldRoles || 'Not set', newValue: newRoles, fieldType: 'category-roles', isDocument: false });
+    }
+    var newCertData = supplierCapturedData.roleCertData || {};
+    var oldCertData = supObEditSnapshot.roleCertData || {};
+    Object.keys(newCertData).forEach(function (role) {
+      (newCertData[role] || []).forEach(function (entry, idx) {
+        var oldEntry = (oldCertData[role] && oldCertData[role][idx]) || {};
+        var labelPrefix = role + (newCertData[role].length > 1 ? ' \u2014 Certificate ' + (idx + 1) : '');
+        if (entry.certName && entry.certName !== oldEntry.certName) {
+          changes.push({ section: 'Categories & Roles', fieldLabel: labelPrefix + ': Certificate name', oldValue: oldEntry.certName || 'Not set', newValue: entry.certName, fieldType: 'text', isDocument: false });
+        }
+        if (entry.regNumber && entry.regNumber !== oldEntry.regNumber) {
+          changes.push({ section: 'Categories & Roles', fieldLabel: labelPrefix + ': Registration number', oldValue: oldEntry.regNumber || 'Not set', newValue: entry.regNumber, fieldType: 'text', isDocument: false });
+        }
+        if (entry.fileName && entry.fileName !== oldEntry.fileName) {
+          changes.push({ section: 'Categories & Roles', fieldLabel: labelPrefix + ': Uploaded certificate', oldValue: oldEntry.fileName || 'Not set', newValue: entry.fileName, fieldType: 'text', isDocument: true });
+        }
+        if (entry.expiryDate && entry.expiryDate !== oldEntry.expiryDate) {
+          changes.push({ section: 'Categories & Roles', fieldLabel: labelPrefix + ': Expiry date', oldValue: oldEntry.expiryDate || 'Not set', newValue: entry.expiryDate, fieldType: 'date', isDocument: false });
+        }
+      });
+    });
+
     if (!changes.length) return null;
     var batchId = 'ownbatch' + Date.now();
     changes.forEach(function (ch, i) { ch.id = batchId + '-c' + i; ch.status = 'pending'; });
-    return { id: batchId, displayId: (typeof suprqNextId === 'function' ? suprqNextId() : Date.now() % 10000), submittedDate: new Date(), changes: changes };
+    // Business-type conversion requests use a distinct numeric range (900000+) so they're visually
+    // distinct from routine field-edit requests (#480001 etc.) while staying numeric-only.
+    var displayId = isBizTypeChange
+      ? (900000 + (++suprqConvIdCounter))
+      : (typeof suprqNextId === 'function' ? suprqNextId() : Date.now() % 10000);
+    return { id: batchId, displayId: displayId, isBusinessTypeChange: isBizTypeChange, submittedDate: new Date(), changes: changes };
   }
 
   document.getElementById('supAcctEditBtn').addEventListener('click', function () {
@@ -17985,7 +18561,7 @@
       }
       supObEditFromSettings = false;
       supObEditSnapshot = null;
-      switchSupSettingsTab(newBatch ? 'requests' : supObReturnTabKey);
+      switchSupSettingsTab(newBatch ? 'requests' : supObReturnTabKey, newBatch ? newBatch.id : undefined);
     }, 200);
   });
 
@@ -18036,6 +18612,7 @@
     tile.addEventListener('click', function () {
       supplierBusinessType = tile.getAttribute('data-value');
       updateSupProfileTypeChip();
+      if (supObEditFromSettings && typeof renderSupObStep === 'function') renderSupObStep(supObCurrentStep);
     });
   });
   updateSupProfileTypeChip();
@@ -18263,6 +18840,10 @@
     showToast('Self-billing agreement signed.');
   });
   document.getElementById('readAgreementRow').addEventListener('click', function () {
+    showToast('This would open the full self-billing agreement in a new tab.');
+  });
+  var supPaymentReadAgreementRowEl = document.getElementById('supPaymentReadAgreementRow');
+  if (supPaymentReadAgreementRowEl) supPaymentReadAgreementRowEl.addEventListener('click', function () {
     showToast('This would open the full self-billing agreement in a new tab.');
   });
 
@@ -18545,6 +19126,8 @@
   function startSupplierOnboarding(signupData) {
     signupData = signupData || {};
     supplierCapturedData = signupData;
+    var phoneEmailRow = document.getElementById('supIdentityPhoneEmailRow');
+    if (phoneEmailRow) phoneEmailRow.style.display = '';
     if (signupData.fullName) document.getElementById('supFullName').value = signupData.fullName;
     if (signupData.phoneNumber) document.getElementById('supPhone').value = signupData.phoneNumber;
     if (signupData.email) document.getElementById('supEmail').value = signupData.email;
@@ -19425,9 +20008,13 @@
   function showSupplierDashboard(signupData, mode) {
     closeAnyLeakedGlobalModals();
     signupData = signupData || {};
-    var fullName = signupData.fullName || 'Fern Whitfield';
+    var fullName = signupData.fullName || signupData.companyFullName || signupData.companyRegName || 'Fern Whitfield';
     var firstName = fullName.trim().split(/\s+/)[0];
-    var email = signupData.email || 'fern@gmail.com';
+    var email = signupData.email || signupData.companyEmail || 'fern@gmail.com';
+    // Each supplier's own requests are keyed by name in the shared store — this must track
+    // whoever is actually signed in, otherwise every new signup would see a fixed demo
+    // supplier's data instead of their own (empty, until they submit something).
+    if (typeof SUP_OWN_DEMO_NAME !== 'undefined') SUP_OWN_DEMO_NAME = fullName;
 
     document.getElementById('supAcctName').textContent = fullName;
     document.getElementById('supAcctEmail').textContent = email;
@@ -19478,8 +20065,27 @@
     'home': 'supHomeView',
     'job-requests': 'supJobRequestsView',
     'service-area': 'supServiceAreaView',
+    'calendar': 'supCalendarView',
     'profile-settings': 'supProfileSettingsView'
   };
+  (function () {
+    var menuBtn = document.getElementById('supMobileMenuBtn');
+    var sidebar = document.getElementById('supDashSidebar');
+    if (!menuBtn || !sidebar) return;
+    menuBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      sidebar.classList.toggle('mobile-open');
+    });
+    document.addEventListener('click', function (e) {
+      if (sidebar.classList.contains('mobile-open') && !sidebar.contains(e.target) && e.target !== menuBtn && !menuBtn.contains(e.target)) {
+        sidebar.classList.remove('mobile-open');
+      }
+    });
+    sidebar.querySelectorAll('.dash-nav-item').forEach(function (item) {
+      item.addEventListener('click', function () { sidebar.classList.remove('mobile-open'); });
+    });
+  })();
+
   function showSupplierView(view) {
     Object.keys(SUP_VIEW_IDS).forEach(function (key) {
       document.getElementById(SUP_VIEW_IDS[key]).style.display = (key === view) ? '' : 'none';
@@ -19507,6 +20113,9 @@
         showSupplierView('service-area');
         initSupsaOnce();
         setTimeout(function () { if (supsaMap) supsaMap.invalidateSize(); }, 160);
+      } else if (nav === 'calendar') {
+        showSupplierView('calendar');
+        if (typeof initSupcalOnce === 'function') initSupcalOnce();
       } else {
         showToast(item.querySelector('.nav-label').textContent + ' isn\u2019t wired up in this prototype yet.');
       }
@@ -20557,8 +21166,658 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     });
   }
 
+  /* ---- Supplier Calendar module ---- */
+  var SUPCAL_DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  var SUPCAL_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  var SUPCAL_DAY_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  var supcalToday = new Date();
+  supcalToday.setHours(0, 0, 0, 0);
+  var supcalDemoDefaultDate = new Date(2026, 6, 14); // initial view lands on the demo data's date range
+  var supcalCurrentDate = new Date(supcalDemoDefaultDate);
+  var supcalScheduleView = 'week';
+  var supcalAvailView = 'week';
+  var supcalFilterValue = 'all';
+  var supcalAvailSelectedDate = new Date(supcalDemoDefaultDate);
+  var supcalAvailMonthDate = new Date(supcalToday);
+  var supcalWorkingHours = {
+    mon: { on: true, from: '09:00', to: '18:00' },
+    tue: { on: true, from: '09:00', to: '18:00' },
+    wed: { on: true, from: '09:00', to: '18:00' },
+    thu: { on: true, from: '09:00', to: '18:00' },
+    fri: { on: true, from: '09:00', to: '18:00' },
+    sat: { on: true, from: '09:00', to: '18:00' },
+    sun: { on: false, from: '09:00', to: '18:00' }
+  };
+  var supcalUnavailableDays = {}; // key 'yyyy-m-d' -> true
+  var supcalTimeOffRanges = [
+    { from: new Date(2026, 6, 7), to: new Date(2026, 6, 7) },
+    { from: new Date(2026, 6, 10), to: new Date(2026, 6, 10) },
+    { from: new Date(2026, 6, 19), to: new Date(2026, 6, 19) },
+    { from: new Date(2026, 6, 25), to: new Date(2026, 6, 25) }
+  ];
+  supcalTimeOffRanges.forEach(function (r) { supcalMarkRangeUnavailable(r.from, r.to, true); });
+  function supcalDateKey(d) { return d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate(); }
+  function supcalMarkRangeUnavailable(from, to, flag) {
+    var cur = new Date(from);
+    cur.setHours(0, 0, 0, 0);
+    var end = new Date(to);
+    end.setHours(0, 0, 0, 0);
+    while (cur <= end) {
+      var key = supcalDateKey(cur);
+      if (flag) supcalUnavailableDays[key] = true; else delete supcalUnavailableDays[key];
+      cur.setDate(cur.getDate() + 1);
+    }
+  }
+  function supcalShowInfoBanner(anchorEl) {
+    var existing = document.getElementById('supcalInfoBanner');
+    if (existing) existing.remove();
+    var banner = document.createElement('div');
+    banner.id = 'supcalInfoBanner';
+    banner.className = 'supcal-info-banner';
+    banner.innerHTML =
+      '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>' +
+      '<div><strong>This date is part of a time off period</strong><br>Edit or remove it from Upcoming Time Off.</div>' +
+      '<button type="button" aria-label="Dismiss"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>';
+    document.body.appendChild(banner);
+    void banner.offsetWidth;
+    banner.classList.add('show');
+    banner.querySelector('button').addEventListener('click', function () { banner.classList.remove('show'); setTimeout(function () { banner.remove(); }, 200); });
+    setTimeout(function () { if (document.getElementById('supcalInfoBanner')) { banner.classList.remove('show'); setTimeout(function () { banner.remove(); }, 200); } }, 5000);
+  }
+  function supcalSameDay(a, b) { return supcalDateKey(a) === supcalDateKey(b); }
+  var supcalDemoJobs = [
+    { date: new Date(2026, 6, 1), time: '09:00', title: 'Airbnb Turnover Clean', status: 'confirmed', end: '10:30', addr: '12 Baker Street, London', client: 'Thomas Davies', total: '\u00a3120.00' },
+    { date: new Date(2026, 6, 1), time: '09:00', title: 'Airbnb Turnover Clean', status: 'confirmed', end: '10:30', addr: '18 Baker Street, London', client: 'Thomas Davies', total: '\u00a3120.00' },
+    { date: new Date(2026, 6, 1), time: '09:00', title: 'Boiler Service (Annual)', status: 'confirmed', end: '11:00', addr: '4 Elm Court, London', client: 'Thomas Davies', total: '\u00a395.00' },
+    { date: new Date(2026, 6, 1), time: '11:30', title: 'EICR \u2014 Electrical Inspection', status: 'scheduled', end: '13:00', addr: '9 Elm Court, London', client: 'Thomas Davies', total: '\u00a3210.00' },
+    { date: new Date(2026, 6, 1), time: '13:30', title: 'Gutter Clearance', status: 'confirmed', end: '14:30', addr: '22 Baker Street, London', client: 'Thomas Davies', total: '\u00a375.00' },
+    { date: new Date(2026, 6, 1), time: '15:00', title: 'Lock Change', status: 'scheduled', end: '16:00', addr: '5 Elm Court, London', client: 'Thomas Davies', total: '\u00a360.00' },
+    { date: new Date(2026, 6, 1), time: '16:30', title: 'Smoke Alarm Check', status: 'confirmed', end: '17:00', addr: '31 Baker Street, London', client: 'Thomas Davies', total: '\u00a340.00' },
+    { date: new Date(2026, 6, 1), time: '17:15', title: 'Garden Tidy', status: 'confirmed', end: '18:00', addr: '2 Elm Court, London', client: 'Thomas Davies', total: '\u00a380.00' },
+    { date: new Date(2026, 6, 2), time: '09:00', title: 'Airbnb Turnover Clean', status: 'confirmed', end: '10:30', addr: '12 Baker Street, London', client: 'Thomas Davies', total: '\u00a3120.00' },
+    { date: new Date(2026, 6, 2), time: '09:00', title: 'Door Entry / Intercom Repair', status: 'scheduled', end: '11:00', addr: '18 Baker Street, London', client: 'Thomas Davies', total: '\u00a3150.00' },
+    { date: new Date(2026, 6, 2), time: '12:58', title: 'Airbnb Turnover Clean', status: 'completed', end: '14:28', addr: '45-47, Whitehall, 45-47 Whitehall', client: 'Thomas Davies', total: '\u00a31,200.00' },
+    { date: new Date(2026, 6, 6), time: '09:00', title: 'EICR \u2014 Electrical Installation', status: 'confirmed', end: '11:30', addr: '7 Baker Street, London', client: 'Thomas Davies', total: '\u00a3210.00' },
+    { date: new Date(2026, 6, 13), time: '09:00', title: 'Airbnb Turnover Clean', status: 'confirmed', end: '10:30', addr: '14 Baker Street, London', client: 'Thomas Davies', total: '\u00a3120.00' },
+    { date: new Date(2026, 6, 13), time: '11:00', title: 'Gas Safety Check', status: 'scheduled', end: '12:00', addr: '3 Elm Court, London', client: 'Thomas Davies', total: '\u00a385.00' },
+    { date: new Date(2026, 6, 14), time: '09:30', title: 'Window Cleaning', status: 'confirmed', end: '10:30', addr: '27 Baker Street, London', client: 'Thomas Davies', total: '\u00a355.00' },
+    { date: new Date(2026, 6, 14), time: '13:00', title: 'Airbnb Turnover Clean', status: 'completed', end: '14:15', addr: '8 Elm Court, London', client: 'Thomas Davies', total: '\u00a3120.00' },
+    { date: new Date(2026, 6, 15), time: '10:00', title: 'PAT Testing', status: 'scheduled', end: '11:30', addr: '19 Baker Street, London', client: 'Thomas Davies', total: '\u00a390.00' },
+    { date: new Date(2026, 6, 16), time: '09:00', title: 'Carpet Deep Clean', status: 'confirmed', end: '11:00', addr: '6 Elm Court, London', client: 'Thomas Davies', total: '\u00a3140.00' },
+    { date: new Date(2026, 6, 16), time: '14:00', title: 'Airbnb Turnover Clean', status: 'confirmed', end: '15:15', addr: '33 Baker Street, London', client: 'Thomas Davies', total: '\u00a3120.00' },
+    { date: new Date(2026, 6, 17), time: '09:00', title: 'Boiler Service (Annual)', status: 'scheduled', end: '10:30', addr: '10 Elm Court, London', client: 'Thomas Davies', total: '\u00a395.00' },
+    { date: new Date(2026, 6, 18), time: '11:00', title: 'Fire Alarm Inspection', status: 'confirmed', end: '12:30', addr: '21 Baker Street, London', client: 'Thomas Davies', total: '\u00a3110.00' },
+    { date: new Date(2026, 7, 3), time: '09:00', title: 'Airbnb Turnover Clean', status: 'confirmed', end: '10:30', addr: '15 Baker Street, London', client: 'Thomas Davies', total: '\u00a3120.00' },
+    { date: new Date(2026, 7, 3), time: '11:00', title: 'Gutter Clearance', status: 'scheduled', end: '12:00', addr: '4 Elm Court, London', client: 'Thomas Davies', total: '\u00a375.00' },
+    { date: new Date(2026, 7, 5), time: '10:00', title: 'Boiler Service (Annual)', status: 'confirmed', end: '11:30', addr: '9 Elm Court, London', client: 'Thomas Davies', total: '\u00a395.00' },
+    { date: new Date(2026, 7, 7), time: '09:00', title: 'Airbnb Turnover Clean', status: 'completed', end: '10:15', addr: '22 Baker Street, London', client: 'Thomas Davies', total: '\u00a3120.00' },
+    { date: new Date(2026, 7, 12), time: '13:00', title: 'EICR \u2014 Electrical Inspection', status: 'scheduled', end: '14:30', addr: '5 Elm Court, London', client: 'Thomas Davies', total: '\u00a3210.00' },
+    { date: new Date(2026, 7, 12), time: '09:00', title: 'Window Cleaning', status: 'confirmed', end: '10:00', addr: '31 Baker Street, London', client: 'Thomas Davies', total: '\u00a355.00' },
+    { date: new Date(2026, 7, 19), time: '09:30', title: 'Carpet Deep Clean', status: 'confirmed', end: '11:30', addr: '2 Elm Court, London', client: 'Thomas Davies', total: '\u00a3140.00' },
+    { date: new Date(2026, 7, 24), time: '10:00', title: 'PAT Testing', status: 'scheduled', end: '11:30', addr: '19 Baker Street, London', client: 'Thomas Davies', total: '\u00a390.00' },
+    { date: new Date(2026, 8, 2), time: '09:00', title: 'Airbnb Turnover Clean', status: 'confirmed', end: '10:30', addr: '14 Baker Street, London', client: 'Thomas Davies', total: '\u00a3120.00' },
+    { date: new Date(2026, 8, 2), time: '11:00', title: 'Smoke Alarm Check', status: 'confirmed', end: '11:30', addr: '3 Elm Court, London', client: 'Thomas Davies', total: '\u00a340.00' },
+    { date: new Date(2026, 8, 8), time: '09:00', title: 'Boiler Service (Annual)', status: 'scheduled', end: '10:30', addr: '27 Baker Street, London', client: 'Thomas Davies', total: '\u00a395.00' },
+    { date: new Date(2026, 8, 8), time: '13:00', title: 'Airbnb Turnover Clean', status: 'completed', end: '14:15', addr: '8 Elm Court, London', client: 'Thomas Davies', total: '\u00a3120.00' },
+    { date: new Date(2026, 8, 15), time: '10:00', title: 'Gas Safety Check', status: 'confirmed', end: '11:00', addr: '6 Elm Court, London', client: 'Thomas Davies', total: '\u00a385.00' },
+    { date: new Date(2026, 8, 22), time: '09:00', title: 'Fire Alarm Inspection', status: 'scheduled', end: '10:30', addr: '21 Baker Street, London', client: 'Thomas Davies', total: '\u00a3110.00' },
+    { date: new Date(2026, 8, 28), time: '14:00', title: 'Airbnb Turnover Clean', status: 'confirmed', end: '15:15', addr: '33 Baker Street, London', client: 'Thomas Davies', total: '\u00a3120.00' }
+  ];
+
+  function supcalJobsForDate(d) {
+    return supcalDemoJobs.filter(function (j) {
+      if (!supcalSameDay(j.date, d)) return false;
+      if (supcalFilterValue === 'confirmed') return j.status === 'confirmed';
+      if (supcalFilterValue === 'scheduled') return j.status === 'scheduled';
+      return true;
+    });
+  }
+  function supcalAllUpcoming() {
+    return supcalDemoJobs.filter(function (j) { return j.date >= supcalToday; }).sort(function (a, b) { return a.date - b.date; });
+  }
+
+  function supcalRenderUpcoming() { /* upcoming panel removed from Schedule tab; kept as no-op in case anything still calls it */ }
+
+  function supcalOpenPopover(job, anchorEl) {
+    var pop = document.getElementById('supcalPopover');
+    if (!pop) return;
+    var statusLabel = job.status === 'completed' ? 'Completed' : (job.status === 'scheduled' ? 'Scheduled' : 'Confirmed');
+    pop.innerHTML =
+      '<span class="status-pill ' + job.status + '">' + statusLabel + '</span>' +
+      '<div class="pop-title">' + job.title + '</div>' +
+      '<div class="pop-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>' + job.time + ' \u2013 ' + job.end + '</div>' +
+      '<div class="pop-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>' + job.addr + '</div>' +
+      '<div class="pop-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' + job.client + ' <span style="color:#cbd5e1;">\u00b7 PM</span></div>' +
+      '<div class="pop-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg><strong style="color:var(--text-heading);">' + job.total + '</strong> <span style="color:#cbd5e1;">\u00b7 total</span></div>' +
+      '<div class="pop-foot">Click to open full details</div>';
+    var rect = anchorEl.getBoundingClientRect();
+    var top = Math.min(rect.bottom + 6, window.innerHeight - 320);
+    var left = Math.min(rect.left, window.innerWidth - 320);
+    pop.style.top = top + 'px';
+    pop.style.left = left + 'px';
+    pop.classList.add('open');
+  }
+  function supcalClosePopover() {
+    var pop = document.getElementById('supcalPopover');
+    if (pop) pop.classList.remove('open');
+  }
+
+  function supcalRenderMonthGrid() {
+    var wrap = document.getElementById('supcalGridWrap');
+    var y = supcalCurrentDate.getFullYear(), m = supcalCurrentDate.getMonth();
+    var firstDow = (new Date(y, m, 1).getDay() + 6) % 7; // Monday-first
+    var daysInMonth = new Date(y, m + 1, 0).getDate();
+    var daysInPrevMonth = new Date(y, m, 0).getDate();
+    var cells = [];
+    for (var i = firstDow - 1; i >= 0; i--) cells.push({ d: daysInPrevMonth - i, other: true, date: new Date(y, m - 1, daysInPrevMonth - i) });
+    for (var d = 1; d <= daysInMonth; d++) cells.push({ d: d, other: false, date: new Date(y, m, d) });
+    while (cells.length % 7 !== 0) { var nd = cells.length - (firstDow + daysInMonth) + 1; cells.push({ d: nd, other: true, date: new Date(y, m + 1, nd) }); }
+    var html = '<div class="supcal-month-grid">';
+    ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].forEach(function (dow) { html += '<div class="supcal-month-dow">' + dow + '</div>'; });
+    cells.forEach(function (c) {
+      var jobs = supcalJobsForDate(c.date);
+      var isToday = supcalSameDay(c.date, supcalToday);
+      html += '<div class="supcal-month-cell' + (c.other ? ' other-month' : '') + (isToday ? ' is-today' : '') + '" data-cell-date="' + supcalDateKey(c.date) + '">' +
+        '<div class="cell-date">' + c.d + '</div>';
+      jobs.slice(0, 3).forEach(function (j, idx) {
+        html += '<div class="supcal-job-chip ' + j.status + '" data-job-idx="' + supcalDemoJobs.indexOf(j) + '">' + j.time + ' ' + j.title + '</div>';
+      });
+      if (jobs.length > 3) html += '<div class="supcal-more-link">+' + (jobs.length - 3) + ' more</div>';
+      if (jobs.length) {
+        html += '<div class="supcal-job-dots">' + jobs.slice(0, 6).map(function (j) { return '<span class="jd ' + j.status + '"></span>'; }).join('') + '</div>';
+      }
+      html += '</div>';
+    });
+    html += '</div>';
+    wrap.innerHTML = html;
+    wrap.querySelectorAll('.supcal-job-chip').forEach(function (chip) {
+      chip.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (window.innerWidth < 500) return; // on narrow screens, the cell click below handles this instead
+        var job = supcalDemoJobs[parseInt(chip.getAttribute('data-job-idx'), 10)];
+        supcalOpenPopover(job, chip);
+      });
+    });
+    wrap.querySelectorAll('.supcal-month-cell[data-cell-date]').forEach(function (cellEl) {
+      cellEl.addEventListener('click', function () {
+        if (window.innerWidth >= 500) return;
+        wrap.querySelectorAll('.supcal-month-cell').forEach(function (c2) { c2.classList.remove('mobile-selected'); });
+        cellEl.classList.add('mobile-selected');
+        supcalShowMobileJobsForDateKey(cellEl.getAttribute('data-cell-date'));
+      });
+    });
+    supcalUpdateMobileJobsVisibility();
+  }
+  function supcalUpdateMobileJobsVisibility() {
+    var list = document.getElementById('supcalMobileJobsList');
+    if (!list) return;
+    if (window.innerWidth < 500 && supcalScheduleView === 'month') {
+      list.style.display = '';
+      supcalShowMobileJobsForDateKey(supcalDateKey(supcalToday));
+    } else {
+      list.style.display = 'none';
+    }
+  }
+  function supcalShowMobileJobsForDateKey(key) {
+    var list = document.getElementById('supcalMobileJobsList');
+    if (!list) return;
+    var parts = key.split('-');
+    var d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10), parseInt(parts[2], 10));
+    var jobs = supcalJobsForDate(d);
+    var label = SUPCAL_DOW[d.getDay()] + ', ' + d.getDate() + ' ' + SUPCAL_MONTHS[d.getMonth()];
+    if (!jobs.length) {
+      list.innerHTML = '<div class="smjl-head">' + label + '</div><div class="smjl-empty">No jobs yet.</div>';
+      return;
+    }
+    list.innerHTML = '<div class="smjl-head">' + label + '</div>' + jobs.map(function (j) {
+      return '<div class="smjl-job ' + j.status + '" data-job-idx="' + supcalDemoJobs.indexOf(j) + '"><span class="smjl-dot"></span><div><div class="smjl-time">' + j.time + ' \u2013 ' + j.end + '</div><div class="smjl-title">' + j.title + '</div></div></div>';
+    }).join('');
+    list.querySelectorAll('.smjl-job').forEach(function (row) {
+      row.addEventListener('click', function () {
+        var job = supcalDemoJobs[parseInt(row.getAttribute('data-job-idx'), 10)];
+        supcalOpenPopover(job, row);
+      });
+    });
+  }
+  window.addEventListener('resize', function () {
+    if (supcalScheduleView === 'month' && document.getElementById('supcalPanelSchedule') && document.getElementById('supcalPanelSchedule').style.display !== 'none') {
+      supcalUpdateMobileJobsVisibility();
+    }
+  });
+  function supcalGetWeekStart(d) {
+    var day = (d.getDay() + 6) % 7;
+    var s = new Date(d);
+    s.setDate(d.getDate() - day);
+    return s;
+  }
+  function supcalRenderWeekGrid() {
+    var mobileList = document.getElementById('supcalMobileJobsList');
+    if (mobileList) mobileList.style.display = 'none';
+    var wrap = document.getElementById('supcalGridWrap');
+    var weekStart = supcalGetWeekStart(supcalCurrentDate);
+    var days = [];
+    for (var i = 0; i < 7; i++) { var dd = new Date(weekStart); dd.setDate(weekStart.getDate() + i); days.push(dd); }
+    var hasAnyJobs = days.some(function (d) { return supcalJobsForDate(d).length > 0; });
+    if (!hasAnyJobs) {
+      wrap.innerHTML = '<div class="supcal-day-empty">' +
+        '<h3>No jobs scheduled</h3>' +
+        '<p>You have no appointments for this week.</p>' +
+        '<button type="button" class="btn btn-primary" id="supcalViewNextWeekBtn">View Next Week</button>' +
+      '</div>';
+      var nextBtn = document.getElementById('supcalViewNextWeekBtn');
+      if (nextBtn) nextBtn.addEventListener('click', function () {
+        supcalCurrentDate.setDate(supcalCurrentDate.getDate() + 7);
+        supcalCurrentDate = new Date(supcalCurrentDate);
+        supcalRenderScheduleGrid();
+      });
+      return;
+    }
+    var hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
+    var html = '<div class="supcal-week-grid">' + '<div></div>';
+    days.forEach(function (d) {
+      var isToday = supcalSameDay(d, supcalToday);
+      html += '<div class="supcal-week-dow' + (isToday ? ' is-today' : '') + '">' + SUPCAL_DOW[d.getDay()] + '<span class="wd-num">' + d.getDate() + '</span></div>';
+    });
+    hours.forEach(function (h) {
+      html += '<div class="supcal-week-timecol">' + (h < 10 ? '0' + h : h) + ':00</div>';
+      days.forEach(function (d) {
+        var isToday = supcalSameDay(d, supcalToday);
+        var jobsThisHour = supcalJobsForDate(d).filter(function (j) { return parseInt(j.time.split(':')[0], 10) === h; });
+        var cellContent = jobsThisHour.map(function (j) {
+          return '<div class="supcal-job-chip ' + j.status + '" style="margin:2px 3px;" data-job-idx="' + supcalDemoJobs.indexOf(j) + '">' + j.time + ' ' + j.title + '</div>';
+        }).join('');
+        html += '<div class="supcal-week-hourrow supcal-week-daycol' + (isToday ? ' is-today' : '') + '">' + cellContent + '</div>';
+      });
+    });
+    html += '</div>';
+    wrap.innerHTML = html;
+    wrap.querySelectorAll('.supcal-job-chip').forEach(function (chip) {
+      chip.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var job = supcalDemoJobs[parseInt(chip.getAttribute('data-job-idx'), 10)];
+        supcalOpenPopover(job, chip);
+      });
+    });
+  }
+
+  function supcalRenderScheduleGrid() {
+    if (supcalScheduleView === 'month') {
+      document.getElementById('supcalDateLabel').textContent = SUPCAL_MONTHS[supcalCurrentDate.getMonth()] + ' ' + supcalCurrentDate.getFullYear();
+      supcalRenderMonthGrid();
+    } else {
+      var weekStart = supcalGetWeekStart(supcalCurrentDate);
+      var weekEnd = new Date(weekStart); weekEnd.setDate(weekStart.getDate() + 6);
+      document.getElementById('supcalDateLabel').textContent = weekStart.getDate() + ' \u2013 ' + weekEnd.getDate() + ' ' + SUPCAL_MONTHS[weekEnd.getMonth()].slice(0, 3) + ' ' + weekEnd.getFullYear();
+      supcalRenderWeekGrid();
+    }
+  }
+
+  document.querySelectorAll('#supcalPanelSchedule .supcal-view-toggle button').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('#supcalPanelSchedule .supcal-view-toggle button').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      supcalScheduleView = btn.getAttribute('data-supcal-view');
+      supcalRenderScheduleGrid();
+    });
+  });
+  document.getElementById('supcalTodayBtn').addEventListener('click', function () { supcalCurrentDate = new Date(supcalToday); supcalRenderScheduleGrid(); });
+  document.getElementById('supcalPrevBtn').addEventListener('click', function () {
+    if (supcalScheduleView === 'month') supcalCurrentDate.setMonth(supcalCurrentDate.getMonth() - 1);
+    else supcalCurrentDate.setDate(supcalCurrentDate.getDate() - 7);
+    supcalCurrentDate = new Date(supcalCurrentDate);
+    supcalRenderScheduleGrid();
+  });
+  document.getElementById('supcalNextBtn').addEventListener('click', function () {
+    if (supcalScheduleView === 'month') supcalCurrentDate.setMonth(supcalCurrentDate.getMonth() + 1);
+    else supcalCurrentDate.setDate(supcalCurrentDate.getDate() + 7);
+    supcalCurrentDate = new Date(supcalCurrentDate);
+    supcalRenderScheduleGrid();
+  });
+  var supcalFilterBtnEl = document.getElementById('supcalFilterBtn');
+  var supcalFilterMenuEl = document.getElementById('supcalFilterMenu');
+  if (supcalFilterBtnEl && supcalFilterMenuEl) {
+    supcalFilterBtnEl.addEventListener('click', function (e) {
+      e.stopPropagation();
+      supcalFilterMenuEl.classList.toggle('open');
+    });
+    supcalFilterMenuEl.querySelectorAll('.cdd-item').forEach(function (item) {
+      item.addEventListener('click', function () {
+        supcalFilterMenuEl.querySelectorAll('.cdd-item').forEach(function (i) { i.classList.remove('selected'); });
+        item.classList.add('selected');
+        supcalFilterValue = item.getAttribute('data-supcal-filter') || 'all';
+        supcalFilterMenuEl.classList.remove('open');
+        if (typeof supcalRenderScheduleGrid === 'function') supcalRenderScheduleGrid();
+      });
+    });
+  }
+  document.addEventListener('click', function (e) {
+    var menu = document.getElementById('supcalFilterMenu');
+    if (menu && !menu.contains(e.target) && e.target.id !== 'supcalFilterBtn') menu.classList.remove('open');
+    var pop = document.getElementById('supcalPopover');
+    if (pop && pop.classList.contains('open') && !pop.contains(e.target) && (!e.target.closest || !e.target.closest('.supcal-job-chip'))) supcalClosePopover();
+  });
+
+  /* ---- Availability tab ---- */
+  function supcalRenderHoursList() {
+    var el = document.getElementById('supcalHoursList');
+    var keys = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+    el.innerHTML = keys.map(function (k, i) {
+      var h = supcalWorkingHours[k];
+      return '<div class="supcal-hours-row"><span class="day-name">' + SUPCAL_DAY_NAMES[i] + '</span><span class="day-time' + (h.on ? '' : ' closed') + '">' + (h.on ? h.from + ' \u2013 ' + h.to : 'Closed') + '</span></div>';
+    }).join('');
+  }
+  function supcalFormatDDMMYYYY(d) { return ('0' + d.getDate()).slice(-2) + '/' + ('0' + (d.getMonth() + 1)).slice(-2) + '/' + d.getFullYear(); }
+  function supcalRenderTimeOff() {
+    var el = document.getElementById('supcalTimeOffList');
+    if (!supcalTimeOffRanges.length) { el.textContent = 'No time off scheduled.'; el.style.textAlign = 'center'; return; }
+    el.style.textAlign = 'left';
+    var sorted = supcalTimeOffRanges.slice().sort(function (a, b) { return a.from - b.from; });
+    el.innerHTML = sorted.map(function (r, i) {
+      var days = Math.round((r.to - r.from) / 86400000) + 1;
+      var dateStr = days === 1 ? supcalFormatDDMMYYYY(r.from) : (supcalFormatDDMMYYYY(r.from) + ' - ' + supcalFormatDDMMYYYY(r.to));
+      return '<div style="padding:12px 0;' + (i > 0 ? 'border-top:1px solid var(--border-subtle);' : '') + 'display:flex;align-items:center;justify-content:space-between;gap:10px;">' +
+        '<div><div style="font-size:13.5px;font-weight:800;color:var(--text-heading);">' + dateStr + '</div><div style="font-size:12px;color:var(--text-body-muted);margin-top:2px;">' + days + ' Day' + (days === 1 ? '' : 's') + '</div></div>' +
+        '<div style="display:flex;gap:6px;flex-shrink:0;">' +
+          '<button type="button" class="supcal-timeoff-edit-btn" data-supcal-timeoff-idx="' + supcalTimeOffRanges.indexOf(r) + '" style="width:30px;height:30px;border-radius:8px;border:1px solid var(--border-subtle);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-body-muted);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></button>' +
+          '<button type="button" class="supcal-timeoff-delete-btn" data-supcal-timeoff-idx="' + supcalTimeOffRanges.indexOf(r) + '" style="width:30px;height:30px;border-radius:8px;border:1px solid var(--border-subtle);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-body-muted);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+    el.querySelectorAll('.supcal-timeoff-edit-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var idx = parseInt(btn.getAttribute('data-supcal-timeoff-idx'), 10);
+        var r = supcalTimeOffRanges[idx];
+        supcalEditingTimeOffIdx = idx;
+        calState.supcalTimeOffFrom.selected = new Date(r.from);
+        calState.supcalTimeOffTo.selected = new Date(r.to);
+        if (typeof updateCalFieldDisplay === 'function') { updateCalFieldDisplay('supcalTimeOffFrom'); updateCalFieldDisplay('supcalTimeOffTo'); }
+        document.getElementById('supcalTimeOffSaveBtn').disabled = false;
+        document.getElementById('supcalTimeOffOverlay').classList.add('open');
+      });
+    });
+    el.querySelectorAll('.supcal-timeoff-delete-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var idx = parseInt(btn.getAttribute('data-supcal-timeoff-idx'), 10);
+        var removed = supcalTimeOffRanges[idx];
+        if (removed) supcalMarkRangeUnavailable(removed.from, removed.to, false);
+        supcalTimeOffRanges.splice(idx, 1);
+        supcalRenderTimeOff();
+        showToast('Time off removed.');
+      });
+    });
+  }
+  var supcalEditingTimeOffIdx = -1;
+
+  function supcalRenderAvailWeek() {
+    var weekStart = supcalGetWeekStart(supcalToday);
+    var html = '<div class="supcal-avail-week-row">';
+    for (var i = 0; i < 7; i++) {
+      var d = new Date(weekStart); d.setDate(weekStart.getDate() + i);
+      var key = supcalDateKey(d);
+      var unavailable = !!supcalUnavailableDays[key];
+      var selected = supcalSameDay(d, supcalAvailSelectedDate);
+      html += '<div class="supcal-day-card' + (selected ? ' selected' : '') + (unavailable ? ' unavailable' : '') + '" data-supcal-day="' + key + '">' +
+        '<div class="dc-dow">' + SUPCAL_DOW[d.getDay()] + '</div>' +
+        '<div class="dc-num">' + d.getDate() + '</div>' +
+        '<div class="dc-status' + (unavailable ? ' closed' : '') + '">' + (unavailable ? 'Closed' : 'Open') + '</div>' +
+      '</div>';
+    }
+    html += '</div>';
+    document.getElementById('supcalAvailBody').innerHTML = html;
+    document.getElementById('supcalAvailMonthLabel').textContent = SUPCAL_MONTHS[weekStart.getMonth()] + ' ' + weekStart.getFullYear();
+    document.getElementById('supcalAvailHint').textContent = 'Tap a day to mark it unavailable. Use Add Time Off for longer periods.';
+    wireSupcalDayCards();
+  }
+  function supcalRenderAvailMonth() {
+    var y = supcalAvailMonthDate.getFullYear(), m = supcalAvailMonthDate.getMonth();
+    var firstDow = (new Date(y, m, 1).getDay() + 6) % 7;
+    var daysInMonth = new Date(y, m + 1, 0).getDate();
+    var html = '<div class="supcal-avail-month-grid">';
+    ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].forEach(function (dow) { html += '<div class="supcal-month-dow">' + dow + '</div>'; });
+    for (var i = 0; i < firstDow; i++) html += '<div class="supcal-avail-month-cell" style="visibility:hidden;"></div>';
+    for (var d = 1; d <= daysInMonth; d++) {
+      var date = new Date(y, m, d);
+      var selected = supcalSameDay(date, supcalAvailSelectedDate);
+      var isUnavailable = !!supcalUnavailableDays[supcalDateKey(date)];
+      html += '<div class="supcal-avail-month-cell' + (selected ? ' selected' : '') + (isUnavailable ? ' unavailable' : '') + '" data-supcal-monthday="' + d + '">' + d + (isUnavailable ? '<span class="supcal-avail-month-dot"></span>' : '') + '</div>';
+    }
+    html += '</div>';
+    document.getElementById('supcalAvailBody').innerHTML = html;
+    document.getElementById('supcalAvailMonthLabel').textContent = SUPCAL_MONTHS[m] + ' ' + y;
+    document.getElementById('supcalAvailHint').textContent = 'Tap dates to mark them unavailable. Use Add Time Off for longer periods.';
+    document.querySelectorAll('.supcal-avail-month-cell[data-supcal-monthday]').forEach(function (cell) {
+      cell.addEventListener('click', function () {
+        var day = parseInt(cell.getAttribute('data-supcal-monthday'), 10);
+        var clickedDate = new Date(y, m, day);
+        var key = supcalDateKey(clickedDate);
+        supcalAvailSelectedDate = clickedDate;
+        if (supcalUnavailableDays[key]) {
+          supcalShowInfoBanner(cell);
+          supcalRenderAvailMonth();
+          return;
+        }
+        supcalUnavailableDays[key] = true;
+        supcalTimeOffRanges.push({ from: new Date(clickedDate), to: new Date(clickedDate) });
+        supcalRenderAvailMonth();
+        if (typeof supcalRenderTimeOff === 'function') supcalRenderTimeOff();
+      });
+    });
+  }
+  function supcalRenderAvailDay() {
+    var d = supcalAvailSelectedDate;
+    var key = supcalDateKey(d);
+    var unavailable = !!supcalUnavailableDays[key];
+    var html = '<div class="supcal-avail-day-card">' +
+      '<div class="supcal-avail-day-title">' + SUPCAL_DAY_NAMES[(d.getDay() + 6) % 7] + ', ' + d.getDate() + ' ' + SUPCAL_MONTHS[d.getMonth()] + ' ' + d.getFullYear() + '</div>' +
+      '<div class="supcal-avail-day-row ' + (unavailable ? '' : 'avail') + '" style="' + (unavailable ? 'background:#fef2f2;color:#b91c1c;' : '') + '"><span>Availability</span><span>' + (unavailable ? 'Unavailable' : 'Available') + '</span></div>' +
+      '<div class="supcal-avail-day-row toggle" id="supcalDayToggleRow">' + (unavailable ? 'Tap for details' : 'Tap to mark unavailable') + '</div>' +
+    '</div>';
+    document.getElementById('supcalAvailBody').innerHTML = html;
+    document.getElementById('supcalAvailMonthLabel').textContent = SUPCAL_MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+    document.getElementById('supcalAvailHint').textContent = 'Tap the day to toggle your availability.';
+    document.getElementById('supcalDayToggleRow').addEventListener('click', function (e) {
+      if (unavailable) { supcalShowInfoBanner(e.currentTarget); return; }
+      supcalUnavailableDays[key] = true;
+      supcalTimeOffRanges.push({ from: new Date(d), to: new Date(d) });
+      supcalRenderAvailDay();
+      supcalRenderTimeOff();
+    });
+  }
+  function wireSupcalDayCards() {
+    document.querySelectorAll('.supcal-day-card[data-supcal-day]').forEach(function (card) {
+      card.addEventListener('click', function () {
+        var key = card.getAttribute('data-supcal-day');
+        if (supcalUnavailableDays[key]) {
+          supcalShowInfoBanner(card);
+          return;
+        }
+        var parts = key.split('-');
+        var d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10), parseInt(parts[2], 10));
+        supcalUnavailableDays[key] = true;
+        supcalTimeOffRanges.push({ from: d, to: new Date(d) });
+        supcalRenderAvailWeek();
+        supcalRenderTimeOff();
+      });
+    });
+  }
+  function supcalRenderAvailBody() {
+    if (supcalAvailView === 'month') supcalRenderAvailMonth();
+    else if (supcalAvailView === 'day') supcalRenderAvailDay();
+    else supcalRenderAvailWeek();
+  }
+  document.querySelectorAll('#supcalPanelAvailability .supcal-view-toggle button').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('#supcalPanelAvailability .supcal-view-toggle button').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      supcalAvailView = btn.getAttribute('data-supcal-avail-view');
+      if (supcalAvailView === 'week' || supcalAvailView === 'day') {
+        supcalAvailSelectedDate = new Date(supcalToday);
+      } else if (supcalAvailView === 'month') {
+        supcalAvailMonthDate = new Date(supcalToday);
+      }
+      supcalRenderAvailBody();
+    });
+  });
+
+  document.getElementById('supcalEditHoursBtn').addEventListener('click', function () {
+    var keys = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+    var body = document.getElementById('supcalEditHoursBody');
+    body.innerHTML = keys.map(function (k, i) {
+      var h = supcalWorkingHours[k];
+      return '<div class="supcal-hours-toggle-row" data-supcal-hours-row="' + k + '">' +
+        '<button type="button" class="toggle-switch' + (h.on ? ' on' : '') + '" data-supcal-hours-toggle="' + k + '" role="switch" aria-checked="' + (h.on ? 'true' : 'false') + '"><span class="thumb"></span></button>' +
+        '<span class="day-label">' + SUPCAL_DAY_NAMES[i] + '</span>' +
+        supcalTimeDropdownHtml(k, 'from', h.from, h.on) +
+        '<span style="font-size:12px;color:var(--text-body-muted);">to</span>' +
+        supcalTimeDropdownHtml(k, 'to', h.to, h.on) +
+      '</div>';
+    }).join('');
+    body.querySelectorAll('[data-supcal-hours-toggle]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var isOn = btn.classList.toggle('on');
+        btn.setAttribute('aria-checked', isOn ? 'true' : 'false');
+        var row = btn.closest('.supcal-hours-toggle-row');
+        if (row) row.querySelectorAll('.supcal-time-dd-btn').forEach(function (b) { b.classList.toggle('disabled', !isOn); });
+      });
+    });
+    body.querySelectorAll('.supcal-time-dd-btn').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (btn.classList.contains('disabled')) return;
+        var menu = btn.nextElementSibling;
+        var wasOpen = menu.classList.contains('open');
+        body.querySelectorAll('.supcal-time-dd-menu.open').forEach(function (m) { m.classList.remove('open'); });
+        if (!wasOpen) {
+          var rect = btn.getBoundingClientRect();
+          menu.style.top = Math.min(rect.bottom + 4, window.innerHeight - 230) + 'px';
+          menu.style.left = rect.left + 'px';
+          menu.style.width = rect.width + 'px';
+          menu.classList.add('open');
+          var selectedItem = menu.querySelector('.cdd-item.selected');
+          if (selectedItem) selectedItem.scrollIntoView({ block: 'nearest' });
+        }
+      });
+    });
+    body.querySelectorAll('.supcal-time-dd-menu .cdd-item').forEach(function (item) {
+      item.addEventListener('click', function () {
+        var menu = item.closest('.supcal-time-dd-menu');
+        var btn = menu.previousElementSibling;
+        menu.querySelectorAll('.cdd-item').forEach(function (i) { i.classList.remove('selected'); });
+        item.classList.add('selected');
+        btn.querySelector('.cdd-value').textContent = item.getAttribute('data-value');
+        btn.setAttribute('data-selected-time', item.getAttribute('data-value'));
+        menu.classList.remove('open');
+      });
+    });
+    document.getElementById('supcalEditHoursOverlay').classList.add('open');
+  });
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.supcal-time-dd-btn') && !e.target.closest('.supcal-time-dd-menu')) {
+      document.querySelectorAll('.supcal-time-dd-menu.open').forEach(function (m) { m.classList.remove('open'); });
+    }
+  });
+  function supcalTimeDropdownHtml(dayKey, which, selected, enabled) {
+    var opts = '';
+    for (var h = 0; h < 24; h++) {
+      ['00', '30'].forEach(function (mm) {
+        var t = (h < 10 ? '0' + h : h) + ':' + mm;
+        opts += '<div class="cdd-item' + (t === selected ? ' selected' : '') + '" data-value="' + t + '">' + t + '</div>';
+      });
+    }
+    return '<div style="position:relative;">' +
+      '<button type="button" class="pm-custom-dd-btn supcal-time-dd-btn' + (enabled ? '' : ' disabled') + '" data-supcal-hours-' + which + '="' + dayKey + '" data-selected-time="' + selected + '" style="width:100px;height:36px;"><span class="cdd-value">' + selected + '</span><svg class="cdd-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>' +
+      '<div class="pm-custom-dd-menu supcal-time-dd-menu">' + opts + '</div>' +
+    '</div>';
+  }
+  function supcalCloseEditHours() { document.getElementById('supcalEditHoursOverlay').classList.remove('open'); }
+  document.getElementById('supcalEditHoursCloseBtn').addEventListener('click', supcalCloseEditHours);
+  document.getElementById('supcalEditHoursCancelBtn').addEventListener('click', supcalCloseEditHours);
+  document.getElementById('supcalEditHoursSaveBtn').addEventListener('click', function () {
+    var keys = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+    var body = document.getElementById('supcalEditHoursBody');
+    keys.forEach(function (k) {
+      var row = body.querySelector('[data-supcal-hours-row="' + k + '"]');
+      if (!row) return;
+      var toggleBtn = row.querySelector('[data-supcal-hours-toggle="' + k + '"]');
+      var fromBtn = row.querySelector('[data-supcal-hours-from="' + k + '"]');
+      var toBtn = row.querySelector('[data-supcal-hours-to="' + k + '"]');
+      supcalWorkingHours[k] = {
+        on: toggleBtn ? toggleBtn.classList.contains('on') : false,
+        from: fromBtn ? fromBtn.getAttribute('data-selected-time') : '09:00',
+        to: toBtn ? toBtn.getAttribute('data-selected-time') : '18:00'
+      };
+    });
+    supcalRenderHoursList();
+    supcalCloseEditHours();
+    showToast('Working hours updated.');
+  });
+
+  document.getElementById('supcalAddTimeOffBtn').addEventListener('click', function () {
+    supcalEditingTimeOffIdx = -1;
+    calState.supcalTimeOffFrom.selected = null;
+    calState.supcalTimeOffTo.selected = null;
+    if (typeof updateCalFieldDisplay === 'function') { updateCalFieldDisplay('supcalTimeOffFrom'); updateCalFieldDisplay('supcalTimeOffTo'); }
+    document.getElementById('supcalTimeOffSaveBtn').disabled = true;
+    document.getElementById('supcalTimeOffOverlay').classList.add('open');
+  });
+  function supcalCloseTimeOff() { document.getElementById('supcalTimeOffOverlay').classList.remove('open'); }
+  document.getElementById('supcalTimeOffCloseBtn').addEventListener('click', supcalCloseTimeOff);
+  document.getElementById('supcalTimeOffCancelBtn').addEventListener('click', supcalCloseTimeOff);
+  document.getElementById('supcalTimeOffSaveBtn').addEventListener('click', function () {
+    var f = calState.supcalTimeOffFrom.selected;
+    var t = calState.supcalTimeOffTo.selected;
+    if (!f || !t) return;
+    var newFrom = new Date(f), newTo = new Date(t);
+    if (newFrom > newTo) { var tmp = newFrom; newFrom = newTo; newTo = tmp; }
+    if (supcalEditingTimeOffIdx > -1 && supcalTimeOffRanges[supcalEditingTimeOffIdx]) {
+      var old = supcalTimeOffRanges[supcalEditingTimeOffIdx];
+      supcalMarkRangeUnavailable(old.from, old.to, false);
+      supcalTimeOffRanges[supcalEditingTimeOffIdx] = { from: newFrom, to: newTo };
+      showToast('Time off updated.');
+    } else {
+      supcalTimeOffRanges.push({ from: newFrom, to: newTo });
+      showToast('Time off added.');
+    }
+    supcalMarkRangeUnavailable(newFrom, newTo, true);
+    supcalEditingTimeOffIdx = -1;
+    supcalRenderTimeOff();
+    if (typeof supcalRenderAvailBody === 'function') supcalRenderAvailBody();
+    supcalCloseTimeOff();
+  });
+
+  document.querySelectorAll('.supcal-tab').forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      document.querySelectorAll('.supcal-tab').forEach(function (t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      var key = tab.getAttribute('data-supcal-tab');
+      document.getElementById('supcalPanelSchedule').style.display = key === 'schedule' ? '' : 'none';
+      document.getElementById('supcalPanelAvailability').style.display = key === 'availability' ? '' : 'none';
+      if (key === 'availability') {
+        supcalRenderHoursList();
+        supcalRenderTimeOff();
+        supcalRenderAvailBody();
+      }
+    });
+  });
+
+  var supcalInitDone = false;
+  function initSupcalOnce() {
+    if (!document.getElementById('supcalPopover')) {
+      var pop = document.createElement('div');
+      pop.className = 'supcal-popover';
+      pop.id = 'supcalPopover';
+      document.body.appendChild(pop);
+      pop.addEventListener('click', function () { showToast('Job details aren\u2019t wired up in this prototype yet.'); });
+    }
+    if (supcalInitDone) { supcalRenderScheduleGrid(); return; }
+    supcalInitDone = true;
+    supcalRenderScheduleGrid();
+    supcalRenderHoursList();
+    supcalRenderTimeOff();
+  }
+
   /* ---- Supplier Profile Settings ---- */
-  function switchSupSettingsTab(key) {
+  function switchSupSettingsTab(key, highlightBatchId) {
     document.querySelectorAll('#supSettingsTabs .pm-settings-tab-item').forEach(function (t) { t.classList.toggle('active', t.getAttribute('data-supsettingstab') === key); });
     ['profile', 'sectors', 'insurance', 'requests', 'questionnaire', 'payment', 'settings'].forEach(function (k) {
       var panel = document.getElementById('supSettingsPanel' + k.charAt(0).toUpperCase() + k.slice(1));
@@ -20571,7 +21830,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     });
     var editBtn = document.getElementById('supAcctEditBtn');
     if (editBtn) editBtn.style.display = (key === 'profile' || key === 'sectors' || key === 'insurance' || key === 'payment') ? '' : 'none';
-    if (key === 'requests' && typeof renderSupOwnRequestsList === 'function') renderSupOwnRequestsList();
+    if (key === 'requests' && typeof renderSupOwnRequestsList === 'function') renderSupOwnRequestsList(highlightBatchId);
   }
   document.querySelectorAll('#supSettingsTabs .pm-settings-tab-item').forEach(function (tab) {
     tab.addEventListener('click', function () { switchSupSettingsTab(tab.getAttribute('data-supsettingstab')); });
@@ -20612,7 +21871,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     document.querySelectorAll('.own-resubmit-select-menu.open').forEach(function (m) { m.classList.remove('open'); });
     document.querySelectorAll('.own-resubmit-select-btn.open').forEach(function (b) { b.classList.remove('open'); });
   });
-  function renderSupOwnRequestsList() {
+  function renderSupOwnRequestsList(highlightBatchId) {
     var listEl = document.getElementById('supOwnRequestsList');
     var emptyEl = document.getElementById('supOwnRequestsEmpty');
     var countEl = document.getElementById('supOwnRequestsCount');
@@ -21179,6 +22438,13 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         }
       });
     });
+    if (highlightBatchId) {
+      var highlightCard = listEl.querySelector('.suprq-card[data-request-card="' + highlightBatchId + '"]');
+      if (highlightCard) {
+        suprqToggleCard(highlightCard, true);
+        setTimeout(function () { highlightCard.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+      }
+    }
   }
   setTimeout(function () {
     var initCountEl = document.getElementById('supOwnRequestsCount');
@@ -21570,6 +22836,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     });
   });
   document.getElementById('supSettingsHelpCentreRow').addEventListener('click', function () {
+    showToast('Help centre isn\u2019t wired up in this prototype yet.');
+  });
+  document.getElementById('pmSettingsHelpCentreRow').addEventListener('click', function () {
     showToast('Help centre isn\u2019t wired up in this prototype yet.');
   });
 
@@ -21980,6 +23249,45 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     document.getElementById('supAcctNewEmailInput').value = '';
     showToast('Email address updated.');
   });
+
+  /* Change Email — shared field below the profile avatar, visible for both Sole Trader and Company */
+  (function () {
+    var link = document.getElementById('supAcctTopChangeEmailLink');
+    var form = document.getElementById('supAcctTopChangeEmailForm');
+    var view = document.getElementById('supProfileEmailView');
+    if (!link || !form || !view) return;
+    link.addEventListener('click', function () {
+      var oldEmail = view.textContent.trim();
+      document.getElementById('supAcctTopChangeEmailOldAddr').textContent = ' (' + oldEmail + ')';
+      view.style.display = 'none';
+      link.style.display = 'none';
+      form.style.display = '';
+      showToast('Confirmation email sent to ' + oldEmail + '.');
+      setTimeout(function () { document.getElementById('supAcctTopNewEmailInput').focus(); }, 50);
+    });
+    document.getElementById('supAcctTopCancelChangeEmailBtn').addEventListener('click', function () {
+      form.style.display = 'none';
+      view.style.display = '';
+      link.style.display = '';
+      document.getElementById('supAcctTopNewEmailInput').value = '';
+    });
+    document.getElementById('supAcctTopSendEmailVerifyBtn').addEventListener('click', function () {
+      var newEmail = document.getElementById('supAcctTopNewEmailInput').value.trim();
+      if (!newEmail || newEmail.indexOf('@') === -1) { showToast('Enter a valid new email address first.'); return; }
+      view.textContent = newEmail;
+      var idEmailView = document.getElementById('supIdEmailView');
+      if (idEmailView) idEmailView.textContent = newEmail;
+      var profHeaderEmail = document.getElementById('supProfileHeaderEmail');
+      if (profHeaderEmail) profHeaderEmail.textContent = newEmail;
+      var acctEmailFooter = document.getElementById('supAcctEmail');
+      if (acctEmailFooter) acctEmailFooter.textContent = newEmail;
+      form.style.display = 'none';
+      view.style.display = '';
+      link.style.display = '';
+      document.getElementById('supAcctTopNewEmailInput').value = '';
+      showToast('Email address updated.');
+    });
+  })();
 
   document.getElementById('supAcctVerifyNewNumberBtn').addEventListener('click', function () {
     var newNumber = document.getElementById('supAcctNewNumberInput').value.trim();
@@ -22809,12 +24117,12 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     { initials: 'LD', color: '#16a34a', name: 'Lucy Doyle', email: 'sup.doyle.2@keylr-seed.co.uk', phone: '+447231132179', type: 'Sole Trader', joined: '20 Apr 2026', status: 'Approved', activeState: 'Active' },
     { initials: 'ON', color: '#0d9488', name: 'Oliver Nwosu', email: 'sup.nwosu.68@keylr-seed.co.uk', phone: '+447538311263', type: 'Sole Trader', joined: '16 Apr 2026', status: 'Approved', activeState: 'Active' },
     { initials: 'CB', color: '#7c3aed', name: 'Callum Bennett', email: 'sup.bennett.12@keylr-seed.co.uk', phone: '+447754793886', type: 'Sole Trader', joined: '14 Apr 2026', status: 'Approved', activeState: 'Active' },
-    { initials: 'GO', color: '#f97316', name: 'Gareth Okafor', email: 'sup.okafor.5@keylr-seed.co.uk', phone: '+447368493752', type: 'Sole Trader', joined: '13 Apr 2026', status: 'Suspended', activeState: 'Inactive', photo: 'https://i.pravatar.cc/150?img=18' },
+    { initials: 'GO', color: '#f97316', name: 'Gareth Okafor', email: 'sup.okafor.5@keylr-seed.co.uk', phone: '+447368493752', type: 'Sole Trader', joined: '13 Apr 2026', status: 'Rejected', activeState: 'Inactive', photo: 'https://i.pravatar.cc/150?img=18' },
     { initials: 'AC', color: '#0ea5e9', name: 'Aiden Campbell', email: 'sup.campbell.9@keylr-seed.co.uk', phone: '+447171943490', type: 'Company', joined: '10 Apr 2026', status: 'Approved', activeState: 'Active' },
-    { initials: 'SM', color: '#f2542d', name: 'Sean Morgan', email: 'sup.morgan.3@keylr-seed.co.uk', phone: '+447703778458', type: 'Sole Trader', joined: '8 Apr 2026', status: 'Suspended', activeState: 'Inactive' },
+    { initials: 'SM', color: '#f2542d', name: 'Sean Morgan', email: 'sup.morgan.3@keylr-seed.co.uk', phone: '+447703778458', type: 'Sole Trader', joined: '8 Apr 2026', status: 'Rejected', activeState: 'Inactive' },
     { initials: 'EM', color: '#2563eb', name: 'Emma Marsh', email: 'sup.marsh.41@keylr-seed.co.uk', phone: '+447587625797', type: 'Company', joined: '5 Apr 2026', status: 'Approved', activeState: 'Active', photo: 'https://i.pravatar.cc/150?img=36' },
     { initials: 'MP', color: '#ec4899', name: 'Marcus Patel', email: 'sup.patel.30@keylr-seed.co.uk', phone: '+447838617114', type: 'Sole Trader', joined: '24 Mar 2026', status: 'Approved', activeState: 'Active' },
-    { initials: 'NY', color: '#16a34a', name: 'Nathan Yates', email: 'sup.yates.7@keylr-seed.co.uk', phone: '+447949578363', type: 'Sole Trader', joined: '22 Mar 2026', status: 'Suspended', activeState: 'Inactive' },
+    { initials: 'NY', color: '#16a34a', name: 'Nathan Yates', email: 'sup.yates.7@keylr-seed.co.uk', phone: '+447949578363', type: 'Sole Trader', joined: '22 Mar 2026', status: 'Rejected', activeState: 'Inactive' },
     { initials: 'OW', color: '#7c3aed', name: 'Oliver Wright', email: 'sup.wright.6@keylr-seed.co.uk', phone: '+447533024559', type: 'Company', joined: '22 Mar 2026', status: 'Approved', activeState: 'Active', photo: 'https://i.pravatar.cc/150?img=40' },
     { initials: 'NT', color: '#0d9488', name: 'Nathan Thompson', email: 'sup.thompson.14@keylr-seed.co.uk', phone: '+447610644584', type: 'Company', joined: '20 Mar 2026', status: 'Approved', activeState: 'Active' },
     { initials: 'CB', color: '#f97316', name: 'Callum Bennett', email: 'sup.bennett.28@keylr-seed.co.uk', phone: '+447474446003', type: 'Sole Trader', joined: '19 Mar 2026', status: 'Approved', activeState: 'Active' },
@@ -23095,7 +24403,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       '<div class="supapp-info-cell" style="margin-top:8px;"><span class="supapp-status-dot ' + supAppVerificationDotClass(c.verificationStatus) + '"></span><span>' + c.verificationStatus + '</span></div>' +
       '<div class="supapp-card-divider"></div>' +
       '<div class="supplier-pill-row">' +
-        '<span class="supplier-approved-pill' + (c.status === 'Approved' ? '' : ' suspended') + '">' + c.status + '</span>' +
+        '<span class="' + supStatusPillClass(c.status) + '">' + supStatusDisplayText(c.status) + '</span>' +
         '<span class="supplier-type-pill' + (c.type === 'Sole Trader' ? ' sole-trader' : '') + '">' + typeIcon + c.type + '</span>' +
       '</div>' +
       '<div class="supapp-card-divider supapp-card-divider-footer"></div>' +
@@ -23113,7 +24421,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       '<td><span class="supplier-type-pill' + (c.type === 'Sole Trader' ? ' sole-trader' : '') + '">' + typeIcon + c.type + '</span></td>' +
       '<td><div class="supapp-table-categories-cell">' + supAppCategoryChipsHtmlStatic(c.categories, 1) + '</div></td>' +
       '<td>' + supAppLocationsTableCellHtml(c.locations) + '</td>' +
-      '<td><span class="supplier-approved-pill' + (c.status === 'Approved' ? '' : ' suspended') + '">' + c.status + '</span></td>' +
+      '<td><span class="' + supStatusPillClass(c.status) + '">' + supStatusDisplayText(c.status) + '</span></td>' +
       '<td>' + c.joined + '</td>' +
     '</tr>';
   }
@@ -23586,7 +24894,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     return activeSuppliers.map(function (c, origIdx) { return { c: c, origIdx: origIdx }; }).filter(function (entry) {
       var c = entry.c;
       if (supActiveTab === 'approved' && c.status !== 'Approved') return false;
-      if (supActiveTab === 'suspended' && c.status !== 'Suspended') return false;
+      if (supActiveTab === 'archived' && c.status !== 'Rejected') return false;
       if (supTypeFilter !== 'All Types' && c.type !== supTypeFilter) return false;
       if (supVerificationFilter !== 'All' && c.verificationStatus !== supVerificationFilter) return false;
       if (supDateJoinedFilter === 'Today' && (!c.joinedDate || c.joinedDate < daysAgo(0))) return false;
@@ -24017,7 +25325,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   var pmChangeRequests = {}; // keyed by PM name — same shape as supplierChangeRequests, for PM profile edit requests
   var suprqIdCounter = 480000;
   function suprqNextId() { suprqIdCounter++; return suprqIdCounter; }
-  var SUPRQ_STORAGE_KEY = 'keylrDemoSupplierChangeRequests_v4';
+  var SUPRQ_STORAGE_KEY = 'keylrDemoSupplierChangeRequests_v5';
   function saveChangeRequestsToStorage() {
     try {
       window.localStorage.setItem(SUPRQ_STORAGE_KEY, JSON.stringify(supplierChangeRequests));
@@ -24288,153 +25596,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
           { section: 'Business Legitimacy', fieldLabel: 'VAT registered', oldValue: 'Not registered', newValue: 'Registered \u2014 GB331204587', fieldType: 'vat', vatNumber: 'GB331204587' }
         ] }
       ];
-    } else if (c && c.name === 'Nadia Reid') {
-      var d1 = new Date(); d1.setDate(d1.getDate() - 1); d1.setHours(10, 24, 0, 0);
-      var d2 = new Date(); d2.setDate(d2.getDate() - 3); d2.setHours(15, 52, 0, 0);
-      var d3 = new Date(); d3.setDate(d3.getDate() - 4); d3.setHours(9, 15, 0, 0);
-      var d4 = new Date(); d4.setDate(d4.getDate() - 6); d4.setHours(17, 3, 0, 0);
-      var d5 = new Date(); d5.setDate(d5.getDate() - 9); d5.setHours(11, 41, 0, 0);
-      supplierChangeRequests[key] = [
-        { id: 'batch1', submittedDate: d1, status: 'pending', changes: [
-          { section: 'Identity', fieldLabel: 'Home address', oldValue: '116 Church Lane, Warminster', newValue: '42 Elm Grove, Warminster' },
-          { section: 'Identity', fieldLabel: 'HMRC registered', oldValue: 'Off', newValue: 'On \u2014 UTR: 4029917364' },
-          { section: 'Identity', fieldLabel: 'Proof of Address document', oldValue: 'utility-bill-2024.pdf', newValue: 'council-tax-2026.pdf (new upload)', isDocument: true }
-        ] },
-        { id: 'batch2', submittedDate: d2, status: 'pending', changes: [
-          { section: 'Categories & Roles', fieldLabel: 'Gas Safe registration number', oldValue: 'GS-558241', newValue: 'GS-701934' },
-          { section: 'Categories & Roles', fieldLabel: 'Trade certificate document', oldValue: 'gas-safe-cert-2024.pdf', newValue: 'gas-safe-cert-2026-renewed.pdf (new upload)', isDocument: true }
-        ] },
-        { id: 'batch3', submittedDate: d3, status: 'pending', changes: [
-          { section: 'Insurance', fieldLabel: 'Public Liability Insurance provider', oldValue: 'Hiscox', newValue: 'Zurich Insurance' },
-          { section: 'Insurance', fieldLabel: 'Public Liability policy number', oldValue: 'PL-330202', newValue: 'PL-441098' },
-          { section: 'Insurance', fieldLabel: 'Insurance certificate document', oldValue: 'pli-certificate-2024.pdf', newValue: 'pli-certificate-2026.pdf (new upload)', isDocument: true }
-        ] },
-        { id: 'batch4', submittedDate: d4, status: 'pending', changes: [
-          { section: 'Background Check', fieldLabel: 'DBS level', oldValue: 'Basic', newValue: 'Enhanced', fieldType: 'select', selectOptions: ['Basic', 'Enhanced'] },
-          { section: 'Background Check', fieldLabel: 'DBS certificate number', oldValue: '847162039485', newValue: '902847561123' },
-          { section: 'Background Check', fieldLabel: 'DBS certificate document', oldValue: '47a8ca0b49834c54bf6c789052c13101.pdf', newValue: 'dbs-enhanced-2026.pdf (new upload)', isDocument: true },
-          { section: 'Background Check', fieldLabel: 'Right to Work', oldValue: 'Yes', newValue: 'Yes \u2014 updated visa expiry' }
-        ] },
-        { id: 'batch5', submittedDate: d5, status: 'pending', changes: [
-          { section: 'Business Legitimacy', fieldLabel: 'VAT registered', oldValue: 'Not registered', newValue: 'Registered \u2014 GB553557881' }
-        ] }
-      ];
-    } else if (c && c.name === 'Fernando Arenas Testing') {
-      var f1 = new Date(); f1.setDate(f1.getDate() - 1); f1.setHours(14, 8, 0, 0);
-      var f2 = new Date(); f2.setDate(f2.getDate() - 4); f2.setHours(10, 33, 0, 0);
-      supplierChangeRequests[key] = [
-        { id: 'batch1', submittedDate: f1, status: 'pending', changes: [
-          { section: 'Insurance', fieldLabel: 'Professional Indemnity coverage amount', oldValue: '\u00a3500,000', newValue: '\u00a31,000,000' },
-          { section: 'Identity', fieldLabel: 'Home address', oldValue: '8 Riverside Court, Leeds', newValue: '21 Kirkgate, Leeds' }
-        ] },
-        { id: 'batch2', submittedDate: f2, status: 'pending', changes: [
-          { section: 'Background Check', fieldLabel: 'Criminal Record Declaration', oldValue: 'No unspent convictions', newValue: 'No unspent convictions (re-declared)' },
-          { section: 'Business Legitimacy', fieldLabel: 'VAT number', oldValue: 'GB294857103', newValue: 'GB294857199' }
-        ] }
-      ];
-    } else if (c && c.name === 'gexeki') {
-      var g1 = new Date(); g1.setHours(g1.getHours() - 4);
-      var g2 = new Date(); g2.setDate(g2.getDate() - 2); g2.setHours(13, 47, 0, 0);
-      var g3 = new Date(); g3.setDate(g3.getDate() - 6); g3.setHours(16, 20, 0, 0);
-      supplierChangeRequests[key] = [
-        { id: 'batch1', submittedDate: g1, status: 'pending', changes: [
-          { section: 'Identity', fieldLabel: 'Company registration number', oldValue: '13847562', newValue: '13847599' },
-          { section: 'Identity', fieldLabel: 'Operational address', oldValue: '5 Trinity Way, Birmingham', newValue: '19 Colmore Row, Birmingham' }
-        ] },
-        { id: 'batch2', submittedDate: g2, status: 'pending', changes: [
-          { section: 'Categories & Roles', fieldLabel: 'Electrician registration number', oldValue: 'EL-220914', newValue: 'EL-330771' },
-          { section: 'Insurance', fieldLabel: 'EL Insurance provider', oldValue: 'Not set', newValue: 'AXA Business Insurance' },
-          { section: 'Insurance', fieldLabel: 'EL Policy number', oldValue: 'Not set', newValue: 'EL-556291' },
-          { section: 'Insurance', fieldLabel: 'EL Coverage amount', oldValue: '\u00a35,000,000', newValue: '\u00a310,000,000' },
-          { section: 'Insurance', fieldLabel: 'EL Expiry date', oldValue: 'Not set', newValue: '30 Apr 2027' },
-          { section: 'Insurance', fieldLabel: 'EL Insurance certificate document', oldValue: 'Not uploaded', newValue: 'el-certificate-2026.pdf (new upload)', isDocument: true }
-        ] },
-        { id: 'batch3', submittedDate: g3, status: 'pending', changes: [
-          { section: 'Background Check', fieldLabel: 'Right to Work', oldValue: 'Not confirmed', newValue: 'Yes \u2014 all staff verified' },
-          { section: 'Business Legitimacy', fieldLabel: 'VAT registered', oldValue: 'Not registered', newValue: 'Registered \u2014 GB118827364' }
-        ] }
-      ];
-    } else if (c && c.name === 'Testing supplier') {
-      // Company variant of the full-profile example — mirrors what Ferna shows for Sole Trader,
-      // but with Company Identity, PSC details, and the extra EL Insurance that only Companies need.
-      var tsDate = new Date(); tsDate.setHours(tsDate.getHours() - 3);
-      supplierChangeRequests[key] = [
-        { id: 'batch1', submittedDate: tsDate, status: 'pending', changes: [
-          { section: 'Company Identity', fieldLabel: 'Company name', oldValue: 'Testing supplier', newValue: 'Testing Supplier Services Ltd' },
-          { section: 'Company Identity', fieldLabel: 'Company registration number', oldValue: 'Not set', newValue: '14229104' },
-          { section: 'Company Identity', fieldLabel: 'Trading name', oldValue: 'Not set', newValue: 'TS Property Services' },
-          { section: 'Company Identity', fieldLabel: 'Operational address', oldValue: '22 Dockside Road, Cardiff', newValue: '7 Bute Terrace, Cardiff' },
-          { section: 'Company Identity', fieldLabel: 'PSC full legal name', oldValue: 'Not set', newValue: 'Owen Bevan' },
-          { section: 'Company Identity', fieldLabel: 'PSC date of birth', oldValue: 'Not set', newValue: '08/02/1985' },
-          { section: 'Company Identity', fieldLabel: 'PSC phone number', oldValue: 'Not set', newValue: '+447812445920' },
-          { section: 'Company Identity', fieldLabel: 'PSC email address', oldValue: 'Not set', newValue: 'owen.bevan@tsproperty.co.uk' },
-          { section: 'Company Identity', fieldLabel: 'I confirm this person holds 25%+ of company shares', oldValue: 'Off', newValue: 'On' },
-          { section: 'Company Identity', fieldLabel: 'Proof of Company Address document', oldValue: 'Not uploaded', newValue: 'proof-of-company-address-2026.pdf (new upload)', isDocument: true },
-          { section: 'Tell us about yourself', fieldLabel: 'Sectors served', oldValue: 'Commercial', newValue: 'Residential, Commercial' },
-          { section: 'Categories & Roles', fieldLabel: 'Plumber \u2014 Certificate name', oldValue: 'Not set', newValue: 'City & Guilds Plumbing' },
-          { section: 'Categories & Roles', fieldLabel: 'Plumber \u2014 Registration number', oldValue: 'Not set', newValue: 'PLB-660214' },
-          { section: 'Categories & Roles', fieldLabel: 'Plumber \u2014 Certificate uploaded', oldValue: 'Not uploaded', newValue: 'plumbing-cert-2026.pdf (new upload)', isDocument: true },
-          { section: 'Categories & Roles', fieldLabel: 'Plumber \u2014 Expiry date', oldValue: 'Not set', newValue: '9 Jul 2027' },
-          { section: 'Insurance', fieldLabel: 'PL Insurance provider', oldValue: 'Not set', newValue: 'Hiscox' },
-          { section: 'Insurance', fieldLabel: 'PL Policy number', oldValue: 'Not set', newValue: 'PL-773410' },
-          { section: 'Insurance', fieldLabel: 'PL Coverage amount', oldValue: 'Not set', newValue: '\u00a35,000,000' },
-          { section: 'Insurance', fieldLabel: 'PL Expiry date', oldValue: 'Not set', newValue: '15 Feb 2027' },
-          { section: 'Insurance', fieldLabel: 'PL Certificate document', oldValue: 'Not uploaded', newValue: 'pl-certificate-2026.pdf (new upload)', isDocument: true },
-          { section: 'Insurance', fieldLabel: 'PI Insurance provider', oldValue: 'Not set', newValue: 'Markel' },
-          { section: 'Insurance', fieldLabel: 'PI Policy number', oldValue: 'Not set', newValue: 'PI-118827' },
-          { section: 'Insurance', fieldLabel: 'PI Coverage amount', oldValue: 'Not set', newValue: '\u00a31,000,000' },
-          { section: 'Insurance', fieldLabel: 'PI Expiry date', oldValue: 'Not set', newValue: '3 Nov 2026' },
-          { section: 'Insurance', fieldLabel: 'PI Insurance certificate document', oldValue: 'Not uploaded', newValue: 'pi-certificate-2026.pdf (new upload)', isDocument: true },
-          { section: 'Insurance', fieldLabel: 'EL Insurance provider', oldValue: 'Not set', newValue: 'AXA Business Insurance' },
-          { section: 'Insurance', fieldLabel: 'EL Policy number', oldValue: 'Not set', newValue: 'EL-902317' },
-          { section: 'Insurance', fieldLabel: 'EL Coverage amount', oldValue: 'Not set', newValue: '\u00a310,000,000' },
-          { section: 'Insurance', fieldLabel: 'EL Expiry date', oldValue: 'Not set', newValue: '21 May 2027' },
-          { section: 'Insurance', fieldLabel: 'EL Insurance certificate document', oldValue: 'Not uploaded', newValue: 'el-certificate-2026.pdf (new upload)', isDocument: true },
-          { section: 'Background Check', fieldLabel: 'Are all operatives DBS checked?', oldValue: 'No', newValue: 'Yes' },
-          { section: 'Background Check', fieldLabel: 'DBS level', oldValue: 'Not set', newValue: 'Basic', fieldType: 'select', selectOptions: ['Basic', 'Enhanced'] },
-          { section: 'Background Check', fieldLabel: 'DBS policy document', oldValue: 'Not uploaded', newValue: 'dbs-policy-2026.pdf (new upload)', isDocument: true },
-          { section: 'Background Check', fieldLabel: 'DBS policy description', oldValue: 'Not set', newValue: 'All field-based operatives undergo a Basic DBS check before their first job. Records are re-checked every 3 years and kept on file with HR.' },
-          { section: 'Background Check', fieldLabel: 'Worker vetting policy document', oldValue: 'Not uploaded', newValue: 'vetting-policy-2026.pdf (new upload)', isDocument: true },
-          { section: 'Background Check', fieldLabel: 'Worker vetting policy description', oldValue: 'Not set', newValue: 'Right to work, references, and identity documents are verified for every new hire before they are assigned to a job.' },
-          { section: 'Background Check', fieldLabel: 'Health & Safety policy document', oldValue: 'Not uploaded', newValue: 'hs-policy-2026.pdf (new upload)', isDocument: true },
-          { section: 'Background Check', fieldLabel: 'Health & Safety policy description', oldValue: 'Not set', newValue: 'RAMS are completed for every job type, PPE is provided to all operatives, and incidents are logged and reviewed monthly.' },
-          { section: 'Background Check', fieldLabel: 'Director / PSC Criminal Record Declaration', oldValue: 'Not declared', newValue: 'The PSC has no unspent criminal convictions' },
-          { section: 'Background Check', fieldLabel: 'Right to Work', oldValue: 'Not confirmed', newValue: 'Yes \u2014 all staff have right to work in the UK' },
-          { section: 'Business Legitimacy', fieldLabel: 'VAT registered', oldValue: 'Not registered', newValue: 'Registered \u2014 GB204817663' }
-        ] }
-      ];
-    } else if (c && c.name === 'Marcus Ade') {
-      var h1 = new Date(); h1.setDate(h1.getDate() - 2); h1.setHours(9, 50, 0, 0);
-      supplierChangeRequests[key] = [
-        { id: 'batch1', submittedDate: h1, status: 'pending', changes: [
-          { section: 'Identity', fieldLabel: 'Home address', oldValue: '12 Grange Road, Sheffield', newValue: '3 Meadow Close, Sheffield' },
-          { section: 'Background Check', fieldLabel: 'DBS certificate document', oldValue: 'Not uploaded', newValue: 'dbs-basic-2026.pdf (new upload)', isDocument: true }
-        ] }
-      ];
-    } else if (c) {
-      var templates = [
-        { section: 'Identity', fieldLabel: 'Home address', oldValue: '9 Mill Lane, Bristol', newValue: '27 Orchard Street, Bristol' },
-        { section: 'Identity', fieldLabel: 'Proof of Address document', oldValue: 'bank-statement-2024.pdf', newValue: 'utility-bill-2026.pdf (new upload)', isDocument: true },
-        { section: 'Categories & Roles', fieldLabel: 'Trade certificate registration number', oldValue: 'REG-' + (10000 + supjrHashCode(c.name) % 89999), newValue: 'REG-' + (10000 + (supjrHashCode(c.name) + 777) % 89999) },
-        { section: 'Categories & Roles', fieldLabel: 'Trade certificate document', oldValue: 'gas-safe-cert-2024.pdf', newValue: 'gas-safe-cert-2026-renewed.pdf (new upload)', isDocument: true },
-        { section: 'Insurance', fieldLabel: 'Public Liability Insurance provider', oldValue: 'Aviva', newValue: 'AXA Business Insurance' },
-        { section: 'Insurance', fieldLabel: 'Public Liability policy number', oldValue: 'PL-' + (100000 + supjrHashCode(c.name) % 899999), newValue: 'PL-' + (100000 + (supjrHashCode(c.name) + 42) % 899999) },
-        { section: 'Insurance', fieldLabel: 'Insurance certificate document', oldValue: 'pli-certificate-2024.pdf', newValue: 'pli-certificate-2026.pdf (new upload)', isDocument: true },
-        { section: 'Background Check', fieldLabel: 'DBS level', oldValue: 'Basic', newValue: 'Enhanced', fieldType: 'select', selectOptions: ['Basic', 'Enhanced'] },
-        { section: 'Background Check', fieldLabel: 'DBS certificate document', oldValue: 'dbs-basic-2023.pdf', newValue: 'dbs-enhanced-2026.pdf (new upload)', isDocument: true },
-        { section: 'Background Check', fieldLabel: 'Right to Work', oldValue: 'Yes', newValue: 'Yes \u2014 updated visa expiry' },
-        { section: 'Business Legitimacy', fieldLabel: 'VAT registered', oldValue: 'Not registered', newValue: 'Registered \u2014 GB' + (100000000 + supjrHashCode(c.name) % 899999999) }
-      ];
-      var changeCount = 1 + (supjrHashCode(c.name) % 3); // 1 to 3 field changes in this single submission
-      var changes = [];
-      for (var t = 0; t < changeCount; t++) {
-        var tmpl = templates[(supjrHashCode(c.name) + t * 3) % templates.length];
-        changes.push({ section: tmpl.section, fieldLabel: tmpl.fieldLabel, oldValue: tmpl.oldValue, newValue: tmpl.newValue, isDocument: !!tmpl.isDocument });
-      }
-      var batchDate = new Date(); batchDate.setDate(batchDate.getDate() - (1 + (supjrHashCode(c.name) % 8)));
-      supplierChangeRequests[key] = [
-        { id: 'batch1', submittedDate: batchDate, status: 'pending', changes: changes }
-      ];
     } else {
       supplierChangeRequests[key] = [];
     }
@@ -24623,6 +25784,15 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
           if (!change) return;
           if (action === 'approve') {
             change.status = 'approved';
+            if (change.fieldType === 'business-type') {
+              var newBizType = /company/i.test(change.newValue) ? 'company' : 'sole-trader';
+              supplierBusinessType = newBizType;
+              if (typeof supplierCapturedData !== 'undefined' && supplierCapturedData) supplierCapturedData.businessType = newBizType;
+              document.querySelectorAll('#businessTypeTiles .choice-tile').forEach(function (tile) {
+                tile.classList.toggle('selected', tile.getAttribute('data-value') === newBizType);
+              });
+              if (typeof updateSupProfileTypeChip === 'function') updateSupProfileTypeChip();
+            }
             showToast(change.fieldLabel + ' updated on ' + c.name + '\u2019s profile.');
           } else {
             change.status = 'resubmit';
@@ -24681,6 +25851,15 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
           if (ch.status === 'pending' || ch.status === 'resubmitted') {
             ch.status = action === 'approve' ? 'approved' : 'resubmit';
             actioned++;
+            if (action === 'approve' && ch.fieldType === 'business-type') {
+              var newBizType = /company/i.test(ch.newValue) ? 'company' : 'sole-trader';
+              supplierBusinessType = newBizType;
+              if (typeof supplierCapturedData !== 'undefined' && supplierCapturedData) supplierCapturedData.businessType = newBizType;
+              document.querySelectorAll('#businessTypeTiles .choice-tile').forEach(function (tile) {
+                tile.classList.toggle('selected', tile.getAttribute('data-value') === newBizType);
+              });
+              if (typeof updateSupProfileTypeChip === 'function') updateSupProfileTypeChip();
+            }
           }
         });
         saveChangeRequestsToStorage();
@@ -26271,11 +27450,21 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   document.getElementById('adminSupPublicProfileBackBtn').addEventListener('click', function () {
     showAdminView('supplier-detail');
   });
-  document.getElementById('supDeactivateBtn2').addEventListener('click', function () {
-    document.getElementById('deactivateClientName').textContent = document.getElementById('supDetailName').textContent;
-    document.getElementById('deactivateConfirmInput').value = '';
-    document.getElementById('deactivateConfirmBtn').disabled = true;
-    document.getElementById('deactivateOverlay').classList.add('open');
+  document.getElementById('supArchiveBtn2').addEventListener('click', function () {
+    var c = supDetailCurrentSupplier;
+    if (!c) return;
+    c.status = 'Rejected';
+    showToast(c.name + ' was archived.');
+    if (typeof renderSupplierList === 'function') renderSupplierList();
+    showAdminView('active-suppliers-list');
+  });
+  document.getElementById('supUnarchiveBtn2').addEventListener('click', function () {
+    var c = supDetailCurrentSupplier;
+    if (!c) return;
+    c.status = 'Approved';
+    showToast(c.name + ' was unarchived.');
+    if (typeof renderSupplierList === 'function') renderSupplierList();
+    showAdminView('active-suppliers-list');
   });
   document.getElementById('supApplicantApproveBtn2').addEventListener('click', function () {
     var c = supDetailCurrentSupplier;
@@ -26286,8 +27475,14 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   });
   document.getElementById('supApplicantRejectBtn2').addEventListener('click', function () {
     var c = supDetailCurrentSupplier;
-    c.status = 'Rejected';
-    showToast(c.name + '\u2019s application was archived.');
+    if (!c) return;
+    if (c.status === 'Rejected') {
+      c.status = 'Incomplete';
+      showToast(c.name + '\u2019s application was unarchived.');
+    } else {
+      c.status = 'Rejected';
+      showToast(c.name + '\u2019s application was archived.');
+    }
     renderSupAppList();
     showAdminView('supplier-applicants-list');
   });
@@ -26422,7 +27617,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   }
   function supStatusPillClass(status) {
     if (status === 'Approved') return 'supplier-approved-pill';
-    if (status === 'Suspended') return 'supplier-approved-pill suspended';
     if (status === 'Pending') return 'supplier-approved-pill pending';
     if (status === 'Rejected') return 'supplier-approved-pill rejected';
     return 'supplier-approved-pill incomplete';
@@ -26493,8 +27687,12 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     document.getElementById('supProfilePhoneCode').value = '+44';
     document.getElementById('supProfilePhoneNumber').value = c.phone ? c.phone.replace(/^\+44/, '').trim() : '';
 
-    document.getElementById('supDeactivateBtn2').style.display = source === 'app' ? 'none' : '';
+    var isArchivedAlready = c.status === 'Rejected';
+    document.getElementById('supArchiveBtn2').style.display = (source === 'app' || isArchivedAlready) ? 'none' : 'flex';
+    document.getElementById('supUnarchiveBtn2').style.display = (source === 'app' || !isArchivedAlready) ? 'none' : 'flex';
     document.getElementById('supApplicantActionBtns').style.display = source === 'app' ? 'flex' : 'none';
+    var supApplicantRejectBtnTextEl = document.getElementById('supApplicantRejectBtnText');
+    if (supApplicantRejectBtnTextEl) supApplicantRejectBtnTextEl.textContent = isArchivedAlready ? 'Unarchive' : 'Archive';
     document.getElementById('supViewPublicProfileBtn').style.display = source === 'app' ? 'none' : '';
 
     supPrimaryTradeSelected = null;
@@ -26742,14 +27940,17 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   });
   document.querySelectorAll('.cdd-item').forEach(function (item) {
     item.addEventListener('click', function (e) {
-      e.stopPropagation();
       var menu = item.closest('.pm-custom-dd-menu');
+      if (!menu) return;
       var key = menu.getAttribute('data-dd-menu');
+      if (!key) return; // this item belongs to a menu managed by its own custom logic (e.g. the Calendar filter), not this generic system
       var btn = document.querySelector('.pm-custom-dd-btn[data-dd="' + key + '"]');
+      if (!btn) return;
+      e.stopPropagation();
       menu.querySelectorAll('.cdd-item').forEach(function (i) { i.classList.remove('selected'); });
       item.classList.add('selected');
-      btn.querySelector('.cdd-value').textContent = item.getAttribute('data-value');
-      btn.querySelector('.cdd-value').classList.remove('cdd-placeholder');
+      var valueEl = btn.querySelector('.cdd-value');
+      if (valueEl) { valueEl.textContent = item.getAttribute('data-value'); valueEl.classList.remove('cdd-placeholder'); }
       closeAllCustomDropdowns();
     });
   });
@@ -26765,6 +27966,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     jobsTo: { viewYear: null, viewMonth: null, selected: null },
     appDateJoinedFrom: { viewYear: null, viewMonth: null, selected: null },
     pmDateJoinedFrom: { viewYear: null, viewMonth: null, selected: null },
+    supcalTimeOffFrom: { viewYear: null, viewMonth: null, selected: null },
+    supcalTimeOffTo: { viewYear: null, viewMonth: null, selected: null },
     pmDateJoinedTo: { viewYear: null, viewMonth: null, selected: null },
     appDateJoinedTo: { viewYear: null, viewMonth: null, selected: null },
     supDob: { viewYear: null, viewMonth: null, selected: new Date(1987, 10, 5) },
@@ -26793,6 +27996,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     jobsTo: 'jobsFilterTo',
     appDateJoinedFrom: 'appDateJoinedFromInput',
     pmDateJoinedFrom: 'pmDateJoinedFromInput',
+    supcalTimeOffFrom: 'supcalTimeOffFromInput',
+    supcalTimeOffTo: 'supcalTimeOffToInput',
     pmDateJoinedTo: 'pmDateJoinedToInput',
     appDateJoinedTo: 'appDateJoinedToInput',
     supDob: 'supDobInput',
@@ -27002,6 +28207,19 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (todayBtn) todayBtn.addEventListener('click', syncPmDateJoinedRangeFilter);
   });
 
+  function syncSupcalTimeOffFields() {
+    var saveBtn = document.getElementById('supcalTimeOffSaveBtn');
+    if (saveBtn) saveBtn.disabled = !(calState.supcalTimeOffFrom.selected && calState.supcalTimeOffTo.selected);
+  }
+  ['supcalTimeOffFrom', 'supcalTimeOffTo'].forEach(function (key) {
+    var grid = document.querySelector('.pm-cal-grid[data-cal-grid="' + key + '"]');
+    if (grid) grid.addEventListener('click', function (e) { if (e.target.closest('.pm-cal-day')) syncSupcalTimeOffFields(); });
+    var clearBtn = document.querySelector('[data-cal-clear="' + key + '"]');
+    if (clearBtn) clearBtn.addEventListener('click', syncSupcalTimeOffFields);
+    var todayBtn = document.querySelector('[data-cal-today="' + key + '"]');
+    if (todayBtn) todayBtn.addEventListener('click', syncSupcalTimeOffFields);
+  });
+
   /* Verification chip popovers (Account / Email / Phone) + Payment verification modal */
   var verifCheckSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
   var verifWarnSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>';
@@ -27102,6 +28320,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   }
 
   var currentDetailSource = 'pm';
+  var currentDetailRecord = null;
   var clientDetailStaticDefaults = {
     legalName: document.getElementById('clientLegalName').textContent,
     regNumber: document.getElementById('clientRegNumber').textContent,
@@ -27116,6 +28335,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
   function populateClientDetailFields(c, source) {
     currentDetailSource = source;
+    currentDetailRecord = c;
     document.getElementById('clientBackLabel').textContent = source === 'app' ? 'PM Applicants' : 'Clients';
     document.getElementById('clientBreadcrumbName').textContent = c.name;
     document.getElementById('clientDetailName').textContent = c.name;
@@ -27126,6 +28346,12 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     document.getElementById('clientAvatarRing').style.background = source === 'app' ? '' : c.color;
     var activeChip = document.getElementById('clientActiveChip');
     if (activeChip) activeChip.style.display = source === 'app' ? 'none' : '';
+    var appStickyBar = document.getElementById('clientAppStickyBar');
+    if (appStickyBar) {
+      appStickyBar.style.display = source === 'app' ? 'flex' : 'none';
+      var stickyScore = document.getElementById('clientAppStickyScore');
+      if (stickyScore) stickyScore.textContent = c.completion + '%';
+    }
     document.getElementById('clientProfileCompletionValue').textContent = c.completion + '%';
     var bar = document.getElementById('clientProfileCompletionBar');
     bar.style.width = c.completion + '%';
@@ -27199,6 +28425,24 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
   document.getElementById('clientBackBtn').addEventListener('click', function () {
     showAdminView(currentDetailSource === 'app' ? 'pm-applicants-list' : 'pm-list');
+  });
+
+  document.getElementById('clientAppApproveBtn').addEventListener('click', function () {
+    var c = currentDetailRecord;
+    if (!c) return;
+    c.status = 'Approved';
+    c.completion = 100;
+    showToast(c.name + ' approved as a property manager.');
+    if (typeof renderApplicantList === 'function') renderApplicantList();
+    showAdminView('pm-applicants-list');
+  });
+  document.getElementById('clientAppArchiveBtn').addEventListener('click', function () {
+    var c = currentDetailRecord;
+    if (!c) return;
+    c.status = 'Rejected';
+    showToast(c.name + '\u2019s application was archived.');
+    if (typeof renderApplicantList === 'function') renderApplicantList();
+    showAdminView('pm-applicants-list');
   });
 
   var clientTabPanelIds = { profile: 'clientTabProfile', properties: 'clientTabProperties', jobs: 'clientTabJobs', chat: 'clientTabChat' };
