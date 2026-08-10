@@ -2374,7 +2374,7 @@
   ========================================================== */
 
   /* ---- Inbox module ---- */
-  .sinb-shell { display: flex; flex-direction: column; height: calc(100vh - 72px); background: #fff; position: relative; }
+  .sinb-shell { display: flex; flex-direction: column; height: 70vh; min-height: 480px; background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; overflow: hidden; position: relative; }
   .sinb-titlebar { display: flex; align-items: center; gap: 12px; padding: 16px 28px; border-bottom: 1px solid var(--border-subtle); flex-shrink: 0; }
   .sinb-titlebar h1 { font-weight: 800; color: var(--text-heading); }
   .sinb-unread-pill { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; background: #fef3e2; color: #b45309; font-size: 12.5px; font-weight: 700; padding: 6px 12px; border-radius: 999px; }
@@ -2435,8 +2435,92 @@
   .sinb-header-support-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--accent-blue); background: var(--icon-tint-bg); border: none; border-radius: 8px; padding: 8px 12px; cursor: pointer; }
 
   .sinb-chat-scroll { flex: 1; overflow-y: auto; padding: 22px 28px; background: #fbfcfe; }
+  .sinb-chat-thread-wrap { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; }
+  .sinb-chat-thread-wrap .sinb-chat-scroll, .sinb-chat-thread-wrap .chat-window-thread { flex: 1; min-height: 0; }
+  .sinb-scroll-bottom-btn { position: fixed; width: 36px; height: 36px; border-radius: 50%; background: #fff; border: 1px solid var(--border-subtle); box-shadow: 0 4px 14px rgba(16,24,40,0.14); color: var(--text-body-muted); display: none; align-items: center; justify-content: center; cursor: pointer; transition: transform 130ms ease-out, color 130ms ease-out; z-index: 40; }
+  .sinb-scroll-bottom-btn.show { display: flex; }
+  .sinb-scroll-bottom-btn:hover { color: var(--accent-blue); transform: translateY(-2px); }
+  .sinb-chat-toolbar { display: flex; justify-content: flex-end; padding: 10px 14px 0; }
+  .sinb-activity-log-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--text-body-muted); background: #fff; border: 1px solid var(--border-subtle); border-radius: 8px; padding: 6px 12px; cursor: pointer; }
+  .sinb-activity-log-btn:hover { color: var(--accent-blue); border-color: var(--accent-blue); }
+  .sinb-activity-entry { display: flex; align-items: flex-start; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--border-subtle); }
+  .sinb-activity-entry:last-child { border-bottom: none; }
+  .sinb-activity-icon { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+  .sinb-activity-entry.approved .sinb-activity-icon { background: #eafaf0; color: #146c43; }
+  .sinb-activity-entry.declined .sinb-activity-icon { background: #fef2f2; color: #b91c1c; }
+  .sinb-activity-entry.resubmit_requested .sinb-activity-icon { background: #fef3c7; color: #92620a; }
+  .sinb-activity-entry.resubmitted .sinb-activity-icon { background: #e7edf6; color: #183060; }
+  .sinb-activity-body { flex: 1; min-width: 0; }
+  .sinb-activity-text { font-size: 13px; color: var(--text-heading); line-height: 1.5; }
+  .sinb-activity-time { font-size: 11px; color: var(--text-body-muted); margin-top: 2px; }
   .sinb-date-sep { text-align: center; margin: 18px 0; }
   .sinb-empty-chat { display: flex; align-items: center; justify-content: center; height: 100%; font-size: 13px; color: var(--text-body-muted); text-align: center; padding: 40px; }
+  .sinb-msg-stack-wide { max-width: 400px; width: 100%; }
+  .sinb-cr-group { display: flex; flex-direction: column; gap: 8px; }
+  .sinb-cr-group-intro { font-size: 12px; font-weight: 600; color: var(--text-body-muted); padding: 2px 2px 2px; }
+  .sinb-cr-pending-badge { font-size: 10.5px; font-weight: 700; color: #92620a; background: #fef3c7; padding: 2px 8px; border-radius: 999px; margin-left: 4px; }
+  .sinb-field-card { background: #fff; border: 1px solid var(--border-subtle); border-left: 3px solid #cbd5e1; border-radius: 10px; overflow: hidden; }
+  .sinb-field-card.pending { border-left-color: #f59e0b; }
+  .sinb-field-card.approved { border-left-color: #22c55e; }
+  .sinb-field-card.declined { border-left-color: #ef4444; }
+  .sinb-field-card.resubmit { border-left-color: var(--accent-blue); }
+  .sinb-field-card-head { display: flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 700; color: var(--text-heading); padding: 9px 12px; }
+  .sinb-field-icon { color: var(--text-body-muted); flex-shrink: 0; display: flex; }
+  .sinb-field-title { flex: 1; min-width: 0; }
+  .sinb-field-status-pill { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
+  .sinb-field-status-pill.pending { color: #92620a; background: #fef3c7; }
+  .sinb-field-status-pill.approved { color: #146c43; background: #eafaf0; }
+  .sinb-field-status-pill.declined { color: #b91c1c; background: #fef2f2; }
+  .sinb-field-status-pill.resubmit { color: #183060; background: #e7edf6; }
+  .sinb-field-card-body { padding: 0 12px 12px; }
+  .sinb-field-context { font-size: 11.5px; color: var(--text-body-muted); margin-bottom: 8px; }
+  .sinb-field-value-row { display: flex; align-items: center; gap: 6px; font-size: 12.5px; flex-wrap: wrap; }
+  .sinb-field-old { color: var(--text-body-muted); text-decoration: line-through; }
+  .sinb-field-value-row svg { color: var(--text-body-muted); flex-shrink: 0; }
+  .sinb-field-new { color: var(--text-heading); font-weight: 700; }
+  .sinb-field-actions { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .sinb-cr-action-btn { font-size: 11px; font-weight: 700; padding: 6px 11px; border-radius: 7px; border: 1px solid var(--border-subtle); background: #fff; cursor: pointer; transition: background-color 130ms ease-out; }
+  .sinb-cr-action-btn.approve { color: #146c43; border-color: #b7ebc9; }
+  .sinb-cr-action-btn.approve:hover { background: #eafaf0; }
+  .sinb-cr-action-btn.resubmit { color: #183060; border-color: #c7d2e8; }
+  .sinb-cr-action-btn.resubmit:hover { background: #e7edf6; }
+  .sinb-cr-action-btn.decline { color: #b91c1c; border-color: #fbc7c0; }
+  .sinb-cr-action-btn.decline:hover { background: #fef2f2; }
+  .sinb-field-edit-row { margin-bottom: 8px; }
+  .sinb-field-input, .sinb-field-select { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border-subtle); font-size: 12.5px; font-family: inherit; color: var(--text-heading); background: #fff; }
+  .sinb-field-input:focus, .sinb-field-select:focus { outline: none; border-color: var(--accent-blue); }
+  .sinb-field-toggle-row { display: flex; gap: 6px; }
+  .sinb-field-toggle-btn { flex: 1; padding: 7px 0; border-radius: 8px; border: 1px solid var(--border-subtle); background: #fff; font-size: 12px; font-weight: 700; color: var(--text-body-muted); cursor: pointer; transition: background-color 130ms ease-out, color 130ms ease-out, border-color 130ms ease-out; }
+  .sinb-field-toggle-btn.active { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); }
+  .sinb-field-resubmit-btn { width: 100%; padding: 8px 0; border-radius: 8px; border: none; background: linear-gradient(135deg, #22447f 0%, #0d1b3d 100%); color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; }
+  .sinb-field-resubmit-btn:hover { filter: brightness(1.1); }
+  .sinb-jump-card { display: flex; align-items: center; gap: 8px; background: #fffbeb; border: 1px solid #f5d78e; border-radius: 10px; padding: 9px 12px; font-size: 12px; color: #92620a; }
+  .sinb-jump-card svg { flex-shrink: 0; }
+  .sinb-jump-card span { flex: 1; }
+  .sinb-jump-btn { flex-shrink: 0; font-size: 11px; font-weight: 700; color: #fff; background: #d97706; border: none; padding: 6px 12px; border-radius: 7px; cursor: pointer; }
+  .sinb-jump-btn:hover { filter: brightness(1.08); }
+  @keyframes sinbFieldFlash { 0%, 100% { box-shadow: none; } 30% { box-shadow: 0 0 0 3px rgba(217,119,6,0.35); } }
+  .sinb-field-card-flash { animation: sinbFieldFlash 1200ms ease-out; }
+  .sinb-field-card-foot { border-top: 1px solid var(--border-subtle); padding: 6px 12px; }
+  .sinb-field-reply-btn { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; color: var(--text-body-muted); background: none; border: none; cursor: pointer; padding: 3px 0; }
+  .sinb-field-reply-btn:hover { color: var(--accent-blue); }
+  .sinb-quote-block { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: var(--accent-blue); background: #eef2ff; border-left: 2px solid var(--accent-blue); border-radius: 6px; padding: 5px 8px; margin-bottom: 4px; cursor: pointer; }
+  .sinb-quote-block:hover { background: #e0e7ff; }
+  .sinb-quote-block svg { flex-shrink: 0; }
+  .sinb-reply-preview { display: flex; align-items: center; gap: 8px; background: var(--surface-soft); border-radius: 8px; padding: 7px 10px; margin-bottom: 8px; }
+  .sinb-reply-preview-bar { width: 3px; align-self: stretch; background: var(--accent-blue); border-radius: 999px; flex-shrink: 0; }
+  .sinb-reply-preview-body { flex: 1; min-width: 0; font-size: 12px; }
+  .sinb-reply-preview-label { font-weight: 700; color: var(--accent-blue); margin-right: 5px; }
+  .sinb-reply-preview-field { color: var(--text-heading); }
+  .sinb-reply-preview-close { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; border: none; background: none; color: var(--text-body-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .sinb-reply-preview-close:hover { background: #e2e8f0; }
+  .sinb-field-upload-drop { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; padding: 16px 10px; border: 1.5px dashed var(--border-subtle); border-radius: 8px; cursor: pointer; color: var(--text-body-muted); font-size: 11.5px; transition: border-color 130ms ease-out, background-color 130ms ease-out; }
+  .sinb-field-upload-drop:hover { border-color: var(--accent-blue); background: var(--surface-soft); }
+  .sinb-field-upload-drop.has-file { border-color: #22c55e; border-style: solid; color: #146c43; font-weight: 700; }
+  .sinb-field-date-btn { width: 100%; display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border-subtle); background: #fff; font-size: 12.5px; color: var(--text-heading); cursor: pointer; }
+  .sinb-field-date-btn:hover { border-color: var(--accent-blue); }
+  .sinb-field-date-wrap { position: relative; }
+  .sinb-field-date-wrap .pm-cal-popup { left: 0; right: auto; }
   .sinb-date-sep span { font-size: 11.5px; font-weight: 600; color: var(--text-body-muted); background: #fff; border: 1px solid var(--border-subtle); border-radius: 999px; padding: 4px 14px; }
   .sinb-msg-row { display: flex; margin-bottom: 4px; animation: sinbMsgIn 240ms cubic-bezier(0.16,1,0.3,1) both; }
   @keyframes sinbMsgIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
@@ -2817,7 +2901,6 @@
     display: none;
   }
   .supapp-ms-menu.open { display: block; }
-  #supAppBlockersDdMenu.open { width: 280px; }
   #supCategoryDdMenu.open, #supAppCategoryDdMenu.open { width: 300px; }
   .pm-custom-dd-menu[data-dd-menu="supAppVerification"].open { width: 180px; }
   .pm-custom-dd-menu[data-dd-menu="supVerification"].open { width: 180px; }
@@ -2833,6 +2916,7 @@
   .supapp-ms-item.selected .supapp-ms-check { background: #183060; border-color: #183060; }
   .supapp-all-chips-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; }
   .supapp-location-chips { display: contents; }
+  #supOverviewLocationChips { gap: 6px; flex-wrap: wrap; }
   .supapp-clear-all-btn { font-size: 12px; font-weight: 700; color: var(--accent-blue); background: none; border: none; cursor: pointer; padding: 4px 2px; text-decoration: underline; }
   .supapp-location-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #183060; background: #e7edf6; padding: 5px 8px 5px 12px; border-radius: 999px; }
   .supapp-invite-chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
@@ -3245,14 +3329,17 @@
   .supplier-meta-row:last-child { margin-bottom: 0; }
   .supapp-card-divider { height: 1px; background: var(--border-subtle); margin: 12px 0 10px; }
   #pmContactsViewCard .supapp-card-divider { margin: 14px 0; }
+  .supapp-progress-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .supapp-progress-label { font-size: 12px; font-weight: 600; color: var(--text-body-muted); }
+  .supapp-progress-pct { font-size: 12px; font-weight: 700; color: var(--text-heading); }
+  .supapp-progress-track { height: 6px; border-radius: 999px; background: var(--surface-soft); overflow: hidden; }
+  .supapp-progress-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #204078, #102048); transition: width 400ms ease-out; }
+  .supapp-progress-fill.complete { background: linear-gradient(90deg, #22c55e, #16a34a); }
+  .supapp-progress-pct.complete { color: #146c43; }
   .supapp-category-row { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; margin-bottom: 2px; }
   .supapp-category-chip { font-size: 11px; font-weight: 600; color: #183060; background: #e7edf6; padding: 3px 9px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
   .supapp-role-chip { font-size: 11px; font-weight: 600; color: #183060; background: #e7edf6; padding: 3px 9px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
   .supapp-category-more { font-size: 11px; font-weight: 700; color: var(--text-body-muted); background: var(--surface-soft); padding: 3px 9px; border-radius: 999px; white-space: nowrap; cursor: default; }
-  .supapp-verification-chip { font-size: 11px; font-weight: 600; color: #146c43; background: #eafaf0; padding: 3px 9px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; display: inline-flex; align-items: center; gap: 4px; }
-  .supapp-verification-chip svg { width: 10px; height: 10px; flex-shrink: 0; }
-  .supapp-blocker-chip { font-size: 11px; font-weight: 600; color: #92620a; background: #fef3c7; padding: 3px 9px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; display: inline-flex; align-items: center; gap: 4px; }
-  .supapp-blocker-chip svg { width: 10px; height: 10px; flex-shrink: 0; }
   .supapp-chip-section-label { font-size: 10px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-body-muted); margin-bottom: 4px; }
   .supapp-location-more { font-size: 10.5px; font-weight: 700; color: var(--text-body-muted); background: var(--surface-soft); padding: 1px 6px; border-radius: 999px; white-space: nowrap; cursor: default; }
   .supapp-table-location-tip-wrap { display: inline-block; max-width: 100%; vertical-align: bottom; position: relative; }
@@ -3921,6 +4008,12 @@
     .supapp-table-fixed { width: auto; min-width: 1100px; }
   }
   .supapp-table-fixed .supapp-table-name-wrap { min-width: 0; }
+  .supapp-table-progress-row { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+  .supapp-table-progress-track { width: 60px; height: 4px; border-radius: 999px; background: var(--surface-soft); overflow: hidden; flex-shrink: 0; }
+  .supapp-table-progress-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #204078, #102048); }
+  .supapp-table-progress-fill.complete { background: linear-gradient(90deg, #22c55e, #16a34a); }
+  .supapp-table-progress-pct { font-size: 10.5px; font-weight: 700; color: var(--text-body-muted); }
+  .supapp-table-progress-pct.complete { color: #146c43; }
   .supapp-table-fixed .nm-name, .supapp-table-fixed .nm-email { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .supapp-table-verif { font-size: 12px; font-weight: 600; white-space: nowrap; }
   .supapp-table-verif.good { color: #146c43; }
@@ -4023,6 +4116,7 @@
   .pm-settings-tabs-row { display: flex; gap: 28px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 20px; }
   .pm-settings-tab-item { padding: 12px 2px; font-size: 14px; font-weight: 600; color: var(--text-body-muted); border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; }
   .pm-settings-tab-item.active { color: var(--accent-blue); border-bottom-color: var(--accent-blue); font-weight: 700; }
+  .pm-settings-tab-item[data-supsettingstab="inbox"] { display: ruby; }
   .pm-settings-tab-item:hover:not(.active) { color: var(--text-heading); }
   .settings-input-embed { display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid var(--border-subtle); border-radius: 11px; padding: 0 14px; height: 43px; background: var(--surface-white); transition: border-color 150ms ease-out, box-shadow 150ms ease-out; }
   .settings-input-embed:focus-within { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(40, 72, 144, 0.15); }
@@ -9338,11 +9432,6 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
             <span class="nav-label">Dashboard</span>
           </div>
-          <div class="dash-nav-item" data-nav="inbox">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z"/></svg>
-            <span class="nav-label">Inbox</span>
-            <span class="dash-nav-badge" id="supBadgeInbox" hidden></span>
-          </div>
         </div>
 
         <div class="dash-nav-group">
@@ -9576,43 +9665,6 @@
             </div>
           </div>
 
-          </div>
-
-          <!-- ============ SUPPLIER INBOX VIEW ============ -->
-          <div id="supInboxView" style="display:none;">
-            <div class="sinb-shell">
-              <div class="sinb-titlebar">
-                <div>
-                  <h1 style="font-size:19px;">Inbox</h1>
-                  <div class="dash-content-sub" style="margin-top:1px;">Chat directly with the Keylr Support team</div>
-                </div>
-              </div>
-
-              <div class="sinb-body sinb-body-solo">
-                <div class="sinb-chat-col sinb-chat-col-full" id="sinbChatCol">
-                  <div class="sinb-chat-header" id="sinbChatHeader"></div>
-                  <div class="sinb-chat-scroll" id="sinbChatScroll"></div>
-                  <div class="sinb-composer" id="sinbComposer">
-                    <div class="sinb-composer-icons">
-                      <div style="position:relative;">
-                        <button type="button" class="sinb-icon-btn" id="sinbEmojiBtn" data-tooltip="Add emoji"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg></button>
-                        <div class="sinb-emoji-popover" id="sinbEmojiPopover">
-                          <span data-emoji="👍">👍</span><span data-emoji="👌">👌</span><span data-emoji="🙂">🙂</span><span data-emoji="😀">😀</span><span data-emoji="🙌">🙌</span><span data-emoji="👋">👋</span>
-                          <span data-emoji="✅">✅</span><span data-emoji="🔧">🔧</span><span data-emoji="🚐">🚐</span><span data-emoji="⏰">⏰</span><span data-emoji="📷">📷</span><span data-emoji="👊">👊</span>
-                        </div>
-                      </div>
-                      <button type="button" class="sinb-icon-btn" id="sinbAttachBtn" data-tooltip="Attach image or PDF"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button>
-                      <input type="file" id="sinbAttachInput" accept="image/*,video/*,.pdf" style="display:none;">
-                    </div>
-                    <div class="sinb-input-row">
-                      <input type="text" id="sinbMessageInput" placeholder="Message...">
-                      <button type="button" class="sinb-send-btn" id="sinbSendBtn" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg></button>
-                    </div>
-                    <div class="sinb-composer-hint">Enter to send · Shift + Enter for new line · Images, videos + PDFs up to 10 MB.</div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
 
           <!-- ============ SUPPLIER JOB REQUESTS VIEW ============ -->
@@ -10052,6 +10104,7 @@
                   <div class="pm-settings-tab-item" data-supsettingstab="payment">Payment Setup</div>
                   <div class="pm-settings-tab-item" data-supsettingstab="requests">Requests <span class="pm-count-text" id="supOwnRequestsCount" style="background:#fef3c7;color:#92620a;padding:1px 8px;border-radius:999px;font-weight:700;">0</span></div>
                   <div class="pm-settings-tab-item" data-supsettingstab="settings">Settings</div>
+                  <div class="pm-settings-tab-item" data-supsettingstab="inbox">Chat<span class="dash-nav-badge" id="supSettingsBadgeInbox" hidden style="position:static;margin-left:6px;"></span></div>
                 </div>
                 <button type="button" class="btn btn-primary" id="supAcctEditBtn" style="flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4z"/></svg>Edit</button>
               </div>
@@ -11313,6 +11366,45 @@
                   <div class="sup-settings-footer">Keylr &middot; Version 1.0.0</div>
                 </div>
               </div>
+
+          <!-- ============ SUPPLIER INBOX VIEW ============ -->
+          <div id="supSettingsPanelInbox" class="acct-settings-tab" style="display:none;">
+            <div class="sinb-shell">
+              <div class="sinb-body sinb-body-solo">
+                <div class="sinb-chat-col sinb-chat-col-full" id="sinbChatCol">
+                  <div class="sinb-chat-header" id="sinbChatHeader"></div>
+                  <div class="sinb-chat-thread-wrap">
+                    <div class="sinb-chat-scroll" id="sinbChatScroll"></div>
+                    <button type="button" class="sinb-scroll-bottom-btn" id="sinbScrollBottomBtn" data-tooltip="Jump to latest"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
+                  </div>
+                  <div class="sinb-composer" id="sinbComposer">
+                    <div class="sinb-reply-preview" id="sinbReplyPreview" style="display:none;">
+                      <div class="sinb-reply-preview-bar"></div>
+                      <div class="sinb-reply-preview-body"><span class="sinb-reply-preview-label">Replying to</span><span class="sinb-reply-preview-field" id="sinbReplyPreviewField"></span></div>
+                      <button type="button" class="sinb-reply-preview-close" id="sinbReplyPreviewClose"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+                    </div>
+                    <div class="sinb-composer-icons">
+                      <div style="position:relative;">
+                        <button type="button" class="sinb-icon-btn" id="sinbEmojiBtn" data-tooltip="Add emoji"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg></button>
+                        <div class="sinb-emoji-popover" id="sinbEmojiPopover">
+                          <span data-emoji="👍">👍</span><span data-emoji="👌">👌</span><span data-emoji="🙂">🙂</span><span data-emoji="😀">😀</span><span data-emoji="🙌">🙌</span><span data-emoji="👋">👋</span>
+                          <span data-emoji="✅">✅</span><span data-emoji="🔧">🔧</span><span data-emoji="🚐">🚐</span><span data-emoji="⏰">⏰</span><span data-emoji="📷">📷</span><span data-emoji="👊">👊</span>
+                        </div>
+                      </div>
+                      <button type="button" class="sinb-icon-btn" id="sinbAttachBtn" data-tooltip="Attach image or PDF"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button>
+                      <input type="file" id="sinbAttachInput" accept="image/*,video/*,.pdf" style="display:none;">
+                    </div>
+                    <div class="sinb-input-row">
+                      <input type="text" id="sinbMessageInput" placeholder="Message...">
+                      <button type="button" class="sinb-send-btn" id="sinbSendBtn" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg></button>
+                    </div>
+                    <div class="sinb-composer-hint">Enter to send · Shift + Enter for new line · Images, videos + PDFs up to 10 MB.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
             </div>
           </div>
 
@@ -12465,8 +12557,6 @@
               <div class="supapp-all-chips-row" id="supAppAllChipsRow" style="display:none;">
                 <div class="supapp-location-chips" id="supAppLocationChips"></div>
                 <div class="supapp-location-chips" id="supAppCategoryChips"></div>
-                <div class="supapp-location-chips" id="supAppVerificationChips"></div>
-                <div class="supapp-location-chips" id="supAppBlockersChips"></div>
                 <button type="button" class="supapp-clear-all-btn" id="supAppClearAllBtn">Clear all</button>
               </div>
             </div>
@@ -12476,9 +12566,9 @@
               <div class="pm-table-scroll">
                 <table class="admin-table supapp-table-fixed">
                   <colgroup>
-                    <col style="width:15%;"><col style="width:12%;"><col style="width:10%;"><col style="width:15%;"><col style="width:9%;"><col style="width:9%;"><col style="width:9%;"><col style="width:11%;"><col style="width:10%;">
+                    <col style="width:16%;"><col style="width:13%;"><col style="width:10%;"><col style="width:17%;"><col style="width:10%;"><col style="width:12%;"><col style="width:12%;"><col style="width:10%;">
                   </colgroup>
-                  <thead><tr><th>Name</th><th>Phone</th><th>Type</th><th>Categories</th><th>Location</th><th>Verified</th><th>Blockers</th><th>Status</th><th>Submitted</th></tr></thead>
+                  <thead><tr><th>Name</th><th>Phone</th><th>Type</th><th>Categories</th><th>Location</th><th>Verified</th><th>Status</th><th>Submitted</th></tr></thead>
                   <tbody id="supAppTableBody"></tbody>
                 </table>
               </div>
@@ -13498,6 +13588,29 @@
                   </div>
                 </div>
 
+                <div class="svc-role-drawer-overlay" id="supChatActivityLogOverlay">
+                  <div class="svc-role-drawer">
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--border-subtle);flex-shrink:0;">
+                      <div style="display:flex;align-items:center;gap:10px;">
+                        <div class="dch-icon" style="width:32px;height:32px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg></div>
+                        <h3 style="font-size:15.5px;font-weight:800;color:var(--text-heading);">Activity Log</h3>
+                      </div>
+                      <button type="button" id="supChatActivityLogCloseBtn" aria-label="Close" style="background:none;border:none;cursor:pointer;color:var(--text-body-muted);padding:4px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+                    </div>
+                    <div style="padding:22px;flex:1;overflow-y:auto;">
+                      <div class="callout callout-neutral" style="margin-bottom:16px;">
+                        <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg></div>
+                        <div>
+                          <div class="callout-title">Full history</div>
+                          <div class="callout-body">Every action taken on this supplier's profile requests \u2014 approvals, declines, resubmission requests, and resubmissions \u2014 tracked chronologically.</div>
+                        </div>
+                      </div>
+                      <div id="supChatActivityLogList"></div>
+                      <div id="supChatActivityLogEmpty" style="display:none;padding:8px 0 16px;font-size:13px;color:var(--text-body-muted);">No activity yet on this supplier's requests.</div>
+                    </div>
+                  </div>
+                </div>
+
                 <div id="supTabRequests" style="display:none;">
                   <div class="callout callout-neutral" style="margin-bottom:16px;">
                     <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4z"/></svg></div>
@@ -13513,19 +13626,31 @@
                 <div id="supTabChat" style="display:none;">
                   <div style="display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:stretch;">
                     <div class="chat-window-card">
-                      <div class="chat-window-thread" id="supChatThreadCard">
-                        <div class="chat-day-divider"><span>6 Jul 2026</span></div>
-                        <div class="chat-msg-row"><div class="chat-msg-bubble"><div class="cmb-text" style="background:var(--surface-soft);color:var(--text-heading);">£240.02 has been deposited — your deposit payout of £240.02 has been successfully credited to your bank account.</div></div></div>
-                        <div class="chat-day-divider" style="margin-top:16px;"><span>8 Jul 2026</span></div>
-                        <div class="chat-msg-row"><div class="chat-msg-bubble"><div class="cmb-text" style="background:var(--surface-soft);color:var(--text-heading);">A deposit of £849.98 from your customer has been charged. Keylr Connect is holding the funds until they clear.</div></div></div>
+                      <div class="sinb-chat-toolbar">
+                        <button type="button" class="sinb-activity-log-btn" id="supChatActivityLogBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>Activity log</button>
+                      </div>
+                      <div class="sinb-chat-thread-wrap">
+                        <div class="chat-window-thread" id="supChatThreadCard">
+                          <div class="chat-day-divider"><span>6 Jul 2026</span></div>
+                          <div class="chat-msg-row"><div class="chat-msg-bubble"><div class="cmb-text" style="background:var(--surface-soft);color:var(--text-heading);">£240.02 has been deposited — your deposit payout of £240.02 has been successfully credited to your bank account.</div></div></div>
+                          <div class="chat-day-divider" style="margin-top:16px;"><span>8 Jul 2026</span></div>
+                          <div class="chat-msg-row"><div class="chat-msg-bubble"><div class="cmb-text" style="background:var(--surface-soft);color:var(--text-heading);">A deposit of £849.98 from your customer has been charged. Keylr Connect is holding the funds until they clear.</div></div></div>
+                        </div>
+                        <button type="button" class="sinb-scroll-bottom-btn" id="supChatScrollBottomBtn" data-tooltip="Jump to latest"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
                       </div>
                       <div class="chat-window-input-area">
+                        <div class="sinb-reply-preview" id="supChatReplyPreview" style="display:none;">
+                          <div class="sinb-reply-preview-bar"></div>
+                          <div class="sinb-reply-preview-body"><span class="sinb-reply-preview-label">Replying to</span><span class="sinb-reply-preview-field" id="supChatReplyPreviewField"></span></div>
+                          <button type="button" class="sinb-reply-preview-close" id="supChatReplyPreviewClose"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+                        </div>
                         <div class="chat-flag-banner" id="supChatFlagBanner" style="display:none;background:#fffbeb;border:1px solid #f5b342;border-radius:10px;padding:10px 14px;margin-bottom:10px;align-items:center;justify-content:space-between;">
                           <div><div style="font-size:10.5px;font-weight:700;color:#92620a;letter-spacing:0.04em;">FLAGGING</div><div style="font-size:13px;font-weight:700;color:var(--text-heading);" id="supChatFlagText">ID document</div></div>
                           <span style="cursor:pointer;color:#92620a;" id="supChatFlagClose">&times;</span>
                         </div>
                         <div class="chat-input-row">
-                          <button type="button" class="chat-icon-btn" aria-label="Attach file"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button>
+                          <button type="button" class="chat-icon-btn" id="supChatAttachBtn" aria-label="Attach file"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button>
+                          <input type="file" id="supChatAttachInput" style="display:none;">
                           <textarea id="supChatMessageInput" rows="1" placeholder="Reply to Nadia Reid..."></textarea>
                           <button type="button" class="chat-send-btn" id="supChatSendBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>Send</button>
                         </div>
@@ -19097,13 +19222,14 @@
           if (!supplierChangeRequests[SUP_OWN_DEMO_NAME]) supplierChangeRequests[SUP_OWN_DEMO_NAME] = [];
           supplierChangeRequests[SUP_OWN_DEMO_NAME].push(newBatch);
           if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
+          if (typeof sinbAddEditRequestMessage === 'function') sinbAddEditRequestMessage(newBatch);
           showToast(newBatch.changes.length + ' change' + (newBatch.changes.length === 1 ? '' : 's') + ' submitted for review.');
         } else {
           showToast('No changes to submit.');
         }
         supObEditFromSettings = false;
         supObEditSnapshot = null;
-        switchSupSettingsTab(newBatch ? 'requests' : supObReturnTabKey, newBatch ? newBatch.id : undefined);
+        switchSupSettingsTab(newBatch ? 'inbox' : supObReturnTabKey, newBatch ? newBatch.id : undefined);
       }, 200);
     } else {
       // Final step submit — go straight to the Supplier Dashboard, landing on Account Settings
@@ -19352,6 +19478,7 @@
       if (!alwaysInclude && oldDisplay === newDisplay) return;
       if (!newDisplay || newDisplay === 'Not set') return;
       changes.push({
+        key: key,
         section: map.section,
         fieldLabel: map.label,
         oldValue: alwaysInclude ? newDisplay : oldDisplay,
@@ -19365,7 +19492,7 @@
         var oldVatNum = supObEditSnapshot.vatNumber || '';
         var newVatNum = supplierCapturedData.vatNumber || '';
         if (newVatNum && (alwaysInclude || newVatNum !== oldVatNum)) {
-          changes.push({ section: map.section, fieldLabel: 'VAT number', oldValue: alwaysInclude ? newVatNum : (oldVatNum || 'Not set'), newValue: newVatNum, fieldType: 'text', isDocument: false });
+          changes.push({ key: 'vatNumber', section: map.section, fieldLabel: 'VAT number', oldValue: alwaysInclude ? newVatNum : (oldVatNum || 'Not set'), newValue: newVatNum, fieldType: 'text', isDocument: false });
         }
       }
     });
@@ -19427,13 +19554,14 @@
         if (!supplierChangeRequests[SUP_OWN_DEMO_NAME]) supplierChangeRequests[SUP_OWN_DEMO_NAME] = [];
         supplierChangeRequests[SUP_OWN_DEMO_NAME].push(newBatch);
         if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
+        if (typeof sinbAddEditRequestMessage === 'function') sinbAddEditRequestMessage(newBatch);
         showToast(newBatch.changes.length + ' change' + (newBatch.changes.length === 1 ? '' : 's') + ' submitted for review.');
       } else {
         showToast('No changes to submit.');
       }
       supObEditFromSettings = false;
       supObEditSnapshot = null;
-      switchSupSettingsTab(newBatch ? 'requests' : supObReturnTabKey, newBatch ? newBatch.id : undefined);
+      switchSupSettingsTab(newBatch ? 'inbox' : supObReturnTabKey, newBatch ? newBatch.id : undefined);
     }, 200);
   });
 
@@ -20537,7 +20665,7 @@
     document.getElementById('chipTaxInfoDot').className = 'dot ' + (populated ? 'green' : 'red');
     document.getElementById('supTopAlertBar').style.display = populated ? 'none' : '';
 
-    var badgeMap = { supBadgeInbox: 5, supBadgeJobRequests: 8, supBadgeMyJobs: 3 };
+    var badgeMap = { supSettingsBadgeInbox: 5, supBadgeJobRequests: 8, supBadgeMyJobs: 3 };
     Object.keys(badgeMap).forEach(function (id) {
       var el = document.getElementById(id);
       el.textContent = badgeMap[id];
@@ -20937,7 +21065,6 @@
   /* Sidebar nav item selection */
   var SUP_VIEW_IDS = {
     'home': 'supHomeView',
-    'inbox': 'supInboxView',
     'job-requests': 'supJobRequestsView',
     'service-area': 'supServiceAreaView',
     'calendar': 'supCalendarView',
@@ -20968,8 +21095,6 @@
     Object.keys(SUP_VIEW_IDS).forEach(function (key) {
       document.getElementById(SUP_VIEW_IDS[key]).style.display = (key === view) ? '' : 'none';
     });
-    var dashContentEl = document.querySelector('#supplierDashboard .dash-content');
-    if (dashContentEl) dashContentEl.classList.toggle('dash-content-inbox-mode', view === 'inbox');
     var scrollArea = document.querySelector('#supplierDashboard .dash-scroll-area');
     scrollArea.scrollTo({ top: 0, behavior: 'smooth' });
     var activeViewEl = document.getElementById(SUP_VIEW_IDS[view]);
@@ -20989,9 +21114,6 @@
       } else if (nav === 'job-requests') {
         showSupplierView('job-requests');
         initSupjrOnce();
-      } else if (nav === 'inbox') {
-        showSupplierView('inbox');
-        if (typeof initSupInboxOnce === 'function') initSupInboxOnce();
       } else if (nav === 'service-area') {
         showSupplierView('service-area');
         initSupsaOnce();
@@ -21533,12 +21655,188 @@
   };
 
   function sinbEsc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function sinbNowTimestamp() {
+    var now = new Date();
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    var time = ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2);
+    return now.getDate() + ' ' + months[now.getMonth()] + ', ' + time;
+  }
+  function sinbWireScrollBottomBtn(scrollEl, btnEl) {
+    if (!scrollEl || !btnEl || btnEl.getAttribute('data-wired')) return;
+    btnEl.setAttribute('data-wired', '1');
+    function positionBtn() {
+      var rect = scrollEl.getBoundingClientRect();
+      btnEl.style.right = (window.innerWidth - rect.right + 20) + 'px';
+      btnEl.style.bottom = (window.innerHeight - rect.bottom + 16) + 'px';
+    }
+    function updateVisibility() {
+      var distanceFromBottom = scrollEl.scrollHeight - scrollEl.scrollTop - scrollEl.clientHeight;
+      var shouldShow = distanceFromBottom > 120;
+      btnEl.classList.toggle('show', shouldShow);
+      if (shouldShow) positionBtn();
+    }
+    scrollEl.addEventListener('scroll', updateVisibility);
+    window.addEventListener('resize', positionBtn);
+    btnEl.addEventListener('click', function () {
+      scrollEl.scrollTo({ top: scrollEl.scrollHeight, behavior: 'smooth' });
+    });
+    positionBtn();
+    updateVisibility();
+  }
   function sinbAvatarColor(initials) {
     return '#dbeafe';
   }
 
   function sinbGetActiveConv() {
     return SINB_SUPPORT_CONV;
+  }
+
+  var SUP_CR_STATUS_META = {
+    pending: { label: 'Awaiting review', class: 'pending' },
+    approved: { label: 'Approved \u00b7 live on profile', class: 'approved' },
+    declined: { label: 'Declined', class: 'declined' },
+    resubmit: { label: 'Needs your update', class: 'resubmit' }
+  };
+  var SUP_CR_FIELD_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4z"/></svg>';
+  // Only these specific fields show a document-upload input when resubmission is requested; every
+  // other field (even ones the underlying data marks isDocument) falls back to a simple text input.
+  var SUP_CR_UPLOAD_FIELD_PATTERNS = [
+    /proof of address/i,
+    /public liability|\bpl (insurance|policy)/i,
+    /professional indemnity|\bpi (insurance|policy)/i,
+    /certificate/i // covers per-role trade certificates like Gas Safe, DBS Certificate, etc.
+  ];
+  function sinbFieldWantsUpload(ch) {
+    return SUP_CR_UPLOAD_FIELD_PATTERNS.some(function (re) { return re.test(ch.fieldLabel); });
+  }
+  // Type-aware inline input matching the same component the onboarding wizard uses for this field,
+  // so resubmitting a value in chat feels like the same field, not a generic text box.
+  function sinbFieldInputHtml(ch) {
+    var t = ch.fieldType;
+    if (sinbFieldWantsUpload(ch)) {
+      return '<div class="sinb-field-upload" data-field-upload>' +
+        '<input type="file" data-field-upload-input accept="image/*,.pdf" style="display:none;">' +
+        '<div class="sinb-field-upload-drop" data-field-upload-drop>' +
+          '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>' +
+          '<span data-field-upload-label>Click to upload a new document</span>' +
+        '</div>' +
+      '</div>';
+    }
+    if (t === 'toggle' || t === 'hmrc-toggle' || t === 'vat' || t === 'right-to-work') {
+      var isYes = /^yes$/i.test(ch.newValue);
+      return '<div class="sinb-field-toggle-row" data-field-toggle>' +
+        '<button type="button" class="sinb-field-toggle-btn' + (isYes ? ' active' : '') + '" data-toggle-val="Yes">Yes</button>' +
+        '<button type="button" class="sinb-field-toggle-btn' + (!isYes ? ' active' : '') + '" data-toggle-val="No">No</button>' +
+      '</div>';
+    }
+    if ((t === 'select' || t === 'nationality') && ch.selectOptions && ch.selectOptions.length) {
+      return '<select class="sinb-field-select" data-field-select>' + ch.selectOptions.map(function (o) {
+        return '<option value="' + supjrEscapeHtml(o) + '"' + (o === ch.newValue ? ' selected' : '') + '>' + supjrEscapeHtml(o) + '</option>';
+      }).join('') + '</select>';
+    }
+    if (t === 'date') {
+      return '<div class="sinb-field-date-wrap" data-field-date-wrap="' + ch.id + '">' +
+        '<button type="button" class="sinb-field-date-btn" data-field-date-btn="' + ch.id + '"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span data-field-date-text>' + supjrEscapeHtml(ch.newValue || 'Select date') + '</span></button>' +
+        '<input type="hidden" data-field-date-value value="' + supjrEscapeHtml(ch.newValue) + '">' +
+        '<div class="pm-cal-popup" data-field-cal-popup="' + ch.id + '">' +
+          '<div class="pm-cal-head">' +
+            '<button type="button" class="pm-cal-month-label" data-field-cal-monthlabel="' + ch.id + '"><span data-field-cal-monthtext="' + ch.id + '"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>' +
+            '<div class="pm-cal-nav">' +
+              '<button type="button" class="pm-cal-nav-btn" data-field-cal-prev="' + ch.id + '" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>' +
+              '<button type="button" class="pm-cal-nav-btn" data-field-cal-next="' + ch.id + '" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>' +
+          '<div class="pm-cal-grid" data-field-cal-grid="' + ch.id + '"></div>' +
+        '</div>' +
+      '</div>';
+    }
+    return '<input type="text" class="sinb-field-input" data-field-text value="' + supjrEscapeHtml(ch.newValue) + '">';
+  }
+  function sinbFieldCardHtml(batch, ch, forAdmin) {
+    var meta = SUP_CR_STATUS_META[ch.status] || SUP_CR_STATUS_META.pending;
+    var body = '';
+    if (ch.status === 'resubmit' && !forAdmin) {
+      // Supplier's turn to act — inline, type-aware input right where the request is, no need to
+      // leave the chat and go find the field in Account Settings.
+      body = '<div class="sinb-field-context">Admin asked you to double-check and update this.</div>' +
+        '<div class="sinb-field-edit-row">' + sinbFieldInputHtml(ch) + '</div>' +
+        '<button type="button" class="sinb-field-resubmit-btn" data-cr-resubmit data-batch-id="' + batch.id + '" data-change-id="' + ch.id + '">' + (sinbFieldWantsUpload(ch) ? 'Upload & resubmit' : 'Resubmit') + '</button>';
+    } else if (ch.status === 'resubmit' && forAdmin) {
+      body = '<div class="sinb-field-context">Waiting on the supplier to update and resubmit this.</div>' +
+        '<div class="sinb-field-value-row"><span class="sinb-field-new">' + sinbEsc(String(ch.newValue)) + '</span></div>';
+    } else if (ch.status === 'pending') {
+      body = '<div class="sinb-field-context">' + (forAdmin ? 'Supplier requested this change.' : 'Waiting for admin to review.') + '</div>' +
+        '<div class="sinb-field-value-row"><span class="sinb-field-old">' + sinbEsc(String(ch.oldValue)) + '</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span class="sinb-field-new">' + sinbEsc(String(ch.newValue)) + '</span></div>' +
+        (forAdmin ? '<div class="sinb-field-actions"><button type="button" class="sinb-cr-action-btn approve" data-cr-action="approve" data-batch-id="' + batch.id + '" data-change-id="' + ch.id + '">Accept</button><button type="button" class="sinb-cr-action-btn resubmit" data-cr-action="resubmit" data-batch-id="' + batch.id + '" data-change-id="' + ch.id + '">Ask to resubmit</button><button type="button" class="sinb-cr-action-btn decline" data-cr-action="decline" data-batch-id="' + batch.id + '" data-change-id="' + ch.id + '">Decline</button></div>' : '');
+    } else if (ch.status === 'approved') {
+      body = '<div class="sinb-field-value-row"><span class="sinb-field-new">' + sinbEsc(String(ch.newValue)) + '</span></div>';
+    } else if (ch.status === 'declined') {
+      body = '<div class="sinb-field-context">This update was not applied.</div><div class="sinb-field-value-row"><span class="sinb-field-old" style="text-decoration:none;">' + sinbEsc(String(ch.newValue)) + '</span></div>';
+    }
+    var replyFooter = '<button type="button" class="sinb-field-reply-btn" data-field-reply-btn data-batch-id="' + batch.id + '" data-change-id="' + ch.id + '" data-field-label="' + supjrEscapeHtml(ch.fieldLabel) + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17H4a1 1 0 01-1-1v-4a1 1 0 011-1h5m0-4l-6 6 6 6M21 7v6a4 4 0 01-4 4H8"/></svg>Reply</button>';
+    return '<div class="sinb-field-card ' + meta.class + '" data-change-id="' + ch.id + '">' +
+      '<div class="sinb-field-card-head"><span class="sinb-field-icon">' + SUP_CR_FIELD_ICON + '</span><span class="sinb-field-title">' + sinbEsc(ch.fieldLabel) + '</span><span class="sinb-field-status-pill ' + meta.class + '">' + meta.label + '</span></div>' +
+      '<div class="sinb-field-card-body">' + body + '</div>' +
+      '<div class="sinb-field-card-foot">' + replyFooter + '</div>' +
+    '</div>';
+  }
+  function sinbFindChangeAnywhere(batchId, changeId) {
+    // Reply threads need to work from both the admin's view (any supplier) and the supplier's own
+    // view (always SUP_OWN_DEMO_NAME), so this checks every supplier's batches rather than just one.
+    var allNames = Object.keys(supplierChangeRequests || {});
+    for (var i = 0; i < allNames.length; i++) {
+      var batches = supplierChangeRequests[allNames[i]] || [];
+      for (var j = 0; j < batches.length; j++) {
+        if (batches[j].id === batchId) {
+          for (var k = 0; k < batches[j].changes.length; k++) {
+            if (batches[j].changes[k].id === changeId) return batches[j].changes[k];
+          }
+        }
+      }
+    }
+    return null;
+  }
+  function sinbEditRequestCardHtml(batch, forAdmin) {
+    var cards = batch.changes.map(function (ch) { return sinbFieldCardHtml(batch, ch, forAdmin); }).join('');
+    var pendingCount = batch.changes.filter(function (ch) { return forAdmin ? ch.status === 'pending' : (ch.status === 'pending' || ch.status === 'resubmit'); }).length;
+    var introText = forAdmin
+      ? 'Requested ' + batch.changes.length + ' profile update' + (batch.changes.length === 1 ? '' : 's') + '.'
+      : 'I\u2019d like to update the following on my profile:';
+    return '<div class="sinb-cr-group">' +
+      '<div class="sinb-cr-group-intro">' + introText + (pendingCount ? ' <span class="sinb-cr-pending-badge">' + pendingCount + ' need' + (pendingCount === 1 ? 's' : '') + ' action</span>' : '') + '</div>' +
+      cards +
+    '</div>';
+  }
+  // Best-effort application of an approved value back onto the live profile data, keyed by field
+  // type so toggles/selects apply their actual underlying value rather than the display string.
+  function sinbApplyApprovedChange(ch) {
+    if (!ch.key || typeof supplierCapturedData === 'undefined') return;
+    var t = ch.fieldType;
+    if (t === 'toggle' || t === 'hmrc-toggle' || t === 'vat' || t === 'right-to-work') {
+      supplierCapturedData[ch.key] = /^yes$/i.test(ch.newValue);
+    } else {
+      supplierCapturedData[ch.key] = ch.newValue;
+    }
+  }
+  function sinbAddEditRequestMessage(batch) {
+    SINB_SUPPORT_CONV.messages.push({ kind: 'edit-request', mine: true, batchId: batch.id, time: sinbNowTimestamp() });
+    if (typeof sinbRenderChat === 'function') sinbRenderChat();
+  }
+  function sinbAddEditResponseMessage(text) {
+    SINB_SUPPORT_CONV.messages.push({ kind: 'text', mine: false, text: text, time: sinbNowTimestamp() });
+    if (typeof sinbRenderChat === 'function') sinbRenderChat();
+  }
+  function sinbFindBatch(batchId) {
+    var batches = (supplierChangeRequests && supplierChangeRequests[SUP_OWN_DEMO_NAME]) || [];
+    for (var i = 0; i < batches.length; i++) { if (batches[i].id === batchId) return batches[i]; }
+    return null;
+  }
+  function sinbFindChange(batchId, changeId) {
+    var batch = sinbFindBatch(batchId);
+    if (!batch) return null;
+    for (var i = 0; i < batch.changes.length; i++) { if (batch.changes[i].id === changeId) return batch.changes[i]; }
+    return null;
   }
 
   function sinbRenderChat() {
@@ -21555,17 +21853,169 @@
     scrollEl.innerHTML = c.messages.length ? c.messages.map(function (m) {
       if (m.kind === 'date') return '<div class="sinb-date-sep"><span>' + m.label + '</span></div>';
       if (m.kind === 'system') return '<div class="sinb-msg-row system"><div class="sinb-system-card"><div class="sinb-system-card-inner' + (m.warn ? ' warn' : '') + '"><div class="sinb-system-card-title">' + sinbEsc(m.title) + '</div><div class="sinb-system-card-body">' + sinbEsc(m.body) + '</div></div><div class="sinb-system-card-time">' + m.time + '</div></div></div>';
-      if (m.kind === 'attachment') return '<div class="sinb-msg-row' + (m.mine ? ' mine' : '') + '"><div class="sinb-msg-stack"><div class="sinb-msg-bubble sinb-attachment-bubble"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (m.isImage ? '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>' : '<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/>') + '</svg><span>' + sinbEsc(m.fileName) + '</span></div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
-      return '<div class="sinb-msg-row' + (m.mine ? ' mine' : '') + '"><div class="sinb-msg-stack"><div class="sinb-msg-bubble">' + sinbEsc(m.text) + '</div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
+      if (m.kind === 'attachment') return '<div class="sinb-msg-row' + (m.mine ? ' mine' : '') + '"><div class="sinb-msg-stack">' + supChatQuoteBlockHtml(m) + '<div class="sinb-msg-bubble sinb-attachment-bubble"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (m.isImage ? '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>' : '<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/>') + '</svg><span>' + sinbEsc(m.fileName) + '</span></div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
+      if (m.kind === 'edit-request') {
+        var batch = sinbFindBatch(m.batchId);
+        if (!batch) return '';
+        return '<div class="sinb-msg-row' + (m.mine ? ' mine' : '') + '"><div class="sinb-msg-stack sinb-msg-stack-wide">' + sinbEditRequestCardHtml(batch, false) + '<div class="sinb-msg-time">' + (m.mine ? 'You \u00b7 ' : '') + m.time + '</div></div></div>';
+      }
+      if (m.kind === 'jump-notification') {
+        return '<div class="sinb-msg-row"><div class="sinb-msg-stack"><div class="sinb-jump-card"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg><span>Please update <b>' + sinbEsc(m.fieldLabel) + '</b></span><button type="button" class="sinb-jump-btn" data-jump-change="' + m.changeId + '">Update here</button></div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
+      }
+      return '<div class="sinb-msg-row' + (m.mine ? ' mine' : '') + '"><div class="sinb-msg-stack">' + supChatQuoteBlockHtml(m) + '<div class="sinb-msg-bubble">' + sinbEsc(m.text) + '</div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
     }).join('') : '<div class="sinb-empty-chat">Send a message to start the conversation with Keylr Support.</div>';
     scrollEl.scrollTop = scrollEl.scrollHeight;
+
+    scrollEl.querySelectorAll('[data-field-toggle]').forEach(function (row) {
+      row.querySelectorAll('.sinb-field-toggle-btn').forEach(function (tbtn) {
+        tbtn.addEventListener('click', function () {
+          row.querySelectorAll('.sinb-field-toggle-btn').forEach(function (b) { b.classList.remove('active'); });
+          tbtn.classList.add('active');
+        });
+      });
+    });
+    scrollEl.querySelectorAll('[data-field-upload]').forEach(function (wrap) {
+      var drop = wrap.querySelector('[data-field-upload-drop]');
+      var input = wrap.querySelector('[data-field-upload-input]');
+      var label = wrap.querySelector('[data-field-upload-label]');
+      drop.addEventListener('click', function () { input.click(); });
+      input.addEventListener('change', function () {
+        var file = input.files && input.files[0];
+        if (!file) return;
+        label.textContent = file.name;
+        drop.classList.add('has-file');
+      });
+    });
+    scrollEl.querySelectorAll('[data-field-date-btn]').forEach(function (btn) {
+      var id = btn.getAttribute('data-field-date-btn');
+      var popup = scrollEl.querySelector('[data-field-cal-popup="' + id + '"]');
+      var valueInput = scrollEl.querySelector('[data-field-date-wrap="' + id + '"] [data-field-date-value]');
+      var textEl = scrollEl.querySelector('[data-field-date-wrap="' + id + '"] [data-field-date-text]');
+      if (!popup) return;
+      var state = { viewYear: null, viewMonth: null, selected: null };
+      var parsed = valueInput.value && new Date(valueInput.value);
+      var today = new Date();
+      state.viewYear = (parsed && !isNaN(parsed)) ? parsed.getFullYear() : today.getFullYear();
+      state.viewMonth = (parsed && !isNaN(parsed)) ? parsed.getMonth() : today.getMonth();
+      var SINB_CAL_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      function draw() {
+        popup.querySelector('[data-field-cal-monthtext="' + id + '"]').textContent = SINB_CAL_MONTHS[state.viewMonth] + ' ' + state.viewYear;
+        var grid = popup.querySelector('[data-field-cal-grid="' + id + '"]');
+        var firstDay = new Date(state.viewYear, state.viewMonth, 1).getDay();
+        var daysInMonth = new Date(state.viewYear, state.viewMonth + 1, 0).getDate();
+        var html = '';
+        for (var i = 0; i < firstDay; i++) html += '<span class="pm-cal-day empty"></span>';
+        for (var d = 1; d <= daysInMonth; d++) {
+          var isSel = state.selected && state.selected.getDate() === d && state.selected.getMonth() === state.viewMonth && state.selected.getFullYear() === state.viewYear;
+          html += '<span class="pm-cal-day' + (isSel ? ' selected' : '') + '" data-cal-day="' + d + '">' + d + '</span>';
+        }
+        grid.innerHTML = html;
+        grid.querySelectorAll('[data-cal-day]').forEach(function (dayEl) {
+          dayEl.addEventListener('click', function () {
+            var day = parseInt(dayEl.getAttribute('data-cal-day'), 10);
+            state.selected = new Date(state.viewYear, state.viewMonth, day);
+            var dd = ('0' + day).slice(-2), mm = ('0' + (state.viewMonth + 1)).slice(-2);
+            var display = dd + '/' + mm + '/' + state.viewYear;
+            valueInput.value = display;
+            textEl.textContent = display;
+            popup.classList.remove('open');
+            draw();
+          });
+        });
+      }
+      draw();
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        popup.classList.toggle('open');
+      });
+      popup.querySelector('[data-field-cal-prev="' + id + '"]').addEventListener('click', function (e) {
+        e.stopPropagation();
+        state.viewMonth--; if (state.viewMonth < 0) { state.viewMonth = 11; state.viewYear--; }
+        draw();
+      });
+      popup.querySelector('[data-field-cal-next="' + id + '"]').addEventListener('click', function (e) {
+        e.stopPropagation();
+        state.viewMonth++; if (state.viewMonth > 11) { state.viewMonth = 0; state.viewYear++; }
+        draw();
+      });
+      popup.addEventListener('click', function (e) { e.stopPropagation(); });
+    });
+    scrollEl.querySelectorAll('[data-cr-resubmit]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var batchId = btn.getAttribute('data-batch-id');
+        var changeId = btn.getAttribute('data-change-id');
+        var change = sinbFindChange(batchId, changeId);
+        if (!change) return;
+        var card = btn.closest('.sinb-field-card');
+        var newVal = change.newValue;
+        var toggleActive = card.querySelector('.sinb-field-toggle-btn.active');
+        var selectEl = card.querySelector('[data-field-select]');
+        var textEl = card.querySelector('[data-field-text]');
+        var uploadInput = card.querySelector('[data-field-upload-input]');
+        var dateValueInput = card.querySelector('[data-field-date-value]');
+        if (uploadInput) {
+          var file = uploadInput.files && uploadInput.files[0];
+          if (!file) { showToast('Please upload a document before resubmitting.'); return; }
+          newVal = file.name;
+        } else if (dateValueInput) {
+          if (!dateValueInput.value) { showToast('Please select a date before resubmitting.'); return; }
+          newVal = dateValueInput.value;
+        } else if (toggleActive) newVal = toggleActive.getAttribute('data-toggle-val');
+        else if (selectEl) newVal = selectEl.value;
+        else if (textEl) newVal = textEl.value.trim();
+        if (!newVal) { showToast('Please enter a value before resubmitting.'); return; }
+        var previousValue = change.newValue;
+        change.newValue = newVal;
+        change.status = 'pending';
+        if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
+        if (typeof logSupChatActivity === 'function') {
+          logSupChatActivity(SUP_OWN_DEMO_NAME, { type: 'resubmitted', actor: SUP_OWN_DEMO_NAME, action: 'resubmitted', fieldLabel: change.fieldLabel, oldValue: previousValue, newValue: newVal });
+        }
+        sinbRenderChat();
+        showToast(change.fieldLabel + ' resubmitted for review.');
+      });
+    });
+    scrollEl.querySelectorAll('[data-jump-change]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var changeId = btn.getAttribute('data-jump-change');
+        var target = scrollEl.querySelector('.sinb-field-card[data-change-id="' + changeId + '"]');
+        if (!target) return;
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.classList.remove('sinb-field-card-flash');
+        void target.offsetWidth;
+        target.classList.add('sinb-field-card-flash');
+      });
+    });
+    scrollEl.querySelectorAll('[data-field-reply-btn]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        sinbReplyingTo = { changeId: btn.getAttribute('data-change-id'), fieldLabel: btn.getAttribute('data-field-label') };
+        document.getElementById('sinbReplyPreviewField').textContent = sinbReplyingTo.fieldLabel;
+        document.getElementById('sinbReplyPreview').style.display = 'flex';
+        document.getElementById('sinbMessageInput').focus();
+      });
+    });
   }
 
   var sinbInitDone = false;
+  var sinbReplyingTo = null;
   function initSupInboxOnce() {
     if (sinbInitDone) { sinbRenderChat(); return; }
     sinbInitDone = true;
+    if (typeof seedChangeRequestsIfNeeded === 'function') seedChangeRequestsIfNeeded({ name: SUP_OWN_DEMO_NAME });
+    var existingBatches = (supplierChangeRequests && supplierChangeRequests[SUP_OWN_DEMO_NAME]) || [];
+    var alreadyMessaged = SINB_SUPPORT_CONV.messages.filter(function (m) { return m.kind === 'edit-request'; }).map(function (m) { return m.batchId; });
+    existingBatches.forEach(function (batch) {
+      if (alreadyMessaged.indexOf(batch.id) === -1) {
+        SINB_SUPPORT_CONV.messages.push({ kind: 'edit-request', mine: true, batchId: batch.id, time: '00:00' });
+      }
+    });
     sinbRenderChat();
+    sinbWireScrollBottomBtn(document.getElementById('sinbChatScroll'), document.getElementById('sinbScrollBottomBtn'));
+
+    document.getElementById('sinbReplyPreviewClose').addEventListener('click', function () {
+      sinbReplyingTo = null;
+      document.getElementById('sinbReplyPreview').style.display = 'none';
+    });
 
     // Message input + send
     var msgInput = document.getElementById('sinbMessageInput');
@@ -21576,9 +22026,11 @@
       var text = msgInput.value.trim();
       if (!text) return;
       var c = sinbGetActiveConv();
-      var now = new Date();
-      var timeStr = ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2);
-      c.messages.push({ kind: 'text', mine: true, text: text, time: timeStr });
+      var msg = { kind: 'text', mine: true, text: text, time: sinbNowTimestamp() };
+      if (sinbReplyingTo) { msg.replyToChangeId = sinbReplyingTo.changeId; msg.replyToFieldLabel = sinbReplyingTo.fieldLabel; }
+      c.messages.push(msg);
+      sinbReplyingTo = null;
+      document.getElementById('sinbReplyPreview').style.display = 'none';
       msgInput.value = '';
       updateSendState();
       sinbRenderChat();
@@ -21623,10 +22075,12 @@
       var file = attachInput.files && attachInput.files[0];
       if (!file) return;
       var c = sinbGetActiveConv();
-      var now = new Date();
-      var timeStr = ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2);
       var isImage = file.type.indexOf('image/') === 0;
-      c.messages.push({ kind: 'attachment', mine: true, fileName: file.name, isImage: isImage, time: timeStr });
+      var msg = { kind: 'attachment', mine: true, fileName: file.name, isImage: isImage, time: sinbNowTimestamp() };
+      if (sinbReplyingTo) { msg.replyToChangeId = sinbReplyingTo.changeId; msg.replyToFieldLabel = sinbReplyingTo.fieldLabel; }
+      c.messages.push(msg);
+      sinbReplyingTo = null;
+      document.getElementById('sinbReplyPreview').style.display = 'none';
       attachInput.value = '';
       sinbRenderChat();
       showToast(file.name + ' attached.');
@@ -22813,7 +23267,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   /* ---- Supplier Profile Settings ---- */
   function switchSupSettingsTab(key, highlightBatchId) {
     document.querySelectorAll('#supSettingsTabs .pm-settings-tab-item').forEach(function (t) { t.classList.toggle('active', t.getAttribute('data-supsettingstab') === key); });
-    ['profile', 'sectors', 'insurance', 'requests', 'questionnaire', 'payment', 'settings'].forEach(function (k) {
+    ['profile', 'sectors', 'insurance', 'requests', 'questionnaire', 'payment', 'settings', 'inbox'].forEach(function (k) {
       var panel = document.getElementById('supSettingsPanel' + k.charAt(0).toUpperCase() + k.slice(1));
       panel.style.display = k === key ? '' : 'none';
       if (k === key) {
@@ -22825,6 +23279,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var editBtn = document.getElementById('supAcctEditBtn');
     if (editBtn) editBtn.style.display = (key === 'profile' || key === 'sectors' || key === 'insurance' || key === 'payment') ? '' : 'none';
     if (key === 'requests' && typeof renderSupOwnRequestsList === 'function') renderSupOwnRequestsList(highlightBatchId);
+    if (key === 'inbox' && typeof initSupInboxOnce === 'function') initSupInboxOnce();
   }
   document.querySelectorAll('#supSettingsTabs .pm-settings-tab-item').forEach(function (tab) {
     tab.addEventListener('click', function () { switchSupSettingsTab(tab.getAttribute('data-supsettingstab')); });
@@ -26540,7 +26995,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   });
   function suprqNavigateToSupRequests() {
     if (typeof showSupplierView === 'function') showSupplierView('profile-settings');
-    setTimeout(function () { if (typeof switchSupSettingsTab === 'function') switchSupSettingsTab('requests'); }, 50);
+    setTimeout(function () { if (typeof switchSupSettingsTab === 'function') switchSupSettingsTab('inbox'); }, 50);
   }
   function suprqAdminFocusName() { return (typeof SUP_OWN_DEMO_NAME !== 'undefined') ? SUP_OWN_DEMO_NAME : 'Ferna'; }
   function suprqComputeAdminActionable() {
@@ -27410,7 +27865,15 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   document.getElementById('supDocsFinalSendBtn').addEventListener('click', function () {
     var text = document.getElementById('supDocsComposeText').value.trim();
     document.getElementById('supDocsOverlay').classList.remove('open');
-    if (text) appendSupChatMessage(text);
+    if (text && supDetailCurrentSupplier) {
+      var name = supDetailCurrentSupplier.name;
+      if (name === SUP_OWN_DEMO_NAME && typeof SINB_SUPPORT_CONV !== 'undefined') {
+        SINB_SUPPORT_CONV.messages.push({ kind: 'text', mine: false, text: text, time: sinbNowTimestamp() });
+      } else {
+        if (!SUP_CHAT_EXTRA_MESSAGES[name]) SUP_CHAT_EXTRA_MESSAGES[name] = [];
+        SUP_CHAT_EXTRA_MESSAGES[name].push({ kind: 'text', fromAdmin: true, text: text, time: sinbNowTimestamp() });
+      }
+    }
     showToast('Documents sent to ' + supDetailCurrentSupplier.name + '.');
     switchSupTab('chat');
   });
@@ -27470,32 +27933,56 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   });
   document.getElementById('supChatFlagClose').addEventListener('click', function () { document.getElementById('supChatFlagBanner').style.display = 'none'; });
 
-  function appendSupChatMessage(text) {
-    var thread = document.getElementById('supChatThreadCard');
-    var row = document.createElement('div');
-    row.className = 'chat-msg-row out';
-    var bubble = document.createElement('div');
-    bubble.className = 'chat-msg-bubble';
-    var textEl = document.createElement('div');
-    textEl.className = 'cmb-text';
-    textEl.textContent = text;
-    var metaEl = document.createElement('div');
-    metaEl.className = 'cmb-meta';
-    metaEl.innerHTML = 'You<span class="dot-sep"></span>' + chatFormatNowTime() + ' <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
-    bubble.appendChild(textEl);
-    bubble.appendChild(metaEl);
-    row.appendChild(bubble);
-    thread.appendChild(row);
-    thread.scrollTop = thread.scrollHeight;
-  }
   document.getElementById('supChatSendBtn').addEventListener('click', function () {
     var input = document.getElementById('supChatMessageInput');
     var text = input.value.trim();
-    if (!text) return;
-    appendSupChatMessage(text);
+    if (!text || !supDetailCurrentSupplier) return;
+    var name = supDetailCurrentSupplier.name;
+    var isLiveSupplier = name === SUP_OWN_DEMO_NAME && typeof SINB_SUPPORT_CONV !== 'undefined';
+    if (isLiveSupplier) {
+      var liveMsg = { kind: 'text', mine: false, text: text, time: sinbNowTimestamp() };
+      if (supChatReplyingTo) { liveMsg.replyToChangeId = supChatReplyingTo.changeId; liveMsg.replyToFieldLabel = supChatReplyingTo.fieldLabel; }
+      SINB_SUPPORT_CONV.messages.push(liveMsg);
+    } else {
+      if (!SUP_CHAT_EXTRA_MESSAGES[name]) SUP_CHAT_EXTRA_MESSAGES[name] = [];
+      var msg = { kind: 'text', fromAdmin: true, text: text, time: sinbNowTimestamp() };
+      if (supChatReplyingTo) { msg.replyToChangeId = supChatReplyingTo.changeId; msg.replyToFieldLabel = supChatReplyingTo.fieldLabel; }
+      SUP_CHAT_EXTRA_MESSAGES[name].push(msg);
+    }
+    supChatReplyingTo = null;
+    document.getElementById('supChatReplyPreview').style.display = 'none';
     input.value = '';
     input.style.height = 'auto';
     document.getElementById('supChatFlagBanner').style.display = 'none';
+    renderSupChatThread();
+  });
+  document.getElementById('supChatReplyPreviewClose').addEventListener('click', function () {
+    supChatReplyingTo = null;
+    document.getElementById('supChatReplyPreview').style.display = 'none';
+  });
+  document.getElementById('supChatAttachBtn').addEventListener('click', function () {
+    document.getElementById('supChatAttachInput').click();
+  });
+  document.getElementById('supChatAttachInput').addEventListener('change', function () {
+    var file = this.files && this.files[0];
+    if (!file || !supDetailCurrentSupplier) return;
+    var name = supDetailCurrentSupplier.name;
+    var isLiveSupplier = name === SUP_OWN_DEMO_NAME && typeof SINB_SUPPORT_CONV !== 'undefined';
+    if (isLiveSupplier) {
+      var liveMsg = { kind: 'attachment', mine: false, fileName: file.name, time: sinbNowTimestamp() };
+      if (supChatReplyingTo) { liveMsg.replyToChangeId = supChatReplyingTo.changeId; liveMsg.replyToFieldLabel = supChatReplyingTo.fieldLabel; }
+      SINB_SUPPORT_CONV.messages.push(liveMsg);
+    } else {
+      if (!SUP_CHAT_EXTRA_MESSAGES[name]) SUP_CHAT_EXTRA_MESSAGES[name] = [];
+      var msg = { kind: 'attachment', fromAdmin: true, fileName: file.name, time: sinbNowTimestamp() };
+      if (supChatReplyingTo) { msg.replyToChangeId = supChatReplyingTo.changeId; msg.replyToFieldLabel = supChatReplyingTo.fieldLabel; }
+      SUP_CHAT_EXTRA_MESSAGES[name].push(msg);
+    }
+    supChatReplyingTo = null;
+    document.getElementById('supChatReplyPreview').style.display = 'none';
+    this.value = '';
+    renderSupChatThread();
+    showToast(file.name + ' attached.');
   });
   document.getElementById('supChatMessageInput').addEventListener('keydown', function (e) {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); document.getElementById('supChatSendBtn').click(); }
@@ -27831,12 +28318,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   }
   function supAppRelativeDate(d) {
     if (!d) return '\u2014';
-    var diffDays = Math.round((new Date().setHours(0, 0, 0, 0) - new Date(d).setHours(0, 0, 0, 0)) / 86400000);
-    if (diffDays <= 0) return 'Today';
-    if (diffDays === 1) return 'Yesterday';
-    if (diffDays < 30) return diffDays + ' days ago';
-    var months = Math.round(diffDays / 30);
-    return months === 1 ? '1 month ago' : months + ' months ago';
+    var date = new Date(d);
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear();
   }
   function supAppVerificationDotClass(v) {
     return v === 'Verification Complete' ? 'is-good' : 'is-warn';
@@ -27858,27 +28342,14 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (!roles || !roles.length) return '<span class="acct-view-empty" style="font-size:12px;">No role set</span>';
     return roles.map(function (role) { return '<span class="supapp-role-chip" data-chip-fit>' + supjrEscapeHtml(role) + '</span>'; }).join('');
   }
-  function supAppVerificationChipsHtml(tags) {
-    if (!tags || !tags.length) return '<span class="acct-view-empty" style="font-size:12px;">Nothing verified yet</span>';
-    return tags.map(function (t) { return '<span class="supapp-verification-chip" data-chip-fit><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>' + supjrEscapeHtml(t) + '</span>'; }).join('');
-  }
-  function supAppBlockerChipsHtml(tags) {
-    if (!tags || !tags.length) return '';
-    return tags.map(function (t) { return '<span class="supapp-blocker-chip" data-chip-fit><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>' + supjrEscapeHtml(t) + '</span>'; }).join('');
-  }
-  // Compact text summary for the card's info grid — full detail lives in the tooltip on hover,
-  // avoiding the extra vertical space a full chip section per field would take on every card.
+  // Compact text summary for the card's info grid — full detail lives in the tooltip on hover.
   function supAppVerificationSummaryHtml(c) {
     var tags = c.verificationTags || [];
-    var text = tags.length ? tags.length + ' Verified' : 'Nothing verified yet';
-    var tip = tags.length ? supjrEscapeHtml(tags.join(', ')) : '';
-    return '<div class="supapp-info-cell good"' + (tip ? ' data-tooltip="' + tip + '"' : '') + '><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>' + text + '</span></div>';
-  }
-  function supAppBlockersSummaryHtml(c) {
-    var tags = c.blockerTags || [];
-    if (!tags.length) return '<div class="supapp-info-cell good"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>No blockers</span></div>';
-    var tip = supjrEscapeHtml(tags.join(', '));
-    return '<div class="supapp-info-cell warn" data-tooltip="' + tip + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg><span>' + tags.length + ' Blocker' + (tags.length === 1 ? '' : 's') + '</span></div>';
+    var isVerified = tags.indexOf('Verified') !== -1;
+    var displayTags = tags.filter(function (t) { return t !== 'Onboarding Complete'; });
+    var text = displayTags.length ? displayTags.join(', ') : 'Unverified';
+    var tip = displayTags.length ? supjrEscapeHtml(displayTags.join(', ')) : '';
+    return '<div class="supapp-info-cell' + (isVerified ? ' good' : ' warn') + '"' + (tip ? ' data-tooltip="' + tip + '"' : '') + '><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' + (isVerified ? '<path d="M20 6L9 17l-5-5"/>' : '<circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/>') + '</svg><span>' + text + '</span></div>';
   }
   /* After a card's chip rows are in the DOM, this measures the row's actual available width and hides
      whichever trailing chips don't fit, folding them into an accurate "+N" badge (with a hover tooltip
@@ -27999,8 +28470,13 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         '<div class="supapp-info-cell' + (c.phone ? '' : ' muted-italic') + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg><span>' + (c.phone || 'No phone provided') + '</span></div>' +
         '<div class="supapp-info-cell" data-tooltip="' + supjrEscapeHtml((c.locations || []).join(', ')) + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><span>' + supAppLocationsText(c.locations) + '</span></div>' +
         supAppVerificationSummaryHtml(c) +
-        supAppBlockersSummaryHtml(c) +
       '</div>' +
+      '<div class="supapp-card-divider"></div>' +
+      '<div class="supapp-progress-row">' +
+        '<span class="supapp-progress-label">Onboarding Complete</span>' +
+        '<span class="supapp-progress-pct' + ((c.verificationTags || []).indexOf('Onboarding Complete') !== -1 ? ' complete' : '') + '">' + (c.completion || 0) + '%</span>' +
+      '</div>' +
+      '<div class="supapp-progress-track"><div class="supapp-progress-fill' + ((c.verificationTags || []).indexOf('Onboarding Complete') !== -1 ? ' complete' : '') + '" style="width:' + (c.completion || 0) + '%;"></div></div>' +
       '<div class="supapp-card-divider"></div>' +
       '<div class="supplier-pill-row">' +
         '<span class="supplier-approved-pill ' + supAppStatusClass(c.status) + '">' + supAppStatusDisplayText(c.status) + '</span>' +
@@ -28015,19 +28491,21 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   function renderSupAppTableRow(c, i) {
     var typeIcon = c.type === 'Company' ? companyIconSvg : personIconSvg;
     var vTags = c.verificationTags || [];
-    var bTags = c.blockerTags || [];
-    var vCellText = vTags.length ? vTags.length + ' Verified' : 'None yet';
-    var vCellTip = vTags.length ? supjrEscapeHtml(vTags.join(', ')) : '';
-    var bCellText = bTags.length ? bTags.length + ' Blocker' + (bTags.length === 1 ? '' : 's') : 'None';
-    var bCellTip = bTags.length ? supjrEscapeHtml(bTags.join(', ')) : '';
+    var isVerified = vTags.indexOf('Verified') !== -1;
+    var vCellText = isVerified ? 'Verified' : 'Unverified';
+    var isOnboardingComplete = vTags.indexOf('Onboarding Complete') !== -1;
+    var completion = c.completion || 0;
     return '<tr class="pm-table-row supplier-table-row" data-idx="' + i + '">' +
-      '<td><div class="pm-name-cell"><div class="pm-card-avatar">' + supAppAvatarHtml(c) + '</div><div class="supapp-table-name-wrap"><div class="nm-name" data-tooltip="' + supjrEscapeHtml(c.name) + '">' + c.name + '</div><div class="nm-email">' + (c.email || 'No email') + '</div></div></div></td>' +
+      '<td><div class="pm-name-cell"><div class="pm-card-avatar">' + supAppAvatarHtml(c) + '</div><div class="supapp-table-name-wrap">' +
+        '<div class="nm-name" data-tooltip="' + supjrEscapeHtml(c.name) + '">' + c.name + '</div>' +
+        '<div class="nm-email">' + (c.email || 'No email') + '</div>' +
+        '<div class="supapp-table-progress-row"><div class="supapp-table-progress-track"><div class="supapp-table-progress-fill' + (isOnboardingComplete ? ' complete' : '') + '" style="width:' + completion + '%;"></div></div><span class="supapp-table-progress-pct' + (isOnboardingComplete ? ' complete' : '') + '">' + completion + '%</span></div>' +
+      '</div></div></td>' +
       '<td>' + (c.phone || '\u2014') + '</td>' +
       '<td>' + (c.type ? '<span class="supplier-type-pill' + (c.type === 'Sole Trader' ? ' sole-trader' : '') + '">' + typeIcon + c.type + '</span>' : '\u2014') + '</td>' +
       '<td><div class="supapp-table-categories-cell">' + supAppCategoryChipsHtmlStatic(c.categories, 1, true) + '</div></td>' +
       '<td>' + supAppLocationsTableCellHtml(c.locations) + '</td>' +
-      '<td><span class="supapp-table-verif good"' + (vCellTip ? ' data-tooltip="' + vCellTip + '"' : '') + '>' + vCellText + '</span></td>' +
-      '<td>' + (bTags.length ? '<span class="supapp-table-verif warn" data-tooltip="' + bCellTip + '">' + bCellText + '</span>' : '<span class="supapp-table-verif good">' + bCellText + '</span>') + '</td>' +
+      '<td><span class="supapp-table-verif' + (isVerified ? ' good' : ' warn') + '">' + vCellText + '</span></td>' +
       '<td><span class="supplier-approved-pill ' + supAppStatusClass(c.status) + '">' + supAppStatusDisplayText(c.status) + '</span></td>' +
       '<td>' + supAppRelativeDate(c.dateSubmitted) + '</td>' +
     '</tr>';
@@ -28041,7 +28519,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   var supSortOrder = 'Newest';
   var supAppTypeFilter = 'All Types';
   var supAppVerificationFilter = [];
-  var supAppBlockersFilter = [];
   var supAppDateFilter = 'All Time';
   var supAppDateFrom = null;
   var supAppDateTo = null;
@@ -28099,23 +28576,27 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var categoryCycle = Object.keys(categoryRoles).length ? Object.keys(categoryRoles) : ['Appliances', 'Cleaning', 'Electrical', 'Gas & Heating', 'Plumbing'];
     var SUP_APP_STATUS_CYCLE = ['New', 'In Review', 'Requests', 'Archived'];
     var VERIFICATION_TAG_SETS = [
-      ['Documents Verified', 'Identity Verified'],
-      ['Documents Verified', 'Certificates Verified', 'Identity Verified', 'Onboarding Complete', 'Verification Complete'],
-      ['Identity Verified', 'Resubmitted'],
-      []
-    ];
-    var BLOCKER_TAG_SETS = [
-      ['Documents Pending', 'Onboarding Incomplete'],
-      [],
-      ['Resubmission Required', 'Certificates Pending'],
-      ['Compliance Issue', 'Verification Pending']
+      ['Verified', 'Onboarding Complete'],
+      ['Unverified', 'Onboarding Complete'],
+      ['Unverified'],
+      ['Unverified']
     ];
     supplierApplicants.forEach(function (c, i) {
       c.status = SUP_APP_STATUS_CYCLE[i % SUP_APP_STATUS_CYCLE.length];
       if (c.docsVerified === undefined) c.docsVerified = (i % 3 !== 0); // ~2/3 fully verified, 1/3 still pending — mirrors their Compliance Checklist completion
       if (!c.verificationStatus) c.verificationStatus = c.docsVerified ? 'Verification Complete' : 'Verification Pending';
       if (!c.verificationTags) c.verificationTags = VERIFICATION_TAG_SETS[i % VERIFICATION_TAG_SETS.length];
-      if (!c.blockerTags) c.blockerTags = BLOCKER_TAG_SETS[i % BLOCKER_TAG_SETS.length];
+      if (c.completion === undefined) {
+        var hasOnboardingComplete = c.verificationTags.indexOf('Onboarding Complete') !== -1;
+        c.completion = hasOnboardingComplete ? 100 : (30 + (i * 17) % 65); // varied partial values, never 100 when not marked complete
+      }
+      // Business rule: a supplier can only be "Verified" once onboarding is fully complete (100%).
+      // Enforced here directly (not just via the tag-set design above) so it holds even if
+      // verificationTags and completion ever drift out of sync.
+      if (c.completion < 100 && c.verificationTags.indexOf('Verified') !== -1) {
+        c.verificationTags = c.verificationTags.filter(function (t) { return t !== 'Verified'; });
+        if (c.verificationTags.indexOf('Unverified') === -1) c.verificationTags.push('Unverified');
+      }
       if (!c.categories) {
         var catCount = 1 + (i % 5); // 1 to 5 categories, varied so the card's overflow ("+N") is testable
         var cats = [];
@@ -28187,9 +28668,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   /* ---- Dynamic filter bar config — add a new entry here to add a new filter, no other wiring needed ---- */
   var SUP_APP_FILTER_DEFS = [
     { key: 'supAppVerification', label: 'Verification Status', type: 'multiSelect', allValue: 'All Verification',
-      options: ['Documents Verified', 'Certificates Verified', 'Identity Verified', 'Resubmitted', 'Onboarding Complete', 'Verification Complete'] },
-    { key: 'supAppBlockers', label: 'Blockers / Reasons', type: 'multiSelect', allValue: 'All Blockers',
-      options: ['Documents Pending', 'Certificates Pending', 'Identity Verification Pending', 'Resubmission Required', 'Compliance Issue', 'Onboarding Incomplete', 'Verification Pending'] },
+      options: ['Verified', 'Unverified', 'Onboarding Complete'] },
     { key: 'supAppDateSubmitted', label: 'Date Submitted', type: 'dateRange', allValue: 'All Time',
       options: ['All Time', 'Today', 'Last 7 Days', 'Last 30 Days', 'Custom Date Range'] },
     { key: 'supAppCategory', label: 'Service Category & Role', type: 'categoryRole', allValue: 'All Categories', searchable: true },
@@ -28293,7 +28772,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         var msOpts = def.options.map(function (opt) {
           return '<div class="supapp-ms-item" data-value="' + supjrEscapeHtml(opt) + '"><span class="supapp-ms-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>' + opt + '</div>';
         }).join('');
-        var msWidthStyle = def.key === 'supAppBlockers' ? 'flex:1 1 210px; min-width:190px;' : 'flex:1 1 160px; min-width:140px;';
+        var msWidthStyle = 'flex:1 1 160px; min-width:140px;';
         return '<div class="pm-filter-field" style="' + msWidthStyle + '">' +
           '<div class="pff-legend-wrap"><label>' + def.label + '</label></div>' +
           '<button type="button" class="pm-custom-dd-btn" id="' + def.key + 'DdBtn">' +
@@ -28375,59 +28854,29 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       });
     });
 
-    // Generic simple multi-select wiring (Verification Status, Blockers / Reasons) — no search
-    // input or nested items, just a flat toggleable checklist.
-    function updateSupAppSimpleMultiSelectChips(key, filterArray) {
-      var chipsWrap = document.getElementById(key + 'Chips');
-      if (!chipsWrap) return;
-      if (!filterArray.length) { chipsWrap.innerHTML = ''; updateSupAppAllChipsRowVisibility(); return; }
-      chipsWrap.innerHTML = filterArray.map(function (val) {
-        return '<span class="supapp-location-chip">' + supjrEscapeHtml(val) + '<button type="button" data-remove-val="' + supjrEscapeHtml(val) + '" aria-label="Remove ' + supjrEscapeHtml(val) + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>';
-      }).join('');
-      updateSupAppAllChipsRowVisibility();
-      chipsWrap.querySelectorAll('[data-remove-val]').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          var val = btn.getAttribute('data-remove-val');
-          var idx = filterArray.indexOf(val);
-          if (idx !== -1) filterArray.splice(idx, 1);
-          var optItem = document.querySelector('#' + key + 'OptionsList .supapp-ms-item[data-value="' + val + '"]');
-          if (optItem) optItem.classList.remove('selected');
-          var ddLabelEl = document.getElementById(key + 'DdLabel');
-          var allLabelText = key === 'supAppVerification' ? 'All Verification' : 'All Blockers';
-          if (ddLabelEl) ddLabelEl.textContent = filterArray.length ? filterArray.length + ' selected' : allLabelText;
-          updateSupAppSimpleMultiSelectChips(key, filterArray);
-          supAppCurrentPage = 1;
-          renderSupAppList();
-        });
-      });
-    }
-    function initSupAppSimpleMultiSelect(key, filterArray, allLabel) {
-      var ddBtn = document.getElementById(key + 'DdBtn');
-      var ddMenu = document.getElementById(key + 'DdMenu');
-      var ddLabel = document.getElementById(key + 'DdLabel');
-      if (!ddBtn || !ddMenu) return;
-      ddBtn.addEventListener('click', function (e) {
+    var appVerifDdBtn = document.getElementById('supAppVerificationDdBtn');
+    var appVerifDdMenu = document.getElementById('supAppVerificationDdMenu');
+    var appVerifDdLabel = document.getElementById('supAppVerificationDdLabel');
+    if (appVerifDdBtn && appVerifDdMenu) {
+      appVerifDdBtn.addEventListener('click', function (e) {
         e.stopPropagation();
-        var wasOpen = ddMenu.classList.contains('open');
+        var wasOpen = appVerifDdMenu.classList.contains('open');
         if (typeof closeAllCustomDropdowns === 'function') closeAllCustomDropdowns();
-        if (!wasOpen) ddMenu.classList.add('open');
+        if (!wasOpen) appVerifDdMenu.classList.add('open');
       });
-      ddMenu.addEventListener('click', function (e) { e.stopPropagation(); });
-      document.querySelectorAll('#' + key + 'OptionsList .supapp-ms-item').forEach(function (item) {
+      appVerifDdMenu.addEventListener('click', function (e) { e.stopPropagation(); });
+      document.querySelectorAll('#supAppVerificationOptionsList .supapp-ms-item').forEach(function (item) {
         item.addEventListener('click', function () {
           var val = item.getAttribute('data-value');
-          var idx = filterArray.indexOf(val);
-          if (idx === -1) filterArray.push(val); else filterArray.splice(idx, 1);
+          var idx = supAppVerificationFilter.indexOf(val);
+          if (idx === -1) supAppVerificationFilter.push(val); else supAppVerificationFilter.splice(idx, 1);
           item.classList.toggle('selected', idx === -1);
-          if (ddLabel) ddLabel.textContent = filterArray.length ? filterArray.length + ' selected' : allLabel;
-          updateSupAppSimpleMultiSelectChips(key, filterArray);
+          if (appVerifDdLabel) appVerifDdLabel.textContent = supAppVerificationFilter.length ? supAppVerificationFilter.length + ' selected' : 'All Verification';
           supAppCurrentPage = 1;
           renderSupAppList();
         });
       });
     }
-    initSupAppSimpleMultiSelect('supAppVerification', supAppVerificationFilter, 'All Verification');
-    initSupAppSimpleMultiSelect('supAppBlockers', supAppBlockersFilter, 'All Blockers');
 
     var clearAllBtn = document.getElementById('supAppClearAllBtn');
     if (clearAllBtn) {
@@ -28435,8 +28884,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         supAppLocationFilter.length = 0;
         supAppCategoryFilter.length = 0;
         supAppVerificationFilter.length = 0;
-        supAppBlockersFilter.length = 0;
-        document.querySelectorAll('#supAppLocationOptionsList .supapp-ms-item.selected, #supAppCategoryOptionsList .supapp-ms-item.selected, #supAppVerificationOptionsList .supapp-ms-item.selected, #supAppBlockersOptionsList .supapp-ms-item.selected').forEach(function (item) {
+        document.querySelectorAll('#supAppLocationOptionsList .supapp-ms-item.selected, #supAppCategoryOptionsList .supapp-ms-item.selected, #supAppVerificationOptionsList .supapp-ms-item.selected').forEach(function (item) {
           item.classList.remove('selected');
         });
         var locLabel = document.getElementById('supAppLocationDdLabel');
@@ -28445,12 +28893,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         if (catLabel) catLabel.textContent = 'All Categories';
         var verifLabel = document.getElementById('supAppVerificationDdLabel');
         if (verifLabel) verifLabel.textContent = 'All Verification';
-        var blockLabel = document.getElementById('supAppBlockersDdLabel');
-        if (blockLabel) blockLabel.textContent = 'All Blockers';
         if (typeof updateSupAppLocationUI === 'function') updateSupAppLocationUI();
         if (typeof updateSupAppCategoryUI === 'function') updateSupAppCategoryUI();
-        updateSupAppSimpleMultiSelectChips('supAppVerification', supAppVerificationFilter);
-        updateSupAppSimpleMultiSelectChips('supAppBlockers', supAppBlockersFilter);
         supAppCurrentPage = 1;
         renderSupAppList();
       });
@@ -28482,7 +28926,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   function updateSupAppAllChipsRowVisibility() {
     var row = document.getElementById('supAppAllChipsRow');
     if (!row) return;
-    var anyActive = supAppLocationFilter.length || supAppCategoryFilter.length || supAppVerificationFilter.length || supAppBlockersFilter.length;
+    var anyActive = supAppLocationFilter.length || supAppCategoryFilter.length || supAppVerificationFilter.length;
     row.style.display = anyActive ? 'flex' : 'none';
   }
   function updateSupAppCategoryUI() {
@@ -28544,8 +28988,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (menu4) menu4.classList.remove('open');
     var menu5 = document.getElementById('supAppVerificationDdMenu');
     if (menu5) menu5.classList.remove('open');
-    var menu6 = document.getElementById('supAppBlockersDdMenu');
-    if (menu6) menu6.classList.remove('open');
   });
 
   function daysAgo(n) { var d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - n); return d; }
@@ -28559,8 +29001,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       if (supAppActiveTab === 'requests' && c.status !== 'Requests') return false;
       if (supAppActiveTab === 'archived' && c.status !== 'Archived') return false;
       if (supAppTypeFilter !== 'All Types' && c.type !== supAppTypeFilter) return false;
-      if (supAppVerificationFilter.length && !supAppVerificationFilter.some(function (v) { return c.verificationTags && c.verificationTags.indexOf(v) !== -1; })) return false;
-      if (supAppBlockersFilter.length && !supAppBlockersFilter.some(function (v) { return c.blockerTags && c.blockerTags.indexOf(v) !== -1; })) return false;
+      if (supAppVerificationFilter.length && !supAppVerificationFilter.every(function (v) { return c.verificationTags && c.verificationTags.indexOf(v) !== -1; })) return false;
       if (supAppCategoryFilter.length && !supAppCategoryFilter.some(function (val) {
         if (val.indexOf(': ') !== -1) {
           var roleOnly = val.split(': ')[1];
@@ -28800,6 +29241,122 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (supAppCurrentPage < totalPages) { supAppCurrentPage++; renderSupAppList(); }
   });
 
+  var SUP_CHAT_EXTRA_MESSAGES = {}; // keyed by supplier name — admin's own sent messages + replies, since renderSupChatThread rebuilds from scratch each time and needs somewhere persistent to read them back from
+  var SUP_CHAT_ACTIVITY_LOG = {}; // keyed by supplier name — full audit trail of every action taken on that supplier's requests
+  function logSupChatActivity(name, entry) {
+    if (!SUP_CHAT_ACTIVITY_LOG[name]) SUP_CHAT_ACTIVITY_LOG[name] = [];
+    entry.time = sinbNowTimestamp();
+    SUP_CHAT_ACTIVITY_LOG[name].unshift(entry); // newest first
+  }
+  var SUP_ACTIVITY_ICON = {
+    approved: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>',
+    declined: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>',
+    resubmit_requested: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>',
+    resubmitted: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>'
+  };
+  function renderSupChatActivityLog(name) {
+    var listEl = document.getElementById('supChatActivityLogList');
+    var emptyEl = document.getElementById('supChatActivityLogEmpty');
+    if (!listEl) return;
+    var log = SUP_CHAT_ACTIVITY_LOG[name] || [];
+    emptyEl.style.display = log.length ? 'none' : '';
+    listEl.innerHTML = log.map(function (e) {
+      var valueRow = (e.oldValue !== undefined && e.newValue !== undefined)
+        ? '<div class="sinb-field-value-row" style="margin-top:4px;"><span class="sinb-field-old">' + sinbEsc(String(e.oldValue)) + '</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span class="sinb-field-new">' + sinbEsc(String(e.newValue)) + '</span></div>'
+        : '';
+      return '<div class="sinb-activity-entry ' + e.type + '"><span class="sinb-activity-icon">' + (SUP_ACTIVITY_ICON[e.type] || '') + '</span><div class="sinb-activity-body"><div class="sinb-activity-text"><b>' + sinbEsc(e.actor) + '</b> ' + sinbEsc(e.action) + ' <b>' + sinbEsc(e.fieldLabel) + '</b></div>' + valueRow + '<div class="sinb-activity-time">' + e.time + '</div></div></div>';
+    }).join('');
+  }
+  var supChatReplyingTo = null; // { changeId, fieldLabel } while composing a reply, else null
+  function supChatQuoteBlockHtml(m) {
+    if (!m.replyToChangeId) return '';
+    return '<div class="sinb-quote-block" data-jump-change="' + m.replyToChangeId + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4z"/></svg>' + sinbEsc(m.replyToFieldLabel) + '</div>';
+  }
+  function renderSupChatThread() {
+    var threadEl = document.getElementById('supChatThreadCard');
+    if (!threadEl || !supDetailCurrentSupplier) return;
+    var name = supDetailCurrentSupplier.name;
+    if (typeof seedChangeRequestsIfNeeded === 'function') seedChangeRequestsIfNeeded(supDetailCurrentSupplier);
+    var batches = supplierChangeRequests[name] || [];
+    var editRequestHtml = batches.map(function (batch) {
+      return '<div class="chat-msg-row" data-batch-anchor="' + batch.id + '"><div class="chat-msg-bubble" style="max-width:420px;">' + sinbEditRequestCardHtml(batch, true) + '</div></div>';
+    }).join('');
+    // Ferna (SUP_OWN_DEMO_NAME) has a live two-way session, so admin reads from the exact same
+    // store the supplier's own Inbox writes to — one shared conversation, not two parallel copies.
+    // Other suppliers have no live session to reflect into, so they keep their own admin-side log.
+    var isLiveSupplier = name === SUP_OWN_DEMO_NAME && typeof SINB_SUPPORT_CONV !== 'undefined';
+    var extraMsgs = isLiveSupplier
+      ? SINB_SUPPORT_CONV.messages.filter(function (m) { return m.kind === 'text' || m.kind === 'attachment'; }).map(function (m) {
+          return { kind: m.kind, fromAdmin: !m.mine, text: m.text, fileName: m.fileName, time: m.time, replyToChangeId: m.replyToChangeId, replyToFieldLabel: m.replyToFieldLabel };
+        })
+      : (SUP_CHAT_EXTRA_MESSAGES[name] || []);
+    var extraHtml = extraMsgs.map(function (m) {
+      if (m.kind === 'attachment') {
+        return '<div class="chat-msg-row' + (m.fromAdmin ? '' : ' theirs') + '"><div class="chat-msg-bubble">' + supChatQuoteBlockHtml(m) + '<div class="cmb-text sinb-attachment-bubble"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg><span>' + sinbEsc(m.fileName) + '</span></div><div class="cmb-meta">' + (m.fromAdmin ? 'You' : sinbEsc(name)) + '<span class="dot-sep"></span>' + m.time + '</div></div></div>';
+      }
+      return '<div class="chat-msg-row' + (m.fromAdmin ? '' : ' theirs') + '"><div class="chat-msg-bubble">' + supChatQuoteBlockHtml(m) + '<div class="cmb-text">' + sinbEsc(m.text) + '</div><div class="cmb-meta">' + (m.fromAdmin ? 'You' : sinbEsc(name)) + '<span class="dot-sep"></span>' + m.time + '</div></div></div>';
+    }).join('');
+    threadEl.innerHTML =
+      '<div class="chat-day-divider"><span>6 Jul 2026</span></div>' +
+      '<div class="chat-msg-row"><div class="chat-msg-bubble"><div class="cmb-text" style="background:var(--surface-soft);color:var(--text-heading);">\u00a3240.02 has been deposited \u2014 your deposit payout of \u00a3240.02 has been successfully credited to your bank account.</div></div></div>' +
+      (editRequestHtml ? '<div class="chat-day-divider" style="margin-top:16px;"><span>Today</span></div>' + editRequestHtml : '') +
+      extraHtml;
+    threadEl.scrollTop = threadEl.scrollHeight;
+    sinbWireScrollBottomBtn(threadEl, document.getElementById('supChatScrollBottomBtn'));
+    threadEl.querySelectorAll('[data-cr-action]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var action = btn.getAttribute('data-cr-action');
+        var batchId = btn.getAttribute('data-batch-id');
+        var changeId = btn.getAttribute('data-change-id');
+        var change = sinbFindChange(batchId, changeId);
+        if (!change) return;
+        change.status = action === 'approve' ? 'approved' : action === 'decline' ? 'declined' : 'resubmit';
+        if (action === 'approve' && typeof sinbApplyApprovedChange === 'function') sinbApplyApprovedChange(change);
+        if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
+        logSupChatActivity(name, {
+          type: action === 'approve' ? 'approved' : action === 'decline' ? 'declined' : 'resubmit_requested',
+          actor: 'Admin',
+          action: action === 'approve' ? 'approved' : action === 'decline' ? 'declined' : 'asked for resubmission of',
+          fieldLabel: change.fieldLabel,
+          oldValue: change.oldValue,
+          newValue: change.newValue
+        });
+        if (name === SUP_OWN_DEMO_NAME) {
+          if (action === 'resubmit' && typeof SINB_SUPPORT_CONV !== 'undefined') {
+            SINB_SUPPORT_CONV.messages.push({ kind: 'jump-notification', changeId: change.id, fieldLabel: change.fieldLabel, time: sinbNowTimestamp() });
+            if (typeof sinbRenderChat === 'function') sinbRenderChat();
+          } else if (typeof sinbAddEditResponseMessage === 'function') {
+            var responseText = action === 'approve'
+              ? '\u201c' + change.fieldLabel + '\u201d was approved \u2014 your profile has been updated.'
+              : '\u201c' + change.fieldLabel + '\u201d was declined. Please contact support if you have questions.';
+            sinbAddEditResponseMessage(responseText);
+          }
+        }
+        renderSupChatThread();
+        showToast('Response sent to ' + name + '.');
+      });
+    });
+    threadEl.querySelectorAll('[data-field-reply-btn]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        supChatReplyingTo = { changeId: btn.getAttribute('data-change-id'), fieldLabel: btn.getAttribute('data-field-label') };
+        document.getElementById('supChatReplyPreviewField').textContent = supChatReplyingTo.fieldLabel;
+        document.getElementById('supChatReplyPreview').style.display = 'flex';
+        document.getElementById('supChatMessageInput').focus();
+      });
+    });
+    threadEl.querySelectorAll('[data-jump-change]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var changeId = btn.getAttribute('data-jump-change');
+        var target = threadEl.querySelector('.sinb-field-card[data-change-id="' + changeId + '"]');
+        if (!target) return;
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.classList.remove('sinb-field-card-flash');
+        void target.offsetWidth;
+        target.classList.add('sinb-field-card-flash');
+      });
+    });
+  }
+
   function switchSupTab(key) {
     document.querySelectorAll('.sup-tabs-row .sup-tab-item').forEach(function (t) { t.classList.toggle('active', t.getAttribute('data-suptab') === key); });
     var panelIds = { overview: 'supTabOverview', compliance: 'supTabCompliance', requests: 'supTabRequests', chat: 'supTabChat' };
@@ -28817,6 +29374,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     });
     document.getElementById('supStickyBar').style.display = (key === 'requests' || key === 'chat') ? 'none' : '';
     if (key === 'requests') renderSupRequestsList();
+    if (key === 'chat') renderSupChatThread();
   }
   document.querySelectorAll('.sup-tabs-row .sup-tab-item').forEach(function (tab) {
     tab.addEventListener('click', function () { switchSupTab(tab.getAttribute('data-suptab')); });
@@ -28839,6 +29397,17 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   }
   document.getElementById('supNotesDrawerCloseBtn').addEventListener('click', closeSupNotesDrawer);
   document.getElementById('supNotesDrawerOverlay').addEventListener('click', function (e) { if (e.target === this) closeSupNotesDrawer(); });
+  document.getElementById('supChatActivityLogBtn').addEventListener('click', function () {
+    document.getElementById('supChatActivityLogOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    if (supDetailCurrentSupplier) renderSupChatActivityLog(supDetailCurrentSupplier.name);
+  });
+  function closeSupChatActivityLogDrawer() {
+    document.getElementById('supChatActivityLogOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('supChatActivityLogCloseBtn').addEventListener('click', closeSupChatActivityLogDrawer);
+  document.getElementById('supChatActivityLogOverlay').addEventListener('click', function (e) { if (e.target === this) closeSupChatActivityLogDrawer(); });
   document.getElementById('supAddNoteBtn').addEventListener('click', function () {
     var input = document.getElementById('supNoteInput');
     var text = input.value.trim();
