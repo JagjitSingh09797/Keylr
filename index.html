@@ -2416,18 +2416,11 @@
 
   .sinb-chat-col { flex: 1; display: flex; flex-direction: column; min-width: 0; }
   .sinb-chat-header { display: flex; align-items: center; gap: 12px; padding: 14px 22px; border-bottom: 1px solid var(--border-subtle); flex-shrink: 0; }
-  .pm-icon-btn-sq.sinb-back-btn { display: none; }
-  .sinb-back-btn { flex-shrink: 0; }
   .sinb-active-toggle { background: var(--icon-tint-bg); color: var(--accent-blue); }
   .sinb-composer.sinb-composer-readonly .sinb-input-row { background: #f1f4f8; }
   .sinb-composer.sinb-composer-readonly input:disabled { cursor: not-allowed; }
   .sinb-composer-readonly-note { font-size: 11.5px; color: var(--text-body-muted); background: var(--surface-soft); border-radius: 8px; padding: 8px 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
   @media (max-width: 1024px) {
-    .pm-icon-btn-sq.sinb-back-btn { display: flex; }
-    .sinb-list-col { width: 100%; border-right: none; }
-    .sinb-chat-col { display: none; }
-    .sinb-list-col.sinb-mobile-hide { display: none; }
-    .sinb-chat-col.sinb-mobile-show { display: flex; width: 100%; }
     .sinb-details-col { width: 100%; max-width: 100%; }
   }
   .sinb-chat-header .sinb-conv-avatar { width: 40px; height: 40px; font-size: 14px; }
@@ -3389,7 +3382,7 @@
   #adminSupplierApplicantsView .pm-yes-tag .dot { background: #183060; }
   #adminSupplierApplicantsView .pm-yes-tag.inactive { color: #64748b; background: #f1f5f9; }
   #adminSupplierApplicantsView .pm-yes-tag.inactive .dot { background: #94a3b8; }
-  #adminSupplierApplicantsView .pm-card-avatar, #adminActiveSuppliersView .pm-card-avatar, #adminPMApplicantsView .pm-card-avatar, #adminPMListView .pm-card-avatar { background: rgba(24, 48, 96, 0.12); color: #183060; }
+  #adminSupplierApplicantsView .pm-card-avatar, #adminActiveSuppliersView .pm-card-avatar, #adminPMApplicantsView .pm-card-avatar, #adminPMListView .pm-card-avatar, #adminSupplierDetailView .pm-card-avatar { background: rgba(24, 48, 96, 0.12); color: #183060; }
   #adminSupplierApplicantsView .pm-card-avatar img, #adminActiveSuppliersView .pm-card-avatar img, #adminPMApplicantsView .pm-card-avatar img, #adminPMListView .pm-card-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
   #adminSupplierDetailView #supDetailAvatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
   #adminSupplierApplicantsView .supplier-table-row:hover, #adminActiveSuppliersView .supplier-table-row:hover { background: #f8fafc; }
@@ -9576,45 +9569,17 @@
           <div id="supInboxView" style="display:none;">
             <div class="sinb-shell">
               <div class="sinb-titlebar">
-                <button type="button" class="pm-icon-btn-sq" id="sinbSidebarToggleBtn" data-tooltip="Toggle conversation list"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg></button>
-                <button type="button" class="pm-icon-btn-sq" data-tooltip="Compose"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 01-8.5 8.5c-1.35 0-2.6-.32-3.7-.9L3 21l1.9-5.8A8.44 8.44 0 013.5 11.5 8.5 8.5 0 0112 3a8.5 8.5 0 019 8.5z"/></svg></button>
                 <div>
                   <h1 style="font-size:19px;">Inbox</h1>
-                  <div class="dash-content-sub" style="margin-top:1px;">Messages with property managers, quotes, jobs &amp; support — all in one place</div>
+                  <div class="dash-content-sub" style="margin-top:1px;">Chat directly with the Keylr Support team</div>
                 </div>
-                <span class="sinb-unread-pill" id="sinbUnreadPill"><span class="dot"></span><span id="sinbUnreadCount">6</span> unread</span>
               </div>
 
-              <div class="sinb-body">
-                <div class="sinb-list-col" id="sinbListCol">
-                  <div class="sinb-search-wrap">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-                    <input type="text" id="sinbSearchInput" placeholder="Search name, job or message...">
-                  </div>
-                  <div class="sinb-tabs">
-                    <div class="sinb-tab active" data-inbtab="active">Active</div>
-                    <div class="sinb-tab" data-inbtab="archived">Archived</div>
-                    <div class="sinb-tab" data-inbtab="completed">Completed</div>
-                  </div>
-                  <div class="sinb-count-sort-row">
-                    <span id="sinbCountText">6 conversations</span>
-                    <div style="position:relative;">
-                      <button type="button" class="sinb-sort-btn" id="sinbSortBtn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5h10M11 9h7M11 13h4M3 17l3 3 3-3M6 18V4"/></svg><span id="sinbSortLabel">Most recent</span></button>
-                      <div class="pm-custom-dd-menu" id="sinbSortMenu" style="right:0;left:auto;top:calc(100% + 4px);">
-                        <div class="cdd-item selected" data-value="Most recent">Most recent</div>
-                        <div class="cdd-item" data-value="Unread first">Unread first</div>
-                        <div class="cdd-item" data-value="Name (A–Z)">Name (A–Z)</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="sinb-conv-scroll" id="sinbConvList"></div>
-                </div>
-
-                <div class="sinb-chat-col" id="sinbChatCol">
+              <div class="sinb-body sinb-body-solo">
+                <div class="sinb-chat-col sinb-chat-col-full" id="sinbChatCol">
                   <div class="sinb-chat-header" id="sinbChatHeader"></div>
                   <div class="sinb-chat-scroll" id="sinbChatScroll"></div>
                   <div class="sinb-composer" id="sinbComposer">
-                    <div class="sinb-composer-readonly-note" id="sinbReadonlyNote" style="display:none;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>You can only message Keylr Support directly. This thread is shown for reference.</div>
                     <div class="sinb-final-offer-row" id="sinbFinalOfferRow" style="display:none;">
                       <span class="sinb-fo-label">Final offer</span>
                       <div class="sinb-fo-input-wrap">£<input type="text" id="sinbFinalOfferInput" placeholder="0" inputmode="numeric"></div>
@@ -12657,7 +12622,6 @@
                         <span class="scs-passed"><span id="supStatPassed">8</span> Passed</span>
                         <span class="scs-pending"><span id="supStatPending">3</span> Pending</span>
                         <span class="scs-issues"><span id="supStatIssues">0</span> Issues</span>
-                        <span class="scs-na"><span id="supStatNA">0</span> N/A</span>
                       </div>
                     </div>
                   </div>
@@ -12683,7 +12647,6 @@
                         <span class="sup-check-tab-pill" data-checkfilter="pending"><span class="tab-dot" style="background:#f59e0b;"></span>Pending <span id="supTabPendingCount">3</span></span>
                         <span class="sup-check-tab-pill" data-checkfilter="issue"><span class="tab-dot" style="background:#e8482c;"></span>Issues <span id="supTabIssueCount">0</span></span>
                         <span class="sup-check-tab-pill" data-checkfilter="verified"><span class="tab-dot" style="background:#22c55e;"></span>Verified <span id="supTabVerifiedCount">8</span></span>
-                        <span class="sup-check-tab-pill" data-checkfilter="na"><span class="tab-dot" style="background:#94a3b8;"></span>N/A <span id="supTabNACount">0</span></span>
                       </div>
                     </div>
                     <div class="sup-checklist-filter-row">
@@ -21598,166 +21561,45 @@
   }
 
   /* ==================== SUPPLIER INBOX MODULE ==================== */
-  var SINB_CONVERSATIONS = [
-    {
-      lastActivityTs: 6, id: 'c1', name: 'Thomas Davies — Carpet / Stair Carpet Steam Clean', initials: 'TD', jobId: 'JOB-2719', type: 'job', status: 'Open',
-      presence: 'Active now', lastActivityLabel: 'just now', dateGroup: 'Today', timeLabel: '00:05', needsReply: false, unread: 0,
-      messages: [
-        { kind: 'system', warn: true, title: 'Supplier did not show up', body: 'Your job was not completed as scheduled. We\u2019ve marked it as a no-show. Please review and take action.', time: '05:30' },
-        { kind: 'system', warn: true, title: 'You\u2019ve been marked as a no-show', body: 'You were marked as a no-show for a scheduled job. Please contact support if you believe this is incorrect.', time: '05:30' },
-        { kind: 'date', label: 'Today' },
-        { kind: 'final-offer', amount: 400, status: 'pending', mine: true, time: '00:05' }
-      ]
-    },
-    {
-      lastActivityTs: 5, id: 'c2', name: 'fotatap — Cleaning', initials: 'F', jobId: null, type: 'job', status: 'Open',
-      presence: null, lastActivityLabel: 'Yesterday', dateGroup: 'Yesterday', timeLabel: 'Yesterday', needsReply: true, unread: 1,
-      messages: [
-        { kind: 'date', label: 'Yesterday' },
-        { kind: 'text', mine: false, text: 'Hi, just checking on the cleaning job — are you still able to make it this week?', time: '09:40' }
-      ]
-    },
-    {
-      lastActivityTs: 4, id: 'c3', name: 'Thomas Davies — End of Tenancy Deep Clean', initials: 'TD', jobId: 'JOB-2701', type: 'job', status: 'Open',
-      presence: null, lastActivityLabel: 'Yesterday', dateGroup: 'Yesterday', timeLabel: 'Yesterday', needsReply: true, unread: 1,
-      messages: [
-        { kind: 'date', label: 'Yesterday' },
-        { kind: 'text', mine: false, text: 'Conversation started for End of Tenancy Deep Clean.', time: '14:02' }
-      ]
-    },
-    {
-      lastActivityTs: 3, id: 'c4', name: 'Thomas Davies — Appliance Installation', initials: 'TD', jobId: 'JOB-2698', type: 'job', status: 'Open',
-      presence: null, lastActivityLabel: 'Wed', dateGroup: 'Previous 7 Days', timeLabel: 'Wed', needsReply: true, unread: 1,
-      messages: [
-        { kind: 'date', label: 'Wednesday' },
-        { kind: 'system', warn: false, title: '\u00a31,019.98 has been deposited', body: 'Your deposit payout of \u00a31,019.98 for JOB-2698 has been successfully credited to your bank account.', time: '10:15' }
-      ]
-    },
-    {
-      lastActivityTs: 2, id: 'c5', name: 'Thomas Davies — EICR Electrical Inspection', initials: 'TD', jobId: 'JOB-2653', type: 'job', status: 'Open',
-      presence: null, lastActivityLabel: 'Wed', dateGroup: 'Previous 7 Days', timeLabel: 'Wed', needsReply: true, unread: 2,
-      messages: [
-        { kind: 'date', label: 'Wednesday' },
-        { kind: 'system', warn: true, title: 'You\u2019ve been marked as a no-show', body: 'You were marked as a no-show for a scheduled job. Please contact support if you believe this is incorrect.', time: '08:16' }
-      ]
-    },
-    {
-      lastActivityTs: 1, id: 'c6', name: 'Keylr Support', initials: 'KS', jobId: null, type: 'support', status: 'Open',
-      presence: 'Active now', lastActivityLabel: '05/07/2026', dateGroup: 'Previous 30 Days', timeLabel: '05/07/2026', needsReply: false, unread: 0,
-      messages: [
-        { kind: 'date', label: '01 Jul 2026' },
-        { kind: 'system', warn: false, title: 'AC Service / Repair / Refrigerant Top-Up', body: 'A property manager has invited you to accept a job.', time: '11:03' },
-        { kind: 'date', label: '02 Jul 2026' },
-        { kind: 'system', warn: false, title: '\u00a3192.00 has been deposited', body: 'Your early payment payout of \u00a3192.00 for IP-51 has been successfully credited to your bank account.', time: '17:52' },
-        { kind: 'date', label: '03 Jul 2026' },
-        { kind: 'system', warn: false, title: '\u00a3240.00 has been deposited', body: 'Your early payment payout of \u00a3240.00 for JB-2653 has been successfully credited to your bank account.', time: '09:23' },
-        { kind: 'system', warn: true, title: 'Boiler Repair / No Hot Water / Gas Leak Emergency', body: 'The property manager has selected a supplier for this job.', time: '16:34' },
-        { kind: 'date', label: '05 Jul 2026' },
-        { kind: 'system', warn: false, title: '\u00a3180.00 has been deposited', body: 'Your deposit payout of \u00a3180.00 for JB-2675 has been successfully credited to your bank account.', time: '14:51' }
-      ]
-    }
-  ];
-  var sinbActiveConvId = 'c1';
-  var sinbActiveTab = 'active';
-  var sinbSortMode = 'Most recent';
-  var sinbSearchTerm = '';
+  /* Simplified to a single, direct channel with Keylr Support — suppliers don't manage
+     multiple conversations here, so there's no list, no archive/star/pin, no sort/search. */
+  var SINB_SUPPORT_CONV = {
+    id: 'support', name: 'Keylr Support', initials: 'KS', type: 'support', status: 'Open',
+    presence: 'Active now', lastActivityLabel: '05/07/2026', unread: 0,
+    messages: [
+      { kind: 'date', label: '01 Jul 2026' },
+      { kind: 'system', warn: false, title: 'AC Service / Repair / Refrigerant Top-Up', body: 'A property manager has invited you to accept a job.', time: '11:03' },
+      { kind: 'date', label: '02 Jul 2026' },
+      { kind: 'system', warn: false, title: '\u00a3192.00 has been deposited', body: 'Your early payment payout of \u00a3192.00 for IP-51 has been successfully credited to your bank account.', time: '17:52' },
+      { kind: 'date', label: '03 Jul 2026' },
+      { kind: 'system', warn: false, title: '\u00a3240.00 has been deposited', body: 'Your early payment payout of \u00a3240.00 for JB-2653 has been successfully credited to your bank account.', time: '09:23' },
+      { kind: 'system', warn: true, title: 'Boiler Repair / No Hot Water / Gas Leak Emergency', body: 'The property manager has selected a supplier for this job.', time: '16:34' },
+      { kind: 'date', label: '05 Jul 2026' },
+      { kind: 'system', warn: false, title: '\u00a3180.00 has been deposited', body: 'Your deposit payout of \u00a3180.00 for JB-2675 has been successfully credited to your bank account.', time: '14:51' }
+    ]
+  };
 
   function sinbEsc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
   function sinbAvatarColor(initials) {
     return '#dbeafe';
   }
 
-  function sinbFilteredConversations() {
-    var list = SINB_CONVERSATIONS.filter(function (c) {
-      if (sinbActiveTab === 'archived') return !!c.archived;
-      if (sinbActiveTab === 'completed') return !!c.completed;
-      return !c.archived && !c.completed;
-    });
-    if (sinbSearchTerm) {
-      var q = sinbSearchTerm.toLowerCase();
-      list = list.filter(function (c) { return c.name.toLowerCase().indexOf(q) !== -1; });
-    }
-    if (sinbSortMode === 'Unread first') {
-      list = list.slice().sort(function (a, b) { return (b.unread || 0) - (a.unread || 0); });
-    } else if (sinbSortMode === 'Name (A–Z)') {
-      list = list.slice().sort(function (a, b) { return a.name.localeCompare(b.name); });
-    } else {
-      list = list.slice().sort(function (a, b) { return (b.lastActivityTs || 0) - (a.lastActivityTs || 0); });
-    }
-    // Keylr Support always stays pinned at the top of the list, regardless of sort mode.
-    list.sort(function (a, b) { return (b.type === 'support') - (a.type === 'support'); });
-    return list;
-  }
-
-  function sinbConvItemHtml(c) {
-    var lastMsg = c.messages[c.messages.length - 1] || {};
-    var previewText = lastMsg.kind === 'final-offer' ? 'Final offer \u00a3' + lastMsg.amount : lastMsg.kind === 'attachment' ? '\uD83D\uDCCE ' + lastMsg.fileName : (lastMsg.body || lastMsg.text || 'No messages yet');
-    return '<div class="sinb-conv-item' + (c.id === sinbActiveConvId ? ' active' : '') + (c.pinned ? ' sinb-conv-pinned' : '') + '" data-conv-id="' + c.id + '">' +
-      '<div class="sinb-conv-avatar" style="background:' + sinbAvatarColor(c.initials) + ';color:#1e40af;">' + c.initials + (c.presence ? '<span class="presence-dot"></span>' : '') + '</div>' +
-      '<div class="sinb-conv-body">' +
-        '<div class="sinb-conv-top-row"><span class="sinb-conv-name">' + sinbEsc(c.name) + '</span><span class="sinb-conv-time">' + c.timeLabel + '</span></div>' +
-        '<div class="sinb-conv-pill-row"><span class="sinb-conv-pill ' + c.type + '">' + (c.type === 'job' ? (c.jobId || 'Job') : 'Support') + '</span>' + (c.needsReply ? '<span class="sinb-conv-needs-reply">Needs reply</span>' : '') + '</div>' +
-        '<div class="sinb-conv-preview"><span class="sinb-conv-preview-text">' + sinbEsc(previewText) + '</span>' + (c.unread ? '<span class="sinb-conv-unread-badge">' + c.unread + '</span>' : '') + '</div>' +
-      '</div>' +
-    '</div>';
-  }
-
-  function sinbRenderConvList() {
-    var listEl = document.getElementById('sinbConvList');
-    var countEl = document.getElementById('sinbCountText');
-    if (!listEl) return;
-    var convs = sinbFilteredConversations();
-    if (countEl) countEl.textContent = convs.length + ' conversation' + (convs.length === 1 ? '' : 's');
-    // Keylr Support is always pinned at the very top, shown outside the date grouping entirely —
-    // otherwise it would surface a "Previous 30 Days" group header above more recent "Today"/
-    // "Yesterday" groups, which reads oddly even though the sort itself is correct.
-    var supportConv = convs.filter(function (c) { return c.type === 'support'; })[0];
-    var restConvs = convs.filter(function (c) { return c.type !== 'support'; });
-    var groups = [];
-    var groupMap = {};
-    restConvs.forEach(function (c) {
-      var g = c.dateGroup || 'Earlier';
-      if (!groupMap[g]) { groupMap[g] = []; groups.push(g); }
-      groupMap[g].push(c);
-    });
-    var groupedHtml = groups.map(function (g) {
-      return '<div class="sinb-conv-date-label">' + g + '</div>' + groupMap[g].map(sinbConvItemHtml).join('');
-    }).join('');
-    listEl.innerHTML = (supportConv ? sinbConvItemHtml(supportConv) : '') + groupedHtml || '<div style="padding:40px 10px;text-align:center;font-size:12.5px;color:var(--text-body-muted);">No conversations found.</div>';
-    listEl.querySelectorAll('.sinb-conv-item').forEach(function (item) {
-      item.addEventListener('click', function () {
-        sinbActiveConvId = item.getAttribute('data-conv-id');
-        var c = SINB_CONVERSATIONS.filter(function (x) { return x.id === sinbActiveConvId; })[0];
-        if (c) c.unread = 0;
-        sinbRenderConvList();
-        sinbRenderChat();
-        sinbShowChat();
-      });
-    });
-  }
-
   function sinbGetActiveConv() {
-    return SINB_CONVERSATIONS.filter(function (c) { return c.id === sinbActiveConvId; })[0] || SINB_CONVERSATIONS[0];
+    return SINB_SUPPORT_CONV;
   }
 
   function sinbRenderChat() {
     var c = sinbGetActiveConv();
-    if (!c) return;
     var headerEl = document.getElementById('sinbChatHeader');
     var scrollEl = document.getElementById('sinbChatScroll');
     if (!headerEl || !scrollEl) return;
     headerEl.innerHTML =
-      '<button type="button" class="pm-icon-btn-sq sinb-back-btn" id="sinbBackBtn" data-tooltip="Back to conversations"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>' +
       '<div class="sinb-conv-avatar" style="background:' + sinbAvatarColor(c.initials) + ';color:#1e40af;">' + c.initials + (c.presence ? '<span class="presence-dot"></span>' : '') + '</div>' +
       '<div style="min-width:0;">' +
         '<div class="sinb-chat-header-name-row"><h3>' + sinbEsc(c.name) + '</h3><span class="sinb-open-pill"><span class="dot"></span>' + c.status + '</span></div>' +
-        '<div class="sinb-chat-header-sub">' + (c.jobId ? c.jobId + ' \u00b7 ' : '') + (c.presence ? '<span class="online">' + c.presence + '</span>' : 'Last active ' + c.lastActivityLabel) + '</div>' +
+        '<div class="sinb-chat-header-sub">' + (c.presence ? '<span class="online">' + c.presence + '</span>' : 'Last active ' + c.lastActivityLabel) + '</div>' +
       '</div>' +
       '<div class="sinb-chat-header-actions">' +
-        (c.type === 'support' ? '<button type="button" class="sinb-header-support-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>Support</button>' : '') +
-        '<button type="button" class="pm-icon-btn-sq' + (c.starred ? ' sinb-active-toggle' : '') + '" data-tooltip="' + (c.starred ? 'Unstar conversation' : 'Star conversation') + '" id="sinbStarBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="' + (c.starred ? 'currentColor' : 'none') + '" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg></button>' +
-        '<button type="button" class="pm-icon-btn-sq' + (c.pinned ? ' sinb-active-toggle' : '') + '" data-tooltip="' + (c.pinned ? 'Unpin conversation' : 'Pin conversation') + '" id="sinbPinBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5M8 3h8l-1 7 3 3v2H6v-2l3-3z"/></svg></button>' +
-        '<button type="button" class="pm-icon-btn-sq" data-tooltip="' + (c.archived ? 'Unarchive conversation' : 'Archive conversation') + '" id="sinbArchiveBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13V7a2 2 0 00-2-2H6a2 2 0 00-2 2v6M4 13h16v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6zM10 17h4"/></svg></button>' +
         '<button type="button" class="pm-icon-btn-sq" data-tooltip="Contact details" id="sinbDetailsToggleBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M15 8h3M15 12h3M6 16h12"/></svg></button>' +
       '</div>';
     scrollEl.innerHTML = c.messages.map(function (m) {
@@ -21769,54 +21611,8 @@
     }).join('');
     scrollEl.scrollTop = scrollEl.scrollHeight;
 
-    // Suppliers can only message Keylr Support directly — job threads are shown for reference
-    // (system updates, offers) but the composer is disabled for anything that isn't Support.
-    var composerEl = document.getElementById('sinbComposer');
-    var isSupport = c.type === 'support';
-    composerEl.classList.toggle('sinb-composer-readonly', !isSupport);
-    document.getElementById('sinbReadonlyNote').style.display = isSupport ? 'none' : 'flex';
-    var msgInputEl = document.getElementById('sinbMessageInput');
-    msgInputEl.disabled = !isSupport;
-    msgInputEl.placeholder = isSupport ? 'Message...' : 'Messaging disabled for this thread';
-    document.getElementById('sinbSendBtn').disabled = true;
-    document.getElementById('sinbSavedRepliesBtn').disabled = !isSupport;
-    document.getElementById('sinbAttachBtn').disabled = !isSupport;
-    document.getElementById('sinbEmojiBtn').disabled = !isSupport;
-    document.getElementById('sinbFinalOfferToggleBtn').disabled = !isSupport;
-    document.getElementById('sinbFinalOfferRow').style.display = 'none';
-
-    document.getElementById('sinbBackBtn').addEventListener('click', sinbShowConvList);
-    document.getElementById('sinbStarBtn').addEventListener('click', function () {
-      c.starred = !c.starred;
-      showToast(c.starred ? c.name + ' starred.' : c.name + ' unstarred.');
-      sinbRenderChat();
-    });
-    document.getElementById('sinbPinBtn').addEventListener('click', function () {
-      c.pinned = !c.pinned;
-      showToast(c.pinned ? c.name + ' pinned.' : c.name + ' unpinned.');
-      sinbRenderChat();
-      sinbRenderConvList();
-    });
-    document.getElementById('sinbArchiveBtn').addEventListener('click', function () {
-      c.archived = !c.archived;
-      showToast(c.archived ? c.name + ' archived.' : c.name + ' unarchived.');
-      sinbRenderChat();
-      sinbRenderConvList();
-      if (c.archived) {
-        var next = sinbFilteredConversations()[0];
-        if (next) { sinbActiveConvId = next.id; sinbRenderChat(); sinbRenderConvList(); }
-      }
-    });
     document.getElementById('sinbDetailsToggleBtn').addEventListener('click', sinbToggleDetails);
     sinbRenderDetails();
-  }
-  function sinbShowConvList() {
-    document.getElementById('sinbListCol').classList.remove('sinb-mobile-hide');
-    document.getElementById('sinbChatCol').classList.remove('sinb-mobile-show');
-  }
-  function sinbShowChat() {
-    document.getElementById('sinbListCol').classList.add('sinb-mobile-hide');
-    document.getElementById('sinbChatCol').classList.add('sinb-mobile-show');
   }
 
   function sinbRenderDetails() {
@@ -21827,9 +21623,9 @@
     scrollEl.innerHTML =
       '<div class="sinb-dtl-avatar-wrap">' +
         '<div class="sinb-conv-avatar" style="background:' + sinbAvatarColor(c.initials) + ';color:#1e40af;">' + c.initials + (c.presence ? '<span class="presence-dot"></span>' : '') + '</div>' +
-        '<div class="sinb-dtl-name">' + sinbEsc(c.name.split(' — ')[0]) + '</div>' +
-        '<div class="sinb-dtl-sub">' + (c.type === 'support' ? 'We\u2019re here when you need you.' : (c.jobId || 'Job conversation')) + '</div>' +
-        '<div class="sinb-dtl-pill-row"><span class="sinb-open-pill"><span class="dot"></span>' + c.status + '</span>' + (c.type === 'support' ? '<span class="sinb-conv-pill support">Support</span>' : '') + '</div>' +
+        '<div class="sinb-dtl-name">' + sinbEsc(c.name) + '</div>' +
+        '<div class="sinb-dtl-sub">We\u2019re here when you need us.</div>' +
+        '<div class="sinb-dtl-pill-row"><span class="sinb-open-pill"><span class="dot"></span>' + c.status + '</span><span class="sinb-conv-pill support">Support</span></div>' +
       '</div>' +
       '<div class="sinb-dtl-action-row">' +
         '<button type="button" class="sinb-dtl-action-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Call</button>' +
@@ -21838,7 +21634,7 @@
       '</div>' +
       '<div class="sinb-dtl-divider"></div>' +
       '<div class="sinb-dtl-section-label">Conversation</div>' +
-      '<div class="sinb-dtl-row"><span class="sinb-dtl-row-label">Type</span><span class="sinb-dtl-row-value">' + (c.type === 'support' ? 'Support' : 'Job') + '</span></div>' +
+      '<div class="sinb-dtl-row"><span class="sinb-dtl-row-label">Type</span><span class="sinb-dtl-row-value">Support</span></div>' +
       '<div class="sinb-dtl-row"><span class="sinb-dtl-row-label">Status</span><span class="sinb-dtl-row-value">' + c.status + '</span></div>' +
       '<div class="sinb-dtl-row"><span class="sinb-dtl-row-label">Messages</span><span class="sinb-dtl-row-value">' + msgCount + '</span></div>' +
       '<div class="sinb-dtl-row"><span class="sinb-dtl-row-label">Presence</span><span class="sinb-dtl-row-value' + (c.presence ? ' green' : '') + '">' + (c.presence || 'Offline') + '</span></div>' +
@@ -21857,7 +21653,7 @@
       '<div class="sinb-dtl-empty">No property linked to this thread.</div>' +
       '<div class="sinb-dtl-divider"></div>' +
       '<div class="sinb-dtl-section-label">Related Records</div>' +
-      '<div class="sinb-dtl-related-row"><span>Open Jobs</span><span class="count">' + (c.jobId ? '1' : 'None linked') + '</span></div>' +
+      '<div class="sinb-dtl-related-row"><span>Open Jobs</span><span class="count">None linked</span></div>' +
       '<div class="sinb-dtl-related-row"><span>Quotes</span><span class="count">None linked</span></div>' +
       '<div class="sinb-dtl-related-row"><span>Invoices</span><span class="count">None linked</span></div>' +
       '<div class="sinb-dtl-related-row"><span>Compliance</span><span class="count">None linked</span></div>';
@@ -21867,56 +21663,14 @@
     var overlay = document.getElementById('sinbDetailsOverlay');
     if (overlay) overlay.classList.toggle('open');
   }
-  function sinbUpdateUnreadBadge() {
-    var total = SINB_CONVERSATIONS.reduce(function (sum, c) { return sum + (c.unread || 0); }, 0);
-    var pillEl = document.getElementById('sinbUnreadCount');
-    if (pillEl) pillEl.textContent = total;
-    var navBadge = document.getElementById('supBadgeInbox');
-    if (navBadge) { navBadge.textContent = total; navBadge.hidden = total === 0; }
-  }
 
   var sinbInitDone = false;
   function initSupInboxOnce() {
-    if (sinbInitDone) { sinbRenderConvList(); sinbRenderChat(); return; }
+    if (sinbInitDone) { sinbRenderChat(); return; }
     sinbInitDone = true;
-    sinbRenderConvList();
     sinbRenderChat();
-    sinbUpdateUnreadBadge();
 
-    document.getElementById('sinbSidebarToggleBtn').addEventListener('click', function () {
-      document.getElementById('sinbListCol').classList.toggle('collapsed');
-    });
     document.getElementById('sinbDetailsCloseBtn').addEventListener('click', sinbToggleDetails);
-
-    document.getElementById('sinbSearchInput').addEventListener('input', function () {
-      sinbSearchTerm = this.value.trim();
-      sinbRenderConvList();
-    });
-    document.querySelectorAll('.sinb-tab').forEach(function (tab) {
-      tab.addEventListener('click', function () {
-        document.querySelectorAll('.sinb-tab').forEach(function (t) { t.classList.remove('active'); });
-        tab.classList.add('active');
-        sinbActiveTab = tab.getAttribute('data-inbtab');
-        sinbRenderConvList();
-      });
-    });
-    var sortBtn = document.getElementById('sinbSortBtn');
-    var sortMenu = document.getElementById('sinbSortMenu');
-    sortBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      sortMenu.classList.toggle('open');
-    });
-    sortMenu.querySelectorAll('.cdd-item').forEach(function (item) {
-      item.addEventListener('click', function () {
-        sortMenu.querySelectorAll('.cdd-item').forEach(function (i) { i.classList.remove('selected'); });
-        item.classList.add('selected');
-        sinbSortMode = item.getAttribute('data-value');
-        document.getElementById('sinbSortLabel').textContent = sinbSortMode;
-        sortMenu.classList.remove('open');
-        sinbRenderConvList();
-      });
-    });
-    document.addEventListener('click', function () { sortMenu.classList.remove('open'); });
 
     // Message input + send
     var msgInput = document.getElementById('sinbMessageInput');
@@ -21933,7 +21687,6 @@
       msgInput.value = '';
       updateSendState();
       sinbRenderChat();
-      sinbRenderConvList();
     }
     sendBtn.addEventListener('click', sendMessage);
     msgInput.addEventListener('keydown', function (e) {
@@ -22007,7 +21760,6 @@
       c.messages.push({ kind: 'attachment', mine: true, fileName: file.name, isImage: isImage, time: timeStr });
       attachInput.value = '';
       sinbRenderChat();
-      sinbRenderConvList();
       showToast(file.name + ' attached.');
     });
 
@@ -22036,7 +21788,6 @@
       foRow.style.display = 'none';
       showToast('Final offer of \u00a3' + amount + ' sent.');
       sinbRenderChat();
-      sinbRenderConvList();
     });
   }
 
@@ -25627,7 +25378,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         { id: 'photoId', name: 'Photo ID Verification', sub: 'Nadia Reid', method: 'auto', status: 'verified' },
         { id: 'selfie', name: 'Selfie Biometric Match', sub: 'Selfie uploaded \u2014 awaiting match', method: 'auto', status: 'verified' },
         { id: 'address', name: 'Proof of Address', sub: '116 Church Lane, Warminster', method: 'manual', status: 'verified' },
-        { id: 'ni', name: 'NI number', sub: 'QQ 12 34 56 C', method: 'manual', status: 'verified', noActions: true }
+        { id: 'ni', name: 'NI number', sub: 'QQ 12 34 56 C', method: 'manual', status: 'verified' }
       ] },
       { category: 'Business Legitimacy', items: [
         { id: 'vat', name: 'VAT registration', sub: 'GB553557881', method: 'auto', status: 'verified' }
@@ -25664,7 +25415,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
           { label: 'DBS Level', value: 'Basic' },
           { label: 'Issue Date', value: '15 Jan 2025' }
         ] },
-        { id: 'rtw', name: 'Right to Work', sub: 'Status: Yes', method: 'manual', status: 'verified', noActions: true }
+        { id: 'rtw', name: 'Right to Work', sub: 'Status: Yes', method: 'manual', status: 'verified' }
       ] }
     ];
   }
@@ -27520,14 +27271,12 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     document.getElementById('supStatPassed').textContent = stats.verified;
     document.getElementById('supStatPending').textContent = stats.pending;
     document.getElementById('supStatIssues').textContent = stats.issues;
-    document.getElementById('supStatNA').textContent = stats.na;
     document.getElementById('supChecksPassedText').textContent = stats.verified + '/' + stats.total + ' checks passed.';
     document.getElementById('supChecklistTotal').textContent = stats.total + '/' + stats.total;
     document.getElementById('supTabAllCount').textContent = stats.total;
     document.getElementById('supTabPendingCount').textContent = stats.pending;
     document.getElementById('supTabIssueCount').textContent = stats.issues;
     document.getElementById('supTabVerifiedCount').textContent = stats.verified;
-    document.getElementById('supTabNACount').textContent = stats.na;
     document.getElementById('supStickyScore').textContent = stats.pct + '%';
     document.getElementById('supStickyChecks').textContent = stats.verified + '/' + stats.total + ' checks passed';
 
