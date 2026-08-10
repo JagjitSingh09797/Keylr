@@ -2097,6 +2097,7 @@
   @keyframes supViewFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   .sup-view-animate { animation: supViewFadeIn 320ms cubic-bezier(0.16,1,0.3,1); }
   .dash-content { max-width: 1240px; margin: 0 auto; padding: 24px 32px 60px; background: #F9FAFB; }
+  .dash-content.dash-content-inbox-mode { max-width: none; margin: 0; padding: 0; }
   .dash-content.dash-content-full { max-width: none; margin: 0; }
   .dash-content.dash-content-narrow-pad { padding-left: 16px; padding-right: 16px; }
   @keyframes pmViewFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -2435,6 +2436,7 @@
 
   .sinb-chat-scroll { flex: 1; overflow-y: auto; padding: 22px 28px; background: #fbfcfe; }
   .sinb-date-sep { text-align: center; margin: 18px 0; }
+  .sinb-empty-chat { display: flex; align-items: center; justify-content: center; height: 100%; font-size: 13px; color: var(--text-body-muted); text-align: center; padding: 40px; }
   .sinb-date-sep span { font-size: 11.5px; font-weight: 600; color: var(--text-body-muted); background: #fff; border: 1px solid var(--border-subtle); border-radius: 999px; padding: 4px 14px; }
   .sinb-msg-row { display: flex; margin-bottom: 4px; animation: sinbMsgIn 240ms cubic-bezier(0.16,1,0.3,1) both; }
   @keyframes sinbMsgIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
@@ -2819,6 +2821,7 @@
     display: none;
   }
   .supapp-ms-menu.open { display: block; }
+  #supAppBlockersDdMenu.open { width: 280px; }
   #supCategoryDdMenu.open, #supAppCategoryDdMenu.open { width: 300px; }
   .pm-custom-dd-menu[data-dd-menu="supAppVerification"].open { width: 180px; }
   .pm-custom-dd-menu[data-dd-menu="supVerification"].open { width: 180px; }
@@ -2832,7 +2835,9 @@
   .supapp-ms-item:hover { background: var(--surface-soft); }
   .supapp-ms-check { width: 16px; height: 16px; border-radius: 5px; border: 1.5px solid #c7d0dc; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #fff; transition: background 120ms ease-out, border-color 120ms ease-out; }
   .supapp-ms-item.selected .supapp-ms-check { background: #183060; border-color: #183060; }
-  .supapp-location-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .supapp-all-chips-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; }
+  .supapp-location-chips { display: contents; }
+  .supapp-clear-all-btn { font-size: 12px; font-weight: 700; color: var(--accent-blue); background: none; border: none; cursor: pointer; padding: 4px 2px; text-decoration: underline; }
   .supapp-location-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #183060; background: #e7edf6; padding: 5px 8px 5px 12px; border-radius: 999px; }
   .supapp-invite-chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
   .supapp-invite-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; color: #183060; background: #e7edf6; padding: 6px 8px 6px 12px; border-radius: 999px; max-width: 100%; }
@@ -3234,6 +3239,7 @@
   .supplier-type-pill svg { width: 12px; height: 12px; flex-shrink: 0; }
   .supplier-approved-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: #1a7a3e; background: #eafaf0; padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
   .supplier-approved-pill.suspended { color: #c0392b; background: #fdecea; }
+  .supplier-approved-pill.edit-requests { color: #183060; background: #e7edf6; }
   .supplier-approved-pill.incomplete { color: #475569; background: var(--surface-soft); }
   .supplier-approved-pill.pending { color: #92620a; background: #fef3c7; }
   .supplier-approved-pill.rejected { color: #64748b; background: #f1f5f9; }
@@ -3247,14 +3253,25 @@
   .supapp-category-chip { font-size: 11px; font-weight: 600; color: #183060; background: #e7edf6; padding: 3px 9px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
   .supapp-role-chip { font-size: 11px; font-weight: 600; color: #183060; background: #e7edf6; padding: 3px 9px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
   .supapp-category-more { font-size: 11px; font-weight: 700; color: var(--text-body-muted); background: var(--surface-soft); padding: 3px 9px; border-radius: 999px; white-space: nowrap; cursor: default; }
+  .supapp-verification-chip { font-size: 11px; font-weight: 600; color: #146c43; background: #eafaf0; padding: 3px 9px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; display: inline-flex; align-items: center; gap: 4px; }
+  .supapp-verification-chip svg { width: 10px; height: 10px; flex-shrink: 0; }
+  .supapp-blocker-chip { font-size: 11px; font-weight: 600; color: #92620a; background: #fef3c7; padding: 3px 9px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; display: inline-flex; align-items: center; gap: 4px; }
+  .supapp-blocker-chip svg { width: 10px; height: 10px; flex-shrink: 0; }
   .supapp-chip-section-label { font-size: 10px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-body-muted); margin-bottom: 4px; }
   .supapp-location-more { font-size: 10.5px; font-weight: 700; color: var(--text-body-muted); background: var(--surface-soft); padding: 1px 6px; border-radius: 999px; white-space: nowrap; cursor: default; }
-  .supapp-table-location-cell { display: inline-block; max-width: 160px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; }
-  .supapp-table-categories-cell { display: flex; align-items: center; gap: 4px; flex-wrap: nowrap; }
+  .supapp-table-location-tip-wrap { display: inline-block; max-width: 100%; vertical-align: bottom; position: relative; }
+  .supapp-table-location-cell { display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .supapp-table-categories-cell { display: flex; align-items: center; gap: 4px; flex-wrap: nowrap; min-width: 0; }
+  .supapp-table-categories-cell .supapp-category-chip { flex-shrink: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  .supapp-table-categories-cell .supapp-category-more { flex-shrink: 0; }
   .supapp-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; }
   .supapp-info-cell { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-body-muted); min-width: 0; }
   .supapp-info-cell span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .supapp-info-cell svg { color: #94a3b8; flex-shrink: 0; width: 12px; height: 12px; }
+  .supapp-info-cell.good { color: #146c43; font-weight: 600; }
+  .supapp-info-cell.good svg { color: #22c55e; }
+  .supapp-info-cell.warn { color: #92620a; font-weight: 600; }
+  .supapp-info-cell.warn svg { color: #d97706; }
   .supapp-status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
   .supapp-status-dot.is-good { background: #22c55e; }
   .supapp-status-dot.is-warn { background: #f59e0b; }
@@ -3871,13 +3888,14 @@
     content: attr(data-tooltip);
     position: absolute; bottom: calc(100% + 7px); left: 50%; transform: translateX(-50%);
     background: var(--navy-900); color: #fff; font-size: 11px; font-weight: 600;
-    padding: 5px 9px; border-radius: 6px; white-space: nowrap; z-index: 30;
+    padding: 5px 9px; border-radius: 6px; white-space: normal; max-width: 220px; width: max-content; text-align: center; line-height: 1.4; z-index: 30;
     opacity: 0; visibility: hidden; transition: opacity 150ms ease-out, visibility 150ms ease-out;
     pointer-events: none;
   }
   [data-tooltip]:hover::after { opacity: 1; visibility: visible; }
   .suprq-doc-view-btn[data-tooltip]::after { left: auto; right: 0; transform: none; }
   .sinb-chat-header [data-tooltip]::after { bottom: auto; top: calc(100% + 7px); }
+  .pm-table-scroll [data-tooltip]::after { bottom: auto; top: calc(100% + 7px); }
   .sinb-titlebar [data-tooltip]::after { bottom: auto; top: calc(100% + 7px); }
 
   /* 3-dot dropdown menu */
@@ -3902,6 +3920,15 @@
   .pm-name-cell .pm-card-avatar { width: 34px; height: 34px; font-size: 12px; }
   .pm-name-cell .nm-name { font-weight: 700; color: var(--text-heading); display: flex; align-items: center; gap: 5px; }
   .pm-name-cell .nm-email { font-size: 11.5px; color: var(--text-body-muted); }
+  .supapp-table-fixed { table-layout: fixed; width: 100%; }
+  @media (max-width: 1440px) {
+    .supapp-table-fixed { width: auto; min-width: 1100px; }
+  }
+  .supapp-table-fixed .supapp-table-name-wrap { min-width: 0; }
+  .supapp-table-fixed .nm-name, .supapp-table-fixed .nm-email { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .supapp-table-verif { font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .supapp-table-verif.good { color: #146c43; }
+  .supapp-table-verif.warn { color: #92620a; }
   .pm-yes-tag { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: #1a7a3e; background: #eafaf0; padding: 4px 10px; border-radius: 999px; }
   .pm-yes-tag .dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; flex-shrink: 0; }
   .pm-table-progress .tp-toprow { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
@@ -5796,11 +5823,6 @@
             <div class="check-row" id="agreeTermsRow">
               <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
               <label for="agreeTerms">I agree to the <button type="button" class="as-link">Terms &amp; Conditions</button> and <button type="button" class="as-link">Privacy Policy</button></label>
-            </div>
-
-            <div class="check-row" id="agreePlatformRow">
-              <input type="checkbox" id="agreePlatform" name="agreePlatform" required>
-              <label for="agreePlatform">I acknowledge and accept the Keylr <a href="https://www.keylr.com/legal/platform-agreement" target="_blank" rel="noopener">Platform Agreement</a>.</label>
             </div>
 
             <button type="button" id="signupContinueBtn" class="btn btn-primary">Continue <span class="arrow">→</span></button>
@@ -8559,11 +8581,6 @@
                         <div class="sldc-label">Privacy Policy</div>
                         <svg class="sldc-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
                       </a>
-                      <a class="sup-legal-doc-card" href="https://www.keylr.com/legal/platform-agreement" target="_blank" rel="noopener">
-                        <div class="sldc-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 1-1 3-9 9-8-6-9-8-9-9V5l9-3 9 3z"/></svg></div>
-                        <div class="sldc-label">Platform Agreement</div>
-                        <svg class="sldc-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
-                      </a>
                     </div>
                   </div>
                 </div>
@@ -9580,12 +9597,6 @@
                   <div class="sinb-chat-header" id="sinbChatHeader"></div>
                   <div class="sinb-chat-scroll" id="sinbChatScroll"></div>
                   <div class="sinb-composer" id="sinbComposer">
-                    <div class="sinb-final-offer-row" id="sinbFinalOfferRow" style="display:none;">
-                      <span class="sinb-fo-label">Final offer</span>
-                      <div class="sinb-fo-input-wrap">£<input type="text" id="sinbFinalOfferInput" placeholder="0" inputmode="numeric"></div>
-                      <button type="button" class="btn btn-primary" id="sinbFinalOfferSendBtn" disabled>Send</button>
-                      <button type="button" class="sinb-fo-close" id="sinbFinalOfferCloseBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-                    </div>
                     <div class="sinb-composer-icons">
                       <div style="position:relative;">
                         <button type="button" class="sinb-icon-btn" id="sinbSavedRepliesBtn" data-tooltip="Saved replies"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></button>
@@ -9607,7 +9618,6 @@
                       </div>
                       <button type="button" class="sinb-icon-btn" id="sinbAttachBtn" data-tooltip="Attach image or PDF"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button>
                       <input type="file" id="sinbAttachInput" accept="image/*,video/*,.pdf" style="display:none;">
-                      <button type="button" class="btn sinb-final-offer-btn" id="sinbFinalOfferToggleBtn">£ Final Offer</button>
                     </div>
                     <div class="sinb-input-row">
                       <input type="text" id="sinbMessageInput" placeholder="Message...">
@@ -9615,16 +9625,6 @@
                     </div>
                     <div class="sinb-composer-hint">Enter to send · Shift + Enter for new line · Images, videos + PDFs up to 10 MB.</div>
                   </div>
-                </div>
-              </div>
-
-              <div class="sinb-details-overlay" id="sinbDetailsOverlay">
-                <div class="sinb-details-col" id="sinbDetailsCol">
-                  <div class="sinb-details-head">
-                    <span>Details</span>
-                    <button type="button" class="pm-icon-btn-sq" id="sinbDetailsCloseBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-                  </div>
-                  <div class="sinb-details-scroll" id="sinbDetailsScroll"></div>
                 </div>
               </div>
             </div>
@@ -11312,11 +11312,6 @@
                         <div class="sldc-label">Privacy Policy</div>
                         <svg class="sldc-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
                       </a>
-                      <a class="sup-legal-doc-card" href="https://www.keylr.com/legal/platform-agreement" target="_blank" rel="noopener">
-                        <div class="sldc-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 1-1 3-9 9-8-6-9-8-9-9V5l9-3 9 3z"/></svg></div>
-                        <div class="sldc-label">Platform Agreement</div>
-                        <svg class="sldc-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
-                      </a>
                     </div>
                   </div>
 
@@ -12449,9 +12444,10 @@
                 </div>
                 <div class="pm-tab-pills" id="supAppTabPills">
                   <div class="pm-tab-pill active" data-filter="all">All</div>
-                  <div class="pm-tab-pill" data-filter="incomplete">Incomplete</div>
-                  <div class="pm-tab-pill" data-filter="complete">Complete</div>
-                  <div class="pm-tab-pill" data-filter="rejected">Archived</div>
+                  <div class="pm-tab-pill" data-filter="new">New</div>
+                  <div class="pm-tab-pill" data-filter="in-review">In Review</div>
+                  <div class="pm-tab-pill" data-filter="requests">Edit Requests</div>
+                  <div class="pm-tab-pill" data-filter="archived">Archived</div>
                 </div>
                 <div class="pm-count-actions">
                   <span class="pm-count-text" id="supAppResultCount">Showing 25 of 33</span>
@@ -12479,28 +12475,24 @@
                   </div>
                 </div>
                 <div id="supAppDynamicFilters" style="display:contents;"></div>
-                <div class="pm-filter-field" style="flex:1 1 110px; min-width:100px;">
-                  <div class="pff-legend-wrap"><label>Sort</label></div>
-                  <button type="button" class="pm-custom-dd-btn" data-dd="supAppSort">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5h10M11 9h7M11 13h4M3 17l3 3 3-3M6 18V4"/></svg>
-                    <span class="cdd-value">Newest</span>
-                    <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-                  </button>
-                  <div class="pm-custom-dd-menu" data-dd-menu="supAppSort">
-                    <div class="cdd-item selected" data-value="Newest">Newest first</div>
-                    <div class="cdd-item" data-value="Oldest">Oldest first</div>
-                  </div>
-                </div>
               </div>
-              <div class="supapp-location-chips" id="supAppLocationChips" style="display:none;"></div>
-              <div class="supapp-location-chips" id="supAppCategoryChips" style="display:none;"></div>
+              <div class="supapp-all-chips-row" id="supAppAllChipsRow" style="display:none;">
+                <div class="supapp-location-chips" id="supAppLocationChips"></div>
+                <div class="supapp-location-chips" id="supAppCategoryChips"></div>
+                <div class="supapp-location-chips" id="supAppVerificationChips"></div>
+                <div class="supapp-location-chips" id="supAppBlockersChips"></div>
+                <button type="button" class="supapp-clear-all-btn" id="supAppClearAllBtn">Clear all</button>
+              </div>
             </div>
 
             <div id="supAppGridView" class="pm-card-grid"></div>
             <div id="supAppTableViewWrap" class="pm-table-wrap" style="display:none;">
               <div class="pm-table-scroll">
-                <table class="admin-table" style="min-width:900px;">
-                  <thead><tr><th>Name</th><th>Phone</th><th>Type</th><th>Categories</th><th>Location</th><th>Status</th><th>Submitted</th></tr></thead>
+                <table class="admin-table supapp-table-fixed">
+                  <colgroup>
+                    <col style="width:15%;"><col style="width:12%;"><col style="width:10%;"><col style="width:15%;"><col style="width:9%;"><col style="width:9%;"><col style="width:9%;"><col style="width:11%;"><col style="width:10%;">
+                  </colgroup>
+                  <thead><tr><th>Name</th><th>Phone</th><th>Type</th><th>Categories</th><th>Location</th><th>Verified</th><th>Blockers</th><th>Status</th><th>Submitted</th></tr></thead>
                   <tbody id="supAppTableBody"></tbody>
                 </table>
               </div>
@@ -15469,19 +15461,6 @@
       agreeRow.classList.remove('error');
     }
 
-    var agreePlatform = document.getElementById('agreePlatform');
-    var agreePlatformRow = document.getElementById('agreePlatformRow');
-    if (!agreePlatform.checked) {
-      invalid = true;
-      agreePlatformRow.classList.add('error');
-      agreePlatformRow.classList.remove('shake');
-      void agreePlatformRow.offsetWidth;
-      agreePlatformRow.classList.add('shake');
-      if (!firstInvalidEl) firstInvalidEl = agreePlatform;
-    } else {
-      agreePlatformRow.classList.remove('error');
-    }
-
     return { invalid: invalid, firstInvalidEl: firstInvalidEl };
   }
 
@@ -15540,11 +15519,6 @@
   document.getElementById('agreeTerms').addEventListener('change', function () {
     if (this.checked) {
       document.getElementById('agreeTermsRow').classList.remove('error');
-    }
-  });
-  document.getElementById('agreePlatform').addEventListener('change', function () {
-    if (this.checked) {
-      document.getElementById('agreePlatformRow').classList.remove('error');
     }
   });
 
@@ -21008,6 +20982,8 @@
     Object.keys(SUP_VIEW_IDS).forEach(function (key) {
       document.getElementById(SUP_VIEW_IDS[key]).style.display = (key === view) ? '' : 'none';
     });
+    var dashContentEl = document.querySelector('#supplierDashboard .dash-content');
+    if (dashContentEl) dashContentEl.classList.toggle('dash-content-inbox-mode', view === 'inbox');
     var scrollArea = document.querySelector('#supplierDashboard .dash-scroll-area');
     scrollArea.scrollTo({ top: 0, behavior: 'smooth' });
     var activeViewEl = document.getElementById(SUP_VIEW_IDS[view]);
@@ -21562,21 +21538,12 @@
 
   /* ==================== SUPPLIER INBOX MODULE ==================== */
   /* Simplified to a single, direct channel with Keylr Support — suppliers don't manage
-     multiple conversations here, so there's no list, no archive/star/pin, no sort/search. */
+     multiple conversations here, so there's no list, no archive/star/pin, no sort/search,
+     no contact details panel, and no final offer flow. */
   var SINB_SUPPORT_CONV = {
-    id: 'support', name: 'Keylr Support', initials: 'KS', type: 'support', status: 'Open',
+    id: 'support', name: 'Keylr Support', initials: 'KS', type: 'support',
     presence: 'Active now', lastActivityLabel: '05/07/2026', unread: 0,
-    messages: [
-      { kind: 'date', label: '01 Jul 2026' },
-      { kind: 'system', warn: false, title: 'AC Service / Repair / Refrigerant Top-Up', body: 'A property manager has invited you to accept a job.', time: '11:03' },
-      { kind: 'date', label: '02 Jul 2026' },
-      { kind: 'system', warn: false, title: '\u00a3192.00 has been deposited', body: 'Your early payment payout of \u00a3192.00 for IP-51 has been successfully credited to your bank account.', time: '17:52' },
-      { kind: 'date', label: '03 Jul 2026' },
-      { kind: 'system', warn: false, title: '\u00a3240.00 has been deposited', body: 'Your early payment payout of \u00a3240.00 for JB-2653 has been successfully credited to your bank account.', time: '09:23' },
-      { kind: 'system', warn: true, title: 'Boiler Repair / No Hot Water / Gas Leak Emergency', body: 'The property manager has selected a supplier for this job.', time: '16:34' },
-      { kind: 'date', label: '05 Jul 2026' },
-      { kind: 'system', warn: false, title: '\u00a3180.00 has been deposited', body: 'Your deposit payout of \u00a3180.00 for JB-2675 has been successfully credited to your bank account.', time: '14:51' }
-    ]
+    messages: []
   };
 
   function sinbEsc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
@@ -21596,72 +21563,16 @@
     headerEl.innerHTML =
       '<div class="sinb-conv-avatar" style="background:' + sinbAvatarColor(c.initials) + ';color:#1e40af;">' + c.initials + (c.presence ? '<span class="presence-dot"></span>' : '') + '</div>' +
       '<div style="min-width:0;">' +
-        '<div class="sinb-chat-header-name-row"><h3>' + sinbEsc(c.name) + '</h3><span class="sinb-open-pill"><span class="dot"></span>' + c.status + '</span></div>' +
+        '<div class="sinb-chat-header-name-row"><h3>' + sinbEsc(c.name) + '</h3></div>' +
         '<div class="sinb-chat-header-sub">' + (c.presence ? '<span class="online">' + c.presence + '</span>' : 'Last active ' + c.lastActivityLabel) + '</div>' +
-      '</div>' +
-      '<div class="sinb-chat-header-actions">' +
-        '<button type="button" class="pm-icon-btn-sq" data-tooltip="Contact details" id="sinbDetailsToggleBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M15 8h3M15 12h3M6 16h12"/></svg></button>' +
       '</div>';
-    scrollEl.innerHTML = c.messages.map(function (m) {
+    scrollEl.innerHTML = c.messages.length ? c.messages.map(function (m) {
       if (m.kind === 'date') return '<div class="sinb-date-sep"><span>' + m.label + '</span></div>';
       if (m.kind === 'system') return '<div class="sinb-msg-row system"><div class="sinb-system-card"><div class="sinb-system-card-inner' + (m.warn ? ' warn' : '') + '"><div class="sinb-system-card-title">' + sinbEsc(m.title) + '</div><div class="sinb-system-card-body">' + sinbEsc(m.body) + '</div></div><div class="sinb-system-card-time">' + m.time + '</div></div></div>';
-      if (m.kind === 'final-offer') return '<div class="sinb-msg-row mine"><div class="sinb-fo-card"><div class="sinb-fo-card-label">Final Offer</div><div class="sinb-fo-card-amount">\u00a3' + m.amount + '</div><div class="sinb-fo-card-divider"></div><div class="sinb-fo-card-status' + (m.status === 'approved' ? ' approved' : '') + '">Status: <b>' + (m.status === 'approved' ? 'Approved' : 'Pending') + '</b> ' + (m.status === 'approved' ? '\u2713' : '\u231B') + '</div><div class="sinb-msg-time">You \u00b7 ' + m.time + '</div></div></div>';
       if (m.kind === 'attachment') return '<div class="sinb-msg-row' + (m.mine ? ' mine' : '') + '"><div class="sinb-msg-stack"><div class="sinb-msg-bubble sinb-attachment-bubble"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (m.isImage ? '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>' : '<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/>') + '</svg><span>' + sinbEsc(m.fileName) + '</span></div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
       return '<div class="sinb-msg-row' + (m.mine ? ' mine' : '') + '"><div class="sinb-msg-stack"><div class="sinb-msg-bubble">' + sinbEsc(m.text) + '</div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
-    }).join('');
+    }).join('') : '<div class="sinb-empty-chat">Send a message to start the conversation with Keylr Support.</div>';
     scrollEl.scrollTop = scrollEl.scrollHeight;
-
-    document.getElementById('sinbDetailsToggleBtn').addEventListener('click', sinbToggleDetails);
-    sinbRenderDetails();
-  }
-
-  function sinbRenderDetails() {
-    var c = sinbGetActiveConv();
-    var scrollEl = document.getElementById('sinbDetailsScroll');
-    if (!c || !scrollEl) return;
-    var msgCount = c.messages.filter(function (m) { return m.kind !== 'date'; }).length;
-    scrollEl.innerHTML =
-      '<div class="sinb-dtl-avatar-wrap">' +
-        '<div class="sinb-conv-avatar" style="background:' + sinbAvatarColor(c.initials) + ';color:#1e40af;">' + c.initials + (c.presence ? '<span class="presence-dot"></span>' : '') + '</div>' +
-        '<div class="sinb-dtl-name">' + sinbEsc(c.name) + '</div>' +
-        '<div class="sinb-dtl-sub">We\u2019re here when you need us.</div>' +
-        '<div class="sinb-dtl-pill-row"><span class="sinb-open-pill"><span class="dot"></span>' + c.status + '</span><span class="sinb-conv-pill support">Support</span></div>' +
-      '</div>' +
-      '<div class="sinb-dtl-action-row">' +
-        '<button type="button" class="sinb-dtl-action-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Call</button>' +
-        '<button type="button" class="sinb-dtl-action-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>Email</button>' +
-        '<button type="button" class="sinb-dtl-action-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Schedule</button>' +
-      '</div>' +
-      '<div class="sinb-dtl-divider"></div>' +
-      '<div class="sinb-dtl-section-label">Conversation</div>' +
-      '<div class="sinb-dtl-row"><span class="sinb-dtl-row-label">Type</span><span class="sinb-dtl-row-value">Support</span></div>' +
-      '<div class="sinb-dtl-row"><span class="sinb-dtl-row-label">Status</span><span class="sinb-dtl-row-value">' + c.status + '</span></div>' +
-      '<div class="sinb-dtl-row"><span class="sinb-dtl-row-label">Messages</span><span class="sinb-dtl-row-value">' + msgCount + '</span></div>' +
-      '<div class="sinb-dtl-row"><span class="sinb-dtl-row-label">Presence</span><span class="sinb-dtl-row-value' + (c.presence ? ' green' : '') + '">' + (c.presence || 'Offline') + '</span></div>' +
-      '<div class="sinb-dtl-row"><span class="sinb-dtl-row-label">Last Activity</span><span class="sinb-dtl-row-value">' + c.lastActivityLabel + '</span></div>' +
-      '<div class="sinb-dtl-divider"></div>' +
-      '<div class="sinb-dtl-section-label">Files &amp; Attachments</div>' +
-      '<div class="sinb-dtl-empty">No files shared in this conversation yet.</div>' +
-      '<div class="sinb-dtl-divider"></div>' +
-      '<div class="sinb-dtl-section-label">Activity</div>' +
-      c.messages.filter(function (m) { return m.kind === 'system' || m.kind === 'final-offer'; }).slice(-5).reverse().map(function (m) {
-        var title = m.kind === 'final-offer' ? 'Final Offer \u00a3' + m.amount + ' sent' : m.title;
-        return '<div class="sinb-dtl-activity-item"><div class="sinb-dtl-activity-dot"></div><div class="sinb-dtl-activity-body"><div class="sinb-dtl-activity-title">' + sinbEsc(title) + '</div><div class="sinb-dtl-activity-date">' + m.time + '</div></div></div>';
-      }).join('') +
-      '<div class="sinb-dtl-divider"></div>' +
-      '<div class="sinb-dtl-section-label">Linked Property</div>' +
-      '<div class="sinb-dtl-empty">No property linked to this thread.</div>' +
-      '<div class="sinb-dtl-divider"></div>' +
-      '<div class="sinb-dtl-section-label">Related Records</div>' +
-      '<div class="sinb-dtl-related-row"><span>Open Jobs</span><span class="count">None linked</span></div>' +
-      '<div class="sinb-dtl-related-row"><span>Quotes</span><span class="count">None linked</span></div>' +
-      '<div class="sinb-dtl-related-row"><span>Invoices</span><span class="count">None linked</span></div>' +
-      '<div class="sinb-dtl-related-row"><span>Compliance</span><span class="count">None linked</span></div>';
-  }
-
-  function sinbToggleDetails() {
-    var overlay = document.getElementById('sinbDetailsOverlay');
-    if (overlay) overlay.classList.toggle('open');
   }
 
   var sinbInitDone = false;
@@ -21669,8 +21580,6 @@
     if (sinbInitDone) { sinbRenderChat(); return; }
     sinbInitDone = true;
     sinbRenderChat();
-
-    document.getElementById('sinbDetailsCloseBtn').addEventListener('click', sinbToggleDetails);
 
     // Message input + send
     var msgInput = document.getElementById('sinbMessageInput');
@@ -21761,33 +21670,6 @@
       attachInput.value = '';
       sinbRenderChat();
       showToast(file.name + ' attached.');
-    });
-
-    // Final offer flow
-    var foToggleBtn = document.getElementById('sinbFinalOfferToggleBtn');
-    var foRow = document.getElementById('sinbFinalOfferRow');
-    var foInput = document.getElementById('sinbFinalOfferInput');
-    var foSendBtn = document.getElementById('sinbFinalOfferSendBtn');
-    var foCloseBtn = document.getElementById('sinbFinalOfferCloseBtn');
-    foToggleBtn.addEventListener('click', function () {
-      foRow.style.display = foRow.style.display === 'none' ? 'flex' : 'none';
-      if (foRow.style.display === 'flex') { foInput.value = ''; foSendBtn.disabled = true; setTimeout(function () { foInput.focus(); }, 50); }
-    });
-    foCloseBtn.addEventListener('click', function () { foRow.style.display = 'none'; });
-    foInput.addEventListener('input', function () {
-      this.value = this.value.replace(/[^0-9]/g, '');
-      foSendBtn.disabled = !this.value;
-    });
-    foSendBtn.addEventListener('click', function () {
-      var amount = parseInt(foInput.value, 10);
-      if (!amount) return;
-      var c = sinbGetActiveConv();
-      var now = new Date();
-      var timeStr = ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2);
-      c.messages.push({ kind: 'final-offer', amount: amount, status: 'pending', mine: true, time: timeStr });
-      foRow.style.display = 'none';
-      showToast('Final offer of \u00a3' + amount + ' sent.');
-      sinbRenderChat();
     });
   }
 
@@ -27963,17 +27845,18 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
   /* ---- Supplier Applicants module ---- */
   function supAppStatusClass(status) {
-    if (status === 'Rejected') return 'rejected';
-    if (status === 'Incomplete') return 'incomplete';
+    if (status === 'New') return 'incomplete';
+    if (status === 'In Review') return 'pending';
+    if (status === 'Requests') return 'edit-requests';
+    if (status === 'Archived') return 'rejected';
     return '';
   }
   function supStatusDisplayText(status) {
     return status === 'Rejected' ? 'Archived' : status;
   }
   function supAppStatusDisplayText(status) {
-    if (status === 'Approved') return 'Complete';
-    if (status === 'Rejected') return 'Archived';
-    return status;
+    if (status === 'Requests') return 'Edit Requests';
+    return status || 'New';
   }
   function supAppDropdownHtml(idx) {
     return '<div class="app-dropdown-menu" data-idx="' + idx + '">' +
@@ -27998,12 +27881,13 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   function supAppVerificationDotClass(v) {
     return v === 'Verification Complete' ? 'is-good' : 'is-warn';
   }
-  function supAppCategoryChipsHtmlStatic(categories, maxVisible) {
+  function supAppCategoryChipsHtmlStatic(categories, maxVisible, tooltipFullList) {
     if (!categories || !categories.length) return '<span class="acct-view-empty" style="font-size:12px;">No category set</span>';
     maxVisible = maxVisible || 3;
     var visible = categories.slice(0, maxVisible);
     var remaining = categories.length - visible.length;
-    return visible.map(function (cat) { return '<span class="supapp-category-chip">' + supjrEscapeHtml(cat) + '</span>'; }).join('') +
+    var fullListTip = tooltipFullList ? ' data-tooltip="' + supjrEscapeHtml(categories.join(', ')) + '"' : '';
+    return visible.map(function (cat) { return '<span class="supapp-category-chip"' + fullListTip + '>' + supjrEscapeHtml(cat) + '</span>'; }).join('') +
       (remaining > 0 ? '<span class="supapp-category-more" data-tooltip="' + supjrEscapeHtml(categories.slice(maxVisible).join(', ')) + '">+' + remaining + '</span>' : '');
   }
   function supAppCategoryChipsHtml(categories) {
@@ -28013,6 +27897,28 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   function supAppRoleChipsHtml(roles) {
     if (!roles || !roles.length) return '<span class="acct-view-empty" style="font-size:12px;">No role set</span>';
     return roles.map(function (role) { return '<span class="supapp-role-chip" data-chip-fit>' + supjrEscapeHtml(role) + '</span>'; }).join('');
+  }
+  function supAppVerificationChipsHtml(tags) {
+    if (!tags || !tags.length) return '<span class="acct-view-empty" style="font-size:12px;">Nothing verified yet</span>';
+    return tags.map(function (t) { return '<span class="supapp-verification-chip" data-chip-fit><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>' + supjrEscapeHtml(t) + '</span>'; }).join('');
+  }
+  function supAppBlockerChipsHtml(tags) {
+    if (!tags || !tags.length) return '';
+    return tags.map(function (t) { return '<span class="supapp-blocker-chip" data-chip-fit><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>' + supjrEscapeHtml(t) + '</span>'; }).join('');
+  }
+  // Compact text summary for the card's info grid — full detail lives in the tooltip on hover,
+  // avoiding the extra vertical space a full chip section per field would take on every card.
+  function supAppVerificationSummaryHtml(c) {
+    var tags = c.verificationTags || [];
+    var text = tags.length ? tags.length + ' Verified' : 'Nothing verified yet';
+    var tip = tags.length ? supjrEscapeHtml(tags.join(', ')) : '';
+    return '<div class="supapp-info-cell good"' + (tip ? ' data-tooltip="' + tip + '"' : '') + '><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>' + text + '</span></div>';
+  }
+  function supAppBlockersSummaryHtml(c) {
+    var tags = c.blockerTags || [];
+    if (!tags.length) return '<div class="supapp-info-cell good"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>No blockers</span></div>';
+    var tip = supjrEscapeHtml(tags.join(', '));
+    return '<div class="supapp-info-cell warn" data-tooltip="' + tip + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg><span>' + tags.length + ' Blocker' + (tags.length === 1 ? '' : 's') + '</span></div>';
   }
   /* After a card's chip rows are in the DOM, this measures the row's actual available width and hides
      whichever trailing chips don't fit, folding them into an accurate "+N" badge (with a hover tooltip
@@ -28102,9 +28008,10 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   function supAppLocationsTableCellHtml(locations) {
     locations = supAppDedupeLondon(locations);
     if (!locations || !locations.length) return '\u2014';
-    var visible = locations.slice(0, 2).join(', ');
+    var visible = locations[0];
     var full = locations.join(', ');
-    return '<span class="supapp-table-location-cell" data-tooltip="' + supjrEscapeHtml(full) + '">' + visible + (locations.length > 2 ? '\u2026' : '') + '</span>';
+    var text = supjrEscapeHtml(visible) + (locations.length > 1 ? ' +' + (locations.length - 1) : '');
+    return '<span class="supapp-table-location-tip-wrap" data-tooltip="' + supjrEscapeHtml(full) + '"><span class="supapp-table-location-cell">' + text + '</span></span>';
   }
   function renderSupAppCard(c, i) {
     var typeIcon = c.type === 'Company' ? companyIconSvg : personIconSvg;
@@ -28131,8 +28038,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       '<div class="supapp-info-grid">' +
         '<div class="supapp-info-cell' + (c.phone ? '' : ' muted-italic') + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg><span>' + (c.phone || 'No phone provided') + '</span></div>' +
         '<div class="supapp-info-cell" data-tooltip="' + supjrEscapeHtml((c.locations || []).join(', ')) + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><span>' + supAppLocationsText(c.locations) + '</span></div>' +
+        supAppVerificationSummaryHtml(c) +
+        supAppBlockersSummaryHtml(c) +
       '</div>' +
-      '<div class="supapp-info-cell" style="margin-top:8px;"><span class="supapp-status-dot ' + supAppVerificationDotClass(c.verificationStatus) + '"></span><span>' + c.verificationStatus + '</span></div>' +
       '<div class="supapp-card-divider"></div>' +
       '<div class="supplier-pill-row">' +
         '<span class="supplier-approved-pill ' + supAppStatusClass(c.status) + '">' + supAppStatusDisplayText(c.status) + '</span>' +
@@ -28146,12 +28054,20 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   }
   function renderSupAppTableRow(c, i) {
     var typeIcon = c.type === 'Company' ? companyIconSvg : personIconSvg;
+    var vTags = c.verificationTags || [];
+    var bTags = c.blockerTags || [];
+    var vCellText = vTags.length ? vTags.length + ' Verified' : 'None yet';
+    var vCellTip = vTags.length ? supjrEscapeHtml(vTags.join(', ')) : '';
+    var bCellText = bTags.length ? bTags.length + ' Blocker' + (bTags.length === 1 ? '' : 's') : 'None';
+    var bCellTip = bTags.length ? supjrEscapeHtml(bTags.join(', ')) : '';
     return '<tr class="pm-table-row supplier-table-row" data-idx="' + i + '">' +
-      '<td><div class="pm-name-cell"><div class="pm-card-avatar">' + supAppAvatarHtml(c) + '</div><div><div class="nm-name">' + c.name + '</div><div class="nm-email">' + (c.email || 'No email') + '</div></div></div></td>' +
+      '<td><div class="pm-name-cell"><div class="pm-card-avatar">' + supAppAvatarHtml(c) + '</div><div class="supapp-table-name-wrap"><div class="nm-name" data-tooltip="' + supjrEscapeHtml(c.name) + '">' + c.name + '</div><div class="nm-email">' + (c.email || 'No email') + '</div></div></div></td>' +
       '<td>' + (c.phone || '\u2014') + '</td>' +
       '<td>' + (c.type ? '<span class="supplier-type-pill' + (c.type === 'Sole Trader' ? ' sole-trader' : '') + '">' + typeIcon + c.type + '</span>' : '\u2014') + '</td>' +
-      '<td><div class="supapp-table-categories-cell">' + supAppCategoryChipsHtmlStatic(c.categories, 1) + '</div></td>' +
+      '<td><div class="supapp-table-categories-cell">' + supAppCategoryChipsHtmlStatic(c.categories, 1, true) + '</div></td>' +
       '<td>' + supAppLocationsTableCellHtml(c.locations) + '</td>' +
+      '<td><span class="supapp-table-verif good"' + (vCellTip ? ' data-tooltip="' + vCellTip + '"' : '') + '>' + vCellText + '</span></td>' +
+      '<td>' + (bTags.length ? '<span class="supapp-table-verif warn" data-tooltip="' + bCellTip + '">' + bCellText + '</span>' : '<span class="supapp-table-verif good">' + bCellText + '</span>') + '</td>' +
       '<td><span class="supplier-approved-pill ' + supAppStatusClass(c.status) + '">' + supAppStatusDisplayText(c.status) + '</span></td>' +
       '<td>' + supAppRelativeDate(c.dateSubmitted) + '</td>' +
     '</tr>';
@@ -28164,13 +28080,30 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   var supAppSortOrder = 'Newest';
   var supSortOrder = 'Newest';
   var supAppTypeFilter = 'All Types';
-  var supAppVerificationFilter = 'All';
+  var supAppVerificationFilter = [];
+  var supAppBlockersFilter = [];
   var supAppDateFilter = 'All Time';
   var supAppDateFrom = null;
   var supAppDateTo = null;
   var supAppCategoryFilter = [];
   var supAppLocationFilter = [];
   var UK_LOCATIONS = ['London', 'Manchester', 'Birmingham', 'Leeds', 'Bristol', 'Glasgow', 'Liverpool', 'Sheffield', 'Edinburgh', 'Newcastle', 'Nottingham', 'Cardiff', 'Leicester', 'Southampton', 'Oxford', 'Cambridge'];
+  // Supplier Applicants' location filter is intentionally narrower than the full UK_LOCATIONS list —
+  // just the specific cities offered during onboarding, plus London (with its zones), plus any custom
+  // city an applicant actually typed in during their own onboarding (so admins can still find them).
+  var SUP_APP_BASE_LOCATIONS = ['London', 'Manchester', 'Birmingham', 'Leeds', 'Liverpool', 'Cambridge', 'Oxford'];
+  var SUP_APP_EXCLUDED_LOCATIONS = ['Bristol', 'Glasgow', 'Edinburgh', 'Newcastle', 'Leicester', 'Sheffield', 'Nottingham', 'Southampton', 'Cardiff'];
+  function supAppLocationList() {
+    var list = SUP_APP_BASE_LOCATIONS.slice();
+    (typeof supplierApplicants !== 'undefined' ? supplierApplicants : []).forEach(function (c) {
+      (c.locations || []).forEach(function (loc) {
+        if (LONDON_ZONES && LONDON_ZONES.indexOf(loc) !== -1) return; // zones are handled separately, nested under London
+        if (SUP_APP_EXCLUDED_LOCATIONS.indexOf(loc) !== -1) return;
+        if (list.indexOf(loc) === -1) list.push(loc);
+      });
+    });
+    return list;
+  }
   var LONDON_ZONES = ['London \u2014 Central', 'London \u2014 North', 'London \u2014 West', 'London \u2014 North East', 'London \u2014 East', 'London \u2014 South East', 'London \u2014 South', 'London \u2014 South West'];
   (function enrichPMListsForFilters() {
     var PM_DEMO_PHOTOS = [11, 22, 31, 44, 56, 63, 71, 8, 19, 27, 38, 49];
@@ -28204,9 +28137,25 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
      Deterministic (index-based) so re-loading the page gives the same results. */
   (function enrichSupApplicantsForFilters() {
     var categoryCycle = Object.keys(categoryRoles).length ? Object.keys(categoryRoles) : ['Appliances', 'Cleaning', 'Electrical', 'Gas & Heating', 'Plumbing'];
+    var SUP_APP_STATUS_CYCLE = ['New', 'In Review', 'Requests', 'Archived'];
+    var VERIFICATION_TAG_SETS = [
+      ['Documents Verified', 'Identity Verified'],
+      ['Documents Verified', 'Certificates Verified', 'Identity Verified', 'Onboarding Complete', 'Verification Complete'],
+      ['Identity Verified', 'Resubmitted'],
+      []
+    ];
+    var BLOCKER_TAG_SETS = [
+      ['Documents Pending', 'Onboarding Incomplete'],
+      [],
+      ['Resubmission Required', 'Certificates Pending'],
+      ['Compliance Issue', 'Verification Pending']
+    ];
     supplierApplicants.forEach(function (c, i) {
+      c.status = SUP_APP_STATUS_CYCLE[i % SUP_APP_STATUS_CYCLE.length];
       if (c.docsVerified === undefined) c.docsVerified = (i % 3 !== 0); // ~2/3 fully verified, 1/3 still pending — mirrors their Compliance Checklist completion
       if (!c.verificationStatus) c.verificationStatus = c.docsVerified ? 'Verification Complete' : 'Verification Pending';
+      if (!c.verificationTags) c.verificationTags = VERIFICATION_TAG_SETS[i % VERIFICATION_TAG_SETS.length];
+      if (!c.blockerTags) c.blockerTags = BLOCKER_TAG_SETS[i % BLOCKER_TAG_SETS.length];
       if (!c.categories) {
         var catCount = 1 + (i % 5); // 1 to 5 categories, varied so the card's overflow ("+N") is testable
         var cats = [];
@@ -28277,10 +28226,12 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
   /* ---- Dynamic filter bar config — add a new entry here to add a new filter, no other wiring needed ---- */
   var SUP_APP_FILTER_DEFS = [
-    { key: 'supAppVerification', label: 'Verification Status', type: 'select', allValue: 'All',
-      options: ['All', 'Verification Pending', 'Verification Complete'] },
+    { key: 'supAppVerification', label: 'Verification Status', type: 'multiSelect', allValue: 'All Verification',
+      options: ['Documents Verified', 'Certificates Verified', 'Identity Verified', 'Resubmitted', 'Onboarding Complete', 'Verification Complete'] },
+    { key: 'supAppBlockers', label: 'Blockers / Reasons', type: 'multiSelect', allValue: 'All Blockers',
+      options: ['Documents Pending', 'Certificates Pending', 'Identity Verification Pending', 'Resubmission Required', 'Compliance Issue', 'Onboarding Incomplete', 'Verification Pending'] },
     { key: 'supAppDateSubmitted', label: 'Date Submitted', type: 'dateRange', allValue: 'All Time',
-      options: ['All Time', 'Today', 'Last 7 Days', 'Last 30 Days', 'Custom Date Range'] },
+      options: ['All Time', 'Today', 'Last 7 Days', 'Last 30 Days', 'Custom Date Range', 'Newest First', 'Oldest First'] },
     { key: 'supAppCategory', label: 'Service Category & Role', type: 'categoryRole', allValue: 'All Categories', searchable: true },
     { key: 'supAppLocation', label: 'Location', type: 'location' }
   ];
@@ -28343,7 +28294,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
             '</div>' +
             '</div>'
           : '';
-        return '<div class="pm-filter-field" style="flex:1 1 130px; min-width:110px;">' +
+        var selWidthStyle = def.key === 'supAppDateSubmitted' ? 'flex:1 1 180px; min-width:160px;' : 'flex:1 1 130px; min-width:110px;';
+        return '<div class="pm-filter-field" style="' + selWidthStyle + '">' +
           '<div class="pff-legend-wrap"><label>' + def.label + '</label></div>' +
           '<button type="button" class="pm-custom-dd-btn" data-dd="' + def.key + '">' +
             '<span class="cdd-value">' + def.options[0] + '</span>' +
@@ -28377,8 +28329,24 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
           '</div>' +
           '</div>';
       }
+      if (def.type === 'multiSelect') {
+        var msOpts = def.options.map(function (opt) {
+          return '<div class="supapp-ms-item" data-value="' + supjrEscapeHtml(opt) + '"><span class="supapp-ms-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>' + opt + '</div>';
+        }).join('');
+        var msWidthStyle = def.key === 'supAppBlockers' ? 'flex:1 1 210px; min-width:190px;' : 'flex:1 1 160px; min-width:140px;';
+        return '<div class="pm-filter-field" style="' + msWidthStyle + '">' +
+          '<div class="pff-legend-wrap"><label>' + def.label + '</label></div>' +
+          '<button type="button" class="pm-custom-dd-btn" id="' + def.key + 'DdBtn">' +
+            '<span class="cdd-value" id="' + def.key + 'DdLabel">' + def.allValue + '</span>' +
+            '<svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' +
+          '</button>' +
+          '<div class="supapp-ms-menu" id="' + def.key + 'DdMenu">' +
+            '<div id="' + def.key + 'OptionsList">' + msOpts + '</div>' +
+          '</div>' +
+          '</div>';
+      }
       if (def.type === 'location') {
-        var locOpts = UK_LOCATIONS.map(function (loc) {
+        var locOpts = supAppLocationList().map(function (loc) {
           var mainItem = '<div class="supapp-ms-item" data-value="' + loc + '"><span class="supapp-ms-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>' + loc + '</div>';
           if (loc !== 'London') return mainItem;
           var zoneItems = LONDON_ZONES.map(function (zone) {
@@ -28447,6 +28415,87 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       });
     });
 
+    // Generic simple multi-select wiring (Verification Status, Blockers / Reasons) — no search
+    // input or nested items, just a flat toggleable checklist.
+    function updateSupAppSimpleMultiSelectChips(key, filterArray) {
+      var chipsWrap = document.getElementById(key + 'Chips');
+      if (!chipsWrap) return;
+      if (!filterArray.length) { chipsWrap.innerHTML = ''; updateSupAppAllChipsRowVisibility(); return; }
+      chipsWrap.innerHTML = filterArray.map(function (val) {
+        return '<span class="supapp-location-chip">' + supjrEscapeHtml(val) + '<button type="button" data-remove-val="' + supjrEscapeHtml(val) + '" aria-label="Remove ' + supjrEscapeHtml(val) + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>';
+      }).join('');
+      updateSupAppAllChipsRowVisibility();
+      chipsWrap.querySelectorAll('[data-remove-val]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var val = btn.getAttribute('data-remove-val');
+          var idx = filterArray.indexOf(val);
+          if (idx !== -1) filterArray.splice(idx, 1);
+          var optItem = document.querySelector('#' + key + 'OptionsList .supapp-ms-item[data-value="' + val + '"]');
+          if (optItem) optItem.classList.remove('selected');
+          var ddLabelEl = document.getElementById(key + 'DdLabel');
+          var allLabelText = key === 'supAppVerification' ? 'All Verification' : 'All Blockers';
+          if (ddLabelEl) ddLabelEl.textContent = filterArray.length ? filterArray.length + ' selected' : allLabelText;
+          updateSupAppSimpleMultiSelectChips(key, filterArray);
+          supAppCurrentPage = 1;
+          renderSupAppList();
+        });
+      });
+    }
+    function initSupAppSimpleMultiSelect(key, filterArray, allLabel) {
+      var ddBtn = document.getElementById(key + 'DdBtn');
+      var ddMenu = document.getElementById(key + 'DdMenu');
+      var ddLabel = document.getElementById(key + 'DdLabel');
+      if (!ddBtn || !ddMenu) return;
+      ddBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var wasOpen = ddMenu.classList.contains('open');
+        if (typeof closeAllCustomDropdowns === 'function') closeAllCustomDropdowns();
+        if (!wasOpen) ddMenu.classList.add('open');
+      });
+      ddMenu.addEventListener('click', function (e) { e.stopPropagation(); });
+      document.querySelectorAll('#' + key + 'OptionsList .supapp-ms-item').forEach(function (item) {
+        item.addEventListener('click', function () {
+          var val = item.getAttribute('data-value');
+          var idx = filterArray.indexOf(val);
+          if (idx === -1) filterArray.push(val); else filterArray.splice(idx, 1);
+          item.classList.toggle('selected', idx === -1);
+          if (ddLabel) ddLabel.textContent = filterArray.length ? filterArray.length + ' selected' : allLabel;
+          updateSupAppSimpleMultiSelectChips(key, filterArray);
+          supAppCurrentPage = 1;
+          renderSupAppList();
+        });
+      });
+    }
+    initSupAppSimpleMultiSelect('supAppVerification', supAppVerificationFilter, 'All Verification');
+    initSupAppSimpleMultiSelect('supAppBlockers', supAppBlockersFilter, 'All Blockers');
+
+    var clearAllBtn = document.getElementById('supAppClearAllBtn');
+    if (clearAllBtn) {
+      clearAllBtn.addEventListener('click', function () {
+        supAppLocationFilter.length = 0;
+        supAppCategoryFilter.length = 0;
+        supAppVerificationFilter.length = 0;
+        supAppBlockersFilter.length = 0;
+        document.querySelectorAll('#supAppLocationOptionsList .supapp-ms-item.selected, #supAppCategoryOptionsList .supapp-ms-item.selected, #supAppVerificationOptionsList .supapp-ms-item.selected, #supAppBlockersOptionsList .supapp-ms-item.selected').forEach(function (item) {
+          item.classList.remove('selected');
+        });
+        var locLabel = document.getElementById('supAppLocationDdLabel');
+        if (locLabel) locLabel.textContent = 'All Locations';
+        var catLabel = document.getElementById('supAppCategoryDdLabel');
+        if (catLabel) catLabel.textContent = 'All Categories';
+        var verifLabel = document.getElementById('supAppVerificationDdLabel');
+        if (verifLabel) verifLabel.textContent = 'All Verification';
+        var blockLabel = document.getElementById('supAppBlockersDdLabel');
+        if (blockLabel) blockLabel.textContent = 'All Blockers';
+        if (typeof updateSupAppLocationUI === 'function') updateSupAppLocationUI();
+        if (typeof updateSupAppCategoryUI === 'function') updateSupAppCategoryUI();
+        updateSupAppSimpleMultiSelectChips('supAppVerification', supAppVerificationFilter);
+        updateSupAppSimpleMultiSelectChips('supAppBlockers', supAppBlockersFilter);
+        supAppCurrentPage = 1;
+        renderSupAppList();
+      });
+    }
+
     var appCatDdBtn = document.getElementById('supAppCategoryDdBtn');
     var appCatDdMenu = document.getElementById('supAppCategoryDdMenu');
     appCatDdBtn.addEventListener('click', function (e) { e.stopPropagation(); var wasOpen = appCatDdMenu.classList.contains('open'); if (typeof closeAllCustomDropdowns === 'function') closeAllCustomDropdowns(); if (!wasOpen) appCatDdMenu.classList.add('open'); });
@@ -28470,17 +28519,23 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       });
     });
   }
+  function updateSupAppAllChipsRowVisibility() {
+    var row = document.getElementById('supAppAllChipsRow');
+    if (!row) return;
+    var anyActive = supAppLocationFilter.length || supAppCategoryFilter.length || supAppVerificationFilter.length || supAppBlockersFilter.length;
+    row.style.display = anyActive ? 'flex' : 'none';
+  }
   function updateSupAppCategoryUI() {
     var labelEl = document.getElementById('supAppCategoryDdLabel');
     if (labelEl) labelEl.textContent = supAppCategoryFilter.length ? supAppCategoryFilter.length + ' selected' : 'All Categories';
     var chipsWrap = document.getElementById('supAppCategoryChips');
     if (!chipsWrap) return;
-    if (!supAppCategoryFilter.length) { chipsWrap.style.display = 'none'; chipsWrap.innerHTML = ''; return; }
-    chipsWrap.style.display = '';
+    if (!supAppCategoryFilter.length) { chipsWrap.innerHTML = ''; updateSupAppAllChipsRowVisibility(); return; }
     chipsWrap.innerHTML = supAppCategoryFilter.map(function (val) {
       var displayText = val.indexOf(': ') !== -1 ? val.split(': ')[1] : val;
       return '<span class="supapp-location-chip">' + supjrEscapeHtml(displayText) + '<button type="button" data-remove-cat="' + supjrEscapeHtml(val) + '" aria-label="Remove ' + supjrEscapeHtml(displayText) + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>';
     }).join('');
+    updateSupAppAllChipsRowVisibility();
     chipsWrap.querySelectorAll('[data-remove-cat]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var val = btn.getAttribute('data-remove-cat');
@@ -28500,11 +28555,11 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (labelEl) labelEl.textContent = supAppLocationFilter.length ? supAppLocationFilter.length + ' selected' : 'All Locations';
     var chipsWrap = document.getElementById('supAppLocationChips');
     if (!chipsWrap) return;
-    if (!supAppLocationFilter.length) { chipsWrap.style.display = 'none'; chipsWrap.innerHTML = ''; return; }
-    chipsWrap.style.display = '';
+    if (!supAppLocationFilter.length) { chipsWrap.innerHTML = ''; updateSupAppAllChipsRowVisibility(); return; }
     chipsWrap.innerHTML = supAppLocationFilter.map(function (loc) {
       return '<span class="supapp-location-chip">' + loc + '<button type="button" data-remove-loc="' + supjrEscapeHtml(loc) + '" aria-label="Remove ' + supjrEscapeHtml(loc) + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>';
     }).join('');
+    updateSupAppAllChipsRowVisibility();
     chipsWrap.querySelectorAll('[data-remove-loc]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var loc = btn.getAttribute('data-remove-loc');
@@ -28527,6 +28582,10 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (menu3) menu3.classList.remove('open');
     var menu4 = document.getElementById('supCategoryDdMenu');
     if (menu4) menu4.classList.remove('open');
+    var menu5 = document.getElementById('supAppVerificationDdMenu');
+    if (menu5) menu5.classList.remove('open');
+    var menu6 = document.getElementById('supAppBlockersDdMenu');
+    if (menu6) menu6.classList.remove('open');
   });
 
   function daysAgo(n) { var d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - n); return d; }
@@ -28535,11 +28594,13 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     return supplierApplicants.map(function (c, origIdx) { return { c: c, origIdx: origIdx }; }).filter(function (entry) {
       var c = entry.c;
       if (!c.type) return false;
-      if (supAppActiveTab === 'incomplete' && c.status !== 'Incomplete') return false;
-      if (supAppActiveTab === 'complete' && c.status !== 'Approved') return false;
-      if (supAppActiveTab === 'rejected' && c.status !== 'Rejected') return false;
+      if (supAppActiveTab === 'new' && c.status !== 'New') return false;
+      if (supAppActiveTab === 'in-review' && c.status !== 'In Review') return false;
+      if (supAppActiveTab === 'requests' && c.status !== 'Requests') return false;
+      if (supAppActiveTab === 'archived' && c.status !== 'Archived') return false;
       if (supAppTypeFilter !== 'All Types' && c.type !== supAppTypeFilter) return false;
-      if (supAppVerificationFilter !== 'All' && c.verificationStatus !== supAppVerificationFilter) return false;
+      if (supAppVerificationFilter.length && !supAppVerificationFilter.some(function (v) { return c.verificationTags && c.verificationTags.indexOf(v) !== -1; })) return false;
+      if (supAppBlockersFilter.length && !supAppBlockersFilter.some(function (v) { return c.blockerTags && c.blockerTags.indexOf(v) !== -1; })) return false;
       if (supAppCategoryFilter.length && !supAppCategoryFilter.some(function (val) {
         if (val.indexOf(': ') !== -1) {
           var roleOnly = val.split(': ')[1];
@@ -28653,16 +28714,30 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       renderSupAppList();
     });
   });
+  function supAppSwitchView(view) {
+    document.querySelectorAll('#supAppViewToggle button').forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-view') === view); });
+    document.getElementById('supAppGridView').style.display = view === 'grid' ? '' : 'none';
+    document.getElementById('supAppTableViewWrap').style.display = view === 'table' ? '' : 'none';
+    if (view === 'grid') supAppFitChipRows(document.getElementById('supAppGridView'));
+  }
   document.querySelectorAll('#supAppViewToggle button').forEach(function (btn) {
     btn.addEventListener('click', function () {
-      document.querySelectorAll('#supAppViewToggle button').forEach(function (b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      var view = btn.getAttribute('data-view');
-      document.getElementById('supAppGridView').style.display = view === 'grid' ? '' : 'none';
-      document.getElementById('supAppTableViewWrap').style.display = view === 'table' ? '' : 'none';
-      if (view === 'grid') supAppFitChipRows(document.getElementById('supAppGridView'));
+      supAppSwitchView(btn.getAttribute('data-view'));
     });
   });
+  // Table view doesn't work well on small screens even with horizontal scroll, so force Card
+  // view whenever the viewport drops below mobile width while Table is active — both on resize
+  // and on initial load, in case the page opens already at a mobile size with Table selected.
+  var SUP_APP_MOBILE_BREAKPOINT = 700;
+  function supAppEnforceMobileView() {
+    var tableBtn = document.querySelector('#supAppViewToggle button[data-view="table"]');
+    var isTableActive = tableBtn && tableBtn.classList.contains('active');
+    if (isTableActive && window.innerWidth < SUP_APP_MOBILE_BREAKPOINT) {
+      supAppSwitchView('grid');
+    }
+  }
+  window.addEventListener('resize', supAppEnforceMobileView);
+  supAppEnforceMobileView();
   document.getElementById('supAppRefreshBtn').addEventListener('click', function () {
     supAppSearchTerm = '';
     document.getElementById('supAppSearchInput').value = '';
@@ -28854,11 +28929,11 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   document.getElementById('supApplicantRejectBtn2').addEventListener('click', function () {
     var c = supDetailCurrentSupplier;
     if (!c) return;
-    if (c.status === 'Rejected') {
-      c.status = 'Incomplete';
+    if (c.status === 'Archived') {
+      c.status = 'New';
       showToast(c.name + '\u2019s application was unarchived.');
     } else {
-      c.status = 'Rejected';
+      c.status = 'Archived';
       showToast(c.name + '\u2019s application was archived.');
     }
     renderSupAppList();
@@ -29063,8 +29138,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     document.getElementById('supArchiveBtn2').style.display = (source === 'app' || isArchivedAlready) ? 'none' : 'flex';
     document.getElementById('supUnarchiveBtn2').style.display = (source === 'app' || !isArchivedAlready) ? 'none' : 'flex';
     document.getElementById('supApplicantActionBtns').style.display = source === 'app' ? 'flex' : 'none';
+    var isAppArchivedAlready = c.status === 'Archived';
     var supApplicantRejectBtnTextEl = document.getElementById('supApplicantRejectBtnText');
-    if (supApplicantRejectBtnTextEl) supApplicantRejectBtnTextEl.textContent = isArchivedAlready ? 'Unarchive' : 'Archive';
+    if (supApplicantRejectBtnTextEl) supApplicantRejectBtnTextEl.textContent = isAppArchivedAlready ? 'Unarchive' : 'Archive';
     document.getElementById('supViewPublicProfileBtn').style.display = source === 'app' ? 'none' : '';
 
     supPrimaryTradeSelected = null;
@@ -29128,9 +29204,13 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     supRowsPerPage: function (v) { supRowsPerPage = parseInt(v, 10); supCurrentPage = 1; renderSupplierList(); },
     supAppType: function (v) { supAppTypeFilter = v; supAppCurrentPage = 1; renderSupAppList(); },
     supAppRowsPerPage: function (v) { supAppRowsPerPage = parseInt(v, 10); supAppCurrentPage = 1; renderSupAppList(); },
-    supAppVerification: function (v) { supAppVerificationFilter = v; supAppCurrentPage = 1; renderSupAppList(); },
-    supAppSort: function (v) { supAppSortOrder = v; supAppCurrentPage = 1; renderSupAppList(); },
     supAppDateSubmitted: function (v) {
+      if (v === 'Newest First' || v === 'Oldest First') {
+        supAppSortOrder = v === 'Oldest First' ? 'Oldest' : 'Newest';
+        supAppCurrentPage = 1;
+        renderSupAppList();
+        return;
+      }
       supAppDateFilter = v;
       var rangeRow = document.getElementById('supAppDateSubmittedCustomRange');
       if (rangeRow) rangeRow.style.display = v === 'Custom Date Range' ? 'flex' : 'none';
