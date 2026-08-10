@@ -2486,13 +2486,6 @@
   .sinb-send-btn:not(:disabled):active { transform: scale(0.9); }
   .sinb-composer-hint { font-size: 10.5px; color: var(--text-body-muted); margin-top: 8px; }
 
-  .sinb-saved-replies-popover { position: fixed; width: 320px; background: #fff; border: 1px solid var(--border-subtle); border-radius: 12px; box-shadow: 0 12px 32px rgba(16,24,40,0.14); padding: 8px; z-index: 200; opacity: 0; visibility: hidden; transform: translateY(6px); transition: opacity 180ms ease-out, transform 180ms ease-out, visibility 180ms; }
-  .sinb-saved-replies-popover.open { opacity: 1; visibility: visible; transform: translateY(0); }
-  .sinb-srp-label { font-size: 11px; font-weight: 700; color: var(--text-body-muted); text-transform: uppercase; letter-spacing: 0.03em; padding: 8px 10px 4px; }
-  .sinb-srp-item { padding: 8px 10px; border-radius: 8px; cursor: pointer; transition: background-color 130ms ease-out; }
-  .sinb-srp-item:hover { background: var(--surface-soft); }
-  .sinb-srp-title { font-size: 12.5px; font-weight: 700; color: var(--text-heading); }
-  .sinb-srp-body { font-size: 11.5px; color: var(--text-body-muted); margin-top: 2px; line-height: 1.4; }
 
   .sinb-details-overlay { position: absolute; inset: 0; background: rgba(15,23,42,0.45); backdrop-filter: blur(3px); z-index: 100; display: flex; align-items: stretch; justify-content: flex-end; padding: 0; opacity: 0; visibility: hidden; transition: opacity 200ms ease-out, visibility 200ms ease-out; }
   .sinb-details-overlay.open { opacity: 1; visibility: visible; }
@@ -2801,6 +2794,9 @@
   .pm-view-toggle button { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; color: #94a3b8; background: #fff; cursor: pointer; }
   .pm-view-toggle button.active { background: var(--icon-tint-bg); color: var(--accent-blue); }
   .pm-icon-btn-sq { width: 28px; height: 28px; border: 1px solid var(--border-subtle); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--text-body-muted); flex-shrink: 0; cursor: pointer; }
+  #supAppSortToggleBtn svg { transition: transform 150ms ease-out; }
+  #supAppSortToggleBtn.supapp-sort-desc { color: var(--accent-blue); background: var(--icon-tint-bg); border-color: transparent; }
+  #supAppSortToggleBtn.supapp-sort-desc svg { transform: scaleY(-1); }
   .pm-icon-btn-sq:hover { background: var(--surface-soft); }
 
   /* Fixed, equal-width columns (minmax floor stops fields from ever getting squeezed
@@ -9599,17 +9595,6 @@
                   <div class="sinb-composer" id="sinbComposer">
                     <div class="sinb-composer-icons">
                       <div style="position:relative;">
-                        <button type="button" class="sinb-icon-btn" id="sinbSavedRepliesBtn" data-tooltip="Saved replies"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></button>
-                        <div class="sinb-saved-replies-popover" id="sinbSavedRepliesPopover">
-                          <div class="sinb-srp-label">Saved Replies</div>
-                          <div class="sinb-srp-item" data-reply="Thanks for the message — I've got this and will get back to you shortly."><div class="sinb-srp-title">Acknowledge</div><div class="sinb-srp-body">Thanks for the message — I've got this and will get back to you shortly.</div></div>
-                          <div class="sinb-srp-item" data-reply="Could you share a quick photo and a bit more detail so I can scope this accurately?"><div class="sinb-srp-title">Need more info</div><div class="sinb-srp-body">Could you share a quick photo and a bit more detail so I can scope this accurately?</div></div>
-                          <div class="sinb-srp-item" data-reply="On my way — should be with you in about 15 minutes."><div class="sinb-srp-title">On my way</div><div class="sinb-srp-body">On my way — should be with you in about 15 minutes.</div></div>
-                          <div class="sinb-srp-item" data-reply="I've got you booked in — I'll confirm the exact time once I lock in my schedule."><div class="sinb-srp-title">Booked in</div><div class="sinb-srp-body">I've got you booked in — I'll confirm the exact time once I lock in my schedule.</div></div>
-                          <div class="sinb-srp-item" data-reply="All done — photos are attached. Let me know if anything needs touching up."><div class="sinb-srp-title">Job complete</div><div class="sinb-srp-body">All done — photos are attached. Let me know if anything needs touching up.</div></div>
-                        </div>
-                      </div>
-                      <div style="position:relative;">
                         <button type="button" class="sinb-icon-btn" id="sinbEmojiBtn" data-tooltip="Add emoji"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg></button>
                         <div class="sinb-emoji-popover" id="sinbEmojiPopover">
                           <span data-emoji="👍">👍</span><span data-emoji="👌">👌</span><span data-emoji="🙂">🙂</span><span data-emoji="😀">😀</span><span data-emoji="🙌">🙌</span><span data-emoji="👋">👋</span>
@@ -12455,6 +12440,7 @@
                     <button type="button" class="active" data-view="grid" aria-label="Grid view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
                     <button type="button" data-view="table" aria-label="Table view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4"/><rect x="3" y="10" width="18" height="4"/><rect x="3" y="16" width="18" height="4"/></svg></button>
                   </div>
+                  <button type="button" class="pm-icon-btn-sq" id="supAppSortToggleBtn" data-tooltip="Sort: Newest first" aria-label="Toggle sort order"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11M3 12h7M3 17h4"/><path d="M17 4v16M17 4l-4 4M17 4l4 4"/></svg></button>
                   <button type="button" class="pm-icon-btn-sq" id="supAppRefreshBtn" aria-label="Refresh"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/></svg></button>
                   <button type="button" class="pm-icon-btn-sq mobile-filter-btn" data-filter-target="pm-filter-row-supapp" aria-label="Filters"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg></button>
                   <button type="button" class="btn btn-primary invite-btn-responsive" id="supAppInviteBtn" style="width:auto;padding:9px 16px;white-space:nowrap;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg><span class="invite-btn-text">Invite Supplier</span></button>
@@ -21602,32 +21588,6 @@
       if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
     });
 
-    // Saved replies popover
-    var srBtn = document.getElementById('sinbSavedRepliesBtn');
-    var srPopover = document.getElementById('sinbSavedRepliesPopover');
-    srBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      var wasOpen = srPopover.classList.contains('open');
-      if (!wasOpen) {
-        var rect = srBtn.getBoundingClientRect();
-        srPopover.style.left = rect.left + 'px';
-        srPopover.style.bottom = (window.innerHeight - rect.top + 8) + 'px';
-        srPopover.style.top = 'auto';
-      }
-      srPopover.classList.toggle('open');
-      srBtn.classList.toggle('open');
-    });
-    srPopover.querySelectorAll('.sinb-srp-item').forEach(function (item) {
-      item.addEventListener('click', function () {
-        msgInput.value = item.getAttribute('data-reply');
-        updateSendState();
-        srPopover.classList.remove('open');
-        srBtn.classList.remove('open');
-        msgInput.focus();
-      });
-    });
-    document.addEventListener('click', function () { srPopover.classList.remove('open'); srBtn.classList.remove('open'); });
-
     // Emoji picker
     var emojiBtn = document.getElementById('sinbEmojiBtn');
     var emojiPopover = document.getElementById('sinbEmojiPopover');
@@ -28231,7 +28191,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     { key: 'supAppBlockers', label: 'Blockers / Reasons', type: 'multiSelect', allValue: 'All Blockers',
       options: ['Documents Pending', 'Certificates Pending', 'Identity Verification Pending', 'Resubmission Required', 'Compliance Issue', 'Onboarding Incomplete', 'Verification Pending'] },
     { key: 'supAppDateSubmitted', label: 'Date Submitted', type: 'dateRange', allValue: 'All Time',
-      options: ['All Time', 'Today', 'Last 7 Days', 'Last 30 Days', 'Custom Date Range', 'Newest First', 'Oldest First'] },
+      options: ['All Time', 'Today', 'Last 7 Days', 'Last 30 Days', 'Custom Date Range'] },
     { key: 'supAppCategory', label: 'Service Category & Role', type: 'categoryRole', allValue: 'All Categories', searchable: true },
     { key: 'supAppLocation', label: 'Location', type: 'location' }
   ];
@@ -28738,9 +28698,19 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   }
   window.addEventListener('resize', supAppEnforceMobileView);
   supAppEnforceMobileView();
+  document.getElementById('supAppSortToggleBtn').addEventListener('click', function () {
+    supAppSortOrder = supAppSortOrder === 'Oldest' ? 'Newest' : 'Oldest';
+    this.classList.toggle('supapp-sort-desc', supAppSortOrder === 'Oldest');
+    this.setAttribute('data-tooltip', supAppSortOrder === 'Oldest' ? 'Sort: Oldest first' : 'Sort: Newest first');
+    supAppCurrentPage = 1;
+    renderSupAppList();
+  });
   document.getElementById('supAppRefreshBtn').addEventListener('click', function () {
     supAppSearchTerm = '';
     document.getElementById('supAppSearchInput').value = '';
+    supAppSortOrder = 'Newest';
+    var sortBtn = document.getElementById('supAppSortToggleBtn');
+    if (sortBtn) { sortBtn.classList.remove('supapp-sort-desc'); sortBtn.setAttribute('data-tooltip', 'Sort: Newest first'); }
     document.querySelectorAll('#pm-filter-row-supapp .pm-custom-dd-menu').forEach(function (menu) {
       var firstItem = menu.querySelector('.cdd-item');
       if (firstItem && !firstItem.classList.contains('selected')) firstItem.click();
@@ -29205,12 +29175,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     supAppType: function (v) { supAppTypeFilter = v; supAppCurrentPage = 1; renderSupAppList(); },
     supAppRowsPerPage: function (v) { supAppRowsPerPage = parseInt(v, 10); supAppCurrentPage = 1; renderSupAppList(); },
     supAppDateSubmitted: function (v) {
-      if (v === 'Newest First' || v === 'Oldest First') {
-        supAppSortOrder = v === 'Oldest First' ? 'Oldest' : 'Newest';
-        supAppCurrentPage = 1;
-        renderSupAppList();
-        return;
-      }
       supAppDateFilter = v;
       var rangeRow = document.getElementById('supAppDateSubmittedCustomRange');
       if (rangeRow) rangeRow.style.display = v === 'Custom Date Range' ? 'flex' : 'none';
