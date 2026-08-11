@@ -2462,8 +2462,9 @@
   .sinb-msg-stack-wide { max-width: 400px; width: 100%; }
   .sinb-cr-group { display: flex; flex-direction: column; gap: 8px; }
   .sinb-cr-group-intro { font-size: 12px; font-weight: 600; color: var(--text-body-muted); padding: 2px 2px 2px; }
+  .sinb-cr-submitted-time { display: block; font-size: 10.5px; font-weight: 500; color: var(--text-body-muted); margin-top: 2px; }
   .sinb-cr-pending-badge { font-size: 10.5px; font-weight: 700; color: #92620a; background: #fef3c7; padding: 2px 8px; border-radius: 999px; margin-left: 4px; }
-  .sinb-field-card { background: #fff; border: 1px solid var(--border-subtle); border-left: 3px solid #cbd5e1; border-radius: 10px; overflow: hidden; }
+  .sinb-field-card { background: #fff; border: 1px solid var(--border-subtle); border-left: 3px solid #cbd5e1; border-radius: 10px; }
   .sinb-field-card.pending { border-left-color: #f59e0b; }
   .sinb-field-card.approved { border-left-color: #22c55e; }
   .sinb-field-card.declined { border-left-color: #ef4444; }
@@ -10074,7 +10075,6 @@
                   <div class="pm-settings-tab-item" data-supsettingstab="insurance">Compliance</div>
                   <div class="pm-settings-tab-item" data-supsettingstab="questionnaire">Portfolio</div>
                   <div class="pm-settings-tab-item" data-supsettingstab="payment">Payment Setup</div>
-                  <div class="pm-settings-tab-item" data-supsettingstab="requests">Requests <span class="pm-count-text" id="supOwnRequestsCount" style="background:#fef3c7;color:#92620a;padding:1px 8px;border-radius:999px;font-weight:700;">0</span></div>
                   <div class="pm-settings-tab-item" data-supsettingstab="settings">Settings</div>
                   <div class="pm-settings-tab-item" data-supsettingstab="inbox">Chat<span class="dash-nav-badge" id="supSettingsBadgeInbox" hidden style="position:static;margin-left:6px;"></span></div>
                 </div>
@@ -12637,7 +12637,6 @@
               <div style="display:flex;gap:16px;">
                 <div class="sup-tab-item active" data-suptab="overview">Overview</div>
                 <div class="sup-tab-item" data-suptab="compliance">Profile</div>
-                <div class="sup-tab-item" data-suptab="requests">Requests <span class="pm-count-text" id="supRequestsCount" style="background:#fef3c7;color:#92620a;padding:1px 8px;border-radius:999px;font-weight:700;">0</span></div>
                 <div class="sup-tab-item" data-suptab="chat">Chat <span class="pm-count-text" id="supChatCount" style="background:#fef3c7;color:#92620a;padding:1px 8px;border-radius:999px;font-weight:700;">3</span></div>
               </div>
               <button type="button" id="supNotesDrawerBtn" aria-label="Admin notes" data-tooltip="Admin notes" style="position:relative;background:none;border:none;cursor:pointer;color:var(--text-body-muted);padding:8px;margin-right:4px;display:flex;align-items:center;">
@@ -21641,11 +21640,14 @@
   function supChatIsLiveSupplier(name) {
     return (name === SUP_OWN_DEMO_NAME || name === 'Ferna') && typeof SINB_SUPPORT_CONV !== 'undefined';
   }
-  function sinbNowTimestamp() {
-    var now = new Date();
+  function sinbFormatTimestamp(d) {
+    var dt = d ? new Date(d) : new Date();
     var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    var time = ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2);
-    return now.getDate() + ' ' + months[now.getMonth()] + ', ' + time;
+    var time = ('0' + dt.getHours()).slice(-2) + ':' + ('0' + dt.getMinutes()).slice(-2);
+    return dt.getDate() + ' ' + months[dt.getMonth()] + ', ' + time;
+  }
+  function sinbNowTimestamp() {
+    return sinbFormatTimestamp(new Date());
   }
   function sinbWireScrollBottomBtn(scrollEl, btnEl) {
     if (!scrollEl || !btnEl) return;
@@ -21672,6 +21674,7 @@
 
   var SUP_CR_STATUS_META = {
     pending: { label: 'Awaiting review', class: 'pending' },
+    resubmitted: { label: 'Awaiting review', class: 'pending' },
     approved: { label: 'Approved \u00b7 live on profile', class: 'approved' },
     declined: { label: 'Declined', class: 'declined' },
     resubmit: { label: 'Needs your update', class: 'resubmit' }
@@ -21688,70 +21691,34 @@
   function sinbFieldWantsUpload(ch) {
     return SUP_CR_UPLOAD_FIELD_PATTERNS.some(function (re) { return re.test(ch.fieldLabel); });
   }
-  // Type-aware inline input matching the same component the onboarding wizard uses for this field,
-  // so resubmitting a value in chat feels like the same field, not a generic text box.
-  function sinbFieldInputHtml(ch) {
-    var t = ch.fieldType;
-    if (sinbFieldWantsUpload(ch)) {
-      return '<div class="sinb-field-upload" data-field-upload>' +
-        '<input type="file" data-field-upload-input accept="image/*,.pdf" style="display:none;">' +
-        '<div class="sinb-field-upload-drop" data-field-upload-drop>' +
-          '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>' +
-          '<span data-field-upload-label>Click to upload a new document</span>' +
-        '</div>' +
-      '</div>';
-    }
-    if (t === 'toggle' || t === 'hmrc-toggle' || t === 'vat' || t === 'right-to-work') {
-      var isYes = /^yes$/i.test(ch.newValue);
-      return '<div class="sinb-field-toggle-row" data-field-toggle>' +
-        '<button type="button" class="sinb-field-toggle-btn' + (isYes ? ' active' : '') + '" data-toggle-val="Yes">Yes</button>' +
-        '<button type="button" class="sinb-field-toggle-btn' + (!isYes ? ' active' : '') + '" data-toggle-val="No">No</button>' +
-      '</div>';
-    }
-    if ((t === 'select' || t === 'nationality') && ch.selectOptions && ch.selectOptions.length) {
-      return '<select class="sinb-field-select" data-field-select>' + ch.selectOptions.map(function (o) {
-        return '<option value="' + supjrEscapeHtml(o) + '"' + (o === ch.newValue ? ' selected' : '') + '>' + supjrEscapeHtml(o) + '</option>';
-      }).join('') + '</select>';
-    }
-    if (t === 'date') {
-      return '<div class="sinb-field-date-wrap" data-field-date-wrap="' + ch.id + '">' +
-        '<button type="button" class="sinb-field-date-btn" data-field-date-btn="' + ch.id + '"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span data-field-date-text>' + supjrEscapeHtml(ch.newValue || 'Select date') + '</span></button>' +
-        '<input type="hidden" data-field-date-value value="' + supjrEscapeHtml(ch.newValue) + '">' +
-        '<div class="pm-cal-popup" data-field-cal-popup="' + ch.id + '">' +
-          '<div class="pm-cal-head">' +
-            '<button type="button" class="pm-cal-month-label" data-field-cal-monthlabel="' + ch.id + '"><span data-field-cal-monthtext="' + ch.id + '"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>' +
-            '<div class="pm-cal-nav">' +
-              '<button type="button" class="pm-cal-nav-btn" data-field-cal-prev="' + ch.id + '" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>' +
-              '<button type="button" class="pm-cal-nav-btn" data-field-cal-next="' + ch.id + '" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>' +
-            '</div>' +
-          '</div>' +
-          '<div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>' +
-          '<div class="pm-cal-grid" data-field-cal-grid="' + ch.id + '"></div>' +
-        '</div>' +
-      '</div>';
-    }
-    return '<input type="text" class="sinb-field-input" data-field-text value="' + supjrEscapeHtml(ch.newValue) + '">';
-  }
   function sinbFieldCardHtml(batch, ch, forAdmin) {
     var meta = SUP_CR_STATUS_META[ch.status] || SUP_CR_STATUS_META.pending;
+    var isDoc = sinbFieldWantsUpload(ch) || ch.isDocument;
+    function viewDocBtn(which, value) {
+      if (!isDoc || !value || /^(not set|not uploaded|—)$/i.test(String(value))) return '';
+      return '<button type="button" class="suprq-doc-view-btn" data-own-view-doc="' + batch.id + '|' + ch.id + '|' + which + '" data-tooltip="View document"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>';
+    }
+    function newValueHtml() {
+      return '<span class="sinb-field-new">' + sinbEsc(String(ch.newValue)) + '</span>' + viewDocBtn('new', ch.newValue);
+    }
     var body = '';
     if (ch.status === 'resubmit' && !forAdmin) {
-      // Supplier's turn to act — inline, type-aware input right where the request is, no need to
-      // leave the chat and go find the field in Account Settings.
+      // Supplier's turn to act — the exact same field component used in the onboarding wizard,
+      // right where the request is, so there's no need to leave the chat to find this field.
       body = '<div class="sinb-field-context">Admin asked you to double-check and update this.</div>' +
-        '<div class="sinb-field-edit-row">' + sinbFieldInputHtml(ch) + '</div>' +
-        '<button type="button" class="sinb-field-resubmit-btn" data-cr-resubmit data-batch-id="' + batch.id + '" data-change-id="' + ch.id + '">' + (sinbFieldWantsUpload(ch) ? 'Upload & resubmit' : 'Resubmit') + '</button>';
+        '<div class="sinb-field-edit-row">' + buildResubmitInputHtml(ch) + '</div>' +
+        '<button type="button" class="sinb-field-resubmit-btn" data-own-resubmit="' + batch.id + '|' + ch.id + '">' + (isDoc ? 'Upload & resubmit' : 'Resubmit') + '</button>';
     } else if (ch.status === 'resubmit' && forAdmin) {
       body = '<div class="sinb-field-context">Waiting on the supplier to update and resubmit this.</div>' +
-        '<div class="sinb-field-value-row"><span class="sinb-field-new">' + sinbEsc(String(ch.newValue)) + '</span></div>';
-    } else if (ch.status === 'pending') {
+        '<div class="sinb-field-value-row">' + newValueHtml() + '</div>';
+    } else if (ch.status === 'pending' || ch.status === 'resubmitted') {
       body = '<div class="sinb-field-context">' + (forAdmin ? 'Supplier requested this change.' : 'Waiting for admin to review.') + '</div>' +
-        '<div class="sinb-field-value-row"><span class="sinb-field-old">' + sinbEsc(String(ch.oldValue)) + '</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span class="sinb-field-new">' + sinbEsc(String(ch.newValue)) + '</span></div>' +
+        '<div class="sinb-field-value-row"><span class="sinb-field-old">' + sinbEsc(String(ch.oldValue)) + '</span>' + viewDocBtn('old', ch.oldValue) + '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>' + newValueHtml() + '</div>' +
         (forAdmin ? '<div class="sinb-field-actions"><button type="button" class="sinb-cr-action-btn approve" data-cr-action="approve" data-batch-id="' + batch.id + '" data-change-id="' + ch.id + '">Accept</button><button type="button" class="sinb-cr-action-btn resubmit" data-cr-action="resubmit" data-batch-id="' + batch.id + '" data-change-id="' + ch.id + '">Ask to resubmit</button><button type="button" class="sinb-cr-action-btn decline" data-cr-action="decline" data-batch-id="' + batch.id + '" data-change-id="' + ch.id + '">Decline</button></div>' : '');
     } else if (ch.status === 'approved') {
-      body = '<div class="sinb-field-value-row"><span class="sinb-field-new">' + sinbEsc(String(ch.newValue)) + '</span></div>';
+      body = '<div class="sinb-field-value-row">' + newValueHtml() + '</div>';
     } else if (ch.status === 'declined') {
-      body = '<div class="sinb-field-context">This update was not applied.</div><div class="sinb-field-value-row"><span class="sinb-field-old" style="text-decoration:none;">' + sinbEsc(String(ch.newValue)) + '</span></div>';
+      body = '<div class="sinb-field-context">This update was not applied.</div><div class="sinb-field-value-row"><span class="sinb-field-old" style="text-decoration:none;">' + sinbEsc(String(ch.newValue)) + '</span>' + viewDocBtn('new', ch.newValue) + '</div>';
     }
     var replyFooter = '<button type="button" class="sinb-field-reply-btn" data-field-reply-btn data-batch-id="' + batch.id + '" data-change-id="' + ch.id + '" data-field-label="' + supjrEscapeHtml(ch.fieldLabel) + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17H4a1 1 0 01-1-1v-4a1 1 0 011-1h5m0-4l-6 6 6 6M21 7v6a4 4 0 01-4 4H8"/></svg>Reply</button>';
     return '<div class="sinb-field-card ' + meta.class + '" data-change-id="' + ch.id + '">' +
@@ -21782,8 +21749,9 @@
     var introText = forAdmin
       ? 'Requested ' + batch.changes.length + ' profile update' + (batch.changes.length === 1 ? '' : 's') + '.'
       : 'I\u2019d like to update the following on my profile:';
+    var submittedLabel = batch.submittedDate ? '<span class="sinb-cr-submitted-time">' + sinbFormatTimestamp(batch.submittedDate) + '</span>' : '';
     return '<div class="sinb-cr-group">' +
-      '<div class="sinb-cr-group-intro">' + introText + (pendingCount ? ' <span class="sinb-cr-pending-badge">' + pendingCount + ' need' + (pendingCount === 1 ? 's' : '') + ' action</span>' : '') + '</div>' +
+      '<div class="sinb-cr-group-intro">' + introText + (pendingCount ? ' <span class="sinb-cr-pending-badge">' + pendingCount + ' need' + (pendingCount === 1 ? 's' : '') + ' action</span>' : '') + submittedLabel + '</div>' +
       cards +
     '</div>';
   }
@@ -21799,12 +21767,12 @@
     }
   }
   function sinbAddEditRequestMessage(batch) {
-    SINB_SUPPORT_CONV.messages.push({ kind: 'edit-request', mine: true, batchId: batch.id, time: sinbNowTimestamp() });
+    SINB_SUPPORT_CONV.messages.push({ kind: 'edit-request', mine: true, batchId: batch.id, ts: Date.now(), time: sinbNowTimestamp() });
     saveSinbMessages();
     if (typeof sinbRenderChat === 'function') sinbRenderChat();
   }
   function sinbAddEditResponseMessage(text) {
-    SINB_SUPPORT_CONV.messages.push({ kind: 'text', mine: false, text: text, time: sinbNowTimestamp() });
+    SINB_SUPPORT_CONV.messages.push({ kind: 'text', mine: false, text: text, ts: Date.now(), time: sinbNowTimestamp() });
     saveSinbMessages();
     if (typeof sinbRenderChat === 'function') sinbRenderChat();
   }
@@ -21865,7 +21833,8 @@
         '<div class="sinb-chat-header-name-row"><h3>' + sinbEsc(c.name) + '</h3></div>' +
         '<div class="sinb-chat-header-sub">' + (c.presence ? '<span class="online">' + c.presence + '</span>' : 'Last active ' + c.lastActivityLabel) + '</div>' +
       '</div>';
-    innerEl.innerHTML = c.messages.length ? c.messages.map(function (m) {
+    var sortedMessages = c.messages.slice().sort(function (a, b) { return (a.ts || 0) - (b.ts || 0); });
+    innerEl.innerHTML = sortedMessages.length ? sortedMessages.map(function (m) {
       if (m.kind === 'date') return '<div class="sinb-date-sep"><span>' + m.label + '</span></div>';
       if (m.kind === 'system') return '<div class="sinb-msg-row system"><div class="sinb-system-card"><div class="sinb-system-card-inner' + (m.warn ? ' warn' : '') + '"><div class="sinb-system-card-title">' + sinbEsc(m.title) + '</div><div class="sinb-system-card-body">' + sinbEsc(m.body) + '</div></div><div class="sinb-system-card-time">' + m.time + '</div></div></div>';
       if (m.kind === 'attachment') return '<div class="sinb-msg-row' + (m.mine ? ' mine' : '') + '"><div class="sinb-msg-stack">' + supChatQuoteBlockHtml(m) + '<div class="sinb-msg-bubble sinb-attachment-bubble"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (m.isImage ? '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>' : '<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/>') + '</svg><span>' + sinbEsc(m.fileName) + '</span></div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
@@ -21882,123 +21851,24 @@
     scrollEl.scrollTop = scrollEl.scrollHeight;
     sinbWireScrollBottomBtn(scrollEl, document.getElementById('sinbScrollBottomBtn'));
 
-    scrollEl.querySelectorAll('[data-field-toggle]').forEach(function (row) {
-      row.querySelectorAll('.sinb-field-toggle-btn').forEach(function (tbtn) {
-        tbtn.addEventListener('click', function () {
-          row.querySelectorAll('.sinb-field-toggle-btn').forEach(function (b) { b.classList.remove('active'); });
-          tbtn.classList.add('active');
-        });
-      });
-    });
-    scrollEl.querySelectorAll('[data-field-upload]').forEach(function (wrap) {
-      var drop = wrap.querySelector('[data-field-upload-drop]');
-      var input = wrap.querySelector('[data-field-upload-input]');
-      var label = wrap.querySelector('[data-field-upload-label]');
-      drop.addEventListener('click', function () { input.click(); });
-      input.addEventListener('change', function () {
-        var file = input.files && input.files[0];
-        if (!file) return;
-        label.textContent = file.name;
-        drop.classList.add('has-file');
-      });
-    });
-    scrollEl.querySelectorAll('[data-field-date-btn]').forEach(function (btn) {
-      var id = btn.getAttribute('data-field-date-btn');
-      var popup = scrollEl.querySelector('[data-field-cal-popup="' + id + '"]');
-      var valueInput = scrollEl.querySelector('[data-field-date-wrap="' + id + '"] [data-field-date-value]');
-      var textEl = scrollEl.querySelector('[data-field-date-wrap="' + id + '"] [data-field-date-text]');
-      if (!popup) return;
-      var state = { viewYear: null, viewMonth: null, selected: null };
-      var parsed = valueInput.value && new Date(valueInput.value);
-      var today = new Date();
-      state.viewYear = (parsed && !isNaN(parsed)) ? parsed.getFullYear() : today.getFullYear();
-      state.viewMonth = (parsed && !isNaN(parsed)) ? parsed.getMonth() : today.getMonth();
-      var SINB_CAL_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-      function draw() {
-        popup.querySelector('[data-field-cal-monthtext="' + id + '"]').textContent = SINB_CAL_MONTHS[state.viewMonth] + ' ' + state.viewYear;
-        var grid = popup.querySelector('[data-field-cal-grid="' + id + '"]');
-        var firstDay = new Date(state.viewYear, state.viewMonth, 1).getDay();
-        var daysInMonth = new Date(state.viewYear, state.viewMonth + 1, 0).getDate();
-        var html = '';
-        for (var i = 0; i < firstDay; i++) html += '<span class="pm-cal-day empty"></span>';
-        for (var d = 1; d <= daysInMonth; d++) {
-          var isSel = state.selected && state.selected.getDate() === d && state.selected.getMonth() === state.viewMonth && state.selected.getFullYear() === state.viewYear;
-          html += '<span class="pm-cal-day' + (isSel ? ' selected' : '') + '" data-cal-day="' + d + '">' + d + '</span>';
-        }
-        grid.innerHTML = html;
-        grid.querySelectorAll('[data-cal-day]').forEach(function (dayEl) {
-          dayEl.addEventListener('click', function () {
-            var day = parseInt(dayEl.getAttribute('data-cal-day'), 10);
-            state.selected = new Date(state.viewYear, state.viewMonth, day);
-            var dd = ('0' + day).slice(-2), mm = ('0' + (state.viewMonth + 1)).slice(-2);
-            var display = dd + '/' + mm + '/' + state.viewYear;
-            valueInput.value = display;
-            textEl.textContent = display;
-            popup.classList.remove('open');
-            draw();
-          });
-        });
-      }
-      draw();
-      btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        popup.classList.toggle('open');
-      });
-      popup.querySelector('[data-field-cal-prev="' + id + '"]').addEventListener('click', function (e) {
-        e.stopPropagation();
-        state.viewMonth--; if (state.viewMonth < 0) { state.viewMonth = 11; state.viewYear--; }
-        draw();
-      });
-      popup.querySelector('[data-field-cal-next="' + id + '"]').addEventListener('click', function (e) {
-        e.stopPropagation();
-        state.viewMonth++; if (state.viewMonth > 11) { state.viewMonth = 0; state.viewYear++; }
-        draw();
-      });
-      popup.addEventListener('click', function (e) { e.stopPropagation(); });
-    });
-    scrollEl.querySelectorAll('[data-cr-resubmit]').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var batchId = btn.getAttribute('data-batch-id');
-        var changeId = btn.getAttribute('data-change-id');
-        var change = sinbFindChange(batchId, changeId);
-        if (!change) return;
-        var card = btn.closest('.sinb-field-card');
-        var newVal = change.newValue;
-        var toggleActive = card.querySelector('.sinb-field-toggle-btn.active');
-        var selectEl = card.querySelector('[data-field-select]');
-        var textEl = card.querySelector('[data-field-text]');
-        var uploadInput = card.querySelector('[data-field-upload-input]');
-        var dateValueInput = card.querySelector('[data-field-date-value]');
-        if (uploadInput) {
-          var file = uploadInput.files && uploadInput.files[0];
-          if (!file) { showToast('Please upload a document before resubmitting.'); return; }
-          newVal = file.name;
-        } else if (dateValueInput) {
-          if (!dateValueInput.value) { showToast('Please select a date before resubmitting.'); return; }
-          newVal = dateValueInput.value;
-        } else if (toggleActive) newVal = toggleActive.getAttribute('data-toggle-val');
-        else if (selectEl) newVal = selectEl.value;
-        else if (textEl) newVal = textEl.value.trim();
-        if (!newVal) { showToast('Please enter a value before resubmitting.'); return; }
-        var previousValue = change.newValue;
-        change.newValue = newVal;
-        change.status = 'pending';
-        if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
+    wireOwnResubmitInputs(scrollEl, function () { return supplierChangeRequests[SUP_OWN_DEMO_NAME] || []; }, function (keepExpandedId, btn) {
+      var parts = btn.getAttribute('data-own-resubmit').split('|');
+      var change = sinbFindChange(parts[0], parts[1]);
+      if (change) {
         if (typeof logSupChatActivity === 'function') {
-          logSupChatActivity(SUP_OWN_DEMO_NAME, { type: 'resubmitted', actor: SUP_OWN_DEMO_NAME, action: 'resubmitted', fieldLabel: change.fieldLabel, oldValue: previousValue, newValue: newVal });
+          logSupChatActivity(SUP_OWN_DEMO_NAME, { type: 'resubmitted', actor: SUP_OWN_DEMO_NAME, action: 'resubmitted', fieldLabel: change.fieldLabel, oldValue: change.oldValue, newValue: change.newValue });
         }
         // Notify admin with a message tagged to this exact field, so it's clear which one was
         // resubmitted without them having to scroll back through the whole request card.
         SINB_SUPPORT_CONV.messages.push({
           kind: 'text', mine: true,
-          text: 'I\u2019ve resubmitted \u201c' + change.fieldLabel + '\u201d \u2014 new value: ' + newVal,
+          text: 'I\u2019ve resubmitted \u201c' + change.fieldLabel + '\u201d \u2014 new value: ' + change.newValue,
           replyToChangeId: change.id, replyToFieldLabel: change.fieldLabel,
-          time: sinbNowTimestamp()
+          ts: Date.now(), time: sinbNowTimestamp()
         });
         saveSinbMessages();
-        sinbRenderChat();
-        showToast(change.fieldLabel + ' resubmitted for review.');
-      });
+      }
+      sinbRenderChat();
     });
     scrollEl.querySelectorAll('[data-jump-change]').forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -22032,7 +21902,7 @@
     var seededAny = false;
     existingBatches.forEach(function (batch) {
       if (alreadyMessaged.indexOf(batch.id) === -1) {
-        SINB_SUPPORT_CONV.messages.push({ kind: 'edit-request', mine: true, batchId: batch.id, time: '00:00' });
+        SINB_SUPPORT_CONV.messages.push({ kind: 'edit-request', mine: true, batchId: batch.id, ts: batch.submittedDate ? new Date(batch.submittedDate).getTime() : Date.now(), time: sinbFormatTimestamp(batch.submittedDate) });
         seededAny = true;
       }
     });
@@ -22053,7 +21923,7 @@
       var text = msgInput.value.trim();
       if (!text) return;
       var c = sinbGetActiveConv();
-      var msg = { kind: 'text', mine: true, text: text, time: sinbNowTimestamp() };
+      var msg = { kind: 'text', mine: true, text: text, ts: Date.now(), time: sinbNowTimestamp() };
       if (sinbReplyingTo) { msg.replyToChangeId = sinbReplyingTo.changeId; msg.replyToFieldLabel = sinbReplyingTo.fieldLabel; }
       c.messages.push(msg);
       sinbReplyingTo = null;
@@ -22104,7 +21974,7 @@
       if (!file) return;
       var c = sinbGetActiveConv();
       var isImage = file.type.indexOf('image/') === 0;
-      var msg = { kind: 'attachment', mine: true, fileName: file.name, isImage: isImage, time: sinbNowTimestamp() };
+      var msg = { kind: 'attachment', mine: true, fileName: file.name, isImage: isImage, ts: Date.now(), time: sinbNowTimestamp() };
       if (sinbReplyingTo) { msg.replyToChangeId = sinbReplyingTo.changeId; msg.replyToFieldLabel = sinbReplyingTo.fieldLabel; }
       c.messages.push(msg);
       sinbReplyingTo = null;
@@ -23350,306 +23220,220 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     document.querySelectorAll('.own-resubmit-select-btn.open').forEach(function (b) { b.classList.remove('open'); });
   });
   var ownRequestsCtx = { listElId: 'supOwnRequestsList', emptyElId: 'supOwnRequestsEmpty', countElId: 'supOwnRequestsCount', getBatchesFn: getSupOwnChangeRequests };
-  function renderOwnRequestsListShared(highlightBatchId) {
-    var listEl = document.getElementById(ownRequestsCtx.listElId);
-    var emptyEl = document.getElementById(ownRequestsCtx.emptyElId);
-    var countEl = document.getElementById(ownRequestsCtx.countElId);
-    if (!listEl) return;
-    var batches = ownRequestsCtx.getBatchesFn();
-    var actionableCount = 0;
-    batches.forEach(function (b) { b.changes.forEach(function (ch) { if (ch.status === 'resubmit') actionableCount++; }); });
-    if (countEl) countEl.textContent = actionableCount;
-
-    if (!batches.length) {
-      listEl.innerHTML = '';
-      if (emptyEl) emptyEl.style.display = '';
-      return;
+  function buildResubmitInputHtml(ch) {
+    var type = ch.fieldType || (ch.isDocument ? 'document' : 'text');
+    if (type === 'billing-cycle') {
+      var BILLING_OPTIONS = [
+        { value: 'Pay upfront', title: 'Pay upfront', desc: 'Pay per job at the time of booking using your card on file. Available immediately on activation \u2014 no approval needed.', sub: '\uD83D\uDEE1 Payment held in escrow until job is completed' },
+        { value: 'Fortnightly', title: 'Fortnightly', desc: 'Consolidated invoice every 2 weeks settled by Direct Debit. Balanced for steady-volume operations.' },
+        { value: 'Monthly (4 weeks)', title: 'Monthly (4 weeks)', desc: 'Single monthly consolidated invoice via Direct Debit. Most common for established operators.' }
+      ];
+      return '<div data-own-resubmit-radio="' + ch.id + '">' +
+        BILLING_OPTIONS.map(function (opt) {
+          var selected = opt.value === ch.newValue;
+          return '<div class="billing-card' + (selected ? ' selected' : '') + '" data-radio-value="' + supjrEscapeHtml(opt.value) + '">' +
+            '<div class="bc-top"><div class="bc-radio"></div><div class="bc-title">' + opt.title + '</div></div>' +
+            '<div class="bc-desc">' + opt.desc + '</div>' +
+            (opt.sub ? '<div class="bc-sub">' + opt.sub + '</div>' : '') +
+          '</div>';
+        }).join('') +
+      '</div>' +
+      '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
     }
-    if (emptyEl) emptyEl.style.display = 'none';
-
-    var sorted = batches.slice().sort(function (a, b) { return b.submittedDate - a.submittedDate; });
-    listEl.innerHTML = sorted.map(function (b, idx) {
-      var needsFixCount = b.changes.filter(function (ch) { return ch.status === 'resubmit'; }).length;
-      var pendingCount = b.changes.filter(function (ch) { return ch.status === 'pending'; }).length;
-      var resubmittedCount = b.changes.filter(function (ch) { return ch.status === 'resubmitted'; }).length;
-      var aggStatus, aggText;
-      if (needsFixCount > 0) { aggStatus = 'resubmit-needed'; aggText = needsFixCount + ' need' + (needsFixCount === 1 ? 's' : '') + ' your attention'; }
-      else if (resubmittedCount > 0) { aggStatus = 'needs-review'; aggText = 'Resubmitted \u2014 under review'; }
-      else if (pendingCount > 0) { aggStatus = 'pending'; aggText = 'Under review'; }
-      else { aggStatus = 'approved'; aggText = 'All approved'; }
-
-      var docIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>';
-      function ownDocValueHtml(ch, value, which) {
-        return '<span class="suprq-doc-value">' + docIcon + '<span class="suprq-doc-name">' + supjrEscapeHtml(value) + '</span>' +
-          '<button type="button" class="suprq-doc-view-btn" data-own-view-doc="' + b.id + '|' + ch.id + '|' + which + '" data-tooltip="View document"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></span>';
-      }
-      function buildResubmitInputHtml(ch) {
-        var type = ch.fieldType || (ch.isDocument ? 'document' : 'text');
-        if (type === 'billing-cycle') {
-          var BILLING_OPTIONS = [
-            { value: 'Pay upfront', title: 'Pay upfront', desc: 'Pay per job at the time of booking using your card on file. Available immediately on activation \u2014 no approval needed.', sub: '\uD83D\uDEE1 Payment held in escrow until job is completed' },
-            { value: 'Fortnightly', title: 'Fortnightly', desc: 'Consolidated invoice every 2 weeks settled by Direct Debit. Balanced for steady-volume operations.' },
-            { value: 'Monthly (4 weeks)', title: 'Monthly (4 weeks)', desc: 'Single monthly consolidated invoice via Direct Debit. Most common for established operators.' }
-          ];
-          return '<div data-own-resubmit-radio="' + ch.id + '">' +
-            BILLING_OPTIONS.map(function (opt) {
-              var selected = opt.value === ch.newValue;
-              return '<div class="billing-card' + (selected ? ' selected' : '') + '" data-radio-value="' + supjrEscapeHtml(opt.value) + '">' +
-                '<div class="bc-top"><div class="bc-radio"></div><div class="bc-title">' + opt.title + '</div></div>' +
-                '<div class="bc-desc">' + opt.desc + '</div>' +
-                (opt.sub ? '<div class="bc-sub">' + opt.sub + '</div>' : '') +
-              '</div>';
-            }).join('') +
-          '</div>' +
-          '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
-        }
-        if (type === 'document') {
-          return '<div class="own-resubmit-upload-zone" data-own-resubmit-upload="' + ch.id + '">' +
-            '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>' +
-            '<span class="own-resubmit-upload-text" data-own-resubmit-upload-label="' + ch.id + '">Click to choose a replacement file</span>' +
-            '</div>' +
-            '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
-        }
-        if (type === 'date') {
-          var calKey = 'own-' + ch.id;
-          var initialDisplay = ch.newValue || 'dd/mm/yyyy';
-          return '<div class="pm-filter-field" style="width:100%;position:relative;">' +
-            '<button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="' + calKey + '" style="width:100%;height:40px;">' +
-              '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>' +
-              '<span class="cdd-value cal-value" data-cal-text="' + calKey + '">' + supjrEscapeHtml(initialDisplay) + '</span>' +
-              '<svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' +
-            '</button>' +
-            '<div class="pm-cal-popup" data-cal-popup="' + calKey + '" style="left:0;right:auto;">' +
-              '<div class="pm-cal-head">' +
-                '<button type="button" class="pm-cal-month-label" data-cal-monthlabel="' + calKey + '"><span data-cal-monthtext="' + calKey + '"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>' +
-                '<div class="pm-cal-nav">' +
-                  '<button type="button" class="pm-cal-nav-btn" data-cal-prev="' + calKey + '" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>' +
-                  '<button type="button" class="pm-cal-nav-btn" data-cal-next="' + calKey + '" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>' +
-                '</div>' +
-              '</div>' +
-              '<div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>' +
-              '<div class="pm-cal-grid" data-cal-grid="' + calKey + '"></div>' +
-              '<div class="pm-cal-foot">' +
-                '<button type="button" class="pm-cal-link" data-cal-today="' + calKey + '">Today</button>' +
-              '</div>' +
-            '</div>' +
-            '<input type="hidden" id="' + calKey + 'Hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">' +
-          '</div>';
-        }
-        if (type === 'criminal-record') {
-          var crOptions = [
-            { value: 'I have no unspent criminal convictions', sub: 'This declaration covers unspent offences only.' },
-            { value: 'I have unspent convictions to declare', sub: 'Having a record doesn\u2019t automatically disqualify you \u2014 we review each case individually.' }
-          ];
-          var crSelected = ch.newValue;
-          var crShowDetail = crSelected === 'I have unspent convictions to declare';
-          return '<div class="radio-row-list own-resubmit-cr" data-own-resubmit-radio="' + ch.id + '">' +
-            crOptions.map(function (opt) {
-              var selected = opt.value === crSelected;
-              var showInlineDesc = selected && opt.value === 'I have unspent convictions to declare';
-              return '<div class="radio-row own-resubmit-cr-row' + (selected ? ' selected' : '') + '" data-radio-value="' + supjrEscapeHtml(opt.value) + '">' +
-                '<div class="rr-circle"></div>' +
-                '<div><div class="rr-title">' + supjrEscapeHtml(opt.value) + '</div><div class="rr-sub">' + opt.sub + '</div>' +
-                (showInlineDesc ? '<div class="own-resubmit-cr-inline-desc" data-own-resubmit-cr-inline="' + ch.id + '" style="display:' + (ch.crDetail ? '' : 'none') + ';">' + supjrEscapeHtml(ch.crDetail || '') + '</div>' : '') +
-                '</div>' +
-              '</div>';
-            }).join('') +
-            '</div>' +
-            '<div class="own-resubmit-cr-detail" data-own-resubmit-cr-detail="' + ch.id + '" style="display:' + (crShowDetail ? '' : 'none') + ';">' +
-              '<label class="rr-detail-label">Please describe your unspent convictions</label>' +
-              '<textarea class="field-input own-resubmit-cr-textarea" data-own-resubmit-cr-text="' + ch.id + '" rows="3" placeholder="Provide details including dates, offences, and outcomes. This information is kept confidential and reviewed by our compliance team.">' + supjrEscapeHtml(ch.crDetail || '') + '</textarea>' +
-            '</div>' +
-            '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
-        }
-        if (type === 'right-to-work') {
-          var rtwOptions = [
-            { value: 'Yes', sub: 'I have the right to work in the UK' },
-            { value: 'No', sub: 'I do not currently have right to work' }
-          ];
-          return '<div class="own-resubmit-yn-row" data-own-resubmit-radio="' + ch.id + '">' +
-            rtwOptions.map(function (opt) {
-              var selected = opt.value === ch.newValue;
-              return '<div class="own-resubmit-yn-tile' + (selected ? ' selected' : '') + '" data-radio-value="' + opt.value + '">' +
-                '<span class="own-resubmit-yn-icon">' + (selected ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>' : '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>') + '</span>' +
-                '<div><div class="rr-title">' + opt.value + '</div><div class="rr-sub">' + opt.sub + '</div></div>' +
-              '</div>';
-            }).join('') +
-            '</div>' +
-            '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
-        }
-        if (type === 'vat') {
-          var vatIsRegistered = /^registered/i.test(ch.newValue) || ch.newValue.indexOf('GB') === 0 || ch.newValue.indexOf('Registered') === 0;
-          var vatNum = ch.vatNumber || (ch.newValue.indexOf('GB') !== -1 ? ch.newValue.substring(ch.newValue.indexOf('GB')) : '');
-          return '<div class="own-resubmit-yn-row own-resubmit-yn-row-2col" data-own-resubmit-radio="' + ch.id + '">' +
-            '<div class="own-resubmit-yn-tile' + (vatIsRegistered ? ' selected' : '') + '" data-radio-value="Registered">' +
-              '<div class="rr-title">Yes, VAT registered</div><div class="rr-sub">I charge VAT on my invoices</div>' +
-            '</div>' +
-            '<div class="own-resubmit-yn-tile' + (!vatIsRegistered ? ' selected' : '') + '" data-radio-value="Not registered">' +
-              '<div class="rr-title">No, not registered</div><div class="rr-sub">Below the VAT threshold or exempt</div>' +
-            '</div>' +
-          '</div>' +
-          '<div class="own-resubmit-vat-detail" data-own-resubmit-vat-detail="' + ch.id + '" style="display:' + (vatIsRegistered ? 'flex' : 'none') + ';gap:8px;margin-top:10px;">' +
-            '<input type="text" class="field-input" data-own-resubmit-vat-number="' + ch.id + '" placeholder="GB 123 4567 89" value="' + supjrEscapeHtml(vatNum) + '" style="flex:1;">' +
-            '<button type="button" class="btn btn-secondary-light" style="flex-shrink:0;padding:0 16px;">Verify with HMRC</button>' +
-          '</div>' +
-          '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
-        }
-        if (type === 'sectors') {
-          var SECTOR_SUBTYPES = { Residential: ['STR \u2013 Short Term Rentals', 'Estate Agents'], Commercial: ['Hotels & Hostels'] };
-          var selectedSectors = ch.newValue.split(',').map(function (s) { return s.trim(); });
-          var selectedSubtypes = ch.sectorSubtypes || [];
-          return '<div class="own-resubmit-sector-row" data-own-resubmit-chips="' + ch.id + '">' +
-            ['Residential', 'Commercial'].map(function (sector) {
-              var isSelected = selectedSectors.indexOf(sector) !== -1;
-              return '<div class="own-resubmit-sector-tile' + (isSelected ? ' selected' : '') + '" data-chip-value="' + sector + '">' +
-                '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>' +
-                '<span>' + sector + '</span>' +
-                (isSelected ? '<span class="own-resubmit-sector-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>' : '') +
-              '</div>';
-            }).join('') +
-          '</div>' +
-          Object.keys(SECTOR_SUBTYPES).map(function (sector) {
-            var visible = selectedSectors.indexOf(sector) !== -1;
-            return '<div class="own-resubmit-subtype-group" data-own-resubmit-subtype-group="' + ch.id + '|' + sector + '" style="display:' + (visible ? 'block' : 'none') + ';margin-top:10px;">' +
-              '<div class="own-resubmit-subtype-label">' + sector + ' Sub-Types <span class="own-resubmit-optional-tag">Optional</span></div>' +
-              '<div class="simple-chip-row">' +
-                SECTOR_SUBTYPES[sector].map(function (sub) {
-                  var subSelected = selectedSubtypes.indexOf(sub) !== -1;
-                  return '<div class="simple-chip' + (subSelected ? ' selected' : '') + '" data-own-resubmit-subtype="' + ch.id + '" data-subtype-value="' + supjrEscapeHtml(sub) + '">' + supjrEscapeHtml(sub) + '</div>';
-                }).join('') +
-              '</div>' +
-            '</div>';
-          }).join('') +
-          '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
-        }
-        if (type === 'hmrc-toggle') {
-          var hmrcIsOn = /^on/i.test(ch.newValue);
-          var utrVal = ch.utrNumber || (ch.newValue.indexOf('UTR:') !== -1 ? ch.newValue.split('UTR:')[1].trim() : '');
-          return '<button type="button" class="toggle-switch' + (hmrcIsOn ? ' on' : '') + '" data-own-resubmit-toggle="' + ch.id + '"><span class="thumb"></span></button>' +
-            '<span style="font-size:12.5px;color:var(--text-body-muted);margin-left:10px;vertical-align:2px;" data-own-resubmit-toggle-label="' + ch.id + '">' + (hmrcIsOn ? 'On' : 'Off') + '</span>' +
-            '<div class="own-resubmit-utr-detail" data-own-resubmit-utr-detail="' + ch.id + '" style="display:' + (hmrcIsOn ? 'block' : 'none') + ';margin-top:10px;">' +
-              '<label class="rr-detail-label">UTR number</label>' +
-              '<input type="text" class="field-input" data-own-resubmit-utr="' + ch.id + '" placeholder="10-digit number" value="' + supjrEscapeHtml(utrVal) + '">' +
-            '</div>' +
-            '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
-        }
-        if (type === 'nationality') {
-          var natOptions = ch.selectOptions || ['British', 'Austrian', 'Irish', 'Polish', 'Other'];
-          return '<div class="pm-filter-field" style="width:100%;position:relative;">' +
-            '<button type="button" class="pm-custom-dd-btn ob-select-dd own-resubmit-select-btn" data-own-resubmit-select="' + ch.id + '" style="width:100%;height:40px;">' +
-              '<span class="cdd-value">' + supjrEscapeHtml(ch.newValue) + '</span>' +
-              '<svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' +
-            '</button>' +
-            '<div class="pm-custom-dd-menu own-resubmit-select-menu" data-own-resubmit-select-menu="' + ch.id + '">' +
-              natOptions.map(function (opt) {
-                return '<div class="cdd-item' + (opt === ch.newValue ? ' selected' : '') + '" data-value="' + supjrEscapeHtml(opt) + '">' + supjrEscapeHtml(opt) + '</div>';
-              }).join('') +
-            '</div>' +
-            '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">' +
-          '</div>';
-        }
-        if (type === 'toggle') {
-          var isOn = /^(on|yes)/i.test(ch.newValue);
-          return '<button type="button" class="toggle-switch' + (isOn ? ' on' : '') + '" data-own-resubmit-toggle="' + ch.id + '"><span class="thumb"></span></button>' +
-            '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">' +
-            '<span style="font-size:12.5px;color:var(--text-body-muted);margin-left:10px;vertical-align:2px;" data-own-resubmit-toggle-label="' + ch.id + '">' + (isOn ? 'On' : 'Off') + '</span>';
-        }
-        if (type === 'radio') {
-          var options = ch.radioOptions || [ch.oldValue, ch.newValue];
-          return '<div class="radio-row-list" data-own-resubmit-radio="' + ch.id + '">' +
-            options.map(function (opt) {
-              var selected = opt === ch.newValue;
-              return '<div class="radio-row' + (selected ? ' selected' : '') + '" data-radio-value="' + supjrEscapeHtml(opt) + '">' +
-                '<div class="rr-circle"></div>' +
-                '<div><div class="rr-title">' + supjrEscapeHtml(opt) + '</div></div>' +
-              '</div>';
-            }).join('') +
-            '</div>' +
-            '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
-        }
-        if (type === 'select') {
-          var selOptions = ch.selectOptions || [ch.oldValue, ch.newValue];
-          return '<div class="pm-filter-field" style="width:100%;position:relative;">' +
-            '<button type="button" class="pm-custom-dd-btn ob-select-dd own-resubmit-select-btn" data-own-resubmit-select="' + ch.id + '" style="width:100%;height:40px;">' +
-              '<span class="cdd-value">' + supjrEscapeHtml(ch.newValue) + '</span>' +
-              '<svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' +
-            '</button>' +
-            '<div class="pm-custom-dd-menu own-resubmit-select-menu" data-own-resubmit-select-menu="' + ch.id + '">' +
-              selOptions.map(function (opt) {
-                return '<div class="cdd-item' + (opt === ch.newValue ? ' selected' : '') + '" data-value="' + supjrEscapeHtml(opt) + '">' + supjrEscapeHtml(opt) + '</div>';
-              }).join('') +
-            '</div>' +
-            '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">' +
-          '</div>';
-        }
-        if (type === 'chips') {
-          var allChips = ch.chipOptions || ch.newValue.split(',').map(function (s) { return s.trim(); });
-          var selectedChips = ch.newValue.split(',').map(function (s) { return s.trim(); });
-          return '<div class="simple-chip-row" data-own-resubmit-chips="' + ch.id + '">' +
-            allChips.map(function (opt) {
-              var isSelected = selectedChips.indexOf(opt) !== -1;
-              return '<div class="simple-chip' + (isSelected ? ' selected' : '') + '" data-chip-value="' + supjrEscapeHtml(opt) + '">' + supjrEscapeHtml(opt) + '</div>';
-            }).join('') +
-            '</div>' +
-            '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
-        }
-        return '<input type="text" class="field-input" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
-      }
-      function ownRowHtml(ch) {
-        if (ch.status === 'resubmit') {
-          return '<div class="suprq-field-row suprq-field-row-highlight">' +
-            '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><div class="suprq-field-name" style="font-size:13px;margin-bottom:0;">' + ch.fieldLabel + '</div><span class="suprq-status-pill resubmit-needed">Resubmit requested</span></div>' +
-            '<div class="suprq-compare" style="grid-template-columns:1fr;margin-bottom:10px;">' +
-              '<div class="suprq-compare-box old"><div class="suprq-compare-label">Current</div><div class="suprq-compare-value">' + (ch.isDocument ? ownDocValueHtml(ch, ch.oldValue, 'old') : supjrEscapeHtml(ch.oldValue)) + '</div></div>' +
-            '</div>' +
-            '<div class="ob-field" style="margin-bottom:10px;">' +
-              '<label style="font-size:11.5px;">Update ' + ch.fieldLabel.toLowerCase() + '</label>' +
-              buildResubmitInputHtml(ch) +
-            '</div>' +
-            '<div class="suprq-item-actions">' +
-              '<button type="button" class="suprq-approve-btn" data-own-resubmit="' + b.id + '|' + ch.id + '"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>Resubmit</button>' +
-            '</div>' +
-          '</div>';
-        }
-        var chStatusText = ch.status === 'approved' ? 'Approved' : ch.status === 'resubmitted' ? 'Resubmitted' : 'Pending review';
-        var ownCrDetailHtml = (ch.fieldType === 'criminal-record' && ch.crDetail && /unspent convictions to declare/i.test(ch.newValue))
-          ? '<div class="suprq-cr-detail-text">' + supjrEscapeHtml(ch.crDetail) + '</div>'
-          : '';
-        return '<div class="suprq-field-row' + (ch.status === 'resubmitted' ? ' suprq-field-row-highlight' : '') + '">' +
-          '<div class="suprq-field-name" style="font-size:13px;margin-bottom:6px;">' + ch.fieldLabel + '</div>' +
-          '<div class="suprq-compare">' +
-            '<div class="suprq-compare-box old"><div class="suprq-compare-label">Current</div><div class="suprq-compare-value">' + (ch.isDocument ? ownDocValueHtml(ch, ch.oldValue, 'old') : supjrEscapeHtml(ch.oldValue)) + '</div></div>' +
-            '<div class="suprq-compare-box new"><div class="suprq-compare-label">Requested</div><div class="suprq-compare-value">' + (ch.isDocument ? ownDocValueHtml(ch, ch.newValue, 'new') : supjrEscapeHtml(ch.newValue)) + ownCrDetailHtml + '</div></div>' +
-          '</div>' +
-          '<div class="suprq-item-actions"><span class="suprq-status-pill ' + ch.status + '" style="white-space:nowrap;">' + chStatusText + '</span></div>' +
-        '</div>';
-      }
-      var sectionOrder = [];
-      var sectionMap = {};
-      b.changes.forEach(function (ch) {
-        if (!sectionMap[ch.section]) { sectionMap[ch.section] = []; sectionOrder.push(ch.section); }
-        sectionMap[ch.section].push(ch);
-      });
-      var changesHtml = sectionOrder.map(function (sectionName) {
-        return '<div class="suprq-section-group">' +
-          '<div class="suprq-section-heading">' + sectionName + '</div>' +
-          sectionMap[sectionName].map(ownRowHtml).join('') +
-        '</div>';
-      }).join('');
-      return '<div class="suprq-card' + (needsFixCount > 0 ? ' suprq-card-action-needed' : '') + '" data-request-card="' + b.id + '" style="animation-delay:' + Math.min(idx * 45, 360) + 'ms;">' +
-        '<div class="suprq-card-top">' +
-          '<div style="display:flex;align-items:center;gap:10px;">' +
-            '<svg class="suprq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>' +
-            '<div><div class="suprq-field-name">#' + (b.displayId || (b.displayId = suprqNextId())) + '<span class="suprq-count-tag">' + b.changes.length + '</span></div><div class="suprq-sub"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>' + suprqOwnFormatDateTime(b.submittedDate) + '</div></div>' +
-          '</div>' +
-          '<span class="suprq-status-pill ' + aggStatus + '">' + aggText + '</span>' +
+    if (type === 'document') {
+      return '<div class="own-resubmit-upload-zone" data-own-resubmit-upload="' + ch.id + '">' +
+        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>' +
+        '<span class="own-resubmit-upload-text" data-own-resubmit-upload-label="' + ch.id + '">Click to choose a replacement file</span>' +
         '</div>' +
-        '<div class="suprq-detail">' +
-          changesHtml +
+        '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
+    }
+    if (type === 'date') {
+      var calKey = 'own-' + ch.id;
+      var initialDisplay = ch.newValue || 'dd/mm/yyyy';
+      return '<div class="pm-filter-field" style="width:100%;position:relative;">' +
+        '<button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="' + calKey + '" style="width:100%;height:40px;">' +
+          '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>' +
+          '<span class="cdd-value cal-value" data-cal-text="' + calKey + '">' + supjrEscapeHtml(initialDisplay) + '</span>' +
+          '<svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>' +
+        '</button>' +
+        '<div class="pm-cal-popup" data-cal-popup="' + calKey + '" style="left:0;right:auto;">' +
+          '<div class="pm-cal-head">' +
+            '<button type="button" class="pm-cal-month-label" data-cal-monthlabel="' + calKey + '"><span data-cal-monthtext="' + calKey + '"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>' +
+            '<div class="pm-cal-nav">' +
+              '<button type="button" class="pm-cal-nav-btn" data-cal-prev="' + calKey + '" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>' +
+              '<button type="button" class="pm-cal-nav-btn" data-cal-next="' + calKey + '" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>' +
+          '<div class="pm-cal-grid" data-cal-grid="' + calKey + '"></div>' +
+          '<div class="pm-cal-foot">' +
+            '<button type="button" class="pm-cal-link" data-cal-today="' + calKey + '">Today</button>' +
+          '</div>' +
         '</div>' +
+        '<input type="hidden" id="' + calKey + 'Hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">' +
       '</div>';
-    }).join('');
+    }
+    if (type === 'criminal-record') {
+      var crOptions = [
+        { value: 'I have no unspent criminal convictions', sub: 'This declaration covers unspent offences only.' },
+        { value: 'I have unspent convictions to declare', sub: 'Having a record doesn\u2019t automatically disqualify you \u2014 we review each case individually.' }
+      ];
+      var crSelected = ch.newValue;
+      var crShowDetail = crSelected === 'I have unspent convictions to declare';
+      return '<div class="radio-row-list own-resubmit-cr" data-own-resubmit-radio="' + ch.id + '">' +
+        crOptions.map(function (opt) {
+          var selected = opt.value === crSelected;
+          var showInlineDesc = selected && opt.value === 'I have unspent convictions to declare';
+          return '<div class="radio-row own-resubmit-cr-row' + (selected ? ' selected' : '') + '" data-radio-value="' + supjrEscapeHtml(opt.value) + '">' +
+            '<div class="rr-circle"></div>' +
+            '<div><div class="rr-title">' + supjrEscapeHtml(opt.value) + '</div><div class="rr-sub">' + opt.sub + '</div>' +
+            (showInlineDesc ? '<div class="own-resubmit-cr-inline-desc" data-own-resubmit-cr-inline="' + ch.id + '" style="display:' + (ch.crDetail ? '' : 'none') + ';">' + supjrEscapeHtml(ch.crDetail || '') + '</div>' : '') +
+            '</div>' +
+          '</div>';
+        }).join('') +
+        '</div>' +
+        '<div class="own-resubmit-cr-detail" data-own-resubmit-cr-detail="' + ch.id + '" style="display:' + (crShowDetail ? '' : 'none') + ';">' +
+          '<label class="rr-detail-label">Please describe your unspent convictions</label>' +
+          '<textarea class="field-input own-resubmit-cr-textarea" data-own-resubmit-cr-text="' + ch.id + '" rows="3" placeholder="Provide details including dates, offences, and outcomes. This information is kept confidential and reviewed by our compliance team.">' + supjrEscapeHtml(ch.crDetail || '') + '</textarea>' +
+        '</div>' +
+        '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
+    }
+    if (type === 'right-to-work') {
+      var rtwOptions = [
+        { value: 'Yes', sub: 'I have the right to work in the UK' },
+        { value: 'No', sub: 'I do not currently have right to work' }
+      ];
+      return '<div class="own-resubmit-yn-row" data-own-resubmit-radio="' + ch.id + '">' +
+        rtwOptions.map(function (opt) {
+          var selected = opt.value === ch.newValue;
+          return '<div class="own-resubmit-yn-tile' + (selected ? ' selected' : '') + '" data-radio-value="' + opt.value + '">' +
+            '<span class="own-resubmit-yn-icon">' + (selected ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>' : '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>') + '</span>' +
+            '<div><div class="rr-title">' + opt.value + '</div><div class="rr-sub">' + opt.sub + '</div></div>' +
+          '</div>';
+        }).join('') +
+        '</div>' +
+        '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
+    }
+    if (type === 'vat') {
+      var vatIsRegistered = /^registered/i.test(ch.newValue) || ch.newValue.indexOf('GB') === 0 || ch.newValue.indexOf('Registered') === 0;
+      var vatNum = ch.vatNumber || (ch.newValue.indexOf('GB') !== -1 ? ch.newValue.substring(ch.newValue.indexOf('GB')) : '');
+      return '<div class="own-resubmit-yn-row own-resubmit-yn-row-2col" data-own-resubmit-radio="' + ch.id + '">' +
+        '<div class="own-resubmit-yn-tile' + (vatIsRegistered ? ' selected' : '') + '" data-radio-value="Registered">' +
+          '<div class="rr-title">Yes, VAT registered</div><div class="rr-sub">I charge VAT on my invoices</div>' +
+        '</div>' +
+        '<div class="own-resubmit-yn-tile' + (!vatIsRegistered ? ' selected' : '') + '" data-radio-value="Not registered">' +
+          '<div class="rr-title">No, not registered</div><div class="rr-sub">Below the VAT threshold or exempt</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="own-resubmit-vat-detail" data-own-resubmit-vat-detail="' + ch.id + '" style="display:' + (vatIsRegistered ? 'flex' : 'none') + ';gap:8px;margin-top:10px;">' +
+        '<input type="text" class="field-input" data-own-resubmit-vat-number="' + ch.id + '" placeholder="GB 123 4567 89" value="' + supjrEscapeHtml(vatNum) + '" style="flex:1;">' +
+        '<button type="button" class="btn btn-secondary-light" style="flex-shrink:0;padding:0 16px;">Verify with HMRC</button>' +
+      '</div>' +
+      '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
+    }
+    if (type === 'sectors') {
+      var SECTOR_SUBTYPES = { Residential: ['STR \u2013 Short Term Rentals', 'Estate Agents'], Commercial: ['Hotels & Hostels'] };
+      var selectedSectors = ch.newValue.split(',').map(function (s) { return s.trim(); });
+      var selectedSubtypes = ch.sectorSubtypes || [];
+      return '<div class="own-resubmit-sector-row" data-own-resubmit-chips="' + ch.id + '">' +
+        ['Residential', 'Commercial'].map(function (sector) {
+          var isSelected = selectedSectors.indexOf(sector) !== -1;
+          return '<div class="own-resubmit-sector-tile' + (isSelected ? ' selected' : '') + '" data-chip-value="' + sector + '">' +
+            '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>' +
+            '<span>' + sector + '</span>' +
+            (isSelected ? '<span class="own-resubmit-sector-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>' : '') +
+          '</div>';
+        }).join('') +
+      '</div>' +
+      Object.keys(SECTOR_SUBTYPES).map(function (sector) {
+        var visible = selectedSectors.indexOf(sector) !== -1;
+        return '<div class="own-resubmit-subtype-group" data-own-resubmit-subtype-group="' + ch.id + '|' + sector + '" style="display:' + (visible ? 'block' : 'none') + ';margin-top:10px;">' +
+          '<div class="own-resubmit-subtype-label">' + sector + ' Sub-Types <span class="own-resubmit-optional-tag">Optional</span></div>' +
+          '<div class="simple-chip-row">' +
+            SECTOR_SUBTYPES[sector].map(function (sub) {
+              var subSelected = selectedSubtypes.indexOf(sub) !== -1;
+              return '<div class="simple-chip' + (subSelected ? ' selected' : '') + '" data-own-resubmit-subtype="' + ch.id + '" data-subtype-value="' + supjrEscapeHtml(sub) + '">' + supjrEscapeHtml(sub) + '</div>';
+            }).join('') +
+          '</div>' +
+        '</div>';
+      }).join('') +
+      '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
+    }
+    if (type === 'hmrc-toggle') {
+      var hmrcIsOn = /^on/i.test(ch.newValue);
+      var utrVal = ch.utrNumber || (ch.newValue.indexOf('UTR:') !== -1 ? ch.newValue.split('UTR:')[1].trim() : '');
+      return '<button type="button" class="toggle-switch' + (hmrcIsOn ? ' on' : '') + '" data-own-resubmit-toggle="' + ch.id + '"><span class="thumb"></span></button>' +
+        '<span style="font-size:12.5px;color:var(--text-body-muted);margin-left:10px;vertical-align:2px;" data-own-resubmit-toggle-label="' + ch.id + '">' + (hmrcIsOn ? 'On' : 'Off') + '</span>' +
+        '<div class="own-resubmit-utr-detail" data-own-resubmit-utr-detail="' + ch.id + '" style="display:' + (hmrcIsOn ? 'block' : 'none') + ';margin-top:10px;">' +
+          '<label class="rr-detail-label">UTR number</label>' +
+          '<input type="text" class="field-input" data-own-resubmit-utr="' + ch.id + '" placeholder="10-digit number" value="' + supjrEscapeHtml(utrVal) + '">' +
+        '</div>' +
+        '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
+    }
+    if (type === 'nationality') {
+      var natOptions = ch.selectOptions || ['British', 'Austrian', 'Irish', 'Polish', 'Other'];
+      return '<div class="pm-filter-field" style="width:100%;position:relative;">' +
+        '<button type="button" class="pm-custom-dd-btn ob-select-dd own-resubmit-select-btn" data-own-resubmit-select="' + ch.id + '" style="width:100%;height:40px;">' +
+          '<span class="cdd-value">' + supjrEscapeHtml(ch.newValue) + '</span>' +
+          '<svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' +
+        '</button>' +
+        '<div class="pm-custom-dd-menu own-resubmit-select-menu" data-own-resubmit-select-menu="' + ch.id + '">' +
+          natOptions.map(function (opt) {
+            return '<div class="cdd-item' + (opt === ch.newValue ? ' selected' : '') + '" data-value="' + supjrEscapeHtml(opt) + '">' + supjrEscapeHtml(opt) + '</div>';
+          }).join('') +
+        '</div>' +
+        '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">' +
+      '</div>';
+    }
+    if (type === 'toggle') {
+      var isOn = /^(on|yes)/i.test(ch.newValue);
+      return '<button type="button" class="toggle-switch' + (isOn ? ' on' : '') + '" data-own-resubmit-toggle="' + ch.id + '"><span class="thumb"></span></button>' +
+        '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">' +
+        '<span style="font-size:12.5px;color:var(--text-body-muted);margin-left:10px;vertical-align:2px;" data-own-resubmit-toggle-label="' + ch.id + '">' + (isOn ? 'On' : 'Off') + '</span>';
+    }
+    if (type === 'radio') {
+      var options = ch.radioOptions || [ch.oldValue, ch.newValue];
+      return '<div class="radio-row-list" data-own-resubmit-radio="' + ch.id + '">' +
+        options.map(function (opt) {
+          var selected = opt === ch.newValue;
+          return '<div class="radio-row' + (selected ? ' selected' : '') + '" data-radio-value="' + supjrEscapeHtml(opt) + '">' +
+            '<div class="rr-circle"></div>' +
+            '<div><div class="rr-title">' + supjrEscapeHtml(opt) + '</div></div>' +
+          '</div>';
+        }).join('') +
+        '</div>' +
+        '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
+    }
+    if (type === 'select') {
+      var selOptions = ch.selectOptions || [ch.oldValue, ch.newValue];
+      return '<div class="pm-filter-field" style="width:100%;position:relative;">' +
+        '<button type="button" class="pm-custom-dd-btn ob-select-dd own-resubmit-select-btn" data-own-resubmit-select="' + ch.id + '" style="width:100%;height:40px;">' +
+          '<span class="cdd-value">' + supjrEscapeHtml(ch.newValue) + '</span>' +
+          '<svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' +
+        '</button>' +
+        '<div class="pm-custom-dd-menu own-resubmit-select-menu" data-own-resubmit-select-menu="' + ch.id + '">' +
+          selOptions.map(function (opt) {
+            return '<div class="cdd-item' + (opt === ch.newValue ? ' selected' : '') + '" data-value="' + supjrEscapeHtml(opt) + '">' + supjrEscapeHtml(opt) + '</div>';
+          }).join('') +
+        '</div>' +
+        '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">' +
+      '</div>';
+    }
+    if (type === 'chips') {
+      var allChips = ch.chipOptions || ch.newValue.split(',').map(function (s) { return s.trim(); });
+      var selectedChips = ch.newValue.split(',').map(function (s) { return s.trim(); });
+      return '<div class="simple-chip-row" data-own-resubmit-chips="' + ch.id + '">' +
+        allChips.map(function (opt) {
+          var isSelected = selectedChips.indexOf(opt) !== -1;
+          return '<div class="simple-chip' + (isSelected ? ' selected' : '') + '" data-chip-value="' + supjrEscapeHtml(opt) + '">' + supjrEscapeHtml(opt) + '</div>';
+        }).join('') +
+        '</div>' +
+        '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
+    }
+    return '<input type="text" class="field-input" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
+  }
 
+  function wireOwnResubmitInputs(listEl, getBatchesFn, onDone) {
     listEl.querySelectorAll('.suprq-card').forEach(function (card) {
       card.addEventListener('click', function (e) {
         if (e.target.closest('[data-own-resubmit]') || e.target.closest('[data-own-resubmit-input]') || e.target.closest('[data-own-view-doc]') ||
@@ -23665,7 +23449,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     listEl.querySelectorAll('.pm-cal-trigger-btn[data-cal^="own-"]').forEach(function (btn) {
       var key = btn.getAttribute('data-cal');
       if (!calState[key]) {
-        var parsedDate = new Date(btn.closest('.pm-filter-field').querySelector('[data-own-resubmit-input]').value);
+        var filterField = btn.closest('.pm-filter-field');
+        var hiddenInput = filterField ? filterField.querySelector('[data-own-resubmit-input]') : null;
+        var parsedDate = hiddenInput ? new Date(hiddenInput.value) : new Date(NaN);
         var hasValidDate = !isNaN(parsedDate.getTime());
         calState[key] = { viewYear: hasValidDate ? parsedDate.getFullYear() : new Date().getFullYear(), viewMonth: hasValidDate ? parsedDate.getMonth() : new Date().getMonth(), selected: hasValidDate ? parsedDate : null };
         calHiddenInputIds[key] = key + 'Hidden';
@@ -23865,7 +23651,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       btn.addEventListener('click', function (e) {
         e.stopPropagation();
         var parts = btn.getAttribute('data-own-view-doc').split('|');
-        var batch = ownRequestsCtx.getBatchesFn().filter(function (b) { return b.id === parts[0]; })[0];
+        var batch = getBatchesFn().filter(function (b) { return b.id === parts[0]; })[0];
         if (!batch) return;
         var change = batch.changes.filter(function (ch) { return ch.id === parts[1]; })[0];
         if (!change) return;
@@ -23879,7 +23665,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       btn.addEventListener('click', function (e) {
         e.stopPropagation();
         var parts = btn.getAttribute('data-own-resubmit').split('|');
-        var batch = ownRequestsCtx.getBatchesFn().filter(function (b) { return b.id === parts[0]; })[0];
+        var batch = getBatchesFn().filter(function (b) { return b.id === parts[0]; })[0];
         if (!batch) return;
         var change = batch.changes.filter(function (ch) { return ch.id === parts[1]; })[0];
         if (!change) return;
@@ -23921,19 +23707,112 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         showToast(change.fieldLabel + ' resubmitted for review.');
         // Always keep the card expanded after resubmitting — never auto-collapse it.
         var keepExpandedId = parts[0];
-        function doRebuild() {
-          renderOwnRequestsListShared();
-          if (keepExpandedId) {
-            var reopened = listEl.querySelector('.suprq-card[data-request-card="' + keepExpandedId + '"]');
-            if (reopened) suprqToggleCard(reopened, true);
-          }
-        }
-        if (typeof suprqPreserveScroll === 'function') {
-          suprqPreserveScroll(btn, doRebuild);
-        } else {
-          doRebuild();
-        }
+        if (onDone) onDone(keepExpandedId, btn);
       });
+    });
+
+  }
+  function renderOwnRequestsListShared(highlightBatchId) {
+    var listEl = document.getElementById(ownRequestsCtx.listElId);
+    var emptyEl = document.getElementById(ownRequestsCtx.emptyElId);
+    var countEl = document.getElementById(ownRequestsCtx.countElId);
+    if (!listEl) return;
+    var batches = ownRequestsCtx.getBatchesFn();
+    var actionableCount = 0;
+    batches.forEach(function (b) { b.changes.forEach(function (ch) { if (ch.status === 'resubmit') actionableCount++; }); });
+    if (countEl) countEl.textContent = actionableCount;
+
+    if (!batches.length) {
+      listEl.innerHTML = '';
+      if (emptyEl) emptyEl.style.display = '';
+      return;
+    }
+    if (emptyEl) emptyEl.style.display = 'none';
+
+    var sorted = batches.slice().sort(function (a, b) { return b.submittedDate - a.submittedDate; });
+    listEl.innerHTML = sorted.map(function (b, idx) {
+      var needsFixCount = b.changes.filter(function (ch) { return ch.status === 'resubmit'; }).length;
+      var pendingCount = b.changes.filter(function (ch) { return ch.status === 'pending'; }).length;
+      var resubmittedCount = b.changes.filter(function (ch) { return ch.status === 'resubmitted'; }).length;
+      var aggStatus, aggText;
+      if (needsFixCount > 0) { aggStatus = 'resubmit-needed'; aggText = needsFixCount + ' need' + (needsFixCount === 1 ? 's' : '') + ' your attention'; }
+      else if (resubmittedCount > 0) { aggStatus = 'needs-review'; aggText = 'Resubmitted \u2014 under review'; }
+      else if (pendingCount > 0) { aggStatus = 'pending'; aggText = 'Under review'; }
+      else { aggStatus = 'approved'; aggText = 'All approved'; }
+
+      var docIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>';
+      function ownDocValueHtml(ch, value, which) {
+        return '<span class="suprq-doc-value">' + docIcon + '<span class="suprq-doc-name">' + supjrEscapeHtml(value) + '</span>' +
+          '<button type="button" class="suprq-doc-view-btn" data-own-view-doc="' + b.id + '|' + ch.id + '|' + which + '" data-tooltip="View document"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></span>';
+      }
+      function ownRowHtml(ch) {
+        if (ch.status === 'resubmit') {
+          return '<div class="suprq-field-row suprq-field-row-highlight">' +
+            '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><div class="suprq-field-name" style="font-size:13px;margin-bottom:0;">' + ch.fieldLabel + '</div><span class="suprq-status-pill resubmit-needed">Resubmit requested</span></div>' +
+            '<div class="suprq-compare" style="grid-template-columns:1fr;margin-bottom:10px;">' +
+              '<div class="suprq-compare-box old"><div class="suprq-compare-label">Current</div><div class="suprq-compare-value">' + (ch.isDocument ? ownDocValueHtml(ch, ch.oldValue, 'old') : supjrEscapeHtml(ch.oldValue)) + '</div></div>' +
+            '</div>' +
+            '<div class="ob-field" style="margin-bottom:10px;">' +
+              '<label style="font-size:11.5px;">Update ' + ch.fieldLabel.toLowerCase() + '</label>' +
+              buildResubmitInputHtml(ch) +
+            '</div>' +
+            '<div class="suprq-item-actions">' +
+              '<button type="button" class="suprq-approve-btn" data-own-resubmit="' + b.id + '|' + ch.id + '"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>Resubmit</button>' +
+            '</div>' +
+          '</div>';
+        }
+        var chStatusText = ch.status === 'approved' ? 'Approved' : ch.status === 'resubmitted' ? 'Resubmitted' : 'Pending review';
+        var ownCrDetailHtml = (ch.fieldType === 'criminal-record' && ch.crDetail && /unspent convictions to declare/i.test(ch.newValue))
+          ? '<div class="suprq-cr-detail-text">' + supjrEscapeHtml(ch.crDetail) + '</div>'
+          : '';
+        return '<div class="suprq-field-row' + (ch.status === 'resubmitted' ? ' suprq-field-row-highlight' : '') + '">' +
+          '<div class="suprq-field-name" style="font-size:13px;margin-bottom:6px;">' + ch.fieldLabel + '</div>' +
+          '<div class="suprq-compare">' +
+            '<div class="suprq-compare-box old"><div class="suprq-compare-label">Current</div><div class="suprq-compare-value">' + (ch.isDocument ? ownDocValueHtml(ch, ch.oldValue, 'old') : supjrEscapeHtml(ch.oldValue)) + '</div></div>' +
+            '<div class="suprq-compare-box new"><div class="suprq-compare-label">Requested</div><div class="suprq-compare-value">' + (ch.isDocument ? ownDocValueHtml(ch, ch.newValue, 'new') : supjrEscapeHtml(ch.newValue)) + ownCrDetailHtml + '</div></div>' +
+          '</div>' +
+          '<div class="suprq-item-actions"><span class="suprq-status-pill ' + ch.status + '" style="white-space:nowrap;">' + chStatusText + '</span></div>' +
+        '</div>';
+      }
+      var sectionOrder = [];
+      var sectionMap = {};
+      b.changes.forEach(function (ch) {
+        if (!sectionMap[ch.section]) { sectionMap[ch.section] = []; sectionOrder.push(ch.section); }
+        sectionMap[ch.section].push(ch);
+      });
+      var changesHtml = sectionOrder.map(function (sectionName) {
+        return '<div class="suprq-section-group">' +
+          '<div class="suprq-section-heading">' + sectionName + '</div>' +
+          sectionMap[sectionName].map(ownRowHtml).join('') +
+        '</div>';
+      }).join('');
+      return '<div class="suprq-card' + (needsFixCount > 0 ? ' suprq-card-action-needed' : '') + '" data-request-card="' + b.id + '" style="animation-delay:' + Math.min(idx * 45, 360) + 'ms;">' +
+        '<div class="suprq-card-top">' +
+          '<div style="display:flex;align-items:center;gap:10px;">' +
+            '<svg class="suprq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>' +
+            '<div><div class="suprq-field-name">#' + (b.displayId || (b.displayId = suprqNextId())) + '<span class="suprq-count-tag">' + b.changes.length + '</span></div><div class="suprq-sub"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>' + suprqOwnFormatDateTime(b.submittedDate) + '</div></div>' +
+          '</div>' +
+          '<span class="suprq-status-pill ' + aggStatus + '">' + aggText + '</span>' +
+        '</div>' +
+        '<div class="suprq-detail">' +
+          changesHtml +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    wireOwnResubmitInputs(listEl, ownRequestsCtx.getBatchesFn, function (keepExpandedId, btn) {
+      function doRebuild() {
+        renderOwnRequestsListShared();
+        if (keepExpandedId) {
+          var reopened = listEl.querySelector('.suprq-card[data-request-card="' + keepExpandedId + '"]');
+          if (reopened) suprqToggleCard(reopened, true);
+        }
+      }
+      if (typeof suprqPreserveScroll === 'function') {
+        suprqPreserveScroll(btn, doRebuild);
+      } else {
+        doRebuild();
+      }
     });
     if (highlightBatchId) {
       var highlightCard = listEl.querySelector('.suprq-card[data-request-card="' + highlightBatchId + '"]');
@@ -25047,7 +24926,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
           if (idx !== -1 && typeof openSupplierDetail === 'function' && typeof showAdminView === 'function') {
             showAdminView('supplier-applicants-list');
             openSupplierDetail(idx, 'app');
-            setTimeout(function () { if (typeof switchSupTab === 'function') switchSupTab('requests'); }, 50);
+            setTimeout(function () { if (typeof switchSupTab === 'function') switchSupTab('chat'); }, 50);
           }
         }
       });
@@ -27047,7 +26926,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       if (idx !== -1 && typeof openSupplierDetail === 'function' && typeof showAdminView === 'function') {
         showAdminView('supplier-applicants-list');
         openSupplierDetail(idx, 'app');
-        setTimeout(function () { if (typeof switchSupTab === 'function') switchSupTab('requests'); }, 50);
+        setTimeout(function () { if (typeof switchSupTab === 'function') switchSupTab('chat'); }, 50);
       }
     }
   });
@@ -27886,10 +27765,10 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (text && supDetailCurrentSupplier) {
       var name = supDetailCurrentSupplier.name;
       if (supChatIsLiveSupplier(name)) {
-        SINB_SUPPORT_CONV.messages.push({ kind: 'text', mine: false, text: text, time: sinbNowTimestamp() });
+        SINB_SUPPORT_CONV.messages.push({ kind: 'text', mine: false, text: text, ts: Date.now(), time: sinbNowTimestamp() });
       } else {
         if (!SUP_CHAT_EXTRA_MESSAGES[name]) SUP_CHAT_EXTRA_MESSAGES[name] = [];
-        SUP_CHAT_EXTRA_MESSAGES[name].push({ kind: 'text', fromAdmin: true, text: text, time: sinbNowTimestamp() });
+        SUP_CHAT_EXTRA_MESSAGES[name].push({ kind: 'text', fromAdmin: true, text: text, ts: Date.now(), time: sinbNowTimestamp() });
       }
       saveSinbMessages();
     }
@@ -27906,12 +27785,12 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var name = supDetailCurrentSupplier.name;
     var isLiveSupplier = supChatIsLiveSupplier(name);
     if (isLiveSupplier) {
-      var liveMsg = { kind: 'text', mine: false, text: text, time: sinbNowTimestamp() };
+      var liveMsg = { kind: 'text', mine: false, text: text, ts: Date.now(), time: sinbNowTimestamp() };
       if (supChatReplyingTo) { liveMsg.replyToChangeId = supChatReplyingTo.changeId; liveMsg.replyToFieldLabel = supChatReplyingTo.fieldLabel; }
       SINB_SUPPORT_CONV.messages.push(liveMsg);
     } else {
       if (!SUP_CHAT_EXTRA_MESSAGES[name]) SUP_CHAT_EXTRA_MESSAGES[name] = [];
-      var msg = { kind: 'text', fromAdmin: true, text: text, time: sinbNowTimestamp() };
+      var msg = { kind: 'text', fromAdmin: true, text: text, ts: Date.now(), time: sinbNowTimestamp() };
       if (supChatReplyingTo) { msg.replyToChangeId = supChatReplyingTo.changeId; msg.replyToFieldLabel = supChatReplyingTo.fieldLabel; }
       SUP_CHAT_EXTRA_MESSAGES[name].push(msg);
     }
@@ -27936,12 +27815,12 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var name = supDetailCurrentSupplier.name;
     var isLiveSupplier = supChatIsLiveSupplier(name);
     if (isLiveSupplier) {
-      var liveMsg = { kind: 'attachment', mine: false, fileName: file.name, time: sinbNowTimestamp() };
+      var liveMsg = { kind: 'attachment', mine: false, fileName: file.name, ts: Date.now(), time: sinbNowTimestamp() };
       if (supChatReplyingTo) { liveMsg.replyToChangeId = supChatReplyingTo.changeId; liveMsg.replyToFieldLabel = supChatReplyingTo.fieldLabel; }
       SINB_SUPPORT_CONV.messages.push(liveMsg);
     } else {
       if (!SUP_CHAT_EXTRA_MESSAGES[name]) SUP_CHAT_EXTRA_MESSAGES[name] = [];
-      var msg = { kind: 'attachment', fromAdmin: true, fileName: file.name, time: sinbNowTimestamp() };
+      var msg = { kind: 'attachment', fromAdmin: true, fileName: file.name, ts: Date.now(), time: sinbNowTimestamp() };
       if (supChatReplyingTo) { msg.replyToChangeId = supChatReplyingTo.changeId; msg.replyToFieldLabel = supChatReplyingTo.fieldLabel; }
       SUP_CHAT_EXTRA_MESSAGES[name].push(msg);
     }
@@ -29247,29 +29126,34 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (typeof loadChangeRequestsFromStorage === 'function') loadChangeRequestsFromStorage();
     if (typeof seedChangeRequestsIfNeeded === 'function') seedChangeRequestsIfNeeded(supDetailCurrentSupplier);
     var batches = supplierChangeRequests[name] || [];
-    var editRequestHtml = batches.map(function (batch) {
-      return '<div class="chat-msg-row" data-batch-anchor="' + batch.id + '"><div class="chat-msg-bubble">' + sinbEditRequestCardHtml(batch, true) + '</div></div>';
-    }).join('');
+    var timeline = batches.map(function (batch) {
+      var ts = batch.submittedDate ? new Date(batch.submittedDate).getTime() : 0;
+      return { ts: ts, html: '<div class="chat-msg-row" data-batch-anchor="' + batch.id + '"><div class="chat-msg-bubble">' + sinbEditRequestCardHtml(batch, true) + '</div></div>' };
+    });
     // Ferna (SUP_OWN_DEMO_NAME) has a live two-way session, so admin reads from the exact same
     // store the supplier's own Inbox writes to — one shared conversation, not two parallel copies.
     // Other suppliers have no live session to reflect into, so they keep their own admin-side log.
     var isLiveSupplier = supChatIsLiveSupplier(name);
     var extraMsgs = isLiveSupplier
       ? SINB_SUPPORT_CONV.messages.filter(function (m) { return m.kind === 'text' || m.kind === 'attachment'; }).map(function (m) {
-          return { kind: m.kind, fromAdmin: !m.mine, text: m.text, fileName: m.fileName, time: m.time, replyToChangeId: m.replyToChangeId, replyToFieldLabel: m.replyToFieldLabel };
+          return { kind: m.kind, fromAdmin: !m.mine, text: m.text, fileName: m.fileName, time: m.time, ts: m.ts, replyToChangeId: m.replyToChangeId, replyToFieldLabel: m.replyToFieldLabel };
         })
       : (SUP_CHAT_EXTRA_MESSAGES[name] || []);
-    var extraHtml = extraMsgs.map(function (m) {
+    extraMsgs.forEach(function (m) {
+      var html;
       if (m.kind === 'attachment') {
-        return '<div class="chat-msg-row' + (m.fromAdmin ? '' : ' theirs') + '"><div class="chat-msg-bubble">' + supChatQuoteBlockHtml(m) + '<div class="cmb-text sinb-attachment-bubble"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg><span>' + sinbEsc(m.fileName) + '</span></div><div class="cmb-meta">' + (m.fromAdmin ? 'You' : sinbEsc(name)) + '<span class="dot-sep"></span>' + m.time + '</div></div></div>';
+        html = '<div class="chat-msg-row' + (m.fromAdmin ? '' : ' theirs') + '"><div class="chat-msg-bubble">' + supChatQuoteBlockHtml(m) + '<div class="cmb-text sinb-attachment-bubble"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg><span>' + sinbEsc(m.fileName) + '</span></div><div class="cmb-meta">' + (m.fromAdmin ? 'You' : sinbEsc(name)) + '<span class="dot-sep"></span>' + m.time + '</div></div></div>';
+      } else {
+        html = '<div class="chat-msg-row' + (m.fromAdmin ? '' : ' theirs') + '"><div class="chat-msg-bubble">' + supChatQuoteBlockHtml(m) + '<div class="cmb-text">' + sinbEsc(m.text) + '</div><div class="cmb-meta">' + (m.fromAdmin ? 'You' : sinbEsc(name)) + '<span class="dot-sep"></span>' + m.time + '</div></div></div>';
       }
-      return '<div class="chat-msg-row' + (m.fromAdmin ? '' : ' theirs') + '"><div class="chat-msg-bubble">' + supChatQuoteBlockHtml(m) + '<div class="cmb-text">' + sinbEsc(m.text) + '</div><div class="cmb-meta">' + (m.fromAdmin ? 'You' : sinbEsc(name)) + '<span class="dot-sep"></span>' + m.time + '</div></div></div>';
-    }).join('');
+      timeline.push({ ts: m.ts || 0, html: html });
+    });
+    timeline.sort(function (a, b) { return a.ts - b.ts; });
+    var timelineHtml = timeline.map(function (item) { return item.html; }).join('');
     innerEl.innerHTML =
       '<div class="chat-day-divider"><span>6 Jul 2026</span></div>' +
       '<div class="chat-msg-row"><div class="chat-msg-bubble"><div class="cmb-text" style="background:var(--surface-soft);color:var(--text-heading);">\u00a3240.02 has been deposited \u2014 your deposit payout of \u00a3240.02 has been successfully credited to your bank account.</div></div></div>' +
-      (editRequestHtml ? '<div class="chat-day-divider" style="margin-top:16px;"><span>Today</span></div>' + editRequestHtml : '') +
-      extraHtml;
+      (timelineHtml ? '<div class="chat-day-divider" style="margin-top:16px;"><span>Today</span></div>' + timelineHtml : '');
     threadEl.scrollTop = threadEl.scrollHeight;
     sinbWireScrollBottomBtn(threadEl, document.getElementById('supChatScrollBottomBtn'));
     threadEl.querySelectorAll('[data-cr-action]').forEach(function (btn) {
@@ -29292,7 +29176,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         });
         if (supChatIsLiveSupplier(name)) {
           if (action === 'resubmit' && typeof SINB_SUPPORT_CONV !== 'undefined') {
-            SINB_SUPPORT_CONV.messages.push({ kind: 'jump-notification', changeId: change.id, fieldLabel: change.fieldLabel, time: sinbNowTimestamp() });
+            SINB_SUPPORT_CONV.messages.push({ kind: 'jump-notification', changeId: change.id, fieldLabel: change.fieldLabel, ts: Date.now(), time: sinbNowTimestamp() });
             saveSinbMessages();
             if (typeof sinbRenderChat === 'function') sinbRenderChat();
           } else if (action === 'approve' && typeof sinbAddEditResponseMessage === 'function') {
