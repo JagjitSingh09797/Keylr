@@ -2438,7 +2438,7 @@
   .sinb-chat-thread-wrap { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; }
   .sinb-chat-thread-wrap .sinb-chat-scroll, .sinb-chat-thread-wrap .chat-window-thread { flex: 1; min-height: 0; }
   .sinb-scroll-anchor { position: sticky; bottom: 16px; height: 0; overflow: visible; display: flex; z-index: 5; pointer-events: none; }
-  #sinbChatScroll .sinb-scroll-anchor { justify-content: flex-start; padding-left: 4px; }
+  #sinbChatScroll .sinb-scroll-anchor, #supInboxChatScroll .sinb-scroll-anchor { justify-content: flex-start; padding-left: 4px; }
   #supChatThreadCard .sinb-scroll-anchor { justify-content: flex-end; padding-right: 4px; }
   .sinb-scroll-bottom-btn { pointer-events: auto; height: 36px; padding: 0 16px 0 14px; border-radius: 999px; background: #fff; border: 1px solid var(--border-subtle); box-shadow: 0 4px 14px rgba(16,24,40,0.14); color: var(--text-body-muted); display: none; align-items: center; gap: 7px; cursor: pointer; transition: transform 130ms ease-out, color 130ms ease-out; white-space: nowrap; }
   .sinb-scroll-bottom-btn span { font-size: 12.5px; font-weight: 700; }
@@ -2450,9 +2450,9 @@
   .sinb-activity-entry { display: flex; align-items: flex-start; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--border-subtle); }
   .sinb-activity-entry:last-child { border-bottom: none; }
   .sinb-activity-icon { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
-  .sinb-activity-entry.approved .sinb-activity-icon { background: #eafaf0; color: #146c43; }
-  .sinb-activity-entry.declined .sinb-activity-icon { background: #fef2f2; color: #b91c1c; }
-  .sinb-activity-entry.resubmit_requested .sinb-activity-icon { background: #fef3c7; color: #92620a; }
+  .sinb-activity-entry.approved .sinb-activity-icon { background: #dbe6f7; color: #0d1b3d; }
+  .sinb-activity-entry.declined .sinb-activity-icon { background: #eef1f5; color: #5b6b85; }
+  .sinb-activity-entry.resubmit_requested .sinb-activity-icon { background: #eaf1fb; color: #2d5a9e; }
   .sinb-activity-entry.resubmitted .sinb-activity-icon { background: #e7edf6; color: #183060; }
   .sinb-activity-body { flex: 1; min-width: 0; }
   .sinb-activity-text { font-size: 13px; color: var(--text-heading); line-height: 1.5; }
@@ -2463,20 +2463,20 @@
   .sinb-cr-group { display: flex; flex-direction: column; gap: 8px; }
   .sinb-cr-group-intro { font-size: 12px; font-weight: 600; color: var(--text-body-muted); padding: 2px 2px 2px; }
   .sinb-cr-submitted-time { display: block; font-size: 10.5px; font-weight: 500; color: var(--text-body-muted); margin-top: 2px; }
-  .sinb-cr-pending-badge { font-size: 10.5px; font-weight: 700; color: #92620a; background: #fef3c7; padding: 2px 8px; border-radius: 999px; margin-left: 4px; }
+  .sinb-cr-pending-badge { font-size: 10.5px; font-weight: 700; color: #2d5a9e; background: #eaf1fb; padding: 2px 8px; border-radius: 999px; margin-left: 4px; }
   .sinb-field-card { background: #fff; border: 1px solid var(--border-subtle); border-left: 3px solid #cbd5e1; border-radius: 10px; }
-  .sinb-field-card.pending { border-left-color: #f59e0b; }
-  .sinb-field-card.approved { border-left-color: #22c55e; }
-  .sinb-field-card.declined { border-left-color: #ef4444; }
-  .sinb-field-card.resubmit { border-left-color: var(--accent-blue); }
+  .sinb-field-card.pending { border-left-color: #4a90d9; }
+  .sinb-field-card.approved { border-left-color: #0a1428; }
+  .sinb-field-card.declined { border-left-color: #9aa5b5; }
+  .sinb-field-card.resubmit { border-left-color: #3a5a9c; }
   .sinb-field-card-head { display: flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 700; color: var(--text-heading); padding: 9px 12px; }
   .sinb-field-icon { color: var(--text-body-muted); flex-shrink: 0; display: flex; }
   .sinb-field-title { flex: 1; min-width: 0; }
   .sinb-field-status-pill { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
-  .sinb-field-status-pill.pending { color: #92620a; background: #fef3c7; }
-  .sinb-field-status-pill.approved { color: #146c43; background: #eafaf0; }
-  .sinb-field-status-pill.declined { color: #b91c1c; background: #fef2f2; }
-  .sinb-field-status-pill.resubmit { color: #183060; background: #e7edf6; }
+  .sinb-field-status-pill.pending { color: #1e4d8c; background: #d2e3fa; }
+  .sinb-field-status-pill.approved { color: #0a1428; background: #b3c6e8; }
+  .sinb-field-status-pill.declined { color: #6b7280; background: #e3e6ea; }
+  .sinb-field-status-pill.resubmit { color: #1c2c54; background: #ccd6ec; }
   .sinb-field-card-body { padding: 0 12px 12px; }
   .sinb-field-context { font-size: 11.5px; color: var(--text-body-muted); margin-bottom: 8px; }
   .sinb-field-value-row { display: flex; align-items: center; gap: 6px; font-size: 12.5px; flex-wrap: wrap; }
@@ -2485,12 +2485,12 @@
   .sinb-field-new { color: var(--text-heading); font-weight: 700; }
   .sinb-field-actions { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
   .sinb-cr-action-btn { font-size: 11px; font-weight: 700; padding: 6px 11px; border-radius: 7px; border: 1px solid var(--border-subtle); background: #fff; cursor: pointer; transition: background-color 130ms ease-out; }
-  .sinb-cr-action-btn.approve { color: #146c43; border-color: #b7ebc9; }
-  .sinb-cr-action-btn.approve:hover { background: #eafaf0; }
-  .sinb-cr-action-btn.resubmit { color: #183060; border-color: #c7d2e8; }
-  .sinb-cr-action-btn.resubmit:hover { background: #e7edf6; }
-  .sinb-cr-action-btn.decline { color: #b91c1c; border-color: #fbc7c0; }
-  .sinb-cr-action-btn.decline:hover { background: #fef2f2; }
+  .sinb-cr-action-btn.approve { color: #0a1428; border-color: #94aed6; }
+  .sinb-cr-action-btn.approve:hover { background: #b3c6e8; }
+  .sinb-cr-action-btn.resubmit { color: #1c2c54; border-color: #a9b8d8; }
+  .sinb-cr-action-btn.resubmit:hover { background: #ccd6ec; }
+  .sinb-cr-action-btn.decline { color: #6b7280; border-color: #c3cddb; }
+  .sinb-cr-action-btn.decline:hover { background: #e3e6ea; }
   .sinb-field-edit-row { margin-bottom: 8px; }
   .sinb-field-input, .sinb-field-select { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border-subtle); font-size: 12.5px; font-family: inherit; color: var(--text-heading); background: #fff; }
   .sinb-field-input:focus, .sinb-field-select:focus { outline: none; border-color: var(--accent-blue); }
@@ -2499,12 +2499,12 @@
   .sinb-field-toggle-btn.active { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); }
   .sinb-field-resubmit-btn { width: 100%; padding: 8px 0; border-radius: 8px; border: none; background: linear-gradient(135deg, #22447f 0%, #0d1b3d 100%); color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; }
   .sinb-field-resubmit-btn:hover { filter: brightness(1.1); }
-  .sinb-jump-card { display: flex; align-items: center; gap: 8px; background: #fffbeb; border: 1px solid #f5d78e; border-radius: 10px; padding: 9px 12px; font-size: 12px; color: #92620a; }
+  .sinb-jump-card { display: flex; align-items: center; gap: 8px; background: #eaf1fb; border: 1px solid #a8bfe0; border-radius: 10px; padding: 9px 12px; font-size: 12px; color: #183060; }
   .sinb-jump-card svg { flex-shrink: 0; }
   .sinb-jump-card span { flex: 1; }
-  .sinb-jump-btn { flex-shrink: 0; font-size: 11px; font-weight: 700; color: #fff; background: #d97706; border: none; padding: 6px 12px; border-radius: 7px; cursor: pointer; }
+  .sinb-jump-btn { flex-shrink: 0; font-size: 11px; font-weight: 700; color: #fff; background: #22447f; border: none; padding: 6px 12px; border-radius: 7px; cursor: pointer; }
   .sinb-jump-btn:hover { filter: brightness(1.08); }
-  @keyframes sinbFieldFlash { 0%, 100% { box-shadow: none; } 30% { box-shadow: 0 0 0 3px rgba(217,119,6,0.35); } }
+  @keyframes sinbFieldFlash { 0%, 100% { box-shadow: none; } 30% { box-shadow: 0 0 0 3px rgba(34,68,127,0.35); } }
   .sinb-field-card-flash { animation: sinbFieldFlash 1200ms ease-out; }
   .sinb-field-card-foot { border-top: 1px solid var(--border-subtle); padding: 6px 12px; }
   .sinb-field-reply-btn { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; color: var(--text-body-muted); background: none; border: none; cursor: pointer; padding: 3px 0; }
@@ -2519,9 +2519,6 @@
   .sinb-reply-preview-field { color: var(--text-heading); }
   .sinb-reply-preview-close { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; border: none; background: none; color: var(--text-body-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; }
   .sinb-reply-preview-close:hover { background: #e2e8f0; }
-  .sinb-field-upload-drop { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; padding: 16px 10px; border: 1.5px dashed var(--border-subtle); border-radius: 8px; cursor: pointer; color: var(--text-body-muted); font-size: 11.5px; transition: border-color 130ms ease-out, background-color 130ms ease-out; }
-  .sinb-field-upload-drop:hover { border-color: var(--accent-blue); background: var(--surface-soft); }
-  .sinb-field-upload-drop.has-file { border-color: #22c55e; border-style: solid; color: #146c43; font-weight: 700; }
   .sinb-field-date-btn { width: 100%; display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border-subtle); background: #fff; font-size: 12.5px; color: var(--text-heading); cursor: pointer; }
   .sinb-field-date-btn:hover { border-color: var(--accent-blue); }
   .sinb-field-date-wrap { position: relative; }
@@ -2886,6 +2883,9 @@
   #supAppSortToggleBtn svg { transition: transform 150ms ease-out; }
   #supAppSortToggleBtn.supapp-sort-desc { color: var(--accent-blue); background: var(--icon-tint-bg); border-color: transparent; }
   #supAppSortToggleBtn.supapp-sort-desc svg { transform: scaleY(-1); }
+  #supSortToggleBtn svg { transition: transform 150ms ease-out; }
+  #supSortToggleBtn.supapp-sort-desc { color: var(--accent-blue); background: var(--icon-tint-bg); border-color: transparent; }
+  #supSortToggleBtn.supapp-sort-desc svg { transform: scaleY(-1); }
   .pm-icon-btn-sq:hover { background: var(--surface-soft); }
 
   /* Fixed, equal-width columns (minmax floor stops fields from ever getting squeezed
@@ -2907,7 +2907,6 @@
   }
   .supapp-ms-menu.open { display: block; }
   #supCategoryDdMenu.open, #supAppCategoryDdMenu.open { width: 300px; }
-  .pm-custom-dd-menu[data-dd-menu="supAppVerification"].open { width: 180px; }
   .pm-custom-dd-menu[data-dd-menu="supVerification"].open { width: 180px; }
   .pm-custom-dd-menu[data-dd-menu="appDateJoined"].open { width: 160px; }
   #supcalFilterMenu.open { width: 120px; left: auto; right: 0; }
@@ -3326,6 +3325,7 @@
   .supplier-approved-pill.suspended { color: #c0392b; background: #fdecea; }
   .supplier-approved-pill.edit-requests { color: #183060; background: #e7edf6; }
   .supplier-approved-pill.incomplete { color: #475569; background: var(--surface-soft); }
+  .supplier-approved-pill.in-progress { color: #1e4d8c; background: #d2e3fa; }
   .supplier-approved-pill.pending { color: #92620a; background: #fef3c7; }
   .supplier-approved-pill.rejected { color: #64748b; background: #f1f5f9; }
   .muted-italic { font-style: italic; color: #a6b0bf; }
@@ -3341,6 +3341,14 @@
   .supapp-progress-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #204078, #102048); transition: width 400ms ease-out; }
   .supapp-progress-fill.complete { background: linear-gradient(90deg, #22c55e, #16a34a); }
   .supapp-progress-pct.complete { color: #146c43; }
+  .supapp-progress-fill.risk-warn { background: linear-gradient(90deg, #f59e0b, #d97706); }
+  .supapp-progress-pct.risk-warn { color: #92620a; }
+  .supapp-progress-fill.risk-bad { background: linear-gradient(90deg, #e8482c, #c0392b); }
+  .supapp-progress-pct.risk-bad { color: #c0392b; }
+  .supapp-cert-expiry-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+  .supapp-cert-expiry-pill.soon { color: #92620a; background: #fef3c7; }
+  .supapp-cert-expiry-pill.expired { color: #c0392b; background: #fdecea; }
+  .supapp-cert-expiry-pill svg { flex-shrink: 0; width: 11px; height: 11px; }
   .supapp-category-row { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; margin-bottom: 2px; }
   .supapp-category-chip { font-size: 11px; font-weight: 600; color: #183060; background: #e7edf6; padding: 3px 9px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
   .supapp-role-chip { font-size: 11px; font-weight: 600; color: #183060; background: #e7edf6; padding: 3px 9px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
@@ -3988,9 +3996,6 @@
   .supapp-table-progress-pct { font-size: 10.5px; font-weight: 700; color: var(--text-body-muted); }
   .supapp-table-progress-pct.complete { color: #146c43; }
   .supapp-table-fixed .nm-name, .supapp-table-fixed .nm-email { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .supapp-table-verif { font-size: 12px; font-weight: 600; white-space: nowrap; }
-  .supapp-table-verif.good { color: #146c43; }
-  .supapp-table-verif.warn { color: #92620a; }
   .pm-yes-tag { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: #1a7a3e; background: #eafaf0; padding: 4px 10px; border-radius: 999px; }
   .pm-yes-tag .dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; flex-shrink: 0; }
   .pm-table-progress .tp-toprow { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
@@ -4140,12 +4145,14 @@
   .chat-msg-bubble { width: 420px; max-width: 92%; }
   .chat-msg-row.out .chat-msg-bubble { text-align: right; }
   .chat-msg-bubble .cmb-text { display: inline-block; background: var(--fill-indigo); color: #fff; padding: 10px 14px; border-radius: 14px 14px 4px 14px; font-size: 13.5px; line-height: 1.4; text-align: left; white-space: pre-wrap; word-break: break-word; }
+  .chat-msg-row.theirs .cmb-text { background: #fff; color: var(--text-heading); border: 1px solid #a8bfe0; border-radius: 14px 14px 14px 4px; }
+  .chat-msg-row.theirs .cmb-meta { justify-content: flex-start; }
   .chat-msg-bubble .cmb-meta { font-size: 11px; color: #94a3b8; margin-top: 4px; display: flex; align-items: center; gap: 4px; justify-content: flex-end; }
   .chat-msg-bubble .cmb-meta svg { width: 12px; height: 12px; color: #94a3b8; flex-shrink: 0; }
 
   .chat-input-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 12px 14px; }
   .chat-window-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
-  .chat-window-thread { flex: 1; min-height: 380px; max-height: 460px; overflow-y: auto; padding: 20px; }
+  .chat-window-thread { flex: 1; min-height: 0; overflow-y: auto; padding: 20px; }
   .chat-window-input-area { border-top: 1px solid var(--border-subtle); padding: 14px 18px; flex-shrink: 0; }
   .chat-input-row { display: flex; align-items: flex-end; gap: 10px; }
   .chat-input-row .chat-icon-btn { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--text-body-muted); flex-shrink: 0; cursor: pointer; }
@@ -4154,6 +4161,14 @@
   .chat-input-row textarea::placeholder { color: #94a3b8; }
   .chat-send-btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 9px; font-size: 13px; font-weight: 700; color: #fff; font-family: inherit; background: linear-gradient(180deg, var(--btn-grad-start), var(--btn-grad-end)); cursor: pointer; flex-shrink: 0; }
   .chat-input-hint { font-size: 10.5px; color: #94a3b8; margin-top: 8px; }
+
+  /* Chat tab layout — fixed-height shell with the chat window stretched to fill it, matching the
+     Supplier Applicants module's chat tab exactly (no side panel). */
+  .sup-chat-layout { display: flex; height: 640px; }
+  .sup-chat-layout .chat-window-card { flex: 1 1 auto; height: 100%; min-width: 0; }
+  @media (max-width: 900px) {
+    .sup-chat-layout { height: 560px; }
+  }
 
   .detail-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 20px 22px; margin-bottom: 20px; }
   .detail-card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
@@ -6051,7 +6066,7 @@
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4z"/></svg>
     </div>
     <div class="suprq-float-notif-body">
-      <div class="suprq-float-notif-title" id="adminRequestFloatNotifTitle">New profile request</div>
+      <div class="suprq-float-notif-title" id="adminRequestFloatNotifTitle">New supplier profile update request</div>
       <div class="suprq-float-notif-sub" id="adminRequestFloatNotifSub">Tap to review</div>
     </div>
     <button type="button" class="suprq-float-notif-close" id="adminRequestFloatNotifClose" aria-label="Dismiss"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
@@ -9405,6 +9420,11 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
             <span class="nav-label">Dashboard</span>
           </div>
+          <div class="dash-nav-item" data-nav="inbox">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            <span class="nav-label">Inbox</span>
+            <span class="dash-nav-badge" id="supInboxNavBadge" hidden></span>
+          </div>
         </div>
 
         <div class="dash-nav-group">
@@ -11382,6 +11402,51 @@
             </div>
           </div>
 
+          <div id="supInboxView" style="display:none;">
+            <div class="dash-header" style="align-items:flex-start;">
+              <div>
+                <h1 style="font-size:22px;font-weight:800;color:var(--text-heading);margin-bottom:4px;">Inbox</h1>
+                <p style="font-size:13.5px;color:var(--text-body-muted);">Chat directly with Keylr Support.</p>
+              </div>
+            </div>
+            <div class="sinb-shell">
+              <div class="sinb-body sinb-body-solo">
+                <div class="sinb-chat-col sinb-chat-col-full" id="supInboxChatCol">
+                  <div class="sinb-chat-header" id="supInboxChatHeader"></div>
+                  <div class="sinb-chat-thread-wrap">
+                    <div class="sinb-chat-scroll" id="supInboxChatScroll">
+                      <div id="supInboxMessagesInner"></div>
+                      <div class="sinb-scroll-anchor"><button type="button" class="sinb-scroll-bottom-btn" id="supInboxScrollBottomBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg><span>Go to bottom</span></button></div>
+                    </div>
+                  </div>
+                  <div class="sinb-composer" id="supInboxComposer">
+                    <div class="sinb-reply-preview" id="supInboxReplyPreview" style="display:none;">
+                      <div class="sinb-reply-preview-bar"></div>
+                      <div class="sinb-reply-preview-body"><span class="sinb-reply-preview-label">Replying to</span><span class="sinb-reply-preview-field" id="supInboxReplyPreviewField"></span></div>
+                      <button type="button" class="sinb-reply-preview-close" id="supInboxReplyPreviewClose"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+                    </div>
+                    <div class="sinb-composer-icons">
+                      <div style="position:relative;">
+                        <button type="button" class="sinb-icon-btn" id="supInboxEmojiBtn" data-tooltip="Add emoji"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg></button>
+                        <div class="sinb-emoji-popover" id="supInboxEmojiPopover">
+                          <span data-emoji="👍">👍</span><span data-emoji="👌">👌</span><span data-emoji="🙂">🙂</span><span data-emoji="😀">😀</span><span data-emoji="🙌">🙌</span><span data-emoji="👋">👋</span>
+                          <span data-emoji="✅">✅</span><span data-emoji="🔧">🔧</span><span data-emoji="🚐">🚐</span><span data-emoji="⏰">⏰</span><span data-emoji="📷">📷</span><span data-emoji="👊">👊</span>
+                        </div>
+                      </div>
+                      <button type="button" class="sinb-icon-btn" id="supInboxAttachBtn" data-tooltip="Attach image or PDF"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button>
+                      <input type="file" id="supInboxAttachInput" accept="image/*,video/*,.pdf" style="display:none;">
+                    </div>
+                    <div class="sinb-input-row">
+                      <input type="text" id="supInboxMessageInput" placeholder="Message...">
+                      <button type="button" class="sinb-send-btn" id="supInboxSendBtn" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg></button>
+                    </div>
+                    <div class="sinb-composer-hint">Enter to send · Shift + Enter for new line · Images, videos + PDFs up to 10 MB.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
       </div>
@@ -11659,6 +11724,7 @@
               <button type="button" id="markAllReadBtn">Mark All Read</button>
             </div>
             <div id="notifListContent"></div>
+            <div id="notifListEmpty" style="display:none;padding:32px 20px;text-align:center;font-size:13px;color:var(--text-body-muted);">No new notifications.</div>
           </div>
         </div>
       </div>
@@ -12406,6 +12472,7 @@
                   <div class="pm-tab-pill" data-filter="all">All</div>
                   <div class="pm-tab-pill active" data-filter="approved">Approved</div>
                   <div class="pm-tab-pill" data-filter="archived">Archived</div>
+                  <div class="pm-tab-pill" data-filter="certs-expiring" id="supCertsExpiringPill">Certs Expiring<span class="pm-count-text" id="supCertsExpiringCount" style="margin-left:6px;background:#fef3c7;color:#92620a;padding:1px 7px;border-radius:999px;font-weight:700;font-size:10.5px;"></span></div>
                 </div>
                 <div class="pm-count-actions">
                   <span class="pm-count-text" id="supResultCount">Showing 25 of 25</span>
@@ -12413,6 +12480,7 @@
                     <button type="button" class="active" data-view="grid" aria-label="Grid view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
                     <button type="button" data-view="table" aria-label="Table view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4"/><rect x="3" y="10" width="18" height="4"/><rect x="3" y="16" width="18" height="4"/></svg></button>
                   </div>
+                  <button type="button" class="pm-icon-btn-sq" id="supSortToggleBtn" data-tooltip="Sort: Newest first" aria-label="Toggle sort order"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11M3 12h7M3 17h4"/><path d="M17 4v16M17 4l-4 4M17 4l4 4"/></svg></button>
                   <button type="button" class="pm-icon-btn-sq" id="supRefreshBtn" aria-label="Refresh"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/></svg></button>
                   <button type="button" class="pm-icon-btn-sq mobile-filter-btn" data-filter-target="pm-filter-row-sup" aria-label="Filters"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg></button>
                 </div>
@@ -12432,21 +12500,12 @@
                   </div>
                 </div>
                 <div id="supDynamicFilters" style="display:contents;"></div>
-                <div class="pm-filter-field" style="flex:1 1 110px; min-width:100px;">
-                  <div class="pff-legend-wrap"><label>Sort</label></div>
-                  <button type="button" class="pm-custom-dd-btn" data-dd="supSort">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5h10M11 9h7M11 13h4M3 17l3 3 3-3M6 18V4"/></svg>
-                    <span class="cdd-value">Newest</span>
-                    <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-                  </button>
-                  <div class="pm-custom-dd-menu" data-dd-menu="supSort">
-                    <div class="cdd-item selected" data-value="Newest">Newest first</div>
-                    <div class="cdd-item" data-value="Oldest">Oldest first</div>
-                  </div>
-                </div>
               </div>
-              <div class="supapp-location-chips" id="supLocationChips" style="display:none;"></div>
-              <div class="supapp-location-chips" id="supCategoryChips" style="display:none;"></div>
+              <div class="supapp-all-chips-row" id="supAllChipsRow" style="display:none;">
+                <div class="supapp-location-chips" id="supLocationChips"></div>
+                <div class="supapp-location-chips" id="supCategoryChips"></div>
+                <button type="button" class="supapp-clear-all-btn" id="supClearAllBtn">Clear all</button>
+              </div>
             </div>
 
             <div id="supGridView" class="pm-card-grid"></div>
@@ -12488,7 +12547,7 @@
           <div id="adminSupplierApplicantsView" style="display:none;">
             <div class="pm-filter-card">
               <div class="pm-search-row">
-                <div class="pm-search-input-wrap" style="max-width:340px;">
+                <div class="pm-search-input-wrap" style="max-width:260px;">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
                   <input type="text" id="supAppSearchInput" placeholder="Search applicants by name, email, phone, or trade">
                   <div class="pm-search-kbd"><span>Ctrl</span><span>K</span></div>
@@ -12496,6 +12555,7 @@
                 <div class="pm-tab-pills" id="supAppTabPills">
                   <div class="pm-tab-pill active" data-filter="all">All</div>
                   <div class="pm-tab-pill" data-filter="new">New</div>
+                  <div class="pm-tab-pill" data-filter="in-progress">In Progress</div>
                   <div class="pm-tab-pill" data-filter="in-review">In Review</div>
                   <div class="pm-tab-pill" data-filter="requests">Edit Requests</div>
                   <div class="pm-tab-pill" data-filter="archived">Archived</div>
@@ -12509,24 +12569,26 @@
                   <button type="button" class="pm-icon-btn-sq" id="supAppSortToggleBtn" data-tooltip="Sort: Newest first" aria-label="Toggle sort order"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11M3 12h7M3 17h4"/><path d="M17 4v16M17 4l-4 4M17 4l4 4"/></svg></button>
                   <button type="button" class="pm-icon-btn-sq" id="supAppRefreshBtn" aria-label="Refresh"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/></svg></button>
                   <button type="button" class="pm-icon-btn-sq mobile-filter-btn" data-filter-target="pm-filter-row-supapp" aria-label="Filters"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg></button>
-                  <button type="button" class="btn btn-primary invite-btn-responsive" id="supAppInviteBtn" style="width:auto;padding:9px 16px;white-space:nowrap;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg><span class="invite-btn-text">Invite Supplier</span></button>
                 </div>
               </div>
-              <div class="supapp-filter-bar" id="pm-filter-row-supapp" style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap;">
-                <div class="pm-filter-field" style="flex:1 1 130px; min-width:110px;">
-                  <div class="pff-legend-wrap"><label>Type</label></div>
-                  <button type="button" class="pm-custom-dd-btn" data-dd="supAppType">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>
-                    <span class="cdd-value">All Types</span>
-                    <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-                  </button>
-                  <div class="pm-custom-dd-menu" data-dd-menu="supAppType">
-                    <div class="cdd-item selected" data-value="All Types">All Types</div>
-                    <div class="cdd-item" data-value="Sole Trader">Sole Trader</div>
-                    <div class="cdd-item" data-value="Company">Company</div>
+              <div style="display:flex; align-items:flex-end; gap:10px; flex-wrap:wrap; margin-top:12px;">
+                <div class="supapp-filter-bar" id="pm-filter-row-supapp" style="display:flex; gap:10px; flex-wrap:wrap; flex:1 1 auto;">
+                  <div class="pm-filter-field" style="flex:1 1 130px; min-width:110px;">
+                    <div class="pff-legend-wrap"><label>Type</label></div>
+                    <button type="button" class="pm-custom-dd-btn" data-dd="supAppType">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>
+                      <span class="cdd-value">All Types</span>
+                      <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="pm-custom-dd-menu" data-dd-menu="supAppType">
+                      <div class="cdd-item selected" data-value="All Types">All Types</div>
+                      <div class="cdd-item" data-value="Sole Trader">Sole Trader</div>
+                      <div class="cdd-item" data-value="Company">Company</div>
+                    </div>
                   </div>
+                  <div id="supAppDynamicFilters" style="display:contents;"></div>
                 </div>
-                <div id="supAppDynamicFilters" style="display:contents;"></div>
+                <button type="button" class="btn btn-primary invite-btn-responsive" id="supAppInviteBtn" style="width:auto;padding:9px 16px;white-space:nowrap;flex-shrink:0;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg><span class="invite-btn-text">Invite Supplier</span></button>
               </div>
               <div class="supapp-all-chips-row" id="supAppAllChipsRow" style="display:none;">
                 <div class="supapp-location-chips" id="supAppLocationChips"></div>
@@ -12540,9 +12602,9 @@
               <div class="pm-table-scroll">
                 <table class="admin-table supapp-table-fixed">
                   <colgroup>
-                    <col style="width:16%;"><col style="width:13%;"><col style="width:10%;"><col style="width:17%;"><col style="width:10%;"><col style="width:12%;"><col style="width:12%;"><col style="width:10%;">
+                    <col style="width:18%;"><col style="width:13%;"><col style="width:10%;"><col style="width:23%;"><col style="width:12%;"><col style="width:14%;"><col style="width:10%;">
                   </colgroup>
-                  <thead><tr><th>Name</th><th>Phone</th><th>Type</th><th>Categories</th><th>Location</th><th>Verified</th><th>Status</th><th>Submitted</th></tr></thead>
+                  <thead><tr><th>Name</th><th>Phone</th><th>Type</th><th>Categories</th><th>Location</th><th>Status</th><th>Submitted</th></tr></thead>
                   <tbody id="supAppTableBody"></tbody>
                 </table>
               </div>
@@ -13597,6 +13659,7 @@
                 </div>
 
                 <div id="supTabChat" style="display:none;">
+                  <div class="sup-chat-layout">
                   <div class="chat-window-card">
                     <div class="sinb-chat-toolbar">
                       <button type="button" class="sinb-activity-log-btn" id="supChatActivityLogBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>Activity log</button>
@@ -13604,9 +13667,7 @@
                     <div class="sinb-chat-thread-wrap">
                       <div class="chat-window-thread" id="supChatThreadCard">
                         <div id="supChatMessagesInner">
-                          <div class="chat-day-divider"><span>6 Jul 2026</span></div>
-                          <div class="chat-msg-row"><div class="chat-msg-bubble"><div class="cmb-text" style="background:var(--surface-soft);color:var(--text-heading);">£240.02 has been deposited — your deposit payout of £240.02 has been successfully credited to your bank account.</div></div></div>
-                          <div class="chat-day-divider" style="margin-top:16px;"><span>8 Jul 2026</span></div>
+                          <div class="chat-day-divider"><span>8 Jul 2026</span></div>
                           <div class="chat-msg-row"><div class="chat-msg-bubble"><div class="cmb-text" style="background:var(--surface-soft);color:var(--text-heading);">A deposit of £849.98 from your customer has been charged. Keylr Connect is holding the funds until they clear.</div></div></div>
                         </div>
                         <div class="sinb-scroll-anchor"><button type="button" class="sinb-scroll-bottom-btn" id="supChatScrollBottomBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg><span>Go to bottom</span></button></div>
@@ -13630,6 +13691,7 @@
                       </div>
                       <div class="chat-input-hint">Enter to send<span class="dot-sep"></span>Shift + Enter for a new line<span class="dot-sep"></span>PNG, JPEG, WEBP, PDF up to 10 MB.</div>
                     </div>
+                  </div>
                   </div>
                 </div>
               </div>
@@ -19453,13 +19515,9 @@
       }
     });
 
-    // Categories & Roles: the role list itself, plus every certificate field for every role,
-    // shown with the same level of detail as when an admin reviews a supplier directly.
-    var oldRoles = supObValueToDisplay('selectedRoles', supObEditSnapshot.selectedRoles);
-    var newRoles = supObValueToDisplay('selectedRoles', supplierCapturedData.selectedRoles);
-    if (newRoles && newRoles !== oldRoles) {
-      changes.push({ section: 'Categories & Roles', fieldLabel: 'Categories & roles', oldValue: oldRoles || 'Not set', newValue: newRoles, fieldType: 'category-roles', isDocument: false });
-    }
+    // Categories & Roles: every certificate field for every role, shown individually (Certificate
+    // name, Registration number, Uploaded certificate, Expiry date) rather than one combined card —
+    // this mirrors exactly what changed instead of a single opaque "role selection changed" summary.
     var newCertData = supplierCapturedData.roleCertData || {};
     var oldCertData = supObEditSnapshot.roleCertData || {};
     Object.keys(newCertData).forEach(function (role) {
@@ -20621,7 +20679,7 @@
     document.getElementById('chipTaxInfoDot').className = 'dot ' + (populated ? 'green' : 'red');
     document.getElementById('supTopAlertBar').style.display = populated ? 'none' : '';
 
-    var badgeMap = { supSettingsBadgeInbox: 5, supBadgeJobRequests: 8, supBadgeMyJobs: 3 };
+    var badgeMap = { supSettingsBadgeInbox: 5, supInboxNavBadge: 5, supBadgeJobRequests: 8, supBadgeMyJobs: 3 };
     Object.keys(badgeMap).forEach(function (id) {
       var el = document.getElementById(id);
       el.textContent = badgeMap[id];
@@ -21024,7 +21082,8 @@
     'job-requests': 'supJobRequestsView',
     'service-area': 'supServiceAreaView',
     'calendar': 'supCalendarView',
-    'profile-settings': 'supProfileSettingsView'
+    'profile-settings': 'supProfileSettingsView',
+    'inbox': 'supInboxView'
   };
   function initMobileMenuBtn(menuBtnId, sidebarId) {
     var menuBtn = document.getElementById(menuBtnId);
@@ -21077,6 +21136,9 @@
       } else if (nav === 'calendar') {
         showSupplierView('calendar');
         if (typeof initSupcalOnce === 'function') initSupcalOnce();
+      } else if (nav === 'inbox') {
+        showSupplierView('inbox');
+        if (typeof initSupInboxOnce === 'function') initSupInboxOnce();
       } else {
         showToast(item.querySelector('.nav-label').textContent + ' isn\u2019t wired up in this prototype yet.');
       }
@@ -21631,6 +21693,21 @@
     } catch (e) { /* ignore malformed or unavailable storage, keep current in-memory state */ }
   }
   loadSinbMessages();
+  // Nadia Reid is the reference Active Supplier used throughout this module (compliance checklist,
+  // admin notes) — seed her chat with a real back-and-forth so the Chat tab has something to actually
+  // demonstrate. Guarded so it never overwrites anything already saved to localStorage.
+  if (!SUP_CHAT_EXTRA_MESSAGES['Nadia Reid']) {
+    var nrD1 = new Date(); nrD1.setDate(nrD1.getDate() - 2); nrD1.setHours(nrD1.getHours() - 5, 12, 0, 0);
+    var nrD2 = new Date(); nrD2.setDate(nrD2.getDate() - 2); nrD2.setHours(nrD2.getHours() - 4, 48, 0, 0);
+    var nrD3 = new Date(); nrD3.setDate(nrD3.getDate() - 1); nrD3.setHours(nrD3.getHours() - 6, 5, 0, 0);
+    var nrD4 = new Date(); nrD4.setDate(nrD4.getDate() - 1); nrD4.setHours(nrD4.getHours() - 5, 40, 0, 0);
+    SUP_CHAT_EXTRA_MESSAGES['Nadia Reid'] = [
+      { kind: 'text', fromAdmin: true, text: 'Hi Nadia, your Public Liability Insurance is coming up for renewal \u2014 could you upload the new certificate when you get a chance?', ts: nrD1.getTime(), time: sinbFormatTimestamp(nrD1) },
+      { kind: 'text', fromAdmin: false, text: 'Hi, thanks for the heads up! I\u2019ve just renewed with Hiscox \u2014 I\u2019ll get the new certificate over to you today.', ts: nrD2.getTime(), time: sinbFormatTimestamp(nrD2) },
+      { kind: 'text', fromAdmin: true, text: 'Perfect, thank you. Also, when you have a moment, could you upload your Gas Safe certificate? It\u2019s still only self-declared on our side.', ts: nrD3.getTime(), time: sinbFormatTimestamp(nrD3) },
+      { kind: 'text', fromAdmin: false, text: 'Will do \u2014 uploading both now.', ts: nrD4.getTime(), time: sinbFormatTimestamp(nrD4) }
+    ];
+  }
 
   function sinbEsc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
   // Ferna is the specific demo supplier this entire admin<->supplier chat sync was built around, so
@@ -21688,12 +21765,15 @@
                     // and DBS Certificate — deliberately does NOT match "PL/PI Insurance provider" or
                     // "PL/PI Policy number" or "...Registration number", none of which say "certificate"
   ];
+  var SUP_CR_UPLOAD_FIELD_EXCLUDE = /\b(name|number)\b/i; // "DBS Certificate Number" and "Certificate
+  // name" both contain "certificate" but are text fields ABOUT the certificate, not the document itself
   function sinbFieldWantsUpload(ch) {
+    if (SUP_CR_UPLOAD_FIELD_EXCLUDE.test(ch.fieldLabel)) return false;
     return SUP_CR_UPLOAD_FIELD_PATTERNS.some(function (re) { return re.test(ch.fieldLabel); });
   }
   function sinbFieldCardHtml(batch, ch, forAdmin) {
     var meta = SUP_CR_STATUS_META[ch.status] || SUP_CR_STATUS_META.pending;
-    var isDoc = sinbFieldWantsUpload(ch) || ch.isDocument;
+    var isDoc = ch.fieldType !== 'date' && (sinbFieldWantsUpload(ch) || ch.isDocument);
     function viewDocBtn(which, value) {
       if (!isDoc || !value || /^(not set|not uploaded|—)$/i.test(String(value))) return '';
       return '<button type="button" class="suprq-doc-view-btn" data-own-view-doc="' + batch.id + '|' + ch.id + '|' + which + '" data-tooltip="View document"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>';
@@ -21712,8 +21792,13 @@
       body = '<div class="sinb-field-context">Waiting on the supplier to update and resubmit this.</div>' +
         '<div class="sinb-field-value-row">' + newValueHtml() + '</div>';
     } else if (ch.status === 'pending' || ch.status === 'resubmitted') {
+      var oldDocBtn = viewDocBtn('old', ch.oldValue);
+      // The connecting arrow is only redundant when the old value already has its own "view document"
+      // icon right next to it (the document preview eye button) — for plain text field changes there's
+      // no document icon, so the arrow stays as the only visual old-to-new indicator.
+      var arrowSvg = oldDocBtn ? '' : '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
       body = '<div class="sinb-field-context">' + (forAdmin ? 'Supplier requested this change.' : 'Waiting for admin to review.') + '</div>' +
-        '<div class="sinb-field-value-row"><span class="sinb-field-old">' + sinbEsc(String(ch.oldValue)) + '</span>' + viewDocBtn('old', ch.oldValue) + '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>' + newValueHtml() + '</div>' +
+        '<div class="sinb-field-value-row"><span class="sinb-field-old">' + sinbEsc(String(ch.oldValue)) + '</span>' + oldDocBtn + arrowSvg + newValueHtml() + '</div>' +
         (forAdmin ? '<div class="sinb-field-actions"><button type="button" class="sinb-cr-action-btn approve" data-cr-action="approve" data-batch-id="' + batch.id + '" data-change-id="' + ch.id + '">Accept</button><button type="button" class="sinb-cr-action-btn resubmit" data-cr-action="resubmit" data-batch-id="' + batch.id + '" data-change-id="' + ch.id + '">Ask to resubmit</button><button type="button" class="sinb-cr-action-btn decline" data-cr-action="decline" data-batch-id="' + batch.id + '" data-change-id="' + ch.id + '">Decline</button></div>' : '');
     } else if (ch.status === 'approved') {
       body = '<div class="sinb-field-value-row">' + newValueHtml() + '</div>';
@@ -21794,7 +21879,8 @@
   function sinbStartChatPolling() {
     setInterval(function () {
       var panel = document.getElementById('supSettingsPanelInbox');
-      var panelVisible = panel && panel.style.display !== 'none';
+      var inboxViewPanel = document.getElementById('supInboxView');
+      var panelVisible = (panel && panel.style.display !== 'none') || (inboxViewPanel && inboxViewPanel.style.display !== 'none');
       var adminPanel = document.getElementById('supTabChat');
       var adminPanelVisible = adminPanel && adminPanel.style.display !== 'none';
       if (!panelVisible && !adminPanelVisible) return; // nothing open, skip the storage read entirely
@@ -21819,22 +21905,23 @@
   }
   sinbStartChatPolling();
 
-  function sinbRenderChat() {
-    if (typeof loadSinbMessages === 'function') loadSinbMessages();
-    if (typeof loadChangeRequestsFromStorage === 'function') loadChangeRequestsFromStorage();
-    var c = sinbGetActiveConv();
-    var headerEl = document.getElementById('sinbChatHeader');
-    var scrollEl = document.getElementById('sinbChatScroll');
-    var innerEl = document.getElementById('sinbMessagesInner');
-    if (!headerEl || !scrollEl || !innerEl) return;
-    headerEl.innerHTML =
-      '<div class="sinb-conv-avatar" style="background:' + sinbAvatarColor(c.initials) + ';color:#1e40af;">' + c.initials + (c.presence ? '<span class="presence-dot"></span>' : '') + '</div>' +
+  var SINB_MOUNTS = [
+    { header: 'sinbChatHeader', scroll: 'sinbChatScroll', inner: 'sinbMessagesInner', scrollBtn: 'sinbScrollBottomBtn', replyPreview: 'sinbReplyPreview', replyPreviewField: 'sinbReplyPreviewField', replyPreviewClose: 'sinbReplyPreviewClose', messageInput: 'sinbMessageInput', sendBtn: 'sinbSendBtn', emojiBtn: 'sinbEmojiBtn', emojiPopover: 'sinbEmojiPopover', attachBtn: 'sinbAttachBtn', attachInput: 'sinbAttachInput' },
+    { header: 'supInboxChatHeader', scroll: 'supInboxChatScroll', inner: 'supInboxMessagesInner', scrollBtn: 'supInboxScrollBottomBtn', replyPreview: 'supInboxReplyPreview', replyPreviewField: 'supInboxReplyPreviewField', replyPreviewClose: 'supInboxReplyPreviewClose', messageInput: 'supInboxMessageInput', sendBtn: 'supInboxSendBtn', emojiBtn: 'supInboxEmojiBtn', emojiPopover: 'supInboxEmojiPopover', attachBtn: 'supInboxAttachBtn', attachInput: 'supInboxAttachInput' }
+  ]; // The Keylr Support chat has two entry points — Account Settings > Chat, and the Dashboard > Inbox
+     // page — both showing the exact same live conversation. Rendering loops over every mount that
+     // exists in the DOM so both always stay in sync regardless of which one the supplier is looking at.
+
+  function sinbBuildHeaderHtml(c) {
+    return '<div class="sinb-conv-avatar" style="background:' + sinbAvatarColor(c.initials) + ';color:#1e40af;">' + c.initials + (c.presence ? '<span class="presence-dot"></span>' : '') + '</div>' +
       '<div style="min-width:0;">' +
         '<div class="sinb-chat-header-name-row"><h3>' + sinbEsc(c.name) + '</h3></div>' +
         '<div class="sinb-chat-header-sub">' + (c.presence ? '<span class="online">' + c.presence + '</span>' : 'Last active ' + c.lastActivityLabel) + '</div>' +
       '</div>';
+  }
+  function sinbBuildMessagesHtml(c) {
     var sortedMessages = c.messages.slice().sort(function (a, b) { return (a.ts || 0) - (b.ts || 0); });
-    innerEl.innerHTML = sortedMessages.length ? sortedMessages.map(function (m) {
+    return sortedMessages.length ? sortedMessages.map(function (m) {
       if (m.kind === 'date') return '<div class="sinb-date-sep"><span>' + m.label + '</span></div>';
       if (m.kind === 'system') return '<div class="sinb-msg-row system"><div class="sinb-system-card"><div class="sinb-system-card-inner' + (m.warn ? ' warn' : '') + '"><div class="sinb-system-card-title">' + sinbEsc(m.title) + '</div><div class="sinb-system-card-body">' + sinbEsc(m.body) + '</div></div><div class="sinb-system-card-time">' + m.time + '</div></div></div>';
       if (m.kind === 'attachment') return '<div class="sinb-msg-row' + (m.mine ? ' mine' : '') + '"><div class="sinb-msg-stack">' + supChatQuoteBlockHtml(m) + '<div class="sinb-msg-bubble sinb-attachment-bubble"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (m.isImage ? '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>' : '<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/>') + '</svg><span>' + sinbEsc(m.fileName) + '</span></div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
@@ -21848,8 +21935,29 @@
       }
       return '<div class="sinb-msg-row' + (m.mine ? ' mine' : '') + '"><div class="sinb-msg-stack">' + supChatQuoteBlockHtml(m) + '<div class="sinb-msg-bubble">' + sinbEsc(m.text) + '</div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
     }).join('') : '<div class="sinb-empty-chat">Send a message to start the conversation with Keylr Support.</div>';
+  }
+  function sinbUpdateAllReplyPreviews() {
+    SINB_MOUNTS.forEach(function (mount) {
+      var fieldEl = document.getElementById(mount.replyPreviewField);
+      var previewEl = document.getElementById(mount.replyPreview);
+      if (!previewEl) return;
+      if (sinbReplyingTo) {
+        if (fieldEl) fieldEl.textContent = sinbReplyingTo.fieldLabel;
+        previewEl.style.display = 'flex';
+      } else {
+        previewEl.style.display = 'none';
+      }
+    });
+  }
+  function sinbRenderChatMount(mount, headerHtml, messagesHtml) {
+    var headerEl = document.getElementById(mount.header);
+    var scrollEl = document.getElementById(mount.scroll);
+    var innerEl = document.getElementById(mount.inner);
+    if (!headerEl || !scrollEl || !innerEl) return;
+    headerEl.innerHTML = headerHtml;
+    innerEl.innerHTML = messagesHtml;
     scrollEl.scrollTop = scrollEl.scrollHeight;
-    sinbWireScrollBottomBtn(scrollEl, document.getElementById('sinbScrollBottomBtn'));
+    sinbWireScrollBottomBtn(scrollEl, document.getElementById(mount.scrollBtn));
 
     wireOwnResubmitInputs(scrollEl, function () { return supplierChangeRequests[SUP_OWN_DEMO_NAME] || []; }, function (keepExpandedId, btn) {
       var parts = btn.getAttribute('data-own-resubmit').split('|');
@@ -21884,11 +21992,19 @@
     scrollEl.querySelectorAll('[data-field-reply-btn]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         sinbReplyingTo = { changeId: btn.getAttribute('data-change-id'), fieldLabel: btn.getAttribute('data-field-label') };
-        document.getElementById('sinbReplyPreviewField').textContent = sinbReplyingTo.fieldLabel;
-        document.getElementById('sinbReplyPreview').style.display = 'flex';
-        document.getElementById('sinbMessageInput').focus();
+        sinbUpdateAllReplyPreviews();
+        var msgInput = document.getElementById(mount.messageInput);
+        if (msgInput) msgInput.focus();
       });
     });
+  }
+  function sinbRenderChat() {
+    if (typeof loadSinbMessages === 'function') loadSinbMessages();
+    if (typeof loadChangeRequestsFromStorage === 'function') loadChangeRequestsFromStorage();
+    var c = sinbGetActiveConv();
+    var headerHtml = sinbBuildHeaderHtml(c);
+    var messagesHtml = sinbBuildMessagesHtml(c);
+    SINB_MOUNTS.forEach(function (mount) { sinbRenderChatMount(mount, headerHtml, messagesHtml); });
   }
 
   var sinbInitDone = false;
@@ -21909,14 +22025,26 @@
     if (seededAny) saveSinbMessages();
     sinbRenderChat();
 
-    document.getElementById('sinbReplyPreviewClose').addEventListener('click', function () {
-      sinbReplyingTo = null;
-      document.getElementById('sinbReplyPreview').style.display = 'none';
-    });
+    SINB_MOUNTS.forEach(wireSinbComposer);
+  }
+  function wireSinbComposer(mount) {
+    var msgInput = document.getElementById(mount.messageInput);
+    var sendBtn = document.getElementById(mount.sendBtn);
+    var replyPreviewCloseBtn = document.getElementById(mount.replyPreviewClose);
+    var emojiBtn = document.getElementById(mount.emojiBtn);
+    var emojiPopover = document.getElementById(mount.emojiPopover);
+    var attachBtn = document.getElementById(mount.attachBtn);
+    var attachInput = document.getElementById(mount.attachInput);
+    if (!msgInput || !sendBtn) return;
+
+    if (replyPreviewCloseBtn) {
+      replyPreviewCloseBtn.addEventListener('click', function () {
+        sinbReplyingTo = null;
+        sinbUpdateAllReplyPreviews();
+      });
+    }
 
     // Message input + send
-    var msgInput = document.getElementById('sinbMessageInput');
-    var sendBtn = document.getElementById('sinbSendBtn');
     function updateSendState() { sendBtn.disabled = !msgInput.value.trim(); }
     msgInput.addEventListener('input', updateSendState);
     function sendMessage() {
@@ -21927,11 +22055,11 @@
       if (sinbReplyingTo) { msg.replyToChangeId = sinbReplyingTo.changeId; msg.replyToFieldLabel = sinbReplyingTo.fieldLabel; }
       c.messages.push(msg);
       sinbReplyingTo = null;
-      document.getElementById('sinbReplyPreview').style.display = 'none';
       msgInput.value = '';
       updateSendState();
       saveSinbMessages();
       sinbRenderChat();
+      sinbUpdateAllReplyPreviews();
     }
     sendBtn.addEventListener('click', sendMessage);
     msgInput.addEventListener('keydown', function (e) {
@@ -21939,51 +22067,52 @@
     });
 
     // Emoji picker
-    var emojiBtn = document.getElementById('sinbEmojiBtn');
-    var emojiPopover = document.getElementById('sinbEmojiPopover');
-    emojiBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      var wasOpen = emojiPopover.classList.contains('open');
-      if (!wasOpen) {
-        var rect = emojiBtn.getBoundingClientRect();
-        emojiPopover.style.left = rect.left + 'px';
-        emojiPopover.style.bottom = (window.innerHeight - rect.top + 8) + 'px';
-        emojiPopover.style.top = 'auto';
-      }
-      emojiPopover.classList.toggle('open');
-      emojiBtn.classList.toggle('open');
-    });
-    emojiPopover.querySelectorAll('span[data-emoji]').forEach(function (span) {
-      span.addEventListener('click', function () {
-        msgInput.value += span.getAttribute('data-emoji');
-        updateSendState();
-        emojiPopover.classList.remove('open');
-        emojiBtn.classList.remove('open');
-        msgInput.focus();
+    if (emojiBtn && emojiPopover) {
+      emojiBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var wasOpen = emojiPopover.classList.contains('open');
+        if (!wasOpen) {
+          var rect = emojiBtn.getBoundingClientRect();
+          emojiPopover.style.left = rect.left + 'px';
+          emojiPopover.style.bottom = (window.innerHeight - rect.top + 8) + 'px';
+          emojiPopover.style.top = 'auto';
+        }
+        emojiPopover.classList.toggle('open');
+        emojiBtn.classList.toggle('open');
       });
-    });
-    document.addEventListener('click', function () { emojiPopover.classList.remove('open'); emojiBtn.classList.remove('open'); });
+      emojiPopover.querySelectorAll('span[data-emoji]').forEach(function (span) {
+        span.addEventListener('click', function () {
+          msgInput.value += span.getAttribute('data-emoji');
+          updateSendState();
+          emojiPopover.classList.remove('open');
+          emojiBtn.classList.remove('open');
+          msgInput.focus();
+        });
+      });
+      document.addEventListener('click', function () { emojiPopover.classList.remove('open'); emojiBtn.classList.remove('open'); });
+    }
 
     // Attach button — opens the file picker; selecting a file adds it as an attachment message
-    var attachInput = document.getElementById('sinbAttachInput');
-    document.getElementById('sinbAttachBtn').addEventListener('click', function () {
-      attachInput.click();
-    });
-    attachInput.addEventListener('change', function () {
-      var file = attachInput.files && attachInput.files[0];
-      if (!file) return;
-      var c = sinbGetActiveConv();
-      var isImage = file.type.indexOf('image/') === 0;
-      var msg = { kind: 'attachment', mine: true, fileName: file.name, isImage: isImage, ts: Date.now(), time: sinbNowTimestamp() };
-      if (sinbReplyingTo) { msg.replyToChangeId = sinbReplyingTo.changeId; msg.replyToFieldLabel = sinbReplyingTo.fieldLabel; }
-      c.messages.push(msg);
-      sinbReplyingTo = null;
-      document.getElementById('sinbReplyPreview').style.display = 'none';
-      attachInput.value = '';
-      saveSinbMessages();
-      sinbRenderChat();
-      showToast(file.name + ' attached.');
-    });
+    if (attachBtn && attachInput) {
+      attachBtn.addEventListener('click', function () {
+        attachInput.click();
+      });
+      attachInput.addEventListener('change', function () {
+        var file = attachInput.files && attachInput.files[0];
+        if (!file) return;
+        var c = sinbGetActiveConv();
+        var isImage = file.type.indexOf('image/') === 0;
+        var msg = { kind: 'attachment', mine: true, fileName: file.name, isImage: isImage, ts: Date.now(), time: sinbNowTimestamp() };
+        if (sinbReplyingTo) { msg.replyToChangeId = sinbReplyingTo.changeId; msg.replyToFieldLabel = sinbReplyingTo.fieldLabel; }
+        c.messages.push(msg);
+        sinbReplyingTo = null;
+        attachInput.value = '';
+        saveSinbMessages();
+        sinbRenderChat();
+        sinbUpdateAllReplyPreviews();
+        showToast(file.name + ' attached.');
+      });
+    }
   }
 
   function initSupjrOnce() {
@@ -24889,20 +25018,14 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     document.getElementById('supplierNetworkContent').innerHTML = buildRingChart(segments, '144', 'suppliers');
   }
 
-  var adminNotifications = [
-    { type: 'job', title: 'Supplier raised a ticket', desc: 'Liam Greenwood: Found work larger than agreed', date: '7 Jul, 16:43', unread: true },
-    { type: 'job', title: 'Supplier raised a ticket', desc: 'Liam Greenwood: Light is not working', date: '27 Jun, 8:39', unread: true },
-    { type: 'job', title: 'Supplier raised a ticket', desc: 'Liam Greenwood: Pipe leakage at Washroom', date: '27 Jun, 7:37', unread: true },
-    { type: 'alert', title: 'Supplier raised a ticket', desc: 'Liam Greenwood: Pipe problem', date: '26 Jun, 22:40', unread: true },
-    { type: 'alert', title: 'Supplier raised a ticket', desc: 'Liam Greenwood: There is an issue with Pipe', date: '26 Jun, 22:38', unread: true },
-    { type: 'alert', title: 'Dispute raised: Appliance Installation (all white goods)', desc: 'A property manager raised a dispute on Appliance Installation (all white goods).', date: '26 Jun, 21:50', unread: true }
-  ];
+  var adminNotifications = []; // populated dynamically (e.g. supplier profile update requests) — no seeded dummy data
 
   var jobIcon = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>';
   var alertIcon = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>';
 
   function renderNotifications() {
     var list = document.getElementById('notifListContent');
+    var emptyEl = document.getElementById('notifListEmpty');
     list.innerHTML = adminNotifications.map(function (n) {
       return '<div class="notif-row' + (n.unread ? ' unread' : '') + '"' + (n.reqType ? ' data-notif-req="' + n.reqType + '"' : '') + '>' +
         '<div class="nr-icon type-' + n.type + '">' + (n.type === 'job' ? jobIcon : alertIcon) + '</div>' +
@@ -24910,6 +25033,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         (n.unread ? '<div class="nr-dot"></div>' : '') +
       '</div>';
     }).join('');
+    if (emptyEl) emptyEl.style.display = adminNotifications.length ? 'none' : '';
     var unreadCount = adminNotifications.filter(function (n) { return n.unread; }).length;
     document.querySelector('#adminBellBtn .aib-dot').style.display = unreadCount > 0 ? '' : 'none';
     list.querySelectorAll('[data-notif-req="profile-request"]').forEach(function (row, i) {
@@ -25576,8 +25700,55 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     { initials: 'DW', color: '#7c3aed', name: 'Dan Walsh', email: 'dan.walsh@test.com', type: 'Company', phone: '+447700112240', activeState: 'Active', status: 'Approved', photo: 'https://i.pravatar.cc/150?img=59' }
   ];
 
-  function supplierComplianceTemplate(allVerified) {
+  /* Deterministic per-supplier certificate-expiry profile, shared by the Active Suppliers list
+     (card badges + the "Certs Expiring" quick filter) and the detail page's compliance checklist,
+     so the same supplier always shows the same nearest-expiring cert in both places. */
+  var CERT_MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var CERT_KEYS = ['pli', 'pi', 'gassafe', 'fgas'];
+  var CERT_DISPLAY_NAMES = { pli: 'Public Liability Insurance', pi: 'Professional Indemnity', gassafe: 'Gas Safe', fgas: 'F-Gas' };
+  function formatCertExpiryDate(d) { return d.getDate() + ' ' + CERT_MONTH_NAMES[d.getMonth()] + ' ' + d.getFullYear(); }
+  function certExpiryDateFromOffset(days) {
+    var d = new Date();
+    d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() + days);
+    return d;
+  }
+  function supCertProfileForIndex(idx) {
+    // Four independent-ish deterministic offsets (different multipliers/phases per cert) so a
+    // supplier can realistically have zero, one, or several certificates expired/expiring at once
+    // — not just a single "nearest" one. Range is wide (-150..1349 days) so most suppliers are
+    // comfortably clear, while a meaningful minority land in the expired/expiring-soon bands.
+    var raw = {
+      pli: ((idx * 47) % 1500) - 150,
+      pi: ((idx * 83 + 311) % 1500) - 150,
+      gassafe: ((idx * 131 + 733) % 1500) - 150,
+      fgas: ((idx * 173 + 977) % 1500) - 150
+    };
+    var items = CERT_KEYS.map(function (key) { return { key: key, name: CERT_DISPLAY_NAMES[key], days: raw[key] }; });
+    var expiredItems = items.filter(function (it) { return it.days < 0; });
+    var expiringSoonItems = items.filter(function (it) { return it.days >= 0 && it.days <= 30; });
+    var nearest = items.slice().sort(function (a, b) { return a.days - b.days; })[0];
+    return {
+      offsets: raw,
+      items: items,
+      expiredItems: expiredItems,
+      expiringSoonItems: expiringSoonItems,
+      expiredCount: expiredItems.length,
+      expiringSoonCount: expiringSoonItems.length,
+      nearestDays: nearest.days,
+      nearestKey: nearest.key,
+      nearestName: nearest.name,
+      expiringSoon: (expiredItems.length + expiringSoonItems.length) > 0
+    };
+  }
+
+  function supplierComplianceTemplate(allVerified, certOffsets) {
     var pendingStatus = allVerified ? 'verified' : 'pending';
+    var eo = certOffsets || {};
+    var pliDate = certExpiryDateFromOffset(eo.pli !== undefined ? eo.pli : 24);
+    var piDate = certExpiryDateFromOffset(eo.pi !== undefined ? eo.pi : 64);
+    var gasSafeDate = certExpiryDateFromOffset(eo.gassafe !== undefined ? eo.gassafe : 39);
+    var fgasDate = certExpiryDateFromOffset(eo.fgas !== undefined ? eo.fgas : 108);
     return [
       { category: 'Identity & Address', items: [
         { id: 'photoId', name: 'Photo ID Verification', sub: 'Nadia Reid', method: 'auto', status: 'verified' },
@@ -25589,29 +25760,29 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         { id: 'vat', name: 'VAT registration', sub: 'GB553557881', method: 'auto', status: 'verified' }
       ] },
       { category: 'Insurance', items: [
-        { id: 'pli', name: 'Public Liability Insurance', sub: 'Hiscox<span class="dot-sep"></span>policy #PL-330202', method: 'manual', status: 'verified', expiryDate: new Date(2026, 7, 8), details: [
+        { id: 'pli', name: 'Public Liability Insurance', sub: 'Hiscox<span class="dot-sep"></span>policy #PL-330202', method: 'manual', status: 'verified', expiryDate: pliDate, details: [
           { label: 'Insurance Provider', value: 'Hiscox' },
           { label: 'Policy Number', value: 'PL-330202' },
           { label: 'Public Liability Coverage', value: '\u00a32,000,000' },
-          { label: 'Expiry Date', value: '8 Aug 2026' }
+          { label: 'Expiry Date', value: formatCertExpiryDate(pliDate) }
         ] },
-        { id: 'pi', name: 'Professional Indemnity', sub: 'Declared', method: 'manual', status: 'verified', expiryDate: new Date(2026, 8, 17), details: [
+        { id: 'pi', name: 'Professional Indemnity', sub: 'Declared', method: 'manual', status: 'verified', expiryDate: piDate, details: [
           { label: 'PI Insurance Provider', value: 'Markel' },
           { label: 'PI Policy Number', value: 'PI-576019' },
           { label: 'PI Coverage Amount', value: '\u00a31,000,000' },
-          { label: 'PI Expiry Date', value: '17 Sep 2026' }
+          { label: 'PI Expiry Date', value: formatCertExpiryDate(piDate) }
         ] }
       ] },
       { category: 'Trade Certifications', items: [
-        { id: 'gassafe', name: 'Gas Safe', sub: 'Self-declared', method: 'manual', status: pendingStatus, expiryDate: new Date(2026, 7, 23), details: [
+        { id: 'gassafe', name: 'Gas Safe', sub: 'Self-declared', method: 'manual', status: pendingStatus, expiryDate: gasSafeDate, details: [
           { label: 'Certificate Name', value: 'Gas Safe' },
           { label: 'Registration Number', value: 'GS-558241' },
-          { label: 'Expiry Date', value: '23 Aug 2026' }
+          { label: 'Expiry Date', value: formatCertExpiryDate(gasSafeDate) }
         ] },
-        { id: 'fgas', name: 'F-Gas', sub: 'Self-declared', method: 'manual', status: pendingStatus, expiryDate: new Date(2026, 10, 2), details: [
+        { id: 'fgas', name: 'F-Gas', sub: 'Self-declared', method: 'manual', status: pendingStatus, expiryDate: fgasDate, details: [
           { label: 'Certificate Name', value: 'F-Gas' },
           { label: 'Registration Number', value: 'FGC-88312' },
-          { label: 'Expiry Date', value: '30 Nov 2026' }
+          { label: 'Expiry Date', value: formatCertExpiryDate(fgasDate) }
         ] }
       ] },
       { category: 'Background Checks', items: [
@@ -25779,8 +25950,38 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     '</div>';
   }
 
+  function supComplianceScoreClass(pct) {
+    // Mirrors the detail page's HEALTHY/NEEDS REVIEW/AT RISK thresholds (renderComplianceSummary)
+    // so a supplier never shows green on the card but amber on their own detail page, or vice versa.
+    if (pct >= 70) return 'complete';
+    if (pct >= 40) return 'risk-warn';
+    return 'risk-bad';
+  }
+  function supCertTooltipText(items, verb) {
+    return items.map(function (it) {
+      if (verb === 'expired') {
+        var d = Math.abs(it.days);
+        return it.name + ' \u2014 expired ' + (d === 0 ? 'today' : d === 1 ? '1 day ago' : d + ' days ago');
+      }
+      return it.name + ' \u2014 expires ' + (it.days === 0 ? 'today' : it.days === 1 ? 'in 1 day' : 'in ' + it.days + ' days');
+    }).join(' \u2022 ');
+  }
+  function supCertExpiryPillHtml(c) {
+    var expiredItems = c.certExpiredItems || [];
+    var soonItems = c.certExpiringSoonItems || [];
+    if (expiredItems.length) {
+      var expiredLabel = expiredItems.length === 1 ? '1 Certificate Expired' : expiredItems.length + ' Certificates Expired';
+      return '<span class="supapp-cert-expiry-pill expired" data-tooltip="' + supjrEscapeHtml(supCertTooltipText(expiredItems, 'expired')) + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>' + expiredLabel + '</span>';
+    }
+    if (soonItems.length) {
+      var soonLabel = soonItems.length === 1 ? '1 Certificate Expiring' : soonItems.length + ' Certificates Expiring';
+      return '<span class="supapp-cert-expiry-pill soon" data-tooltip="' + supjrEscapeHtml(supCertTooltipText(soonItems, 'soon')) + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>' + soonLabel + '</span>';
+    }
+    return '';
+  }
   function renderSupplierCard(c, i) {
     var typeIcon = c.type === 'Company' ? companyIconSvg : personIconSvg;
+    var onboardingPct = c.onboardingCompletionPct === undefined ? 100 : c.onboardingCompletionPct;
     return '<div class="supplier-card supapp-card" data-idx="' + i + '">' +
       '<div class="supplier-card-top">' +
         '<div class="pm-card-avatar">' + supAppAvatarHtml(c) + '</div>' +
@@ -25805,11 +26006,17 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         '<div class="supapp-info-cell' + (c.phone ? '' : ' muted-italic') + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg><span>' + (c.phone || 'No phone provided') + '</span></div>' +
         '<div class="supapp-info-cell" data-tooltip="' + supjrEscapeHtml((c.locations || []).join(', ')) + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><span>' + supAppLocationsText(c.locations) + '</span></div>' +
       '</div>' +
-      '<div class="supapp-info-cell" style="margin-top:8px;"><span class="supapp-status-dot ' + supAppVerificationDotClass(c.verificationStatus) + '"></span><span>' + c.verificationStatus + '</span></div>' +
+      '<div class="supapp-card-divider"></div>' +
+      '<div class="supapp-progress-row">' +
+        '<span class="supapp-progress-label">Onboarding Complete</span>' +
+        '<span class="supapp-progress-pct' + (onboardingPct >= 100 ? ' complete' : '') + '">' + onboardingPct + '%</span>' +
+      '</div>' +
+      '<div class="supapp-progress-track"><div class="supapp-progress-fill' + (onboardingPct >= 100 ? ' complete' : '') + '" style="width:' + onboardingPct + '%;"></div></div>' +
       '<div class="supapp-card-divider"></div>' +
       '<div class="supplier-pill-row">' +
         '<span class="' + supStatusPillClass(c.status) + '">' + supStatusDisplayText(c.status) + '</span>' +
         '<span class="supplier-type-pill' + (c.type === 'Sole Trader' ? ' sole-trader' : '') + '">' + typeIcon + c.type + '</span>' +
+        supCertExpiryPillHtml(c) +
       '</div>' +
       '<div class="supapp-card-divider supapp-card-divider-footer"></div>' +
       '<div class="supapp-card-footer">' +
@@ -25820,13 +26027,20 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
   function renderSupplierTableRow(c, i) {
     var typeIcon = c.type === 'Company' ? companyIconSvg : personIconSvg;
+    var expiryPill = supCertExpiryPillHtml(c);
+    var onboardingPct = c.onboardingCompletionPct === undefined ? 100 : c.onboardingCompletionPct;
+    var isOnboardingComplete = onboardingPct >= 100;
     return '<tr class="pm-table-row supplier-table-row" data-idx="' + i + '">' +
-      '<td><div class="pm-name-cell"><div class="pm-card-avatar">' + supAppAvatarHtml(c) + '</div><div><div class="nm-name">' + c.name + '</div><div class="nm-email">' + (c.email || 'No email') + '</div></div></div></td>' +
+      '<td><div class="pm-name-cell"><div class="pm-card-avatar">' + supAppAvatarHtml(c) + '</div><div class="supapp-table-name-wrap">' +
+        '<div class="nm-name" data-tooltip="' + supjrEscapeHtml(c.name) + '">' + c.name + '</div>' +
+        '<div class="nm-email">' + (c.email || 'No email') + '</div>' +
+        '<div class="supapp-table-progress-row"><div class="supapp-table-progress-track"><div class="supapp-table-progress-fill' + (isOnboardingComplete ? ' complete' : '') + '" style="width:' + onboardingPct + '%;"></div></div><span class="supapp-table-progress-pct' + (isOnboardingComplete ? ' complete' : '') + '">' + onboardingPct + '%</span></div>' +
+      '</div></div></td>' +
       '<td>' + (c.phone || '\u2014') + '</td>' +
       '<td><span class="supplier-type-pill' + (c.type === 'Sole Trader' ? ' sole-trader' : '') + '">' + typeIcon + c.type + '</span></td>' +
       '<td><div class="supapp-table-categories-cell">' + supAppCategoryChipsHtmlStatic(c.categories, 1) + '</div></td>' +
       '<td>' + supAppLocationsTableCellHtml(c.locations) + '</td>' +
-      '<td><span class="' + supStatusPillClass(c.status) + '">' + supStatusDisplayText(c.status) + '</span></td>' +
+      '<td><div style="display:flex;flex-direction:column;gap:4px;align-items:flex-start;"><span class="' + supStatusPillClass(c.status) + '">' + supStatusDisplayText(c.status) + '</span>' + (expiryPill || '') + '</div></td>' +
       '<td>' + c.joined + '</td>' +
     '</tr>';
   }
@@ -26310,7 +26524,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   var supActiveTab = 'approved';
   var supSearchTerm = '';
   var supTypeFilter = 'All Types';
-  var supVerificationFilter = 'All';
   var supCategoryFilter = [];
   var supLocationFilter = [];
   var supDateJoinedFilter = 'All Time';
@@ -26322,8 +26535,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       var c = entry.c;
       if (supActiveTab === 'approved' && c.status !== 'Approved') return false;
       if (supActiveTab === 'archived' && c.status !== 'Rejected') return false;
+      if (supActiveTab === 'certs-expiring' && !c.certExpiringSoon) return false;
       if (supTypeFilter !== 'All Types' && c.type !== supTypeFilter) return false;
-      if (supVerificationFilter !== 'All' && c.verificationStatus !== supVerificationFilter) return false;
       if (supDateJoinedFilter === 'Today' && (!c.joinedDate || c.joinedDate < daysAgo(0))) return false;
       if (supDateJoinedFilter === 'Last 7 Days' && (!c.joinedDate || c.joinedDate < daysAgo(7))) return false;
       if (supDateJoinedFilter === 'Last 30 Days' && (!c.joinedDate || c.joinedDate < daysAgo(30))) return false;
@@ -26353,8 +26566,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   }
 
   var SUP_FILTER_DEFS = [
-    { key: 'supVerification', label: 'Verification Status', type: 'select', allValue: 'All',
-      options: ['All', 'Verification Pending', 'Verification Complete'] },
     { key: 'supDateJoined', label: 'Date Joined', type: 'dateRange', allValue: 'All Time',
       options: ['All Time', 'Today', 'Last 7 Days', 'Last 30 Days', 'Custom Date Range'] },
     { key: 'supCategory', label: 'Service Category & Role', type: 'categoryRole', allValue: 'All Categories', searchable: true },
@@ -26454,7 +26665,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
           '</div>';
       }
       if (def.type === 'location') {
-        var locOpts = UK_LOCATIONS.map(function (loc) {
+        var locOpts = supLocationList().map(function (loc) {
           var mainItem = '<div class="supapp-ms-item" data-value="' + loc + '"><span class="supapp-ms-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>' + loc + '</div>';
           if (loc !== 'London') return mainItem;
           var zoneItems = LONDON_ZONES.map(function (zone) {
@@ -26518,6 +26729,25 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       });
     });
 
+    var supClearAllBtnEl = document.getElementById('supClearAllBtn');
+    if (supClearAllBtnEl) {
+      supClearAllBtnEl.addEventListener('click', function () {
+        supLocationFilter.length = 0;
+        supCategoryFilter.length = 0;
+        document.querySelectorAll('#supLocationOptionsList .supapp-ms-item.selected, #supCategoryOptionsList .supapp-ms-item.selected').forEach(function (item) {
+          item.classList.remove('selected');
+        });
+        var supLocLabel = document.getElementById('supLocationDdLabel');
+        if (supLocLabel) supLocLabel.textContent = 'All Locations';
+        var supCatLabel = document.getElementById('supCategoryDdLabel');
+        if (supCatLabel) supCatLabel.textContent = 'All Categories';
+        updateSupLocationUI();
+        updateSupCategoryUI();
+        supCurrentPage = 1;
+        renderSupplierList();
+      });
+    }
+
     var catDdBtn = document.getElementById('supCategoryDdBtn');
     var catDdMenu = document.getElementById('supCategoryDdMenu');
     catDdBtn.addEventListener('click', function (e) { e.stopPropagation(); var wasOpen = catDdMenu.classList.contains('open'); if (typeof closeAllCustomDropdowns === 'function') closeAllCustomDropdowns(); if (!wasOpen) catDdMenu.classList.add('open'); });
@@ -26541,13 +26771,19 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       });
     });
   }
+  function updateSupAllChipsRowVisibility() {
+    var row = document.getElementById('supAllChipsRow');
+    if (!row) return;
+    var anyActive = supLocationFilter.length || supCategoryFilter.length;
+    row.style.display = anyActive ? 'flex' : 'none';
+  }
   function updateSupCategoryUI() {
     var labelEl = document.getElementById('supCategoryDdLabel');
     if (labelEl) labelEl.textContent = supCategoryFilter.length ? supCategoryFilter.length + ' selected' : 'All Categories';
     var chipsWrap = document.getElementById('supCategoryChips');
     if (!chipsWrap) return;
-    if (!supCategoryFilter.length) { chipsWrap.style.display = 'none'; chipsWrap.innerHTML = ''; return; }
-    chipsWrap.style.display = '';
+    if (!supCategoryFilter.length) { chipsWrap.innerHTML = ''; updateSupAllChipsRowVisibility(); return; }
+    updateSupAllChipsRowVisibility();
     chipsWrap.innerHTML = supCategoryFilter.map(function (val) {
       var displayText = val.indexOf(': ') !== -1 ? val.split(': ')[1] : val;
       return '<span class="supapp-location-chip">' + supjrEscapeHtml(displayText) + '<button type="button" data-remove-cat="' + supjrEscapeHtml(val) + '" aria-label="Remove ' + supjrEscapeHtml(displayText) + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>';
@@ -26570,8 +26806,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (labelEl) labelEl.textContent = supLocationFilter.length ? supLocationFilter.length + ' selected' : 'All Locations';
     var chipsWrap = document.getElementById('supLocationChips');
     if (!chipsWrap) return;
-    if (!supLocationFilter.length) { chipsWrap.style.display = 'none'; chipsWrap.innerHTML = ''; return; }
-    chipsWrap.style.display = '';
+    if (!supLocationFilter.length) { chipsWrap.innerHTML = ''; updateSupAllChipsRowVisibility(); return; }
+    updateSupAllChipsRowVisibility();
     chipsWrap.innerHTML = supLocationFilter.map(function (loc) {
       return '<span class="supapp-location-chip">' + loc + '<button type="button" data-remove-loc="' + supjrEscapeHtml(loc) + '" aria-label="Remove ' + supjrEscapeHtml(loc) + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>';
     }).join('');
@@ -26595,6 +26831,12 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (supCurrentPage > totalPages) supCurrentPage = totalPages;
     var startIdx = (supCurrentPage - 1) * supRowsPerPage;
     var pageEntries = filtered.slice(startIdx, startIdx + supRowsPerPage);
+
+    var certsExpiringCountEl = document.getElementById('supCertsExpiringCount');
+    if (certsExpiringCountEl) {
+      var expiringCount = activeSuppliers.filter(function (c) { return c.certExpiringSoon; }).length;
+      certsExpiringCountEl.textContent = expiringCount;
+    }
 
     document.getElementById('supGridView').innerHTML = pageEntries.map(function (entry) { return renderSupplierCard(entry.c, entry.origIdx); }).join('');
     document.getElementById('supTableBody').innerHTML = pageEntries.map(function (entry) { return renderSupplierTableRow(entry.c, entry.origIdx); }).join('');
@@ -26878,7 +27120,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var latestName = focusName;
     var titleEl = document.getElementById('adminRequestFloatNotifTitle');
     var subEl = document.getElementById('adminRequestFloatNotifSub');
-    if (titleEl) titleEl.textContent = actionable.length === 1 ? 'New profile request' : actionable.length + ' profile requests need review';
+    if (titleEl) titleEl.textContent = actionable.length === 1 ? 'New supplier profile update request' : actionable.length + ' supplier profile update requests need review';
     if (subEl) subEl.textContent = latestName + ' \u2014 tap to review';
     notif.setAttribute('data-notif-supplier', latestName);
     notif.classList.add('show');
@@ -26945,7 +27187,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       adminNotifications.unshift({
         type: 'alert',
         reqType: 'profile-request',
-        title: 'Profile update request',
+        title: 'Supplier Profile update request',
         desc: focusName + ' \u2014 ' + actionable.length + ' item' + (actionable.length === 1 ? '' : 's') + ' need review',
         date: 'Just now',
         unread: true,
@@ -27020,6 +27262,19 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
           { section: 'Background Check', fieldLabel: 'Criminal Record Declaration', oldValue: 'Not declared', newValue: 'I have unspent convictions to declare', fieldType: 'criminal-record', crDetail: 'Caution for minor motoring offence (speeding), issued 2023. No custodial sentence, no impact on trade work.' },
           { section: 'Background Check', fieldLabel: 'Right to Work', oldValue: 'Not confirmed', newValue: 'Yes', fieldType: 'right-to-work' },
           { section: 'Business Legitimacy', fieldLabel: 'VAT registered', oldValue: 'Not registered', newValue: 'Registered \u2014 GB331204587', fieldType: 'vat', vatNumber: 'GB331204587' }
+        ] }
+      ];
+    } else if (c && c.name === 'Nadia Reid') {
+      // Nadia Reid is the reference Active Supplier for this module — a small, realistic compliance
+      // recertification batch (matches the chat conversation and admin notes already seeded for her)
+      // so opening her profile always shows a real, working pending-request example to test against.
+      var nrBatchDate = new Date(); nrBatchDate.setDate(nrBatchDate.getDate() - 1); nrBatchDate.setHours(nrBatchDate.getHours() - 5, 30, 0, 0);
+      supplierChangeRequests[key] = [
+        { id: 'batch1', submittedDate: nrBatchDate, status: 'pending', changes: [
+          { section: 'Insurance', fieldLabel: 'PL Expiry date', oldValue: '8 Aug 2025', newValue: '8 Aug 2026', fieldType: 'date' },
+          { section: 'Insurance', fieldLabel: 'PL Certificate document', oldValue: 'pli-certificate-2025.pdf', newValue: 'pli-certificate-2026.pdf (new upload)', isDocument: true },
+          { section: 'Categories & Roles', fieldLabel: 'Gas Safe Engineer \u2014 Certificate uploaded', oldValue: 'Not uploaded', newValue: 'gas-safe-cert-2026.pdf (new upload)', isDocument: true },
+          { section: 'Categories & Roles', fieldLabel: 'Gas Safe Engineer \u2014 Expiry date', oldValue: 'Not set', newValue: '23 Aug 2027', fieldType: 'date' }
         ] }
       ];
     } else {
@@ -27761,6 +28016,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   });
   document.getElementById('supDocsFinalSendBtn').addEventListener('click', function () {
     var text = document.getElementById('supDocsComposeText').value.trim();
+    var docCount = document.getElementById('supDocsComposeCount').textContent;
     document.getElementById('supDocsOverlay').classList.remove('open');
     if (text && supDetailCurrentSupplier) {
       var name = supDetailCurrentSupplier.name;
@@ -27771,6 +28027,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         SUP_CHAT_EXTRA_MESSAGES[name].push({ kind: 'text', fromAdmin: true, text: text, ts: Date.now(), time: sinbNowTimestamp() });
       }
       saveSinbMessages();
+      logSupChatActivity(name, { type: 'document', actor: 'Admin', action: 'sent ' + docCount + (docCount === '1' ? ' document to' : ' documents to') + ' ' + name, messageText: text });
     }
     showToast('Documents sent to ' + supDetailCurrentSupplier.name + '.');
     switchSupTab('chat');
@@ -27794,6 +28051,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       if (supChatReplyingTo) { msg.replyToChangeId = supChatReplyingTo.changeId; msg.replyToFieldLabel = supChatReplyingTo.fieldLabel; }
       SUP_CHAT_EXTRA_MESSAGES[name].push(msg);
     }
+    logSupChatActivity(name, { type: 'message', actor: 'Admin', action: supChatReplyingTo ? 'replied to ' + name : 'sent a message to ' + name, messageText: text });
     supChatReplyingTo = null;
     document.getElementById('supChatReplyPreview').style.display = 'none';
     input.value = '';
@@ -27824,6 +28082,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       if (supChatReplyingTo) { msg.replyToChangeId = supChatReplyingTo.changeId; msg.replyToFieldLabel = supChatReplyingTo.fieldLabel; }
       SUP_CHAT_EXTRA_MESSAGES[name].push(msg);
     }
+    logSupChatActivity(name, { type: 'attachment', actor: 'Admin', action: 'attached a file for ' + name, messageText: file.name });
     supChatReplyingTo = null;
     document.getElementById('supChatReplyPreview').style.display = 'none';
     this.value = '';
@@ -28140,6 +28399,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   /* ---- Supplier Applicants module ---- */
   function supAppStatusClass(status) {
     if (status === 'New') return 'incomplete';
+    if (status === 'In Progress') return 'in-progress';
     if (status === 'In Review') return 'pending';
     if (status === 'Requests') return 'edit-requests';
     if (status === 'Archived') return 'rejected';
@@ -28188,15 +28448,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   function supAppRoleChipsHtml(roles) {
     if (!roles || !roles.length) return '<span class="acct-view-empty" style="font-size:12px;">No role set</span>';
     return roles.map(function (role) { return '<span class="supapp-role-chip" data-chip-fit>' + supjrEscapeHtml(role) + '</span>'; }).join('');
-  }
-  // Compact text summary for the card's info grid — full detail lives in the tooltip on hover.
-  function supAppVerificationSummaryHtml(c) {
-    var tags = c.verificationTags || [];
-    var isVerified = tags.indexOf('Verified') !== -1;
-    var displayTags = tags.filter(function (t) { return t !== 'Onboarding Complete'; });
-    var text = displayTags.length ? displayTags.join(', ') : 'Unverified';
-    var tip = displayTags.length ? supjrEscapeHtml(displayTags.join(', ')) : '';
-    return '<div class="supapp-info-cell' + (isVerified ? ' good' : ' warn') + '"' + (tip ? ' data-tooltip="' + tip + '"' : '') + '><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' + (isVerified ? '<path d="M20 6L9 17l-5-5"/>' : '<circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/>') + '</svg><span>' + text + '</span></div>';
   }
   /* After a card's chip rows are in the DOM, this measures the row's actual available width and hides
      whichever trailing chips don't fit, folding them into an accurate "+N" badge (with a hover tooltip
@@ -28316,7 +28567,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       '<div class="supapp-info-grid">' +
         '<div class="supapp-info-cell' + (c.phone ? '' : ' muted-italic') + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg><span>' + (c.phone || 'No phone provided') + '</span></div>' +
         '<div class="supapp-info-cell" data-tooltip="' + supjrEscapeHtml((c.locations || []).join(', ')) + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><span>' + supAppLocationsText(c.locations) + '</span></div>' +
-        supAppVerificationSummaryHtml(c) +
       '</div>' +
       '<div class="supapp-card-divider"></div>' +
       '<div class="supapp-progress-row">' +
@@ -28338,8 +28588,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   function renderSupAppTableRow(c, i) {
     var typeIcon = c.type === 'Company' ? companyIconSvg : personIconSvg;
     var vTags = c.verificationTags || [];
-    var isVerified = vTags.indexOf('Verified') !== -1;
-    var vCellText = isVerified ? 'Verified' : 'Unverified';
     var isOnboardingComplete = vTags.indexOf('Onboarding Complete') !== -1;
     var completion = c.completion || 0;
     return '<tr class="pm-table-row supplier-table-row" data-idx="' + i + '">' +
@@ -28352,7 +28600,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       '<td>' + (c.type ? '<span class="supplier-type-pill' + (c.type === 'Sole Trader' ? ' sole-trader' : '') + '">' + typeIcon + c.type + '</span>' : '\u2014') + '</td>' +
       '<td><div class="supapp-table-categories-cell">' + supAppCategoryChipsHtmlStatic(c.categories, 1, true) + '</div></td>' +
       '<td>' + supAppLocationsTableCellHtml(c.locations) + '</td>' +
-      '<td><span class="supapp-table-verif' + (isVerified ? ' good' : ' warn') + '">' + vCellText + '</span></td>' +
       '<td><span class="supplier-approved-pill ' + supAppStatusClass(c.status) + '">' + supAppStatusDisplayText(c.status) + '</span></td>' +
       '<td>' + supAppRelativeDate(c.dateSubmitted) + '</td>' +
     '</tr>';
@@ -28365,7 +28612,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   var supAppSortOrder = 'Newest';
   var supSortOrder = 'Newest';
   var supAppTypeFilter = 'All Types';
-  var supAppVerificationFilter = [];
   var supAppDateFilter = 'All Time';
   var supAppDateFrom = null;
   var supAppDateTo = null;
@@ -28383,6 +28629,21 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       (c.locations || []).forEach(function (loc) {
         if (LONDON_ZONES && LONDON_ZONES.indexOf(loc) !== -1) return; // zones are handled separately, nested under London
         if (SUP_APP_EXCLUDED_LOCATIONS.indexOf(loc) !== -1) return;
+        if (list.indexOf(loc) === -1) list.push(loc);
+      });
+    });
+    return list;
+  }
+  // Active Suppliers' location filter mirrors the Applicants module exactly: a curated base list
+  // plus whatever custom cities actually appear in the data, rather than the full static UK_LOCATIONS.
+  var SUP_BASE_LOCATIONS = ['London', 'Manchester', 'Birmingham', 'Leeds', 'Liverpool', 'Cambridge', 'Oxford'];
+  var SUP_EXCLUDED_LOCATIONS = ['Bristol', 'Glasgow', 'Edinburgh', 'Newcastle', 'Leicester', 'Sheffield', 'Nottingham', 'Southampton', 'Cardiff'];
+  function supLocationList() {
+    var list = SUP_BASE_LOCATIONS.slice();
+    (typeof activeSuppliers !== 'undefined' ? activeSuppliers : []).forEach(function (c) {
+      (c.locations || []).forEach(function (loc) {
+        if (LONDON_ZONES && LONDON_ZONES.indexOf(loc) !== -1) return;
+        if (SUP_EXCLUDED_LOCATIONS.indexOf(loc) !== -1) return;
         if (list.indexOf(loc) === -1) list.push(loc);
       });
     });
@@ -28421,7 +28682,11 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
      Deterministic (index-based) so re-loading the page gives the same results. */
   (function enrichSupApplicantsForFilters() {
     var categoryCycle = Object.keys(categoryRoles).length ? Object.keys(categoryRoles) : ['Appliances', 'Cleaning', 'Electrical', 'Gas & Heating', 'Plumbing'];
-    var SUP_APP_STATUS_CYCLE = ['New', 'In Review', 'Requests', 'Archived'];
+    // Requests/Archived are administrative states set by admin action, independent of how far the
+    // supplier got through onboarding — cycled in for a subset of records. Everyone else gets their
+    // status derived directly from completion: New/In Progress/In Review, matching exactly what
+    // completion already represents (0% = not started, partial = started, 100% = submitted).
+    var ADMIN_STATE_CYCLE = [null, null, null, 'Requests', null, null, 'Archived', null, null, null];
     var VERIFICATION_TAG_SETS = [
       ['Verified', 'Onboarding Complete'],
       ['Unverified', 'Onboarding Complete'],
@@ -28429,13 +28694,28 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       ['Unverified']
     ];
     supplierApplicants.forEach(function (c, i) {
-      c.status = SUP_APP_STATUS_CYCLE[i % SUP_APP_STATUS_CYCLE.length];
       if (c.docsVerified === undefined) c.docsVerified = (i % 3 !== 0); // ~2/3 fully verified, 1/3 still pending — mirrors their Compliance Checklist completion
       if (!c.verificationStatus) c.verificationStatus = c.docsVerified ? 'Verification Complete' : 'Verification Pending';
       if (!c.verificationTags) c.verificationTags = VERIFICATION_TAG_SETS[i % VERIFICATION_TAG_SETS.length];
       if (c.completion === undefined) {
         var hasOnboardingComplete = c.verificationTags.indexOf('Onboarding Complete') !== -1;
-        c.completion = hasOnboardingComplete ? 100 : (30 + (i * 17) % 65); // varied partial values, never 100 when not marked complete
+        if (hasOnboardingComplete) {
+          c.completion = 100;
+        } else {
+          // Every 5th non-complete record hasn't started at all (0%, "New"); the rest are mid-onboarding
+          // with varied partial values ("In Progress") — never 100 when not marked complete.
+          c.completion = (i % 5 === 0) ? 0 : (30 + (i * 17) % 65);
+        }
+      }
+      var adminState = ADMIN_STATE_CYCLE[i % ADMIN_STATE_CYCLE.length];
+      if (adminState) {
+        c.status = adminState;
+      } else if (c.completion >= 100) {
+        c.status = 'In Review';
+      } else if (c.completion > 0) {
+        c.status = 'In Progress';
+      } else {
+        c.status = 'New';
       }
       // Business rule: a supplier can only be "Verified" once onboarding is fully complete (100%).
       // Enforced here directly (not just via the tag-set design above) so it holds even if
@@ -28483,6 +28763,25 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     activeSuppliers.forEach(function (c, i) {
       if (c.docsVerified === undefined) c.docsVerified = (i % 4 !== 0); // most active suppliers stay fully compliant
       if (!c.verificationStatus) c.verificationStatus = c.docsVerified ? 'Verification Complete' : 'Verification Pending';
+      // Compliance score mirrors exactly what the detail page's checklist would compute for this
+      // supplier (supplierComplianceTemplate: 8/11 checks pass when docsVerified is false, all 11
+      // pass when true) so the list and detail page never disagree on the same supplier.
+      if (c.complianceScorePct === undefined) c.complianceScorePct = c.docsVerified ? 100 : 73;
+      // Most Active Suppliers have fully completed their profile, but a realistic minority still have
+      // a few optional fields outstanding (extra certs, secondary trade details, etc.) — mirrors the
+      // Applicant card's completion bar with real variety instead of pinning every card to 100%.
+      if (c.onboardingCompletionPct === undefined) {
+        var ONBOARDING_COMPLETION_CYCLE = [100, 100, 100, 88, 96, 100, 100, 76, 100, 92];
+        c.onboardingCompletionPct = ONBOARDING_COMPLETION_CYCLE[i % ONBOARDING_COMPLETION_CYCLE.length];
+      }
+      if (c.certExpiryDays === undefined) {
+        var certProfile = supCertProfileForIndex(i);
+        c.certExpiryDays = certProfile.nearestDays;
+        c.nearestExpiringCertName = certProfile.nearestName;
+        c.certExpiringSoon = certProfile.expiringSoon;
+        c.certExpiredItems = certProfile.expiredItems;
+        c.certExpiringSoonItems = certProfile.expiringSoonItems;
+      }
       if (!c.categories) {
         var catCount = 1 + (i % 5);
         var cats = [];
@@ -28514,8 +28813,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
   /* ---- Dynamic filter bar config — add a new entry here to add a new filter, no other wiring needed ---- */
   var SUP_APP_FILTER_DEFS = [
-    { key: 'supAppVerification', label: 'Verification Status', type: 'multiSelect', allValue: 'All Verification',
-      options: ['Verified', 'Unverified', 'Onboarding Complete'] },
     { key: 'supAppDateSubmitted', label: 'Date Submitted', type: 'dateRange', allValue: 'All Time',
       options: ['All Time', 'Today', 'Last 7 Days', 'Last 30 Days', 'Custom Date Range'] },
     { key: 'supAppCategory', label: 'Service Category & Role', type: 'categoryRole', allValue: 'All Categories', searchable: true },
@@ -28701,45 +28998,18 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       });
     });
 
-    var appVerifDdBtn = document.getElementById('supAppVerificationDdBtn');
-    var appVerifDdMenu = document.getElementById('supAppVerificationDdMenu');
-    var appVerifDdLabel = document.getElementById('supAppVerificationDdLabel');
-    if (appVerifDdBtn && appVerifDdMenu) {
-      appVerifDdBtn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        var wasOpen = appVerifDdMenu.classList.contains('open');
-        if (typeof closeAllCustomDropdowns === 'function') closeAllCustomDropdowns();
-        if (!wasOpen) appVerifDdMenu.classList.add('open');
-      });
-      appVerifDdMenu.addEventListener('click', function (e) { e.stopPropagation(); });
-      document.querySelectorAll('#supAppVerificationOptionsList .supapp-ms-item').forEach(function (item) {
-        item.addEventListener('click', function () {
-          var val = item.getAttribute('data-value');
-          var idx = supAppVerificationFilter.indexOf(val);
-          if (idx === -1) supAppVerificationFilter.push(val); else supAppVerificationFilter.splice(idx, 1);
-          item.classList.toggle('selected', idx === -1);
-          if (appVerifDdLabel) appVerifDdLabel.textContent = supAppVerificationFilter.length ? supAppVerificationFilter.length + ' selected' : 'All Verification';
-          supAppCurrentPage = 1;
-          renderSupAppList();
-        });
-      });
-    }
-
     var clearAllBtn = document.getElementById('supAppClearAllBtn');
     if (clearAllBtn) {
       clearAllBtn.addEventListener('click', function () {
         supAppLocationFilter.length = 0;
         supAppCategoryFilter.length = 0;
-        supAppVerificationFilter.length = 0;
-        document.querySelectorAll('#supAppLocationOptionsList .supapp-ms-item.selected, #supAppCategoryOptionsList .supapp-ms-item.selected, #supAppVerificationOptionsList .supapp-ms-item.selected').forEach(function (item) {
+        document.querySelectorAll('#supAppLocationOptionsList .supapp-ms-item.selected, #supAppCategoryOptionsList .supapp-ms-item.selected').forEach(function (item) {
           item.classList.remove('selected');
         });
         var locLabel = document.getElementById('supAppLocationDdLabel');
         if (locLabel) locLabel.textContent = 'All Locations';
         var catLabel = document.getElementById('supAppCategoryDdLabel');
         if (catLabel) catLabel.textContent = 'All Categories';
-        var verifLabel = document.getElementById('supAppVerificationDdLabel');
-        if (verifLabel) verifLabel.textContent = 'All Verification';
         if (typeof updateSupAppLocationUI === 'function') updateSupAppLocationUI();
         if (typeof updateSupAppCategoryUI === 'function') updateSupAppCategoryUI();
         supAppCurrentPage = 1;
@@ -28773,7 +29043,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   function updateSupAppAllChipsRowVisibility() {
     var row = document.getElementById('supAppAllChipsRow');
     if (!row) return;
-    var anyActive = supAppLocationFilter.length || supAppCategoryFilter.length || supAppVerificationFilter.length;
+    var anyActive = supAppLocationFilter.length || supAppCategoryFilter.length;
     row.style.display = anyActive ? 'flex' : 'none';
   }
   function updateSupAppCategoryUI() {
@@ -28833,8 +29103,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (menu3) menu3.classList.remove('open');
     var menu4 = document.getElementById('supCategoryDdMenu');
     if (menu4) menu4.classList.remove('open');
-    var menu5 = document.getElementById('supAppVerificationDdMenu');
-    if (menu5) menu5.classList.remove('open');
   });
 
   function daysAgo(n) { var d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - n); return d; }
@@ -28844,11 +29112,11 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       var c = entry.c;
       if (!c.type) return false;
       if (supAppActiveTab === 'new' && c.status !== 'New') return false;
+      if (supAppActiveTab === 'in-progress' && c.status !== 'In Progress') return false;
       if (supAppActiveTab === 'in-review' && c.status !== 'In Review') return false;
       if (supAppActiveTab === 'requests' && c.status !== 'Requests') return false;
       if (supAppActiveTab === 'archived' && c.status !== 'Archived') return false;
       if (supAppTypeFilter !== 'All Types' && c.type !== supAppTypeFilter) return false;
-      if (supAppVerificationFilter.length && !supAppVerificationFilter.every(function (v) { return c.verificationTags && c.verificationTags.indexOf(v) !== -1; })) return false;
       if (supAppCategoryFilter.length && !supAppCategoryFilter.some(function (val) {
         if (val.indexOf(': ') !== -1) {
           var roleOnly = val.split(': ')[1];
@@ -29088,7 +29356,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (supAppCurrentPage < totalPages) { supAppCurrentPage++; renderSupAppList(); }
   });
 
-  var SUP_CHAT_ACTIVITY_LOG = {}; // keyed by supplier name — full audit trail of every action taken on that supplier's requests
+  var SUP_CHAT_ACTIVITY_LOG = {}; // keyed by supplier name — full audit trail of everything that happens on that supplier's chat: compliance-request actions AND ordinary messages/attachments/document sends
   function logSupChatActivity(name, entry) {
     if (!SUP_CHAT_ACTIVITY_LOG[name]) SUP_CHAT_ACTIVITY_LOG[name] = [];
     entry.time = sinbNowTimestamp();
@@ -29098,7 +29366,15 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     approved: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>',
     declined: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>',
     resubmit_requested: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>',
-    resubmitted: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>'
+    resubmitted: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>',
+    message: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>',
+    attachment: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>',
+    document: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>'
+  };
+  var SUP_ACTIVITY_ICON_BG = {
+    message: { background: '#e7edf6', color: '#183060' },
+    attachment: { background: '#e7edf6', color: '#183060' },
+    document: { background: '#e8f0f8', color: '#284890' }
   };
   function renderSupChatActivityLog(name) {
     var listEl = document.getElementById('supChatActivityLogList');
@@ -29106,11 +29382,19 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (!listEl) return;
     var log = SUP_CHAT_ACTIVITY_LOG[name] || [];
     emptyEl.style.display = log.length ? 'none' : '';
+    if (emptyEl) emptyEl.textContent = 'No activity yet on this supplier.';
     listEl.innerHTML = log.map(function (e) {
       var valueRow = (e.oldValue !== undefined && e.newValue !== undefined)
         ? '<div class="sinb-field-value-row" style="margin-top:4px;"><span class="sinb-field-old">' + sinbEsc(String(e.oldValue)) + '</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span class="sinb-field-new">' + sinbEsc(String(e.newValue)) + '</span></div>'
         : '';
-      return '<div class="sinb-activity-entry ' + e.type + '"><span class="sinb-activity-icon">' + (SUP_ACTIVITY_ICON[e.type] || '') + '</span><div class="sinb-activity-body"><div class="sinb-activity-text"><b>' + sinbEsc(e.actor) + '</b> ' + sinbEsc(e.action) + ' <b>' + sinbEsc(e.fieldLabel) + '</b></div>' + valueRow + '<div class="sinb-activity-time">' + e.time + '</div></div></div>';
+      var mainText = e.fieldLabel
+        ? '<b>' + sinbEsc(e.actor) + '</b> ' + sinbEsc(e.action) + ' <b>' + sinbEsc(e.fieldLabel) + '</b>'
+        : '<b>' + sinbEsc(e.actor) + '</b> ' + sinbEsc(e.action);
+      var snippetRow = e.messageText
+        ? '<div class="sinb-field-value-row" style="margin-top:4px;font-style:italic;color:var(--text-body-muted);">\u201c' + sinbEsc(e.messageText.length > 90 ? e.messageText.slice(0, 87) + '\u2026' : e.messageText) + '\u201d</div>'
+        : '';
+      var iconStyle = SUP_ACTIVITY_ICON_BG[e.type] ? 'background:' + SUP_ACTIVITY_ICON_BG[e.type].background + ';color:' + SUP_ACTIVITY_ICON_BG[e.type].color + ';' : '';
+      return '<div class="sinb-activity-entry ' + e.type + '"><span class="sinb-activity-icon" style="' + iconStyle + '">' + (SUP_ACTIVITY_ICON[e.type] || '') + '</span><div class="sinb-activity-body"><div class="sinb-activity-text">' + mainText + '</div>' + valueRow + snippetRow + '<div class="sinb-activity-time">' + e.time + '</div></div></div>';
     }).join('');
   }
   var supChatReplyingTo = null; // { changeId, fieldLabel } while composing a reply, else null
@@ -29150,12 +29434,12 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     });
     timeline.sort(function (a, b) { return a.ts - b.ts; });
     var timelineHtml = timeline.map(function (item) { return item.html; }).join('');
-    innerEl.innerHTML =
-      '<div class="chat-day-divider"><span>6 Jul 2026</span></div>' +
-      '<div class="chat-msg-row"><div class="chat-msg-bubble"><div class="cmb-text" style="background:var(--surface-soft);color:var(--text-heading);">\u00a3240.02 has been deposited \u2014 your deposit payout of \u00a3240.02 has been successfully credited to your bank account.</div></div></div>' +
-      (timelineHtml ? '<div class="chat-day-divider" style="margin-top:16px;"><span>Today</span></div>' + timelineHtml : '');
+    innerEl.innerHTML = timelineHtml
+      ? '<div class="chat-day-divider"><span>Today</span></div>' + timelineHtml
+      : '<div style="padding:40px 20px;text-align:center;font-size:13px;color:var(--text-body-muted);">No messages yet with ' + sinbEsc(name) + '.</div>';
     threadEl.scrollTop = threadEl.scrollHeight;
     sinbWireScrollBottomBtn(threadEl, document.getElementById('supChatScrollBottomBtn'));
+    wireOwnResubmitInputs(threadEl, function () { return batches; }, function () { renderSupChatThread(); });
     threadEl.querySelectorAll('[data-cr-action]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var action = btn.getAttribute('data-cr-action');
@@ -29493,7 +29777,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var c = source === 'app' ? supplierApplicants[idx] : activeSuppliers[idx];
     currentSupplierDetailSource = source || 'supplier';
     supDetailCurrentSupplier = c;
-    supDetailChecklist = supplierComplianceTemplate(c.docsVerified !== false);
+    var supCertProfile = supCertProfileForIndex(idx);
+    supDetailChecklist = supplierComplianceTemplate(c.docsVerified !== false, supCertProfile.offsets);
     supDetailDocuments = supplierDocumentsTemplate();
     seedAdminNotesIfNeeded(c);
     var notesCountEl = document.getElementById('supNotesCount');
@@ -29615,8 +29900,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
   var ddSideEffects = {
     supType: function (v) { supTypeFilter = v; supCurrentPage = 1; renderSupplierList(); },
-    supVerification: function (v) { supVerificationFilter = v; supCurrentPage = 1; renderSupplierList(); },
-    supSort: function (v) { supSortOrder = v; supCurrentPage = 1; renderSupplierList(); },
     pmRowsPerPage: function (v) { pmRowsPerPage = parseInt(v, 10); pmCurrentPage = 1; renderPMList(); },
     appRowsPerPage: function (v) { appRowsPerPage = parseInt(v, 10); appCurrentPage = 1; renderApplicantList(); },
     supRowsPerPage: function (v) { supRowsPerPage = parseInt(v, 10); supCurrentPage = 1; renderSupplierList(); },
@@ -29704,11 +29987,21 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var totalPages = Math.max(1, Math.ceil(getFilteredSuppliers().length / supRowsPerPage));
     if (supCurrentPage < totalPages) { supCurrentPage++; renderSupplierList(); }
   });
+  document.getElementById('supSortToggleBtn').addEventListener('click', function () {
+    supSortOrder = supSortOrder === 'Oldest' ? 'Newest' : 'Oldest';
+    this.classList.toggle('supapp-sort-desc', supSortOrder === 'Oldest');
+    this.setAttribute('data-tooltip', supSortOrder === 'Oldest' ? 'Sort: Oldest first' : 'Sort: Newest first');
+    supCurrentPage = 1;
+    renderSupplierList();
+  });
   document.getElementById('supRefreshBtn').addEventListener('click', function () {
     document.getElementById('supSearchInput').value = '';
     supSearchTerm = '';
     supActiveTab = 'approved';
     supCurrentPage = 1;
+    supSortOrder = 'Newest';
+    var supSortBtn = document.getElementById('supSortToggleBtn');
+    if (supSortBtn) { supSortBtn.classList.remove('supapp-sort-desc'); supSortBtn.setAttribute('data-tooltip', 'Sort: Newest first'); }
     document.querySelectorAll('#supTabPills .pm-tab-pill').forEach(function (p) { p.classList.toggle('active', p.getAttribute('data-filter') === 'approved'); });
     document.querySelectorAll('#pm-filter-row-sup .pm-custom-dd-menu').forEach(function (menu) {
       var firstItem = menu.querySelector('.cdd-item');
