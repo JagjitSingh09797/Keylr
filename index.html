@@ -2437,7 +2437,10 @@
   .sinb-chat-scroll { flex: 1; overflow-y: auto; padding: 22px 28px; background: #fbfcfe; }
   .sinb-chat-thread-wrap { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; }
   .sinb-chat-thread-wrap .sinb-chat-scroll, .sinb-chat-thread-wrap .chat-window-thread { flex: 1; min-height: 0; }
-  .sinb-scroll-bottom-btn { position: fixed; height: 36px; padding: 0 16px 0 14px; border-radius: 999px; background: #fff; border: 1px solid var(--border-subtle); box-shadow: 0 4px 14px rgba(16,24,40,0.14); color: var(--text-body-muted); display: none; align-items: center; gap: 7px; cursor: pointer; transition: transform 130ms ease-out, color 130ms ease-out; z-index: 9999; white-space: nowrap; }
+  .sinb-scroll-anchor { position: sticky; bottom: 16px; height: 0; overflow: visible; display: flex; z-index: 5; pointer-events: none; }
+  #sinbChatScroll .sinb-scroll-anchor { justify-content: flex-start; padding-left: 4px; }
+  #supChatThreadCard .sinb-scroll-anchor { justify-content: flex-end; padding-right: 4px; }
+  .sinb-scroll-bottom-btn { pointer-events: auto; height: 36px; padding: 0 16px 0 14px; border-radius: 999px; background: #fff; border: 1px solid var(--border-subtle); box-shadow: 0 4px 14px rgba(16,24,40,0.14); color: var(--text-body-muted); display: none; align-items: center; gap: 7px; cursor: pointer; transition: transform 130ms ease-out, color 130ms ease-out; white-space: nowrap; }
   .sinb-scroll-bottom-btn span { font-size: 12.5px; font-weight: 700; }
   .sinb-scroll-bottom-btn.show { display: flex; }
   .sinb-scroll-bottom-btn:hover { color: var(--accent-blue); transform: translateY(-2px); }
@@ -3674,38 +3677,6 @@
   .sup-preview-body .spb-placeholder { background: #fff; border-radius: 10px; padding: 60px 50px; display: flex; flex-direction: column; align-items: center; gap: 14px; color: #94a3b8; }
   .sup-preview-body .spb-placeholder span { font-size: 13px; font-weight: 600; color: var(--text-body-muted); }
 
-  /* Compliance flags sidebar (Chat tab) */
-  .sup-flags-panel { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 18px 20px; display: flex; flex-direction: column; }
-  .sup-flags-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-  .sup-flags-head .sfh-icon { width: 36px; height: 36px; border-radius: 50%; background: #183060; color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-
-  .sup-flags-head h4 { font-size: 14px; font-weight: 700; color: var(--text-heading); }
-  .sup-flags-head p { font-size: 11.5px; color: var(--text-body-muted); margin-top: 2px; }
-  .sup-flags-count-badge { display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--text-body-muted); background: var(--surface-soft); padding: 1px 8px; border-radius: 999px; margin-left: 2px; }
-  .sup-flag-tab-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 600; color: var(--text-body-muted); background: #fff; border: 1px solid var(--border-subtle); padding: 4px 10px; border-radius: 999px; cursor: pointer; white-space: nowrap; }
-  .sup-flag-tab-pill:hover:not(.active) { background: var(--surface-soft); }
-  .sup-flag-tab-pill .tab-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-  .sup-flag-tab-pill[data-flagfilter="all"].active { background: var(--surface-soft); color: var(--text-heading); border-color: var(--border-subtle); }
-  .sup-flag-tab-pill[data-flagfilter="issue"].active { background: #fdecea; color: #c0392b; border-color: #fdecea; }
-  .sup-flag-tab-pill[data-flagfilter="pending"].active { background: #fef3c7; color: #92620a; border-color: #fef3c7; }
-  .sup-flags-clear-link { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: var(--text-body-muted); cursor: pointer; white-space: nowrap; }
-  .sup-flags-clear-link:hover { color: var(--text-heading); }
-  .sup-flags-search { width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-subtle); font-size: 12.5px; font-family: inherit; margin-bottom: 12px; }
-  .sup-flags-tab-row { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
-  .sup-flags-cat-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; color: #94a3b8; margin: 12px 0 6px; }
-  .sup-flag-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; cursor: pointer; border-radius: 8px; }
-  .sup-flag-item:hover { background: var(--surface-soft); }
-  .sup-flag-item .sfi-icon { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .sup-flag-item .sfi-icon.issue { background: #fdecea; color: #c0392b; }
-  .sup-flag-item .sfi-icon.pending { background: #fef3c7; color: #b5891a; }
-  .sup-flag-item .sfi-info { flex: 1; min-width: 0; }
-  .sup-flag-item .sfi-name { font-size: 13px; font-weight: 700; color: var(--text-heading); }
-  .sup-flag-item .sfi-sub { font-size: 11.5px; color: var(--text-body-muted); }
-  .sup-flag-item .sfi-status { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 999px; }
-  .sup-flag-item .sfi-status.issue { color: #c0392b; background: #fdecea; }
-  .sup-flag-item .sfi-status.pending { color: #92620a; background: #fef3c7; }
-  .sup-flags-foot { font-size: 11.5px; color: var(--text-body-muted); margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; }
-
   /* Compliance & Documents tab */
   .sup-comp-sidebar { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 18px; }
   .sup-comp-sidebar-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
@@ -4165,7 +4136,7 @@
   .chat-day-divider span { font-size: 11.5px; font-weight: 600; color: var(--text-body-muted); background: var(--surface-soft); padding: 4px 12px; border-radius: 999px; }
   .chat-msg-row { display: flex; margin-bottom: 14px; }
   .chat-msg-row.out { justify-content: flex-end; }
-  .chat-msg-bubble { max-width: 92%; }
+  .chat-msg-bubble { width: 420px; max-width: 92%; }
   .chat-msg-row.out .chat-msg-bubble { text-align: right; }
   .chat-msg-bubble .cmb-text { display: inline-block; background: var(--fill-indigo); color: #fff; padding: 10px 14px; border-radius: 14px 14px 4px 14px; font-size: 13.5px; line-height: 1.4; text-align: left; white-space: pre-wrap; word-break: break-word; }
   .chat-msg-bubble .cmb-meta { font-size: 11px; color: #94a3b8; margin-top: 4px; display: flex; align-items: center; gap: 4px; justify-content: flex-end; }
@@ -11375,8 +11346,10 @@
                 <div class="sinb-chat-col sinb-chat-col-full" id="sinbChatCol">
                   <div class="sinb-chat-header" id="sinbChatHeader"></div>
                   <div class="sinb-chat-thread-wrap">
-                    <div class="sinb-chat-scroll" id="sinbChatScroll"></div>
-                    <button type="button" class="sinb-scroll-bottom-btn" id="sinbScrollBottomBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg><span>Go to bottom</span></button>
+                    <div class="sinb-chat-scroll" id="sinbChatScroll">
+                      <div id="sinbMessagesInner"></div>
+                      <div class="sinb-scroll-anchor"><button type="button" class="sinb-scroll-bottom-btn" id="sinbScrollBottomBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg><span>Go to bottom</span></button></div>
+                    </div>
                   </div>
                   <div class="sinb-composer" id="sinbComposer">
                     <div class="sinb-reply-preview" id="sinbReplyPreview" style="display:none;">
@@ -13625,55 +13598,38 @@
                 </div>
 
                 <div id="supTabChat" style="display:none;">
-                  <div style="display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:stretch;">
-                    <div class="chat-window-card">
-                      <div class="sinb-chat-toolbar">
-                        <button type="button" class="sinb-activity-log-btn" id="supChatActivityLogBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>Activity log</button>
-                      </div>
-                      <div class="sinb-chat-thread-wrap">
-                        <div class="chat-window-thread" id="supChatThreadCard">
+                  <div class="chat-window-card">
+                    <div class="sinb-chat-toolbar">
+                      <button type="button" class="sinb-activity-log-btn" id="supChatActivityLogBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>Activity log</button>
+                    </div>
+                    <div class="sinb-chat-thread-wrap">
+                      <div class="chat-window-thread" id="supChatThreadCard">
+                        <div id="supChatMessagesInner">
                           <div class="chat-day-divider"><span>6 Jul 2026</span></div>
                           <div class="chat-msg-row"><div class="chat-msg-bubble"><div class="cmb-text" style="background:var(--surface-soft);color:var(--text-heading);">£240.02 has been deposited — your deposit payout of £240.02 has been successfully credited to your bank account.</div></div></div>
                           <div class="chat-day-divider" style="margin-top:16px;"><span>8 Jul 2026</span></div>
                           <div class="chat-msg-row"><div class="chat-msg-bubble"><div class="cmb-text" style="background:var(--surface-soft);color:var(--text-heading);">A deposit of £849.98 from your customer has been charged. Keylr Connect is holding the funds until they clear.</div></div></div>
                         </div>
-                        <button type="button" class="sinb-scroll-bottom-btn" id="supChatScrollBottomBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg><span>Go to bottom</span></button>
-                      </div>
-                      <div class="chat-window-input-area">
-                        <div class="sinb-reply-preview" id="supChatReplyPreview" style="display:none;">
-                          <div class="sinb-reply-preview-bar"></div>
-                          <div class="sinb-reply-preview-body"><span class="sinb-reply-preview-label">Replying to</span><span class="sinb-reply-preview-field" id="supChatReplyPreviewField"></span></div>
-                          <button type="button" class="sinb-reply-preview-close" id="supChatReplyPreviewClose"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-                        </div>
-                        <div class="chat-flag-banner" id="supChatFlagBanner" style="display:none;background:#fffbeb;border:1px solid #f5b342;border-radius:10px;padding:10px 14px;margin-bottom:10px;align-items:center;justify-content:space-between;">
-                          <div><div style="font-size:10.5px;font-weight:700;color:#92620a;letter-spacing:0.04em;">FLAGGING</div><div style="font-size:13px;font-weight:700;color:var(--text-heading);" id="supChatFlagText">ID document</div></div>
-                          <span style="cursor:pointer;color:#92620a;" id="supChatFlagClose">&times;</span>
-                        </div>
-                        <div class="chat-input-row">
-                          <button type="button" class="chat-icon-btn" id="supChatAttachBtn" aria-label="Attach file"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button>
-                          <input type="file" id="supChatAttachInput" style="display:none;">
-                          <textarea id="supChatMessageInput" rows="1" placeholder="Reply to Nadia Reid..."></textarea>
-                          <button type="button" class="chat-send-btn" id="supChatSendBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>Send</button>
-                        </div>
-                        <div class="chat-input-hint">Enter to send<span class="dot-sep"></span>Shift + Enter for a new line<span class="dot-sep"></span>PNG, JPEG, WEBP, PDF up to 10 MB.</div>
+                        <div class="sinb-scroll-anchor"><button type="button" class="sinb-scroll-bottom-btn" id="supChatScrollBottomBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg><span>Go to bottom</span></button></div>
                       </div>
                     </div>
-                    <div class="sup-flags-panel" style="height:100%;">
-                      <div class="sup-flags-head">
-                        <div class="sfh-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg></div>
-                        <div><h4>Open compliance flags <span class="sup-flags-count-badge" id="supFlagsCount">4</span></h4><p>Click any flag to start a templated message.</p></div>
+                    <div class="chat-window-input-area">
+                      <div class="sinb-reply-preview" id="supChatReplyPreview" style="display:none;">
+                        <div class="sinb-reply-preview-bar"></div>
+                        <div class="sinb-reply-preview-body"><span class="sinb-reply-preview-label">Replying to</span><span class="sinb-reply-preview-field" id="supChatReplyPreviewField"></span></div>
+                        <button type="button" class="sinb-reply-preview-close" id="supChatReplyPreviewClose"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
                       </div>
-                      <input type="text" class="sup-flags-search" placeholder="Search flags...">
-                      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
-                        <div id="supFlagsTabs" style="display:flex;gap:6px;flex-wrap:wrap;">
-                          <span class="sup-flag-tab-pill active" data-flagfilter="all"><span class="tab-dot" style="background:#94a3b8;"></span>All <span id="supFlagsAllCount">4</span></span>
-                          <span class="sup-flag-tab-pill" data-flagfilter="issue"><span class="tab-dot" style="background:#e8482c;"></span>Issues <span id="supFlagsIssueCount">1</span></span>
-                          <span class="sup-flag-tab-pill" data-flagfilter="pending"><span class="tab-dot" style="background:#f59e0b;"></span>Pending <span id="supFlagsPendingCount">3</span></span>
-                        </div>
-                        <span class="sup-flags-clear-link" id="supFlagsClearBtn" style="margin-left:auto;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>Clear</span>
+                      <div class="chat-flag-banner" id="supChatFlagBanner" style="display:none;background:#fffbeb;border:1px solid #f5b342;border-radius:10px;padding:10px 14px;margin-bottom:10px;align-items:center;justify-content:space-between;">
+                        <div><div style="font-size:10.5px;font-weight:700;color:#92620a;letter-spacing:0.04em;">FLAGGING</div><div style="font-size:13px;font-weight:700;color:var(--text-heading);" id="supChatFlagText">ID document</div></div>
+                        <span style="cursor:pointer;color:#92620a;" id="supChatFlagClose">&times;</span>
                       </div>
-                      <div id="supFlagsList"></div>
-                      <div class="sup-flags-foot"><span>Showing <span id="supFlagsShowing">4</span> of <span id="supFlagsTotal">4</span></span><span id="supFlagsFootRight">1 issue<span class="dot-sep"></span>3 pending</span></div>
+                      <div class="chat-input-row">
+                        <button type="button" class="chat-icon-btn" id="supChatAttachBtn" aria-label="Attach file"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button>
+                        <input type="file" id="supChatAttachInput" style="display:none;">
+                        <textarea id="supChatMessageInput" rows="1" placeholder="Reply to Nadia Reid..."></textarea>
+                        <button type="button" class="chat-send-btn" id="supChatSendBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>Send</button>
+                      </div>
+                      <div class="chat-input-hint">Enter to send<span class="dot-sep"></span>Shift + Enter for a new line<span class="dot-sep"></span>PNG, JPEG, WEBP, PDF up to 10 MB.</div>
                     </div>
                   </div>
                 </div>
@@ -21654,6 +21610,28 @@
     presence: 'Active now', lastActivityLabel: '05/07/2026', unread: 0,
     messages: []
   };
+  var SUP_CHAT_EXTRA_MESSAGES = {}; // keyed by supplier name — admin's own sent messages + replies for suppliers other than the live-synced demo one
+  var SINB_MSG_STORAGE_KEY = 'keylrDemoSinbMessages_v1';
+  var SUP_CHAT_EXTRA_STORAGE_KEY = 'keylrDemoSupChatExtra_v1';
+  // On static hosting (GitHub Pages etc.) there's no backend — the admin and supplier "views" are
+  // really just two separate browser tabs (or a tab plus a page reload), each with its own isolated
+  // JS memory. Without persisting to localStorage (shared across tabs/reloads on the same origin),
+  // a message sent in one tab would only ever exist in that tab's memory and never reach the other.
+  function saveSinbMessages() {
+    try {
+      window.localStorage.setItem(SINB_MSG_STORAGE_KEY, JSON.stringify(SINB_SUPPORT_CONV.messages));
+      window.localStorage.setItem(SUP_CHAT_EXTRA_STORAGE_KEY, JSON.stringify(SUP_CHAT_EXTRA_MESSAGES));
+    } catch (e) { /* storage unavailable — messages still work within this tab's session */ }
+  }
+  function loadSinbMessages() {
+    try {
+      var rawSinb = window.localStorage.getItem(SINB_MSG_STORAGE_KEY);
+      if (rawSinb) SINB_SUPPORT_CONV.messages = JSON.parse(rawSinb);
+      var rawExtra = window.localStorage.getItem(SUP_CHAT_EXTRA_STORAGE_KEY);
+      if (rawExtra) SUP_CHAT_EXTRA_MESSAGES = JSON.parse(rawExtra);
+    } catch (e) { /* ignore malformed or unavailable storage, keep current in-memory state */ }
+  }
+  loadSinbMessages();
 
   function sinbEsc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
   // Ferna is the specific demo supplier this entire admin<->supplier chat sync was built around, so
@@ -21669,40 +21647,19 @@
     var time = ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2);
     return now.getDate() + ' ' + months[now.getMonth()] + ', ' + time;
   }
-  function sinbWireScrollBottomBtn(scrollEl, btnEl, side) {
+  function sinbWireScrollBottomBtn(scrollEl, btnEl) {
     if (!scrollEl || !btnEl) return;
-    function positionBtn() {
-      var rect = scrollEl.getBoundingClientRect();
-      if (side === 'left') {
-        btnEl.style.left = (rect.left + 20) + 'px';
-        btnEl.style.right = 'auto';
-      } else {
-        btnEl.style.right = (window.innerWidth - rect.right + 20) + 'px';
-        btnEl.style.left = 'auto';
-      }
-      btnEl.style.bottom = (window.innerHeight - rect.bottom + 16) + 'px';
-    }
     function updateVisibility() {
       var distanceFromBottom = scrollEl.scrollHeight - scrollEl.scrollTop - scrollEl.clientHeight;
       btnEl.classList.toggle('show', distanceFromBottom > 80);
-      positionBtn();
     }
     if (!btnEl.getAttribute('data-wired')) {
       btnEl.setAttribute('data-wired', '1');
-      // Relocate to a direct child of <body> so this position:fixed button is never nested inside an
-      // ancestor with an active CSS transform (e.g. the panel fade-in animations) — a transformed
-      // ancestor turns position:fixed into "fixed relative to that ancestor" instead of the viewport.
-      document.body.appendChild(btnEl);
       scrollEl.addEventListener('scroll', updateVisibility);
-      window.addEventListener('resize', positionBtn);
       btnEl.addEventListener('click', function () {
         scrollEl.scrollTo({ top: scrollEl.scrollHeight, behavior: 'smooth' });
       });
     }
-    // Always recalculate on every call (not just the first wire) — the container may have been
-    // display:none or mid-transition the first time this ran, which would otherwise permanently
-    // lock the button into wrong (or zeroed, off-screen) coordinates with nothing to correct it.
-    positionBtn();
     updateVisibility();
   }
   function sinbAvatarColor(initials) {
@@ -21724,9 +21681,9 @@
   // other field (even ones the underlying data marks isDocument) falls back to a simple text input.
   var SUP_CR_UPLOAD_FIELD_PATTERNS = [
     /proof of address/i,
-    /public liability|\bpl (insurance|policy)/i,
-    /professional indemnity|\bpi (insurance|policy)/i,
-    /certificate/i // covers per-role trade certificates like Gas Safe, DBS Certificate, etc.
+    /certificate/i // covers PLI/PI certificate documents, per-role trade certificates (e.g. Gas Safe),
+                    // and DBS Certificate — deliberately does NOT match "PL/PI Insurance provider" or
+                    // "PL/PI Policy number" or "...Registration number", none of which say "certificate"
   ];
   function sinbFieldWantsUpload(ch) {
     return SUP_CR_UPLOAD_FIELD_PATTERNS.some(function (re) { return re.test(ch.fieldLabel); });
@@ -21843,10 +21800,12 @@
   }
   function sinbAddEditRequestMessage(batch) {
     SINB_SUPPORT_CONV.messages.push({ kind: 'edit-request', mine: true, batchId: batch.id, time: sinbNowTimestamp() });
+    saveSinbMessages();
     if (typeof sinbRenderChat === 'function') sinbRenderChat();
   }
   function sinbAddEditResponseMessage(text) {
     SINB_SUPPORT_CONV.messages.push({ kind: 'text', mine: false, text: text, time: sinbNowTimestamp() });
+    saveSinbMessages();
     if (typeof sinbRenderChat === 'function') sinbRenderChat();
   }
   function sinbFindBatch(batchId, forName) {
@@ -21867,14 +21826,19 @@
   function sinbStartChatPolling() {
     setInterval(function () {
       var panel = document.getElementById('supSettingsPanelInbox');
-      if (panel && panel.style.display !== 'none' && typeof SINB_SUPPORT_CONV !== 'undefined') {
+      var panelVisible = panel && panel.style.display !== 'none';
+      var adminPanel = document.getElementById('supTabChat');
+      var adminPanelVisible = adminPanel && adminPanel.style.display !== 'none';
+      if (!panelVisible && !adminPanelVisible) return; // nothing open, skip the storage read entirely
+      loadSinbMessages(); // pick up anything written from a different tab since the last tick
+      if (typeof loadChangeRequestsFromStorage === 'function') loadChangeRequestsFromStorage(); // pick up new/updated batches too — a new submission bumps the message count below, but the render itself reads this store directly, so it must be fresh too
+      if (panelVisible && typeof SINB_SUPPORT_CONV !== 'undefined') {
         if (SINB_SUPPORT_CONV.messages.length !== sinbLastMsgCount) {
           sinbLastMsgCount = SINB_SUPPORT_CONV.messages.length;
           if (typeof sinbRenderChat === 'function') sinbRenderChat();
         }
       }
-      var adminPanel = document.getElementById('supTabChat');
-      if (adminPanel && adminPanel.style.display !== 'none' && typeof supDetailCurrentSupplier !== 'undefined' && supDetailCurrentSupplier) {
+      if (adminPanelVisible && typeof supDetailCurrentSupplier !== 'undefined' && supDetailCurrentSupplier) {
         var liveCount = (typeof SINB_SUPPORT_CONV !== 'undefined' && supChatIsLiveSupplier(supDetailCurrentSupplier.name))
           ? SINB_SUPPORT_CONV.messages.length
           : ((SUP_CHAT_EXTRA_MESSAGES[supDetailCurrentSupplier.name] || []).length);
@@ -21888,17 +21852,20 @@
   sinbStartChatPolling();
 
   function sinbRenderChat() {
+    if (typeof loadSinbMessages === 'function') loadSinbMessages();
+    if (typeof loadChangeRequestsFromStorage === 'function') loadChangeRequestsFromStorage();
     var c = sinbGetActiveConv();
     var headerEl = document.getElementById('sinbChatHeader');
     var scrollEl = document.getElementById('sinbChatScroll');
-    if (!headerEl || !scrollEl) return;
+    var innerEl = document.getElementById('sinbMessagesInner');
+    if (!headerEl || !scrollEl || !innerEl) return;
     headerEl.innerHTML =
       '<div class="sinb-conv-avatar" style="background:' + sinbAvatarColor(c.initials) + ';color:#1e40af;">' + c.initials + (c.presence ? '<span class="presence-dot"></span>' : '') + '</div>' +
       '<div style="min-width:0;">' +
         '<div class="sinb-chat-header-name-row"><h3>' + sinbEsc(c.name) + '</h3></div>' +
         '<div class="sinb-chat-header-sub">' + (c.presence ? '<span class="online">' + c.presence + '</span>' : 'Last active ' + c.lastActivityLabel) + '</div>' +
       '</div>';
-    scrollEl.innerHTML = c.messages.length ? c.messages.map(function (m) {
+    innerEl.innerHTML = c.messages.length ? c.messages.map(function (m) {
       if (m.kind === 'date') return '<div class="sinb-date-sep"><span>' + m.label + '</span></div>';
       if (m.kind === 'system') return '<div class="sinb-msg-row system"><div class="sinb-system-card"><div class="sinb-system-card-inner' + (m.warn ? ' warn' : '') + '"><div class="sinb-system-card-title">' + sinbEsc(m.title) + '</div><div class="sinb-system-card-body">' + sinbEsc(m.body) + '</div></div><div class="sinb-system-card-time">' + m.time + '</div></div></div>';
       if (m.kind === 'attachment') return '<div class="sinb-msg-row' + (m.mine ? ' mine' : '') + '"><div class="sinb-msg-stack">' + supChatQuoteBlockHtml(m) + '<div class="sinb-msg-bubble sinb-attachment-bubble"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (m.isImage ? '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>' : '<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/>') + '</svg><span>' + sinbEsc(m.fileName) + '</span></div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
@@ -21913,7 +21880,7 @@
       return '<div class="sinb-msg-row' + (m.mine ? ' mine' : '') + '"><div class="sinb-msg-stack">' + supChatQuoteBlockHtml(m) + '<div class="sinb-msg-bubble">' + sinbEsc(m.text) + '</div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
     }).join('') : '<div class="sinb-empty-chat">Send a message to start the conversation with Keylr Support.</div>';
     scrollEl.scrollTop = scrollEl.scrollHeight;
-    sinbWireScrollBottomBtn(scrollEl, document.getElementById('sinbScrollBottomBtn'), 'left');
+    sinbWireScrollBottomBtn(scrollEl, document.getElementById('sinbScrollBottomBtn'));
 
     scrollEl.querySelectorAll('[data-field-toggle]').forEach(function (row) {
       row.querySelectorAll('.sinb-field-toggle-btn').forEach(function (tbtn) {
@@ -22020,6 +21987,15 @@
         if (typeof logSupChatActivity === 'function') {
           logSupChatActivity(SUP_OWN_DEMO_NAME, { type: 'resubmitted', actor: SUP_OWN_DEMO_NAME, action: 'resubmitted', fieldLabel: change.fieldLabel, oldValue: previousValue, newValue: newVal });
         }
+        // Notify admin with a message tagged to this exact field, so it's clear which one was
+        // resubmitted without them having to scroll back through the whole request card.
+        SINB_SUPPORT_CONV.messages.push({
+          kind: 'text', mine: true,
+          text: 'I\u2019ve resubmitted \u201c' + change.fieldLabel + '\u201d \u2014 new value: ' + newVal,
+          replyToChangeId: change.id, replyToFieldLabel: change.fieldLabel,
+          time: sinbNowTimestamp()
+        });
+        saveSinbMessages();
         sinbRenderChat();
         showToast(change.fieldLabel + ' resubmitted for review.');
       });
@@ -22053,11 +22029,14 @@
     if (typeof seedChangeRequestsIfNeeded === 'function') seedChangeRequestsIfNeeded({ name: SUP_OWN_DEMO_NAME });
     var existingBatches = (supplierChangeRequests && supplierChangeRequests[SUP_OWN_DEMO_NAME]) || [];
     var alreadyMessaged = SINB_SUPPORT_CONV.messages.filter(function (m) { return m.kind === 'edit-request'; }).map(function (m) { return m.batchId; });
+    var seededAny = false;
     existingBatches.forEach(function (batch) {
       if (alreadyMessaged.indexOf(batch.id) === -1) {
         SINB_SUPPORT_CONV.messages.push({ kind: 'edit-request', mine: true, batchId: batch.id, time: '00:00' });
+        seededAny = true;
       }
     });
+    if (seededAny) saveSinbMessages();
     sinbRenderChat();
 
     document.getElementById('sinbReplyPreviewClose').addEventListener('click', function () {
@@ -22081,6 +22060,7 @@
       document.getElementById('sinbReplyPreview').style.display = 'none';
       msgInput.value = '';
       updateSendState();
+      saveSinbMessages();
       sinbRenderChat();
     }
     sendBtn.addEventListener('click', sendMessage);
@@ -22130,6 +22110,7 @@
       sinbReplyingTo = null;
       document.getElementById('sinbReplyPreview').style.display = 'none';
       attachInput.value = '';
+      saveSinbMessages();
       sinbRenderChat();
       showToast(file.name + ' attached.');
     });
@@ -23328,10 +23309,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (editBtn) editBtn.style.display = (key === 'profile' || key === 'sectors' || key === 'insurance' || key === 'payment') ? '' : 'none';
     if (key === 'requests' && typeof renderSupOwnRequestsList === 'function') renderSupOwnRequestsList(highlightBatchId);
     if (key === 'inbox' && typeof initSupInboxOnce === 'function') initSupInboxOnce();
-    if (key !== 'inbox') {
-      var sinbBtn = document.getElementById('sinbScrollBottomBtn');
-      if (sinbBtn) sinbBtn.classList.remove('show');
-    }
   }
   document.querySelectorAll('#supSettingsTabs .pm-settings-tab-item').forEach(function (tab) {
     tab.addEventListener('click', function () { switchSupSettingsTab(tab.getAttribute('data-supsettingstab')); });
@@ -26823,7 +26800,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   var supDetailCurrentSupplier = null;
   var supDocsFilterTab = 'all';
   var supDocsSelected = {};
-  var supFlagsFilterTab = 'all';
 
   /* ---- Admin Notes (internal only, never visible to the supplier) ---- */
   var CURRENT_ADMIN_USER = { name: 'You', role: 'Admin', initials: 'YO' };
@@ -27643,15 +27619,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var ringFill = document.getElementById('supComplianceRingFill');
     ringFill.style.stroke = ringColor;
     ringFill.setAttribute('stroke-dashoffset', offset);
-
-    var flagItems = flattenChecklist(supDetailChecklist).filter(function (i) { return i.status === 'pending' || i.status === 'issue'; });
-    document.getElementById('supFlagsCount').textContent = flagItems.length;
-    document.getElementById('supFlagsAllCount').textContent = flagItems.length;
-    document.getElementById('supFlagsIssueCount').textContent = stats.issues;
-    document.getElementById('supFlagsPendingCount').textContent = stats.pending;
-    document.getElementById('supFlagsShowing').textContent = flagItems.length;
-    document.getElementById('supFlagsTotal').textContent = flagItems.length;
-    document.getElementById('supFlagsFootRight').innerHTML = stats.issues + (stats.issues === 1 ? ' issue' : ' issues') + '<span class="dot-sep"></span>' + stats.pending + ' pending';
   }
 
   function checklistIconHtml(status) {
@@ -27745,7 +27712,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         else if (action === 'resubmit') { showToast('Resubmission requested for ' + item.name + '.'); }
         renderComplianceSummary();
         renderChecklistGroups();
-        renderFlagsList();
       });
     });
   }
@@ -27925,64 +27891,12 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         if (!SUP_CHAT_EXTRA_MESSAGES[name]) SUP_CHAT_EXTRA_MESSAGES[name] = [];
         SUP_CHAT_EXTRA_MESSAGES[name].push({ kind: 'text', fromAdmin: true, text: text, time: sinbNowTimestamp() });
       }
+      saveSinbMessages();
     }
     showToast('Documents sent to ' + supDetailCurrentSupplier.name + '.');
     switchSupTab('chat');
   });
 
-  function renderFlagsList() {
-    var flat = flattenChecklist(supDetailChecklist).filter(function (i) { return i.status === 'pending' || i.status === 'issue'; });
-    var filtered = flat.filter(function (i) { return supFlagsFilterTab === 'all' || i.status === supFlagsFilterTab; });
-    var byCategory = {};
-    var order = [];
-    supDetailChecklist.forEach(function (group) {
-      group.items.forEach(function (item) {
-        if (filtered.indexOf(item) !== -1) {
-          if (!byCategory[group.category]) { byCategory[group.category] = []; order.push(group.category); }
-          byCategory[group.category].push(item);
-        }
-      });
-    });
-    var html = '';
-    order.forEach(function (cat) {
-      html += '<div class="sup-flags-cat-label">' + cat.toUpperCase() + '<span class="dot-sep"></span>' + byCategory[cat].length + '</div>';
-      byCategory[cat].forEach(function (item) {
-        var iconClass = item.status === 'issue' ? 'issue' : 'pending';
-        var statusLabel = item.status === 'issue' ? 'Failed' : 'Pending';
-        html += '<div class="sup-flag-item" data-flag-id="' + item.id + '">' +
-          '<div class="sfi-icon ' + iconClass + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg></div>' +
-          '<div class="sfi-info"><div class="sfi-name">' + item.name + '</div><div class="sfi-sub">' + supDetailCurrentSupplier.name + '</div></div>' +
-          '<span class="sfi-status ' + iconClass + '">' + statusLabel + '</span>' +
-        '</div>';
-      });
-    });
-    document.getElementById('supFlagsList').innerHTML = html || '<div style="font-size:12.5px;color:var(--text-body-muted);padding:12px 0;">No open flags.</div>';
-    document.querySelectorAll('.sup-flag-item').forEach(function (el) {
-      el.addEventListener('click', function () {
-        var item = findCheckItem(el.getAttribute('data-flag-id'));
-        if (!item) return;
-        document.getElementById('supChatFlagText').textContent = item.name;
-        document.getElementById('supChatFlagBanner').style.display = 'flex';
-        document.getElementById('supChatMessageInput').value = 'Please re-upload ' + item.name.toLowerCase() + ' (' + supDetailCurrentSupplier.name + ') \u2014 the current submission needs another look.';
-        switchSupTab('chat');
-        document.getElementById('supChatMessageInput').focus();
-      });
-    });
-  }
-  document.querySelectorAll('#supFlagsTabs .sup-flag-tab-pill').forEach(function (pill) {
-    pill.addEventListener('click', function () {
-      document.querySelectorAll('#supFlagsTabs .sup-flag-tab-pill').forEach(function (p) { p.classList.remove('active'); });
-      pill.classList.add('active');
-      supFlagsFilterTab = pill.getAttribute('data-flagfilter');
-      renderFlagsList();
-    });
-  });
-  document.getElementById('supFlagsClearBtn').addEventListener('click', function () {
-    document.querySelectorAll('#supFlagsTabs .sup-flag-tab-pill').forEach(function (p, i) { p.classList.toggle('active', i === 0); });
-    supFlagsFilterTab = 'all';
-    document.querySelector('.sup-flags-search').value = '';
-    renderFlagsList();
-  });
   document.getElementById('supChatFlagClose').addEventListener('click', function () { document.getElementById('supChatFlagBanner').style.display = 'none'; });
 
   document.getElementById('supChatSendBtn').addEventListener('click', function () {
@@ -28006,6 +27920,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     input.value = '';
     input.style.height = 'auto';
     document.getElementById('supChatFlagBanner').style.display = 'none';
+    saveSinbMessages();
     renderSupChatThread();
   });
   document.getElementById('supChatReplyPreviewClose').addEventListener('click', function () {
@@ -28033,6 +27948,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     supChatReplyingTo = null;
     document.getElementById('supChatReplyPreview').style.display = 'none';
     this.value = '';
+    saveSinbMessages();
     renderSupChatThread();
     showToast(file.name + ' attached.');
   });
@@ -29293,7 +29209,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (supAppCurrentPage < totalPages) { supAppCurrentPage++; renderSupAppList(); }
   });
 
-  var SUP_CHAT_EXTRA_MESSAGES = {}; // keyed by supplier name — admin's own sent messages + replies, since renderSupChatThread rebuilds from scratch each time and needs somewhere persistent to read them back from
   var SUP_CHAT_ACTIVITY_LOG = {}; // keyed by supplier name — full audit trail of every action taken on that supplier's requests
   function logSupChatActivity(name, entry) {
     if (!SUP_CHAT_ACTIVITY_LOG[name]) SUP_CHAT_ACTIVITY_LOG[name] = [];
@@ -29326,12 +29241,14 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   }
   function renderSupChatThread() {
     var threadEl = document.getElementById('supChatThreadCard');
-    if (!threadEl || !supDetailCurrentSupplier) return;
+    var innerEl = document.getElementById('supChatMessagesInner');
+    if (!threadEl || !innerEl || !supDetailCurrentSupplier) return;
     var name = supDetailCurrentSupplier.name;
+    if (typeof loadChangeRequestsFromStorage === 'function') loadChangeRequestsFromStorage();
     if (typeof seedChangeRequestsIfNeeded === 'function') seedChangeRequestsIfNeeded(supDetailCurrentSupplier);
     var batches = supplierChangeRequests[name] || [];
     var editRequestHtml = batches.map(function (batch) {
-      return '<div class="chat-msg-row" data-batch-anchor="' + batch.id + '"><div class="chat-msg-bubble" style="max-width:420px;">' + sinbEditRequestCardHtml(batch, true) + '</div></div>';
+      return '<div class="chat-msg-row" data-batch-anchor="' + batch.id + '"><div class="chat-msg-bubble">' + sinbEditRequestCardHtml(batch, true) + '</div></div>';
     }).join('');
     // Ferna (SUP_OWN_DEMO_NAME) has a live two-way session, so admin reads from the exact same
     // store the supplier's own Inbox writes to — one shared conversation, not two parallel copies.
@@ -29348,13 +29265,13 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       }
       return '<div class="chat-msg-row' + (m.fromAdmin ? '' : ' theirs') + '"><div class="chat-msg-bubble">' + supChatQuoteBlockHtml(m) + '<div class="cmb-text">' + sinbEsc(m.text) + '</div><div class="cmb-meta">' + (m.fromAdmin ? 'You' : sinbEsc(name)) + '<span class="dot-sep"></span>' + m.time + '</div></div></div>';
     }).join('');
-    threadEl.innerHTML =
+    innerEl.innerHTML =
       '<div class="chat-day-divider"><span>6 Jul 2026</span></div>' +
       '<div class="chat-msg-row"><div class="chat-msg-bubble"><div class="cmb-text" style="background:var(--surface-soft);color:var(--text-heading);">\u00a3240.02 has been deposited \u2014 your deposit payout of \u00a3240.02 has been successfully credited to your bank account.</div></div></div>' +
       (editRequestHtml ? '<div class="chat-day-divider" style="margin-top:16px;"><span>Today</span></div>' + editRequestHtml : '') +
       extraHtml;
     threadEl.scrollTop = threadEl.scrollHeight;
-    sinbWireScrollBottomBtn(threadEl, document.getElementById('supChatScrollBottomBtn'), 'right');
+    sinbWireScrollBottomBtn(threadEl, document.getElementById('supChatScrollBottomBtn'));
     threadEl.querySelectorAll('[data-cr-action]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var action = btn.getAttribute('data-cr-action');
@@ -29376,6 +29293,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         if (supChatIsLiveSupplier(name)) {
           if (action === 'resubmit' && typeof SINB_SUPPORT_CONV !== 'undefined') {
             SINB_SUPPORT_CONV.messages.push({ kind: 'jump-notification', changeId: change.id, fieldLabel: change.fieldLabel, time: sinbNowTimestamp() });
+            saveSinbMessages();
             if (typeof sinbRenderChat === 'function') sinbRenderChat();
           } else if (action === 'approve' && typeof sinbAddEditResponseMessage === 'function') {
             sinbAddEditResponseMessage('\u201c' + change.fieldLabel + '\u201d was approved \u2014 your profile has been updated.');
@@ -29454,10 +29372,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     document.getElementById('supStickyBar').style.display = (key === 'requests' || key === 'chat') ? 'none' : '';
     if (key === 'requests') renderSupRequestsList();
     if (key === 'chat') renderSupChatThread();
-    if (key !== 'chat') {
-      var supChatBtn = document.getElementById('supChatScrollBottomBtn');
-      if (supChatBtn) supChatBtn.classList.remove('show');
-    }
   }
   document.querySelectorAll('.sup-tabs-row .sup-tab-item').forEach(function (tab) {
     tab.addEventListener('click', function () { switchSupTab(tab.getAttribute('data-suptab')); });
@@ -29707,11 +29621,10 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     document.getElementById('supTrustIdSentPill').style.display = 'none';
     document.getElementById('supTrustIdExpiryText').style.display = 'none';
     document.getElementById('supResendLinkBtn').textContent = 'Send Link';
-    supDetailChecklistTab = 'all'; supDetailMethodTab = 'all'; supDetailSearchTerm = ''; supFlagsFilterTab = 'all';
+    supDetailChecklistTab = 'all'; supDetailMethodTab = 'all'; supDetailSearchTerm = '';
     document.getElementById('supChecklistSearch').value = '';
     document.querySelectorAll('#supChecklistTabs .sup-check-tab-pill').forEach(function (p, i) { p.classList.toggle('active', i === 0); });
     document.querySelectorAll('#supMethodTabs button').forEach(function (p, i) { p.classList.toggle('active', i === 0); });
-    document.querySelectorAll('#supFlagsTabs .sup-flag-tab-pill').forEach(function (p, i) { p.classList.toggle('active', i === 0); });
 
     var MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     var appliedText = c.joined || (c.dateSubmitted ? c.dateSubmitted.getDate() + ' ' + MONTH_NAMES[c.dateSubmitted.getMonth()] + ' ' + c.dateSubmitted.getFullYear() : 'Not submitted yet');
@@ -29784,7 +29697,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     renderSupDocChips();
     renderChecklistGroups();
     renderComplianceSummary();
-    renderFlagsList();
     switchSupTab('overview');
     showAdminView('supplier-detail');
   }
