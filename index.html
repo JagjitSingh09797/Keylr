@@ -2437,7 +2437,8 @@
   .sinb-chat-scroll { flex: 1; overflow-y: auto; padding: 22px 28px; background: #fbfcfe; }
   .sinb-chat-thread-wrap { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; }
   .sinb-chat-thread-wrap .sinb-chat-scroll, .sinb-chat-thread-wrap .chat-window-thread { flex: 1; min-height: 0; }
-  .sinb-scroll-bottom-btn { position: fixed; width: 36px; height: 36px; border-radius: 50%; background: #fff; border: 1px solid var(--border-subtle); box-shadow: 0 4px 14px rgba(16,24,40,0.14); color: var(--text-body-muted); display: none; align-items: center; justify-content: center; cursor: pointer; transition: transform 130ms ease-out, color 130ms ease-out; z-index: 40; }
+  .sinb-scroll-bottom-btn { position: fixed; height: 36px; padding: 0 16px 0 14px; border-radius: 999px; background: #fff; border: 1px solid var(--border-subtle); box-shadow: 0 4px 14px rgba(16,24,40,0.14); color: var(--text-body-muted); display: none; align-items: center; gap: 7px; cursor: pointer; transition: transform 130ms ease-out, color 130ms ease-out; z-index: 9999; white-space: nowrap; }
+  .sinb-scroll-bottom-btn span { font-size: 12.5px; font-weight: 700; }
   .sinb-scroll-bottom-btn.show { display: flex; }
   .sinb-scroll-bottom-btn:hover { color: var(--accent-blue); transform: translateY(-2px); }
   .sinb-chat-toolbar { display: flex; justify-content: flex-end; padding: 10px 14px 0; }
@@ -11375,7 +11376,7 @@
                   <div class="sinb-chat-header" id="sinbChatHeader"></div>
                   <div class="sinb-chat-thread-wrap">
                     <div class="sinb-chat-scroll" id="sinbChatScroll"></div>
-                    <button type="button" class="sinb-scroll-bottom-btn" id="sinbScrollBottomBtn" data-tooltip="Jump to latest"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
+                    <button type="button" class="sinb-scroll-bottom-btn" id="sinbScrollBottomBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg><span>Go to bottom</span></button>
                   </div>
                   <div class="sinb-composer" id="sinbComposer">
                     <div class="sinb-reply-preview" id="sinbReplyPreview" style="display:none;">
@@ -13636,7 +13637,7 @@
                           <div class="chat-day-divider" style="margin-top:16px;"><span>8 Jul 2026</span></div>
                           <div class="chat-msg-row"><div class="chat-msg-bubble"><div class="cmb-text" style="background:var(--surface-soft);color:var(--text-heading);">A deposit of £849.98 from your customer has been charged. Keylr Connect is holding the funds until they clear.</div></div></div>
                         </div>
-                        <button type="button" class="sinb-scroll-bottom-btn" id="supChatScrollBottomBtn" data-tooltip="Jump to latest"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
+                        <button type="button" class="sinb-scroll-bottom-btn" id="supChatScrollBottomBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg><span>Go to bottom</span></button>
                       </div>
                       <div class="chat-window-input-area">
                         <div class="sinb-reply-preview" id="supChatReplyPreview" style="display:none;">
@@ -21010,7 +21011,7 @@
   function showSupplierDashboard(signupData, mode) {
     closeAnyLeakedGlobalModals();
     signupData = signupData || {};
-    var fullName = signupData.fullName || signupData.companyFullName || signupData.companyRegName || 'Fern Whitfield';
+    var fullName = signupData.fullName || signupData.companyFullName || signupData.companyRegName || 'Ferna';
     var firstName = fullName.trim().split(/\s+/)[0];
     var email = signupData.email || signupData.companyEmail || 'fern@gmail.com';
     // Each supplier's own requests are keyed by name in the shared store — this must track
@@ -21655,31 +21656,52 @@
   };
 
   function sinbEsc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  // Ferna is the specific demo supplier this entire admin<->supplier chat sync was built around, so
+  // this check has a hard fallback to her name directly, not just SUP_OWN_DEMO_NAME — that variable
+  // gets reassigned to whoever's signup data reaches showSupplierDashboard(), and if that path ever
+  // supplies a different name than expected, the sync would otherwise silently break with no error.
+  function supChatIsLiveSupplier(name) {
+    return (name === SUP_OWN_DEMO_NAME || name === 'Ferna') && typeof SINB_SUPPORT_CONV !== 'undefined';
+  }
   function sinbNowTimestamp() {
     var now = new Date();
     var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     var time = ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2);
     return now.getDate() + ' ' + months[now.getMonth()] + ', ' + time;
   }
-  function sinbWireScrollBottomBtn(scrollEl, btnEl) {
-    if (!scrollEl || !btnEl || btnEl.getAttribute('data-wired')) return;
-    btnEl.setAttribute('data-wired', '1');
+  function sinbWireScrollBottomBtn(scrollEl, btnEl, side) {
+    if (!scrollEl || !btnEl) return;
     function positionBtn() {
       var rect = scrollEl.getBoundingClientRect();
-      btnEl.style.right = (window.innerWidth - rect.right + 20) + 'px';
+      if (side === 'left') {
+        btnEl.style.left = (rect.left + 20) + 'px';
+        btnEl.style.right = 'auto';
+      } else {
+        btnEl.style.right = (window.innerWidth - rect.right + 20) + 'px';
+        btnEl.style.left = 'auto';
+      }
       btnEl.style.bottom = (window.innerHeight - rect.bottom + 16) + 'px';
     }
     function updateVisibility() {
       var distanceFromBottom = scrollEl.scrollHeight - scrollEl.scrollTop - scrollEl.clientHeight;
-      var shouldShow = distanceFromBottom > 120;
-      btnEl.classList.toggle('show', shouldShow);
-      if (shouldShow) positionBtn();
+      btnEl.classList.toggle('show', distanceFromBottom > 80);
+      positionBtn();
     }
-    scrollEl.addEventListener('scroll', updateVisibility);
-    window.addEventListener('resize', positionBtn);
-    btnEl.addEventListener('click', function () {
-      scrollEl.scrollTo({ top: scrollEl.scrollHeight, behavior: 'smooth' });
-    });
+    if (!btnEl.getAttribute('data-wired')) {
+      btnEl.setAttribute('data-wired', '1');
+      // Relocate to a direct child of <body> so this position:fixed button is never nested inside an
+      // ancestor with an active CSS transform (e.g. the panel fade-in animations) — a transformed
+      // ancestor turns position:fixed into "fixed relative to that ancestor" instead of the viewport.
+      document.body.appendChild(btnEl);
+      scrollEl.addEventListener('scroll', updateVisibility);
+      window.addEventListener('resize', positionBtn);
+      btnEl.addEventListener('click', function () {
+        scrollEl.scrollTo({ top: scrollEl.scrollHeight, behavior: 'smooth' });
+      });
+    }
+    // Always recalculate on every call (not just the first wire) — the container may have been
+    // display:none or mid-transition the first time this ran, which would otherwise permanently
+    // lock the button into wrong (or zeroed, off-screen) coordinates with nothing to correct it.
     positionBtn();
     updateVisibility();
   }
@@ -21827,17 +21849,43 @@
     SINB_SUPPORT_CONV.messages.push({ kind: 'text', mine: false, text: text, time: sinbNowTimestamp() });
     if (typeof sinbRenderChat === 'function') sinbRenderChat();
   }
-  function sinbFindBatch(batchId) {
-    var batches = (supplierChangeRequests && supplierChangeRequests[SUP_OWN_DEMO_NAME]) || [];
+  function sinbFindBatch(batchId, forName) {
+    var key = forName || SUP_OWN_DEMO_NAME;
+    var batches = (supplierChangeRequests && supplierChangeRequests[key]) || [];
     for (var i = 0; i < batches.length; i++) { if (batches[i].id === batchId) return batches[i]; }
     return null;
   }
-  function sinbFindChange(batchId, changeId) {
-    var batch = sinbFindBatch(batchId);
+  function sinbFindChange(batchId, changeId, forName) {
+    var batch = sinbFindBatch(batchId, forName);
     if (!batch) return null;
     for (var i = 0; i < batch.changes.length; i++) { if (batch.changes[i].id === changeId) return batch.changes[i]; }
     return null;
   }
+
+  var sinbLastMsgCount = -1;
+  var supChatLastMsgCount = -1;
+  function sinbStartChatPolling() {
+    setInterval(function () {
+      var panel = document.getElementById('supSettingsPanelInbox');
+      if (panel && panel.style.display !== 'none' && typeof SINB_SUPPORT_CONV !== 'undefined') {
+        if (SINB_SUPPORT_CONV.messages.length !== sinbLastMsgCount) {
+          sinbLastMsgCount = SINB_SUPPORT_CONV.messages.length;
+          if (typeof sinbRenderChat === 'function') sinbRenderChat();
+        }
+      }
+      var adminPanel = document.getElementById('supTabChat');
+      if (adminPanel && adminPanel.style.display !== 'none' && typeof supDetailCurrentSupplier !== 'undefined' && supDetailCurrentSupplier) {
+        var liveCount = (typeof SINB_SUPPORT_CONV !== 'undefined' && supChatIsLiveSupplier(supDetailCurrentSupplier.name))
+          ? SINB_SUPPORT_CONV.messages.length
+          : ((SUP_CHAT_EXTRA_MESSAGES[supDetailCurrentSupplier.name] || []).length);
+        if (liveCount !== supChatLastMsgCount) {
+          supChatLastMsgCount = liveCount;
+          if (typeof renderSupChatThread === 'function') renderSupChatThread();
+        }
+      }
+    }, 1500);
+  }
+  sinbStartChatPolling();
 
   function sinbRenderChat() {
     var c = sinbGetActiveConv();
@@ -21865,6 +21913,7 @@
       return '<div class="sinb-msg-row' + (m.mine ? ' mine' : '') + '"><div class="sinb-msg-stack">' + supChatQuoteBlockHtml(m) + '<div class="sinb-msg-bubble">' + sinbEsc(m.text) + '</div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
     }).join('') : '<div class="sinb-empty-chat">Send a message to start the conversation with Keylr Support.</div>';
     scrollEl.scrollTop = scrollEl.scrollHeight;
+    sinbWireScrollBottomBtn(scrollEl, document.getElementById('sinbScrollBottomBtn'), 'left');
 
     scrollEl.querySelectorAll('[data-field-toggle]').forEach(function (row) {
       row.querySelectorAll('.sinb-field-toggle-btn').forEach(function (tbtn) {
@@ -22010,7 +22059,6 @@
       }
     });
     sinbRenderChat();
-    sinbWireScrollBottomBtn(document.getElementById('sinbChatScroll'), document.getElementById('sinbScrollBottomBtn'));
 
     document.getElementById('sinbReplyPreviewClose').addEventListener('click', function () {
       sinbReplyingTo = null;
@@ -23280,6 +23328,10 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (editBtn) editBtn.style.display = (key === 'profile' || key === 'sectors' || key === 'insurance' || key === 'payment') ? '' : 'none';
     if (key === 'requests' && typeof renderSupOwnRequestsList === 'function') renderSupOwnRequestsList(highlightBatchId);
     if (key === 'inbox' && typeof initSupInboxOnce === 'function') initSupInboxOnce();
+    if (key !== 'inbox') {
+      var sinbBtn = document.getElementById('sinbScrollBottomBtn');
+      if (sinbBtn) sinbBtn.classList.remove('show');
+    }
   }
   document.querySelectorAll('#supSettingsTabs .pm-settings-tab-item').forEach(function (tab) {
     tab.addEventListener('click', function () { switchSupSettingsTab(tab.getAttribute('data-supsettingstab')); });
@@ -27867,7 +27919,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     document.getElementById('supDocsOverlay').classList.remove('open');
     if (text && supDetailCurrentSupplier) {
       var name = supDetailCurrentSupplier.name;
-      if (name === SUP_OWN_DEMO_NAME && typeof SINB_SUPPORT_CONV !== 'undefined') {
+      if (supChatIsLiveSupplier(name)) {
         SINB_SUPPORT_CONV.messages.push({ kind: 'text', mine: false, text: text, time: sinbNowTimestamp() });
       } else {
         if (!SUP_CHAT_EXTRA_MESSAGES[name]) SUP_CHAT_EXTRA_MESSAGES[name] = [];
@@ -27938,7 +27990,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var text = input.value.trim();
     if (!text || !supDetailCurrentSupplier) return;
     var name = supDetailCurrentSupplier.name;
-    var isLiveSupplier = name === SUP_OWN_DEMO_NAME && typeof SINB_SUPPORT_CONV !== 'undefined';
+    var isLiveSupplier = supChatIsLiveSupplier(name);
     if (isLiveSupplier) {
       var liveMsg = { kind: 'text', mine: false, text: text, time: sinbNowTimestamp() };
       if (supChatReplyingTo) { liveMsg.replyToChangeId = supChatReplyingTo.changeId; liveMsg.replyToFieldLabel = supChatReplyingTo.fieldLabel; }
@@ -27967,7 +28019,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var file = this.files && this.files[0];
     if (!file || !supDetailCurrentSupplier) return;
     var name = supDetailCurrentSupplier.name;
-    var isLiveSupplier = name === SUP_OWN_DEMO_NAME && typeof SINB_SUPPORT_CONV !== 'undefined';
+    var isLiveSupplier = supChatIsLiveSupplier(name);
     if (isLiveSupplier) {
       var liveMsg = { kind: 'attachment', mine: false, fileName: file.name, time: sinbNowTimestamp() };
       if (supChatReplyingTo) { liveMsg.replyToChangeId = supChatReplyingTo.changeId; liveMsg.replyToFieldLabel = supChatReplyingTo.fieldLabel; }
@@ -29284,7 +29336,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     // Ferna (SUP_OWN_DEMO_NAME) has a live two-way session, so admin reads from the exact same
     // store the supplier's own Inbox writes to — one shared conversation, not two parallel copies.
     // Other suppliers have no live session to reflect into, so they keep their own admin-side log.
-    var isLiveSupplier = name === SUP_OWN_DEMO_NAME && typeof SINB_SUPPORT_CONV !== 'undefined';
+    var isLiveSupplier = supChatIsLiveSupplier(name);
     var extraMsgs = isLiveSupplier
       ? SINB_SUPPORT_CONV.messages.filter(function (m) { return m.kind === 'text' || m.kind === 'attachment'; }).map(function (m) {
           return { kind: m.kind, fromAdmin: !m.mine, text: m.text, fileName: m.fileName, time: m.time, replyToChangeId: m.replyToChangeId, replyToFieldLabel: m.replyToFieldLabel };
@@ -29302,13 +29354,13 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       (editRequestHtml ? '<div class="chat-day-divider" style="margin-top:16px;"><span>Today</span></div>' + editRequestHtml : '') +
       extraHtml;
     threadEl.scrollTop = threadEl.scrollHeight;
-    sinbWireScrollBottomBtn(threadEl, document.getElementById('supChatScrollBottomBtn'));
+    sinbWireScrollBottomBtn(threadEl, document.getElementById('supChatScrollBottomBtn'), 'right');
     threadEl.querySelectorAll('[data-cr-action]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var action = btn.getAttribute('data-cr-action');
         var batchId = btn.getAttribute('data-batch-id');
         var changeId = btn.getAttribute('data-change-id');
-        var change = sinbFindChange(batchId, changeId);
+        var change = sinbFindChange(batchId, changeId, name);
         if (!change) return;
         change.status = action === 'approve' ? 'approved' : action === 'decline' ? 'declined' : 'resubmit';
         if (action === 'approve' && typeof sinbApplyApprovedChange === 'function') sinbApplyApprovedChange(change);
@@ -29321,19 +29373,46 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
           oldValue: change.oldValue,
           newValue: change.newValue
         });
-        if (name === SUP_OWN_DEMO_NAME) {
+        if (supChatIsLiveSupplier(name)) {
           if (action === 'resubmit' && typeof SINB_SUPPORT_CONV !== 'undefined') {
             SINB_SUPPORT_CONV.messages.push({ kind: 'jump-notification', changeId: change.id, fieldLabel: change.fieldLabel, time: sinbNowTimestamp() });
             if (typeof sinbRenderChat === 'function') sinbRenderChat();
-          } else if (typeof sinbAddEditResponseMessage === 'function') {
-            var responseText = action === 'approve'
-              ? '\u201c' + change.fieldLabel + '\u201d was approved \u2014 your profile has been updated.'
-              : '\u201c' + change.fieldLabel + '\u201d was declined. Please contact support if you have questions.';
-            sinbAddEditResponseMessage(responseText);
+          } else if (action === 'approve' && typeof sinbAddEditResponseMessage === 'function') {
+            sinbAddEditResponseMessage('\u201c' + change.fieldLabel + '\u201d was approved \u2014 your profile has been updated.');
+          } else if (action === 'decline' && typeof sinbAddEditResponseMessage === 'function') {
+            // Always send a baseline notification immediately, so the supplier is guaranteed to see
+            // *something* the moment the field is declined, even if the admin never follows up with
+            // a custom reason via the composer below.
+            sinbAddEditResponseMessage('\u201c' + change.fieldLabel + '\u201d was declined.');
+          }
+        }
+        if (action === 'decline' || action === 'resubmit') {
+          // Additionally, let the admin write a more detailed reason — pre-fill the composer with a
+          // starter template and set the reply context to this field. This is optional context on
+          // top of the guaranteed notification above, not a replacement for it.
+          supChatReplyingTo = { changeId: change.id, fieldLabel: change.fieldLabel };
+          var replyPreviewField = document.getElementById('supChatReplyPreviewField');
+          if (replyPreviewField) replyPreviewField.textContent = change.fieldLabel;
+          var replyPreview = document.getElementById('supChatReplyPreview');
+          if (replyPreview) replyPreview.style.display = 'flex';
+          var msgInput = document.getElementById('supChatMessageInput');
+          if (msgInput) {
+            msgInput.value = action === 'decline'
+              ? 'Declining \u201c' + change.fieldLabel + '\u201d because '
+              : 'Please resubmit \u201c' + change.fieldLabel + '\u201d \u2014 ';
+            msgInput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            msgInput.focus();
+            msgInput.setSelectionRange(msgInput.value.length, msgInput.value.length);
+            msgInput.style.height = 'auto';
+            msgInput.style.height = Math.min(msgInput.scrollHeight, 120) + 'px';
           }
         }
         renderSupChatThread();
-        showToast('Response sent to ' + name + '.');
+        if (action === 'decline' || action === 'resubmit') {
+          showToast(change.fieldLabel + ' updated \u2014 add your reason below and hit Send to notify ' + name + '.');
+        } else {
+          showToast('Response sent to ' + name + '.');
+        }
       });
     });
     threadEl.querySelectorAll('[data-field-reply-btn]').forEach(function (btn) {
@@ -29375,6 +29454,10 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     document.getElementById('supStickyBar').style.display = (key === 'requests' || key === 'chat') ? 'none' : '';
     if (key === 'requests') renderSupRequestsList();
     if (key === 'chat') renderSupChatThread();
+    if (key !== 'chat') {
+      var supChatBtn = document.getElementById('supChatScrollBottomBtn');
+      if (supChatBtn) supChatBtn.classList.remove('show');
+    }
   }
   document.querySelectorAll('.sup-tabs-row .sup-tab-item').forEach(function (tab) {
     tab.addEventListener('click', function () { switchSupTab(tab.getAttribute('data-suptab')); });
