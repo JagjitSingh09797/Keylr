@@ -2991,6 +2991,8 @@
   .notif-row .nr-icon { width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
   .notif-row .nr-icon.type-job { background: var(--icon-tint-bg); color: var(--accent-blue); }
   .notif-row .nr-icon.type-alert { background: #f8e0e0; color: #d82020; }
+  .notif-row .nr-icon.type-success { background: #d6f5e0; color: #1a7a3e; }
+  .notif-row .nr-icon.type-warn { background: #fef3c7; color: #92620a; }
   .notif-row .nr-body { flex: 1; min-width: 0; }
   .notif-row .nr-title { font-size: 13.5px; font-weight: 700; color: var(--text-heading); line-height: 1.4; }
   .notif-row .nr-desc { font-size: 12.5px; color: var(--text-body-muted); line-height: 1.4; margin-top: 2px; }
@@ -19481,6 +19483,16 @@
         showSupplierDashboard(supplierCapturedData, 'new');
         document.querySelectorAll('#supplierDashboard .dash-nav-item').forEach(function (i) { i.classList.remove('active'); });
         showSupplierView('profile-settings');
+        if (typeof pushAdminNotification === 'function') {
+          var submittedName = (supplierCapturedData && supplierCapturedData.fullName) || 'New Supplier';
+          pushAdminNotification({
+            type: 'onboarding',
+            title: 'New Supplier Application',
+            desc: submittedName + ' \u2014 onboarding application submitted',
+            supplierName: submittedName,
+            onClick: function () { adminNotifOpenApplicant(submittedName, 'overview'); }
+          });
+        }
       }, 200);
     }
   });
@@ -22300,6 +22312,7 @@
       saveSinbMessages();
       sinbRenderChat();
       sinbUpdateAllReplyPreviews();
+      notifyAdminOfSupplierMessage(mount);
     }
     sendBtn.addEventListener('click', sendMessage);
     msgInput.addEventListener('keydown', function (e) {
@@ -22350,9 +22363,24 @@
         saveSinbMessages();
         sinbRenderChat();
         sinbUpdateAllReplyPreviews();
+        notifyAdminOfSupplierMessage(mount);
         showToast(file.name + ' attached.');
       });
     }
+  }
+  // The onboarding floating widget is a deliberately separate conversation (see OB_CHAT_CONV) that
+  // admin never sees, so only the shared mounts (Settings > Chat, Dashboard > Inbox) should notify
+  // admin of a new supplier message.
+  function notifyAdminOfSupplierMessage(mount) {
+    if (mount.standalone || typeof pushAdminNotification !== 'function') return;
+    var supplierName = (typeof SUP_OWN_DEMO_NAME !== 'undefined') ? SUP_OWN_DEMO_NAME : 'Ferna';
+    pushAdminNotification({
+      type: 'chat',
+      title: 'New Message from Supplier',
+      desc: supplierName + ' \u2014 You have a new message',
+      supplierName: supplierName,
+      onClick: function () { adminNotifOpenApplicant(supplierName, 'chat'); }
+    });
   }
 
   /* ---------------- Onboarding floating "Keylr Support" chat widget ---------------- */
@@ -24097,6 +24125,20 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         change.status = 'resubmitted';
         if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
         showToast(change.fieldLabel + ' resubmitted for review.');
+        // Document-type fields get their own specific admin notification on top of the general
+        // "Profile Update Resubmitted" count (which stays state-derived and recomputes on the next
+        // poll tick regardless of field type).
+        if (change.isDocument && typeof pushAdminNotification === 'function') {
+          var docFocusName = (typeof suprqAdminFocusName === 'function') ? suprqAdminFocusName() : 'Ferna';
+          var cleanFieldLabel = change.fieldLabel.replace(/\s+document$/i, '');
+          pushAdminNotification({
+            type: 'document',
+            title: 'Document Resubmitted',
+            desc: docFocusName + ' \u2014 ' + cleanFieldLabel + ' has been resubmitted',
+            supplierName: docFocusName,
+            onClick: function () { adminNotifOpenApplicant(docFocusName, 'chat'); }
+          });
+        }
         // Always keep the card expanded after resubmitting — never auto-collapse it.
         var keepExpandedId = parts[0];
         if (onDone) onDone(keepExpandedId, btn);
@@ -25281,41 +25323,117 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     document.getElementById('supplierNetworkContent').innerHTML = buildRingChart(segments, '144', 'suppliers');
   }
 
-  var adminNotifications = []; // populated dynamically (e.g. supplier profile update requests) — no seeded dummy data
+  var adminNotifications = []; // populated dynamically as real events happen (onboarding submitted, edit requests, resubmissions, chat, document resubmits)
+  var supNotifications = [];   // same idea, supplier-side (chat from admin, approved/declined, resubmit requested)
 
   var jobIcon = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>';
   var alertIcon = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>';
 
+  var NOTIF_ICON_HTML = {
+    onboarding: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M12 18v-6M9 15h6"/></svg>',
+    request: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4z"/></svg>',
+    resubmit: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>',
+    chat: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>',
+    document: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>',
+    approved: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>',
+    declined: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>'
+  };
+  var NOTIF_ICON_CLASS = {
+    onboarding: 'type-job', request: 'type-warn', resubmit: 'type-warn',
+    chat: 'type-job', document: 'type-warn', approved: 'type-success', declined: 'type-alert'
+  };
+  function notifIconHtml(type) { return NOTIF_ICON_HTML[type] || alertIcon; }
+  function notifIconClass(type) { return NOTIF_ICON_CLASS[type] || 'type-alert'; }
+
+  // Fresh, one-off notification (chat messages, document resubmits, new applications) — always adds
+  // a new row.
+  function pushAdminNotification(entry) {
+    entry.unread = true;
+    entry.date = entry.date || 'Just now';
+    adminNotifications.unshift(entry);
+    if (typeof renderNotifications === 'function') renderNotifications();
+  }
+  function pushSupNotification(entry) {
+    entry.unread = true;
+    entry.date = entry.date || 'Just now';
+    supNotifications.unshift(entry);
+    if (typeof renderSupNotifications === 'function') renderSupNotifications();
+  }
+  // Repeated events of the same kind (e.g. admin approves several fields in a row) fold into one
+  // row with a running count, as long as the previous one is still unread — reading it resets the
+  // count for next time, same as most apps' "3 new likes" style grouping.
+  function pushOrMergeUnread(list, mergeKey, buildEntry) {
+    var existing = null;
+    for (var i = 0; i < list.length; i++) { if (list[i].unread && list[i].mergeKey === mergeKey) { existing = list[i]; break; } }
+    var count = existing ? (existing.count || 1) + 1 : 1;
+    var fresh = buildEntry(count);
+    fresh.mergeKey = mergeKey;
+    fresh.count = count;
+    fresh.unread = true;
+    fresh.date = 'Just now';
+    if (existing) list.splice(list.indexOf(existing), 1);
+    list.unshift(fresh);
+  }
+  // State-derived rows (computed fresh from real data on every poll tick) — identified by a stable
+  // key so re-syncing never duplicates a row, and correctly disappears once the underlying condition
+  // clears. If the computed content hasn't actually changed since last sync, the existing read/unread
+  // state and timestamp are preserved instead of being reset to unread/"Just now" every 3 seconds.
+  function syncStateNotification(list, key, entryOrNull) {
+    var existingIdx = -1;
+    for (var i = 0; i < list.length; i++) { if (list[i].key === key) { existingIdx = i; break; } }
+    var existing = existingIdx !== -1 ? list[existingIdx] : null;
+    if (existingIdx !== -1) list.splice(existingIdx, 1);
+    if (!entryOrNull) return;
+    entryOrNull.key = key;
+    if (existing && existing.desc === entryOrNull.desc) {
+      entryOrNull.unread = existing.unread;
+      entryOrNull.date = existing.date;
+    } else {
+      entryOrNull.unread = true;
+      entryOrNull.date = 'Just now';
+    }
+    list.unshift(entryOrNull);
+  }
+
+  function adminNotifOpenApplicant(supplierName, tabKey) {
+    if (typeof supplierApplicants === 'undefined') return;
+    var idx = -1;
+    for (var i = 0; i < supplierApplicants.length; i++) { if (supplierApplicants[i].name === supplierName) { idx = i; break; } }
+    if (idx === -1 || typeof openSupplierDetail !== 'function' || typeof showAdminView !== 'function') return;
+    showAdminView('supplier-applicants-list');
+    openSupplierDetail(idx, 'app');
+    setTimeout(function () { if (typeof switchSupTab === 'function') switchSupTab(tabKey); }, 60);
+  }
+  function supNotifOpenSettingsTab(tabKey, highlightBatchId) {
+    if (typeof showSupplierView === 'function') showSupplierView('profile-settings');
+    setTimeout(function () { if (typeof switchSupSettingsTab === 'function') switchSupSettingsTab(tabKey, highlightBatchId); }, 60);
+  }
+
   function renderNotifications() {
     var list = document.getElementById('notifListContent');
     var emptyEl = document.getElementById('notifListEmpty');
-    list.innerHTML = adminNotifications.map(function (n) {
-      return '<div class="notif-row' + (n.unread ? ' unread' : '') + '"' + (n.reqType ? ' data-notif-req="' + n.reqType + '"' : '') + '>' +
-        '<div class="nr-icon type-' + n.type + '">' + (n.type === 'job' ? jobIcon : alertIcon) + '</div>' +
+    list.innerHTML = adminNotifications.map(function (n, i) {
+      return '<div class="notif-row' + (n.unread ? ' unread' : '') + '" data-notif-idx="' + i + '">' +
+        '<div class="nr-icon ' + notifIconClass(n.type) + '">' + notifIconHtml(n.type) + '</div>' +
         '<div class="nr-body"><div class="nr-title">' + n.title + '</div><div class="nr-desc">' + n.desc + '</div><div class="nr-date">' + n.date + '</div></div>' +
         (n.unread ? '<div class="nr-dot"></div>' : '') +
       '</div>';
     }).join('');
     if (emptyEl) emptyEl.style.display = adminNotifications.length ? 'none' : '';
     var unreadCount = adminNotifications.filter(function (n) { return n.unread; }).length;
-    document.querySelector('#adminBellBtn .aib-dot').style.display = unreadCount > 0 ? '' : 'none';
-    list.querySelectorAll('[data-notif-req="profile-request"]').forEach(function (row, i) {
+    var dot = document.querySelector('#adminBellBtn .aib-dot');
+    if (dot) dot.style.display = unreadCount > 0 ? '' : 'none';
+    if (typeof updateAdminNotifBellBadge === 'function') updateAdminNotifBellBadge(unreadCount > 0, unreadCount);
+    list.querySelectorAll('.notif-row').forEach(function (row) {
       row.addEventListener('click', function () {
-        var n = adminNotifications.filter(function (x) { return x.reqType === 'profile-request'; })[i] || adminNotifications.filter(function (x) { return x.reqType === 'profile-request'; })[0];
-        var supplierName = n ? n.supplierName : suprqAdminFocusName();
-        var actionable = suprqComputeAdminActionable();
-        suprqSetSeenSignature('admin', actionable.sort().join(','));
+        var idx = parseInt(row.getAttribute('data-notif-idx'), 10);
+        var n = adminNotifications[idx];
+        if (!n) return;
+        n.unread = false;
         document.getElementById('adminRequestFloatNotif').classList.remove('show');
         document.getElementById('notifPanel').classList.remove('open');
-        if (typeof supplierApplicants !== 'undefined') {
-          var idx = -1;
-          for (var j = 0; j < supplierApplicants.length; j++) { if (supplierApplicants[j].name === supplierName) { idx = j; break; } }
-          if (idx !== -1 && typeof openSupplierDetail === 'function' && typeof showAdminView === 'function') {
-            showAdminView('supplier-applicants-list');
-            openSupplierDetail(idx, 'app');
-            setTimeout(function () { if (typeof switchSupTab === 'function') switchSupTab('chat'); }, 50);
-          }
-        }
+        if (typeof n.onClick === 'function') n.onClick();
+        renderNotifications();
       });
     });
   }
@@ -27327,8 +27445,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var batches = (typeof getSupOwnChangeRequests === 'function') ? getSupOwnChangeRequests() : [];
     var needsFix = [];
     batches.forEach(function (b) { b.changes.forEach(function (ch) { if (ch.status === 'resubmit') needsFix.push(ch.id); }); });
-    updateSupNotifBellBadge(needsFix.length);
-    suprqSyncSupNotifPanel(needsFix.length);
+    syncSupResubmitNotifEntry(needsFix.length);
+    var unreadCount = supNotifications.filter(function (n) { return n.unread; }).length;
+    updateSupNotifBellBadge(unreadCount);
     if (!needsFix.length) { notif.classList.remove('show'); return; }
     var sig = needsFix.sort().join(',');
     var seen = suprqGetSeenSignatures();
@@ -27337,33 +27456,47 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (titleEl) titleEl.textContent = needsFix.length === 1 ? '1 change needs your attention' : needsFix.length + ' changes need your attention';
     notif.classList.add('show');
   }
-  function suprqSyncSupNotifPanel(count) {
+  // State-derived: "Action Required: Resubmit Information" reflects however many fields currently
+  // have status === 'resubmit' (admin asked for a fix) — recomputed on every poll tick so it always
+  // matches the real, current count without ever double-counting.
+  function syncSupResubmitNotifEntry(count) {
+    syncStateNotification(supNotifications, 'resubmit-requested', count > 0 ? {
+      type: 'resubmit',
+      title: 'Action Required: Resubmit Information',
+      desc: 'The Keylr team has requested you to resubmit ' + count + ' item' + (count === 1 ? '' : 's') + '.',
+      onClick: function () { supNotifOpenSettingsTab('inbox'); }
+    } : null);
+    if (typeof renderSupNotifications === 'function') renderSupNotifications();
+  }
+  function renderSupNotifications() {
     var list = document.getElementById('supNotifListContent');
     var empty = document.getElementById('supNotifEmpty');
     if (!list) return;
-    if (!count) {
-      list.innerHTML = '';
-      if (empty) empty.style.display = '';
-      return;
-    }
-    if (empty) empty.style.display = 'none';
-    list.innerHTML = '<div class="notif-row unread" id="supNotifReqRow">' +
-      '<div class="nr-icon type-alert"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg></div>' +
-      '<div class="nr-body"><div class="nr-title">Resubmit requested</div><div class="nr-desc">' + count + ' change' + (count === 1 ? '' : 's') + ' need' + (count === 1 ? 's' : '') + ' your attention</div><div class="nr-date">Just now</div></div>' +
-      '<div class="nr-dot"></div>' +
-    '</div>';
-    var row = document.getElementById('supNotifReqRow');
-    if (row) {
+    list.innerHTML = supNotifications.map(function (n, i) {
+      return '<div class="notif-row' + (n.unread ? ' unread' : '') + '" data-sup-notif-idx="' + i + '">' +
+        '<div class="nr-icon ' + notifIconClass(n.type) + '">' + notifIconHtml(n.type) + '</div>' +
+        '<div class="nr-body"><div class="nr-title">' + n.title + '</div><div class="nr-desc">' + n.desc + '</div><div class="nr-date">' + n.date + '</div></div>' +
+        (n.unread ? '<div class="nr-dot"></div>' : '') +
+      '</div>';
+    }).join('');
+    if (empty) empty.style.display = supNotifications.length ? 'none' : '';
+    var unreadCount = supNotifications.filter(function (n) { return n.unread; }).length;
+    var dot = document.getElementById('supBellDot');
+    if (dot) dot.style.display = unreadCount > 0 ? '' : 'none';
+    if (typeof updateSupNotifBellBadge === 'function') updateSupNotifBellBadge(unreadCount);
+    list.querySelectorAll('.notif-row').forEach(function (row) {
       row.addEventListener('click', function () {
-        var batches = (typeof getSupOwnChangeRequests === 'function') ? getSupOwnChangeRequests() : [];
-        var needsFix = [];
-        batches.forEach(function (b) { b.changes.forEach(function (ch) { if (ch.status === 'resubmit') needsFix.push(ch.id); }); });
-        suprqSetSeenSignature('supplier', needsFix.sort().join(','));
+        var idx = parseInt(row.getAttribute('data-sup-notif-idx'), 10);
+        var n = supNotifications[idx];
+        if (!n) return;
+        n.unread = false;
         document.getElementById('supRequestFloatNotif').classList.remove('show');
-        document.getElementById('supNotifPanel').classList.remove('open');
-        suprqNavigateToSupRequests();
+        var panel = document.getElementById('supNotifPanel');
+        if (panel) panel.classList.remove('open');
+        if (typeof n.onClick === 'function') n.onClick();
+        renderSupNotifications();
       });
-    }
+    });
   }
   function checkAdminNewRequestNotification() {
     var notif = document.getElementById('adminRequestFloatNotif');
@@ -27374,9 +27507,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     // Scoped to Ferna for now, since that's the supplier identity used for testing the admin/supplier sync loop.
     var focusName = suprqAdminFocusName();
     var actionable = suprqComputeAdminActionable();
-    if (!actionable.length) { notif.classList.remove('show'); updateAdminNotifBellBadge(false, 0); suprqSyncAdminNotifPanel(); return; }
-    updateAdminNotifBellBadge(true, actionable.length, focusName);
     suprqSyncAdminNotifPanel();
+    if (!actionable.length) { notif.classList.remove('show'); return; }
     var sig = actionable.sort().join(',');
     var seen = suprqGetSeenSignatures();
     if (sig === seen.admin) return;
@@ -27412,6 +27544,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   function suprqAdminFocusName() { return (typeof SUP_OWN_DEMO_NAME !== 'undefined') ? SUP_OWN_DEMO_NAME : 'Ferna'; }
   function suprqComputeAdminActionable() {
     var focusName = suprqAdminFocusName();
+    if (typeof seedChangeRequestsIfNeeded === 'function') seedChangeRequestsIfNeeded({ name: focusName });
     var actionable = [];
     (supplierChangeRequests[focusName] || []).forEach(function (b) {
       var hasActionable = b.changes.some(function (ch) { return ch.status === 'pending' || ch.status === 'resubmitted'; });
@@ -27425,15 +27558,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     suprqSetSeenSignature('admin', actionable.sort().join(','));
     this.classList.remove('show');
     var supplierName = this.getAttribute('data-notif-supplier');
-    if (supplierName && typeof supplierApplicants !== 'undefined') {
-      var idx = -1;
-      for (var i = 0; i < supplierApplicants.length; i++) { if (supplierApplicants[i].name === supplierName) { idx = i; break; } }
-      if (idx !== -1 && typeof openSupplierDetail === 'function' && typeof showAdminView === 'function') {
-        showAdminView('supplier-applicants-list');
-        openSupplierDetail(idx, 'app');
-        setTimeout(function () { if (typeof switchSupTab === 'function') switchSupTab('chat'); }, 50);
-      }
-    }
+    if (supplierName) adminNotifOpenApplicant(supplierName, 'chat');
   });
   document.getElementById('adminRequestFloatNotifClose').addEventListener('click', function (e) {
     e.stopPropagation();
@@ -27441,22 +27566,36 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     suprqSetSeenSignature('admin', actionable.sort().join(','));
     document.getElementById('adminRequestFloatNotif').classList.remove('show');
   });
+  // State-derived: two separate rows, kept in sync with the real batch data on every poll tick —
+  // "Supplier Profile Update Request" for fields still awaiting first review (status === 'pending'),
+  // and "Profile Update Resubmitted" for fields the supplier has already sent back (status ===
+  // 'resubmitted'). Each recomputes and replaces itself in place, so counts are always accurate and
+  // the row disappears cleanly once nothing of that kind is left outstanding.
   function suprqSyncAdminNotifPanel() {
-    var actionable = suprqComputeAdminActionable();
-    // Remove any previous request-notification row so we don't stack duplicates on re-sync.
-    adminNotifications = adminNotifications.filter(function (n) { return n.reqType !== 'profile-request'; });
-    if (actionable.length) {
-      var focusName = suprqAdminFocusName();
-      adminNotifications.unshift({
-        type: 'alert',
-        reqType: 'profile-request',
-        title: 'Supplier Profile update request',
-        desc: focusName + ' \u2014 ' + actionable.length + ' item' + (actionable.length === 1 ? '' : 's') + ' need review',
-        date: 'Just now',
-        unread: true,
-        supplierName: focusName
+    var focusName = suprqAdminFocusName();
+    if (typeof seedChangeRequestsIfNeeded === 'function') seedChangeRequestsIfNeeded({ name: focusName });
+    var batches = supplierChangeRequests[focusName] || [];
+    var pendingCount = 0, resubmittedCount = 0;
+    batches.forEach(function (b) {
+      b.changes.forEach(function (ch) {
+        if (ch.status === 'pending') pendingCount++;
+        else if (ch.status === 'resubmitted') resubmittedCount++;
       });
-    }
+    });
+    syncStateNotification(adminNotifications, 'profile-request:' + focusName, pendingCount > 0 ? {
+      type: 'request',
+      title: 'Supplier Profile Update Request',
+      desc: focusName + ' \u2014 ' + pendingCount + ' item' + (pendingCount === 1 ? '' : 's') + ' need review',
+      supplierName: focusName,
+      onClick: function () { adminNotifOpenApplicant(focusName, 'chat'); }
+    } : null);
+    syncStateNotification(adminNotifications, 'resubmitted:' + focusName, resubmittedCount > 0 ? {
+      type: 'resubmit',
+      title: 'Profile Update Resubmitted',
+      desc: focusName + ' \u2014 ' + resubmittedCount + ' requested change' + (resubmittedCount === 1 ? '' : 's') + ' resubmitted',
+      supplierName: focusName,
+      onClick: function () { adminNotifOpenApplicant(focusName, 'chat'); }
+    } : null);
     if (typeof renderNotifications === 'function') renderNotifications();
   }
   document.getElementById('supBellBtn').addEventListener('click', function (e) {
@@ -27469,6 +27608,58 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       supNotifPanel.classList.remove('open');
     }
   });
+  // Seed one starting example of each purely event-driven notification type (the ones with no
+  // persistent state to derive from — a submitted application, an incoming chat message, a specific
+  // document coming back) so both notification panels show the full range described in the product
+  // spec right from first load. The state-derived types (pending review, resubmitted, approved,
+  // declined, resubmit-required) don't need seeding here — they read live off Ferna's seed batch
+  // above and populate themselves on the first poll tick a few lines down.
+  (function seedInitialDemoNotifications() {
+    var focusName = (typeof suprqAdminFocusName === 'function') ? suprqAdminFocusName() : 'Ferna';
+    if (typeof pushAdminNotification === 'function') {
+      pushAdminNotification({
+        type: 'document', title: 'Document Resubmitted',
+        desc: focusName + ' \u2014 Proof of Address has been resubmitted', date: '15 min ago',
+        supplierName: focusName, onClick: function () { adminNotifOpenApplicant(focusName, 'chat'); }
+      });
+      pushAdminNotification({
+        type: 'chat', title: 'New Message from Supplier',
+        desc: focusName + ' \u2014 You have a new message', date: '10 min ago',
+        supplierName: focusName, onClick: function () { adminNotifOpenApplicant(focusName, 'chat'); }
+      });
+      pushAdminNotification({
+        type: 'onboarding', title: 'New Supplier Application',
+        desc: focusName + ' \u2014 onboarding application submitted', date: 'Just now',
+        supplierName: focusName, onClick: function () { adminNotifOpenApplicant(focusName, 'overview'); }
+      });
+    }
+    if (typeof pushSupNotification === 'function') {
+      // "Action Required: Resubmit Information" isn't seeded here — it's already state-derived from
+      // Ferna's real batch (the "HMRC registered" field is pre-seeded with status: 'resubmit') and
+      // populates itself correctly via syncSupResubmitNotifEntry on the first poll tick.
+      // The approved/declined seeds below carry the same mergeKey + count that pushOrMergeUnread
+      // uses for real approve/decline events, so if the admin approves or declines another field
+      // later in the session it correctly increments this same row instead of creating a stray
+      // duplicate alongside it.
+      pushSupNotification({
+        type: 'declined', title: 'Profile Update Declined',
+        desc: 'Your request to update 1 item was declined.', date: '15 min ago',
+        mergeKey: 'declined', count: 1,
+        onClick: function () { supNotifOpenSettingsTab('inbox'); }
+      });
+      pushSupNotification({
+        type: 'approved', title: 'Profile Update Approved',
+        desc: 'Your 2 requested changes have been approved and updated.', date: '10 min ago',
+        mergeKey: 'approved', count: 2,
+        onClick: function () { supNotifOpenSettingsTab('profile'); }
+      });
+      pushSupNotification({
+        type: 'chat', title: 'New Message from Admin',
+        desc: 'You have a new message from the Keylr team.', date: '5 min ago',
+        onClick: function () { supNotifOpenSettingsTab('inbox'); }
+      });
+    }
+  })();
   setInterval(function () {
     checkSupResubmitNotification();
     checkAdminNewRequestNotification();
@@ -27488,13 +27679,13 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       var allDate = new Date(); allDate.setHours(allDate.getHours() - 2);
       supplierChangeRequests[key] = [
         { id: 'batch1', submittedDate: allDate, status: 'pending', changes: [
-          { section: 'Identity', fieldLabel: 'Full legal name', oldValue: 'Ferna', newValue: 'Fernanda Wright' },
+          { section: 'Identity', fieldLabel: 'Full legal name', oldValue: 'Ferna', newValue: 'Fernanda Wright', status: 'approved' },
           { section: 'Identity', fieldLabel: 'Date of birth', oldValue: '12/05/1990', newValue: '12/05/1991', fieldType: 'date' },
-          { section: 'Identity', fieldLabel: 'Home address', oldValue: '14 Rowan Street, Leeds', newValue: '3 Aspen Court, Leeds' },
-          { section: 'Identity', fieldLabel: 'Nationality', oldValue: 'Not set', newValue: 'British', fieldType: 'nationality', selectOptions: ['British', 'Austrian', 'Irish', 'Polish', 'Other'] },
-          { section: 'Identity', fieldLabel: 'NI number', oldValue: 'Not set', newValue: 'QQ 778823 A' },
-          { section: 'Identity', fieldLabel: 'HMRC registered', oldValue: 'Off', newValue: 'On \u2014 UTR: 5561287403', fieldType: 'hmrc-toggle' },
-          { section: 'Identity', fieldLabel: 'Proof of Address document', oldValue: 'Not uploaded', newValue: 'proof-of-address-2026.pdf (new upload)', isDocument: true },
+          { section: 'Identity', fieldLabel: 'Home address', oldValue: '14 Rowan Street, Leeds', newValue: '3 Aspen Court, Leeds', status: 'resubmitted' },
+          { section: 'Identity', fieldLabel: 'Nationality', oldValue: 'Not set', newValue: 'British', fieldType: 'nationality', selectOptions: ['British', 'Austrian', 'Irish', 'Polish', 'Other'], status: 'declined' },
+          { section: 'Identity', fieldLabel: 'NI number', oldValue: 'Not set', newValue: 'QQ 778823 A', status: 'approved' },
+          { section: 'Identity', fieldLabel: 'HMRC registered', oldValue: 'Off', newValue: 'On \u2014 UTR: 5561287403', fieldType: 'hmrc-toggle', status: 'resubmit' },
+          { section: 'Identity', fieldLabel: 'Proof of Address document', oldValue: 'Not uploaded', newValue: 'proof-of-address-2026.pdf (new upload)', isDocument: true, status: 'resubmitted' },
           { section: 'Tell us about yourself', fieldLabel: 'Sectors served', oldValue: 'Residential', newValue: 'Residential, Commercial', fieldType: 'sectors', sectorSubtypes: ['Estate Agents'] },
           { section: 'Categories & Roles', fieldLabel: 'Gas Safe Engineer \u2014 Certificate name', oldValue: 'Not set', newValue: 'Gas Safe' },
           { section: 'Categories & Roles', fieldLabel: 'Gas Safe Engineer \u2014 Registration number', oldValue: 'Not set', newValue: 'GS-448821' },
@@ -28308,6 +28499,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       var liveMsg = { kind: 'text', mine: false, text: text, ts: Date.now(), time: sinbNowTimestamp() };
       if (supChatReplyingTo) { liveMsg.replyToChangeId = supChatReplyingTo.changeId; liveMsg.replyToFieldLabel = supChatReplyingTo.fieldLabel; }
       SINB_SUPPORT_CONV.messages.push(liveMsg);
+      notifySupplierOfAdminMessage();
     } else {
       if (!SUP_CHAT_EXTRA_MESSAGES[name]) SUP_CHAT_EXTRA_MESSAGES[name] = [];
       var msg = { kind: 'text', fromAdmin: true, text: text, ts: Date.now(), time: sinbNowTimestamp() };
@@ -28339,6 +28531,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       var liveMsg = { kind: 'attachment', mine: false, fileName: file.name, ts: Date.now(), time: sinbNowTimestamp() };
       if (supChatReplyingTo) { liveMsg.replyToChangeId = supChatReplyingTo.changeId; liveMsg.replyToFieldLabel = supChatReplyingTo.fieldLabel; }
       SINB_SUPPORT_CONV.messages.push(liveMsg);
+      notifySupplierOfAdminMessage();
     } else {
       if (!SUP_CHAT_EXTRA_MESSAGES[name]) SUP_CHAT_EXTRA_MESSAGES[name] = [];
       var msg = { kind: 'attachment', fromAdmin: true, fileName: file.name, ts: Date.now(), time: sinbNowTimestamp() };
@@ -28353,6 +28546,18 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     renderSupChatThread();
     showToast(file.name + ' attached.');
   });
+  // Admin's message reaches the supplier's real, live-synced chat (SINB_SUPPORT_CONV) only for the
+  // one supplier this whole demo's admin<->supplier sync loop is built around — see
+  // supChatIsLiveSupplier.
+  function notifySupplierOfAdminMessage() {
+    if (typeof pushSupNotification !== 'function') return;
+    pushSupNotification({
+      type: 'chat',
+      title: 'New Message from Admin',
+      desc: 'You have a new message from the Keylr team.',
+      onClick: function () { supNotifOpenSettingsTab('inbox'); }
+    });
+  }
   document.getElementById('supChatMessageInput').addEventListener('keydown', function (e) {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); document.getElementById('supChatSendBtn').click(); }
   });
@@ -29726,13 +29931,37 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
             SINB_SUPPORT_CONV.messages.push({ kind: 'jump-notification', changeId: change.id, fieldLabel: change.fieldLabel, ts: Date.now(), time: sinbNowTimestamp() });
             saveSinbMessages();
             if (typeof sinbRenderChat === 'function') sinbRenderChat();
+            // No extra push here — "Action Required: Resubmit Information" is state-derived from
+            // change.status === 'resubmit' and picks this up automatically on the next poll tick.
           } else if (action === 'approve' && typeof sinbAddEditResponseMessage === 'function') {
             sinbAddEditResponseMessage('\u201c' + change.fieldLabel + '\u201d was approved \u2014 your profile has been updated.');
+            if (typeof pushOrMergeUnread === 'function') {
+              pushOrMergeUnread(supNotifications, 'approved', function (count) {
+                return {
+                  type: 'approved',
+                  title: 'Profile Update Approved',
+                  desc: 'Your ' + count + ' requested change' + (count === 1 ? ' has' : 's have') + ' been approved and updated.',
+                  onClick: function () { supNotifOpenSettingsTab('profile'); }
+                };
+              });
+              if (typeof renderSupNotifications === 'function') renderSupNotifications();
+            }
           } else if (action === 'decline' && typeof sinbAddEditResponseMessage === 'function') {
             // Always send a baseline notification immediately, so the supplier is guaranteed to see
             // *something* the moment the field is declined, even if the admin never follows up with
             // a custom reason via the composer below.
             sinbAddEditResponseMessage('\u201c' + change.fieldLabel + '\u201d was declined.');
+            if (typeof pushOrMergeUnread === 'function') {
+              pushOrMergeUnread(supNotifications, 'declined', function (count) {
+                return {
+                  type: 'declined',
+                  title: 'Profile Update Declined',
+                  desc: 'Your request to update ' + count + ' item' + (count === 1 ? '' : 's') + ' was declined.',
+                  onClick: function () { supNotifOpenSettingsTab('inbox'); }
+                };
+              });
+              if (typeof renderSupNotifications === 'function') renderSupNotifications();
+            }
           }
         }
         if (action === 'decline' || action === 'resubmit') {
