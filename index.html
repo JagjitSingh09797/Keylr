@@ -1297,6 +1297,7 @@
     line-height: 1.7;
   }
   .meta-badge.optional { background: #eef1f5; color: #64748b; }
+  .meta-badge.coming-soon { background: #fef3c7; color: #92620a; }
   .meta-badge.auto { background: #f0fcf2; color: #3a7646; }
   .meta-badge.dac7 { background: #f0f0f8; color: #4c4c9c; }
   .meta-badge.approval { background: #f8f0c0; color: #8a6d1a; }
@@ -1540,6 +1541,8 @@
   .simple-chip-action { border-style: dashed; color: var(--accent-blue); font-weight: 700; }
   .simple-chip-action:hover { border-color: var(--accent-blue); background: var(--icon-tint-bg); }
   .simple-chip.selected { background: var(--tile-selected-bg, #e8f0f8); border-color: var(--accent-blue); color: var(--accent-blue); }
+  .simple-chip.simple-chip-disabled { cursor: not-allowed; opacity: 0.6; background: var(--surface-soft); color: var(--text-body-muted); }
+  .simple-chip.simple-chip-disabled:hover { border-color: var(--border-subtle); }
   .simple-chip-removable { display: inline-flex; align-items: center; gap: 7px; cursor: default; transition: opacity 150ms ease-out, transform 150ms ease-out; }
   .simple-chip-removable .scr-label { cursor: pointer; }
   .simple-chip-removable .scr-remove { display: flex; align-items: center; justify-content: center; background: none; border: none; padding: 0; cursor: pointer; color: inherit; opacity: 0.6; }
@@ -2229,6 +2232,12 @@
   .dash-banner .banner-progress-track { height: 6px; background: #fde68a; border-radius: 999px; overflow: hidden; }
   .dash-banner .banner-progress-fill { height: 100%; background: #b5891a; border-radius: 999px; transition: width 400ms ease-out; }
   .dash-banner .banner-progress-label { font-size: 12px; color: #8a6d1a; font-weight: 600; margin-top: 6px; }
+  .dash-banner .banner-missing-docs { margin-top: 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+  .dash-banner .banner-missing-label { font-size: 12px; font-weight: 700; color: #8a6d1a; margin-right: 2px; }
+  .dash-banner .banner-missing-chip {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 600;
+    color: #92620a; background: #fef3c7; border: 1px solid #fde68a; border-radius: 999px; padding: 3px 10px;
+  }
   .btn-amber-solid {
     background: var(--cta-amber-solid, #b05008);
     color: #fff; white-space: nowrap;
@@ -4115,6 +4124,7 @@
   .sinb-chat-header [data-tooltip]::after { bottom: auto; top: calc(100% + 7px); }
   .pm-table-scroll [data-tooltip]::after { bottom: auto; top: calc(100% + 7px); }
   .sinb-titlebar [data-tooltip]::after { bottom: auto; top: calc(100% + 7px); }
+  #commercialSubTypes [data-tooltip]::after { bottom: auto; top: calc(100% + 7px); }
 
   /* 3-dot dropdown menu */
   .pm-dropdown-menu, .app-dropdown-menu, .supplier-dropdown-menu {
@@ -6899,9 +6909,9 @@
           </div>
 
           <div class="ob-section" id="commercialSubTypes" style="display:none;">
-            <div class="ob-section-title" style="font-size:13.5px;">Commercial Sub-Types <span class="meta-badge optional">Optional</span></div>
+            <div class="ob-section-title" style="font-size:13.5px;">Commercial Sub-Types <span class="meta-badge optional">Optional</span> <span class="meta-badge coming-soon">Coming Soon</span></div>
             <div class="simple-chip-row">
-              <div class="simple-chip" data-value="hotels">Hotels &amp; Hostels</div>
+              <div class="simple-chip simple-chip-disabled" data-value="hotels" aria-disabled="true" data-tooltip="Commercial sub-types are coming soon">Hotels &amp; Hostels</div>
             </div>
           </div>
         </section>
@@ -6916,7 +6926,7 @@
             <div class="ab-head"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg><div class="ab-title">4 details still needed to finish this step</div></div>
             <div class="ab-sub">The highlighted fields below are required. Tap one to jump to it.</div>
             <div class="attention-jump-row">
-              <div class="attention-jump-pill" data-jump="supDob">Date of birth</div>
+              <div class="attention-jump-pill" data-jump="obSupDob">Date of birth</div>
               <div class="attention-jump-pill" data-jump="supNiNumber">NI number</div>
               <div class="attention-jump-pill" data-jump="supHomeAddress">Home address</div>
               <div class="attention-jump-pill" data-jump="supProofAddress">Proof of address</div>
@@ -7792,7 +7802,7 @@
           <div class="cat-role-picker">
             <div class="crp-cats">
               <div class="crp-cats-label">CATEGORIES <span class="crp-cats-total">16</span></div>
-              <div class="crp-search"><input class="field-input" type="text" id="categorySearchInput" placeholder="Search categories..."></div>
+              <div class="crp-search"><input class="field-input" type="text" id="categorySearchInput" placeholder="Search categories & roles"></div>
               <div id="categoryList">
                 <div class="crp-cat-row active" data-cat="Gas & Heating"><span class="crp-checkbox"></span><span class="crp-cat-name">Gas &amp; Heating</span><span class="crp-count" data-role-count="0">0</span></div>
                 <div class="crp-cat-row" data-cat="HVAC & Air Conditioning"><span class="crp-checkbox"></span><span class="crp-cat-name">HVAC &amp; Air Conditioning</span><span class="crp-count" data-role-count="0">0</span></div>
@@ -9752,21 +9762,6 @@
         <div class="dash-content">
           <div id="supHomeView">
 
-          <div class="dash-section" id="supOnboardingBanner">
-            <div class="dash-banner" style="margin-bottom:0;">
-              <div class="banner-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div>
-              <div class="banner-text">
-                <div class="banner-title">Complete your onboarding and get approved to access this feature</div>
-                <div class="banner-desc">Finish all verification details so an admin can review your account.</div>
-              </div>
-              <button type="button" class="btn btn-amber-solid btn-sm" id="supContinueOnboardingBtn">Continue Onboarding <span class="arrow">→</span></button>
-              <div class="banner-progress-wrap">
-                <div class="banner-progress-track"><div class="banner-progress-fill" id="supOnboardingProgressFill" style="width:35%;"></div></div>
-                <div class="banner-progress-label" id="supOnboardingProgressLabel">35% verified</div>
-              </div>
-            </div>
-          </div>
-
           <div class="dash-section">
             <div class="dash-header">
               <div>
@@ -10274,6 +10269,21 @@
 
 
           <div id="supProfileSettingsView" style="display:none;">
+            <div class="dash-section" id="supOnboardingBanner">
+              <div class="dash-banner" style="margin-bottom:0;">
+                <div class="banner-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div>
+                <div class="banner-text">
+                  <div class="banner-title">Complete your onboarding and get approved to access this feature</div>
+                  <div class="banner-desc">Finish all verification details so an admin can review your account.</div>
+                  <div class="banner-missing-docs" id="supOnboardingMissingDocs" style="display:none;"></div>
+                </div>
+                <button type="button" class="btn btn-amber-solid btn-sm" id="supContinueOnboardingBtn">Continue Onboarding <span class="arrow">→</span></button>
+                <div class="banner-progress-wrap">
+                  <div class="banner-progress-track"><div class="banner-progress-fill" id="supOnboardingProgressFill" style="width:0%;"></div></div>
+                  <div class="banner-progress-label" id="supOnboardingProgressLabel">0% verified</div>
+                </div>
+              </div>
+            </div>
             <div class="dash-section">
               <div class="dash-header">
                 <div><h2>Account Settings</h2><div class="dash-content-sub">Manage your profile, business &amp; subscription.</div></div>
@@ -15622,14 +15632,25 @@
   document.querySelectorAll('.attention-jump-pill').forEach(function (pill) {
     pill.addEventListener('click', function () {
       var targetId = pill.getAttribute('data-jump');
-      var targetEl = document.getElementById(targetId);
+      // Prefer a real calendar trigger button for this key when one exists — some jump targets are
+      // custom calendar widgets (Date of Birth, insurance/DBS expiry dates) where the plain id on
+      // the field points at a hidden helper input rather than the actual visible button the
+      // supplier needs to click, which was why jumping there looked like it did nothing at all.
+      var targetEl = document.querySelector('.pm-cal-trigger-btn[data-cal="' + targetId + '"]') || document.getElementById(targetId);
       if (!targetEl) return;
       targetEl.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
       var focusable = targetEl.matches('input,select,textarea,.file-dropzone,.radio-tile-row') ? targetEl : targetEl.querySelector('input,select,textarea,.file-dropzone');
       var flashTarget = focusable || targetEl;
       flashTarget.classList.add('field-flash');
       setTimeout(function () { flashTarget.classList.remove('field-flash'); }, 900);
-      if (focusable && (focusable.tagName === 'INPUT' || focusable.tagName === 'SELECT' || focusable.tagName === 'TEXTAREA')) focusable.focus();
+      if (focusable && (focusable.tagName === 'INPUT' || focusable.tagName === 'SELECT' || focusable.tagName === 'TEXTAREA')) {
+        focusable.focus();
+      } else if (targetEl.classList.contains('pm-cal-trigger-btn') && !targetEl.classList.contains('open')) {
+        // A calendar trigger button has no native input to focus — open the date picker itself so
+        // "jump to this field" actually puts the supplier one click away from picking a date,
+        // instead of just scrolling near an inert-looking button.
+        setTimeout(function () { targetEl.click(); }, reduceMotion ? 0 : 320);
+      }
     });
   });
 
@@ -19210,6 +19231,120 @@
     pscDob: { label: 'PSC date of birth', section: 'Company Identity', fieldType: 'date' },
     pscConfirmed: { label: 'PSC details confirmed', section: 'Company Identity', fieldType: 'toggle' }
   };
+
+  // Onboarding-completeness tracking — a separate, purpose-built list from SUP_OB_FIELD_MAP above
+  // (which exists for change-request diffing). Drives the "Complete your onboarding" banner's
+  // progress bar/percentage and its missing-documents list, and is used to jump "Continue
+  // Onboarding" straight to the first step that still needs something. `step` matches a real
+  // data-stepkey in the wizard.
+  var SUP_OB_REQUIRED_SOLE = [
+    { key: 'fullName', label: 'Full legal name', step: 'identity' },
+    { key: 'phoneNumber', label: 'Phone number', step: 'identity' },
+    { key: 'email', label: 'Email address', step: 'identity' },
+    { key: 'dob', label: 'Date of birth', step: 'identity' },
+    { key: 'nationality', label: 'Nationality', step: 'identity' },
+    { key: 'niNumber', label: 'NI number', step: 'identity' },
+    { key: 'homeAddress', label: 'Home address', step: 'identity' },
+    { key: 'proofAddressFile', label: 'Proof of Address', step: 'identity', isDocument: true },
+    { key: 'selectedRoles', label: 'Service category & role', step: 'categories', isArray: true },
+    { key: 'pliCertFile', label: 'Public Liability Insurance certificate', step: 'insurance', isDocument: true },
+    { key: 'pliExpiry', label: 'Public Liability Insurance expiry date', step: 'insurance' },
+    { key: 'dbsCertFile', label: 'DBS certificate', step: 'background', isDocument: true },
+    { key: 'dbsIssueDate', label: 'DBS issue date', step: 'background' },
+    { key: 'rightToWork', label: 'Right to Work confirmation', step: 'background' }
+  ];
+  var SUP_OB_REQUIRED_COMPANY = [
+    { key: 'companyFullName', label: 'Contact full name', step: 'identity' },
+    { key: 'companyPhone', label: 'Phone number', step: 'identity' },
+    { key: 'companyEmail', label: 'Email address', step: 'identity' },
+    { key: 'companyRegNo', label: 'Company registration number', step: 'identity' },
+    { key: 'companyRegName', label: 'Registered company name', step: 'identity' },
+    { key: 'companyRegOffice', label: 'Registered office address', step: 'identity' },
+    { key: 'companyProofAddressFile', label: 'Proof of Address', step: 'identity', isDocument: true },
+    { key: 'selectedRoles', label: 'Service category & role', step: 'categories', isArray: true },
+    { key: 'pliCertFile', label: 'Public Liability Insurance certificate', step: 'insurance', isDocument: true },
+    { key: 'pliExpiry', label: 'Public Liability Insurance expiry date', step: 'insurance' },
+    { key: 'elCertFile', label: 'Employers\u2019 Liability Insurance certificate', step: 'insurance', isDocument: true },
+    { key: 'elExpiry', label: 'Employers\u2019 Liability Insurance expiry date', step: 'insurance' },
+    { key: 'dbsPolicyFile', label: 'DBS Policy document', step: 'background', isDocument: true },
+    { key: 'companyRightToWork', label: 'Right to Work confirmation', step: 'background' }
+  ];
+  function supObRequiredFields() {
+    return supplierCapturedData.businessType === 'company' ? SUP_OB_REQUIRED_COMPANY : SUP_OB_REQUIRED_SOLE;
+  }
+  // Reads supplierCapturedData as it currently stands — NOT a fresh DOM scan — so it reflects
+  // whatever was actually saved at the last step transition (see supObCollectWizardData calls on
+  // Save & Continue / Back), and so it can be computed safely from outside the wizard (e.g. when
+  // Account Settings is opened) without depending on the wizard's DOM being in any particular state.
+  function supObComputeProgress() {
+    var defs = supObRequiredFields();
+    var filled = 0;
+    var missingDocs = [];
+    var firstIncompleteStep = null;
+    defs.forEach(function (d) {
+      var v = supplierCapturedData[d.key];
+      var isFilled = d.isArray ? (Array.isArray(v) && v.length > 0) : !!(v && String(v).trim());
+      if (isFilled) {
+        filled++;
+      } else {
+        if (d.isDocument) missingDocs.push(d.label);
+        if (!firstIncompleteStep) firstIncompleteStep = d.step;
+      }
+    });
+    var pct = defs.length ? Math.round((filled / defs.length) * 100) : 0;
+    return { pct: pct, missingDocs: missingDocs, firstIncompleteStep: firstIncompleteStep, total: defs.length, filled: filled };
+  }
+  // Drives: the banner's visibility/progress/missing-docs list, the "Profile complete" ring next to
+  // the Account Settings heading, and whether the Edit button is available at all — a supplier can
+  // only start a profile-edit request once their initial onboarding is actually 100% complete.
+  function renderSupOnboardingCompletionState() {
+    var progress = supObComputeProgress();
+    var isComplete = progress.pct >= 100;
+    var banner = document.getElementById('supOnboardingBanner');
+    var editBtn = document.getElementById('supAcctEditBtn');
+    if (banner) banner.style.display = isComplete ? 'none' : '';
+    if (editBtn) editBtn.style.display = isComplete ? '' : 'none';
+    if (!isComplete) {
+      var fillEl = document.getElementById('supOnboardingProgressFill');
+      var labelEl = document.getElementById('supOnboardingProgressLabel');
+      if (fillEl) fillEl.style.width = progress.pct + '%';
+      if (labelEl) labelEl.textContent = progress.pct + '% verified';
+      var missingWrap = document.getElementById('supOnboardingMissingDocs');
+      if (missingWrap) {
+        if (progress.missingDocs.length) {
+          missingWrap.style.display = '';
+          missingWrap.innerHTML = '<span class="banner-missing-label">Documents still needed:</span>' +
+            progress.missingDocs.map(function (docLabel) { return '<span class="banner-missing-chip">' + supjrEscapeHtml(docLabel) + '</span>'; }).join('');
+        } else {
+          missingWrap.style.display = 'none';
+        }
+      }
+    }
+    var ring = document.getElementById('supProfileCompleteRing');
+    var ringPct = document.getElementById('supProfileCompletePct');
+    if (ring) {
+      var circumference = 169.6; // matches this ring's stroke-dasharray in the markup
+      ring.setAttribute('stroke-dashoffset', String(Math.round(circumference * (1 - progress.pct / 100))));
+    }
+    if (ringPct) ringPct.textContent = progress.pct + '%';
+    return progress;
+  }
+  // Reopens the wizard so the supplier can finish whatever's missing. Unlike openSupOnboardingForEdit
+  // (which is for an already-complete profile submitting a change request), this keeps
+  // supObEditFromSettings false so finishing goes through the normal first-time-completion path —
+  // the wizard's own DOM already retains whatever was filled in during any earlier pass, since it's
+  // never reset, so nothing needs to be pre-filled here.
+  function openSupOnboardingToContinue() {
+    supObEditFromSettings = false;
+    supObApp.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(function () { supObApp.classList.add('visible'); });
+    var progress = supObComputeProgress();
+    var order = currentSupObStepOrder();
+    var stepKey = progress.firstIncompleteStep;
+    var stepNum = stepKey ? order.indexOf(stepKey) + 1 : 1;
+    goToSupObStep(stepNum > 0 ? stepNum : 1);
+  }
   var supObReturnTabKey = 'profile';
 
   var supObOriginalBusinessType = null;
@@ -19253,7 +19388,7 @@
     var label = step === 1 ? 'Setup' : (step >= 5 ? 'Profile' : 'Verification');
     var isLast = step === order.length;
     supObStepLabel.textContent = label;
-    supObNextBtn.innerHTML = (isLast ? 'Submit for Review' : 'Save & Continue') + ' <span class="arrow">→</span>';
+    supObNextBtn.innerHTML = (isLast ? 'Continue' : 'Save & Continue') + ' <span class="arrow">→</span>';
     supObBackBtn.hidden = step === 1;
     var canSkip = supObEditFromSettings && !supObIsBusinessTypeChanging();
     document.getElementById('supObSaveSkipBtn').style.display = canSkip ? 'inline-flex' : 'none';
@@ -19281,7 +19416,10 @@
   }
 
   supObBackBtn.addEventListener('click', function () {
-    if (supObCurrentStep > 1) goToSupObStep(supObCurrentStep - 1);
+    if (supObCurrentStep > 1) {
+      supObCollectWizardData();
+      goToSupObStep(supObCurrentStep - 1);
+    }
   });
 
   function supObCollectWizardData() {
@@ -19309,7 +19447,13 @@
     }
     function calValue(key) {
       var span = document.querySelector('[data-cal-text="' + key + '"]');
-      return (span && !span.classList.contains('cdd-placeholder')) ? span.textContent : '';
+      if (!span) return '';
+      // Belt-and-braces: a date is only really "set" if it's neither placeholder-styled NOR still
+      // showing literal placeholder text — catches either signal being stale without the other.
+      var text = span.textContent.trim();
+      var looksLikePlaceholder = span.classList.contains('cdd-placeholder') || span.classList.contains('placeholder') ||
+        text === 'Select date...' || text === 'dd/mm/yyyy' || text === '';
+      return looksLikePlaceholder ? '' : text;
     }
 
     var isCompany = selectedTileValue('businessTypeTiles') === 'company';
@@ -19449,6 +19593,10 @@
 
   supObNextBtn.addEventListener('click', function () {
     if (supObCurrentStep < currentSupObStepOrder().length) {
+      // Capture whatever's been filled in on this step immediately, not just at final submit — this
+      // is what lets the "Complete your onboarding" banner reflect real progress even if the
+      // supplier leaves partway through and comes back later.
+      supObCollectWizardData();
       goToSupObStep(supObCurrentStep + 1);
     } else if (supObEditFromSettings) {
       // Editing from Account Settings and completed every step (e.g. a business-type switch) —
@@ -19472,6 +19620,7 @@
         supObEditFromSettings = false;
         supObEditSnapshot = null;
         switchSupSettingsTab(newBatch ? 'inbox' : supObReturnTabKey, newBatch ? newBatch.id : undefined);
+        if (typeof renderSupOnboardingCompletionState === 'function') renderSupOnboardingCompletionState();
       }, 200);
     } else {
       // Final step submit — go straight to the Supplier Dashboard, landing on Account Settings
@@ -19810,6 +19959,7 @@
       supObEditFromSettings = false;
       supObEditSnapshot = null;
       switchSupSettingsTab(newBatch ? 'inbox' : supObReturnTabKey, newBatch ? newBatch.id : undefined);
+      if (typeof renderSupOnboardingCompletionState === 'function') renderSupOnboardingCompletionState();
     }, 200);
   });
 
@@ -19928,7 +20078,9 @@
 
   initMultiSelectTiles(document.getElementById('sectorTypeTiles'));
   initMultiSelectTiles(document.getElementById('residentialSubTypes').querySelector('.simple-chip-row'));
-  initMultiSelectTiles(document.getElementById('commercialSubTypes').querySelector('.simple-chip-row'));
+  // Commercial Sub-Types is intentionally left unwired — the whole section is marked "Coming Soon"
+  // (see the section title), so nothing inside it, including "Hotels & Hostels", should be selectable
+  // yet.
 
   function syncSectorSubTypes() {
     var residentialSelected = document.querySelector('#sectorTypeTiles .choice-tile[data-value="residential"]').classList.contains('selected');
@@ -19944,16 +20096,26 @@
   /* ---- Step 2: Identity ---- */
   initObToggle('selfAssessmentToggle', 'utrField');
 
+  // calState (the calendar widgets' shared state object) isn't assigned until much later in this
+  // script, but attention-banner checks referencing calendar fields can run synchronously as soon as
+  // this point in initial page load — guard with typeof so an unset calendar field just reads as
+  // "not filled yet" instead of throwing and aborting the rest of setup.
+  function calIsSet(key) {
+    return typeof calState !== 'undefined' && !!(calState[key] && calState[key].selected);
+  }
+
   var identityBanner = initAttentionBanner('identityAttentionBanner', [
-    { jumpId: 'supDob', check: function () { return document.getElementById('supDob').value.trim().length > 0; } },
+    { jumpId: 'obSupDob', check: function () { return calIsSet('obSupDob'); } },
     { jumpId: 'supNiNumber', check: function () { return document.getElementById('supNiNumber').value.trim().length > 0; } },
     { jumpId: 'supHomeAddress', check: function () { return document.getElementById('supHomeAddress').value.trim().length > 0; } },
     { jumpId: 'supProofAddress', check: function () { return document.getElementById('supProofAddress').classList.contains('uploaded'); } }
   ]);
-  ['supDob', 'supNiNumber', 'supHomeAddress'].forEach(function (id) {
+  ['supNiNumber', 'supHomeAddress'].forEach(function (id) {
     document.getElementById(id).addEventListener('input', identityBanner.update);
   });
   document.getElementById('supProofAddress').addEventListener('keylr-uploaded', identityBanner.update);
+  var supDobCalText = document.querySelector('[data-cal-text="obSupDob"]');
+  if (supDobCalText) supDobCalText.addEventListener('cal-value-changed', identityBanner.update);
 
   /* ---- Step 2 (Company): Company & Director Identity ---- */
   var supPscFields = document.getElementById('supPscFields');
@@ -19998,14 +20160,16 @@
     { jumpId: 'insProvider', check: function () { return !document.getElementById('publicLiabilityToggle').classList.contains('on') || document.getElementById('insProvider').value.trim().length > 0; } },
     { jumpId: 'insPolicyNumber', check: function () { return !document.getElementById('publicLiabilityToggle').classList.contains('on') || document.getElementById('insPolicyNumber').value.trim().length > 0; } },
     { jumpId: 'insCoverage', check: function () { return !document.getElementById('publicLiabilityToggle').classList.contains('on') || document.getElementById('insCoverage').value.trim().length > 0; } },
-    { jumpId: 'insExpiry', check: function () { return !document.getElementById('publicLiabilityToggle').classList.contains('on') || document.getElementById('insExpiry').value.trim().length > 0; } },
+    { jumpId: 'insExpiry', check: function () { return !document.getElementById('publicLiabilityToggle').classList.contains('on') || calIsSet('obInsExpiry'); } },
     { jumpId: 'insUpload', check: function () { return !document.getElementById('publicLiabilityToggle').classList.contains('on') || document.getElementById('insUploadZone').classList.contains('uploaded'); } }
   ]);
-  ['insProvider', 'insPolicyNumber', 'insCoverage', 'insExpiry'].forEach(function (id) {
+  ['insProvider', 'insPolicyNumber', 'insCoverage'].forEach(function (id) {
     document.getElementById(id).addEventListener('input', insuranceBanner.update);
   });
   document.getElementById('insUploadZone').addEventListener('keylr-uploaded', insuranceBanner.update);
   document.getElementById('publicLiabilityToggle').addEventListener('click', function () { setTimeout(insuranceBanner.update, 0); });
+  var insExpiryCalText = document.querySelector('[data-cal-text="obInsExpiry"]');
+  if (insExpiryCalText) insExpiryCalText.addEventListener('cal-value-changed', insuranceBanner.update);
 
   /* ---- Step 4: Background Checks ---- */
   initObToggle('dbsToggle', 'dbsFields');
@@ -20135,7 +20299,14 @@
     var selectedCount = Object.keys(selectedSet).filter(function (r) { return selectedSet[r]; }).length;
     document.getElementById('crpSelectAll').textContent = selectedCount === roles.length ? 'Clear All' : 'Select All';
 
-    grid.innerHTML = roles.map(function (role) {
+    var searchInput = document.getElementById('categorySearchInput');
+    var q = searchInput ? searchInput.value.trim().toLowerCase() : '';
+    var filteredRoles = q ? roles.filter(function (r) { return r.toLowerCase().indexOf(q) !== -1; }) : roles;
+    // If this category only matched the search by its own name (no individual role's text matched),
+    // fall back to showing every role in it rather than an empty-looking grid.
+    var rolesToRender = (q && filteredRoles.length === 0) ? roles : filteredRoles;
+
+    grid.innerHTML = rolesToRender.map(function (role) {
       var isSelected = !!selectedSet[role];
       var cert = CERT_REQUIRED_ROLES[role];
       var certTag = cert ? '<div class="rc-cert-tag">★ Certificate Required</div>' : '';
@@ -20298,10 +20469,26 @@
   });
   document.getElementById('categorySearchInput').addEventListener('input', function () {
     var q = this.value.trim().toLowerCase();
+    var matchingCats = [];
     document.querySelectorAll('#categoryList .crp-cat-row').forEach(function (row) {
-      var name = row.getAttribute('data-cat').toLowerCase();
-      row.style.display = name.indexOf(q) !== -1 ? '' : 'none';
+      var cat = row.getAttribute('data-cat');
+      var catNameMatches = cat.toLowerCase().indexOf(q) !== -1;
+      var roles = categoryRoles[cat] || [];
+      var roleMatches = !!q && roles.some(function (r) { return r.toLowerCase().indexOf(q) !== -1; });
+      var show = !q || catNameMatches || roleMatches;
+      row.style.display = show ? '' : 'none';
+      if (show) matchingCats.push(cat);
     });
+    // If the search matched a role in a category that isn't the one currently open, jump straight
+    // to the first matching category instead of leaving the supplier to click into it themselves
+    // to discover why it showed up in the filtered list.
+    if (q && matchingCats.length && matchingCats.indexOf(activeCategory) === -1) {
+      activeCategory = matchingCats[0];
+      document.querySelectorAll('#categoryList .crp-cat-row').forEach(function (r) {
+        r.classList.toggle('active', r.getAttribute('data-cat') === activeCategory);
+      });
+    }
+    renderCrpRoles();
   });
   renderCrpRoles();
   syncCategoryCounts();
@@ -20907,7 +21094,27 @@
   function renderSupplierDashboardState(mode) {
     var populated = mode === 'populated';
 
-    document.getElementById('supOnboardingBanner').style.display = populated ? 'none' : '';
+    if (populated) {
+      // The quick-login demo persona never actually goes through the wizard, so seed her captured
+      // data directly with a complete, realistic profile — otherwise the (correctly, for a real
+      // supplier) data-driven completion banner would incorrectly treat her as 0% onboarded.
+      supplierCapturedData.businessType = 'sole-trader';
+      supplierCapturedData.fullName = 'Ferna';
+      supplierCapturedData.phoneNumber = '+447671542225';
+      supplierCapturedData.email = 'greenwood86@gmail.com';
+      supplierCapturedData.dob = '12 May 1990';
+      supplierCapturedData.nationality = 'British';
+      supplierCapturedData.niNumber = 'QQ 778823 A';
+      supplierCapturedData.homeAddress = '14 Rowan Street, Leeds';
+      supplierCapturedData.proofAddressFile = 'proof-of-address.pdf';
+      supplierCapturedData.selectedRoles = [{ category: 'Plumbing', role: 'General Plumber' }];
+      supplierCapturedData.pliCertFile = 'public-liability-cert.pdf';
+      supplierCapturedData.pliExpiry = '08 Aug 2027';
+      supplierCapturedData.dbsCertFile = 'dbs-certificate.pdf';
+      supplierCapturedData.dbsIssueDate = '15 Jan 2025';
+      supplierCapturedData.rightToWork = 'yes';
+    }
+
     document.getElementById('chipBankAccountDot').className = 'dot ' + (populated ? 'green' : 'red');
     document.getElementById('chipIdentityDot').className = 'dot green';
     document.getElementById('chipTaxInfoDot').className = 'dot ' + (populated ? 'green' : 'red');
@@ -20923,8 +21130,6 @@
     document.getElementById('supAcctProgressRing').setAttribute('stroke-dashoffset', populated ? '0' : '65');
 
     if (!populated) {
-      document.getElementById('supOnboardingProgressFill').style.width = '35%';
-      document.getElementById('supOnboardingProgressLabel').textContent = '35% verified';
       document.getElementById('supStatOpenQuotes').textContent = '0';
       document.getElementById('supStatInProgress').textContent = '0';
       document.getElementById('supStatUpcoming').textContent = '0';
@@ -21344,6 +21549,7 @@
     Object.keys(SUP_VIEW_IDS).forEach(function (key) {
       document.getElementById(SUP_VIEW_IDS[key]).style.display = (key === view) ? '' : 'none';
     });
+    if (view === 'profile-settings' && typeof renderSupOnboardingCompletionState === 'function') renderSupOnboardingCompletionState();
     var scrollArea = document.querySelector('#supplierDashboard .dash-scroll-area');
     scrollArea.scrollTo({ top: 0, behavior: 'smooth' });
     var activeViewEl = document.getElementById(SUP_VIEW_IDS[view]);
@@ -25282,7 +25488,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     switchSupSettingsTab('payment');
   });
   document.getElementById('supContinueOnboardingBtn').addEventListener('click', function () {
-    showToast('You\u2019ve already submitted your onboarding details \u2014 verification is in progress.');
+    openSupOnboardingToContinue();
   });
   document.getElementById('supNotifCard').addEventListener('click', function () {
     document.querySelectorAll('#supplierDashboard .dash-nav-item').forEach(function (i) { i.classList.remove('active'); });
@@ -30712,13 +30918,26 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (!textEl) return;
     if (st.selected) {
       textEl.textContent = calFormatDMY(st.selected);
-      textEl.classList.remove('placeholder');
+      // The onboarding wizard's calendar fields use the cdd-value/cdd-placeholder convention (to
+      // match its other custom-dropdown fields) while calendars elsewhere in the app use a plain
+      // "placeholder" class — remove both so a picked date is correctly marked active/selected
+      // regardless of which convention this particular field uses. Leaving cdd-placeholder in place
+      // was the root cause of picked onboarding dates (DOB, insurance/DBS expiry dates) never
+      // registering as filled for validation or the onboarding-completion progress calculation.
+      textEl.classList.remove('placeholder', 'cdd-placeholder');
       if (hiddenInput) hiddenInput.value = calFormatISO(st.selected);
     } else {
       textEl.textContent = 'dd/mm/yyyy';
       textEl.classList.add('placeholder');
+      if (textEl.classList.contains('cdd-value')) textEl.classList.add('cdd-placeholder');
       if (hiddenInput) hiddenInput.value = '';
     }
+    // Lets anything that needs to react to a picked/cleared date do so without updateCalFieldDisplay
+    // (a low-level display helper) needing to know about higher-level concerns like attention-banner
+    // pills — e.g. the onboarding wizard's "X details still needed" banners listen for this on their
+    // date fields so a picked Date of Birth / policy expiry date correctly gets struck through
+    // instead of staying stuck looking incomplete forever.
+    textEl.dispatchEvent(new Event('cal-value-changed', { bubbles: true }));
   }
   document.querySelectorAll('.pm-cal-trigger-btn').forEach(function (btn) {
     btn.addEventListener('click', function (e) {
