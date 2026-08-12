@@ -634,6 +634,13 @@
     .footer-bottom { flex-direction: column; gap: 12px; align-items: flex-start; }
   }
 
+  @media (max-width: 420px) {
+    .hero h1 { font-size: 30px; }
+    .hero { padding-left: 16px; padding-right: 16px; }
+    #heroSearchBtn .hero-search-btn-text { display: none; }
+    #heroSearchBtn { padding: 12px 16px; }
+  }
+
   /* =========================================================
      SCROLL-REVEAL SYSTEM
   ========================================================== */
@@ -1746,6 +1753,15 @@
   .upload-method-option .umo-sub { font-size: 12.5px; color: var(--text-body-muted); margin-top: 2px; }
   .upload-method-option .umo-chevron { margin-left: auto; color: var(--text-body-muted); flex-shrink: 0; }
   .upload-method-overlay.single-option #uploadFromPhoneOption { display: none; }
+  /* On a phone, "scan a QR code with your phone" to upload from your phone is circular — swap that
+     option for a direct camera-capture option instead. Desktop/tablet keep the QR handoff since
+     there's no camera to open locally. */
+  #uploadFromCameraOption { display: none; }
+  @media (max-width: 420px) {
+    #uploadFromPhoneOption { display: none; }
+    #uploadFromCameraOption { display: flex; }
+  }
+  .upload-method-overlay.single-option #uploadFromCameraOption { display: none; }
 
   .qr-code-box {
     width: 200px; height: 200px; margin: 0 auto 18px; border-radius: 12px;
@@ -1906,6 +1922,85 @@
   .cat-role-picker .crp-roles-head .crp-select-all { font-size: 12px; font-weight: 600; color: var(--accent-blue); cursor: pointer; }
   .crp-roles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
   @media (max-width: 560px) { .crp-roles-grid { grid-template-columns: repeat(2, 1fr); } }
+
+  /* ==========================================================================
+     SUPPLIER ONBOARDING — mobile responsive (<=420px)
+     Everything here is scoped under #supObApp so it never touches the PM
+     onboarding wizard, Account Settings, or Admin views that reuse the same
+     ob-, ab-, callout, ocs-, and crp- component classes outside of onboarding.
+     ========================================================================== */
+  @media (max-width: 420px) {
+    /* Hide the visible scrollbar chrome on the onboarding scroll area while
+       keeping scrolling itself fully functional (Firefox + IE/Edge legacy +
+       WebKit/Blink). */
+    #supObApp .ob-content {
+      overflow-y: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    #supObApp .ob-content::-webkit-scrollbar { display: none; }
+    #supObApp { scrollbar-width: none; -ms-overflow-style: none; }
+    #supObApp::-webkit-scrollbar { display: none; }
+
+    /* Topbar: the logo and the back/continue actions share the top row (actions pushed to the
+       right), while the step label + inline progress track wrap onto their own row below. */
+    #supObApp .ob-topbar { height: auto; padding: 12px 0; }
+    #supObApp .ob-topbar-inner { flex-wrap: wrap; row-gap: 10px; }
+    #supObApp .ob-topbar-logo-group { order: 1; }
+    #supObApp .ob-actions { order: 2; margin-left: auto; }
+    #supObApp .ob-step-label {
+      position: static; left: auto; top: auto; transform: none;
+      display: flex; align-items: center; order: 3; flex: 1 1 100%;
+    }
+    #supObApp .ob-inline-progress-track { order: 4; }
+
+    /* Back button: icon only, no label text. */
+    #supObApp .ob-back-btn { padding: 9px; }
+    #supObApp .ob-back-btn .ob-back-btn-text { display: none; }
+
+    /* Section titles wrap onto their own line under any inline badge instead
+       of fighting for horizontal space. */
+    #supObApp .ob-section-title { flex-direction: column; align-items: baseline; gap: 6px; }
+
+    /* Attention banners: icon+title stack above the sub-copy, and the left
+       indent that used to align text under the (now stacked) icon is removed. */
+    #supObApp .ab-head { flex-direction: column; align-items: baseline; }
+    #supObApp .ab-sub { margin-left: 0; }
+    #supObApp .attention-jump-row { margin-left: 0; }
+
+    /* Callouts: icon stacks above the body text instead of sitting beside it. */
+    #supObApp .callout.callout-info { flex-direction: column; }
+
+    /* Categories & Roles step: role chips go full-width, one per row. */
+    #crpRolesGrid { grid-template-columns: repeat(1, 1fr); }
+
+    /* Card-section headers (icon + title [+ optional badge]): tighter, more consistent spacing
+       across every step, whether or not the header happens to wrap onto two lines. */
+    #supObApp .ocs-head { row-gap: 0px; margin-bottom: 16px; }
+
+    /* Two-up field rows stack to a single column across every step (not just Background Check). */
+    #supObApp .ob-row-2 { display: block; }
+
+    /* Insurance step: fields that were pinned to ~50% width (to sit two-up
+       next to another field) are freed to use the full row width now that
+       ob-row-2 already stacks to a single column below 640px. */
+    #supObApp .ob-step[data-stepkey="insurance"] .ob-field { max-width: none !important; }
+
+    /* Background check step */
+    #supObApp .ob-step[data-stepkey="background"] .fd-label { display: grid; }
+    #supObApp .ob-step[data-stepkey="background"] .callout.callout-neutral { flex-direction: column; }
+
+    /* Payment setup step: the "v1 · Current" version badge drops below the
+       section title instead of being squeezed onto the same line, and the
+       VAT number + verify button stack instead of sitting side by side. */
+    #supObApp .ob-step[data-stepkey="payment"] .ocs-head { flex-wrap: wrap; }
+    #supObApp .ob-step[data-stepkey="payment"] .version-badge {
+      flex-basis: 100%; margin-left: 40px !important; margin-top: 2px;
+    }
+    #supObApp .ob-step[data-stepkey="payment"] .vat-verify-row { flex-direction: column; }
+  }
+
+
   .crp-role-chip {
     display: flex; align-items: center; gap: 8px;
     border: 1px solid var(--border-subtle); border-radius: 9px; padding: 9px 11px;
@@ -2571,6 +2666,63 @@
   .sinb-send-btn:not(:disabled) { background: linear-gradient(135deg, #22447f 0%, #0d1b3d 100%); }
   .sinb-send-btn:not(:disabled):active { transform: scale(0.9); }
   .sinb-composer-hint { font-size: 10.5px; color: var(--text-body-muted); margin-top: 8px; }
+
+  /* ==========================================================================
+     ONBOARDING — floating "Keylr Support" chat widget (bottom-right FAB).
+     Reuses the same sinb-* chat components as the Dashboard Inbox and Account
+     Settings Chat tab, just shrunk to fit a floating panel.
+     ========================================================================== */
+  .ob-chat-fab-wrap { position: fixed; right: 24px; bottom: 24px; z-index: 390; }
+  .ob-chat-fab {
+    width: 56px; height: 56px; border-radius: 50%; border: none; position: relative;
+    background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%);
+    color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer;
+    box-shadow: 0 12px 30px rgba(16,24,40,0.3); transition: transform 150ms ease-out;
+  }
+  .ob-chat-fab:hover { transform: translateY(-2px); }
+  .ob-chat-fab-icon-close { display: none; }
+  .ob-chat-fab-wrap.open .ob-chat-fab-icon-chat { display: none; }
+  .ob-chat-fab-wrap.open .ob-chat-fab-icon-close { display: block; }
+  .ob-chat-fab-badge {
+    position: absolute; top: -2px; right: -2px; min-width: 20px; height: 20px; padding: 0 5px;
+    border-radius: 999px; background: #e8482c; color: #fff; font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; border: 2px solid #fff;
+  }
+  .ob-chat-panel {
+    position: absolute; bottom: 68px; right: 0; width: 360px; height: 500px; max-height: calc(100vh - 110px);
+    background: #fff; border-radius: 18px; box-shadow: 0 26px 60px rgba(16,24,40,0.3);
+    display: flex; flex-direction: column; overflow: hidden;
+    opacity: 0; visibility: hidden; transform: translateY(16px) scale(0.98); pointer-events: none;
+    transition: opacity 200ms ease-out, transform 200ms cubic-bezier(0.16,1,0.3,1), visibility 200ms ease-out;
+  }
+  .ob-chat-fab-wrap.open .ob-chat-panel { opacity: 1; visibility: visible; transform: none; pointer-events: auto; }
+  .ob-chat-panel-topbar { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-bottom: 1px solid var(--border-subtle); flex-shrink: 0; }
+  .ob-chat-panel-topbar .sinb-chat-header { flex: 1; min-width: 0; padding: 0; border-bottom: none; }
+  .ob-chat-panel-topbar .sinb-chat-header .sinb-conv-avatar { width: 34px; height: 34px; font-size: 12px; }
+  .ob-chat-panel-topbar .sinb-chat-header-name-row h3 { font-size: 13.5px; }
+  .ob-chat-panel-close {
+    width: 28px; height: 28px; border-radius: 8px; border: none; background: var(--surface-soft);
+    color: var(--text-body-muted); display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0; transition: background-color 150ms ease-out, color 150ms ease-out;
+  }
+  .ob-chat-panel-close:hover { background: #e2e8f0; color: var(--text-heading); }
+  .ob-chat-panel .sinb-chat-scroll { padding: 14px 16px; overflow-x: hidden; }
+  .ob-chat-panel .sinb-msg-stack { max-width: 85%; }
+  .ob-chat-panel .sinb-msg-stack-wide,
+  .ob-chat-panel .sinb-system-card,
+  .ob-chat-panel .sinb-jump-card { max-width: 100%; }
+  .ob-chat-panel .sinb-msg-bubble,
+  .ob-chat-panel .sinb-attachment-bubble,
+  .ob-chat-panel .sinb-system-card-body,
+  .ob-chat-panel .sinb-system-card-title { word-break: break-word; overflow-wrap: break-word; }
+  .ob-chat-panel .sinb-composer { padding: 10px 12px 12px; }
+  @media (max-width: 420px) {
+    .ob-chat-fab-wrap { right: 16px; bottom: 16px; }
+    .ob-chat-panel {
+      position: fixed; right: 12px; left: 12px; bottom: 84px;
+      width: auto; height: min(72vh, 560px); max-height: calc(100vh - 100px);
+    }
+  }
 
 
   .sinb-details-overlay { position: absolute; inset: 0; background: rgba(15,23,42,0.45); backdrop-filter: blur(3px); z-index: 100; display: flex; align-items: stretch; justify-content: flex-end; padding: 0; opacity: 0; visibility: hidden; transition: opacity 200ms ease-out, visibility 200ms ease-out; }
@@ -5442,7 +5594,7 @@
       <form class="search-bar" role="search" onsubmit="return false;">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
         <input type="text" id="heroSearchInput" placeholder="Describe your issue or need...">
-        <button type="button" id="heroSearchBtn" class="btn btn-primary">Search <span class="arrow">→</span></button>
+        <button type="button" id="heroSearchBtn" class="btn btn-primary"><span class="hero-search-btn-text">Search</span> <span class="arrow">→</span></button>
       </form>
 
       <div class="try-row">
@@ -6134,6 +6286,14 @@
         </div>
         <span class="umo-chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></span>
       </div>
+      <div class="upload-method-option" id="uploadFromCameraOption">
+        <div class="umo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+        <div>
+          <div class="umo-title">Take Photo</div>
+          <div class="umo-sub">Use your camera to capture and upload directly</div>
+        </div>
+        <span class="umo-chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></span>
+      </div>
       <button type="button" class="btn btn-secondary-light" id="uploadMethodCancel" style="width:100%;">Cancel</button>
     </div>
   </div>
@@ -6661,16 +6821,16 @@
             <path d="M190.031 17.0398V0.00976562L257.091 0.0897655L324.111 0.209765L324.231 17.1598L324.311 34.0698H257.171H190.031V17.0398Z"/>
           </svg>
         </div>
-        <div class="ob-inline-progress-track"><div class="ob-inline-progress-fill" id="supObProgressFill"></div></div>
       </div>
       <div class="ob-step-label" id="supObStepLabel">Setup</div>
+      <div class="ob-inline-progress-track"><div class="ob-inline-progress-fill" id="supObProgressFill"></div></div>
       <div class="ob-actions">
         <button type="button" class="ob-back-btn" id="supObBackBtn" hidden>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          Back
+          <span class="ob-back-btn-text">Back</span>
         </button>
         <button type="button" class="btn btn-secondary-light" id="supObSaveSkipBtn" style="display:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M20 6L9 17l-5-5"/></svg>Submit &amp; skip other steps</button>
-        <button type="button" class="btn btn-primary" id="supObNextBtn">Continue <span class="arrow">→</span></button>
+        <button type="button" class="btn btn-primary" id="supObNextBtn">Save &amp; Continue <span class="arrow">→</span></button>
       </div>
       </div>
     </div>
@@ -7966,6 +8126,51 @@
           </div>
         </section>
       </div>
+    </div>
+
+    <!-- Floating "Keylr Support" chat widget — same live conversation as Dashboard > Inbox and
+         Account Settings > Chat, just reachable while still mid-onboarding. -->
+    <div class="ob-chat-fab-wrap" id="obChatFabWrap">
+      <div class="ob-chat-panel" id="obChatPanel">
+        <div class="ob-chat-panel-topbar">
+          <div class="sinb-chat-header" id="obChatHeader"></div>
+          <button type="button" class="ob-chat-panel-close" id="obChatPanelCloseBtn" aria-label="Close chat"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+        </div>
+        <div class="sinb-chat-thread-wrap">
+          <div class="sinb-chat-scroll" id="obChatScroll">
+            <div id="obChatMessagesInner"></div>
+            <div class="sinb-scroll-anchor"><button type="button" class="sinb-scroll-bottom-btn" id="obChatScrollBottomBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg><span>Go to bottom</span></button></div>
+          </div>
+        </div>
+        <div class="sinb-composer" id="obChatComposer">
+          <div class="sinb-reply-preview" id="obChatReplyPreview" style="display:none;">
+            <div class="sinb-reply-preview-bar"></div>
+            <div class="sinb-reply-preview-body"><span class="sinb-reply-preview-label">Replying to</span><span class="sinb-reply-preview-field" id="obChatReplyPreviewField"></span></div>
+            <button type="button" class="sinb-reply-preview-close" id="obChatReplyPreviewClose"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+          </div>
+          <div class="sinb-composer-icons">
+            <div style="position:relative;">
+              <button type="button" class="sinb-icon-btn" id="obChatEmojiBtn" data-tooltip="Add emoji"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg></button>
+              <div class="sinb-emoji-popover" id="obChatEmojiPopover">
+                <span data-emoji="👍">👍</span><span data-emoji="👌">👌</span><span data-emoji="🙂">🙂</span><span data-emoji="😀">😀</span><span data-emoji="🙌">🙌</span><span data-emoji="👋">👋</span>
+                <span data-emoji="✅">✅</span><span data-emoji="🔧">🔧</span><span data-emoji="🚐">🚐</span><span data-emoji="⏰">⏰</span><span data-emoji="📷">📷</span><span data-emoji="👊">👊</span>
+              </div>
+            </div>
+            <button type="button" class="sinb-icon-btn" id="obChatAttachBtn" data-tooltip="Attach image or PDF"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button>
+            <input type="file" id="obChatAttachInput" accept="image/*,video/*,.pdf" style="display:none;">
+          </div>
+          <div class="sinb-input-row">
+            <input type="text" id="obChatMessageInput" placeholder="Message...">
+            <button type="button" class="sinb-send-btn" id="obChatSendBtn" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg></button>
+          </div>
+          <div class="sinb-composer-hint">Enter to send · Shift + Enter for new line · Images, videos + PDFs up to 10 MB.</div>
+        </div>
+      </div>
+      <button type="button" class="ob-chat-fab" id="obChatFabBtn" aria-label="Chat with Keylr Support">
+        <svg class="ob-chat-fab-icon-chat" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+        <svg class="ob-chat-fab-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        <span class="ob-chat-fab-badge" id="obChatFabBadge" hidden>1</span>
+      </button>
     </div>
   </div>
 
@@ -15343,6 +15548,23 @@
     }, 3500);
   });
 
+  document.getElementById('uploadFromCameraOption').addEventListener('click', function () {
+    var input = activeUploadZone && activeUploadZone.querySelector('input[type="file"]');
+    closeUploadMethodPopup();
+    if (!input) return;
+    // Reuse the zone's existing hidden file input — just point the OS picker straight at the
+    // camera for this one click, then restore its normal (any file type) behaviour afterward.
+    var prevAccept = input.getAttribute('accept');
+    var hadCapture = input.hasAttribute('capture');
+    input.setAttribute('accept', 'image/*');
+    input.setAttribute('capture', 'environment');
+    input.click();
+    setTimeout(function () {
+      if (prevAccept === null) input.removeAttribute('accept'); else input.setAttribute('accept', prevAccept);
+      if (!hadCapture) input.removeAttribute('capture');
+    }, 1000);
+  });
+
   document.getElementById('qrCancelBtn').addEventListener('click', function () {
     clearTimeout(qrCompleteTimer);
     qrUploadOverlay.classList.remove('open');
@@ -19029,7 +19251,7 @@
     var label = step === 1 ? 'Setup' : (step >= 5 ? 'Profile' : 'Verification');
     var isLast = step === order.length;
     supObStepLabel.textContent = label;
-    supObNextBtn.innerHTML = (isLast ? 'Submit for Review' : 'Continue') + ' <span class="arrow">→</span>';
+    supObNextBtn.innerHTML = (isLast ? 'Submit for Review' : 'Save & Continue') + ' <span class="arrow">→</span>';
     supObBackBtn.hidden = step === 1;
     var canSkip = supObEditFromSettings && !supObIsBusinessTypeChanging();
     document.getElementById('supObSaveSkipBtn').style.display = canSkip ? 'inline-flex' : 'none';
@@ -21671,6 +21893,18 @@
     presence: 'Active now', lastActivityLabel: '05/07/2026', unread: 0,
     messages: []
   };
+  // The onboarding floating widget is intentionally a separate, fresh conversation — it does NOT
+  // show the supplier's existing Account Settings / Dashboard Inbox history, just a short greeting
+  // to start from. Kept in memory only (not persisted to localStorage), since it's meant to reset to
+  // this same starting point each time onboarding is (re)entered rather than accumulate history.
+  var OB_CHAT_CONV = {
+    id: 'ob-support', name: 'Keylr Support', initials: 'KS', type: 'support',
+    presence: 'Online', lastActivityLabel: 'just now',
+    messages: [
+      { kind: 'text', mine: false, text: 'Hi, this is Keylr Support \u2014 how can we help with your onboarding today?', ts: Date.now(), time: sinbNowTimestamp() }
+    ]
+  };
+  function obChatGetConv() { return OB_CHAT_CONV; }
   var SUP_CHAT_EXTRA_MESSAGES = {}; // keyed by supplier name — admin's own sent messages + replies for suppliers other than the live-synced demo one
   var SINB_MSG_STORAGE_KEY = 'keylrDemoSinbMessages_v1';
   var SUP_CHAT_EXTRA_STORAGE_KEY = 'keylrDemoSupChatExtra_v1';
@@ -21880,7 +22114,8 @@
     setInterval(function () {
       var panel = document.getElementById('supSettingsPanelInbox');
       var inboxViewPanel = document.getElementById('supInboxView');
-      var panelVisible = (panel && panel.style.display !== 'none') || (inboxViewPanel && inboxViewPanel.style.display !== 'none');
+      var obChatWrap = document.getElementById('obChatFabWrap');
+      var panelVisible = (panel && panel.style.display !== 'none') || (inboxViewPanel && inboxViewPanel.style.display !== 'none') || (obChatWrap && obChatWrap.classList.contains('open'));
       var adminPanel = document.getElementById('supTabChat');
       var adminPanelVisible = adminPanel && adminPanel.style.display !== 'none';
       if (!panelVisible && !adminPanelVisible) return; // nothing open, skip the storage read entirely
@@ -21906,11 +22141,13 @@
   sinbStartChatPolling();
 
   var SINB_MOUNTS = [
-    { header: 'sinbChatHeader', scroll: 'sinbChatScroll', inner: 'sinbMessagesInner', scrollBtn: 'sinbScrollBottomBtn', replyPreview: 'sinbReplyPreview', replyPreviewField: 'sinbReplyPreviewField', replyPreviewClose: 'sinbReplyPreviewClose', messageInput: 'sinbMessageInput', sendBtn: 'sinbSendBtn', emojiBtn: 'sinbEmojiBtn', emojiPopover: 'sinbEmojiPopover', attachBtn: 'sinbAttachBtn', attachInput: 'sinbAttachInput' },
-    { header: 'supInboxChatHeader', scroll: 'supInboxChatScroll', inner: 'supInboxMessagesInner', scrollBtn: 'supInboxScrollBottomBtn', replyPreview: 'supInboxReplyPreview', replyPreviewField: 'supInboxReplyPreviewField', replyPreviewClose: 'supInboxReplyPreviewClose', messageInput: 'supInboxMessageInput', sendBtn: 'supInboxSendBtn', emojiBtn: 'supInboxEmojiBtn', emojiPopover: 'supInboxEmojiPopover', attachBtn: 'supInboxAttachBtn', attachInput: 'supInboxAttachInput' }
-  ]; // The Keylr Support chat has two entry points — Account Settings > Chat, and the Dashboard > Inbox
-     // page — both showing the exact same live conversation. Rendering loops over every mount that
-     // exists in the DOM so both always stay in sync regardless of which one the supplier is looking at.
+    { header: 'sinbChatHeader', scroll: 'sinbChatScroll', inner: 'sinbMessagesInner', scrollBtn: 'sinbScrollBottomBtn', replyPreview: 'sinbReplyPreview', replyPreviewField: 'sinbReplyPreviewField', replyPreviewClose: 'sinbReplyPreviewClose', messageInput: 'sinbMessageInput', sendBtn: 'sinbSendBtn', emojiBtn: 'sinbEmojiBtn', emojiPopover: 'sinbEmojiPopover', attachBtn: 'sinbAttachBtn', attachInput: 'sinbAttachInput', getConv: sinbGetActiveConv },
+    { header: 'supInboxChatHeader', scroll: 'supInboxChatScroll', inner: 'supInboxMessagesInner', scrollBtn: 'supInboxScrollBottomBtn', replyPreview: 'supInboxReplyPreview', replyPreviewField: 'supInboxReplyPreviewField', replyPreviewClose: 'supInboxReplyPreviewClose', messageInput: 'supInboxMessageInput', sendBtn: 'supInboxSendBtn', emojiBtn: 'supInboxEmojiBtn', emojiPopover: 'supInboxEmojiPopover', attachBtn: 'supInboxAttachBtn', attachInput: 'supInboxAttachInput', getConv: sinbGetActiveConv },
+    { header: 'obChatHeader', scroll: 'obChatScroll', inner: 'obChatMessagesInner', scrollBtn: 'obChatScrollBottomBtn', replyPreview: 'obChatReplyPreview', replyPreviewField: 'obChatReplyPreviewField', replyPreviewClose: 'obChatReplyPreviewClose', messageInput: 'obChatMessageInput', sendBtn: 'obChatSendBtn', emojiBtn: 'obChatEmojiBtn', emojiPopover: 'obChatEmojiPopover', attachBtn: 'obChatAttachBtn', attachInput: 'obChatAttachInput', getConv: obChatGetConv, standalone: true }
+  ]; // Account Settings > Chat and the Dashboard > Inbox page both show the exact same live "Keylr
+     // Support" conversation and stay in sync via getConv (both point at sinbGetActiveConv). The
+     // onboarding floating widget is deliberately its own separate conversation (getConv points at
+     // obChatGetConv instead) — see OB_CHAT_CONV above.
 
   function sinbBuildHeaderHtml(c) {
     return '<div class="sinb-conv-avatar" style="background:' + sinbAvatarColor(c.initials) + ';color:#1e40af;">' + c.initials + (c.presence ? '<span class="presence-dot"></span>' : '') + '</div>' +
@@ -21949,35 +22186,41 @@
       }
     });
   }
-  function sinbRenderChatMount(mount, headerHtml, messagesHtml) {
+  function sinbRenderChatMount(mount) {
     var headerEl = document.getElementById(mount.header);
     var scrollEl = document.getElementById(mount.scroll);
     var innerEl = document.getElementById(mount.inner);
     if (!headerEl || !scrollEl || !innerEl) return;
-    headerEl.innerHTML = headerHtml;
-    innerEl.innerHTML = messagesHtml;
+    var c = (mount.getConv || sinbGetActiveConv)();
+    headerEl.innerHTML = sinbBuildHeaderHtml(c);
+    innerEl.innerHTML = sinbBuildMessagesHtml(c);
     scrollEl.scrollTop = scrollEl.scrollHeight;
     sinbWireScrollBottomBtn(scrollEl, document.getElementById(mount.scrollBtn));
 
-    wireOwnResubmitInputs(scrollEl, function () { return supplierChangeRequests[SUP_OWN_DEMO_NAME] || []; }, function (keepExpandedId, btn) {
-      var parts = btn.getAttribute('data-own-resubmit').split('|');
-      var change = sinbFindChange(parts[0], parts[1]);
-      if (change) {
-        if (typeof logSupChatActivity === 'function') {
-          logSupChatActivity(SUP_OWN_DEMO_NAME, { type: 'resubmitted', actor: SUP_OWN_DEMO_NAME, action: 'resubmitted', fieldLabel: change.fieldLabel, oldValue: change.oldValue, newValue: change.newValue });
+    // The resubmit-from-chat flow only makes sense for the shared Keylr Support conversation (it
+    // posts back into SINB_SUPPORT_CONV specifically) — skip it for standalone mounts like the
+    // onboarding widget, which never renders edit-request cards in the first place.
+    if (!mount.standalone) {
+      wireOwnResubmitInputs(scrollEl, function () { return supplierChangeRequests[SUP_OWN_DEMO_NAME] || []; }, function (keepExpandedId, btn) {
+        var parts = btn.getAttribute('data-own-resubmit').split('|');
+        var change = sinbFindChange(parts[0], parts[1]);
+        if (change) {
+          if (typeof logSupChatActivity === 'function') {
+            logSupChatActivity(SUP_OWN_DEMO_NAME, { type: 'resubmitted', actor: SUP_OWN_DEMO_NAME, action: 'resubmitted', fieldLabel: change.fieldLabel, oldValue: change.oldValue, newValue: change.newValue });
+          }
+          // Notify admin with a message tagged to this exact field, so it's clear which one was
+          // resubmitted without them having to scroll back through the whole request card.
+          SINB_SUPPORT_CONV.messages.push({
+            kind: 'text', mine: true,
+            text: 'I\u2019ve resubmitted \u201c' + change.fieldLabel + '\u201d \u2014 new value: ' + change.newValue,
+            replyToChangeId: change.id, replyToFieldLabel: change.fieldLabel,
+            ts: Date.now(), time: sinbNowTimestamp()
+          });
+          saveSinbMessages();
         }
-        // Notify admin with a message tagged to this exact field, so it's clear which one was
-        // resubmitted without them having to scroll back through the whole request card.
-        SINB_SUPPORT_CONV.messages.push({
-          kind: 'text', mine: true,
-          text: 'I\u2019ve resubmitted \u201c' + change.fieldLabel + '\u201d \u2014 new value: ' + change.newValue,
-          replyToChangeId: change.id, replyToFieldLabel: change.fieldLabel,
-          ts: Date.now(), time: sinbNowTimestamp()
-        });
-        saveSinbMessages();
-      }
-      sinbRenderChat();
-    });
+        sinbRenderChat();
+      });
+    }
     scrollEl.querySelectorAll('[data-jump-change]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var changeId = btn.getAttribute('data-jump-change');
@@ -22001,10 +22244,7 @@
   function sinbRenderChat() {
     if (typeof loadSinbMessages === 'function') loadSinbMessages();
     if (typeof loadChangeRequestsFromStorage === 'function') loadChangeRequestsFromStorage();
-    var c = sinbGetActiveConv();
-    var headerHtml = sinbBuildHeaderHtml(c);
-    var messagesHtml = sinbBuildMessagesHtml(c);
-    SINB_MOUNTS.forEach(function (mount) { sinbRenderChatMount(mount, headerHtml, messagesHtml); });
+    SINB_MOUNTS.forEach(function (mount) { sinbRenderChatMount(mount); });
   }
 
   var sinbInitDone = false;
@@ -22050,7 +22290,7 @@
     function sendMessage() {
       var text = msgInput.value.trim();
       if (!text) return;
-      var c = sinbGetActiveConv();
+      var c = (mount.getConv || sinbGetActiveConv)();
       var msg = { kind: 'text', mine: true, text: text, ts: Date.now(), time: sinbNowTimestamp() };
       if (sinbReplyingTo) { msg.replyToChangeId = sinbReplyingTo.changeId; msg.replyToFieldLabel = sinbReplyingTo.fieldLabel; }
       c.messages.push(msg);
@@ -22100,7 +22340,7 @@
       attachInput.addEventListener('change', function () {
         var file = attachInput.files && attachInput.files[0];
         if (!file) return;
-        var c = sinbGetActiveConv();
+        var c = (mount.getConv || sinbGetActiveConv)();
         var isImage = file.type.indexOf('image/') === 0;
         var msg = { kind: 'attachment', mine: true, fileName: file.name, isImage: isImage, ts: Date.now(), time: sinbNowTimestamp() };
         if (sinbReplyingTo) { msg.replyToChangeId = sinbReplyingTo.changeId; msg.replyToFieldLabel = sinbReplyingTo.fieldLabel; }
@@ -22114,6 +22354,29 @@
       });
     }
   }
+
+  /* ---------------- Onboarding floating "Keylr Support" chat widget ---------------- */
+  (function () {
+    var fabWrap = document.getElementById('obChatFabWrap');
+    var fabBtn = document.getElementById('obChatFabBtn');
+    var closeBtn = document.getElementById('obChatPanelCloseBtn');
+    if (!fabWrap || !fabBtn) return;
+    function openObChatPanel() {
+      fabWrap.classList.add('open');
+      if (typeof initSupInboxOnce === 'function') initSupInboxOnce();
+      var badge = document.getElementById('obChatFabBadge');
+      if (badge) badge.hidden = true;
+      setTimeout(function () {
+        var msgInput = document.getElementById('obChatMessageInput');
+        if (msgInput) msgInput.focus();
+      }, 260);
+    }
+    function closeObChatPanel() { fabWrap.classList.remove('open'); }
+    fabBtn.addEventListener('click', function () {
+      if (fabWrap.classList.contains('open')) closeObChatPanel(); else openObChatPanel();
+    });
+    if (closeBtn) closeBtn.addEventListener('click', function (e) { e.stopPropagation(); closeObChatPanel(); });
+  })();
 
   function initSupjrOnce() {
     if (supjrInitialized) return;
