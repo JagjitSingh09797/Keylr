@@ -1945,17 +1945,36 @@
     #supObApp { scrollbar-width: none; -ms-overflow-style: none; }
     #supObApp::-webkit-scrollbar { display: none; }
 
-    /* Topbar: the logo and the back/continue actions share the top row (actions pushed to the
-       right), while the step label + inline progress track wrap onto their own row below. */
+    /* Topbar: just the logo and the step label + inline progress track (parallel, progress pushed
+       to the right). The action buttons no longer live here at all on mobile — see the fixed
+       bottom bar below, which gives Back / Finish Later / Submit for Review their own dedicated
+       strip instead of fighting the logo for room. */
     #supObApp .ob-topbar { height: auto; padding: 12px 0; }
-    #supObApp .ob-topbar-inner { flex-wrap: wrap; row-gap: 10px; }
+    #supObApp .ob-topbar-inner { flex-wrap: nowrap; }
     #supObApp .ob-topbar-logo-group { order: 1; }
-    #supObApp .ob-actions { order: 2; margin-left: auto; }
     #supObApp .ob-step-label {
       position: static; left: auto; top: auto; transform: none;
-      display: flex; align-items: center; order: 3; flex: 1 1 100%;
+      display: flex; align-items: center; order: 2; margin-left: auto;
+      flex: 0 1 auto; font-size: 12px;
     }
-    #supObApp .ob-inline-progress-track { order: 4; }
+    #supObApp .ob-inline-progress-track { order: 3; width: 64px; }
+
+    /* Action buttons: a floating white bar pinned to the bottom of the screen, sitting above the
+       scrollable form content rather than competing with the topbar for space. */
+    #supObApp .ob-actions {
+      position: fixed; left: 0; right: 0; bottom: 0; margin-left: 0; z-index: 392;
+      background: #fff; border-top: 1px solid var(--border-subtle);
+      box-shadow: 0 -6px 20px rgba(16, 24, 40, 0.08);
+      padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+      display: flex; align-items: center; flex-wrap: nowrap; gap: 8px;
+    }
+    #supObApp .ob-actions .btn { font-size: 12.5px; padding: 9px 12px; }
+    #supObApp .ob-actions #supObContinueOnlyBtn,
+    #supObApp .ob-actions #supObSaveSkipBtn,
+    #supObApp .ob-actions #supObNextBtn { flex: 1 1 0; white-space: nowrap; }
+    /* Leave room at the bottom of the scroll area so the last field(s) don't end up hidden behind
+       the fixed action bar. */
+    #supObApp .ob-content { padding-bottom: 90px; }
 
     /* Back button: icon only, no label text. */
     #supObApp .ob-back-btn { padding: 9px; }
@@ -2726,10 +2745,10 @@
   .ob-chat-panel .sinb-system-card-title { word-break: break-word; overflow-wrap: break-word; }
   .ob-chat-panel .sinb-composer { padding: 10px 12px 12px; }
   @media (max-width: 420px) {
-    .ob-chat-fab-wrap { right: 16px; bottom: 16px; }
+    .ob-chat-fab-wrap { right: 16px; bottom: 88px; z-index: 393; }
     .ob-chat-panel {
-      position: fixed; right: 12px; left: 12px; bottom: 84px;
-      width: auto; height: min(72vh, 560px); max-height: calc(100vh - 100px);
+      position: fixed; right: 12px; left: 12px; bottom: 156px;
+      width: auto; height: min(65vh, 560px); max-height: calc(100vh - 172px);
     }
   }
 
@@ -6842,6 +6861,7 @@
           <span class="ob-back-btn-text">Back</span>
         </button>
         <button type="button" class="btn btn-secondary-light" id="supObSaveSkipBtn" style="display:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M20 6L9 17l-5-5"/></svg>Submit &amp; skip other steps</button>
+        <button type="button" class="btn btn-secondary-light" id="supObContinueOnlyBtn" style="display:none;">Finish Later</button>
         <button type="button" class="btn btn-primary" id="supObNextBtn">Save &amp; Continue <span class="arrow">→</span></button>
       </div>
       </div>
@@ -19270,19 +19290,23 @@
     { key: 'companyRightToWork', label: 'Right to Work confirmation', step: 'background' }
   ];
   function supObRequiredFields() {
-    return supplierCapturedData.businessType === 'company' ? SUP_OB_REQUIRED_COMPANY : SUP_OB_REQUIRED_SOLE;
+    var capturedData = (typeof supplierCapturedData !== 'undefined') ? supplierCapturedData : {};
+    return capturedData.businessType === 'company' ? SUP_OB_REQUIRED_COMPANY : SUP_OB_REQUIRED_SOLE;
   }
   // Reads supplierCapturedData as it currently stands — NOT a fresh DOM scan — so it reflects
   // whatever was actually saved at the last step transition (see supObCollectWizardData calls on
   // Save & Continue / Back), and so it can be computed safely from outside the wizard (e.g. when
   // Account Settings is opened) without depending on the wizard's DOM being in any particular state.
+  // Guarded against supplierCapturedData not being assigned yet (it's declared much later in this
+  // script) since this can run synchronously during initial page setup, before that point.
   function supObComputeProgress() {
+    var capturedData = (typeof supplierCapturedData !== 'undefined') ? supplierCapturedData : {};
     var defs = supObRequiredFields();
     var filled = 0;
     var missingDocs = [];
     var firstIncompleteStep = null;
     defs.forEach(function (d) {
-      var v = supplierCapturedData[d.key];
+      var v = capturedData[d.key];
       var isFilled = d.isArray ? (Array.isArray(v) && v.length > 0) : !!(v && String(v).trim());
       if (isFilled) {
         filled++;
@@ -19320,13 +19344,35 @@
         }
       }
     }
+    // Blue while there's still anything outstanding, green only once the profile is genuinely 100%
+    // complete — no intermediate amber/red states.
+    var ringColor = progress.pct >= 100 ? '#22c55e' : '#284890';
+    var pctColor = progress.pct >= 100 ? '#1a7a3e' : '#284890';
+
+    // "Profile complete" ring next to the Account Settings heading.
     var ring = document.getElementById('supProfileCompleteRing');
     var ringPct = document.getElementById('supProfileCompletePct');
     if (ring) {
       var circumference = 169.6; // matches this ring's stroke-dasharray in the markup
       ring.setAttribute('stroke-dashoffset', String(Math.round(circumference * (1 - progress.pct / 100))));
+      ring.style.stroke = ringColor;
     }
-    if (ringPct) ringPct.textContent = progress.pct + '%';
+    if (ringPct) { ringPct.textContent = progress.pct + '%'; ringPct.style.color = pctColor; }
+
+    // Same underlying progress drives the small ring around the sidebar's bottom avatar too, so
+    // the two never disagree about how complete the profile actually is.
+    var sidebarRing = document.getElementById('supAcctProgressRing');
+    if (sidebarRing) {
+      var sidebarCircumference = 100.5; // matches supAcctProgressRing's stroke-dasharray in the markup
+      sidebarRing.setAttribute('stroke-dashoffset', String(Math.round(sidebarCircumference * (1 - progress.pct / 100))));
+      sidebarRing.style.stroke = ringColor;
+    }
+
+    var statusPill = document.getElementById('supAcctStatusPill');
+    if (statusPill) {
+      statusPill.textContent = isComplete ? 'Active' : 'Under Review';
+      statusPill.className = 'status-pill ' + (isComplete ? 'green' : 'amber');
+    }
     return progress;
   }
   // Reopens the wizard so the supplier can finish whatever's missing. Unlike openSupOnboardingForEdit
@@ -19388,10 +19434,14 @@
     var label = step === 1 ? 'Setup' : (step >= 5 ? 'Profile' : 'Verification');
     var isLast = step === order.length;
     supObStepLabel.textContent = label;
-    supObNextBtn.innerHTML = (isLast ? 'Continue' : 'Save & Continue') + ' <span class="arrow">→</span>';
+    supObNextBtn.innerHTML = (isLast ? 'Submit for Review' : 'Save & Continue') + ' <span class="arrow">→</span>';
     supObBackBtn.hidden = step === 1;
     var canSkip = supObEditFromSettings && !supObIsBusinessTypeChanging();
     document.getElementById('supObSaveSkipBtn').style.display = canSkip ? 'inline-flex' : 'none';
+    // On the last step of a first-time (not editing-from-settings) run through the wizard, offer a
+    // lighter "Continue" alongside "Submit for Review" — lets the supplier land on Account Settings
+    // without formally submitting yet, e.g. to come back and finish later via the completion banner.
+    document.getElementById('supObContinueOnlyBtn').style.display = (isLast && !supObEditFromSettings) ? 'inline-flex' : 'none';
     supObProgressFill.style.width = ((step / order.length) * 100) + '%';
 
     var stepper = document.getElementById('supProfileDotStepper');
@@ -19644,6 +19694,23 @@
         }
       }, 200);
     }
+  });
+
+  // "Continue" (outlined, last step only) — same destination as "Submit for Review" (Account
+  // Settings), but doesn't push the "New Supplier Application" admin notification, since the
+  // supplier is explicitly choosing not to formally submit yet. The "Complete your onboarding"
+  // banner (and its own "Continue Onboarding" resume button) picks up from here based on whatever
+  // was actually filled in.
+  document.getElementById('supObContinueOnlyBtn').addEventListener('click', function () {
+    supObApp.classList.remove('visible');
+    setTimeout(function () {
+      supObApp.classList.remove('active');
+      document.body.style.overflow = '';
+      supObCollectWizardData();
+      showSupplierDashboard(supplierCapturedData, 'new');
+      document.querySelectorAll('#supplierDashboard .dash-nav-item').forEach(function (i) { i.classList.remove('active'); });
+      showSupplierView('profile-settings');
+    }, 200);
   });
 
   /* ---- Edit from Account Settings: prefill onboarding fields with current settings values ---- */
@@ -20016,33 +20083,11 @@
   updateSupProfileTypeChip();
 
   function computeSupProfileCompletion() {
-    var total = 0, done = 0;
-    function check(bool) { total++; if (bool) done++; }
-
-    check(document.getElementById('supProfileFullNameInput').value.trim().length > 0);
-    check(document.querySelectorAll('#supDashSectorTiles .choice-tile.selected').length > 0);
-    check(document.getElementById('supDobInput').value.length > 0);
-    check(document.getElementById('supHomeAddressInput').value.trim().length > 0);
-    check(document.getElementById('supPliToggle').classList.contains('on'));
-    check(document.getElementById('supPiToggle').classList.contains('on'));
-    check(document.getElementById('supDbsToggle').classList.contains('on'));
-    check(document.querySelectorAll('#supDashCriminalDeclaration .radio-tile.selected').length > 0);
-    check(document.querySelectorAll('#supRightToWorkTiles .radio-tile.selected').length > 0);
-
-    var pct = total > 0 ? Math.round((done / total) * 100) : 100;
-    var circumference = 169.6;
-    var offset = circumference - (pct / 100) * circumference;
-    var ring = document.getElementById('supProfileCompleteRing');
-    ring.setAttribute('stroke-dashoffset', offset);
-    ring.style.stroke = pct >= 100 ? '#22c55e' : pct >= 50 ? '#f59e0b' : '#e8482c';
-    document.getElementById('supProfileCompletePct').textContent = pct + '%';
-    document.getElementById('supProfileCompletePct').style.color = pct >= 100 ? '#1a7a3e' : pct >= 50 ? '#b5891a' : '#c0392b';
-    var statusPill = document.getElementById('supAcctStatusPill');
-    if (statusPill) {
-      var isActive = pct >= 100;
-      statusPill.textContent = isActive ? 'Active' : 'Under Review';
-      statusPill.className = 'status-pill ' + (isActive ? 'green' : 'amber');
-    }
+    // Delegates to the same onboarding-progress calculation the "Complete your onboarding" banner
+    // uses, so the ring in Account Settings, the sidebar avatar ring, and the banner's own progress
+    // bar never disagree with each other — previously this ran its own separate, narrower check
+    // against a different set of fields and could show a different percentage than the banner.
+    if (typeof renderSupOnboardingCompletionState === 'function') renderSupOnboardingCompletionState();
   }
   document.getElementById('supProfileSettingsView').addEventListener('input', computeSupProfileCompletion);
   document.getElementById('supProfileSettingsView').addEventListener('click', function () { setTimeout(computeSupProfileCompletion, 0); });
@@ -21127,7 +21172,11 @@
       el.hidden = !populated;
     });
     document.getElementById('supBellDot').style.display = populated ? '' : 'none';
-    document.getElementById('supAcctProgressRing').setAttribute('stroke-dashoffset', populated ? '0' : '65');
+    // Sidebar avatar ring, "Profile complete" ring, the completion banner, and the Edit button are
+    // all driven by the same real onboarding-progress calculation from here — this call is what
+    // keeps the sidebar ring correct from the moment the dashboard first loads, not just after the
+    // supplier happens to visit Account Settings.
+    if (typeof renderSupOnboardingCompletionState === 'function') renderSupOnboardingCompletionState();
 
     if (!populated) {
       document.getElementById('supStatOpenQuotes').textContent = '0';
