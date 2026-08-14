@@ -2752,6 +2752,84 @@
     }
   }
 
+  /* ==========================================================================
+     SUPPLIER ACCOUNT SETTINGS + SIDEBAR — mobile responsive (<=420px)
+     ========================================================================== */
+  .sup-acct-mobile-progress-row { display: none; align-items: center; gap: 12px; margin-top: 10px; }
+  .sup-acct-mobile-progress { flex: 1; min-width: 0; }
+  .sup-acct-mobile-progress .sacct-progress-track { height: 7px; background: var(--surface-soft); border-radius: 999px; overflow: hidden; }
+  .sup-acct-mobile-progress .sacct-progress-fill { height: 100%; border-radius: 999px; background: #284890; transition: width 400ms ease-out; }
+  .sup-acct-mobile-progress .sacct-progress-label { font-size: 12px; font-weight: 600; color: var(--text-body-muted); margin-top: 6px; }
+  /* Base layout for the ring+"Profile complete" column — kept as a real class (not an inline
+     style) specifically so the mobile media query below can actually override its display; an
+     inline style would always win over a stylesheet rule regardless of selector specificity, which
+     was the reason this ring kept showing up on mobile despite the #supAcctRingCol{display:none}
+     rule already being here. */
+  .sup-acct-ring-col { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  @media (max-width: 420px) {
+    /* Settings tabs row: scrolls horizontally instead of wrapping/overflowing. The desktop Edit
+       button is hidden here on mobile (see renderSupOnboardingCompletionState — it's swapped for
+       the copy next to the progress bar below instead), so the tabs row gets the full row width
+       to scroll within rather than sharing it. */
+    #supSettingsTabs {
+      overflow-x: auto; flex-wrap: nowrap;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none; -ms-overflow-style: none;
+    }
+    #supSettingsTabs::-webkit-scrollbar { display: none; }
+    #supSettingsTabs .pm-settings-tab-item { flex-shrink: 0; }
+
+    /* Sidebar: nav items scroll, the avatar/account footer stays pinned to the bottom of the
+       sidebar itself. #supDashSidebar gets a transform on mobile (for its slide-in/out drawer
+       animation), which makes it the containing block for this fixed footer — so "fixed" here
+       means fixed to the sidebar, not the viewport, and it slides in and out together with it. */
+    #supDashSidebar .dash-sidebar-footer {
+      position: fixed; left: 0; right: 0; bottom: 0;
+      background: var(--sidebar-bg, #fff);
+    }
+    #supDashSidebar .dash-nav-scroll { padding-bottom: 74px; }
+
+    /* Account Settings header: the ring is replaced by a plain progress bar sitting on its own row
+       below the heading/subheading/"Active" chip (with Edit alongside it), instead of squeezing a
+       circular ring in beside them — the "Active" chip stays right where it is, parallel to the
+       heading. With the ring gone there's nothing left that needs to wrap, so keep heading + chip
+       strictly on one row. */
+    #supAcctRingCol { display: none; }
+    .sup-acct-mobile-progress-row { display: flex; margin-top: 24px; }
+    #supProfileSettingsView .dash-header { flex-wrap: nowrap; }
+
+    /* Account Settings > Portfolio tab: same two-column-field-row-collapses-to-one-column
+       treatment already applied inside the onboarding wizard itself. */
+    #supSettingsPanelQuestionnaire .ob-row-2 { display: block; }
+  }
+
+  /* Chat tab (Account Settings > Chat, and Dashboard > Inbox — both render the same sinb-* chat
+     markup): tighter side padding, no horizontal scroll, and both scrollbars hidden while
+     scrolling itself stays functional, plus wider message bubbles and a "Please update X / Update
+     here" jump-card that stacks its button below the text instead of squeezing everything onto one
+     line. Scoped to these two specific mounts — the onboarding floating widget already has its own
+     separate, more specific mobile rules for the same shared classes (see .ob-chat-panel above),
+     which take precedence there. */
+  @media (max-width: 420px) {
+    #sinbChatScroll, #supInboxChatScroll {
+      padding-left: 8px; padding-right: 8px;
+      overflow-x: hidden;
+      scrollbar-width: none; -ms-overflow-style: none;
+    }
+    #sinbChatScroll::-webkit-scrollbar, #supInboxChatScroll::-webkit-scrollbar { display: none; }
+    #sinbChatScroll .sinb-msg-stack, #supInboxChatScroll .sinb-msg-stack { max-width: 85%; }
+    #sinbChatScroll .sinb-msg-stack-wide, #supInboxChatScroll .sinb-msg-stack-wide,
+    #sinbChatScroll .sinb-system-card, #supInboxChatScroll .sinb-system-card { max-width: 100%; }
+    #sinbChatScroll .sinb-msg-bubble, #supInboxChatScroll .sinb-msg-bubble,
+    #sinbChatScroll .sinb-attachment-bubble, #supInboxChatScroll .sinb-attachment-bubble {
+      word-break: break-word; overflow-wrap: break-word;
+    }
+    #sinbChatScroll .sinb-jump-card, #supInboxChatScroll .sinb-jump-card {
+      flex-direction: column; align-items: flex-start; gap: 8px;
+    }
+    #sinbChatScroll .sinb-jump-btn, #supInboxChatScroll .sinb-jump-btn { align-self: flex-start; }
+  }
+
 
   .sinb-details-overlay { position: absolute; inset: 0; background: rgba(15,23,42,0.45); backdrop-filter: blur(3px); z-index: 100; display: flex; align-items: stretch; justify-content: flex-end; padding: 0; opacity: 0; visibility: hidden; transition: opacity 200ms ease-out, visibility 200ms ease-out; }
   .sinb-details-overlay.open { opacity: 1; visibility: visible; }
@@ -3005,6 +3083,21 @@
     z-index: 500;
   }
   .notif-panel.open { opacity: 1; visibility: visible; transform: none; }
+  /* On narrow screens a fixed 380px popup anchored to the bell's position ran straight off the
+     edge of the viewport instead of fitting on screen (the bell isn't anywhere near the left edge,
+     so a right:0-anchored panel that wide has nowhere to go but off-screen). Pin it to the
+     viewport itself with equal margins instead, so it always fits regardless of where the bell
+     button sits in the topbar. This has to live right here, immediately after the base .notif-panel
+     rule above — an earlier attempt at this same fix lived earlier in the stylesheet than this base
+     rule, and lost to it every time despite the media query, because with equal selector
+     specificity (both plain ".notif-panel") the rule that comes later in source order wins,
+     regardless of which one is inside a media query. */
+  @media (max-width: 420px) {
+    .notif-panel {
+      position: fixed; left: 12px; right: 12px; top: 82px;
+      width: auto; max-width: none; max-height: calc(100vh - 100px);
+    }
+  }
   .notif-panel-head {
     position: sticky; top: 0; background: #fff; z-index: 1;
     display: flex; align-items: center; justify-content: space-between;
@@ -10309,7 +10402,7 @@
                 <div><h2>Account Settings</h2><div class="dash-content-sub">Manage your profile, business &amp; subscription.</div></div>
                 <div style="display:flex;align-items:start;gap:14px;">
                   <span class="status-pill green" id="supAcctStatusPill" style="font-size:11px;">Active</span>
-                  <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+                  <div class="sup-acct-ring-col" id="supAcctRingCol">
                     <div style="position:relative;width:64px;height:64px;">
                       <svg width="64" height="64" viewBox="0 0 64 64">
                         <circle cx="32" cy="32" r="27" fill="none" stroke="var(--surface-soft)" stroke-width="5"/>
@@ -10320,9 +10413,16 @@
                         <span style="font-size:8px;font-weight:700;color:#94a3b8;">done</span>
                       </div>
                     </div>
-                    <span style="font-size:11.5px;color:var(--text-body-muted);">Profile complete</span>
+                    <span style="font-size:11.5px;color:var(--text-body-muted);text-align:center;">Profile complete</span>
                   </div>
                 </div>
+              </div>
+              <div class="sup-acct-mobile-progress-row" id="supAcctMobileProgressRow">
+                <div class="sup-acct-mobile-progress" id="supAcctMobileProgress">
+                  <div class="sacct-progress-track"><div class="sacct-progress-fill" id="supAcctMobileProgressFill" style="width:0%;"></div></div>
+                  <div class="sacct-progress-label" id="supAcctMobileProgressLabel">Profile complete — 0%</div>
+                </div>
+                <button type="button" class="btn btn-primary" id="supAcctEditBtnMobile" style="display:none;flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4z"/></svg>Edit</button>
               </div>
 
               <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px;">
@@ -11580,16 +11680,6 @@
                         <svg class="sldc-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
                       </a>
                     </div>
-                  </div>
-
-                  <div class="sup-settings-section-label">Session</div>
-                  <div class="sup-settings-row clickable danger" id="supSettingsLogoutRow">
-                    <div class="sup-settings-row-icon red"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg></div>
-                    <div class="sup-settings-row-body">
-                      <div class="sup-settings-row-title">Log out</div>
-                      <div class="sup-settings-row-desc">Sign out of this device</div>
-                    </div>
-                    <svg class="sup-settings-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
                   </div>
 
                   <div class="sup-settings-footer">Keylr &middot; Version 1.0.0</div>
@@ -19326,8 +19416,14 @@
     var isComplete = progress.pct >= 100;
     var banner = document.getElementById('supOnboardingBanner');
     var editBtn = document.getElementById('supAcctEditBtn');
+    var editBtnMobile = document.getElementById('supAcctEditBtnMobile');
     if (banner) banner.style.display = isComplete ? 'none' : '';
-    if (editBtn) editBtn.style.display = isComplete ? '' : 'none';
+    // Two Edit buttons exist — one next to the tabs row (desktop), one next to the mobile progress
+    // bar (<=420px) — only one is ever actually shown, based on viewport width, so the tabs row has
+    // the full width to itself for horizontal scrolling on mobile instead of sharing it with Edit.
+    var isMobileWidth = (typeof window !== 'undefined') && window.innerWidth <= 420;
+    if (editBtn) editBtn.style.display = (isComplete && !isMobileWidth) ? '' : 'none';
+    if (editBtnMobile) editBtnMobile.style.display = (isComplete && isMobileWidth) ? 'inline-flex' : 'none';
     if (!isComplete) {
       var fillEl = document.getElementById('supOnboardingProgressFill');
       var labelEl = document.getElementById('supOnboardingProgressLabel');
@@ -19368,6 +19464,13 @@
       sidebarRing.style.stroke = ringColor;
     }
 
+    // Mobile-only plain progress bar, standing in for the ring at narrow widths (see the
+    // #supAcctRingCol / .sup-acct-mobile-progress display toggle in the stylesheet).
+    var mobileFill = document.getElementById('supAcctMobileProgressFill');
+    var mobileLabel = document.getElementById('supAcctMobileProgressLabel');
+    if (mobileFill) { mobileFill.style.width = progress.pct + '%'; mobileFill.style.background = ringColor; }
+    if (mobileLabel) { mobileLabel.textContent = 'Profile complete — ' + progress.pct + '%'; mobileLabel.style.color = pctColor; }
+
     var statusPill = document.getElementById('supAcctStatusPill');
     if (statusPill) {
       statusPill.textContent = isComplete ? 'Active' : 'Under Review';
@@ -19392,6 +19495,19 @@
     goToSupObStep(stepNum > 0 ? stepNum : 1);
   }
   var supObReturnTabKey = 'profile';
+
+  // Keeps the desktop-vs-mobile Edit button swap (see renderSupOnboardingCompletionState) correct
+  // even if the window is resized/rotated across the 420px breakpoint without a full navigation.
+  var supAcctResizeTimer = null;
+  window.addEventListener('resize', function () {
+    clearTimeout(supAcctResizeTimer);
+    supAcctResizeTimer = setTimeout(function () {
+      var settingsView = document.getElementById('supProfileSettingsView');
+      if (settingsView && settingsView.style.display !== 'none' && typeof renderSupOnboardingCompletionState === 'function') {
+        renderSupOnboardingCompletionState();
+      }
+    }, 150);
+  });
 
   var supObOriginalBusinessType = null;
   function supObIsBusinessTypeChanging() {
@@ -20000,11 +20116,13 @@
     return { id: batchId, displayId: displayId, isBusinessTypeChange: isBizTypeChange, submittedDate: new Date(), changes: changes };
   }
 
-  document.getElementById('supAcctEditBtn').addEventListener('click', function () {
+  function openEditFromCurrentTab() {
     var activeTab = document.querySelector('#supSettingsTabs .pm-settings-tab-item.active');
     var key = activeTab ? activeTab.getAttribute('data-supsettingstab') : 'profile';
     openSupOnboardingForEdit(key);
-  });
+  }
+  document.getElementById('supAcctEditBtn').addEventListener('click', openEditFromCurrentTab);
+  document.getElementById('supAcctEditBtnMobile').addEventListener('click', openEditFromCurrentTab);
 
   document.getElementById('supObSaveSkipBtn').addEventListener('click', function () {
     supObApp.classList.remove('visible');
@@ -21561,7 +21679,13 @@
   /* Sidebar collapse */
   var supDashSidebar = document.getElementById('supDashSidebar');
   document.getElementById('supSidebarCollapseBtn').addEventListener('click', function () {
-    supDashSidebar.classList.toggle('collapsed');
+    // On narrow/mobile widths the sidebar is a slide-in drawer, not a collapsible rail — the same
+    // button should close the drawer there instead of shrinking it to icon-only width.
+    if (window.innerWidth <= 420) {
+      supDashSidebar.classList.remove('mobile-open');
+    } else {
+      supDashSidebar.classList.toggle('collapsed');
+    }
   });
 
   /* Sidebar nav item selection */
@@ -21639,6 +21763,10 @@
     document.querySelector('#supplierDashboard .' + cls).addEventListener('click', function () {
       document.querySelectorAll('#supplierDashboard .dash-nav-item').forEach(function (i) { i.classList.remove('active'); });
       showSupplierView('profile-settings');
+      // Clicking the sidebar footer/avatar isn't a .dash-nav-item, so it doesn't get the
+      // auto-close-on-navigate behaviour those get for free — close the mobile drawer here too.
+      var sidebarEl = document.getElementById('supDashSidebar');
+      if (sidebarEl) sidebarEl.classList.remove('mobile-open');
     });
   });
 
@@ -25515,9 +25643,11 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   }
   document.getElementById('supDashLogoutBtn').addEventListener('click', function () {
     document.getElementById('supLogoutOverlay').classList.add('open');
-  });
-  document.getElementById('supSettingsLogoutRow').addEventListener('click', function () {
-    document.getElementById('supLogoutOverlay').classList.add('open');
+    // The logout button lives in the sidebar footer, so on mobile (where the sidebar is a slide-in
+    // drawer) close the drawer once the confirmation popup takes over, same as any other sidebar
+    // action does.
+    var sidebarEl = document.getElementById('supDashSidebar');
+    if (sidebarEl) sidebarEl.classList.remove('mobile-open');
   });
   document.getElementById('supLogoutCancelBtn').addEventListener('click', function () {
     document.getElementById('supLogoutOverlay').classList.remove('open');
@@ -29372,7 +29502,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     });
     return list;
   }
-  var LONDON_ZONES = ['London \u2014 Central', 'London \u2014 North', 'London \u2014 West', 'London \u2014 North East', 'London \u2014 East', 'London \u2014 South East', 'London \u2014 South', 'London \u2014 South West'];
+  var LONDON_ZONES = ['London \u2014 Central', 'London \u2014 North', 'London \u2014 West', 'London \u2014 North West', 'London \u2014 North East', 'London \u2014 East', 'London \u2014 South East', 'London \u2014 South', 'London \u2014 South West'];
   (function enrichPMListsForFilters() {
     var PM_DEMO_PHOTOS = [11, 22, 31, 44, 56, 63, 71, 8, 19, 27, 38, 49];
     if (typeof pmClients !== 'undefined') {
