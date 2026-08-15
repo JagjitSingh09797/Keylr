@@ -752,6 +752,14 @@
     .invite-btn-responsive .invite-btn-text { display: none; }
     .invite-btn-responsive svg { margin-right: 0 !important; }
   }
+  @media (max-width: 420px) {
+    /* Supplier Applicants specifically keeps the full icon+text "Invite Supplier" button (unlike
+       the generic icon-only collapse above), pushed to the right of its row now that the filter
+       bar next to it is hidden. */
+    #supAppInviteBtn.invite-btn-responsive { padding: 9px 16px !important; margin-left: auto; }
+    #supAppInviteBtn.invite-btn-responsive .invite-btn-text { display: inline !important; }
+    #supAppInviteBtn.invite-btn-responsive svg { margin-right: 6px !important; }
+  }
 
   .modal-card {
     display: grid;
@@ -2789,6 +2797,15 @@
     }
     #supDashSidebar .dash-nav-scroll { padding-bottom: 74px; }
 
+    /* Admin sidebar gets the exact same treatment — nav items scroll, the Collapse/Sign Out footer
+       stays pinned to the bottom of the (also mobile-transformed) sidebar. Its footer holds two
+       stacked buttons rather than one avatar row, so it needs a bit more scroll clearance below. */
+    #adminDashSidebar .dash-sidebar-footer {
+      position: fixed; left: 0; right: 0; bottom: 0;
+      background: var(--sidebar-bg, #fff);
+    }
+    #adminDashSidebar .dash-nav-scroll { padding-bottom: 116px; }
+
     /* Account Settings header: the ring is replaced by a plain progress bar sitting on its own row
        below the heading/subheading/"Active" chip (with Edit alongside it), instead of squeezing a
        circular ring in beside them — the "Active" chip stays right where it is, parallel to the
@@ -2828,6 +2845,16 @@
       flex-direction: column; align-items: flex-start; gap: 8px;
     }
     #sinbChatScroll .sinb-jump-btn, #supInboxChatScroll .sinb-jump-btn { align-self: flex-start; }
+  }
+
+  /* Hides the visible scrollbar on the main content scroll area for every dashboard (PM, Supplier,
+     Admin all share .dash-scroll-area) while leaving scrolling itself fully functional — same
+     technique already used for the onboarding wizard and chat scroll areas. */
+  @media (max-width: 420px) {
+    .dash-scroll-area {
+      scrollbar-width: none; -ms-overflow-style: none;
+    }
+    .dash-scroll-area::-webkit-scrollbar { display: none; }
   }
 
 
@@ -3782,10 +3809,12 @@
 
   /* Supplier Detail page */
   .sup-detail-header-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 16px; padding: 20px 24px; margin-bottom: 20px; display: flex; align-items: center; gap: 16px; }
-  .sup-detail-header-card .sdh-name-row { display: flex; align-items: center; gap: 10px; }
-  .sup-detail-header-card .sdh-name-row h1 { font-size: 20px; font-weight: 800; color: var(--text-heading); }
+  .sup-detail-header-card .sdh-name-row { flex: 1; min-width: 0; }
+  .sup-detail-header-card .sdh-name-row h1 { font-size: 20px; font-weight: 800; color: var(--text-heading); margin-bottom: 8px; }
+  .sup-detail-header-card .sdh-chip-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .sup-detail-header-card .sdh-sub { font-size: 12.5px; color: var(--text-body-muted); margin-top: 4px; }
   .sup-tabs-row { display: flex; gap: 28px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 20px; }
+  .sup-detail-grid { display: grid; grid-template-columns: 1fr; gap: 20px; align-items: start; }
 
   .sup-compliance-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 20px 22px; margin-bottom: 16px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
   .sup-ring-wrap { position: relative; width: 92px; height: 92px; flex-shrink: 0; }
@@ -3793,6 +3822,19 @@
   .sup-ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
   .sup-ring-center .src-pct { font-size: 19px; font-weight: 800; color: var(--text-heading); line-height: 1; }
   .sup-ring-center .src-label { font-size: 8.5px; font-weight: 700; color: #94a3b8; letter-spacing: 0.04em; margin-top: 2px; }
+  .sup-compliance-mobile-bar { display: none; width: 100%; }
+  .sup-compliance-mobile-bar .scmb-track { height: 8px; background: var(--surface-soft); border-radius: 999px; overflow: hidden; }
+  .sup-compliance-mobile-bar .scmb-fill { height: 100%; border-radius: 999px; background: #22c55e; transition: width 400ms ease-out; }
+  .sup-compliance-mobile-bar .scmb-label { font-size: 12.5px; font-weight: 700; color: var(--text-heading); margin-top: 8px; }
+  /* Shown only on mobile — has to live right here, immediately after the base rule above.
+     An earlier attempt at this same override lived earlier in the stylesheet than this base rule,
+     and lost to it every time despite being wrapped in a media query, because with equal selector
+     specificity (both plain ".sup-compliance-mobile-bar") the rule that comes later in source order
+     wins, regardless of which one is inside a media query — the exact same mistake made (and then
+     fixed) for the notification panel earlier. */
+  @media (max-width: 420px) {
+    .sup-compliance-mobile-bar { display: block; }
+  }
   .sup-compliance-info .sci-top { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
   .sup-compliance-info .sci-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; color: #94a3b8; }
   .sup-health-badge { font-size: 10.5px; font-weight: 700; letter-spacing: 0.03em; padding: 2px 9px; border-radius: 999px; }
@@ -3851,6 +3893,7 @@
   .sup-check-row-top .scr-status.pending { color: #92620a; background: #fef3c7; }
   .sup-check-row-top .scr-status.issue { color: #c0392b; background: #fdecea; }
   .sup-check-row-top .scr-chevron { color: #94a3b8; flex-shrink: 0; transition: transform 150ms ease-out; }
+  .sup-check-row-top .scr-meta-row { display: flex; align-items: center; gap: 12px; }
   .sup-check-row.expanded .scr-chevron { transform: rotate(180deg); }
   .sup-check-row-detail { display: none; padding: 0 14px 14px 48px; }
   .sup-check-row.expanded .sup-check-row-detail { display: block; }
@@ -3895,6 +3938,65 @@
   }
   .sup-sticky-bar .ssb-score { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--text-body-muted); }
   .sup-sticky-bar .ssb-score .dot { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; }
+  .sup-sticky-bar .ssb-actions { display: flex; align-items: center; gap: 10px; }
+
+  /* ==========================================================================
+     ADMIN — Supplier Applicant / Active Supplier detail page, mobile (<=420px)
+     This block deliberately lives down here, after every base rule it overrides, rather than up
+     near the other mobile blocks earlier in the stylesheet — several of its selectors (plain
+     classes with no extra specificity, like .sup-checklist-filter-row and .sup-check-row-top)
+     were silently losing to their base rules when this lived earlier, because with equal
+     specificity CSS resolves ties by source order regardless of which rule is wrapped in a media
+     query. Same root cause as the notification panel and compliance-progress-bar fixes.
+     ========================================================================== */
+  @media (max-width: 420px) {
+    /* Header: avatar + name row now stack naturally via block flow (see the base .sdh-name-row
+       rule, which no longer uses flex at all), so no extra reflow is needed here — just the
+       email/phone/submitted-date line, which goes vertical instead of being joined with middot
+       separators on one line. */
+    .sup-detail-header-card .sdh-sub { display: flex; flex-direction: column; gap: 4px; }
+    .sup-detail-header-card .sdh-sub .dot-sep { display: none; }
+    .sup-detail-header-card .sdh-sub-item { display: block; }
+
+    /* Overview/compliance grid collapses to a single flowing column instead of a CSS grid track —
+       display:grid was set inline in the markup (moved to the .sup-detail-grid class specifically
+       so this override actually has something to win against; an inline style always beats a
+       stylesheet rule regardless of selector specificity). */
+    #supDetailGrid { display: block; }
+
+    /* Compliance ring swaps for a plain progress bar — see renderComplianceSummary(), which keeps
+       both in sync with the same numbers/colour so only the display differs. */
+    #supRingWrap { display: none; }
+
+    /* Checklist rows: icon + name stay on the top line; the badge/method/eye/status cluster (now
+       grouped in .scr-meta-row — see checklistRowHtml) drops to its own row below, indented to
+       roughly line up under the name text. The expand/collapse chevron stays pinned to the top
+       right corner of the row throughout, rather than getting caught up in the meta-row wrap. */
+    .sup-check-row-top { flex-wrap: wrap; row-gap: 8px; position: relative; padding-right: 34px; }
+    .sup-check-row-top .scr-meta-row { flex: 1 1 100%; flex-wrap: wrap; margin-left: 66px; }
+    .sup-check-row-top .scr-chevron { position: absolute; top: 14px; right: 14px; }
+
+    /* Checklist filter pills: the "Verified" pill is the one most likely to wrap onto a second row
+       on a narrow screen, so it gets a little breathing room from the row above it. The row holding
+       the search bar + method filter, and the row holding the status pills, both stop being flex
+       rows so their contents can stack instead of getting squeezed. */
+    #supChecklistTabs .sup-check-tab-pill[data-checkfilter="verified"] { margin-top: 6px; }
+    .sup-checklist-filter-row { display: block; }
+    .sup-segmented { margin-top: 6px; }
+
+    /* Sticky action bar: score on its own line, action buttons grouped on their own line
+       underneath via the .ssb-actions wrapper, right-aligned. Scoped to #supStickyBar specifically
+       (not the shared .sup-sticky-bar class) — the PM Applicant version of this same component
+       (#clientAppStickyBar) already has its own separate responsive handling at a different
+       breakpoint, and sits inside a differently-structured wrapper that this shouldn't touch.
+       Deliberately does NOT force any individual button's display — each one's own JS-driven
+       show/hide (Archive vs Unarchive vs the applicant Approve/Archive pair) stays completely
+       untouched; only their shared wrapper becomes a flex row, so whichever ones are actually
+       visible lay out correctly and the hidden ones stay hidden. */
+    #supStickyBar { display: block; padding: 16px; }
+    #supStickyBar .ssb-score { display: block; margin-bottom: 10px; }
+    #supStickyBar .ssb-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; }
+  }
 
   /* All Documents modal */
   .sup-docs-overlay { position: fixed; inset: 0; background: rgba(8,13,22,0.55); display: flex; align-items: center; justify-content: center; padding: 24px; z-index: 560; opacity: 0; visibility: hidden; transition: opacity 200ms ease-out, visibility 200ms ease-out; }
@@ -12996,14 +13098,17 @@
             </div>
 
             <div class="sup-detail-header-card" style="flex-direction:column;align-items:stretch;gap:16px;">
-              <div style="display:flex;align-items:center;gap:16px;">
+              <div style="display:flex;align-items:center;gap:16px;" class="sdh-top-row">
                 <div class="pm-card-avatar" id="supDetailAvatar" style="width:52px;height:52px;font-size:16px;">NR</div>
-                <div style="flex:1;min-width:0;">
-                  <div class="sdh-name-row"><h1 id="supDetailName">Nadia Reid</h1><span class="supplier-approved-pill" id="supDetailStatusPill">Approved</span></div>
-                  <div class="sdh-sub"><span id="supDetailEmail">nadia.reid07@gmail.com</span><span class="dot-sep"></span><span id="supDetailPhone">+447974202021</span><span class="dot-sep"></span>Submitted on <span id="supDetailApplied">02/07/2026</span></div>
+                <div class="sdh-name-row">
+                  <h1 id="supDetailName">Nadia Reid</h1>
+                  <div class="sdh-chip-row">
+                    <span class="supplier-approved-pill" id="supDetailStatusPill">Approved</span>
+                    <span class="supplier-type-pill" id="supDetailTypePill">Sole Trader</span>
+                  </div>
                 </div>
-                <span class="supplier-type-pill" id="supDetailTypePill">Sole Trader</span>
               </div>
+              <div class="sdh-sub"><span class="sdh-sub-item"><span id="supDetailEmail">nadia.reid07@gmail.com</span></span><span class="dot-sep"></span><span class="sdh-sub-item"><span id="supDetailPhone">+447974202021</span></span><span class="dot-sep"></span><span class="sdh-sub-item">Submitted on <span id="supDetailApplied">02/07/2026</span></span></div>
               <div style="border-top:1px solid var(--border-subtle);padding-top:16px;">
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
                   <div>
@@ -13034,16 +13139,20 @@
               </button>
             </div>
 
-            <div style="display:grid;grid-template-columns:1fr;gap:20px;align-items:start;" id="supDetailGrid">
+            <div class="sup-detail-grid" id="supDetailGrid">
               <div>
                 <div id="supTabOverview">
                   <div class="sup-compliance-card">
-                    <div class="sup-ring-wrap">
+                    <div class="sup-ring-wrap" id="supRingWrap">
                       <svg width="92" height="92" viewBox="0 0 92 92">
                         <circle cx="46" cy="46" r="40" fill="none" stroke="var(--surface-soft)" stroke-width="9"/>
                         <circle cx="46" cy="46" r="40" fill="none" id="supComplianceRingFill" stroke="#22c55e" stroke-width="9" stroke-linecap="round" stroke-dasharray="251.2" stroke-dashoffset="67.8"/>
                       </svg>
                       <div class="sup-ring-center"><span class="src-pct" id="supCompliancePct">73%</span><span class="src-label">SCORE</span></div>
+                    </div>
+                    <div class="sup-compliance-mobile-bar" id="supComplianceMobileBar">
+                      <div class="scmb-track"><div class="scmb-fill" id="supComplianceMobileFill" style="width:73%;"></div></div>
+                      <div class="scmb-label"><span id="supComplianceMobilePct">73%</span> compliance score</div>
                     </div>
                     <div class="sup-compliance-info">
                       <div class="sci-top"><span class="sci-label">COMPLIANCE SCORE</span><span class="sup-health-badge healthy" id="supHealthBadge">HEALTHY</span></div>
@@ -14028,11 +14137,13 @@
 
             <div class="sup-sticky-bar" id="supStickyBar">
               <span class="ssb-score"><span class="dot"></span>Compliance score: <span id="supStickyScore">73%</span><span class="dot-sep"></span><span id="supStickyChecks">8/11 checks passed</span></span>
-              <button type="button" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 20px;border-radius:10px;background:#64748b;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;border:none;" id="supArchiveBtn2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13V7a2 2 0 00-2-2H6a2 2 0 00-2 2v6M4 13h16v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6zM10 17h4"/></svg>Archive</button>
-              <button type="button" style="display:none;align-items:center;justify-content:center;gap:7px;padding:9px 20px;border-radius:10px;background:#64748b;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;border:none;" id="supUnarchiveBtn2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>Unarchive</button>
-              <div id="supApplicantActionBtns" style="display:none;gap:10px;">
-                <button type="button" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 20px;border-radius:10px;background:#1a7a3e;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;" id="supApplicantApproveBtn2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Approve</button>
-                <button type="button" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 20px;border-radius:10px;background:#64748b;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;border:none;" id="supApplicantRejectBtn2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13V7a2 2 0 00-2-2H6a2 2 0 00-2 2v6M4 13h16v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6zM10 17h4"/></svg><span id="supApplicantRejectBtnText">Archive</span></button>
+              <div class="ssb-actions">
+                <button type="button" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 20px;border-radius:10px;background:#64748b;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;border:none;" id="supArchiveBtn2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13V7a2 2 0 00-2-2H6a2 2 0 00-2 2v6M4 13h16v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6zM10 17h4"/></svg>Archive</button>
+                <button type="button" style="display:none;align-items:center;justify-content:center;gap:7px;padding:9px 20px;border-radius:10px;background:#64748b;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;border:none;" id="supUnarchiveBtn2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>Unarchive</button>
+                <div id="supApplicantActionBtns" style="display:none;gap:10px;">
+                  <button type="button" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 20px;border-radius:10px;background:#1a7a3e;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;" id="supApplicantApproveBtn2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Approve</button>
+                  <button type="button" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 20px;border-radius:10px;background:#64748b;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;border:none;" id="supApplicantRejectBtn2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13V7a2 2 0 00-2-2H6a2 2 0 00-2 2v6M4 13h16v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6zM10 17h4"/></svg><span id="supApplicantRejectBtnText">Archive</span></button>
+                </div>
               </div>
             </div>
           </div>
@@ -25861,12 +25972,19 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     });
   }
 
-  document.getElementById('adminSidebarCollapseBtn').addEventListener('click', function () {
-    document.getElementById('adminDashSidebar').classList.toggle('collapsed');
-  });
-  document.getElementById('adminCollapseFooterBtn').addEventListener('click', function () {
-    document.getElementById('adminDashSidebar').classList.toggle('collapsed');
-  });
+  function adminSidebarCollapseOrClose() {
+    var sidebarEl = document.getElementById('adminDashSidebar');
+    // Below 420px the sidebar is a slide-in drawer, not a collapsible rail — the collapse button
+    // should close the drawer there instead of shrinking it to icon-only width (which would leave
+    // a narrow, half-open drawer rather than actually getting it out of the way).
+    if (window.innerWidth <= 420) {
+      sidebarEl.classList.remove('mobile-open');
+    } else {
+      sidebarEl.classList.toggle('collapsed');
+    }
+  }
+  document.getElementById('adminSidebarCollapseBtn').addEventListener('click', adminSidebarCollapseOrClose);
+  document.getElementById('adminCollapseFooterBtn').addEventListener('click', adminSidebarCollapseOrClose);
   document.getElementById('adminSignOutBtn').addEventListener('click', function () {
     adminDashboard.classList.remove('visible');
     setTimeout(function () {
@@ -28592,6 +28710,14 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var ringFill = document.getElementById('supComplianceRingFill');
     ringFill.style.stroke = ringColor;
     ringFill.setAttribute('stroke-dashoffset', offset);
+
+    // Mobile-only plain progress bar standing in for the ring (see #supRingWrap /
+    // #supComplianceMobileBar display toggle in the stylesheet) — kept in sync with the exact same
+    // numbers so it never disagrees with the ring.
+    var mobileFill = document.getElementById('supComplianceMobileFill');
+    var mobilePct = document.getElementById('supComplianceMobilePct');
+    if (mobileFill) { mobileFill.style.width = stats.pct + '%'; mobileFill.style.background = ringColor; }
+    if (mobilePct) mobilePct.textContent = stats.pct + '%';
   }
 
   function checklistIconHtml(status) {
@@ -28630,10 +28756,12 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       '<div class="sup-check-row-top"' + (item.noActions ? '' : ' data-check-toggle="' + item.id + '"') + '>' +
         checklistIconHtml(item.status) +
         '<div class="scr-info"><div class="scr-name">' + item.name + '</div><div class="scr-sub">' + item.sub + '</div></div>' +
-        checklistExpiryBadgeHtml(item) +
-        '<span class="scr-method">' + item.method.toUpperCase() + '</span>' +
-        (item.noActions ? '' : '<svg class="scr-eye" data-check-preview="' + item.id + '" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>') +
-        '<span class="scr-status ' + item.status + '">' + statusLabel + '</span>' +
+        '<div class="scr-meta-row">' +
+          checklistExpiryBadgeHtml(item) +
+          '<span class="scr-method">' + item.method.toUpperCase() + '</span>' +
+          (item.noActions ? '' : '<svg class="scr-eye" data-check-preview="' + item.id + '" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>') +
+          '<span class="scr-status ' + item.status + '">' + statusLabel + '</span>' +
+        '</div>' +
         (item.noActions ? '' : '<svg class="scr-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>') +
       '</div>' +
       detailHtml +
