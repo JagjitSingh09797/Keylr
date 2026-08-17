@@ -4148,10 +4148,11 @@
   .sup-preview-overlay.open { opacity: 1; visibility: visible; }
   .sup-preview-card { width: 100%; max-width: 820px; max-height: 88vh; background: #fff; border-radius: 18px; overflow: hidden; box-shadow: 0 30px 70px rgba(0,0,0,0.4); display: flex; flex-direction: column; transform: translateY(16px) scale(0.98); opacity: 0; transition: transform 260ms cubic-bezier(0.16,1,0.3,1), opacity 220ms ease-out; }
   .sup-preview-overlay.open .sup-preview-card { transform: none; opacity: 1; }
-  .sup-preview-head { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; flex-shrink: 0; border-bottom: 1px solid var(--border-subtle); flex-wrap: wrap; gap: 10px; }
+  .sup-preview-head { display: flex; align-items: flex-start; justify-content: space-between; padding: 18px 22px; flex-shrink: 0; border-bottom: 1px solid var(--border-subtle); flex-wrap: nowrap; gap: 10px; }
+  .sup-preview-head .sph-name-col { min-width: 0; flex: 1 1 auto; }
   .sup-preview-head h2 { font-size: 17px; font-weight: 800; color: var(--text-heading); }
   .sup-preview-head .sph-sub { font-size: 12px; color: var(--text-body-muted); margin-top: 2px; }
-  .sup-preview-head-actions { display: flex; align-items: center; gap: 16px; }
+  .sup-preview-head-actions { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
   .sup-preview-zoom { display: flex; align-items: center; gap: 8px; background: var(--surface-soft); border-radius: 999px; padding: 5px 10px; font-size: 12.5px; font-weight: 600; color: var(--text-heading); }
   .sup-preview-zoom svg { color: var(--text-body-muted); cursor: pointer; }
   .sup-preview-link-action { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 600; color: var(--text-heading); cursor: pointer; }
@@ -4438,6 +4439,7 @@
   .sinb-titlebar [data-tooltip]::after { bottom: auto; top: calc(100% + 7px); }
   #commercialSubTypes [data-tooltip]::after { bottom: auto; top: calc(100% + 7px); }
   .ain-thread-header [data-tooltip]::after { bottom: auto; top: calc(100% + 7px); }
+  .sup-preview-head [data-tooltip]::after { bottom: auto; top: calc(100% + 7px); }
   .ain-thread-header #ainExpandBtn[data-tooltip]::after { left: auto; right: 0; transform: none; }
 
   /* 3-dot dropdown menu */
@@ -6567,7 +6569,7 @@
   <div class="sup-preview-overlay" id="supPreviewOverlay">
     <div class="sup-preview-card">
       <div class="sup-preview-head">
-        <div>
+        <div class="sph-name-col">
           <h2 id="supPreviewName">Photo ID</h2>
           <div class="sph-sub" id="supPreviewFile">c20d20af49284cccad8eef6c8269cd15.png</div>
         </div>
@@ -6577,8 +6579,8 @@
             <span>100%</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>
           </div>
-          <span class="sup-preview-link-action" id="supPreviewDownloadBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>Download</span>
-          <span class="sup-preview-link-action accent" id="supPreviewNewTabBtn">Open in new tab</span>
+          <span class="sup-preview-link-action" id="supPreviewDownloadBtn" data-tooltip="Download"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></span>
+          <span class="sup-preview-link-action accent" id="supPreviewNewTabBtn" data-tooltip="Open in new tab"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span>
           <span class="sup-preview-close" id="supPreviewCloseBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></span>
         </div>
       </div>
@@ -12538,12 +12540,17 @@
                     </div>
                   </div>
                   <div class="sinb-composer" id="ainComposer">
+                    <div class="sinb-reply-preview" id="ainReplyPreview" style="display:none;">
+                      <div class="sinb-reply-preview-bar"></div>
+                      <div class="sinb-reply-preview-body"><span class="sinb-reply-preview-label">Replying to</span><span class="sinb-reply-preview-field" id="ainReplyPreviewField"></span></div>
+                      <button type="button" class="sinb-reply-preview-close" id="ainReplyPreviewClose"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+                    </div>
                     <div class="sinb-composer-icons">
                       <div style="position:relative;">
                         <button type="button" class="sinb-icon-btn" id="ainEmojiBtn" data-tooltip="Add emoji"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg></button>
                         <div class="sinb-emoji-popover" id="ainEmojiPopover">
-                          <span data-emoji="\ud83d\udc4d">\ud83d\udc4d</span><span data-emoji="\ud83d\udc4c">\ud83d\udc4c</span><span data-emoji="\ud83d\ude42">\ud83d\ude42</span><span data-emoji="\ud83d\ude00">\ud83d\ude00</span><span data-emoji="\ud83d\ude4c">\ud83d\ude4c</span><span data-emoji="\ud83d\udc4b">\ud83d\udc4b</span>
-                          <span data-emoji="\u2705">\u2705</span><span data-emoji="\ud83d\udd27">\ud83d\udd27</span><span data-emoji="\ud83d\ude90">\ud83d\ude90</span><span data-emoji="\u23f0">\u23f0</span><span data-emoji="\ud83d\udcf7">\ud83d\udcf7</span><span data-emoji="\ud83d\udc4a">\ud83d\udc4a</span>
+                          <span data-emoji="👍">👍</span><span data-emoji="👌">👌</span><span data-emoji="🙂">🙂</span><span data-emoji="😀">😀</span><span data-emoji="🙌">🙌</span><span data-emoji="👋">👋</span>
+                          <span data-emoji="✅">✅</span><span data-emoji="🔧">🔧</span><span data-emoji="🚐">🚐</span><span data-emoji="⏰">⏰</span><span data-emoji="📷">📷</span><span data-emoji="👊">👊</span>
                         </div>
                       </div>
                       <button type="button" class="sinb-icon-btn" id="ainAttachBtn" data-tooltip="Attach image or PDF"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button>
@@ -14220,7 +14227,7 @@
                       <div id="supNotesEmpty" style="display:none;padding:8px 0 16px;font-size:13px;color:var(--text-body-muted);">No internal notes yet. Be the first to leave one for the team.</div>
                     </div>
                     <div style="padding:16px 22px;border-top:1px solid var(--border-subtle);flex-shrink:0;">
-                      <textarea id="supNoteInput" class="ob-textarea" placeholder="Add an internal note about this applicant \u2014 e.g. follow-up needed, call summary, risk flag..." style="min-height:70px;"></textarea>
+                      <textarea id="supNoteInput" class="ob-textarea" placeholder="Add an internal note about this applicant — e.g. follow-up needed, call summary, risk flag..." style="min-height:70px;"></textarea>
                       <div style="display:flex;justify-content:flex-end;margin-top:10px;">
                         <button type="button" class="btn btn-primary" id="supAddNoteBtn">Add Note</button>
                       </div>
@@ -14242,7 +14249,7 @@
                         <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg></div>
                         <div>
                           <div class="callout-title">Full history</div>
-                          <div class="callout-body">Every action taken on this supplier's profile requests \u2014 approvals, declines, resubmission requests, and resubmissions \u2014 tracked chronologically.</div>
+                          <div class="callout-body">Every action taken on this supplier's profile requests — approvals, declines, resubmission requests, and resubmissions — tracked chronologically.</div>
                         </div>
                       </div>
                       <div id="supChatActivityLogList"></div>
@@ -22922,6 +22929,15 @@
         return '<div class="sinb-msg-row' + (mine ? ' mine' : '') + '"><div class="sinb-msg-stack sinb-msg-stack-wide">' + sinbEditRequestCardHtml(batch, !!forAdmin) + '<div class="sinb-msg-time">' + (mine ? 'You \u00b7 ' : '') + m.time + '</div></div></div>';
       }
       if (m.kind === 'jump-notification') {
+        // Admin is already in this exact conversation with this exact supplier — a card saying
+        // "asked [them] to update X" is redundant noise once you're already looking straight at
+        // it, and the reference implementation (the Supplier Detail page's own Chat tab,
+        // renderSupChatThread) doesn't show this message kind to admin at all either, it only ever
+        // surfaces the field itself via the edit-request card. This message is addressed directly
+        // to the supplier ("please update X, click here to jump to it in your own wizard") and the
+        // "Update here" button can't do anything useful outside the supplier's own wizard context,
+        // so it's hidden entirely for admin rather than reworded.
+        if (forAdmin) return '';
         return '<div class="sinb-msg-row"><div class="sinb-msg-stack"><div class="sinb-jump-card"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg><span>Please update <b>' + sinbEsc(m.fieldLabel) + '</b></span><button type="button" class="sinb-jump-btn" data-jump-change="' + m.changeId + '">Update here</button></div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
       }
       return '<div class="sinb-msg-row' + (mine ? ' mine' : '') + '"><div class="sinb-msg-stack">' + supChatQuoteBlockHtml(m) + '<div class="sinb-msg-bubble">' + sinbEsc(m.text) + '</div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
@@ -24403,9 +24419,14 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
     }
     if (type === 'document') {
-      return '<div class="own-resubmit-upload-zone" data-own-resubmit-upload="' + ch.id + '">' +
-        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>' +
-        '<span class="own-resubmit-upload-text" data-own-resubmit-upload-label="' + ch.id + '">Click to choose a replacement file</span>' +
+      // Matches the exact .file-dropzone structure used by the onboarding wizard's own certificate
+      // uploads (see wireUploadZonesIn / openUploadMethodPopup / markZoneUploaded) so clicking this
+      // opens the real "choose from files / phone / camera" upload modal instead of directly faking
+      // an upload the moment it's clicked, the same as every other upload zone in the app.
+      return '<div class="file-dropzone own-resubmit-upload-zone" data-title="Upload replacement file" data-own-resubmit-upload="' + ch.id + '">' +
+        '<input type="file" style="display:none;">' +
+        '<div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg></div>' +
+        '<div class="fd-label" data-own-resubmit-upload-label="' + ch.id + '">Click to choose a replacement file</div>' +
         '</div>' +
         '<input type="hidden" data-own-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
     }
@@ -24797,16 +24818,19 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     listEl.querySelectorAll('[data-own-resubmit-utr]').forEach(function (input) {
       input.addEventListener('click', function (e) { e.stopPropagation(); });
     });
+    // Reuses the exact same upload-method modal (choose from files / phone QR / camera) the
+    // onboarding wizard's own certificate uploads use, instead of directly faking an upload the
+    // instant the zone is clicked — wireUploadZonesIn wires the click (openUploadMethodPopup) and
+    // the file input's change (markZoneUploaded); this just syncs whatever filename actually gets
+    // chosen back into the hidden input the resubmit/change-request logic reads from.
+    if (typeof wireUploadZonesIn === 'function') wireUploadZonesIn(listEl);
     listEl.querySelectorAll('[data-own-resubmit-upload]').forEach(function (zone) {
-      zone.addEventListener('click', function (e) {
-        e.stopPropagation();
+      zone.addEventListener('keylr-uploaded', function () {
         var id = zone.getAttribute('data-own-resubmit-upload');
-        var fakeFileName = 'new-document-' + new Date().getFullYear() + '.pdf';
-        var label = listEl.querySelector('[data-own-resubmit-upload-label="' + id + '"]');
-        if (label) label.textContent = fakeFileName + ' selected';
+        var uploadedNameEl = zone.querySelector('.fd-uploaded-name');
+        var filename = uploadedNameEl ? uploadedNameEl.textContent.trim() : 'document';
         var hidden = listEl.querySelector('input[data-own-resubmit-input="' + id + '"]');
-        if (hidden) hidden.value = fakeFileName;
-        showToast('Demo file selected \u2014 file picking isn\u2019t wired up in this prototype.');
+        if (hidden) hidden.value = filename;
       });
     });
     listEl.querySelectorAll('[data-own-view-doc]').forEach(function (btn) {
@@ -27112,6 +27136,21 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     scrollEl.scrollTop = scrollEl.scrollHeight;
     sinbWireScrollBottomBtn(scrollEl, document.getElementById('ainScrollBottomBtn'));
     adminInboxWireCrActions();
+    // Wires the "View document" eye icon on any pending/resubmit/approved/declined field card (and,
+    // for completeness, the same resubmit-upload/date-picker/etc. plumbing wireOwnResubmitInputs
+    // already handles elsewhere) — this was never called for the Admin Inbox at all, which is why
+    // View document specifically did nothing here despite rendering and working correctly in every
+    // other chat surface. Harmless to call even though forAdmin's card view doesn't show the upload
+    // zone/resubmit button themselves — those selectors simply won't find anything to wire.
+    var activeConvForWiring = adminInboxConv(adminInboxActiveId);
+    if (activeConvForWiring && typeof wireOwnResubmitInputs === 'function') {
+      wireOwnResubmitInputs(
+        document.getElementById('ainMessagesInner'),
+        function () { return supplierChangeRequests[activeConvForWiring.name] || []; },
+        function () { adminInboxRenderThread(); }
+      );
+    }
+    adminInboxWireReplyAndJump();
   }
   // Auto-refresh: when a supplier submits a profile-update request (or sends any other message)
   // while the Admin Inbox is open, this picks it up without needing a manual reload — same idea as
@@ -27121,6 +27160,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   // supChatIsLiveSupplier); the other 95 conversations are self-contained demo data with nothing
   // external to poll for.
   var adminInboxLastLiveMsgCount = -1;
+  var adminInboxReplyingTo = null;
   function adminInboxPollForUpdates() {
     var inboxView = document.getElementById('adminInboxView');
     if (!inboxView || inboxView.style.display === 'none') return;
@@ -27146,7 +27186,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     } else if (last.kind === 'attachment') {
       previewText = last.fileName;
     } else if (last.kind === 'jump-notification') {
-      previewText = 'Please update ' + last.fieldLabel;
+      previewText = 'Asked ' + liveConv.name + ' to update ' + last.fieldLabel;
     } else {
       previewText = last.text;
     }
@@ -27193,6 +27233,36 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       });
     });
   }
+  // "Reply" (on a field card) and the little quote block a reply-message shows pointing back at
+  // the field it replied to (data-jump-change) — same behaviour as every other chat surface
+  // (sinbRenderChatMount's mounts, and the Supplier Detail page's own Chat tab), just never wired
+  // up at all for the Admin Inbox specifically, which is why neither did anything here.
+  function adminInboxWireReplyAndJump() {
+    var scrollEl = document.getElementById('ainChatScroll');
+    scrollEl.querySelectorAll('[data-jump-change]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var changeId = btn.getAttribute('data-jump-change');
+        var target = scrollEl.querySelector('.sinb-field-card[data-change-id="' + changeId + '"]');
+        if (!target) return;
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.classList.remove('sinb-field-card-flash');
+        void target.offsetWidth;
+        target.classList.add('sinb-field-card-flash');
+      });
+    });
+    scrollEl.querySelectorAll('[data-field-reply-btn]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        adminInboxReplyingTo = { changeId: btn.getAttribute('data-change-id'), fieldLabel: btn.getAttribute('data-field-label') };
+        document.getElementById('ainReplyPreviewField').textContent = adminInboxReplyingTo.fieldLabel;
+        document.getElementById('ainReplyPreview').style.display = 'flex';
+        document.getElementById('ainMessageInput').focus();
+      });
+    });
+  }
+  document.getElementById('ainReplyPreviewClose').addEventListener('click', function () {
+    adminInboxReplyingTo = null;
+    document.getElementById('ainReplyPreview').style.display = 'none';
+  });
   function adminInboxSendMessage(text) {
     var c = adminInboxConv(adminInboxActiveId);
     if (!c || !text.trim()) return;
@@ -27201,6 +27271,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     // level. Display-side, sinbBuildMessagesHtml's forAdmin flag flips this so it still shows up
     // correctly right-aligned as "my message" when admin is the one looking at it.
     var msg = { kind: 'text', mine: false, text: text.trim(), ts: Date.now(), time: sinbNowTimestamp() };
+    if (adminInboxReplyingTo) { msg.replyToChangeId = adminInboxReplyingTo.changeId; msg.replyToFieldLabel = adminInboxReplyingTo.fieldLabel; }
     if (c.isLive) {
       SINB_SUPPORT_CONV.messages.push(msg);
       if (typeof saveSinbMessages === 'function') saveSinbMessages();
@@ -27211,6 +27282,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     } else {
       c.messages.push(msg);
     }
+    adminInboxReplyingTo = null;
+    document.getElementById('ainReplyPreview').style.display = 'none';
     c.lastMessageText = msg.text;
     c.lastTs = Date.now();
     adminInboxRenderThread();
@@ -27310,6 +27383,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       // mine:false — same convention as adminInboxSendMessage above; admin attaching a file is
       // never "mine" at the shared data level, only on display via forAdmin's flip.
       var msg = { kind: 'attachment', mine: false, fileName: file.name, isImage: isImage, ts: Date.now(), time: sinbNowTimestamp() };
+      if (adminInboxReplyingTo) { msg.replyToChangeId = adminInboxReplyingTo.changeId; msg.replyToFieldLabel = adminInboxReplyingTo.fieldLabel; }
       if (c.isLive) {
         SINB_SUPPORT_CONV.messages.push(msg);
         if (typeof saveSinbMessages === 'function') saveSinbMessages();
@@ -27317,6 +27391,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       } else {
         c.messages.push(msg);
       }
+      adminInboxReplyingTo = null;
+      document.getElementById('ainReplyPreview').style.display = 'none';
       c.lastMessageText = file.name;
       c.lastTs = Date.now();
       ainAttachInput.value = '';
@@ -28626,6 +28702,24 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       window.localStorage.setItem(SUPRQ_STORAGE_KEY + '_pm', JSON.stringify(pmChangeRequests));
     } catch (e) { /* storage unavailable — in-memory state still works within this tab */ }
   }
+  // A field that's genuinely a document (isDocument:true) should never also carry an explicit
+  // fieldType:'text' — that combination forces buildResubmitInputHtml's plain text input instead
+  // of the real upload zone, regardless of isDocument (fieldType is checked first). The code path
+  // that used to create these for role certificates has been fixed to stop producing them, but
+  // that fix only prevents *new* ones — anything already saved to localStorage from before that
+  // fix, for any supplier, any role, keeps the broken shape forever unless corrected here too. This
+  // runs on every load specifically so it also fixes data already sitting in someone's browser, not
+  // just data created going forward.
+  function suprqCorrectStaleDocumentFields(reqStore) {
+    if (!reqStore) return;
+    Object.keys(reqStore).forEach(function (name) {
+      (reqStore[name] || []).forEach(function (batch) {
+        (batch.changes || []).forEach(function (ch) {
+          if (ch.isDocument === true && ch.fieldType === 'text') delete ch.fieldType;
+        });
+      });
+    });
+  }
   function loadChangeRequestsFromStorage() {
     try {
       var raw = window.localStorage.getItem(SUPRQ_STORAGE_KEY);
@@ -28644,6 +28738,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
           pmChangeRequests[key] = parsedPm[key];
         });
       }
+      suprqCorrectStaleDocumentFields(supplierChangeRequests);
+      suprqCorrectStaleDocumentFields(pmChangeRequests);
     } catch (e) { /* ignore malformed/unavailable storage and fall back to fresh seed data */ }
   }
   loadChangeRequestsFromStorage();
@@ -28934,7 +29030,17 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
       }
     }
-    if (supplierChangeRequests[key]) return;
+    if (supplierChangeRequests[key]) {
+      // Same reasoning as the Gas Safe correction above, generalized: any document field anywhere
+      // in this supplier's already-persisted requests that still carries the old broken
+      // fieldType:'text' + isDocument:true combination gets corrected immediately, rather than
+      // waiting for the next polling tick's loadChangeRequestsFromStorage() call to catch it.
+      if (typeof suprqCorrectStaleDocumentFields === 'function') {
+        suprqCorrectStaleDocumentFields(supplierChangeRequests);
+        if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
+      }
+      return;
+    }
     if (c && c.name === 'Ferna') {
       // This applicant updated everything on their profile in one go, then submitted — demonstrates
       // what a full-profile request looks like with every field type represented in a single card.
