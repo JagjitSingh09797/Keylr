@@ -2230,6 +2230,7 @@
   @keyframes pmTabFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
   .pm-tab-animate { animation: pmTabFadeIn 240ms ease-out; }
   .dash-content-sub { font-size: 13.5px; color: var(--text-body-muted); margin-top: 4px; }
+  .dash-content-head { margin-bottom: 16px; }
 
   .dash-header {
     display: flex; align-items: flex-start; justify-content: space-between;
@@ -2466,6 +2467,12 @@
   @media (max-width: 860px) {
     .dash-sidebar { position: fixed; z-index: 310; box-shadow: 0 0 0 9999px rgba(0,0,0,0); }
     .dash-content { padding: 20px 16px 50px; }
+    /* Tablet widths get the same hamburger-menu / hidden-drawer sidebar as phones, rather than a
+       permanently-visible fixed-position sidebar with no way to collapse or hide it \u2014 previously
+       this only kicked in below 450px, leaving the whole 451-860px tablet range stuck with the
+       sidebar always taking up space and no menu button to tuck it away. */
+    .dash-sidebar { transform: translateX(-100%); transition: transform 220ms ease-out; }
+    .dash-sidebar.mobile-open { transform: translateX(0); box-shadow: 0 0 0 9999px rgba(8,13,22,0.45); }
   }
 
   .dash-mobile-menu-btn {
@@ -2474,10 +2481,16 @@
     border: 1px solid var(--border-subtle); margin-right: 12px;
     align-items: center; justify-content: center; cursor: pointer; color: var(--text-heading);
   }
-  @media (max-width: 450px) {
-    .dash-sidebar { transform: translateX(-100%); transition: transform 220ms ease-out; }
-    .dash-sidebar.mobile-open { transform: translateX(0); box-shadow: 0 0 0 9999px rgba(8,13,22,0.45); }
+  /* Has to live here, right after the base rule above \u2014 an earlier version of this same override
+     lived inside the @media block further up (before .dash-mobile-menu-btn's own base rule), and
+     with equal selector specificity on both sides, the one appearing later in source order always
+     wins the cascade regardless of which one is wrapped in a media query. Same root cause as every
+     other "override placed too early" bug fixed elsewhere in this stylesheet (notification panel,
+     compliance progress bar, checklist filter row). */
+  @media (max-width: 860px) {
     .dash-mobile-menu-btn { display: flex; }
+  }
+  @media (max-width: 450px) {
     .dash-topbar h1 { font-size: 15px; }
     .dash-content-sub { font-size: 11.5px; }
     .dash-content h1, .client-header-card h1, .sup-detail-header-card h1 { font-size: 17px; }
@@ -2702,6 +2715,91 @@
   .sinb-send-btn:not(:disabled) { background: linear-gradient(135deg, #22447f 0%, #0d1b3d 100%); }
   .sinb-send-btn:not(:disabled):active { transform: scale(0.9); }
   .sinb-composer-hint { font-size: 10.5px; color: var(--text-body-muted); margin-top: 8px; }
+
+  /* ==========================================================================
+     ADMIN INBOX — a list of every supplier/PM conversation, with a detail panel
+     reusing the same sinb-* chat components used elsewhere (Settings > Chat,
+     Dashboard > Inbox, the onboarding widget) for visual consistency.
+     ========================================================================== */
+  .ain-layout { display: flex; gap: 0; background: #fff; border: 1px solid var(--border-subtle); border-radius: 16px; overflow: hidden; height: calc(100vh - 200px); min-height: 480px; }
+  .ain-list-panel { width: 360px; flex-shrink: 0; border-right: 1px solid var(--border-subtle); display: flex; flex-direction: column; min-height: 0; }
+  .ain-search-row { display: flex; align-items: center; gap: 8px; padding: 16px; flex-shrink: 0; }
+  .ain-search-box { flex: 1; position: relative; }
+  .ain-search-box svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; }
+  .ain-search-box input { width: 100%; padding: 9px 12px 9px 34px; border: 1px solid var(--border-subtle); border-radius: 10px; font-size: 13px; background: var(--surface-soft); }
+  .ain-search-box input:focus { outline: none; border-color: var(--accent-blue); background: #fff; }
+  .ain-refresh-btn { width: 34px; height: 34px; border-radius: 9px; border: 1px solid var(--border-subtle); background: #fff; color: var(--text-body-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: background-color 150ms ease-out; }
+  .ain-refresh-btn:hover { background: var(--surface-soft); }
+  .ain-refresh-btn.spinning svg { animation: ainSpin 600ms linear; }
+  @keyframes ainSpin { to { transform: rotate(360deg); } }
+  .ain-filter-tabs { display: flex; gap: 6px; padding: 0 16px 12px; flex-shrink: 0; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; }
+  .ain-filter-tabs::-webkit-scrollbar { display: none; }
+  .ain-filter-tab { flex-shrink: 0; padding: 7px 13px; border-radius: 999px; font-size: 12.5px; font-weight: 600; color: var(--text-body-muted); background: var(--surface-soft); cursor: pointer; white-space: nowrap; transition: background-color 150ms ease-out, color 150ms ease-out; }
+  .ain-filter-tab:hover { background: #e2e8f0; }
+  .ain-filter-tab.active { background: var(--icon-tint-bg); color: var(--accent-blue); font-weight: 700; }
+  .ain-conv-list { flex: 1; overflow-y: auto; min-height: 0; }
+  .ain-conv-item { display: flex; align-items: flex-start; gap: 10px; padding: 13px 16px; border-bottom: 1px solid var(--border-subtle); cursor: pointer; position: relative; transition: background-color 120ms ease-out; }
+  .ain-conv-item:hover { background: var(--surface-soft); }
+  .ain-conv-item.active { background: var(--icon-tint-bg); }
+  .ain-conv-item .ain-conv-avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+  /* Unscoped (not just .ain-conv-item) and !important on colour specifically, because the thread
+     header reuses .sinb-conv-avatar too (for identical sizing/positioning there), and that class's
+     own base rule already sets a plain grey background/colour with equal selector specificity \u2014
+     this is what actually wins the light-blue/Keylr-blue treatment in both the list and the header. */
+  .ain-conv-avatar { color: var(--accent-blue) !important; background: var(--icon-tint-bg) !important; overflow: hidden; }
+  .ain-conv-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+  .ain-conv-body { flex: 1; min-width: 0; }
+  .ain-conv-top-row { display: flex; align-items: center; gap: 8px; }
+  .ain-conv-name { font-size: 13.5px; font-weight: 700; color: var(--text-heading); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ain-conv-role-badge { font-size: 9.5px; font-weight: 700; letter-spacing: 0.02em; padding: 1px 7px; border-radius: 999px; flex-shrink: 0; }
+  .ain-conv-role-badge.pm { background: #eef1f5; color: #475569; }
+  .ain-conv-role-badge.supplier { background: var(--icon-tint-bg); color: var(--accent-blue); }
+  .ain-conv-time { font-size: 11px; color: var(--text-body-muted); margin-left: auto; flex-shrink: 0; }
+  .ain-conv-preview { font-size: 12.5px; color: var(--text-body-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 2px; }
+  .ain-conv-item.unread .ain-conv-name { font-weight: 800; }
+  .ain-conv-item.unread .ain-conv-preview { color: var(--text-heading); font-weight: 600; }
+  .ain-conv-meta-row { display: flex; align-items: center; gap: 8px; margin-top: 5px; }
+  .ain-conv-icon-btn { color: #cbd5e1; cursor: pointer; transition: color 150ms ease-out; }
+  .ain-conv-icon-btn:hover, .ain-conv-icon-btn.active { color: var(--accent-blue); }
+  .ain-conv-icon-btn.active svg { fill: currentColor; }
+  .ain-unread-badge { min-width: 19px; height: 19px; padding: 0 5px; border-radius: 999px; background: var(--accent-blue); color: #fff; font-size: 10.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; position: absolute; top: 13px; right: 16px; }
+  .ain-conv-list-empty { padding: 60px 24px; text-align: center; font-size: 13px; color: var(--text-body-muted); }
+  .ain-detail-panel { flex: 1; min-width: 0; display: flex; flex-direction: column; min-height: 0; }
+  .ain-empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px; }
+  .ain-empty-icon { width: 64px; height: 64px; border-radius: 50%; background: var(--surface-soft); color: #94a3b8; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+  .ain-empty-title { font-size: 17px; font-weight: 800; color: var(--text-heading); margin-bottom: 6px; }
+  .ain-empty-sub { font-size: 13px; color: var(--text-body-muted); max-width: 340px; line-height: 1.5; }
+  .ain-empty-sub b { color: var(--accent-blue); }
+  .ain-thread-view { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+  .ain-thread-header { display: flex; align-items: center; gap: 4px; border-bottom: 1px solid var(--border-subtle); flex-shrink: 0; }
+  .ain-thread-header .sinb-chat-header { border-bottom: none; flex: 1; min-width: 0; }
+  .ain-icon-btn { width: 34px; height: 34px; border-radius: 9px; border: none; background: transparent; color: #94a3b8; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: background-color 150ms ease-out, color 150ms ease-out; margin-right: 6px; }
+  .ain-icon-btn:hover { background: var(--surface-soft); color: var(--text-heading); }
+  .ain-icon-btn.active { color: var(--accent-blue); }
+  .ain-icon-btn.active svg { fill: currentColor; }
+  .ain-back-btn { display: none; }
+
+  @media (max-width: 860px) {
+    /* WhatsApp-style: only one of the list or the open thread is ever visible at once. Default
+       state shows just the conversation list at full width/height; opening a conversation swaps to
+       showing just the thread, full width/height, with a back button to return. This starts at the
+       same breakpoint the layout switches to a single column at all \u2014 stacking both panels one
+       above the other without this swap meant the open thread rendered awkwardly below the whole
+       conversation list instead of taking over the screen. */
+    .ain-layout { height: calc(100vh - 200px); min-height: 420px; flex-direction: column; }
+    .ain-list-panel { width: 100%; max-height: none; border-right: none; border-bottom: none; flex: 1; display: flex; }
+    .ain-detail-panel { display: none; flex: 1; min-height: 480px; }
+    .ain-layout.ain-mobile-thread-open .ain-list-panel { display: none; }
+    .ain-layout.ain-mobile-thread-open .ain-detail-panel { display: flex; }
+    .ain-back-btn { display: inline-flex; margin-right: 0; }
+    /* The back button already has its own gap from .ain-thread-header's flex layout — its own
+       margin-right on top of that pushed the avatar/name further right than intended once it's
+       visible on narrower screens. */
+    .ain-thread-header .sinb-chat-header { margin-left: 0; padding-left: 0; }
+    /* Message bubbles get the full width of the thread to work with instead of a fixed max-width
+       fraction \u2014 same treatment as the Supplier Applicant detail page's chat on mobile. */
+    #ainChatScroll .sinb-msg-stack { max-width: none; }
+  }
 
   /* ==========================================================================
      ONBOARDING — floating "Keylr Support" chat widget (bottom-right FAB).
@@ -4339,6 +4437,8 @@
   .pm-table-scroll [data-tooltip]::after { bottom: auto; top: calc(100% + 7px); }
   .sinb-titlebar [data-tooltip]::after { bottom: auto; top: calc(100% + 7px); }
   #commercialSubTypes [data-tooltip]::after { bottom: auto; top: calc(100% + 7px); }
+  .ain-thread-header [data-tooltip]::after { bottom: auto; top: calc(100% + 7px); }
+  .ain-thread-header #ainExpandBtn[data-tooltip]::after { left: auto; right: 0; transform: none; }
 
   /* 3-dot dropdown menu */
   .pm-dropdown-menu, .app-dropdown-menu, .supplier-dropdown-menu {
@@ -12046,6 +12146,11 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
             <span class="nav-label">Overview</span>
           </div>
+          <div class="dash-nav-item" data-nav="inbox">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            <span class="nav-label">Inbox</span>
+            <span class="dash-nav-badge" id="adminInboxNavBadge">0</span>
+          </div>
         </div>
 
         <div class="dash-nav-group">
@@ -12106,10 +12211,6 @@
 
         <div class="dash-nav-group">
           <div class="dash-nav-group-label">System</div>
-          <div class="dash-nav-item" data-nav="messages">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-            <span class="nav-label">Messages</span>
-          </div>
           <div class="dash-nav-item" data-nav="activity-logs">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 106 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>
             <span class="nav-label">Activity Logs</span>
@@ -12384,11 +12485,79 @@
                   <div class="quick-action-item" data-action="manage-services"><div class="qai-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div><div><div class="qai-title">Manage Services</div><div class="qai-sub">Taxonomy</div></div></div>
                   <div class="quick-action-item" data-action="clients"><div class="qai-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></div><div><div class="qai-title">Clients</div><div class="qai-sub">47 active</div></div></div>
                   <div class="quick-action-item" data-action="jobs"><div class="qai-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div><div><div class="qai-title">Jobs</div><div class="qai-sub">39 active</div></div></div>
-                  <div class="quick-action-item" data-action="messages"><div class="qai-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><div><div class="qai-title">Messages</div><div class="qai-sub">Inbox</div></div></div>
+                  <div class="quick-action-item" data-action="inbox"><div class="qai-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><div><div class="qai-title">Inbox</div><div class="qai-sub">Messages</div></div></div>
                 </div>
               </div>
             </div>
           </div>
+          </div>
+
+          <!-- ============ INBOX VIEW ============ -->
+          <div id="adminInboxView" style="display:none;">
+            <div class="dash-content-head">
+              <div><h2>Inbox</h2><div class="dash-content-sub">Chat directly with suppliers and property managers.</div></div>
+            </div>
+
+            <div class="ain-layout">
+              <div class="ain-list-panel">
+                <div class="ain-search-row">
+                  <div class="ain-search-box">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    <input type="text" id="ainSearchInput" placeholder="Search conversations">
+                  </div>
+                  <button type="button" class="ain-refresh-btn" id="ainRefreshBtn" aria-label="Refresh"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg></button>
+                </div>
+                <div class="ain-filter-tabs" id="ainFilterTabs">
+                  <div class="ain-filter-tab active" data-ainfilter="all">All (<span id="ainTabAllCount">0</span>)</div>
+                  <div class="ain-filter-tab" data-ainfilter="unread">Unread (<span id="ainTabUnreadCount">0</span>)</div>
+                  <div class="ain-filter-tab" data-ainfilter="suppliers">Suppliers (<span id="ainTabSuppliersCount">0</span>)</div>
+                  <div class="ain-filter-tab" data-ainfilter="pms">PMs (<span id="ainTabPMsCount">0</span>)</div>
+                  <div class="ain-filter-tab" data-ainfilter="favourites">Favourites (<span id="ainTabFavCount">0</span>)</div>
+                </div>
+                <div class="ain-conv-list" id="ainConvList"></div>
+              </div>
+
+              <div class="ain-detail-panel">
+                <div class="ain-empty-state" id="ainEmptyState">
+                  <div class="ain-empty-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+                  <div class="ain-empty-title">Pick a Conversation</div>
+                  <div class="ain-empty-sub">Select a support thread on the left to read and reply as <b>Keylr Support</b>.</div>
+                </div>
+                <div class="ain-thread-view" id="ainThreadView" style="display:none;">
+                  <div class="ain-thread-header">
+                    <button type="button" class="ain-icon-btn ain-back-btn" id="ainBackBtn" aria-label="Back to conversations"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+                    <div class="sinb-chat-header" id="ainThreadHeaderInner"></div>
+                    <button type="button" class="ain-icon-btn" id="ainPinBtn" data-tooltip="Pin conversation"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5M9 3h6l-1 7 4 3H6l4-3-1-7z"/></svg></button>
+                    <button type="button" class="ain-icon-btn" id="ainStarBtn" data-tooltip="Star conversation"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
+                    <button type="button" class="ain-icon-btn" id="ainExpandBtn" data-tooltip="View full profile"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
+                  </div>
+                  <div class="sinb-chat-thread-wrap">
+                    <div class="sinb-chat-scroll" id="ainChatScroll">
+                      <div id="ainMessagesInner"></div>
+                      <div class="sinb-scroll-anchor"><button type="button" class="sinb-scroll-bottom-btn" id="ainScrollBottomBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg><span>Go to bottom</span></button></div>
+                    </div>
+                  </div>
+                  <div class="sinb-composer" id="ainComposer">
+                    <div class="sinb-composer-icons">
+                      <div style="position:relative;">
+                        <button type="button" class="sinb-icon-btn" id="ainEmojiBtn" data-tooltip="Add emoji"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg></button>
+                        <div class="sinb-emoji-popover" id="ainEmojiPopover">
+                          <span data-emoji="\ud83d\udc4d">\ud83d\udc4d</span><span data-emoji="\ud83d\udc4c">\ud83d\udc4c</span><span data-emoji="\ud83d\ude42">\ud83d\ude42</span><span data-emoji="\ud83d\ude00">\ud83d\ude00</span><span data-emoji="\ud83d\ude4c">\ud83d\ude4c</span><span data-emoji="\ud83d\udc4b">\ud83d\udc4b</span>
+                          <span data-emoji="\u2705">\u2705</span><span data-emoji="\ud83d\udd27">\ud83d\udd27</span><span data-emoji="\ud83d\ude90">\ud83d\ude90</span><span data-emoji="\u23f0">\u23f0</span><span data-emoji="\ud83d\udcf7">\ud83d\udcf7</span><span data-emoji="\ud83d\udc4a">\ud83d\udc4a</span>
+                        </div>
+                      </div>
+                      <button type="button" class="sinb-icon-btn" id="ainAttachBtn" data-tooltip="Attach image or PDF"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button>
+                      <input type="file" id="ainAttachInput" accept="image/*,video/*,.pdf" style="display:none;">
+                    </div>
+                    <div class="sinb-input-row">
+                      <input type="text" id="ainMessageInput" placeholder="Reply...">
+                      <button type="button" class="sinb-send-btn" id="ainSendBtn" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg></button>
+                    </div>
+                    <div class="sinb-composer-hint">Enter to send · Shift + Enter for new line · Images, videos + PDFs up to 10 MB.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- ============ SERVICES_VIEW_PLACEHOLDER ============ -->
@@ -20208,7 +20377,13 @@
           changes.push({ section: 'Categories & Roles', fieldLabel: labelPrefix + ': Registration number', oldValue: oldEntry.regNumber || 'Not set', newValue: entry.regNumber, fieldType: 'text', isDocument: false });
         }
         if (entry.fileName && entry.fileName !== oldEntry.fileName) {
-          changes.push({ section: 'Categories & Roles', fieldLabel: labelPrefix + ': Uploaded certificate', oldValue: oldEntry.fileName || 'Not set', newValue: entry.fileName, fieldType: 'text', isDocument: true });
+          // No explicit fieldType here — unlike the two entries above, this one IS a document, so
+          // omitting fieldType lets buildResubmitInputHtml's `ch.fieldType || (ch.isDocument ?
+          // 'document' : 'text')` correctly fall through to 'document' via isDocument. Setting
+          // fieldType:'text' here (as this used to) short-circuits that check before isDocument is
+          // ever consulted, forcing the plain text input instead of the real upload zone — the
+          // uploaded-certificate resubmit bug reported from the chat.
+          changes.push({ section: 'Categories & Roles', fieldLabel: labelPrefix + ': Uploaded certificate', oldValue: oldEntry.fileName || 'Not set', newValue: entry.fileName, isDocument: true });
         }
         if (entry.expiryDate && entry.expiryDate !== oldEntry.expiryDate) {
           changes.push({ section: 'Categories & Roles', fieldLabel: labelPrefix + ': Expiry date', oldValue: oldEntry.expiryDate || 'Not set', newValue: entry.expiryDate, fieldType: 'date', isDocument: false });
@@ -22601,6 +22776,64 @@
     saveSinbMessages();
     if (typeof sinbRenderChat === 'function') sinbRenderChat();
   }
+  // Shared state-mutation logic for Accept / Ask to resubmit / Decline on a change-request field —
+  // status update, applying approved values back to the profile, persistence, activity logging, and
+  // notifying the supplier. Used by both the Supplier Detail page's own Chat tab
+  // (renderSupChatThread) and the Admin Inbox, so an action taken from either place behaves
+  // identically. Deliberately does NOT include the "pre-fill the composer with a reply" step below —
+  // that part targets different composer elements depending on which of those two contexts is
+  // calling this, so it stays with each caller instead of being generalized here.
+  function sinbHandleCrAction(change, action, name) {
+    change.status = action === 'approve' ? 'approved' : action === 'decline' ? 'declined' : 'resubmit';
+    if (action === 'approve' && typeof sinbApplyApprovedChange === 'function') sinbApplyApprovedChange(change);
+    if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
+    logSupChatActivity(name, {
+      type: action === 'approve' ? 'approved' : action === 'decline' ? 'declined' : 'resubmit_requested',
+      actor: 'Admin',
+      action: action === 'approve' ? 'approved' : action === 'decline' ? 'declined' : 'asked for resubmission of',
+      fieldLabel: change.fieldLabel,
+      oldValue: change.oldValue,
+      newValue: change.newValue
+    });
+    if (supChatIsLiveSupplier(name)) {
+      if (action === 'resubmit' && typeof SINB_SUPPORT_CONV !== 'undefined') {
+        SINB_SUPPORT_CONV.messages.push({ kind: 'jump-notification', changeId: change.id, fieldLabel: change.fieldLabel, ts: Date.now(), time: sinbNowTimestamp() });
+        saveSinbMessages();
+        if (typeof sinbRenderChat === 'function') sinbRenderChat();
+        // No extra push here — "Action Required: Resubmit Information" is state-derived from
+        // change.status === 'resubmit' and picks this up automatically on the next poll tick.
+      } else if (action === 'approve' && typeof sinbAddEditResponseMessage === 'function') {
+        sinbAddEditResponseMessage('\u201c' + change.fieldLabel + '\u201d was approved \u2014 your profile has been updated.');
+        if (typeof pushOrMergeUnread === 'function') {
+          pushOrMergeUnread(supNotifications, 'approved', function (count) {
+            return {
+              type: 'approved',
+              title: 'Profile Update Approved',
+              desc: 'Your ' + count + ' requested change' + (count === 1 ? ' has' : 's have') + ' been approved and updated.',
+              onClick: function () { supNotifOpenSettingsTab('profile'); }
+            };
+          });
+          if (typeof renderSupNotifications === 'function') renderSupNotifications();
+        }
+      } else if (action === 'decline' && typeof sinbAddEditResponseMessage === 'function') {
+        // Always send a baseline notification immediately, so the supplier is guaranteed to see
+        // *something* the moment the field is declined, even if the admin never follows up with a
+        // custom reason via the composer below.
+        sinbAddEditResponseMessage('\u201c' + change.fieldLabel + '\u201d was declined.');
+        if (typeof pushOrMergeUnread === 'function') {
+          pushOrMergeUnread(supNotifications, 'declined', function (count) {
+            return {
+              type: 'declined',
+              title: 'Profile Update Declined',
+              desc: 'Your request to update ' + count + ' item' + (count === 1 ? '' : 's') + ' was declined.',
+              onClick: function () { supNotifOpenSettingsTab('inbox'); }
+            };
+          });
+          if (typeof renderSupNotifications === 'function') renderSupNotifications();
+        }
+      }
+    }
+  }
   function sinbFindBatch(batchId, forName) {
     var key = forName || SUP_OWN_DEMO_NAME;
     var batches = (supplierChangeRequests && supplierChangeRequests[key]) || [];
@@ -22662,21 +22895,36 @@
         '<div class="sinb-chat-header-sub">' + (c.presence ? '<span class="online">' + c.presence + '</span>' : 'Last active ' + c.lastActivityLabel) + '</div>' +
       '</div>';
   }
-  function sinbBuildMessagesHtml(c) {
+  function sinbBuildMessagesHtml(c, forAdmin) {
     var sortedMessages = c.messages.slice().sort(function (a, b) { return (a.ts || 0) - (b.ts || 0); });
     return sortedMessages.length ? sortedMessages.map(function (m) {
+      // "mine" in the data always means "sent by the supplier this conversation belongs to" — the
+      // convention every other caller of this function (Settings > Chat, Dashboard > Inbox, the
+      // onboarding widget) already relies on, since those are all the supplier's own view of their
+      // own conversation. The Admin Inbox is the odd one out: admin is the viewer there, not the
+      // supplier, so which side should visually read as "my message" flips — this is the one place
+      // that inversion happens, right where bubbles get laid out, rather than changing what "mine"
+      // means in the stored data itself (which would break the other three mounts).
+      var mine = forAdmin ? !m.mine : m.mine;
       if (m.kind === 'date') return '<div class="sinb-date-sep"><span>' + m.label + '</span></div>';
       if (m.kind === 'system') return '<div class="sinb-msg-row system"><div class="sinb-system-card"><div class="sinb-system-card-inner' + (m.warn ? ' warn' : '') + '"><div class="sinb-system-card-title">' + sinbEsc(m.title) + '</div><div class="sinb-system-card-body">' + sinbEsc(m.body) + '</div></div><div class="sinb-system-card-time">' + m.time + '</div></div></div>';
-      if (m.kind === 'attachment') return '<div class="sinb-msg-row' + (m.mine ? ' mine' : '') + '"><div class="sinb-msg-stack">' + supChatQuoteBlockHtml(m) + '<div class="sinb-msg-bubble sinb-attachment-bubble"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (m.isImage ? '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>' : '<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/>') + '</svg><span>' + sinbEsc(m.fileName) + '</span></div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
+      if (m.kind === 'attachment') return '<div class="sinb-msg-row' + (mine ? ' mine' : '') + '"><div class="sinb-msg-stack">' + supChatQuoteBlockHtml(m) + '<div class="sinb-msg-bubble sinb-attachment-bubble"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (m.isImage ? '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>' : '<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/>') + '</svg><span>' + sinbEsc(m.fileName) + '</span></div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
       if (m.kind === 'edit-request') {
-        var batch = sinbFindBatch(m.batchId);
+        // forAdmin defaults to false (existing behaviour for Settings > Chat, Dashboard > Inbox, and
+        // the onboarding widget, none of which pass this) — the Admin Inbox is the only caller that
+        // passes true, which is what shows the Accept / Ask to resubmit / Decline buttons instead of
+        // the supplier's own "waiting for review" view of the same card. forName is likewise only
+        // overridden for the admin case, since sinbFindBatch's default (SUP_OWN_DEMO_NAME) assumes
+        // whoever's viewing is the logged-in supplier themselves, which isn't true for admin viewing
+        // someone else's conversation.
+        var batch = sinbFindBatch(m.batchId, forAdmin ? c.name : undefined);
         if (!batch) return '';
-        return '<div class="sinb-msg-row' + (m.mine ? ' mine' : '') + '"><div class="sinb-msg-stack sinb-msg-stack-wide">' + sinbEditRequestCardHtml(batch, false) + '<div class="sinb-msg-time">' + (m.mine ? 'You \u00b7 ' : '') + m.time + '</div></div></div>';
+        return '<div class="sinb-msg-row' + (mine ? ' mine' : '') + '"><div class="sinb-msg-stack sinb-msg-stack-wide">' + sinbEditRequestCardHtml(batch, !!forAdmin) + '<div class="sinb-msg-time">' + (mine ? 'You \u00b7 ' : '') + m.time + '</div></div></div>';
       }
       if (m.kind === 'jump-notification') {
         return '<div class="sinb-msg-row"><div class="sinb-msg-stack"><div class="sinb-jump-card"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg><span>Please update <b>' + sinbEsc(m.fieldLabel) + '</b></span><button type="button" class="sinb-jump-btn" data-jump-change="' + m.changeId + '">Update here</button></div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
       }
-      return '<div class="sinb-msg-row' + (m.mine ? ' mine' : '') + '"><div class="sinb-msg-stack">' + supChatQuoteBlockHtml(m) + '<div class="sinb-msg-bubble">' + sinbEsc(m.text) + '</div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
+      return '<div class="sinb-msg-row' + (mine ? ' mine' : '') + '"><div class="sinb-msg-stack">' + supChatQuoteBlockHtml(m) + '<div class="sinb-msg-bubble">' + sinbEsc(m.text) + '</div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
     }).join('') : '<div class="sinb-empty-chat">Send a message to start the conversation with Keylr Support.</div>';
   }
   function sinbUpdateAllReplyPreviews() {
@@ -25997,6 +26245,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   function showAdminView(view) {
     var adminViewIds = {
       overview: 'adminOverviewView',
+      inbox: 'adminInboxView',
       services: 'adminServicesView',
       'pm-list': 'adminPMListView',
       'pm-applicants-list': 'adminPMApplicantsView',
@@ -26042,6 +26291,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         showAdminView('supplier-applicants-list');
       } else if (nav === 'services') {
         showAdminView('services');
+      } else if (nav === 'inbox') {
+        showAdminView('inbox');
+        initAdminInboxOnce();
       } else {
         showAdminView('overview');
         document.querySelector('#adminDashboard .dash-nav-item[data-nav="overview"]').classList.add('active');
@@ -26053,6 +26305,13 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
   document.querySelectorAll('.quick-action-item').forEach(function (item) {
     item.addEventListener('click', function () {
+      if (item.getAttribute('data-action') === 'inbox') {
+        document.querySelectorAll('#adminDashboard .dash-nav-item').forEach(function (i) { i.classList.remove('active'); });
+        document.querySelector('#adminDashboard .dash-nav-item[data-nav="inbox"]').classList.add('active');
+        showAdminView('inbox');
+        initAdminInboxOnce();
+        return;
+      }
       showToast(item.querySelector('.qai-title').textContent + ' isn\u2019t wired up in this prototype yet.');
     });
   });
@@ -26583,6 +26842,489 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     { initials: 'PK', color: '#16a34a', name: 'Priya Kaur', email: '', type: 'Sole Trader', phone: '+447700112239', activeState: 'Active', status: 'Approved', photo: 'https://i.pravatar.cc/150?img=44' },
     { initials: 'DW', color: '#7c3aed', name: 'Dan Walsh', email: 'dan.walsh@test.com', type: 'Company', phone: '+447700112240', activeState: 'Active', status: 'Approved', photo: 'https://i.pravatar.cc/150?img=59' }
   ];
+
+  /* =========================================================
+     ADMIN INBOX — a combined list of every supplier + PM conversation, with a
+     detail panel that reuses the exact same sinb-* rendering helpers used
+     everywhere else (Settings > Chat, Dashboard > Inbox, the onboarding
+     widget) for visual consistency. Ferna's entry is special-cased to be the
+     real, live SINB_SUPPORT_CONV conversation (see supChatIsLiveSupplier) —
+     replying to her here shows up in her actual Settings/Dashboard chat too,
+     the same as replying from her supplier-detail page's Chat tab already
+     does. Every other conversation gets its own generated, self-contained
+     thread (deterministic, not random, so it's stable across renders).
+  ========================================================== */
+  // PM conversations are hidden from the Inbox for now (suppliers only) \u2014 flip this back to true,
+  // and remove the "display:none" this adds to the PMs stat card + filter tab in initAdminInboxOnce,
+  // once PM chat is ready to ship. Nothing else needs to change: the data-building, filtering, and
+  // stat-counting logic all already handle PM conversations correctly, they're just not included.
+  var ADMIN_INBOX_SHOW_PMS = false;
+  var ADMIN_INBOX_SYSTEM_POOL = [
+    { title: 'Welcome', body: 'We\u2019re here when you need us.' },
+    { title: 'VAT Verification Failed', body: 'Your VAT registration could not be verified. Please check your details and resubmit.' },
+    { title: 'Bill Finalised', body: 'Your billing period has ended and your invoice is ready to view.' },
+    { title: 'Payout Deposited', body: '\u00a3150.00 has been deposited \u2014 your early payment payout has been credited to your bank account.' },
+    { title: 'New Job Invitation', body: 'A property manager has invited you to accept a job: EICR \u2014 Electrical Installation Condition Report.' },
+    { title: 'Billing Cycle Approved', body: 'Your fortnightly billing cycle has been approved and processed.' },
+    { title: 'New Job Invitation', body: 'A property manager has invited you to accept a job: Carpet / Stair Carpet Steam Clean.' },
+    { title: 'Account Approved', body: 'Congratulations \u2014 your account has been approved and is now active.' },
+    { title: 'Payout Scheduled', body: 'An early payment has been charged and is being held until it clears. We\u2019ll notify you when it lands.' },
+    { title: 'Compliance Reminder', body: 'One of your certificates is expiring soon \u2014 please upload a renewed copy before it lapses.' }
+  ];
+  var ADMIN_INBOX_PERSON_LAST = [
+    'I cannot complete my onboarding', 'Can you check on my payout status for me?', 'Thanks for the update!',
+    'When will my next job be assigned?', 'I\u2019ve resubmitted the document you asked for.', 'Is there someone I can call about this?'
+  ];
+  var adminInboxConversations = [];
+  var adminInboxInitDone = false;
+  var adminInboxActiveId = null;
+  var adminInboxFilter = 'all';
+  var adminInboxSearchQuery = '';
+
+  function adminInboxSeedMessages(idx) {
+    var msgs = [];
+    var base = Date.now() - (idx * 3 + 10) * 60000;
+    var welcome = ADMIN_INBOX_SYSTEM_POOL[0];
+    msgs.push({ kind: 'system', title: welcome.title, body: welcome.body, time: sinbFormatTimestamp(base - 900000), ts: base - 900000 });
+    var poolIdx = 1 + ((idx * 47 + 13) % (ADMIN_INBOX_SYSTEM_POOL.length - 1));
+    var pick = ADMIN_INBOX_SYSTEM_POOL[poolIdx];
+    msgs.push({ kind: 'system', title: pick.title, body: pick.body, time: sinbFormatTimestamp(base - 300000), ts: base - 300000 });
+    if (idx % 3 === 0) {
+      var reply = ADMIN_INBOX_PERSON_LAST[idx % ADMIN_INBOX_PERSON_LAST.length];
+      // mine:true here matches the same convention SINB_SUPPORT_CONV uses everywhere else in this
+      // app — "mine" always means "sent by the supplier this conversation belongs to", never "sent
+      // by whoever's currently looking at it". sinbBuildMessagesHtml's forAdmin flag is what flips
+      // this for display when admin is the one viewing (see adminInboxRenderThread).
+      msgs.push({ kind: 'text', mine: true, text: reply, time: sinbFormatTimestamp(base), ts: base });
+    }
+    return msgs;
+  }
+  function adminInboxBuildConversations() {
+    if (adminInboxConversations.length) return adminInboxConversations;
+    var list = [];
+    var now = Date.now();
+    function pushPerson(person, type) {
+      var idx = list.length;
+      var isLive = supChatIsLiveSupplier(person.name);
+      var minsAgo = (idx * 17 + 5) % (60 * 30);
+      var unread = (idx % 5 === 0) ? (((idx * 3 + 1) % 12) + 1) : 0;
+      var lastEntry;
+      if (isLive) {
+        var liveMsgs = SINB_SUPPORT_CONV.messages;
+        var lastLive = liveMsgs.length ? liveMsgs[liveMsgs.length - 1] : null;
+        lastEntry = lastLive ? (lastLive.text || (lastLive.title ? lastLive.title + ' ' + (lastLive.body || '') : 'Attachment')) : 'We\u2019re here when you need us.';
+      } else {
+        var seedMsgs = adminInboxSeedMessages(idx);
+        var last = seedMsgs[seedMsgs.length - 1];
+        lastEntry = last.kind === 'system' ? (last.title + ' ' + last.body) : last.text;
+      }
+      list.push({
+        id: type + '-' + idx,
+        name: person.name,
+        type: type,
+        initials: person.initials || (person.name || '?').slice(0, 2).toUpperCase(),
+        photo: person.photo || null,
+        lastMessageText: lastEntry,
+        lastTs: now - minsAgo * 60000,
+        unread: isLive ? 0 : unread,
+        pinned: false,
+        starred: false,
+        isLive: isLive,
+        messages: isLive ? null : adminInboxSeedMessages(idx)
+      });
+    }
+    activeSuppliers.forEach(function (s) { pushPerson(s, 'supplier'); });
+    supplierApplicants.forEach(function (s) { pushPerson(s, 'supplier'); });
+    if (ADMIN_INBOX_SHOW_PMS) {
+      pmClients.forEach(function (p) { pushPerson(p, 'pm'); });
+      pmApplicants.forEach(function (p) { pushPerson(p, 'pm'); });
+    }
+    list.sort(function (a, b) { return b.lastTs - a.lastTs; });
+    adminInboxConversations = list;
+    return list;
+  }
+  function adminInboxConv(id) {
+    return adminInboxBuildConversations().filter(function (c) { return c.id === id; })[0];
+  }
+  function adminInboxRelTime(ts) {
+    var mins = Math.round((Date.now() - ts) / 60000);
+    if (mins < 1) return 'now';
+    if (mins < 60) return mins + 'm';
+    var hrs = Math.round(mins / 60);
+    if (hrs < 24) return hrs + 'h';
+    var days = Math.round(hrs / 24);
+    return days + 'd';
+  }
+  function adminInboxFilteredList() {
+    var all = adminInboxBuildConversations();
+    var q = adminInboxSearchQuery.trim().toLowerCase();
+    return all.filter(function (c) {
+      if (adminInboxFilter === 'unread' && !c.unread) return false;
+      if (adminInboxFilter === 'suppliers' && c.type !== 'supplier') return false;
+      if (adminInboxFilter === 'pms' && c.type !== 'pm') return false;
+      if (adminInboxFilter === 'favourites' && !c.starred) return false;
+      if (q && c.name.toLowerCase().indexOf(q) === -1) return false;
+      return true;
+    });
+  }
+  function adminInboxRenderStats() {
+    var all = adminInboxBuildConversations();
+    var suppliers = all.filter(function (c) { return c.type === 'supplier'; }).length;
+    var pms = all.filter(function (c) { return c.type === 'pm'; }).length;
+    var unread = all.filter(function (c) { return c.unread > 0; }).length;
+    var favourites = all.filter(function (c) { return c.starred; }).length;
+    document.getElementById('ainTabAllCount').textContent = all.length;
+    document.getElementById('ainTabUnreadCount').textContent = unread;
+    document.getElementById('ainTabSuppliersCount').textContent = suppliers;
+    document.getElementById('ainTabPMsCount').textContent = pms;
+    document.getElementById('ainTabFavCount').textContent = favourites;
+    var badge = document.getElementById('adminInboxNavBadge');
+    // Uses the hidden attribute (not an inline style) specifically so the .collapsed sidebar's own
+    // "always hide nav badges" rule can still win when the sidebar is collapsed — an inline
+    // style.display here would override that stylesheet rule regardless of the sidebar's state.
+    if (badge) { badge.textContent = unread; badge.hidden = !unread; }
+  }
+  function adminInboxRenderList() {
+    var listEl = document.getElementById('ainConvList');
+    var items = adminInboxFilteredList();
+    // Pinned conversations float to the top, newest-first within each group.
+    items = items.slice().sort(function (a, b) {
+      if (!!b.pinned !== !!a.pinned) return b.pinned ? 1 : -1;
+      return b.lastTs - a.lastTs;
+    });
+    if (!items.length) {
+      listEl.innerHTML = '<div class="ain-conv-list-empty">No conversations match this search.</div>';
+      return;
+    }
+    listEl.innerHTML = items.map(function (c) {
+      return '<div class="ain-conv-item' + (c.unread ? ' unread' : '') + (c.id === adminInboxActiveId ? ' active' : '') + '" data-ain-conv="' + c.id + '">' +
+        '<div class="ain-conv-avatar">' + supAppAvatarHtml(c) + '</div>' +
+        '<div class="ain-conv-body">' +
+          '<div class="ain-conv-top-row">' +
+            '<span class="ain-conv-name">' + sinbEsc(c.name) + '</span>' +
+            '<span class="ain-conv-role-badge ' + c.type + '">' + (c.type === 'pm' ? 'PM' : 'SUPPLIER') + '</span>' +
+            '<span class="ain-conv-time">' + adminInboxRelTime(c.lastTs) + '</span>' +
+          '</div>' +
+          '<div class="ain-conv-preview">' + sinbEsc(c.lastMessageText) + '</div>' +
+          '<div class="ain-conv-meta-row">' +
+            '<svg class="ain-conv-icon-btn' + (c.pinned ? ' active' : '') + '" data-ain-pin="' + c.id + '" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5M9 3h6l-1 7 4 3H6l4-3-1-7z"/></svg>' +
+            '<svg class="ain-conv-icon-btn' + (c.starred ? ' active' : '') + '" data-ain-star="' + c.id + '" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>' +
+          '</div>' +
+        '</div>' +
+        (c.unread ? '<span class="ain-unread-badge">' + c.unread + '</span>' : '') +
+      '</div>';
+    }).join('');
+    listEl.querySelectorAll('[data-ain-conv]').forEach(function (el) {
+      el.addEventListener('click', function (e) {
+        if (e.target.closest('[data-ain-pin]') || e.target.closest('[data-ain-star]')) return;
+        adminInboxOpenConversation(el.getAttribute('data-ain-conv'));
+      });
+    });
+    listEl.querySelectorAll('[data-ain-pin]').forEach(function (el) {
+      el.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var c = adminInboxConv(el.getAttribute('data-ain-pin'));
+        if (c) c.pinned = !c.pinned;
+        adminInboxRenderList();
+      });
+    });
+    listEl.querySelectorAll('[data-ain-star]').forEach(function (el) {
+      el.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var c = adminInboxConv(el.getAttribute('data-ain-star'));
+        if (c) c.starred = !c.starred;
+        adminInboxRenderList();
+        adminInboxRenderStats();
+      });
+    });
+  }
+  function adminInboxOpenConversation(id) {
+    var c = adminInboxConv(id);
+    if (!c) return;
+    adminInboxActiveId = id;
+    c.unread = 0;
+    document.getElementById('ainEmptyState').style.display = 'none';
+    document.getElementById('ainThreadView').style.display = 'flex';
+    document.getElementById('ainPinBtn').classList.toggle('active', !!c.pinned);
+    document.getElementById('ainStarBtn').classList.toggle('active', !!c.starred);
+    var layoutEl = document.querySelector('#adminInboxView .ain-layout');
+    if (layoutEl) layoutEl.classList.add('ain-mobile-thread-open');
+    adminInboxRenderThread();
+    adminInboxRenderList();
+    adminInboxRenderStats();
+    var msgInput = document.getElementById('ainMessageInput');
+    if (msgInput) setTimeout(function () { msgInput.focus(); }, 150);
+  }
+  function adminInboxCloseThreadMobile() {
+    var layoutEl = document.querySelector('#adminInboxView .ain-layout');
+    if (layoutEl) layoutEl.classList.remove('ain-mobile-thread-open');
+  }
+  // Redirects to the actual Supplier or PM profile behind this conversation \u2014 checks both source
+  // lists for that person type (e.g. a supplier could be in supplierApplicants or activeSuppliers)
+  // since the Inbox combines them into one list but the rest of the admin app keeps them separate.
+  function adminInboxOpenProfile(id) {
+    var c = adminInboxConv(id);
+    if (!c) return;
+    var i;
+    if (c.type === 'supplier') {
+      for (i = 0; i < supplierApplicants.length; i++) {
+        if (supplierApplicants[i].name === c.name) { showAdminView('supplier-applicants-list'); openSupplierDetail(i, 'app'); return; }
+      }
+      for (i = 0; i < activeSuppliers.length; i++) {
+        if (activeSuppliers[i].name === c.name) { showAdminView('active-suppliers-list'); openSupplierDetail(i, 'supplier'); return; }
+      }
+    } else {
+      for (i = 0; i < pmApplicants.length; i++) {
+        if (pmApplicants[i].name === c.name) { openApplicantDetail(i); return; }
+      }
+      for (i = 0; i < pmClients.length; i++) {
+        if (pmClients[i].name === c.name) { openClientDetail(i); return; }
+      }
+    }
+    showToast('Couldn\u2019t find a matching profile for ' + c.name + '.');
+  }
+  function adminInboxGetActiveConvData() {
+    var c = adminInboxConv(adminInboxActiveId);
+    if (!c) return null;
+    if (c.isLive) {
+      return { initials: c.initials, name: c.name, photo: c.photo, presence: 'Online', messages: SINB_SUPPORT_CONV.messages };
+    }
+    return { initials: c.initials, name: c.name, photo: c.photo, lastActivityLabel: adminInboxRelTime(c.lastTs) + ' ago', messages: c.messages };
+  }
+  // Mirrors sinbBuildHeaderHtml's structure exactly (same classes, so it looks identical everywhere
+  // else this chat header appears) but adds photo support and the light-blue/Keylr-blue avatar
+  // treatment, matching .ain-conv-avatar in the list rather than sinbBuildHeaderHtml's own hashed
+  // avatar colour \u2014 kept as its own function instead of changing the shared one, since that one is
+  // also used by Settings > Chat, Dashboard > Inbox, and the onboarding widget.
+  function adminInboxBuildHeaderHtml(c) {
+    return '<div class="sinb-conv-avatar ain-conv-avatar">' + supAppAvatarHtml(c) + '</div>' +
+      '<div style="min-width:0;">' +
+        '<div class="sinb-chat-header-name-row"><h3>' + sinbEsc(c.name) + '</h3></div>' +
+        '<div class="sinb-chat-header-sub">' + (c.presence ? '<span class="online">' + c.presence + '</span>' : 'Last active ' + c.lastActivityLabel) + '</div>' +
+      '</div>';
+  }
+  function adminInboxRenderThread() {
+    var data = adminInboxGetActiveConvData();
+    if (!data) return;
+    document.getElementById('ainThreadHeaderInner').innerHTML = adminInboxBuildHeaderHtml(data);
+    document.getElementById('ainMessagesInner').innerHTML = sinbBuildMessagesHtml(data, true);
+    var scrollEl = document.getElementById('ainChatScroll');
+    scrollEl.scrollTop = scrollEl.scrollHeight;
+    sinbWireScrollBottomBtn(scrollEl, document.getElementById('ainScrollBottomBtn'));
+    adminInboxWireCrActions();
+  }
+  // Auto-refresh: when a supplier submits a profile-update request (or sends any other message)
+  // while the Admin Inbox is open, this picks it up without needing a manual reload — same idea as
+  // sinbStartChatPolling (which already does this for the Supplier Detail page's own Chat tab), just
+  // covering the Inbox specifically, which that existing polling doesn't touch. Currently only
+  // Ferna's conversation is "live" (backed by real, shared SINB_SUPPORT_CONV data — see
+  // supChatIsLiveSupplier); the other 95 conversations are self-contained demo data with nothing
+  // external to poll for.
+  var adminInboxLastLiveMsgCount = -1;
+  function adminInboxPollForUpdates() {
+    var inboxView = document.getElementById('adminInboxView');
+    if (!inboxView || inboxView.style.display === 'none') return;
+    if (typeof loadChangeRequestsFromStorage === 'function') loadChangeRequestsFromStorage();
+    if (typeof loadSinbMessages === 'function') loadSinbMessages();
+    if (typeof SINB_SUPPORT_CONV === 'undefined') return;
+    var msgs = SINB_SUPPORT_CONV.messages;
+    if (adminInboxLastLiveMsgCount === -1) { adminInboxLastLiveMsgCount = msgs.length; return; } // first tick after opening the Inbox — just establishes a baseline, doesn't treat everything that already existed as "new"
+    if (msgs.length === adminInboxLastLiveMsgCount) return;
+    var newMessages = msgs.slice(adminInboxLastLiveMsgCount);
+    var newFromSupplier = newMessages.filter(function (m) { return m.mine; }).length;
+    adminInboxLastLiveMsgCount = msgs.length;
+
+    var liveConv = adminInboxBuildConversations().filter(function (c) { return c.isLive; })[0];
+    if (!liveConv) return;
+    var last = msgs[msgs.length - 1];
+    var previewText;
+    if (last.kind === 'edit-request') {
+      var batch = sinbFindBatch(last.batchId, liveConv.name);
+      previewText = batch ? ('Requested ' + batch.changes.length + ' profile update' + (batch.changes.length === 1 ? '' : 's')) : 'Requested a profile update';
+    } else if (last.kind === 'system') {
+      previewText = last.title + ' ' + last.body;
+    } else if (last.kind === 'attachment') {
+      previewText = last.fileName;
+    } else if (last.kind === 'jump-notification') {
+      previewText = 'Please update ' + last.fieldLabel;
+    } else {
+      previewText = last.text;
+    }
+    liveConv.lastMessageText = previewText;
+    liveConv.lastTs = Date.now();
+    if (liveConv.id === adminInboxActiveId) {
+      // Admin is looking at this conversation right now — refresh what's on screen, but nothing
+      // "unread" about a request that just landed directly in front of them.
+      adminInboxRenderThread();
+    } else if (newFromSupplier > 0) {
+      liveConv.unread = (liveConv.unread || 0) + newFromSupplier;
+    }
+    adminInboxRenderList();
+    adminInboxRenderStats();
+  }
+  setInterval(adminInboxPollForUpdates, 1500);
+  // Wires up Accept / Ask to resubmit / Decline on any change-request cards just rendered into the
+  // thread — same underlying action as the Supplier Detail page's own Chat tab (via the shared
+  // sinbHandleCrAction), so admin can act on a request from either place with identical results.
+  function adminInboxWireCrActions() {
+    var c = adminInboxConv(adminInboxActiveId);
+    if (!c) return;
+    document.querySelectorAll('#ainMessagesInner [data-cr-action]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var action = btn.getAttribute('data-cr-action');
+        var batchId = btn.getAttribute('data-batch-id');
+        var changeId = btn.getAttribute('data-change-id');
+        var change = sinbFindChange(batchId, changeId, c.name);
+        if (!change) return;
+        sinbHandleCrAction(change, action, c.name);
+        adminInboxRenderThread();
+        var msgInput = document.getElementById('ainMessageInput');
+        if ((action === 'decline' || action === 'resubmit') && msgInput) {
+          msgInput.value = action === 'decline'
+            ? 'Declining \u201c' + change.fieldLabel + '\u201d because '
+            : 'Please resubmit \u201c' + change.fieldLabel + '\u201d \u2014 ';
+          msgInput.dispatchEvent(new Event('input'));
+          msgInput.focus();
+          if (msgInput.setSelectionRange) msgInput.setSelectionRange(msgInput.value.length, msgInput.value.length);
+          showToast(change.fieldLabel + ' updated \u2014 add your reason below and hit Send to notify ' + c.name + '.');
+        } else {
+          showToast('Response sent to ' + c.name + '.');
+        }
+      });
+    });
+  }
+  function adminInboxSendMessage(text) {
+    var c = adminInboxConv(adminInboxActiveId);
+    if (!c || !text.trim()) return;
+    // mine:false — the shared SINB_SUPPORT_CONV data convention is "mine means sent by the
+    // supplier this conversation belongs to", so a message admin sends is never "mine" at the data
+    // level. Display-side, sinbBuildMessagesHtml's forAdmin flag flips this so it still shows up
+    // correctly right-aligned as "my message" when admin is the one looking at it.
+    var msg = { kind: 'text', mine: false, text: text.trim(), ts: Date.now(), time: sinbNowTimestamp() };
+    if (c.isLive) {
+      SINB_SUPPORT_CONV.messages.push(msg);
+      if (typeof saveSinbMessages === 'function') saveSinbMessages();
+      if (typeof sinbRenderChat === 'function') sinbRenderChat();
+      if (typeof pushSupNotification === 'function') {
+        pushSupNotification({ type: 'chat', title: 'New Message from Admin', desc: 'You have a new message from the Keylr team.', onClick: function () { supNotifOpenSettingsTab('inbox'); } });
+      }
+    } else {
+      c.messages.push(msg);
+    }
+    c.lastMessageText = msg.text;
+    c.lastTs = Date.now();
+    adminInboxRenderThread();
+    adminInboxRenderList();
+  }
+  function initAdminInboxOnce() {
+    adminInboxRenderStats();
+    adminInboxRenderList();
+    if (adminInboxInitDone) return;
+    adminInboxInitDone = true;
+    if (!ADMIN_INBOX_SHOW_PMS) {
+      var pmTab = document.querySelector('[data-ainfilter="pms"]');
+      if (pmTab) pmTab.style.display = 'none';
+    }
+    document.getElementById('ainSearchInput').addEventListener('input', function () {
+      adminInboxSearchQuery = this.value;
+      adminInboxRenderList();
+    });
+    document.getElementById('ainRefreshBtn').addEventListener('click', function () {
+      this.classList.remove('spinning');
+      void this.offsetWidth;
+      this.classList.add('spinning');
+      adminInboxRenderStats();
+      adminInboxRenderList();
+      if (adminInboxActiveId) adminInboxRenderThread();
+    });
+    document.querySelectorAll('#ainFilterTabs .ain-filter-tab').forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        document.querySelectorAll('#ainFilterTabs .ain-filter-tab').forEach(function (t) { t.classList.remove('active'); });
+        tab.classList.add('active');
+        adminInboxFilter = tab.getAttribute('data-ainfilter');
+        adminInboxRenderList();
+      });
+    });
+    document.getElementById('ainPinBtn').addEventListener('click', function () {
+      var c = adminInboxConv(adminInboxActiveId);
+      if (!c) return;
+      c.pinned = !c.pinned;
+      this.classList.toggle('active', c.pinned);
+      adminInboxRenderList();
+    });
+    document.getElementById('ainStarBtn').addEventListener('click', function () {
+      var c = adminInboxConv(adminInboxActiveId);
+      if (!c) return;
+      c.starred = !c.starred;
+      this.classList.toggle('active', c.starred);
+      adminInboxRenderList();
+      adminInboxRenderStats();
+    });
+    document.getElementById('ainExpandBtn').addEventListener('click', function () {
+      if (adminInboxActiveId) adminInboxOpenProfile(adminInboxActiveId);
+    });
+    document.getElementById('ainBackBtn').addEventListener('click', adminInboxCloseThreadMobile);
+    var ainInput = document.getElementById('ainMessageInput');
+    var ainSendBtn = document.getElementById('ainSendBtn');
+    function ainUpdateSendState() { ainSendBtn.disabled = !ainInput.value.trim(); }
+    ainInput.addEventListener('input', ainUpdateSendState);
+    ainInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        if (!ainSendBtn.disabled) ainSendBtn.click();
+      }
+    });
+    ainSendBtn.addEventListener('click', function () {
+      var text = ainInput.value;
+      if (!text.trim()) return;
+      adminInboxSendMessage(text);
+      ainInput.value = '';
+      ainUpdateSendState();
+    });
+    var ainEmojiBtn = document.getElementById('ainEmojiBtn');
+    var ainEmojiPopover = document.getElementById('ainEmojiPopover');
+    ainEmojiBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      ainEmojiPopover.classList.toggle('open');
+    });
+    ainEmojiPopover.querySelectorAll('[data-emoji]').forEach(function (span) {
+      span.addEventListener('click', function () {
+        ainInput.value += span.getAttribute('data-emoji');
+        ainUpdateSendState();
+        ainEmojiPopover.classList.remove('open');
+        ainInput.focus();
+      });
+    });
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('#ainEmojiBtn') && !e.target.closest('#ainEmojiPopover')) ainEmojiPopover.classList.remove('open');
+    });
+    var ainAttachBtn = document.getElementById('ainAttachBtn');
+    var ainAttachInput = document.getElementById('ainAttachInput');
+    ainAttachBtn.addEventListener('click', function () { ainAttachInput.click(); });
+    ainAttachInput.addEventListener('change', function () {
+      var file = ainAttachInput.files && ainAttachInput.files[0];
+      if (!file) return;
+      var c = adminInboxConv(adminInboxActiveId);
+      if (!c) return;
+      var isImage = file.type.indexOf('image/') === 0;
+      // mine:false — same convention as adminInboxSendMessage above; admin attaching a file is
+      // never "mine" at the shared data level, only on display via forAdmin's flip.
+      var msg = { kind: 'attachment', mine: false, fileName: file.name, isImage: isImage, ts: Date.now(), time: sinbNowTimestamp() };
+      if (c.isLive) {
+        SINB_SUPPORT_CONV.messages.push(msg);
+        if (typeof saveSinbMessages === 'function') saveSinbMessages();
+        if (typeof sinbRenderChat === 'function') sinbRenderChat();
+      } else {
+        c.messages.push(msg);
+      }
+      c.lastMessageText = file.name;
+      c.lastTs = Date.now();
+      ainAttachInput.value = '';
+      adminInboxRenderThread();
+      adminInboxRenderList();
+      showToast(file.name + ' attached.');
+    });
+  }
 
   /* Deterministic per-supplier certificate-expiry profile, shared by the Active Suppliers list
      (card badges + the "Certs Expiring" quick filter) and the detail page's compliance checklist,
@@ -28175,6 +28917,23 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   function supRequestsKeyFor(c) { return c ? c.name : ''; }
   function seedChangeRequestsIfNeeded(c) {
     var key = supRequestsKeyFor(c);
+    // Force-corrects one specific field even when this supplier's requests were already
+    // seeded/loaded from an earlier session (in which case the early return right below skips the
+    // rest of this function entirely) — the Gas Safe Engineer certificate field previously had no
+    // explicit status, defaulted to 'pending', and got persisted to localStorage in that state
+    // before this was fixed. Anyone whose browser already has that stale value cached would never
+    // see the corrected version otherwise, since the seeding below only ever runs once per browser.
+    if (c && c.name === 'Ferna' && supplierChangeRequests[key]) {
+      var existingBatch = supplierChangeRequests[key][0];
+      var gasSafeChange = existingBatch && existingBatch.changes.filter(function (ch) {
+        return ch.fieldLabel === 'Gas Safe Engineer \u2014 Certificate uploaded';
+      })[0];
+      if (gasSafeChange && gasSafeChange.status !== 'resubmit') {
+        gasSafeChange.status = 'resubmit';
+        gasSafeChange.newValue = 'gas-safe-cert-2026.pdf (new upload)';
+        if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
+      }
+    }
     if (supplierChangeRequests[key]) return;
     if (c && c.name === 'Ferna') {
       // This applicant updated everything on their profile in one go, then submitted — demonstrates
@@ -28192,7 +28951,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
           { section: 'Tell us about yourself', fieldLabel: 'Sectors served', oldValue: 'Residential', newValue: 'Residential, Commercial', fieldType: 'sectors', sectorSubtypes: ['Estate Agents'] },
           { section: 'Categories & Roles', fieldLabel: 'Gas Safe Engineer \u2014 Certificate name', oldValue: 'Not set', newValue: 'Gas Safe' },
           { section: 'Categories & Roles', fieldLabel: 'Gas Safe Engineer \u2014 Registration number', oldValue: 'Not set', newValue: 'GS-448821' },
-          { section: 'Categories & Roles', fieldLabel: 'Gas Safe Engineer \u2014 Certificate uploaded', oldValue: 'Not uploaded', newValue: 'gas-safe-cert-2026.pdf (new upload)', isDocument: true },
+          { section: 'Categories & Roles', fieldLabel: 'Gas Safe Engineer \u2014 Certificate uploaded', oldValue: 'Not uploaded', newValue: 'gas-safe-cert-2026.pdf (new upload)', isDocument: true, status: 'resubmit' },
           { section: 'Categories & Roles', fieldLabel: 'Gas Safe Engineer \u2014 Expiry date', oldValue: 'Not set', newValue: '14 Mar 2027', fieldType: 'date' },
           { section: 'Categories & Roles', fieldLabel: 'Electrician \u2014 Certificate 1 name', oldValue: 'Not set', newValue: '18th Edition Wiring Regulations' },
           { section: 'Categories & Roles', fieldLabel: 'Electrician \u2014 Certificate 1 registration number', oldValue: 'Not set', newValue: 'EL-18ED-5729' },
@@ -30428,55 +31187,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         var changeId = btn.getAttribute('data-change-id');
         var change = sinbFindChange(batchId, changeId, name);
         if (!change) return;
-        change.status = action === 'approve' ? 'approved' : action === 'decline' ? 'declined' : 'resubmit';
-        if (action === 'approve' && typeof sinbApplyApprovedChange === 'function') sinbApplyApprovedChange(change);
-        if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
-        logSupChatActivity(name, {
-          type: action === 'approve' ? 'approved' : action === 'decline' ? 'declined' : 'resubmit_requested',
-          actor: 'Admin',
-          action: action === 'approve' ? 'approved' : action === 'decline' ? 'declined' : 'asked for resubmission of',
-          fieldLabel: change.fieldLabel,
-          oldValue: change.oldValue,
-          newValue: change.newValue
-        });
-        if (supChatIsLiveSupplier(name)) {
-          if (action === 'resubmit' && typeof SINB_SUPPORT_CONV !== 'undefined') {
-            SINB_SUPPORT_CONV.messages.push({ kind: 'jump-notification', changeId: change.id, fieldLabel: change.fieldLabel, ts: Date.now(), time: sinbNowTimestamp() });
-            saveSinbMessages();
-            if (typeof sinbRenderChat === 'function') sinbRenderChat();
-            // No extra push here — "Action Required: Resubmit Information" is state-derived from
-            // change.status === 'resubmit' and picks this up automatically on the next poll tick.
-          } else if (action === 'approve' && typeof sinbAddEditResponseMessage === 'function') {
-            sinbAddEditResponseMessage('\u201c' + change.fieldLabel + '\u201d was approved \u2014 your profile has been updated.');
-            if (typeof pushOrMergeUnread === 'function') {
-              pushOrMergeUnread(supNotifications, 'approved', function (count) {
-                return {
-                  type: 'approved',
-                  title: 'Profile Update Approved',
-                  desc: 'Your ' + count + ' requested change' + (count === 1 ? ' has' : 's have') + ' been approved and updated.',
-                  onClick: function () { supNotifOpenSettingsTab('profile'); }
-                };
-              });
-              if (typeof renderSupNotifications === 'function') renderSupNotifications();
-            }
-          } else if (action === 'decline' && typeof sinbAddEditResponseMessage === 'function') {
-            // Always send a baseline notification immediately, so the supplier is guaranteed to see
-            // *something* the moment the field is declined, even if the admin never follows up with
-            // a custom reason via the composer below.
-            sinbAddEditResponseMessage('\u201c' + change.fieldLabel + '\u201d was declined.');
-            if (typeof pushOrMergeUnread === 'function') {
-              pushOrMergeUnread(supNotifications, 'declined', function (count) {
-                return {
-                  type: 'declined',
-                  title: 'Profile Update Declined',
-                  desc: 'Your request to update ' + count + ' item' + (count === 1 ? '' : 's') + ' was declined.',
-                  onClick: function () { supNotifOpenSettingsTab('inbox'); }
-                };
-              });
-              if (typeof renderSupNotifications === 'function') renderSupNotifications();
-            }
-          }
-        }
+        sinbHandleCrAction(change, action, name);
         if (action === 'decline' || action === 'resubmit') {
           // Additionally, let the admin write a more detailed reason — pre-fill the composer with a
           // starter template and set the reply context to this field. This is optional context on
