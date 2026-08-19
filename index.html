@@ -5969,8 +5969,15 @@
   .confirm-modal-icon { width: 64px; height: 64px; border-radius: 50%; background: var(--icon-tint-bg); color: var(--navy-900); display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; }
   .confirm-modal-title { font-size: 18px; font-weight: 800; color: var(--text-heading); margin-bottom: 10px; }
   .confirm-modal-desc { font-size: 13.5px; color: var(--text-body-muted); line-height: 1.6; margin-bottom: 22px; }
-  .confirm-modal-btns { display: flex; gap: 10px; }
-  .confirm-modal-btns button { flex: 1; border-radius: 10px; padding: 12px; font-size: 13.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  /* Actions sit right-aligned at their natural width rather than splitting the row in half,
+     so the primary action lands where the eye finishes reading. */
+  .confirm-modal-btns { margin-top: 20px; text-align: right; }
+  .confirm-modal-btns button { display: inline-block; width: auto; min-width: 108px; border-radius: 10px; padding: 12px 22px; font-size: 13.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .confirm-modal-btns button + button { margin-left: 10px; }
+  @media (max-width: 420px) {
+    .confirm-modal-btns button { display: block; width: 100%; min-width: 0; }
+    .confirm-modal-btns button + button { margin-left: 0; margin-top: 10px; }
+  }
   .confirm-modal-confirm { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); border: none; color: #fff; }
   .confirm-modal-confirm:hover { opacity: 0.9; }
 
@@ -6957,14 +6964,10 @@
      needs and Cancel shrinks to its label. */
   #supcalGcalCard { max-width: 460px; }
   #supcalGcalCard .confirm-modal-btns button { white-space: nowrap; }
-  #supcalGcalCard .confirm-modal-btns .pmprop-del-cancel { flex: 0 1 auto; padding-left: 22px; padding-right: 22px; }
-  #supcalGcalCard .confirm-modal-btns .confirm-modal-confirm { flex: 1 1 auto; }
 
   /* Below this the two buttons genuinely can't share a row, so stack them action-first. */
   @media (max-width: 420px) {
     #supcalGcalCard { padding: 26px 20px; }
-    #supcalGcalCard .confirm-modal-btns { flex-direction: column-reverse; }
-    #supcalGcalCard .confirm-modal-btns button { width: 100%; flex: 0 0 auto; }
   }
 
   /* ---------- TrustID status badge ---------- */
@@ -7109,6 +7112,227 @@
   #supInvitesTableBody .sup-inv-actions > *:last-child[data-tooltip]::after {
     left: auto; right: 0; transform: none;
   }
+
+  /* ---------- Teams ---------- */
+  .team-header-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; flex-wrap: wrap; }
+  .team-header-actions .btn { white-space: nowrap; }
+
+  .team-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 16px; }
+  .team-stat { border: 1px solid var(--border-subtle); border-radius: 12px; background: #fff; padding: 14px 16px; }
+  .team-stat .ts-num { font-size: 22px; font-weight: 800; color: var(--text-heading); line-height: 1.1; }
+  .team-stat .ts-label { font-size: 11.5px; font-weight: 600; color: var(--text-body-muted); margin-top: 4px; }
+  /* Only pending invites get tinted — they're the one number that implies an action. */
+  .team-stat.tint { border-color: #d3e2f4; background: #fafcff; }
+  .team-stat.tint .ts-num { color: var(--accent-blue); }
+
+  /* The tables fit their columns, so no scroll container and no clipped tooltips. */
+  .team-table-wrap, .team-table-wrap .pm-table-scroll { overflow: visible; max-height: none; min-height: 0; }
+  .team-table-wrap table { min-width: 0; width: 100%; }
+  .team-table-wrap thead th { position: static; }
+  .team-table-wrap thead th:first-child { border-top-left-radius: 14px; }
+  .team-table-wrap thead th:last-child { border-top-right-radius: 14px; }
+  .team-table-wrap td { vertical-align: middle; }
+  .team-table-wrap th:last-child, .team-table-wrap td:last-child { width: 1%; white-space: nowrap; }
+  .team-table-wrap [data-tooltip]::after { bottom: calc(100% + 7px); top: auto; }
+  .team-table-wrap [data-tooltip]:hover, .team-table-wrap [data-tooltip]::after { z-index: 60; }
+  .team-actions > *:last-child[data-tooltip]::after { left: auto; right: 0; transform: none; }
+  @media (max-width: 940px) {
+    .team-table-wrap .pm-table-scroll { overflow-x: auto; }
+    .team-table-wrap table { min-width: 820px; }
+  }
+
+  .team-person { display: flex; align-items: center; gap: 11px; min-width: 0; }
+  .team-avatar {
+    width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0; color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800;
+  }
+  .team-person-main { display: flex; flex-direction: column; min-width: 0; }
+  .team-person-name { font-weight: 700; }
+  .team-person-email { font-size: 11.5px; color: var(--text-body-muted); }
+
+  .team-role-cell { min-width: 170px; }
+  .team-role-warn { font-size: 11px; color: #8a5a06; margin-top: 5px; line-height: 1.4; }
+  .team-perm-cell { min-width: 160px; }
+  .team-dd-inner { position: relative; }
+  .team-dd-inner .pm-custom-dd-btn { width: 100%; }
+  .team-dd-inner .pm-custom-dd-menu.open { width: max-content; min-width: 100%; }
+
+  .team-perm-chip {
+    display: inline-flex; align-items: center; white-space: nowrap;
+    font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px;
+    background: var(--surface-soft); border: 1px solid var(--border-subtle); color: #64748b;
+  }
+  .team-perm-chip.inherited { background: var(--surface-soft); border-color: var(--border-subtle); color: #64748b; }
+  .team-perm-chip.custom { background: var(--icon-tint-bg); border-color: #c9d8ee; color: var(--accent-blue); }
+
+  .team-status-chip {
+    display: inline-flex; align-items: center; white-space: nowrap;
+    font-size: 10.5px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 999px;
+    background: var(--surface-soft); border: 1px solid var(--border-subtle); color: #64748b;
+  }
+  .team-status-chip.st-active { background: #eafaf0; border-color: #bfe3cc; color: #15803d; }
+  .team-status-chip.st-invited { background: var(--icon-tint-bg); border-color: #c9d8ee; color: var(--accent-blue); }
+
+  .team-lastactive { color: var(--text-body-muted); white-space: nowrap; }
+  .team-count-chip {
+    display: inline-flex; align-items: center; justify-content: center; min-width: 26px;
+    padding: 3px 9px; border-radius: 999px; background: var(--surface-soft);
+    border: 1px solid var(--border-subtle); font-size: 12px; font-weight: 700; color: var(--text-heading);
+  }
+
+  .team-role-main { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .team-role-name { font-weight: 700; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .team-role-desc { font-size: 11.5px; color: var(--text-body-muted); line-height: 1.45; }
+  .team-sys-chip {
+    display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;
+    font-size: 9.5px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 999px;
+    background: var(--surface-soft); border: 1px solid var(--border-subtle); color: #64748b;
+  }
+
+  .team-actions { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
+  .team-mini-btn { padding: 6px 12px; font-size: 12px; white-space: nowrap; }
+  .team-toggle-wrap { display: inline-flex; align-items: center; gap: 8px; }
+  .team-toggle-label { font-size: 11.5px; font-weight: 700; color: var(--text-body-muted); white-space: nowrap; }
+  .team-toggle-label.on { color: #15803d; }
+
+  /* ---- modals ---- */
+  .team-modal-card { max-width: 480px; text-align: left; }
+  .team-modal-title { font-size: 17px; font-weight: 800; color: var(--text-heading); margin-bottom: 6px; }
+  .team-modal-desc { font-size: 13px; color: var(--text-body-muted); line-height: 1.55; margin-bottom: 18px; }
+  .team-field { margin-bottom: 16px; }
+  .team-field label {
+    display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.05em;
+    text-transform: uppercase; color: #94a3b8; margin-bottom: 7px;
+  }
+  .team-field input[type="text"], .team-field input[type="email"] {
+    width: 100%; border: 1px solid var(--border-subtle); border-radius: 10px; background: #fff;
+    padding: 10px 13px; font-family: inherit; font-size: 13.5px; color: var(--text-heading); outline: none;
+    transition: border-color 150ms ease-out, box-shadow 150ms ease-out;
+  }
+  .team-field input:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(40,72,144,0.12); }
+  .team-field input:disabled { background: var(--surface-soft); color: var(--text-body-muted); }
+  .team-field-error { display: none; font-size: 12px; color: #b91c1c; margin-top: 6px; }
+  .team-field-hint { font-size: 12px; color: var(--text-body-muted); margin-top: 7px; line-height: 1.5; }
+
+
+  @media (max-width: 620px) {
+    .team-stats { grid-template-columns: repeat(2, 1fr); }
+    .team-header-actions { width: 100%; }
+    .team-header-actions .btn { flex: 1; justify-content: center; }
+  }
+
+  /* ---------- Teams: permission matrix ---------- */
+
+  /* Access is a control, not a label — it opens the person's exceptions or the role editor. */
+  .team-access-btn {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
+    background: none; border: none; padding: 4px 6px; margin: -4px -6px;
+    border-radius: 9px; font-family: inherit; text-align: left; cursor: pointer;
+    transition: background-color 150ms ease-out;
+  }
+  .team-access-btn:hover { background: var(--surface-soft); }
+  .team-access-sub { font-size: 11.5px; color: var(--text-body-muted); }
+  .team-access-summary { font-size: 13px; font-weight: 700; color: var(--text-heading); }
+  .team-lvl-chips { display: flex; gap: 5px; flex-wrap: wrap; }
+  .team-lvl-chip {
+    font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap;
+    background: var(--surface-soft); border: 1px solid var(--border-subtle); color: #64748b;
+  }
+  .team-lvl-chip.lvl-both { background: #e3ecf8; border-color: #b9cde9; color: #1c3d75; }
+  .team-lvl-chip.lvl-write { background: #f2f7fd; border-color: #d3e2f4; color: #40679c; }
+
+  .team-modal-wide { max-width: 620px; }
+  .team-mx-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+  .team-mx-count { font-size: 12px; font-weight: 700; color: var(--text-body-muted); }
+  .team-reset-btn {
+    background: none; border: none; padding: 0; font-family: inherit; font-size: 12px;
+    font-weight: 700; color: var(--accent-blue); cursor: pointer; text-decoration: underline;
+  }
+  .team-reset-btn:hover { color: #12305e; }
+
+  /* The matrix scrolls inside the modal so the Done button never falls below the fold. */
+  .team-matrix {
+    border: 1px solid var(--border-subtle); border-radius: 12px; background: #fff;
+    max-height: 340px; overflow-y: auto;
+  }
+  .team-mx-group + .team-mx-group { border-top: 1px solid var(--border-subtle); }
+  .team-mx-group-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 9px 14px; background: var(--surface-soft);
+    position: sticky; top: 0; z-index: 1;
+  }
+  .team-mx-group-name {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #94a3b8;
+  }
+  .team-mx-quick { display: flex; gap: 6px; }
+  .team-mx-quick button {
+    background: none; border: 1px solid var(--border-subtle); border-radius: 999px;
+    padding: 2px 10px; font-family: inherit; font-size: 10.5px; font-weight: 700;
+    color: var(--text-body-muted); cursor: pointer; transition: border-color 150ms ease-out, color 150ms ease-out;
+  }
+  .team-mx-quick button:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+
+  .team-mx-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 14px;
+    padding: 9px 14px;
+  }
+  .team-mx-row + .team-mx-row { border-top: 1px solid var(--border-subtle); }
+  .team-mx-name { font-size: 13px; font-weight: 600; color: var(--text-heading); min-width: 0; }
+  .team-mx-badge {
+    display: block; font-size: 10.5px; font-weight: 600; color: var(--accent-blue); margin-top: 2px;
+  }
+
+  /* Segmented control: one row, four states, current one filled. */
+  .team-mx-seg { display: inline-flex; flex-shrink: 0; border: 1px solid var(--border-subtle); border-radius: 8px; overflow: hidden; background: #fff; }
+  .team-mx-opt {
+    background: none; border: none; padding: 5px 11px; font-family: inherit;
+    font-size: 11.5px; font-weight: 700; color: var(--text-body-muted); cursor: pointer;
+    transition: background-color 150ms ease-out, color 150ms ease-out;
+  }
+  .team-mx-opt + .team-mx-opt { border-left: 1px solid var(--border-subtle); }
+  .team-mx-opt:hover { background: var(--surface-soft); color: var(--text-heading); }
+  .team-mx-opt.on { background: var(--icon-tint-bg); color: var(--accent-blue); }
+  .team-mx-opt.on.lvl-none { background: var(--surface-soft); color: #64748b; }
+  .team-mx-opt.on.lvl-both { background: #22447f; color: #fff; }
+
+  @media (max-width: 560px) {
+    .team-mx-row { flex-direction: column; align-items: stretch; gap: 8px; }
+    .team-mx-seg { width: 100%; }
+    .team-mx-opt { flex: 1; }
+  }
+
+  /* ---------- Teams: avatars, waivers, modal chrome ---------- */
+
+  /* A soft blue wash rather than a solid block — the initials carry the colour. */
+  .team-avatar {
+    background: radial-gradient(120% 120% at 30% 20%, #eef4fc 0%, var(--icon-tint-bg) 55%, #dde8f6 100%);
+    color: var(--accent-blue);
+    border: 1px solid #dbe6f5;
+    overflow: hidden;
+  }
+  .team-avatar.has-photo { background: var(--surface-soft); }
+  .team-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* The column is fixed; the picker fills whatever the column gives it. */
+  .team-role-cell { width: 100%; min-width: 0; }
+  .team-table-wrap th:nth-child(2), .team-table-wrap td:nth-child(2) { width: 250px; }
+
+  .team-role-warn { font-size: 11px; color: #8a5a06; margin-top: 7px; line-height: 1.4; }
+  .team-status-chip.st-blocked { background: #fef6e7; border-color: #f2ddb4; color: #8a5a06; }
+
+  /* Close affordance, shared by every modal in the module. */
+  .confirm-modal-card { position: relative; }
+  .modal-close-x {
+    position: absolute; top: 14px; right: 14px; width: 30px; height: 30px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: none; border: 1px solid transparent; border-radius: 9px;
+    color: #94a3b8; cursor: pointer; padding: 0;
+    transition: background-color 150ms ease-out, color 150ms ease-out, border-color 150ms ease-out;
+  }
+  .modal-close-x:hover { background: var(--surface-soft); border-color: var(--border-subtle); color: var(--text-heading); }
+  .team-modal-card .team-modal-title { padding-right: 34px; }
 
 </style>
 </head>
@@ -13713,6 +13937,10 @@
 
         <div class="dash-nav-group">
           <div class="dash-nav-group-label">System</div>
+          <div class="dash-nav-item" data-nav="teams">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+            <span class="nav-label">Teams</span>
+          </div>
           <div class="dash-nav-item" data-nav="activity-logs">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 106 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>
             <span class="nav-label">Activity Logs</span>
@@ -14832,6 +15060,7 @@
                 <div class="pm-tab-pills" id="supTabPills">
                   <div class="pm-tab-pill" data-filter="all">All</div>
                   <div class="pm-tab-pill active" data-filter="approved">Approved</div>
+                  <div class="pm-tab-pill" data-filter="requests">Edit Requests</div>
                   <div class="pm-tab-pill" data-filter="archived">Archived</div>
                   <div class="pm-tab-pill" data-filter="certs-expiring" id="supCertsExpiringPill">Certs Expiring<span class="pm-count-text" id="supCertsExpiringCount" style="margin-left:6px;background:#fef3c7;color:#92620a;padding:1px 7px;border-radius:999px;font-weight:700;font-size:10.5px;"></span></div>
                 </div>
@@ -14900,6 +15129,170 @@
                   <div style="display:flex;gap:4px;" id="supPageNumbers"></div>
                   <button type="button" class="pm-icon-btn-sq" id="supPageNext" aria-label="Next page"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============ TEAMS (SYSTEM) ============ -->
+          <div id="adminTeamsView" style="display:none;">
+            <div class="dash-header" style="align-items:flex-start;margin-bottom:16px;">
+              <div>
+                <h1 style="font-size:22px;font-weight:800;color:var(--text-heading);margin-bottom:4px;">Teams</h1>
+                <p style="font-size:13.5px;color:var(--text-body-muted);">Who works in the Keylr console, what they can reach, and what they&rsquo;re allowed to do there.</p>
+              </div>
+              <div class="team-header-actions">
+                <button type="button" class="btn btn-secondary-light" id="teamAddRoleBtn">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M12 5v14M5 12h14"/></svg>
+                  New role
+                </button>
+                <button type="button" class="btn btn-primary" id="teamInviteBtn">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>
+                  Invite member
+                </button>
+              </div>
+            </div>
+
+            <div class="team-stats" id="teamStats"></div>
+
+            <div class="pm-filter-card">
+              <div class="pm-search-row" style="margin-bottom:0;">
+                <div class="pm-search-input-wrap" style="max-width:280px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                  <input type="text" id="teamSearch" placeholder="Search people or roles">
+                </div>
+                <div class="pm-tab-pills" id="teamTabs">
+                  <div class="pm-tab-pill active" data-team-tab="members">Members</div>
+                  <div class="pm-tab-pill" data-team-tab="roles">Roles &amp; permissions</div>
+                </div>
+                <div class="pm-count-actions">
+                  <span class="pm-count-text" id="teamCount">0</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Members -->
+            <div id="teamMembersPanel">
+              <div class="pm-table-wrap team-table-wrap">
+                <div class="pm-table-scroll">
+                  <table class="admin-table">
+                    <thead><tr><th>Member</th><th>Role</th><th>Access</th><th>Last active</th><th>Status</th><th style="text-align:right;">Actions</th></tr></thead>
+                    <tbody id="teamMembersBody"></tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="svcp-empty" id="teamMembersEmpty" style="display:none;">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/></svg>
+                <div class="svcp-empty-title" id="teamMembersEmptyTitle">No members match</div>
+                <div class="svcp-empty-desc">Try a different search term.</div>
+              </div>
+            </div>
+
+            <!-- Roles -->
+            <div id="teamRolesPanel" style="display:none;">
+              <div class="pm-table-wrap team-table-wrap">
+                <div class="pm-table-scroll">
+                  <table class="admin-table">
+                    <thead><tr><th>Role</th><th>Permissions</th><th>Members</th><th>Status</th><th style="text-align:right;">Actions</th></tr></thead>
+                    <tbody id="teamRolesBody"></tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="svcp-empty" id="teamRolesEmpty" style="display:none;">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                <div class="svcp-empty-title" id="teamRolesEmptyTitle">No roles match</div>
+                <div class="svcp-empty-desc">Try a different search term.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Invite member -->
+          <div class="modal-overlay" id="teamInviteOverlay">
+            <div class="confirm-modal-card team-modal-card">
+              <button type="button" class="modal-close-x" data-team-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+              <div class="team-modal-title">Invite a team member</div>
+              <div class="team-modal-desc">They&rsquo;ll get an email with a link to set up their console login. The role you pick decides what they can reach and what they can change.</div>
+
+              <div class="team-field">
+                <label for="teamInviteEmail">Email address</label>
+                <input type="email" id="teamInviteEmail" placeholder="name@keylr.com" autocomplete="off">
+                <div class="team-field-error" id="teamInviteEmailError">Enter a valid email address.</div>
+              </div>
+
+              <div class="team-field">
+                <label>Role</label>
+                <div class="team-dd" id="teamInviteRoleDD"></div>
+                <div class="team-field-hint" id="teamInviteRoleHint"></div>
+              </div>
+
+              <div class="confirm-modal-btns">
+                <button type="button" class="pmprop-del-cancel" id="teamInviteCancel">Cancel</button>
+                <button type="button" class="confirm-modal-confirm" id="teamInviteSend">Send invite</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Create / edit role -->
+          <div class="modal-overlay" id="teamRoleOverlay">
+            <div class="confirm-modal-card team-modal-card">
+              <button type="button" class="modal-close-x" data-team-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+              <div class="team-modal-title" id="teamRoleModalTitle">New role</div>
+              <div class="team-modal-desc">Pick which modules this role covers and what it can do in each. Everyone holding the role inherits this, apart from anyone you&rsquo;ve given a personal exception.</div>
+
+              <div class="team-field">
+                <label for="teamRoleName">Role name</label>
+                <input type="text" id="teamRoleName" placeholder="e.g. Compliance Reviewer" autocomplete="off">
+                <div class="team-field-error" id="teamRoleNameError">Give the role a name.</div>
+              </div>
+
+              <div class="team-field">
+                <label for="teamRoleDesc">What is this role for?</label>
+                <input type="text" id="teamRoleDesc" placeholder="Optional — helps whoever assigns it later" autocomplete="off">
+              </div>
+
+              <div class="team-field">
+                <div class="team-mx-head">
+                  <label style="margin-bottom:0;">Modules &amp; permissions</label>
+                  <span class="team-mx-count" id="teamRoleMatrixCount"></span>
+                </div>
+                <div class="team-matrix" id="teamRoleMatrix"></div>
+              </div>
+
+              <div class="confirm-modal-btns">
+                <button type="button" class="pmprop-del-cancel" id="teamRoleCancel">Cancel</button>
+                <button type="button" class="confirm-modal-confirm" id="teamRoleSave">Create role</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Member permission overrides -->
+          <div class="modal-overlay" id="teamMemberPermOverlay">
+            <div class="confirm-modal-card team-modal-card team-modal-wide">
+              <button type="button" class="modal-close-x" data-team-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+              <div class="team-modal-title" id="teamMemberPermTitle">Access</div>
+              <div class="team-modal-desc" id="teamMemberPermSub"></div>
+
+              <div class="team-mx-head">
+                <span class="team-mx-count" id="teamMemberPermCount"></span>
+                <button type="button" class="team-reset-btn" id="teamMemberPermReset">Reset all to role</button>
+              </div>
+              <div class="team-matrix" id="teamMemberPermMatrix"></div>
+
+              <div class="confirm-modal-btns">
+                <button type="button" class="confirm-modal-confirm" id="teamMemberPermClose">Done</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Remove confirmation -->
+          <div class="modal-overlay" id="teamRemoveOverlay">
+            <div class="confirm-modal-card">
+              <button type="button" class="modal-close-x" data-team-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+              <div class="confirm-modal-icon" style="background:#fef2f2;color:#b91c1c;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></div>
+              <div class="confirm-modal-title" id="teamRemoveTitle">Remove?</div>
+              <div class="confirm-modal-desc" id="teamRemoveDesc"></div>
+              <div class="confirm-modal-btns">
+                <button type="button" class="pmprop-del-cancel" id="teamRemoveCancel">Cancel</button>
+                <button type="button" class="confirm-modal-confirm" id="teamRemoveConfirm" style="background:#b91c1c;">Remove</button>
               </div>
             </div>
           </div>
@@ -28879,6 +29272,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       'active-suppliers-list': 'adminActiveSuppliersView',
       'supplier-applicants-list': 'adminSupplierApplicantsView',
       'supplier-invites': 'adminSupInvitesView',
+      teams: 'adminTeamsView',
       'client-detail': 'adminClientDetailView',
       'supplier-detail': 'adminSupplierDetailView',
       'supplier-public-profile': 'adminSupplierPublicProfileView'
@@ -28922,6 +29316,10 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       } else if (nav === 'inbox') {
         showAdminView('inbox');
         initAdminInboxOnce();
+      } else if (nav === 'teams') {
+        showAdminView('teams');
+        initTeamsOnce();
+        renderTeams();
       } else {
         showAdminView('overview');
         document.querySelector('#adminDashboard .dash-nav-item[data-nav="overview"]').classList.add('active');
@@ -30316,6 +30714,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       '<div class="supapp-info-grid">' +
         '<div class="supapp-info-cell' + (c.phone ? '' : ' muted-italic') + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg><span>' + (c.phone || 'No phone provided') + '</span></div>' +
         '<div class="supapp-info-cell" data-tooltip="' + supjrEscapeHtml((c.locations || []).join(', ')) + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><span>' + supAppLocationsText(c.locations) + '</span></div>' +
+        '<div class="supapp-info-cell supapp-trustid-cell tid-' + supTrustIdStatusOf(c) + '">' +
+          '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>' +
+          '<span>TrustID: ' + SUP_TRUSTID_LABELS[supTrustIdStatusOf(c)] + '</span></div>' +
       '</div>' +
       '<div class="supapp-card-divider"></div>' +
       '<div class="supapp-progress-row">' +
@@ -30327,6 +30728,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       '<div class="supplier-pill-row">' +
         '<span class="' + supStatusPillClass(c.status) + '">' + supStatusDisplayText(c.status) + '</span>' +
         '<span class="supplier-type-pill' + (c.type === 'Sole Trader' ? ' sole-trader' : '') + '">' + typeIcon + c.type + '</span>' +
+        (c.editRequest ? '<span class="supplier-approved-pill edit-requests">Edit Request</span>' : '') +
         supCertExpiryPillHtml(c) +
       '</div>' +
       '<div class="supapp-card-divider supapp-card-divider-footer"></div>' +
@@ -30846,7 +31248,11 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       var c = entry.c;
       if (supActiveTab === 'approved' && c.status !== 'Approved') return false;
       if (supActiveTab === 'archived' && c.status !== 'Rejected') return false;
+      /* Edit requests sit across approved suppliers rather than replacing their status —
+         someone waiting on a profile change is still an approved supplier. */
+      if (supActiveTab === 'requests' && !c.editRequest) return false;
       if (supActiveTab === 'certs-expiring' && !c.certExpiringSoon) return false;
+      if (supTrustIdFilter !== 'All Statuses' && SUP_TRUSTID_LABELS[supTrustIdStatusOf(c)] !== supTrustIdFilter) return false;
       if (supTypeFilter !== 'All Types' && c.type !== supTypeFilter) return false;
       if (supDateJoinedFilter === 'Today' && (!c.joinedDate || c.joinedDate < daysAgo(0))) return false;
       if (supDateJoinedFilter === 'Last 7 Days' && (!c.joinedDate || c.joinedDate < daysAgo(7))) return false;
@@ -30880,8 +31286,11 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     { key: 'supDateJoined', label: 'Date Joined', type: 'dateRange', allValue: 'All Time',
       options: ['All Time', 'Today', 'Last 7 Days', 'Last 30 Days', 'Custom Date Range'] },
     { key: 'supCategory', label: 'Service Category & Role', type: 'categoryRole', allValue: 'All Categories', searchable: true },
-    { key: 'supLocation', label: 'Location', type: 'location' }
+    { key: 'supLocation', label: 'Location', type: 'location' },
+    { key: 'supTrustId', label: 'TrustID Status', type: 'select', allValue: 'All Statuses',
+      options: ['All Statuses', 'Verified', 'Invite Sent', 'Unverified'] }
   ];
+  var supTrustIdFilter = 'All Statuses';
 
   function renderSupFilterBar() {
     var wrap = document.getElementById('supDynamicFilters');
@@ -33217,6 +33626,14 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     });
   })();
 
+  /* A handful of approved suppliers have asked to change their profile. Spread across the
+     list rather than clustered, so the chip is visible on the first page of cards. */
+  (function seedSupplierEditRequests() {
+    activeSuppliers.forEach(function (c, i) {
+      if (c.status === 'Approved' && i % 6 === 2) c.editRequest = true;
+    });
+  })();
+
   (function enrichActiveSuppliersForFilters() {
     var categoryCycle = Object.keys(categoryRoles).length ? Object.keys(categoryRoles) : ['Appliances', 'Cleaning', 'Electrical', 'Gas & Heating', 'Plumbing'];
     activeSuppliers.forEach(function (c, i) {
@@ -34801,6 +35218,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
   var ddSideEffects = {
     supType: function (v) { supTypeFilter = v; supCurrentPage = 1; renderSupplierList(); },
+    supTrustId: function (v) { supTrustIdFilter = v; supCurrentPage = 1; renderSupplierList(); },
     pmRowsPerPage: function (v) { pmRowsPerPage = parseInt(v, 10); pmCurrentPage = 1; renderPMList(); },
     appRowsPerPage: function (v) { appRowsPerPage = parseInt(v, 10); appCurrentPage = 1; renderApplicantList(); },
     supRowsPerPage: function (v) { supRowsPerPage = parseInt(v, 10); supCurrentPage = 1; renderSupplierList(); },
@@ -37767,6 +38185,721 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   document.getElementById('svcpSearchInput').addEventListener('input', function () { svcpSearchTerm = this.value; renderSvcpList(); });
   /* Filter + add-variable dropdown selections are handled by the delegated svcp-dd listener above. */
 
+
+
+
+  /* =========================================================
+     ADMIN — TEAMS
+
+     Permission model, and why it's shaped this way:
+
+       role   → a map of module -> level. Absent module means no access.
+       member → a role, plus an optional per-module override map.
+
+     A member's effective level is `override || roleLevel || 'none'`. Overrides are only
+     stored when they *differ* from the role, so "Custom · 2 changed" always means exactly
+     two modules genuinely diverge — the badge can't drift away from the truth. That keeps
+     the role as the single place to change things for everyone, while still letting one
+     person be an exception, visibly.
+  ========================================================== */
+  var TEAM_LEVELS = [
+    { id: 'none',  name: 'None',  short: 'None' },
+    { id: 'read',  name: 'Read only',  short: 'Read' },
+    { id: 'write', name: 'Write only', short: 'Write' },
+    { id: 'both',  name: 'Both', short: 'Both' }
+  ];
+  function teamLevel(id) {
+    for (var i = 0; i < TEAM_LEVELS.length; i++) { if (TEAM_LEVELS[i].id === id) return TEAM_LEVELS[i]; }
+    return TEAM_LEVELS[0];
+  }
+
+  var TEAM_MODULE_GROUPS = [
+    { id: 'console', name: 'Console', modules: [{ id: 'overview', name: 'Overview' }] },
+    { id: 'network', name: 'Network', modules: [
+      { id: 'pm', name: 'Property Managers' },
+      { id: 'pmApplicants', name: 'PM Applicants' },
+      { id: 'suppliers', name: 'Active Suppliers' },
+      { id: 'supplierApplicants', name: 'Supplier Applicants' }
+    ] },
+    { id: 'operations', name: 'Operations', modules: [
+      { id: 'jobs', name: 'Jobs' },
+      { id: 'quotes', name: 'Quotes' },
+      { id: 'disputes', name: 'Disputes' },
+      { id: 'services', name: 'Services & Pricing' }
+    ] },
+    { id: 'finance', name: 'Finance', modules: [
+      { id: 'invoices', name: 'Invoices' },
+      { id: 'earnings', name: 'Keylr Earnings' },
+      { id: 'markup', name: 'Markup Tiers' }
+    ] },
+    { id: 'system', name: 'System', modules: [
+      { id: 'inbox', name: 'Messages' },
+      { id: 'teams', name: 'Teams' },
+      { id: 'logs', name: 'Activity Logs' }
+    ] }
+  ];
+  var TEAM_ALL_MODULES = [];
+  TEAM_MODULE_GROUPS.forEach(function (g) { g.modules.forEach(function (m) { TEAM_ALL_MODULES.push(m); }); });
+  var TEAM_MODULE_COUNT = TEAM_ALL_MODULES.length;
+  function teamModuleName(id) {
+    for (var i = 0; i < TEAM_ALL_MODULES.length; i++) { if (TEAM_ALL_MODULES[i].id === id) return TEAM_ALL_MODULES[i].name; }
+    return id;
+  }
+  function teamEveryModule(level) {
+    var m = {};
+    TEAM_ALL_MODULES.forEach(function (mod) { m[mod.id] = level; });
+    return m;
+  }
+
+  var teamUid = 0;
+  function teamNextId(p) { teamUid += 1; return p + '_' + teamUid; }
+
+  var teamRoles = [
+    { id: 'role_owner', name: 'Owner', description: 'Full control, including billing and team management.', active: true, system: true, modules: teamEveryModule('both') },
+    { id: 'role_admin', name: 'Administrator', description: 'Runs the console day to day across every module.', active: true, system: true, modules: teamEveryModule('both') },
+    { id: 'role_ops', name: 'Operations', description: 'Handles jobs, quotes and disputes.', active: true, system: false,
+      modules: { overview: 'read', pm: 'read', suppliers: 'read', jobs: 'both', quotes: 'both', disputes: 'both', services: 'read', inbox: 'both' } },
+    { id: 'role_compliance', name: 'Compliance Reviewer', description: 'Reviews supplier documents and verification.', active: true, system: false,
+      modules: { overview: 'read', suppliers: 'both', supplierApplicants: 'both', pm: 'read', inbox: 'write' } },
+    { id: 'role_finance', name: 'Finance', description: 'Invoices, payouts and earnings reporting.', active: true, system: false,
+      modules: { overview: 'read', invoices: 'both', earnings: 'read', markup: 'both', jobs: 'read' } },
+    { id: 'role_support', name: 'Support', description: 'Answers inbox messages and chases applicants.', active: false, system: false,
+      modules: { overview: 'read', inbox: 'both', pmApplicants: 'read', supplierApplicants: 'read' } }
+  ];
+
+  function teamRoleById(id) {
+    for (var i = 0; i < teamRoles.length; i++) { if (teamRoles[i].id === id) return teamRoles[i]; }
+    return null;
+  }
+  function teamRoleLevel(role, modId) { return (role && role.modules && role.modules[modId]) || 'none'; }
+  function teamMemberLevel(m, modId) {
+    if (m.overrides && m.overrides[modId]) return m.overrides[modId];
+    return teamRoleLevel(teamRoleById(m.roleId), modId);
+  }
+  function teamOverrideCount(m) { return m.overrides ? Object.keys(m.overrides).length : 0; }
+  function teamGrantedCount(getLevel) {
+    var n = 0;
+    TEAM_ALL_MODULES.forEach(function (mod) { if (getLevel(mod.id) !== 'none') n += 1; });
+    return n;
+  }
+  function teamLevelTally(getLevel) {
+    var t = { read: 0, write: 0, both: 0 };
+    TEAM_ALL_MODULES.forEach(function (mod) {
+      var l = getLevel(mod.id);
+      if (t[l] !== undefined) t[l] += 1;
+    });
+    return t;
+  }
+
+  function teamAvatarHtml(m) {
+    if (m.photo) {
+      return '<span class="team-avatar has-photo"><img src="' + supjrEscapeHtml(m.photo) + '" alt="" loading="lazy"></span>';
+    }
+    return '<span class="team-avatar">' + supjrEscapeHtml(teamInitials(teamDisplayName(m))) + '</span>';
+  }
+  function teamInitials(name) {
+    var parts = String(name || '').trim().split(/\s+/);
+    if (!parts[0]) return '?';
+    return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
+  }
+  function teamNameFromEmail(email) {
+    var local = String(email).split('@')[0].replace(/[._-]+/g, ' ');
+    return local.replace(/\b\w/g, function (m) { return m.toUpperCase(); });
+  }
+  function teamDisplayName(m) { return m.name || teamNameFromEmail(m.email); }
+
+  function teamMakeMember(o) {
+    return {
+      id: teamNextId('mem'),
+      name: o.name || '',
+      email: o.email,
+      roleId: o.roleId,
+      overrides: o.overrides || {},
+      photo: o.photo || '',
+      status: o.status || 'active',
+      lastActive: o.lastActive === undefined ? null : o.lastActive
+    };
+  }
+
+  var teamMembers = [
+    teamMakeMember({ name: 'Amara Osei', email: 'amara.osei@keylr.com', roleId: 'role_owner', lastActive: 0, photo: 'https://i.pravatar.cc/150?img=47' }),
+    teamMakeMember({ name: 'Priya Nair', email: 'priya.nair@keylr.com', roleId: 'role_admin', lastActive: 0, photo: 'https://i.pravatar.cc/150?img=32' }),
+    teamMakeMember({ name: 'Tom Blake', email: 'tom.blake@keylr.com', roleId: 'role_ops', lastActive: 1 }),
+    /* One seeded exception so the override path is visible without hunting for it. */
+    teamMakeMember({ name: 'Sofia Marchetti', email: 'sofia.marchetti@keylr.com', roleId: 'role_compliance', lastActive: 2,
+      overrides: { disputes: 'read' } }),
+    teamMakeMember({ name: 'Daniel Whitfield', email: 'daniel.whitfield@keylr.com', roleId: 'role_finance', lastActive: 6, photo: 'https://i.pravatar.cc/150?img=12' }),
+    teamMakeMember({ name: 'Hannah Cole', email: 'hannah.cole@keylr.com', roleId: 'role_support', status: 'inactive', lastActive: 34 }),
+    teamMakeMember({ email: 'ravi.shah@keylr.com', roleId: 'role_ops', status: 'invited', lastActive: null })
+  ];
+
+  var teamTab = 'members';
+  var teamSearch = '';
+  var teamPendingRemove = null;
+  var teamEditingRoleId = null;
+  var teamInviteRoleId = 'role_ops';
+  var teamRoleDraft = null;     // { name, description, modules } while the role modal is open
+  var teamPermMemberId = null;  // member whose overrides are open
+
+  function teamLastActiveText(m) {
+    if (m.status === 'invited') return 'Invite pending';
+    if (m.lastActive === null) return 'Never';
+    if (m.lastActive === 0) return 'Today';
+    if (m.lastActive === 1) return 'Yesterday';
+    if (m.lastActive < 30) return m.lastActive + ' days ago';
+    return Math.floor(m.lastActive / 30) + ' month' + (m.lastActive < 60 ? '' : 's') + ' ago';
+  }
+  function teamMembersOfRole(roleId) { return teamMembers.filter(function (m) { return m.roleId === roleId; }); }
+
+  /* Signing in needs both: the person switched on, and their role live. Suspending a role
+     suspends everyone holding it — there is no per-member exception. */
+  function teamRoleBlocked(m) {
+    var role = teamRoleById(m.roleId);
+    return !!(role && !role.active);
+  }
+  function teamStatusLabel(m) {
+    if (m.status === 'invited') return { key: 'invited', text: 'Invited' };
+    if (m.status !== 'active') return { key: 'inactive', text: 'Inactive' };
+    if (teamRoleBlocked(m)) return { key: 'blocked', text: 'Blocked by role' };
+    return { key: 'active', text: 'Active' };
+  }
+
+  function teamFilteredMembers() {
+    var t = teamSearch.trim().toLowerCase();
+    if (!t) return teamMembers;
+    return teamMembers.filter(function (m) {
+      var role = teamRoleById(m.roleId);
+      return (m.name + ' ' + m.email + ' ' + (role ? role.name : '')).toLowerCase().indexOf(t) !== -1;
+    });
+  }
+  function teamFilteredRoles() {
+    var t = teamSearch.trim().toLowerCase();
+    if (!t) return teamRoles;
+    return teamRoles.filter(function (r) {
+      return (r.name + ' ' + r.description).toLowerCase().indexOf(t) !== -1;
+    });
+  }
+
+  /* ---------- Permission matrix (shared by the role editor and member overrides) ---------- */
+  function teamMatrixHtml(getLevel, opts) {
+    opts = opts || {};
+    return TEAM_MODULE_GROUPS.map(function (g) {
+      return '<div class="team-mx-group">' +
+        '<div class="team-mx-group-head">' +
+          '<span class="team-mx-group-name">' + g.name + '</span>' +
+          (opts.quickActions
+            ? '<span class="team-mx-quick">' +
+                '<button type="button" data-mx-group="' + g.id + '" data-mx-level="both">All</button>' +
+                '<button type="button" data-mx-group="' + g.id + '" data-mx-level="none">None</button>' +
+              '</span>'
+            : '') +
+        '</div>' +
+        g.modules.map(function (mod) {
+          var level = getLevel(mod.id);
+          var badge = opts.badgeFor ? opts.badgeFor(mod.id) : '';
+          return '<div class="team-mx-row" data-mx-row="' + mod.id + '">' +
+            '<span class="team-mx-name">' + mod.name + badge + '</span>' +
+            '<span class="team-mx-seg">' + TEAM_LEVELS.map(function (l) {
+              return '<button type="button" class="team-mx-opt' + (l.id === level ? ' on' : '') +
+                ' lvl-' + l.id + '" data-mx-set="' + mod.id + '" data-mx-value="' + l.id + '">' + l.short + '</button>';
+            }).join('') + '</span>' +
+          '</div>';
+        }).join('') +
+      '</div>';
+    }).join('');
+  }
+
+  /* ---------- Render ---------- */
+  var TEAM_TRASH = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg>';
+  var TEAM_LOCK = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>';
+
+  function teamLevelChips(tally) {
+    return TEAM_LEVELS.filter(function (l) { return l.id !== 'none' && tally[l.id]; })
+      .map(function (l) { return '<span class="team-lvl-chip lvl-' + l.id + '">' + tally[l.id] + ' ' + l.short.toLowerCase() + '</span>'; })
+      .join('');
+  }
+
+  function renderTeamStats() {
+    var box = document.getElementById('teamStats');
+    if (!box) return;
+    var active = teamMembers.filter(function (m) { return m.status === 'active'; }).length;
+    var invited = teamMembers.filter(function (m) { return m.status === 'invited'; }).length;
+    var custom = teamMembers.filter(function (m) { return teamOverrideCount(m) > 0; }).length;
+    var activeRoles = teamRoles.filter(function (r) { return r.active; }).length;
+    box.innerHTML = [
+      { n: active, label: 'Active members' },
+      { n: invited, label: 'Invites pending', tint: invited > 0 },
+      { n: activeRoles, label: 'Active roles' },
+      { n: custom, label: 'With custom access', tint: custom > 0 }
+    ].map(function (s) {
+      return '<div class="team-stat' + (s.tint ? ' tint' : '') + '"><div class="ts-num">' + s.n + '</div><div class="ts-label">' + s.label + '</div></div>';
+    }).join('');
+  }
+
+  function renderTeamMembers() {
+    var body = document.getElementById('teamMembersBody');
+    if (!body) return;
+    var list = teamFilteredMembers();
+    document.querySelector('#teamMembersPanel .team-table-wrap').style.display = list.length ? '' : 'none';
+    document.getElementById('teamMembersEmpty').style.display = list.length ? 'none' : '';
+
+    body.innerHTML = list.map(function (m) {
+      var role = teamRoleById(m.roleId);
+      var roleInactive = role && !role.active;
+      var overrides = teamOverrideCount(m);
+      var granted = teamGrantedCount(function (id) { return teamMemberLevel(m, id); });
+      return '<tr>' +
+        '<td><div class="team-person">' +
+          teamAvatarHtml(m) +
+          '<span class="team-person-main">' +
+            '<span class="team-person-name">' + supjrEscapeHtml(teamDisplayName(m)) + '</span>' +
+            '<span class="team-person-email">' + supjrEscapeHtml(m.email) + '</span>' +
+          '</span>' +
+        '</div></td>' +
+        '<td><div class="team-role-cell">' + teamRoleDDHtml(role, 'data-member="' + m.id + '"') +
+          (roleInactive
+            ? '<div class="team-role-warn">Role is switched off \u2014 they can\u2019t sign in until it\u2019s back on.</div>'
+            : '') +
+        '</div></td>' +
+        /* Access is a button, not a label: it's the way in to this person's exceptions. */
+        '<td><button type="button" class="team-access-btn" data-team-member-perms="' + m.id + '">' +
+          '<span class="team-perm-chip ' + (overrides ? 'custom' : 'inherited') + '">' +
+            (overrides ? 'Custom \u00b7 ' + overrides + ' changed' : 'Role default') + '</span>' +
+          '<span class="team-access-sub">' + granted + ' of ' + TEAM_MODULE_COUNT + ' modules</span>' +
+        '</button></td>' +
+        '<td class="team-lastactive">' + supjrEscapeHtml(teamLastActiveText(m)) + '</td>' +
+        '<td><span class="team-status-chip st-' + teamStatusLabel(m).key + '">' + teamStatusLabel(m).text + '</span></td>' +
+        '<td><div class="team-actions">' +
+          (m.status === 'invited'
+            ? '<button type="button" class="btn btn-secondary-light team-mini-btn" data-team-resend="' + m.id + '">Resend</button>'
+            : '<span class="team-toggle-wrap">' +
+                '<button type="button" class="toggle-switch sm' + (m.status === 'active' ? ' on' : '') + '" data-team-member-toggle="' + m.id + '" role="switch" aria-checked="' + (m.status === 'active' ? 'true' : 'false') + '" aria-label="Member active"><span class="thumb"></span></button>' +
+              '</span>') +
+          '<button type="button" class="svcp-icon-btn danger" data-team-member-remove="' + m.id + '"' +
+            (role && role.id === 'role_owner' ? ' disabled data-tooltip="The owner can\u2019t be removed"' : ' data-tooltip="Remove member"') +
+            ' aria-label="Remove member">' + TEAM_TRASH + '</button>' +
+        '</div></td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function renderTeamRoles() {
+    var body = document.getElementById('teamRolesBody');
+    if (!body) return;
+    var list = teamFilteredRoles();
+    document.querySelector('#teamRolesPanel .team-table-wrap').style.display = list.length ? '' : 'none';
+    document.getElementById('teamRolesEmpty').style.display = list.length ? 'none' : '';
+
+    body.innerHTML = list.map(function (r) {
+      var count = teamMembersOfRole(r.id).length;
+      var getLevel = function (id) { return teamRoleLevel(r, id); };
+      var granted = teamGrantedCount(getLevel);
+      var tally = teamLevelTally(getLevel);
+      var summary = granted === 0 ? 'No modules'
+        : granted === TEAM_MODULE_COUNT && tally.both === TEAM_MODULE_COUNT ? 'Every module \u00b7 full access'
+        : granted + ' of ' + TEAM_MODULE_COUNT + ' modules';
+      return '<tr>' +
+        '<td><div class="team-role-main">' +
+          '<span class="team-role-name">' + supjrEscapeHtml(r.name) +
+            (r.system ? '<span class="team-sys-chip">' + TEAM_LOCK + 'Built in</span>' : '') + '</span>' +
+          (r.description ? '<span class="team-role-desc">' + supjrEscapeHtml(r.description) + '</span>' : '') +
+        '</div></td>' +
+        '<td><button type="button" class="team-access-btn" data-team-role-edit="' + r.id + '">' +
+          '<span class="team-access-summary">' + summary + '</span>' +
+          '<span class="team-lvl-chips">' + teamLevelChips(tally) + '</span>' +
+        '</button></td>' +
+        '<td><span class="team-count-chip">' + count + '</span></td>' +
+        '<td><span class="team-toggle-wrap">' +
+          '<button type="button" class="toggle-switch sm' + (r.active ? ' on' : '') + '" data-team-role-toggle="' + r.id + '"' +
+            (r.system ? ' disabled data-tooltip="Built-in roles stay active"' : '') +
+            ' role="switch" aria-checked="' + (r.active ? 'true' : 'false') + '" aria-label="Role active"><span class="thumb"></span></button>' +
+          '<span class="team-toggle-label' + (r.active ? ' on' : '') + '">' + (r.active ? 'Active' : 'Inactive') + '</span>' +
+        '</span></td>' +
+        '<td><div class="team-actions">' +
+          '<button type="button" class="svcp-icon-btn" data-team-role-edit="' + r.id + '" data-tooltip="Edit role &amp; permissions" aria-label="Edit role"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>' +
+          '<button type="button" class="svcp-icon-btn danger" data-team-role-remove="' + r.id + '"' +
+            (r.system ? ' disabled data-tooltip="Built-in roles can\u2019t be deleted"' : count ? ' disabled data-tooltip="Reassign its ' + count + ' member' + (count === 1 ? '' : 's') + ' first"' : ' data-tooltip="Delete role"') +
+            ' aria-label="Delete role">' + TEAM_TRASH + '</button>' +
+        '</div></td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  /* The role picker lists names only — a member's access is spelled out in its own column,
+     so repeating a level here was both redundant and, once permissions went per-module,
+     wrong. */
+  function teamRoleDDHtml(role, extraAttrs) {
+    var options = teamRoles.filter(function (r) { return r.active; });
+    return svcpDDShell('data-ddrole="team-role" ' + (extraAttrs || '') + ' class="pm-custom-dd-btn"',
+      role ? role.id : '', role ? role.name : 'Select a role\u2026', !role,
+      options.map(function (r) { return svcpDDItem(r.id, r.name, role && r.id === role.id); }).join('')
+    ).replace('<div class="svcp-dd">', '<div class="team-dd-inner">');
+  }
+
+  function renderTeams() {
+    renderTeamStats();
+    var membersOn = teamTab === 'members';
+    document.getElementById('teamMembersPanel').style.display = membersOn ? '' : 'none';
+    document.getElementById('teamRolesPanel').style.display = membersOn ? 'none' : '';
+    if (membersOn) renderTeamMembers(); else renderTeamRoles();
+    var n = membersOn ? teamFilteredMembers().length : teamFilteredRoles().length;
+    document.getElementById('teamCount').textContent = n + (membersOn ? ' member' : ' role') + (n === 1 ? '' : 's');
+  }
+
+  /* ---------- Invite ---------- */
+  function teamRenderInviteRoleDD() {
+    var wrap = document.getElementById('teamInviteRoleDD');
+    var role = teamRoleById(teamInviteRoleId);
+    if (!role || !role.active) {
+      var firstActive = teamRoles.filter(function (r) { return r.active; })[0];
+      role = firstActive || null;
+      teamInviteRoleId = role ? role.id : '';
+    }
+    wrap.innerHTML = teamRoleDDHtml(role, 'data-invite="1"');
+    var hint = document.getElementById('teamInviteRoleHint');
+    if (!role) { hint.textContent = 'No active roles available. Switch one on first.'; return; }
+    var getLevel = function (id) { return teamRoleLevel(role, id); };
+    var granted = teamGrantedCount(getLevel);
+    hint.innerHTML = 'Gives access to <b>' + granted + ' of ' + TEAM_MODULE_COUNT + ' modules</b>. ' +
+      'You can fine-tune it for this person once they\u2019ve accepted.';
+  }
+  function teamOpenInvite() {
+    document.getElementById('teamInviteEmail').value = '';
+    document.getElementById('teamInviteEmailError').style.display = 'none';
+    teamRenderInviteRoleDD();
+    document.getElementById('teamInviteOverlay').classList.add('open');
+    setTimeout(function () { document.getElementById('teamInviteEmail').focus(); }, 50);
+  }
+
+  /* ---------- Role editor ---------- */
+  function teamRenderRoleMatrix() {
+    document.getElementById('teamRoleMatrix').innerHTML =
+      teamMatrixHtml(function (id) { return teamRoleDraft.modules[id] || 'none'; }, { quickActions: true });
+    var granted = teamGrantedCount(function (id) { return teamRoleDraft.modules[id] || 'none'; });
+    document.getElementById('teamRoleMatrixCount').textContent = granted + ' of ' + TEAM_MODULE_COUNT + ' modules';
+  }
+  function teamOpenRoleModal(roleId) {
+    teamEditingRoleId = roleId || null;
+    var role = roleId ? teamRoleById(roleId) : null;
+    teamRoleDraft = {
+      name: role ? role.name : '',
+      description: role ? role.description : '',
+      modules: role ? JSON.parse(JSON.stringify(role.modules)) : {}
+    };
+    document.getElementById('teamRoleModalTitle').textContent = role ? 'Edit role' : 'New role';
+    document.getElementById('teamRoleSave').textContent = role ? 'Save role' : 'Create role';
+    document.getElementById('teamRoleName').value = teamRoleDraft.name;
+    document.getElementById('teamRoleName').disabled = !!(role && role.system);
+    document.getElementById('teamRoleDesc').value = teamRoleDraft.description;
+    document.getElementById('teamRoleNameError').style.display = 'none';
+    teamRenderRoleMatrix();
+    document.getElementById('teamRoleOverlay').classList.add('open');
+  }
+
+  /* ---------- Member overrides ---------- */
+  function teamRenderMemberPerms() {
+    var m = teamMembers.filter(function (x) { return x.id === teamPermMemberId; })[0];
+    if (!m) return;
+    var role = teamRoleById(m.roleId);
+    document.getElementById('teamMemberPermTitle').textContent = teamDisplayName(m) + '\u2019s access';
+    document.getElementById('teamMemberPermSub').innerHTML =
+      'Inheriting from <b>' + supjrEscapeHtml(role ? role.name : 'no role') + '</b>. ' +
+      'Change a row to make an exception for this person only \u2014 the role itself stays as it is.';
+
+    var overrides = teamOverrideCount(m);
+    var resetBtn = document.getElementById('teamMemberPermReset');
+    resetBtn.style.display = overrides ? '' : 'none';
+    resetBtn.textContent = 'Reset all to ' + (role ? role.name : 'role');
+
+    document.getElementById('teamMemberPermMatrix').innerHTML = teamMatrixHtml(
+      function (id) { return teamMemberLevel(m, id); },
+      { badgeFor: function (id) {
+          return (m.overrides && m.overrides[id])
+            ? '<span class="team-mx-badge">Changed \u00b7 role says ' + teamLevel(teamRoleLevel(role, id)).short.toLowerCase() + '</span>'
+            : '';
+        } }
+    );
+    document.getElementById('teamMemberPermCount').textContent = overrides
+      ? overrides + ' exception' + (overrides === 1 ? '' : 's') + ' to the role'
+      : 'No exceptions \u2014 matches the role exactly';
+  }
+  function teamOpenMemberPerms(id) {
+    teamPermMemberId = id;
+    teamRenderMemberPerms();
+    document.getElementById('teamMemberPermOverlay').classList.add('open');
+  }
+
+  /* ---------- Wiring ---------- */
+  function initTeamsOnce() {
+    if (initTeamsOnce.done) return;
+    initTeamsOnce.done = true;
+
+    document.getElementById('teamSearch').addEventListener('input', function () {
+      teamSearch = this.value;
+      renderTeams();
+    });
+    document.getElementById('teamTabs').addEventListener('click', function (e) {
+      var pill = e.target.closest('[data-team-tab]');
+      if (!pill) return;
+      teamTab = pill.getAttribute('data-team-tab');
+      this.querySelectorAll('.pm-tab-pill').forEach(function (p) { p.classList.toggle('active', p === pill); });
+      renderTeams();
+    });
+
+    document.getElementById('teamInviteBtn').addEventListener('click', teamOpenInvite);
+    document.getElementById('teamAddRoleBtn').addEventListener('click', function () { teamOpenRoleModal(null); });
+
+    /* ---- invite ---- */
+    var inviteOverlay = document.getElementById('teamInviteOverlay');
+    document.getElementById('teamInviteCancel').addEventListener('click', function () { inviteOverlay.classList.remove('open'); });
+    inviteOverlay.addEventListener('click', function (e) { if (e.target === inviteOverlay) inviteOverlay.classList.remove('open'); });
+    document.getElementById('teamInviteSend').addEventListener('click', function () {
+      var input = document.getElementById('teamInviteEmail');
+      var err = document.getElementById('teamInviteEmailError');
+      var email = input.value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        err.textContent = 'Enter a valid email address.';
+        err.style.display = ''; input.focus(); return;
+      }
+      if (teamMembers.filter(function (m) { return m.email.toLowerCase() === email.toLowerCase(); })[0]) {
+        err.textContent = 'That address is already on the team.';
+        err.style.display = ''; input.focus(); return;
+      }
+      if (!teamInviteRoleId) { showToast('Switch a role on before inviting anyone to it.'); return; }
+      teamMembers.push(teamMakeMember({ email: email, roleId: teamInviteRoleId, status: 'invited', lastActive: null }));
+      inviteOverlay.classList.remove('open');
+      teamTab = 'members';
+      document.querySelectorAll('#teamTabs .pm-tab-pill').forEach(function (p) {
+        p.classList.toggle('active', p.getAttribute('data-team-tab') === 'members');
+      });
+      renderTeams();
+      showToast('Invite sent to ' + email + ' as ' + teamRoleById(teamInviteRoleId).name + '.');
+    });
+
+    /* ---- role editor ---- */
+    var roleOverlay = document.getElementById('teamRoleOverlay');
+    document.getElementById('teamRoleCancel').addEventListener('click', function () { roleOverlay.classList.remove('open'); });
+    roleOverlay.addEventListener('click', function (e) { if (e.target === roleOverlay) roleOverlay.classList.remove('open'); });
+
+    document.getElementById('teamRoleMatrix').addEventListener('click', function (e) {
+      var set = e.target.closest('[data-mx-set]');
+      if (set) {
+        var mid = set.getAttribute('data-mx-set');
+        var val = set.getAttribute('data-mx-value');
+        if (val === 'none') delete teamRoleDraft.modules[mid]; else teamRoleDraft.modules[mid] = val;
+        teamRenderRoleMatrix();
+        return;
+      }
+      var grp = e.target.closest('[data-mx-group]');
+      if (grp) {
+        var gid = grp.getAttribute('data-mx-group');
+        var lvl = grp.getAttribute('data-mx-level');
+        var group = TEAM_MODULE_GROUPS.filter(function (g) { return g.id === gid; })[0];
+        group.modules.forEach(function (mod) {
+          if (lvl === 'none') delete teamRoleDraft.modules[mod.id]; else teamRoleDraft.modules[mod.id] = lvl;
+        });
+        teamRenderRoleMatrix();
+      }
+    });
+
+    document.getElementById('teamRoleSave').addEventListener('click', function () {
+      var nameEl = document.getElementById('teamRoleName');
+      var name = nameEl.disabled ? teamRoleDraft.name : nameEl.value.trim();
+      var err = document.getElementById('teamRoleNameError');
+      if (!name) { err.style.display = ''; nameEl.focus(); return; }
+      var desc = document.getElementById('teamRoleDesc').value.trim();
+      if (teamEditingRoleId) {
+        var role = teamRoleById(teamEditingRoleId);
+        if (!role.system) role.name = name;
+        role.description = desc;
+        role.modules = teamRoleDraft.modules;
+        var affected = teamMembersOfRole(role.id).length;
+        roleOverlay.classList.remove('open');
+        renderTeams();
+        showToast(affected
+          ? role.name + ' updated \u2014 applies to ' + affected + ' member' + (affected === 1 ? '' : 's') + ', except where someone has their own exceptions.'
+          : role.name + ' updated.');
+      } else {
+        teamRoles.push({ id: teamNextId('role'), name: name, description: desc, active: true, system: false, modules: teamRoleDraft.modules });
+        roleOverlay.classList.remove('open');
+        teamTab = 'roles';
+        document.querySelectorAll('#teamTabs .pm-tab-pill').forEach(function (p) {
+          p.classList.toggle('active', p.getAttribute('data-team-tab') === 'roles');
+        });
+        renderTeams();
+        var g = teamGrantedCount(function (id) { return teamRoleDraft.modules[id] || 'none'; });
+        showToast(name + ' created with access to ' + g + ' of ' + TEAM_MODULE_COUNT + ' modules.');
+      }
+    });
+
+    /* ---- member overrides ---- */
+    var permOverlay = document.getElementById('teamMemberPermOverlay');
+    document.getElementById('teamMemberPermClose').addEventListener('click', function () { permOverlay.classList.remove('open'); });
+    permOverlay.addEventListener('click', function (e) { if (e.target === permOverlay) permOverlay.classList.remove('open'); });
+    document.getElementById('teamMemberPermReset').addEventListener('click', function () {
+      var m = teamMembers.filter(function (x) { return x.id === teamPermMemberId; })[0];
+      if (!m) return;
+      m.overrides = {};
+      teamRenderMemberPerms();
+      renderTeams();
+      showToast(teamDisplayName(m) + ' is back to their role\u2019s access.');
+    });
+    document.getElementById('teamMemberPermMatrix').addEventListener('click', function (e) {
+      var set = e.target.closest('[data-mx-set]');
+      if (!set) return;
+      var m = teamMembers.filter(function (x) { return x.id === teamPermMemberId; })[0];
+      if (!m) return;
+      var mid = set.getAttribute('data-mx-set');
+      var val = set.getAttribute('data-mx-value');
+      var roleLevel = teamRoleLevel(teamRoleById(m.roleId), mid);
+      /* Storing an override only when it differs keeps "N changed" literally true. */
+      if (val === roleLevel) delete m.overrides[mid]; else m.overrides[mid] = val;
+      teamRenderMemberPerms();
+      renderTeams();
+    });
+
+    /* ---- remove confirmation ---- */
+    var removeOverlay = document.getElementById('teamRemoveOverlay');
+    document.getElementById('teamRemoveCancel').addEventListener('click', function () {
+      removeOverlay.classList.remove('open');
+      teamPendingRemove = null;
+    });
+    removeOverlay.addEventListener('click', function (e) {
+      if (e.target === removeOverlay) { removeOverlay.classList.remove('open'); teamPendingRemove = null; }
+    });
+    document.getElementById('teamRemoveConfirm').addEventListener('click', function () {
+      if (!teamPendingRemove) return;
+      var label;
+      if (teamPendingRemove.kind === 'member') {
+        var m = teamMembers.filter(function (x) { return x.id === teamPendingRemove.id; })[0];
+        label = m ? teamDisplayName(m) : 'Member';
+        teamMembers = teamMembers.filter(function (x) { return x.id !== teamPendingRemove.id; });
+      } else {
+        var r = teamRoleById(teamPendingRemove.id);
+        label = r ? r.name : 'Role';
+        teamRoles = teamRoles.filter(function (x) { return x.id !== teamPendingRemove.id; });
+      }
+      teamPendingRemove = null;
+      removeOverlay.classList.remove('open');
+      renderTeams();
+      showToast(label + ' removed.');
+    });
+
+    /* ---- table actions ---- */
+    document.getElementById('adminTeamsView').addEventListener('click', function (e) {
+      var perms = e.target.closest('[data-team-member-perms]');
+      if (perms) { teamOpenMemberPerms(perms.getAttribute('data-team-member-perms')); return; }
+
+      var mToggle = e.target.closest('[data-team-member-toggle]');
+      if (mToggle) {
+        var mem = teamMembers.filter(function (x) { return x.id === mToggle.getAttribute('data-team-member-toggle'); })[0];
+        if (!mem) return;
+        mem.status = mem.status === 'active' ? 'inactive' : 'active';
+        renderTeams();
+        showToast(teamDisplayName(mem) + (mem.status === 'active' ? ' can sign in again.' : ' has been switched off \u2014 they can\u2019t sign in.'));
+        return;
+      }
+      var rToggle = e.target.closest('[data-team-role-toggle]');
+      if (rToggle) {
+        if (rToggle.disabled) { showToast('Built-in roles stay active.'); return; }
+        var role = teamRoleById(rToggle.getAttribute('data-team-role-toggle'));
+        if (!role) return;
+        role.active = !role.active;
+        renderTeams();
+        var held = teamMembersOfRole(role.id).length;
+        showToast(role.active
+          ? role.name + ' is active again.' + (held ? ' ' + held + ' member' + (held === 1 ? '' : 's') + ' can sign in.' : '')
+          : held
+            ? role.name + ' switched off \u2014 ' + held + ' member' + (held === 1 ? '' : 's') + ' holding it can no longer sign in.'
+            : role.name + ' switched off.');
+        return;
+      }
+      var resend = e.target.closest('[data-team-resend]');
+      if (resend) {
+        var rm = teamMembers.filter(function (x) { return x.id === resend.getAttribute('data-team-resend'); })[0];
+        if (rm) showToast('Invite resent to ' + rm.email + '.');
+        return;
+      }
+      var edit = e.target.closest('[data-team-role-edit]');
+      if (edit) { teamOpenRoleModal(edit.getAttribute('data-team-role-edit')); return; }
+
+      var mRemove = e.target.closest('[data-team-member-remove]');
+      if (mRemove) {
+        if (mRemove.disabled) { showToast('The owner can\u2019t be removed.'); return; }
+        var target = teamMembers.filter(function (x) { return x.id === mRemove.getAttribute('data-team-member-remove'); })[0];
+        if (!target) return;
+        teamPendingRemove = { kind: 'member', id: target.id };
+        document.getElementById('teamRemoveTitle').textContent = 'Remove this member?';
+        document.getElementById('teamRemoveDesc').textContent =
+          teamDisplayName(target) + ' will lose console access straight away. Anything they did stays in the activity log.';
+        removeOverlay.classList.add('open');
+        return;
+      }
+      var rRemove = e.target.closest('[data-team-role-remove]');
+      if (rRemove) {
+        if (rRemove.disabled) { showToast(rRemove.getAttribute('data-tooltip') + '.'); return; }
+        var rr = teamRoleById(rRemove.getAttribute('data-team-role-remove'));
+        if (!rr) return;
+        teamPendingRemove = { kind: 'role', id: rr.id };
+        document.getElementById('teamRemoveTitle').textContent = 'Delete this role?';
+        document.getElementById('teamRemoveDesc').textContent =
+          '\u201c' + rr.name + '\u201d will no longer be available when inviting or reassigning people.';
+        removeOverlay.classList.add('open');
+      }
+    });
+
+    /* ---- role dropdowns ---- */
+    ['adminTeamsView', 'teamInviteOverlay'].forEach(function (id) {
+      document.getElementById(id).addEventListener('click', function (e) {
+        var btn = e.target.closest('.team-dd-inner .pm-custom-dd-btn');
+        if (btn) {
+          e.stopPropagation();
+          var menu = btn.nextElementSibling;
+          var wasOpen = btn.classList.contains('open');
+          if (typeof closeAllCustomDropdowns === 'function') closeAllCustomDropdowns();
+          if (!wasOpen) {
+            btn.classList.add('open');
+            menu.classList.add('open');
+            var below = window.innerHeight - btn.getBoundingClientRect().bottom;
+            menu.classList.toggle('drop-up', below < Math.min(menu.scrollHeight + 20, 260));
+          }
+          return;
+        }
+        var item = e.target.closest('.team-dd-inner .cdd-item');
+        if (!item) return;
+        e.stopPropagation();
+        var trigger = item.closest('.team-dd-inner').querySelector('.pm-custom-dd-btn');
+        var value = item.getAttribute('data-svcp-dd-value');
+        if (typeof closeAllCustomDropdowns === 'function') closeAllCustomDropdowns();
+
+        if (trigger.hasAttribute('data-invite')) {
+          teamInviteRoleId = value;
+          teamRenderInviteRoleDD();
+          return;
+        }
+        var mid = trigger.getAttribute('data-member');
+        var mm = teamMembers.filter(function (x) { return x.id === mid; })[0];
+        if (!mm) return;
+        var had = teamOverrideCount(mm);
+        mm.roleId = value;
+        /* Exceptions were made against the old role, so carrying them into a new one would
+           silently mean something different. They're cleared, and the admin is told. */
+        mm.overrides = {};
+        renderTeams();
+        var nr = teamRoleById(value);
+        showToast(teamDisplayName(mm) + ' is now ' + nr.name +
+          (had ? ' \u2014 their ' + had + ' custom exception' + (had === 1 ? ' was' : 's were') + ' cleared.' : '.'));
+      });
+    });
+
+    /* One handler for every X in the module — each lives inside its own overlay. */
+    document.querySelectorAll('#teamInviteOverlay, #teamRoleOverlay, #teamMemberPermOverlay, #teamRemoveOverlay').forEach(function (ov) {
+      var x = ov.querySelector('[data-team-close]');
+      if (x) x.addEventListener('click', function () { ov.classList.remove('open'); teamPendingRemove = null; });
+    });
+
+    renderTeams();
+  }
 
   /* =========================================================
      PM — SERVICES & PRICING (service templates)
