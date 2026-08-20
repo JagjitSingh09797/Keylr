@@ -3295,13 +3295,18 @@
   @media (max-width: 1300px) { .pm-filter-row { grid-template-columns: repeat(3, minmax(150px, 1fr)); max-width: calc(100% - 150px); } }
   @media (max-width: 700px) { .pm-filter-row { grid-template-columns: repeat(2, minmax(140px, 1fr)); max-width: calc(100% - 60px); } }
   @media (max-width: 480px) { .pm-filter-row { grid-template-columns: 1fr; max-width: 100%; } }
-  /* PM Applicants only ever places 2 fields (Date Joined, Location) in this row, unlike the
-     5-slot grid the shared class assumes — reserving 5 tracks left no room for the Sent
-     Invitations / Invite Applicant buttons to sit alongside on the same line, pushing them onto
-     their own row below. Scoped to this one instance rather than the shared class, since
-     Property Managers reuses .pm-filter-row with its full field set. */
-  #pm-filter-row-app { display: flex; flex-wrap: wrap; max-width: none; flex: 1 1 auto; }
-  #pm-filter-row-app .pm-filter-field { flex: 0 1 200px; min-width: 160px; }
+  /* PM Applicants and Property Manager both only ever place 2 fields (Date Joined, Location) in
+     this row, unlike the 5-slot grid the shared class assumes — reserving 5 tracks left no room
+     for the buttons/icons that sit alongside on the same line, pushing them onto their own row
+     below. Scoped to these two instances rather than the shared class, since other modules
+     (e.g. the standalone Property Managers-within-PM-detail nav) still use .pm-filter-row with
+     a fuller field set. */
+  #pm-filter-row-app, #pm-filter-row-pm { display: flex; flex-wrap: wrap; max-width: none; flex: 1 1 auto; }
+  /* Property Manager's filter row has no separate action-buttons wrapper to carry the spacing
+     the way PM Applicants' does (that one holds Sent Invitations / Invite Applicant alongside
+     it), so the row itself carries the margin here instead. */
+  #pm-filter-row-pm { margin-bottom: 16px; }
+  #pm-filter-row-app .pm-filter-field, #pm-filter-row-pm .pm-filter-field { flex: 0 1 200px; min-width: 160px; }
   .pm-filter-field { position: relative; }
   .supapp-filter-bar { align-items: flex-start; }
   .supapp-daterange-row { display: flex; align-items: stretch; gap: 8px; margin-top: 10px; }
@@ -3341,8 +3346,10 @@
     #adminSupplierApplicantsView .supapp-filter-bar .pm-filter-field, #adminActiveSuppliersView .supapp-filter-bar .pm-filter-field { width: 100% !important; flex: 1 1 100% !important; }
   }
   @media (max-width: 640px) {
-    #adminSupplierApplicantsView .pm-search-row, #adminActiveSuppliersView .pm-search-row { flex-direction: column; align-items: stretch; }
-    #adminSupplierApplicantsView .pm-tab-pills, #adminActiveSuppliersView .pm-tab-pills { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    #adminSupplierApplicantsView .pm-search-row, #adminActiveSuppliersView .pm-search-row,
+    #adminPMListView .pm-search-row, #adminPMApplicantsView .pm-search-row { flex-direction: column; align-items: stretch; }
+    #adminSupplierApplicantsView .pm-tab-pills, #adminActiveSuppliersView .pm-tab-pills,
+    #adminPMListView .pm-tab-pills, #adminPMApplicantsView .pm-tab-pills { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   }
   .pm-filter-field .pff-legend-wrap { position: relative; height: 12px; margin-bottom: 6px; }
   .pm-filter-field label {
@@ -10590,6 +10597,8 @@
                           </div>
                         </div>
                       </div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>Company name</div><div class="dmf-value" id="pmSettingsCompanyView">Not set</div></div>
+                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>Role</div><div class="dmf-value" id="pmSettingsRoleView">Not set</div></div>
                     </div>
                   </div>
 
@@ -14886,9 +14895,9 @@
                 </div>
                 <div class="pm-tab-pills" id="pmTabPills">
                   <div class="pm-tab-pill active" data-filter="all">All</div>
-                  <div class="pm-tab-pill" data-filter="complete">Complete</div>
-                  <div class="pm-tab-pill" data-filter="incomplete">Incomplete</div>
-                  <div class="pm-tab-pill" data-filter="archived">Archive</div>
+                  <div class="pm-tab-pill" data-filter="approved">Approved</div>
+                  <div class="pm-tab-pill" data-filter="requests">Edit Requests</div>
+                  <div class="pm-tab-pill" data-filter="archived">Archived</div>
                 </div>
                 <div class="pm-count-actions">
                   <span class="pm-count-text"><span id="pmResultCount">41</span> property managers</span>
@@ -14896,6 +14905,7 @@
                     <button type="button" class="active" data-view="grid" aria-label="Grid view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
                     <button type="button" data-view="table" aria-label="Table view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4"/><rect x="3" y="10" width="18" height="4"/><rect x="3" y="16" width="18" height="4"/></svg></button>
                   </div>
+                  <button type="button" class="pm-icon-btn-sq" id="pmSortToggleBtn" data-tooltip="Sort: Newest first" aria-label="Toggle sort order"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11M3 12h7M3 17h4"/><path d="M17 4v16M17 4l-4 4M17 4l4 4"/></svg></button>
                   <button type="button" class="pm-icon-btn-sq" id="pmRefreshBtn" aria-label="Refresh"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/></svg></button>
                   <button type="button" class="pm-icon-btn-sq mobile-filter-btn" data-filter-target="pm-filter-row-pm" aria-label="Filters"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg></button>
                 </div>
@@ -14976,20 +14986,11 @@
                     <div id="pmLocationOptionsList"></div>
                   </div>
                 </div>
-                <div class="pm-filter-field">
-                  <div class="pff-legend-wrap"><label>Sort</label></div>
-                  <button type="button" class="pm-custom-dd-btn" data-dd="pmSort">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5h10M11 9h7M11 13h4M3 17l3 3 3-3M6 18V4"/></svg>
-                    <span class="cdd-value">Newest</span>
-                    <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-                  </button>
-                  <div class="pm-custom-dd-menu" data-dd-menu="pmSort">
-                    <div class="cdd-item selected" data-value="Newest">Newest first</div>
-                    <div class="cdd-item" data-value="Oldest">Oldest first</div>
-                  </div>
-                </div>
               </div>
-              <div class="supapp-location-chips" id="pmLocationChips" style="display:none;"></div>
+              <div class="supapp-all-chips-row" id="pmAllChipsRow" style="display:none;">
+                <div class="supapp-location-chips" id="pmLocationChips"></div>
+                <button type="button" class="supapp-clear-all-btn" id="pmClearAllBtn">Clear all</button>
+              </div>
             </div>
 
             <div id="pmGridView" class="pm-card-grid"></div>
@@ -15055,7 +15056,7 @@
                   <button type="button" class="pm-icon-btn-sq mobile-filter-btn" data-filter-target="pm-filter-row-app" aria-label="Filters"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg></button>
                 </div>
               </div>
-              <div style="display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;">
+              <div style="display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:16px;">
               <div class="pm-filter-row" id="pm-filter-row-app">
                 <div class="pm-filter-field">
                   <div class="pff-legend-wrap"><label>Date Joined</label></div>
@@ -15141,7 +15142,10 @@
                 <button type="button" class="btn btn-primary invite-btn-responsive" id="appInviteBtn" style="width:auto;padding:9px 16px;white-space:nowrap;flex-shrink:0;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg><span class="invite-btn-text">Invite Applicant</span></button>
               </div>
               </div>
-              <div class="supapp-location-chips" id="appLocationChips" style="display:none;"></div>
+              <div class="supapp-all-chips-row" id="appAllChipsRow" style="display:none;">
+                <div class="supapp-location-chips" id="appLocationChips"></div>
+                <button type="button" class="supapp-clear-all-btn" id="appClearAllBtn">Clear all</button>
+              </div>
             </div>
 
             <div id="appGridView" class="pm-card-grid"></div>
@@ -16854,15 +16858,6 @@
                 </div>
                 <div class="client-header-actions" id="clientHeaderActionsView">
                   <button type="button" class="btn btn-outline-full" id="clientEditProfileBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4z"/></svg>Edit Profile</button>
-                  <div style="position:relative;">
-                    <button type="button" class="pm-icon-btn-sq" style="width:38px;height:38px;" id="clientMoreBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>
-                    <div class="pm-dropdown-menu" id="clientMoreMenu">
-                      <button type="button"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>Send message</button>
-                      <button type="button"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>Reset Password</button>
-                      <button type="button"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>Export Data</button>
-                      <button type="button"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Activity Log</button>
-                    </div>
-                  </div>
                   <button type="button" class="btn btn-primary" id="clientApproveBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M20 6L9 17l-5-5"/></svg>Approve Client</button>
                   <button type="button" class="btn-danger-outline" id="clientDeactivateBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 11-12.73 0M12 2v10"/></svg>Deactivate</button>
                 </div>
@@ -16949,6 +16944,13 @@
                             <input type="text" class="field-input" id="clientCompProfilePhone" value="7991197253">
                           </div>
                         </div>
+                        <div class="sup-comp-field-grid" style="margin-top:16px;">
+                          <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Company name</div><input type="text" class="field-input" id="clientCompProfileCompany" value="" placeholder="Not set"></div>
+                          <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Role</div><input type="text" class="field-input" id="clientCompProfileRole" value="" placeholder="Not set"></div>
+                        </div>
+
+                        <div class="scf-label" style="margin-bottom:8px;margin-top:16px;font-size:11px;">Legal acceptance</div>
+                        <div class="sup-consent-card" id="clientCompProfileConsentCard"></div>
                         <div style="display:flex;justify-content:flex-end;margin-top:20px;"><button type="button" class="btn btn-primary">Update</button></div>
                       </div>
                     </div>
@@ -17553,6 +17555,9 @@
             <div id="clientTabChat" style="display:none;">
               <div class="pmc-chat-layout">
               <div class="chat-window-card">
+                <div class="sinb-chat-toolbar">
+                  <button type="button" class="sinb-activity-log-btn" id="clientChatActivityLogBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>Activity log</button>
+                </div>
                 <div class="sinb-chat-thread-wrap">
                   <div class="chat-window-thread" id="clientChatThreadCard">
                     <div id="clientChatMessagesInner"></div>
@@ -17567,6 +17572,29 @@
                   <div class="chat-input-hint">Enter to send<span class="dot-sep"></span>Shift + Enter for a new line</div>
                 </div>
               </div>
+              </div>
+            </div>
+
+            <div class="svc-role-drawer-overlay" id="clientChatActivityLogOverlay">
+              <div class="svc-role-drawer">
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--border-subtle);flex-shrink:0;">
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <div class="dch-icon" style="width:32px;height:32px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg></div>
+                    <h3 style="font-size:15.5px;font-weight:800;color:var(--text-heading);">Activity Log</h3>
+                  </div>
+                  <button type="button" id="clientChatActivityLogCloseBtn" aria-label="Close" style="background:none;border:none;cursor:pointer;color:var(--text-body-muted);padding:4px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+                </div>
+                <div style="padding:22px;flex:1;overflow-y:auto;">
+                  <div class="callout callout-neutral" style="margin-bottom:16px;">
+                    <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg></div>
+                    <div>
+                      <div class="callout-title">Full history</div>
+                      <div class="callout-body">Every action taken on this applicant's profile requests &mdash; approvals, declines, resubmission requests, and messages &mdash; tracked chronologically.</div>
+                    </div>
+                  </div>
+                  <div id="clientChatActivityLogList"></div>
+                  <div id="clientChatActivityLogEmpty" style="display:none;padding:8px 0 16px;font-size:13px;color:var(--text-body-muted);">No activity yet on this applicant.</div>
+                </div>
               </div>
             </div>
 
@@ -23905,6 +23933,16 @@
     if (profEmailView && email) profEmailView.textContent = email;
     var profPhoneView = document.getElementById('pmSettingsPhoneView');
     if (profPhoneView && signupData.phoneNumber) profPhoneView.textContent = 'GB +44 ' + signupData.phoneNumber;
+    var profCompanyView = document.getElementById('pmSettingsCompanyView');
+    if (profCompanyView) {
+      profCompanyView.textContent = signupData.companyName || 'Not set';
+      profCompanyView.classList.toggle('acct-view-empty', !signupData.companyName);
+    }
+    var profRoleView = document.getElementById('pmSettingsRoleView');
+    if (profRoleView) {
+      profRoleView.textContent = signupData.jobTitle || 'Not set';
+      profRoleView.classList.toggle('acct-view-empty', !signupData.jobTitle);
+    }
 
     // Portfolio tab
     applyTileSelection('stgSectorTiles', '.choice-tile', signupData.sectors);
@@ -30147,21 +30185,36 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     { initials: 'SR', color: '#7c3aed', name: 'Sam R...', email: '', company: 'KEY RIDERS LTD', phone: '+447889922110', joined: '11 Jun 2026', business: true, discovery: true, properties: 'No properties yet', spend: 'No spend yet', completion: 27 }
   ];
 
+  /* No pmClients record carried a locations array at all, so the Location filter above could
+     never actually match anything — the same latent gap PM Applicants had before its own
+     location filter was curated. Cycling through the same curated 7-city list keeps this list's
+     filter consistent with PM Applicants' and Supplier Applicants', and a couple of PM clients
+     carry an outstanding edit request so the Edit Requests tab has something real to show. */
+  (function enrichPmClientsForFilters() {
+    var cycle = ['London', 'Manchester', 'Birmingham', 'Leeds', 'Liverpool', 'Cambridge', 'Oxford'];
+    pmClients.forEach(function (c, i) {
+      var locs = [cycle[i % cycle.length]];
+      if (i % 5 === 2) locs.push(cycle[(i + 3) % cycle.length]);
+      c.locations = locs;
+    });
+    [3, 11].forEach(function (i) { if (pmClients[i]) pmClients[i].editRequest = true; });
+  })();
+
   /* Status vocabulary matches Supplier Applicants: New / In Progress / In Review / Requests /
      Rejected (displayed "Archived"). "Approved" survives as a valid terminal value — the
      existing Approve action still sets it — but it isn't one of the five staged-workflow tabs,
      since an approved applicant has left the pipeline the tabs represent. */
   var pmApplicants = [
-    { initials: 'JJ', color: '#2563eb', name: 'John John', email: 'john@house.com', company: 'johnhouseltd', phone: '+4407991197253', joined: '7 Jul 2026', business: true, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 25, status: 'In Progress', locations: ['London', 'Oxford'] },
-    { initials: 'RA', color: '#7c3aed', name: 'raman', email: 'naman@gmail.com', company: 'raman ltd', phone: '+447999542811', joined: '3 Jul 2026', business: true, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 25, status: 'In Progress', photo: 'https://i.pravatar.cc/150?img=33', locations: ['Manchester', 'Leeds'] },
-    { initials: 'VK', color: '#f2542d', name: 'veera kumari', email: 'veera@gmail.com', company: 'kumari pvt ltd', phone: '+447766885588', joined: '30 Jun 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 100, status: 'In Review', photo: 'https://i.pravatar.cc/150?img=47', locations: ['Birmingham', 'Coventry', 'Leicester'] },
-    { initials: 'TE', color: '#2563eb', name: 'Testing', email: 'tt@gmail.com', company: '', phone: '+44 7543 218992', joined: '26 Jun 2026', business: false, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 15, status: 'New', locations: ['London'] },
-    { initials: 'GS', color: '#f2542d', name: 'Gurpreet Singh', email: 'inderbb9@gmail.com', company: '123123', phone: '', joined: '24 Jun 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 27, status: 'Rejected', photo: 'https://i.pravatar.cc/150?img=52', locations: ['Leeds', 'Bradford'] },
-    { initials: 'PR', color: '#7c3aed', name: 'PropertiesItd', email: 'propertieslt@gg.com', company: 'KEY RIDERS LTD', phone: '', joined: '11 Jun 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 27, status: 'In Progress', locations: ['Bristol', 'Bath', 'Cardiff'] },
-    { initials: 'AM', color: '#2563eb', name: 'Amara Osei', email: 'amara.osei@propman.co.uk', company: 'Osei Property Group', phone: '+447712345098', joined: '9 Jul 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 100, status: 'Approved', photo: 'https://i.pravatar.cc/150?img=25', locations: ['Nottingham', 'Sheffield'] },
-    { initials: 'DW', color: '#f2542d', name: 'Daniel Wren', email: 'daniel.wren@wrenlets.com', company: 'Wren Lettings', phone: '+447890123456', joined: '5 Jul 2026', business: true, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 100, status: 'Approved', locations: ['Cambridge'] },
-    { initials: 'HC', color: '#7c3aed', name: 'Harriet Cole', email: 'harriet.cole@colepm.co.uk', company: 'Cole Property Management', phone: '+447701998877', joined: '2 Jul 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 100, status: 'In Review', photo: 'https://i.pravatar.cc/150?img=36', locations: ['Edinburgh', 'Glasgow'] },
-    { initials: 'MK', color: '#2563eb', name: 'Marcus King', email: '', company: 'King Estates', phone: '+447655221190', joined: '28 Jun 2026', business: false, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 12, status: 'Rejected', locations: ['Newcastle'] }
+    { initials: 'JJ', color: '#2563eb', name: 'John John', email: 'john@house.com', company: 'johnhouseltd', role: 'Portfolio Manager', phone: '+4407991197253', joined: '7 Jul 2026', business: true, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 25, status: 'In Progress', locations: ['London', 'Oxford'] },
+    { initials: 'RA', color: '#7c3aed', name: 'raman', email: 'naman@gmail.com', company: 'raman ltd', role: 'Property Manager', phone: '+447999542811', joined: '3 Jul 2026', business: true, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 25, status: 'In Progress', photo: 'https://i.pravatar.cc/150?img=33', locations: ['Manchester', 'Leeds'] },
+    { initials: 'VK', color: '#f2542d', name: 'veera kumari', email: 'veera@gmail.com', company: 'kumari pvt ltd', role: 'Operations Director', phone: '+447766885588', joined: '30 Jun 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 100, status: 'In Review', photo: 'https://i.pravatar.cc/150?img=47', locations: ['Birmingham', 'Coventry', 'Leicester'] },
+    { initials: 'TE', color: '#2563eb', name: 'Testing', email: 'tt@gmail.com', company: '', role: '', phone: '+44 7543 218992', joined: '26 Jun 2026', business: false, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 15, status: 'New', locations: ['London'] },
+    { initials: 'GS', color: '#f2542d', name: 'Gurpreet Singh', email: 'inderbb9@gmail.com', company: '123123', role: 'Owner', phone: '', joined: '24 Jun 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 27, status: 'Rejected', photo: 'https://i.pravatar.cc/150?img=52', locations: ['Leeds', 'Bradford'] },
+    { initials: 'PR', color: '#7c3aed', name: 'PropertiesItd', email: 'propertieslt@gg.com', company: 'KEY RIDERS LTD', role: 'Managing Director', phone: '', joined: '11 Jun 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 27, status: 'In Progress', locations: ['Bristol', 'Bath', 'Cardiff'] },
+    { initials: 'AM', color: '#2563eb', name: 'Amara Osei', email: 'amara.osei@propman.co.uk', company: 'Osei Property Group', role: 'Founder', phone: '+447712345098', joined: '9 Jul 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 100, status: 'Approved', photo: 'https://i.pravatar.cc/150?img=25', locations: ['Nottingham', 'Sheffield'] },
+    { initials: 'DW', color: '#f2542d', name: 'Daniel Wren', email: 'daniel.wren@wrenlets.com', company: 'Wren Lettings', role: 'Director', phone: '+447890123456', joined: '5 Jul 2026', business: true, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 100, status: 'Approved', locations: ['Cambridge'] },
+    { initials: 'HC', color: '#7c3aed', name: 'Harriet Cole', email: 'harriet.cole@colepm.co.uk', company: 'Cole Property Management', role: 'Senior Property Manager', phone: '+447701998877', joined: '2 Jul 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 100, status: 'In Review', photo: 'https://i.pravatar.cc/150?img=36', locations: ['Edinburgh', 'Glasgow'] },
+    { initials: 'MK', color: '#2563eb', name: 'Marcus King', email: '', company: 'King Estates', role: '', phone: '+447655221190', joined: '28 Jun 2026', business: false, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 12, status: 'Rejected', locations: ['Newcastle'] }
   ];
   /* Two applicants carry an outstanding profile-edit request, so Edit Requests has something to
      show and the chip is visible somewhere other than a hand-crafted one-off test record. */
@@ -30904,7 +30957,20 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     '</div>';
   }
 
+  function pmClientEffectiveStatus(c) { return c.editRequest ? 'Requests' : pmClientStatus(c); }
+  function pmClientStatusClass(eff) {
+    if (eff === 'Requests') return 'edit-requests';
+    if (eff === 'Rejected') return 'rejected';
+    return '';
+  }
+  function pmClientStatusDisplayText(eff) {
+    if (eff === 'Requests') return 'Edit Requests';
+    if (eff === 'Rejected') return 'Archived';
+    return eff;
+  }
   function renderPMCard(c, i) {
+    var eff = pmClientEffectiveStatus(c);
+    var pct = c.completion === undefined ? 0 : c.completion;
     return '<div class="pm-client-card app-client-card supapp-card" data-idx="' + i + '">' +
       '<div class="pm-card-top">' +
         '<div class="pm-card-avatar">' + supAppAvatarHtml(c) + '</div>' +
@@ -30925,8 +30991,14 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         '<div class="supapp-info-cell" data-tooltip="' + supjrEscapeHtml((c.locations || []).join(', ')) + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><span>' + supAppLocationsText(c.locations) + '</span></div>' +
       '</div>' +
       '<div class="supapp-card-divider"></div>' +
+      '<div class="supapp-progress-row">' +
+        '<span class="supapp-progress-label">Onboarding Complete</span>' +
+        '<span class="supapp-progress-pct' + (pct >= 100 ? ' complete' : '') + '">' + pct + '%</span>' +
+      '</div>' +
+      '<div class="supapp-progress-track"><div class="supapp-progress-fill' + (pct >= 100 ? ' complete' : '') + '" style="width:' + pct + '%;"></div></div>' +
+      '<div class="supapp-card-divider"></div>' +
       '<div class="supplier-pill-row">' +
-        '<span class="supplier-approved-pill ' + supAppStatusClass(c.status) + '">' + supAppStatusDisplayText(c.status) + '</span>' +
+        '<span class="supplier-approved-pill ' + pmClientStatusClass(eff) + '">' + pmClientStatusDisplayText(eff) + '</span>' +
         (c.business ? '<div class="pm-verified-badge">' + checkSvgSm + 'Verified</div>' : '<div class="pm-verified-badge unverified">' + unverifiedIconSvg + 'Unverified</div>') +
       '</div>' +
       '<div class="supapp-card-divider supapp-card-divider-footer"></div>' +
@@ -30937,12 +31009,17 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   }
 
   function renderPMTableRow(c, i) {
+    var eff = pmClientEffectiveStatus(c);
+    var pct = c.completion === undefined ? 0 : c.completion;
     return '<tr class="pm-table-row" data-idx="' + i + '">' +
-      '<td><div class="pm-name-cell"><div class="pm-card-avatar">' + supAppAvatarHtml(c) + '</div><div><div class="nm-name">' + c.name + '</div><div class="nm-email">' + (c.email || '') + '</div></div></div></td>' +
+      '<td><div class="pm-name-cell"><div class="pm-card-avatar">' + supAppAvatarHtml(c) + '</div><div class="supapp-table-name-wrap">' +
+        '<div class="nm-name">' + c.name + '</div><div class="nm-email">' + (c.email || '') + '</div>' +
+        '<div class="supapp-table-progress-row"><div class="supapp-table-progress-track"><div class="supapp-table-progress-fill' + (pct >= 100 ? ' complete' : '') + '" style="width:' + pct + '%;"></div></div><span class="supapp-table-progress-pct' + (pct >= 100 ? ' complete' : '') + '">' + pct + '%</span></div>' +
+      '</div></div></td>' +
       '<td>' + yesNoTag(!!c.business) + '</td>' +
       '<td>' + (c.company || '—') + '</td>' +
       '<td>' + (c.phone || '—') + '</td>' +
-      '<td><span class="supplier-approved-pill ' + supAppStatusClass(c.status) + '">' + supAppStatusDisplayText(c.status) + '</span></td>' +
+      '<td><span class="supplier-approved-pill ' + pmClientStatusClass(eff) + '">' + pmClientStatusDisplayText(eff) + '</span></td>' +
       '<td>' + c.joined + '</td>' +
     '</tr>';
   }
@@ -31164,6 +31241,10 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   var pmDateJoinedTo = null;
   var pmLocationFilter = [];
   var pmSortOrder = 'Newest';
+  // Most pmClients records carry no explicit status at all — they're meant to read as Approved
+  // by omission, the same way an Active Suppliers record with status:'Approved' does. Deriving
+  // it here means every tab check and every status pill agrees on the same answer.
+  function pmClientStatus(c) { return c.status || 'Approved'; }
 
   /* Shared numbered-pagination renderer (used by PM list, Applicants, Suppliers) */
   function renderPageNumberButtons(containerId, currentPage, totalPages, onPageClick) {
@@ -31182,17 +31263,21 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var seenEmails = {};
     return pmClients.map(function (c, origIdx) { return { c: c, origIdx: origIdx }; }).filter(function (entry) {
       var c = entry.c;
-      // Only show verified/approved clients here — Incomplete or Rejected records still belong
-      // in PM Applicants until they're approved, not in the main Property Managers list.
-      if (c.status === 'Incomplete' || c.status === 'Rejected') return false;
+      // Incomplete accounts haven't finished onboarding and still belong in PM Applicants, not
+      // here. Rejected/archived ones do belong here though — under the Archived tab — so only
+      // Incomplete is excluded at the base level; Approved vs Archived is a tab choice below.
+      if (c.status === 'Incomplete') return false;
       // De-duplicate by email (more reliable than name, since names can collide) so the same
       // person never shows up as multiple, conflicting cards.
       var emailKey = (c.email || c.name).toLowerCase();
       if (seenEmails[emailKey]) return false;
       seenEmails[emailKey] = true;
-      if (pmActiveTab === 'complete' && c.status !== 'Approved') return false;
-      if (pmActiveTab === 'incomplete' && c.status !== 'Incomplete') return false;
-      if (pmActiveTab === 'archived' && c.status !== 'Rejected') return false;
+      var status = pmClientStatus(c);
+      if (pmActiveTab === 'approved' && status !== 'Approved') return false;
+      if (pmActiveTab === 'archived' && status !== 'Rejected') return false;
+      // Edit requests sit across approved clients rather than replacing their status — someone
+      // waiting on a profile change is still an approved property manager.
+      if (pmActiveTab === 'requests' && !c.editRequest) return false;
       var joinedDate = c.joined ? new Date(c.joined) : null;
       if (pmDateJoinedFilter === 'Today' && (!joinedDate || joinedDate < daysAgo(0))) return false;
       if (pmDateJoinedFilter === 'Last 7 Days' && (!joinedDate || joinedDate < daysAgo(7))) return false;
@@ -31321,10 +31406,18 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var totalPages = Math.max(1, Math.ceil(getFilteredPMClients().length / pmRowsPerPage));
     if (pmCurrentPage < totalPages) { pmCurrentPage++; renderPMList(); }
   });
+  document.getElementById('pmSortToggleBtn').addEventListener('click', function () {
+    pmSortOrder = pmSortOrder === 'Newest' ? 'Oldest' : 'Newest';
+    this.setAttribute('data-tooltip', 'Sort: ' + pmSortOrder + ' first');
+    pmCurrentPage = 1;
+    renderPMList();
+  });
   document.getElementById('pmRefreshBtn').addEventListener('click', function () {
     document.getElementById('pmSearchInput').value = '';
     pmSearchTerm = '';
     pmActiveTab = 'all';
+    pmSortOrder = 'Newest';
+    document.getElementById('pmSortToggleBtn').setAttribute('data-tooltip', 'Sort: Newest first');
     pmCurrentPage = 1;
     document.querySelectorAll('#pmTabPills .pm-tab-pill').forEach(function (p, i) { p.classList.toggle('active', i === 0); });
     document.querySelectorAll('#pm-filter-row-pm .pm-custom-dd-menu').forEach(function (menu) {
@@ -31515,9 +31608,10 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var labelEl = document.getElementById('appLocationDdLabel');
     if (labelEl) labelEl.textContent = appLocationFilter.length ? appLocationFilter.length + ' selected' : 'All Locations';
     var chipsWrap = document.getElementById('appLocationChips');
+    var allRow = document.getElementById('appAllChipsRow');
     if (!chipsWrap) return;
-    if (!appLocationFilter.length) { chipsWrap.style.display = 'none'; chipsWrap.innerHTML = ''; return; }
-    chipsWrap.style.display = '';
+    if (!appLocationFilter.length) { if (allRow) allRow.style.display = 'none'; chipsWrap.innerHTML = ''; return; }
+    if (allRow) allRow.style.display = 'flex';
     chipsWrap.innerHTML = appLocationFilter.map(function (loc) {
       return '<span class="supapp-location-chip">' + loc + '<button type="button" data-remove-app-loc="' + supjrEscapeHtml(loc) + '" aria-label="Remove ' + supjrEscapeHtml(loc) + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>';
     }).join('');
@@ -31532,6 +31626,18 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         appCurrentPage = 1;
         renderApplicantList();
       });
+    });
+  }
+  var appClearAllBtn = document.getElementById('appClearAllBtn');
+  if (appClearAllBtn) {
+    appClearAllBtn.addEventListener('click', function () {
+      appLocationFilter.length = 0;
+      document.querySelectorAll('#appLocationOptionsList .supapp-ms-item.selected').forEach(function (item) {
+        item.classList.remove('selected');
+      });
+      updateAppLocationUI();
+      appCurrentPage = 1;
+      renderApplicantList();
     });
   }
   setTimeout(function () {
@@ -31581,9 +31687,10 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var labelEl = document.getElementById('pmLocationDdLabel');
     if (labelEl) labelEl.textContent = pmLocationFilter.length ? pmLocationFilter.length + ' selected' : 'All Locations';
     var chipsWrap = document.getElementById('pmLocationChips');
+    var allRow = document.getElementById('pmAllChipsRow');
     if (!chipsWrap) return;
-    if (!pmLocationFilter.length) { chipsWrap.style.display = 'none'; chipsWrap.innerHTML = ''; return; }
-    chipsWrap.style.display = '';
+    if (!pmLocationFilter.length) { if (allRow) allRow.style.display = 'none'; chipsWrap.innerHTML = ''; return; }
+    if (allRow) allRow.style.display = 'flex';
     chipsWrap.innerHTML = pmLocationFilter.map(function (loc) {
       return '<span class="supapp-location-chip">' + loc + '<button type="button" data-remove-pm-loc="' + supjrEscapeHtml(loc) + '" aria-label="Remove ' + supjrEscapeHtml(loc) + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>';
     }).join('');
@@ -31600,10 +31707,22 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       });
     });
   }
+  var pmClearAllBtn = document.getElementById('pmClearAllBtn');
+  if (pmClearAllBtn) {
+    pmClearAllBtn.addEventListener('click', function () {
+      pmLocationFilter.length = 0;
+      document.querySelectorAll('#pmLocationOptionsList .supapp-ms-item.selected').forEach(function (item) {
+        item.classList.remove('selected');
+      });
+      updatePmLocationUI();
+      pmCurrentPage = 1;
+      renderPMList();
+    });
+  }
   setTimeout(function () {
     var optsList = document.getElementById('pmLocationOptionsList');
     if (!optsList || typeof UK_LOCATIONS === 'undefined') return;
-    optsList.innerHTML = UK_LOCATIONS.map(function (loc) {
+    optsList.innerHTML = pmClientLocationList().map(function (loc) {
       var mainItem = '<div class="supapp-ms-item" data-value="' + loc + '"><span class="supapp-ms-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>' + loc + '</div>';
       if (loc !== 'London') return mainItem;
       var zoneItems = LONDON_ZONES.map(function (zone) {
@@ -32759,6 +32878,36 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     for (var i = 0; i < batch.changes.length; i++) { if (batch.changes[i].id === changeId) return batch.changes[i]; }
     return null;
   }
+  /* Full audit trail of admin actions on this applicant's requests — mirrors
+     SUP_CHAT_ACTIVITY_LOG/logSupChatActivity exactly, kept as its own store since it's keyed
+     by PM name rather than supplier name. */
+  var PM_CHAT_ACTIVITY_LOG = {};
+  function logPmChatActivity(name, entry) {
+    if (!PM_CHAT_ACTIVITY_LOG[name]) PM_CHAT_ACTIVITY_LOG[name] = [];
+    entry.time = sinbNowTimestamp();
+    PM_CHAT_ACTIVITY_LOG[name].unshift(entry); // newest first
+  }
+  function renderClientChatActivityLog(name) {
+    var listEl = document.getElementById('clientChatActivityLogList');
+    var emptyEl = document.getElementById('clientChatActivityLogEmpty');
+    if (!listEl) return;
+    var log = PM_CHAT_ACTIVITY_LOG[name] || [];
+    emptyEl.style.display = log.length ? 'none' : '';
+    listEl.innerHTML = log.map(function (e) {
+      var valueRow = (e.oldValue !== undefined && e.newValue !== undefined)
+        ? '<div class="sinb-field-value-row" style="margin-top:4px;"><span class="sinb-field-old">' + sinbEsc(String(e.oldValue)) + '</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span class="sinb-field-new">' + sinbEsc(String(e.newValue)) + '</span></div>'
+        : '';
+      var mainText = e.fieldLabel
+        ? '<b>' + sinbEsc(e.actor) + '</b> ' + sinbEsc(e.action) + ' <b>' + sinbEsc(e.fieldLabel) + '</b>'
+        : '<b>' + sinbEsc(e.actor) + '</b> ' + sinbEsc(e.action);
+      var snippetRow = e.messageText
+        ? '<div class="sinb-field-value-row" style="margin-top:4px;font-style:italic;color:var(--text-body-muted);">\u201c' + sinbEsc(e.messageText.length > 90 ? e.messageText.slice(0, 87) + '\u2026' : e.messageText) + '\u201d</div>'
+        : '';
+      var iconStyle = SUP_ACTIVITY_ICON_BG[e.type] ? 'background:' + SUP_ACTIVITY_ICON_BG[e.type].background + ';color:' + SUP_ACTIVITY_ICON_BG[e.type].color + ';' : '';
+      return '<div class="sinb-activity-entry ' + e.type + '"><span class="sinb-activity-icon" style="' + iconStyle + '">' + (SUP_ACTIVITY_ICON[e.type] || '') + '</span><div class="sinb-activity-body"><div class="sinb-activity-text">' + mainText + '</div>' + valueRow + snippetRow + '<div class="sinb-activity-time">' + e.time + '</div></div></div>';
+    }).join('');
+  }
+
   function pmcrHandleAction(change, action, name) {
     change.status = action === 'approve' ? 'approved' : action === 'decline' ? 'declined' : 'resubmit';
     if (action === 'approve' && typeof applyApprovedPmField === 'function') applyApprovedPmField(change);
@@ -32770,6 +32919,14 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         : action === 'decline'
           ? '\u201c' + change.fieldLabel + '\u201d was declined.'
           : 'Please update \u201c' + change.fieldLabel + '\u201d and resubmit.'
+    });
+    logPmChatActivity(name, {
+      type: action === 'approve' ? 'approved' : action === 'decline' ? 'declined' : 'resubmit_requested',
+      actor: 'Admin',
+      action: action === 'approve' ? 'approved' : action === 'decline' ? 'declined' : 'asked for resubmission of',
+      fieldLabel: change.fieldLabel,
+      oldValue: change.oldValue,
+      newValue: change.newValue
     });
   }
 
@@ -32850,6 +33007,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (!c || !text) return;
     pmChatAddMessage(c.name, { kind: 'text', fromAdmin: true, text: text });
     if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
+    logPmChatActivity(c.name, { type: 'message', actor: 'Admin', action: 'sent a message to ' + c.name, messageText: text });
     renderClientChatThread();
   }
 
@@ -34141,6 +34299,21 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   function appLocationList() {
     var list = PM_APP_BASE_LOCATIONS.slice();
     (typeof pmApplicants !== 'undefined' ? pmApplicants : []).forEach(function (c) {
+      (c.locations || []).forEach(function (loc) {
+        if (LONDON_ZONES && LONDON_ZONES.indexOf(loc) !== -1) return;
+        if (PM_APP_EXCLUDED_LOCATIONS.indexOf(loc) !== -1) return;
+        if (list.indexOf(loc) === -1) list.push(loc);
+      });
+    });
+    return list;
+  }
+  // Property Manager (active clients) uses the exact same curated base as PM Applicants — the
+  // seeded locations above only ever draw from that same 7-city cycle, so nothing beyond it
+  // would surface here anyway, but this stays structurally identical to every other location
+  // list in the app rather than being a special case.
+  function pmClientLocationList() {
+    var list = PM_APP_BASE_LOCATIONS.slice();
+    (typeof pmClients !== 'undefined' ? pmClients : []).forEach(function (c) {
       (c.locations || []).forEach(function (loc) {
         if (LONDON_ZONES && LONDON_ZONES.indexOf(loc) !== -1) return;
         if (PM_APP_EXCLUDED_LOCATIONS.indexOf(loc) !== -1) return;
@@ -35893,6 +36066,36 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     '</div>';
   }
 
+  /* PM's version of the same card, in the PM Applicant detail page's Profile sidebar. Reuses
+     supConsentDate/supFormatConsent/SUP_CONSENT_DOCS directly rather than duplicating them —
+     none of those three take any supplier-specific assumption (they only ever read
+     c.dateSubmitted/c.joined/c.name), so they're already exactly as generic as this needs. */
+  function renderClientProfileConsent(c) {
+    var card = document.getElementById('clientCompProfileConsentCard');
+    if (!card) return;
+    var when = supConsentDate(c);
+
+    if (!when) {
+      card.className = 'sup-consent-card empty';
+      card.innerHTML = '<div class="sup-consent-empty">No acceptance recorded \u2014 this account hasn\u2019t completed sign-up.</div>';
+      return;
+    }
+
+    var stamp = supFormatConsent(when);
+    card.className = 'sup-consent-card';
+    card.innerHTML = '<div class="sup-consent-row">' +
+      '<span class="scr-tick"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>' +
+      '<span class="scr-main">' +
+        '<span class="scr-names">' +
+          SUP_CONSENT_DOCS.map(function (doc) {
+            return '<a class="scr-name" href="' + doc.url + '" target="_blank" rel="noopener noreferrer">' + doc.name + '</a>';
+          }).join(' <span class="scr-and">and</span> ') +
+        '</span>' +
+        '<span class="scr-time">Accepted ' + supjrEscapeHtml(stamp) + '</span>' +
+      '</span>' +
+    '</div>';
+  }
+
   var currentSupplierDetailSource = 'supplier';
   function openSupplierDetail(idx, source) {
     var c = source === 'app' ? supplierApplicants[idx] : activeSuppliers[idx];
@@ -36065,7 +36268,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       pmCurrentPage = 1;
       renderPMList();
     },
-    pmSort: function (v) { pmSortOrder = v; pmCurrentPage = 1; renderPMList(); },
     pmexRatingFilter: function (v) {
       var map = { 'Any rating': 0, '3.0+ \u2605': 3, '4.0+ \u2605': 4, '4.5+ \u2605': 4.5 };
       pmexApplyFilter(map[v] !== undefined ? map[v] : 0);
@@ -36778,6 +36980,20 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (appSidebarWrap) {
       appSidebarWrap.style.display = '';
       if (typeof renderClientCompNavList === 'function') renderClientCompNavList();
+      // These previously always showed the same hardcoded sample values regardless of which
+      // applicant was open — wiring them to the actual record here, matching how every other
+      // field on this page already reads from c.
+      var ccpName = document.getElementById('clientCompProfileName');
+      if (ccpName) ccpName.value = c.name || '';
+      var ccpEmail = document.getElementById('clientCompProfileEmail');
+      if (ccpEmail) ccpEmail.value = c.email || '';
+      var ccpPhone = document.getElementById('clientCompProfilePhone');
+      if (ccpPhone) ccpPhone.value = c.phone ? c.phone.replace(/^\+44/, '').trim() : '';
+      var ccpCompany = document.getElementById('clientCompProfileCompany');
+      if (ccpCompany) ccpCompany.value = c.company || '';
+      var ccpRole = document.getElementById('clientCompProfileRole');
+      if (ccpRole) ccpRole.value = c.role || '';
+      if (typeof renderClientProfileConsent === 'function') renderClientProfileConsent(c);
     }
     // Properties & Jobs tabs are removed entirely — Profile / Chat only, for both. Requests is
     // gone too — edit requests now render as cards inside Chat (renderClientChatThread).
@@ -36976,6 +37192,24 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     });
   }
 
+  var clientChatActivityLogBtn = document.getElementById('clientChatActivityLogBtn');
+  if (clientChatActivityLogBtn) {
+    clientChatActivityLogBtn.addEventListener('click', function () {
+      document.getElementById('clientChatActivityLogOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+      var c = (typeof currentDetailRecord !== 'undefined') ? currentDetailRecord : null;
+      if (c) renderClientChatActivityLog(c.name);
+    });
+  }
+  function closeClientChatActivityLogDrawer() {
+    document.getElementById('clientChatActivityLogOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  var clientChatActivityLogCloseBtn = document.getElementById('clientChatActivityLogCloseBtn');
+  if (clientChatActivityLogCloseBtn) clientChatActivityLogCloseBtn.addEventListener('click', closeClientChatActivityLogDrawer);
+  var clientChatActivityLogOverlay = document.getElementById('clientChatActivityLogOverlay');
+  if (clientChatActivityLogOverlay) clientChatActivityLogOverlay.addEventListener('click', function (e) { if (e.target === this) closeClientChatActivityLogDrawer(); });
+
   /* Admin notes: slide-in drawer, opened from the icon button beside the tabs — same pattern
      as the Supplier Applicants module's notes drawer. */
   var clientAddNoteBtn = document.getElementById('clientAddNoteBtn');
@@ -37024,30 +37258,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   document.getElementById('clientApproveBtn').addEventListener('click', function () {
     document.getElementById('clientPendingPill').style.display = 'none';
     showToast('Client approved.');
-  });
-
-  /* ---- Client 3-dot menu ---- */
-  document.getElementById('clientMoreBtn').addEventListener('click', function (e) {
-    e.stopPropagation();
-    var menu = document.getElementById('clientMoreMenu');
-    var wasOpen = menu.classList.contains('open');
-    if (!wasOpen) {
-      var rect = this.getBoundingClientRect();
-      menu.classList.add('pm-dropdown-menu-fixed');
-      menu.style.top = (rect.bottom + 6) + 'px';
-      menu.style.left = (rect.right - menu.offsetWidth) + 'px';
-    }
-    menu.classList.toggle('open');
-  });
-  document.querySelectorAll('#clientMoreMenu button').forEach(function (btn) {
-    btn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      showToast(btn.textContent + ' isn\u2019t wired up in this prototype yet.');
-      document.getElementById('clientMoreMenu').classList.remove('open');
-    });
-  });
-  document.addEventListener('click', function () {
-    document.getElementById('clientMoreMenu').classList.remove('open');
   });
 
   /* ---- Client Edit Profile mode ---- */
