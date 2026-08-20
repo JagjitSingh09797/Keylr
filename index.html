@@ -7207,6 +7207,11 @@
 
   /* ---- modals ---- */
   .team-modal-card { max-width: 480px; text-align: left; }
+  /* New Role/Edit Role and the member Permission modal both hold a full module matrix and need
+     more room than a plain form does — widened to 680px. Invite stays at the base 480px, since
+     it's just an email field and a role picker. */
+  #teamRoleOverlay .team-modal-card,
+  #teamMemberPermOverlay .team-modal-card { max-width: 680px; }
   .team-modal-title { font-size: 17px; font-weight: 800; color: var(--text-heading); margin-bottom: 6px; }
   .team-modal-desc { font-size: 13px; color: var(--text-body-muted); line-height: 1.55; margin-bottom: 18px; }
   .team-field { margin-bottom: 16px; }
