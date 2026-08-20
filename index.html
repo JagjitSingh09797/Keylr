@@ -1498,7 +1498,6 @@
   }
   .file-dropzone .fd-label { font-size: 13px; font-weight: 600; color: var(--accent-blue); white-space: nowrap; }
   .file-dropzone .fd-label .fd-sub { font-weight: 400; color: var(--text-body-muted); margin-left: 4px; }
-  .file-dropzone .fd-filename { font-size: 12px; color: var(--text-heading); font-weight: 600; margin-left: auto; }
 
   /* Chip multiselect with search */
   .chip-multiselect { position: relative; }
@@ -3296,6 +3295,13 @@
   @media (max-width: 1300px) { .pm-filter-row { grid-template-columns: repeat(3, minmax(150px, 1fr)); max-width: calc(100% - 150px); } }
   @media (max-width: 700px) { .pm-filter-row { grid-template-columns: repeat(2, minmax(140px, 1fr)); max-width: calc(100% - 60px); } }
   @media (max-width: 480px) { .pm-filter-row { grid-template-columns: 1fr; max-width: 100%; } }
+  /* PM Applicants only ever places 2 fields (Date Joined, Location) in this row, unlike the
+     5-slot grid the shared class assumes — reserving 5 tracks left no room for the Sent
+     Invitations / Invite Applicant buttons to sit alongside on the same line, pushing them onto
+     their own row below. Scoped to this one instance rather than the shared class, since
+     Property Managers reuses .pm-filter-row with its full field set. */
+  #pm-filter-row-app { display: flex; flex-wrap: wrap; max-width: none; flex: 1 1 auto; }
+  #pm-filter-row-app .pm-filter-field { flex: 0 1 200px; min-width: 160px; }
   .pm-filter-field { position: relative; }
   .supapp-filter-bar { align-items: flex-start; }
   .supapp-daterange-row { display: flex; align-items: stretch; gap: 8px; margin-top: 10px; }
@@ -4204,8 +4210,10 @@
     .sup-comp-field-grid { grid-template-columns: 1fr; }
     .pm-table-wrap { display: none !important; }
     .pm-view-toggle { display: none !important; }
-    /* With the table force-hidden here, a list left in table view would show nothing at all. */
+    /* With the table force-hidden here, a list left in table view would show nothing at all.
+       Every list that offers a grid/table toggle needs the same fallback. */
     #pmsvcCardGrid:not([data-empty="1"]) { display: grid !important; }
+    #supGridView, #supAppGridView, #appGridView, #pmGridView { display: grid !important; }
   }
   .sup-comp-field { margin-top: 16px; margin-bottom: 16px; min-width: 0; }
   .sup-comp-field .scf-label { font-size: 12.5px; font-weight: 600; color: var(--text-body-muted); margin-bottom: 6px; }
@@ -7052,7 +7060,7 @@
   .sup-inv-chip.accepted { background: #e3ecf8; border-color: #b9cde9; color: #1c3d75; }
   .sup-inv-chip.pending { background: #f2f7fd; border-color: #d3e2f4; color: #40679c; }
   .sup-inv-chip.expired { background: var(--surface-soft); border-color: var(--border-subtle); color: #8b98a9; }
-  .supapp-action-row { display: flex; justify-content: flex-end; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .supapp-action-row { display: flex; justify-content: flex-end; align-items: flex-end; gap: 10px; flex-wrap: wrap; }
   /* The filter bar is its own block now, so it carries the gap to the actions beneath it. */
   .supapp-filter-bar { margin-bottom: 16px; }
   .mfd-body .supapp-filter-bar { margin-bottom: 0; }
@@ -7334,6 +7342,72 @@
   .modal-close-x:hover { background: var(--surface-soft); border-color: var(--border-subtle); color: var(--text-heading); }
   .team-modal-card .team-modal-title { padding-right: 34px; }
 
+  /* ---------- Supplier: coming-soon placeholder ---------- */
+  .sup-soon-card {
+    border: 1px solid var(--border-subtle); border-radius: 16px; background: #fff;
+    padding: 48px 32px; text-align: center; max-width: 560px; margin: 0 auto;
+  }
+  .sup-soon-icon {
+    width: 62px; height: 62px; border-radius: 18px; margin: 0 auto 18px;
+    display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(120% 120% at 30% 20%, #eef4fc 0%, var(--icon-tint-bg) 55%, #dde8f6 100%);
+    border: 1px solid #dbe6f5; color: var(--accent-blue);
+  }
+  .sup-soon-chip {
+    display: inline-flex; align-items: center; margin-bottom: 12px;
+    font-size: 10.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 999px;
+    background: var(--icon-tint-bg); border: 1px solid #c9d8ee; color: var(--accent-blue);
+  }
+  .sup-soon-title { font-size: 19px; font-weight: 800; color: var(--text-heading); margin-bottom: 8px; }
+  .sup-soon-desc { font-size: 13.5px; color: var(--text-body-muted); line-height: 1.6; max-width: 420px; margin: 0 auto; }
+  /* Doesn't leave the supplier at a dead end — points at where the work actually is today. */
+  .sup-soon-meanwhile {
+    font-size: 13px; color: var(--text-body-muted); line-height: 1.6;
+    margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--border-subtle);
+    max-width: 420px; margin-left: auto; margin-right: auto;
+  }
+  .sup-soon-link {
+    background: none; border: none; padding: 0; font-family: inherit; font-size: inherit;
+    font-weight: 700; color: var(--accent-blue); cursor: pointer; text-decoration: underline;
+  }
+  .sup-soon-link:hover { color: #12305e; }
+  @media (max-width: 620px) { .sup-soon-card { padding: 36px 20px; } }
+
+  /* Log out: flex row, both buttons filling the width equally with a 14px gap. Shared
+     12px/22px padding from the base .confirm-modal-btns button rule is what gives Cancel and
+     Log Out the same height without either needing an explicit one — same treatment as the
+     Supplier side's logout modal. */
+  #pmLogoutOverlay .confirm-modal-btns { display: flex; gap: 14px; }
+  #pmLogoutOverlay .confirm-modal-btns button { flex: 1; width: auto; min-width: 0; margin: 0; }
+
+  #supLogoutOverlay .confirm-modal-btns { display: flex; gap: 14px; }
+  #supLogoutOverlay .confirm-modal-btns button { flex: 1; width: auto; min-width: 0; margin: 0; }
+
+  /* ---------- Active Suppliers table: parity with Supplier Applicants ---------- */
+  .supapp-table-status-stack { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
+  .supapp-table-status-stack > span { white-space: nowrap; }
+  #supTableBody .supapp-tid-pill { white-space: nowrap; }
+
+
+  /* ---------- PM Applicant / Client detail: notes drawer ---------- */
+  /* Admin Notes opens as a slide-in drawer from the icon button beside the tabs — the exact
+     same .svc-role-drawer-overlay/.svc-role-drawer pattern the Supplier Applicants module
+     already uses, reused verbatim here rather than styled separately. */
+
+  /* Chat tab: same fixed-height shell as the Supplier Applicants module's chat tab. */
+  .pmc-chat-layout { display: flex; height: 560px; }
+  .pmc-chat-layout .chat-window-card { flex: 1 1 auto; height: 100%; min-width: 0; }
+
+  @media (max-width: 640px) {
+    .pmc-chat-layout { height: 480px; }
+  }
+  @media (max-width: 420px) {
+    .client-tabs-row { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; flex-wrap: nowrap; }
+    .client-tabs-row::-webkit-scrollbar { display: none; }
+    .client-tabs-row .client-tab { flex-shrink: 0; }
+    .pmc-chat-layout { height: 420px; }
+  }
 </style>
 </head>
 <body>
@@ -8397,7 +8471,6 @@
                 <div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>
                 <div class="fd-label">Upload PNG or SVG</div>
                 <div class="helper" style="margin-top:2px;">PNG or SVG. Shown to service providers.</div>
-                <div class="fd-filename" id="logoFilename"></div>
               </div>
             </div>
           </div>
@@ -10128,20 +10201,6 @@
               <button type="button" class="btn btn-amber-solid btn-sm" id="addPaymentCardBtn">Add payment card</button>
             </div>
 
-            <div class="dash-banner" id="onboardingBanner" style="margin-bottom:0;">
-              <div class="banner-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div>
-              <div class="banner-text">
-                <div class="banner-title">Complete Your Onboarding Details</div>
-                <div class="banner-desc">Your account can't be reviewed until all verification details are submitted.</div>
-              </div>
-              <div class="banner-progress-wrap">
-                <div class="banner-progress-track"><div class="banner-progress-fill" id="onboardingProgressFill" style="width:82%;"></div></div>
-                <div class="banner-progress-label" id="onboardingProgressLabel">82% verified</div>
-              </div>
-              <div style="flex:1 1 100%;">
-                <button type="button" class="btn btn-outline-amber btn-sm" id="completeOnboardingBtn">Complete Onboarding <span class="arrow">→</span></button>
-              </div>
-            </div>
           </div>
 
           <div class="dash-section">
@@ -10442,6 +10501,20 @@
 
           <!-- ============ PM SETTINGS VIEW ============ -->
           <div id="pmSettingsView" style="display:none;">
+            <div class="dash-section" id="onboardingBannerSection">
+              <div class="dash-banner" id="onboardingBanner" style="margin-bottom:0;display:none;">
+                <div class="banner-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div>
+                <div class="banner-text">
+                  <div class="banner-title">Complete Your Onboarding Details</div>
+                  <div class="banner-desc">Your account can't be reviewed until all verification details are submitted.</div>
+                </div>
+                <button type="button" class="btn btn-outline-amber btn-sm" id="completeOnboardingBtn">Complete Onboarding <span class="arrow">→</span></button>
+                <div class="banner-progress-wrap">
+                  <div class="banner-progress-track"><div class="banner-progress-fill" id="onboardingProgressFill" style="width:0%;"></div></div>
+                  <div class="banner-progress-label" id="onboardingProgressLabel">0% verified</div>
+                </div>
+              </div>
+            </div>
             <div class="dash-section">
               <div class="dash-header">
                 <div>
@@ -10455,8 +10528,8 @@
                 <div class="pm-settings-tab-item active" data-settingstab="profile">Profile</div>
                 <div class="pm-settings-tab-item" data-settingstab="portfolio">Portfolio</div>
                 <div class="pm-settings-tab-item" data-settingstab="billingpayments">Payment Setup</div>
-                <div class="pm-settings-tab-item" data-settingstab="requests">Requests</div>
                 <div class="pm-settings-tab-item" data-settingstab="settings">Settings</div>
+                <div class="pm-settings-tab-item" data-settingstab="chat">Chat</div>
                 <button type="button" class="btn btn-primary" id="pmAcctEditBtn" style="margin-left:auto;flex-shrink:0;padding:9px 18px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4z"/></svg>Edit</button>
               </div>
 
@@ -10766,17 +10839,43 @@
               </div>
 
               <!-- Requests tab -->
-              <div id="pmSettingsPanelRequests" style="display:none;">
-                <div style="margin-top:20px;">
-                  <div class="callout callout-neutral" style="margin-bottom:16px;">
-                    <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4z"/></svg></div>
-                    <div>
-                      <div class="callout-title">Your profile update requests</div>
-                      <div class="callout-body">When you update fields on your profile, they're sent here for the Keylr team to review before going live. If something needs a fix, it'll be flagged for you to edit and resubmit.</div>
+              <!-- Chat tab -->
+              <div id="pmSettingsPanelChat" style="display:none;">
+                <div class="sinb-shell">
+                  <div class="sinb-body sinb-body-solo">
+                    <div class="sinb-chat-col sinb-chat-col-full" id="pmOwnChatCol">
+                      <div class="sinb-chat-header" id="pmOwnChatHeader"></div>
+                      <div class="sinb-chat-thread-wrap">
+                        <div class="sinb-chat-scroll" id="pmOwnChatScroll">
+                          <div id="pmOwnChatMessagesInner"></div>
+                          <div class="sinb-scroll-anchor"><button type="button" class="sinb-scroll-bottom-btn" id="pmOwnChatScrollBottomBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg><span>Go to bottom</span></button></div>
+                        </div>
+                      </div>
+                      <div class="sinb-composer" id="pmOwnChatComposer">
+                        <div class="sinb-reply-preview" id="pmOwnChatReplyPreview" style="display:none;">
+                          <div class="sinb-reply-preview-bar"></div>
+                          <div class="sinb-reply-preview-body"><span class="sinb-reply-preview-label">Replying to</span><span class="sinb-reply-preview-field" id="pmOwnChatReplyPreviewField"></span></div>
+                          <button type="button" class="sinb-reply-preview-close" id="pmOwnChatReplyPreviewClose"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+                        </div>
+                        <div class="sinb-composer-icons">
+                          <div style="position:relative;">
+                            <button type="button" class="sinb-icon-btn" id="pmOwnChatEmojiBtn" data-tooltip="Add emoji"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg></button>
+                            <div class="sinb-emoji-popover" id="pmOwnChatEmojiPopover">
+                              <span data-emoji="👍">👍</span><span data-emoji="👌">👌</span><span data-emoji="🙂">🙂</span><span data-emoji="😀">😀</span><span data-emoji="🙌">🙌</span><span data-emoji="👋">👋</span>
+                              <span data-emoji="✅">✅</span><span data-emoji="🔧">🔧</span><span data-emoji="🚐">🚐</span><span data-emoji="⏰">⏰</span><span data-emoji="📷">📷</span><span data-emoji="👊">👊</span>
+                            </div>
+                          </div>
+                          <button type="button" class="sinb-icon-btn" id="pmOwnChatAttachBtn" data-tooltip="Attach image or PDF"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button>
+                          <input type="file" id="pmOwnChatAttachInput" accept="image/*,video/*,.pdf" style="display:none;">
+                        </div>
+                        <div class="sinb-input-row">
+                          <input type="text" id="pmOwnChatMessageInput" placeholder="Message...">
+                          <button type="button" class="sinb-send-btn" id="pmOwnChatSendBtn" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg></button>
+                        </div>
+                        <div class="sinb-composer-hint">Enter to send · Images, videos + PDFs up to 10 MB.</div>
+                      </div>
                     </div>
                   </div>
-                  <div id="pmOwnRequestsList" class="suprq-grid"></div>
-                  <div id="pmOwnRequestsEmpty" style="display:none;padding:24px 0;font-size:13px;color:var(--text-body-muted);text-align:center;">You haven't submitted any profile changes yet.</div>
                 </div>
               </div>
 
@@ -11800,6 +11899,34 @@
           </div>
 
           <!-- ============ SUPPLIER JOB REQUESTS VIEW ============ -->
+          <!-- ============ MY JOBS (coming soon) ============ -->
+          <div id="supMyJobsView" style="display:none;">
+            <div class="dash-section">
+              <div class="dash-header" style="align-items:flex-start;margin-bottom:16px;">
+                <div>
+                  <h1 style="font-size:22px;font-weight:800;color:var(--text-heading);margin-bottom:4px;">My Jobs</h1>
+                  <p style="font-size:13.5px;color:var(--text-body-muted);">Everything you&rsquo;ve accepted, in one place.</p>
+                </div>
+              </div>
+
+              <div class="sup-soon-card">
+                <div class="sup-soon-icon">
+                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+                </div>
+                <span class="sup-soon-chip">Coming soon</span>
+                <div class="sup-soon-title">My Jobs is on the way</div>
+                <div class="sup-soon-desc">
+                  You&rsquo;ll be able to track every job you&rsquo;ve accepted here &mdash; what&rsquo;s scheduled, what&rsquo;s in progress,
+                  and what&rsquo;s waiting on proof of completion.
+                </div>
+                <div class="sup-soon-meanwhile">
+                  In the meantime, new work still comes through <button type="button" class="sup-soon-link" data-goto-nav="job-requests">Job Requests</button>,
+                  and anything you&rsquo;ve accepted shows on your <button type="button" class="sup-soon-link" data-goto-nav="calendar">Calendar</button>.
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div id="supJobRequestsView" style="display:none;">
             <div class="dash-section">
               <div class="dash-header">
@@ -14906,9 +15033,11 @@
                 </div>
                 <div class="pm-tab-pills" id="appTabPills">
                   <div class="pm-tab-pill active" data-filter="all">All</div>
-                  <div class="pm-tab-pill" data-filter="complete">Complete</div>
-                  <div class="pm-tab-pill" data-filter="incomplete">Incomplete</div>
-                  <div class="pm-tab-pill" data-filter="archived">Archive</div>
+                  <div class="pm-tab-pill" data-filter="new">New</div>
+                  <div class="pm-tab-pill" data-filter="in-progress">In Progress</div>
+                  <div class="pm-tab-pill" data-filter="in-review">In Review</div>
+                  <div class="pm-tab-pill" data-filter="requests">Edit Requests</div>
+                  <div class="pm-tab-pill" data-filter="archived">Archived</div>
                 </div>
                 <div class="pm-count-actions">
                   <span class="pm-count-text"><span id="appResultCount">6</span> applicants</span>
@@ -14916,11 +15045,12 @@
                     <button type="button" class="active" data-view="grid" aria-label="Grid view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
                     <button type="button" data-view="table" aria-label="Table view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4"/><rect x="3" y="10" width="18" height="4"/><rect x="3" y="16" width="18" height="4"/></svg></button>
                   </div>
+                  <button type="button" class="pm-icon-btn-sq" id="appSortToggleBtn" data-tooltip="Sort: Newest first" aria-label="Toggle sort order"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11M3 12h7M3 17h4"/><path d="M17 4v16M17 4l-4 4M17 4l4 4"/></svg></button>
                   <button type="button" class="pm-icon-btn-sq" id="appRefreshBtn" aria-label="Refresh"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/></svg></button>
                   <button type="button" class="pm-icon-btn-sq mobile-filter-btn" data-filter-target="pm-filter-row-app" aria-label="Filters"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg></button>
-                  <button type="button" class="btn btn-primary invite-btn-responsive" id="appInviteBtn" style="width:auto;padding:9px 16px;white-space:nowrap;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg><span class="invite-btn-text">Invite Applicant</span></button>
                 </div>
               </div>
+              <div style="display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;">
               <div class="pm-filter-row" id="pm-filter-row-app">
                 <div class="pm-filter-field">
                   <div class="pff-legend-wrap"><label>Date Joined</label></div>
@@ -14997,18 +15127,14 @@
                     <div id="appLocationOptionsList"></div>
                   </div>
                 </div>
-                <div class="pm-filter-field">
-                  <div class="pff-legend-wrap"><label>Sort</label></div>
-                  <button type="button" class="pm-custom-dd-btn" data-dd="appSort">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5h10M11 9h7M11 13h4M3 17l3 3 3-3M6 18V4"/></svg>
-                    <span class="cdd-value">Newest</span>
-                    <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-                  </button>
-                  <div class="pm-custom-dd-menu" data-dd-menu="appSort">
-                    <div class="cdd-item selected" data-value="Newest">Newest first</div>
-                    <div class="cdd-item" data-value="Oldest">Oldest first</div>
-                  </div>
-                </div>
+              </div>
+              <div class="supapp-action-row">
+                <button type="button" class="btn btn-secondary-light" id="appViewInvitesBtn" style="width:auto;padding:9px 14px;white-space:nowrap;flex-shrink:0;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M4 4h16v16H4z"/><path d="M4 7l8 6 8-6"/></svg>
+                  Sent invitations<span class="sup-inv-badge" id="appInvitesBadge">0</span>
+                </button>
+                <button type="button" class="btn btn-primary invite-btn-responsive" id="appInviteBtn" style="width:auto;padding:9px 16px;white-space:nowrap;flex-shrink:0;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg><span class="invite-btn-text">Invite Applicant</span></button>
+              </div>
               </div>
               <div class="supapp-location-chips" id="appLocationChips" style="display:none;"></div>
             </div>
@@ -15016,8 +15142,11 @@
             <div id="appGridView" class="pm-card-grid"></div>
             <div id="appTableViewWrap" class="pm-table-wrap" style="display:none;">
               <div class="pm-table-scroll">
-                <table class="admin-table" style="min-width:720px;">
-                  <thead><tr><th>Name</th><th>Verified</th><th>Company</th><th>Contact</th><th>Status</th><th>Joined</th></tr></thead>
+                <table class="admin-table supapp-table-fixed">
+                  <colgroup>
+                    <col style="width:26%;"><col style="width:20%;"><col style="width:16%;"><col style="width:19%;"><col style="width:12%;">
+                  </colgroup>
+                  <thead><tr><th>Applicant</th><th>Company</th><th>Phone</th><th>Status</th><th>Joined</th></tr></thead>
                   <tbody id="appTableBody"></tbody>
                 </table>
               </div>
@@ -15075,7 +15204,8 @@
                   <button type="button" class="pm-icon-btn-sq mobile-filter-btn" data-filter-target="pm-filter-row-sup" aria-label="Filters"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg></button>
                 </div>
               </div>
-              <div class="supapp-filter-bar" id="pm-filter-row-sup" style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap;">
+              <div style="margin-top:12px;">
+              <div class="supapp-filter-bar" id="pm-filter-row-sup" style="display:flex; gap:10px; flex-wrap:wrap;">
                 <div class="pm-filter-field" style="flex:1 1 130px; min-width:110px;">
                   <div class="pff-legend-wrap"><label>Type</label></div>
                   <button type="button" class="pm-custom-dd-btn" data-dd="supType">
@@ -15091,6 +15221,7 @@
                 </div>
                 <div id="supDynamicFilters" style="display:contents;"></div>
               </div>
+              </div>
               <div class="supapp-all-chips-row" id="supAllChipsRow" style="display:none;">
                 <div class="supapp-location-chips" id="supLocationChips"></div>
                 <div class="supapp-location-chips" id="supCategoryChips"></div>
@@ -15101,8 +15232,11 @@
             <div id="supGridView" class="pm-card-grid"></div>
             <div id="supTableViewWrap" class="pm-table-wrap" style="display:none;">
               <div class="pm-table-scroll">
-                <table class="admin-table" style="min-width:900px;">
-                  <thead><tr><th>Name</th><th>Phone</th><th>Type</th><th>Categories</th><th>Location</th><th>Status</th><th>Joined</th></tr></thead>
+                <table class="admin-table supapp-table-fixed">
+                  <colgroup>
+                    <col style="width:20%;"><col style="width:11%;"><col style="width:9%;"><col style="width:18%;"><col style="width:11%;"><col style="width:10%;"><col style="width:12%;"><col style="width:9%;">
+                  </colgroup>
+                  <thead><tr><th>Name</th><th>Phone</th><th>Type</th><th>Categories</th><th>Location</th><th>TrustID</th><th>Status</th><th>Joined</th></tr></thead>
                   <tbody id="supTableBody"></tbody>
                 </table>
               </div>
@@ -15294,6 +15428,60 @@
                 <button type="button" class="pmprop-del-cancel" id="teamRemoveCancel">Cancel</button>
                 <button type="button" class="confirm-modal-confirm" id="teamRemoveConfirm" style="background:#b91c1c;">Remove</button>
               </div>
+            </div>
+          </div>
+
+          <!-- ============ PM INVITATIONS TRACKER ============ -->
+          <div id="adminPMInvitesView" style="display:none;">
+            <button type="button" class="svcp-back" id="pmInvitesBackBtn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              PM applicants
+            </button>
+
+            <div class="dash-header" style="align-items:flex-start;margin-bottom:16px;">
+              <div>
+                <h1 style="font-size:22px;font-weight:800;color:var(--text-heading);margin-bottom:4px;">PM invitations</h1>
+                <p style="font-size:13.5px;color:var(--text-body-muted);">Every invite sent to a property manager, and what happened next. Invites expire 14 days after the last send.</p>
+              </div>
+              <button type="button" class="btn btn-primary" id="pmInvitesInviteBtn" style="flex-shrink:0;white-space:nowrap;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>
+                Invite applicants
+              </button>
+            </div>
+
+            <div class="sup-inv-stats" id="pmInvitesStats"></div>
+
+            <div class="pm-filter-card">
+              <div class="pm-search-row">
+                <div class="pm-search-input-wrap" style="max-width:280px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                  <input type="text" id="pmInvitesSearch" placeholder="Search by email or sender">
+                </div>
+                <div class="pm-tab-pills" id="pmInvitesTabs">
+                  <div class="pm-tab-pill active" data-inv-tab="all">All</div>
+                  <div class="pm-tab-pill" data-inv-tab="pending">Awaiting</div>
+                  <div class="pm-tab-pill" data-inv-tab="accepted">Accepted</div>
+                  <div class="pm-tab-pill" data-inv-tab="expired">Expired</div>
+                </div>
+                <div class="pm-count-actions">
+                  <span class="pm-count-text" id="pmInvitesCount">0 invitations</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="pm-table-wrap" id="pmInvitesTableWrap">
+              <div class="pm-table-scroll">
+                <table class="admin-table">
+                  <thead><tr><th>Applicant</th><th>Invited</th><th>Sent by</th><th>Sends</th><th>Status</th><th style="text-align:right;">Actions</th></tr></thead>
+                  <tbody id="pmInvitesTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="svcp-empty" id="pmInvitesEmpty" style="display:none;">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 7l8 6 8-6"/></svg>
+              <div class="svcp-empty-title" id="pmInvitesEmptyTitle">No invitations yet</div>
+              <div class="svcp-empty-desc" id="pmInvitesEmptyDesc">Invites you send to property managers will be tracked here so you can see who hasn&rsquo;t signed up yet.</div>
             </div>
           </div>
 
@@ -16707,12 +16895,17 @@
               </div>
             </div>
 
-            <div class="client-tabs-row">
-              <div class="client-tab active" data-tab="profile">Profile</div>
-              <div class="client-tab" data-tab="properties" id="clientTabBtnProperties">Properties</div>
-              <div class="client-tab" data-tab="jobs" id="clientTabBtnJobs">Jobs</div>
-              <div class="client-tab" data-tab="requests" id="clientTabBtnRequests" style="display:none;">Requests</div>
-              <div class="client-tab" data-tab="chat">Chat</div>
+            <div class="client-tabs-row" style="justify-content:space-between;">
+              <div style="display:flex;gap:28px;">
+                <div class="client-tab active" data-tab="profile">Profile</div>
+                <div class="client-tab" data-tab="properties" id="clientTabBtnProperties">Properties</div>
+                <div class="client-tab" data-tab="jobs" id="clientTabBtnJobs">Jobs</div>
+                <div class="client-tab" data-tab="chat">Chat</div>
+              </div>
+              <button type="button" id="clientNotesDrawerBtn" aria-label="Admin notes" data-tooltip="Admin notes" style="position:relative;background:none;border:none;cursor:pointer;color:var(--text-body-muted);padding:8px;display:flex;align-items:center;">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                <span class="pm-count-text" id="clientNotesCount" style="position:absolute;top:2px;right:2px;background:var(--surface-soft);color:var(--text-body-muted);padding:0px 5px;border-radius:999px;font-weight:700;font-size:10px;min-width:14px;text-align:center;">0</span>
+              </button>
             </div>
 
             <div id="clientTabProfile">
@@ -17352,51 +17545,23 @@
               </div>
             </div>
 
-            <div id="clientTabRequests" style="display:none;">
-              <div id="clientRequestsEmpty" class="client-empty-state" style="display:none;">
-                <div class="ces-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg></div>
-                <h3>No Requests Yet</h3>
-                <p>Profile edits submitted by this applicant will appear here for review.</p>
-              </div>
-              <div id="clientRequestsList" class="suprq-grid"></div>
-            </div>
-
             <div id="clientTabChat" style="display:none;">
-              <div class="chat-header-card">
-                <div class="chat-avatar" id="chatHeaderAvatar" style="background:#e8482c;">JJ</div>
-                <div class="chat-header-info">
-                  <div class="chi-name-row">Conversation with <span id="chatHeaderName">john john</span><span class="chi-active"><span class="dot"></span>Active</span></div>
-                  <div class="chi-sub"><span id="chatHeaderEmail">johnjohn@house.com</span><span class="dot-sep"></span><span id="chatHeaderPhone">+4407891197253</span></div>
-                </div>
-                <div class="chat-header-search">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-                  <input type="text" placeholder="Search messages">
-                </div>
-              </div>
-              <div class="chat-filter-pills" id="chatFilterPills">
-                <div class="chat-filter-pill active" data-chatfilter="all"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>All messages</div>
-                <div class="chat-filter-pill" data-chatfilter="unread"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H8l-4 4z"/></svg>Unread</div>
-                <div class="chat-filter-pill" data-chatfilter="flagged"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22V15"/></svg>Flagged</div>
-                <div class="chat-filter-pill" data-chatfilter="attachments"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>With attachments</div>
-              </div>
-              <div class="chat-thread-card" id="chatThreadCard">
-                <div class="chat-day-divider"><span>Today</span></div>
-                <div class="chat-msg-row out">
-                  <div class="chat-msg-bubble">
-                    <div class="cmb-text">Hi</div>
-                    <div class="cmb-meta">You<span class="dot-sep"></span>14:51 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+              <div class="pmc-chat-layout">
+              <div class="chat-window-card">
+                <div class="sinb-chat-thread-wrap">
+                  <div class="chat-window-thread" id="clientChatThreadCard">
+                    <div id="clientChatMessagesInner"></div>
+                    <div class="sinb-scroll-anchor"><button type="button" class="sinb-scroll-bottom-btn" id="clientChatScrollBottomBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button></div>
                   </div>
                 </div>
-              </div>
-              <div class="chat-input-card">
-                <div class="chat-input-row">
-                  <button type="button" class="chat-icon-btn" aria-label="Attach file"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button>
-                  <textarea id="chatMessageInput" rows="1" placeholder="Reply to john john..."></textarea>
-                  <button type="button" class="chat-icon-btn" aria-label="Emoji"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg></button>
-                  <button type="button" class="chat-icon-btn" aria-label="GIF"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M8 9v6M8 9h3M8 12h2M14 15V9h3M14 12h2"/></svg></button>
-                  <button type="button" class="chat-send-btn" id="chatSendBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>Send</button>
+                <div class="chat-window-input-area">
+                  <div class="chat-input-row">
+                    <textarea id="clientChatMessageInput" rows="1" placeholder="Message this applicant..."></textarea>
+                    <button type="button" class="chat-send-btn" id="clientChatSendBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg></button>
+                  </div>
+                  <div class="chat-input-hint">Enter to send<span class="dot-sep"></span>Shift + Enter for a new line</div>
                 </div>
-                <div class="chat-input-hint">Enter to send<span class="dot-sep"></span>Shift + Enter for a new line<span class="dot-sep"></span>PNG, JPEG, WEBP, PDF up to 10 MB.</div>
+              </div>
               </div>
             </div>
 
@@ -17405,6 +17570,35 @@
               <div style="display:flex;gap:10px;">
                 <button type="button" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 20px;border-radius:10px;background:#1a7a3e;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;border:none;" id="clientAppApproveBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Approve</button>
                 <button type="button" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 20px;border-radius:10px;background:#64748b;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;border:none;" id="clientAppArchiveBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13V7a2 2 0 00-2-2H6a2 2 0 00-2 2v6M4 13h16v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6zM10 17h4"/></svg><span id="clientAppArchiveBtnText">Archive</span></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="svc-role-drawer-overlay" id="clientNotesDrawerOverlay">
+            <div class="svc-role-drawer">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--border-subtle);flex-shrink:0;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div class="dch-icon" style="width:32px;height:32px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+                  <h3 style="font-size:15.5px;font-weight:800;color:var(--text-heading);">Admin Notes</h3>
+                </div>
+                <button type="button" id="clientNotesDrawerCloseBtn" aria-label="Close" style="background:none;border:none;cursor:pointer;color:var(--text-body-muted);padding:4px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+              </div>
+              <div style="padding:22px;flex:1;overflow-y:auto;">
+                <div class="callout callout-neutral" style="margin-bottom:16px;">
+                  <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+                  <div>
+                    <div class="callout-title">Internal only</div>
+                    <div class="callout-body">Visible to the admin team only &mdash; never shown to the PM.</div>
+                  </div>
+                </div>
+                <div id="clientNotesList"></div>
+                <div id="clientNotesEmpty" style="display:none;padding:8px 0 16px;font-size:13px;color:var(--text-body-muted);">No internal notes yet.</div>
+              </div>
+              <div style="padding:16px 22px;border-top:1px solid var(--border-subtle);flex-shrink:0;">
+                <textarea id="clientNoteInput" class="ob-textarea" placeholder="Add an internal note about this applicant..." style="min-height:70px;"></textarea>
+                <div style="display:flex;justify-content:flex-end;margin-top:10px;">
+                  <button type="button" class="btn btn-primary" id="clientAddNoteBtn">Add Note</button>
+                </div>
               </div>
             </div>
           </div>
@@ -18703,6 +18897,18 @@
     if (fill) fill.style.width = result.percent + '%';
     if (label) label.textContent = result.percent + '% verified';
     if (banner) banner.style.display = result.complete ? 'none' : '';
+    // A PM can only submit a profile-edit request once onboarding is genuinely 100% complete —
+    // recorded here as a marker attribute (rather than a display toggle directly) because this
+    // function can run while a different Settings tab is active, and only switchPMSettingsTab
+    // knows whether Edit is even supposed to be visible on the current tab.
+    var editBtn = document.getElementById('pmAcctEditBtn');
+    if (editBtn) {
+      if (result.complete) editBtn.removeAttribute('data-ob-incomplete'); else editBtn.setAttribute('data-ob-incomplete', '1');
+      var activeTab = document.querySelector('#pmSettingsTabs .pm-settings-tab-item.active');
+      if (activeTab && activeTab.getAttribute('data-settingstab') === 'profile') {
+        editBtn.style.display = result.complete ? '' : 'none';
+      }
+    }
     return result;
   }
   pmObUpdateBanner();
@@ -18856,6 +19062,12 @@
       if (!pmChangeRequests[pmName]) pmChangeRequests[pmName] = [];
       pmChangeRequests[pmName].push(newBatch);
       if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
+      // Mirrors the Supplier side exactly: submitting doesn't just file the batch away, it
+      // shows up as a real message in the same Chat tab admin reads, so "submitted" and "visible
+      // to admin" are the same moment rather than two separate systems that could drift.
+      if (typeof pmChatAddMessage === 'function') {
+        pmChatAddMessage(pmName, { kind: 'text', fromAdmin: false, text: 'I\u2019d like to update ' + newBatch.changes.length + ' field' + (newBatch.changes.length === 1 ? '' : 's') + ' on my profile \u2014 details above.' });
+      }
     }
     obApp.classList.remove('visible');
     setTimeout(function () {
@@ -18864,10 +19076,134 @@
       obEditFromSettings = false;
       showToast(newBatch ? newBatch.changes.length + ' change' + (newBatch.changes.length === 1 ? '' : 's') + ' submitted for review.' : 'No changes to submit.');
       showPMView('settings');
-      if (typeof switchPMSettingsTab === 'function') switchPMSettingsTab(newBatch ? 'requests' : 'profile', newBatch ? newBatch.id : undefined);
+      if (typeof switchPMSettingsTab === 'function') switchPMSettingsTab(newBatch ? 'chat' : 'profile', newBatch ? newBatch.id : undefined);
     }, 200);
   }
   document.getElementById('obSaveSkipBtn').addEventListener('click', pmObSubmitEditRequest);
+
+  /* ---- PM's own Chat tab (Account Settings) ----
+     Reads the exact same PM_CHAT_MESSAGES / pmChangeRequests stores admin's PM Applicant Chat
+     tab uses, keyed by this PM's own name — genuinely shared state, not a mirrored copy, so
+     nothing needs to be kept in sync by hand. forAdmin=false on the card renderer is what swaps
+     Accept/Decline for the PM's own "waiting for review" / resubmit view of the same batch. */
+  function pmCurrentName() {
+    return (typeof signupCapturedData !== 'undefined' && signupCapturedData && signupCapturedData.fullName)
+      || (typeof obEditSnapshot !== 'undefined' && obEditSnapshot && obEditSnapshot.fullName)
+      || '';
+  }
+  function renderPmOwnChatHeader() {
+    var headerEl = document.getElementById('pmOwnChatHeader');
+    if (!headerEl) return;
+    // PM only ever has one conversation — with Keylr Support — so this is static rather than
+    // driven by a conv object the way sinbBuildHeaderHtml is for the multi-conversation admin
+    // inbox; the visual shape (avatar, name, status line) matches it exactly regardless.
+    headerEl.innerHTML = '<div class="sinb-conv-avatar" style="background:#dbeafe;color:#1e40af;">KS<span class="presence-dot"></span></div>' +
+      '<div style="min-width:0;"><div class="sinb-chat-header-name-row"><h3>Keylr Support</h3></div>' +
+      '<div class="sinb-chat-header-sub"><span class="online">Online</span></div></div>';
+  }
+  function renderPmOwnChatThread(highlightBatchId) {
+    var innerEl = document.getElementById('pmOwnChatMessagesInner');
+    var scrollEl = document.getElementById('pmOwnChatScroll');
+    if (!innerEl || !scrollEl) return;
+    renderPmOwnChatHeader();
+    var name = pmCurrentName();
+    if (typeof loadChangeRequestsFromStorage === 'function') loadChangeRequestsFromStorage();
+    var batches = (typeof pmChangeRequests === 'object' && pmChangeRequests[name]) || [];
+
+    var timeline = batches.map(function (batch) {
+      var ts = batch.submittedDate ? new Date(batch.submittedDate).getTime() : 0;
+      var timeLabel = batch.submittedDate ? sinbFormatTimestamp(new Date(batch.submittedDate)) : '';
+      return { ts: ts, html: '<div class="sinb-msg-row mine" data-batch-anchor="' + batch.id + '"><div class="sinb-msg-stack sinb-msg-stack-wide">' + pmcrEditRequestCardHtml(batch, false) + '<div class="sinb-msg-time">You \u00b7 ' + timeLabel + '</div></div></div>' };
+    });
+    (typeof PM_CHAT_MESSAGES === 'object' ? (PM_CHAT_MESSAGES[name] || []) : []).forEach(function (m) {
+      var mine = !m.fromAdmin;
+      var html;
+      if (m.kind === 'attachment') {
+        html = '<div class="sinb-msg-row' + (mine ? ' mine' : '') + '"><div class="sinb-msg-stack"><div class="sinb-msg-bubble sinb-attachment-bubble"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (m.isImage ? '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>' : '<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/>') + '</svg><span>' + sinbEsc(m.fileName) + '</span></div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
+      } else {
+        html = '<div class="sinb-msg-row' + (mine ? ' mine' : '') + '"><div class="sinb-msg-stack"><div class="sinb-msg-bubble">' + sinbEsc(m.text) + '</div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
+      }
+      timeline.push({ ts: m.ts || 0, html: html });
+    });
+    timeline.sort(function (a, b) { return a.ts - b.ts; });
+    var timelineHtml = timeline.map(function (item) { return item.html; }).join('');
+    innerEl.innerHTML = timelineHtml
+      ? '<div class="sinb-date-sep"><span>Today</span></div>' + timelineHtml
+      : '<div class="sinb-empty-chat">Send a message to start the conversation with Keylr Support.</div>';
+    scrollEl.scrollTop = scrollEl.scrollHeight;
+    if (typeof sinbWireScrollBottomBtn === 'function') sinbWireScrollBottomBtn(scrollEl, document.getElementById('pmOwnChatScrollBottomBtn'));
+    if (highlightBatchId) {
+      var anchor = scrollEl.querySelector('[data-batch-anchor="' + highlightBatchId + '"]');
+      if (anchor) anchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+  function pmOwnChatSend() {
+    var input = document.getElementById('pmOwnChatMessageInput');
+    var text = input.value.trim();
+    if (!text) return;
+    pmChatAddMessage(pmCurrentName(), { kind: 'text', fromAdmin: false, text: text });
+    if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
+    input.value = '';
+    if (pmOwnChatSendBtn) pmOwnChatSendBtn.disabled = true;
+    renderPmOwnChatThread();
+  }
+  var pmOwnChatSendBtn = document.getElementById('pmOwnChatSendBtn');
+  var pmOwnChatMessageInput = document.getElementById('pmOwnChatMessageInput');
+  if (pmOwnChatSendBtn && pmOwnChatMessageInput) {
+    pmOwnChatSendBtn.addEventListener('click', pmOwnChatSend);
+    pmOwnChatMessageInput.addEventListener('input', function () {
+      pmOwnChatSendBtn.disabled = !this.value.trim();
+    });
+    pmOwnChatMessageInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); pmOwnChatSend(); }
+    });
+  }
+  // Emoji picker — same toggle/position/insert behaviour as the Supplier side's composer.
+  var pmOwnChatEmojiBtn = document.getElementById('pmOwnChatEmojiBtn');
+  var pmOwnChatEmojiPopover = document.getElementById('pmOwnChatEmojiPopover');
+  if (pmOwnChatEmojiBtn && pmOwnChatEmojiPopover && pmOwnChatMessageInput) {
+    pmOwnChatEmojiBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var wasOpen = pmOwnChatEmojiPopover.classList.contains('open');
+      if (!wasOpen) {
+        var rect = pmOwnChatEmojiBtn.getBoundingClientRect();
+        pmOwnChatEmojiPopover.style.left = rect.left + 'px';
+        pmOwnChatEmojiPopover.style.bottom = (window.innerHeight - rect.top + 8) + 'px';
+        pmOwnChatEmojiPopover.style.top = 'auto';
+      }
+      pmOwnChatEmojiPopover.classList.toggle('open');
+      pmOwnChatEmojiBtn.classList.toggle('open');
+    });
+    pmOwnChatEmojiPopover.querySelectorAll('span[data-emoji]').forEach(function (span) {
+      span.addEventListener('click', function () {
+        pmOwnChatMessageInput.value += span.getAttribute('data-emoji');
+        pmOwnChatSendBtn.disabled = !pmOwnChatMessageInput.value.trim();
+        pmOwnChatEmojiPopover.classList.remove('open');
+        pmOwnChatEmojiBtn.classList.remove('open');
+        pmOwnChatMessageInput.focus();
+      });
+    });
+    document.addEventListener('click', function () {
+      pmOwnChatEmojiPopover.classList.remove('open');
+      pmOwnChatEmojiBtn.classList.remove('open');
+    });
+  }
+  // Attach — opens the file picker; selecting a file posts it as an attachment bubble, same as
+  // the Supplier side's composer.
+  var pmOwnChatAttachBtn = document.getElementById('pmOwnChatAttachBtn');
+  var pmOwnChatAttachInput = document.getElementById('pmOwnChatAttachInput');
+  if (pmOwnChatAttachBtn && pmOwnChatAttachInput) {
+    pmOwnChatAttachBtn.addEventListener('click', function () { pmOwnChatAttachInput.click(); });
+    pmOwnChatAttachInput.addEventListener('change', function () {
+      var file = pmOwnChatAttachInput.files && pmOwnChatAttachInput.files[0];
+      if (!file) return;
+      pmChatAddMessage(pmCurrentName(), { kind: 'attachment', fromAdmin: false, fileName: file.name, isImage: file.type.indexOf('image/') === 0 });
+      if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
+      pmOwnChatAttachInput.value = '';
+      renderPmOwnChatThread();
+      showToast(file.name + ' attached.');
+    });
+  }
 
   obNextBtn.addEventListener('click', function () {
     var visible = pmObVisibleSteps();
@@ -18879,11 +19215,14 @@
       // same as "Submit & skip other steps", rather than treating this as a fresh-signup completion.
       pmObSubmitEditRequest();
     } else if (obReentryMode) {
-      // Re-entered from the dashboard banner to finish pending fields — return to the same dashboard, don't reset it
+      // Re-entered from the Account Settings banner to finish pending fields — the banner lives
+      // in Settings now, so simply closing the wizard already returns there; no extra navigation
+      // needed, same as before.
       closeObAppToExistingDashboard();
       setTimeout(function () { showToast('Onboarding complete \u2014 your account is now fully verified.'); }, 220);
     } else {
-      // Step 5 submit on a fresh signup — go straight to the dashboard, no intermediate confirmation screen
+      // Step 5 submit on a fresh signup — land straight on Account Settings (where the completed
+      // profile and the newly-available Edit button live), not Home, matching the Supplier side.
       obApp.classList.remove('visible');
       setTimeout(function () {
         obApp.classList.remove('active');
@@ -18891,6 +19230,8 @@
         pmObCollectWizardData();
         showPMDashboard(signupCapturedData, 'new');
         pmObUpdateBanner();
+        showPMView('settings');
+        if (typeof switchPMSettingsTab === 'function') switchPMSettingsTab('profile');
       }, 200);
     }
   });
@@ -18968,19 +19309,11 @@
 
   var logoDropzone = document.getElementById('logoDropzone');
   var logoInput = document.getElementById('logoInput');
-  var logoFilename = document.getElementById('logoFilename');
-  logoInput.addEventListener('change', function () {
-    if (logoInput.files && logoInput.files[0]) {
-      logoFilename.textContent = logoInput.files[0].name;
-    }
-  });
+  logoInput.addEventListener('change', function () {});
   ['dragover', 'dragleave', 'drop'].forEach(function (evt) {
     logoDropzone.addEventListener(evt, function (e) {
       e.preventDefault();
       logoDropzone.classList.toggle('dragover', evt === 'dragover');
-      if (evt === 'drop' && e.dataTransfer.files[0]) {
-        logoFilename.textContent = e.dataTransfer.files[0].name;
-      }
     });
   });
 
@@ -21641,7 +21974,7 @@
 
   function switchPMSettingsTab(key, highlightBatchId) {
     document.querySelectorAll('#pmSettingsTabs .pm-settings-tab-item').forEach(function (t) { t.classList.toggle('active', t.getAttribute('data-settingstab') === key); });
-    ['profile', 'portfolio', 'billingpayments', 'requests', 'settings'].forEach(function (k) {
+    ['profile', 'portfolio', 'billingpayments', 'settings', 'chat'].forEach(function (k) {
       var panel = document.getElementById('pmSettingsPanel' + k.charAt(0).toUpperCase() + k.slice(1));
       panel.style.display = k === key ? '' : 'none';
       if (k === key) {
@@ -21651,8 +21984,11 @@
       }
     });
     var editBtn = document.getElementById('pmAcctEditBtn');
-    if (editBtn) editBtn.style.display = key === 'profile' ? '' : 'none';
-    if (key === 'requests' && typeof renderPmOwnRequestsList === 'function') renderPmOwnRequestsList(highlightBatchId);
+    // A PM can only start an edit request once their initial onboarding is actually complete —
+    // same rule the Supplier side enforces (renderSupOnboardingCompletionState) — so this defers
+    // to whatever pmObUpdateBanner most recently computed rather than showing it unconditionally.
+    if (editBtn) editBtn.style.display = (key === 'profile' && !editBtn.hasAttribute('data-ob-incomplete')) ? '' : 'none';
+    if (key === 'chat' && typeof renderPmOwnChatThread === 'function') renderPmOwnChatThread(highlightBatchId);
   }
   document.querySelectorAll('#pmSettingsTabs .pm-settings-tab-item').forEach(function (tab) {
     tab.addEventListener('click', function () { switchPMSettingsTab(tab.getAttribute('data-settingstab')); });
@@ -24212,6 +24548,7 @@
   /* Sidebar nav item selection */
   var SUP_VIEW_IDS = {
     'home': 'supHomeView',
+    'my-jobs': 'supMyJobsView',
     'job-requests': 'supJobRequestsView',
     'service-area': 'supServiceAreaView',
     'calendar': 'supCalendarView',
@@ -24260,6 +24597,8 @@
       var nav = item.getAttribute('data-nav');
       if (nav === 'dashboard') {
         showSupplierView('home');
+      } else if (nav === 'my-jobs') {
+        showSupplierView('my-jobs');
       } else if (nav === 'job-requests') {
         showSupplierView('job-requests');
         initSupjrOnce();
@@ -24278,6 +24617,13 @@
       }
     });
   });
+  document.getElementById('supMyJobsView').addEventListener('click', function (e) {
+    var link = e.target.closest('[data-goto-nav]');
+    if (!link) return;
+    var target = document.querySelector('#supplierDashboard .dash-nav-item[data-nav="' + link.getAttribute('data-goto-nav') + '"]');
+    if (target) target.click();
+  });
+
   document.querySelector('#supplierDashboard .dash-account-avatar').style.cursor = 'pointer';
   document.querySelector('#supplierDashboard .dash-account-info').style.cursor = 'pointer';
   ['dash-account-avatar', 'dash-account-info'].forEach(function (cls) {
@@ -29272,6 +29618,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       'active-suppliers-list': 'adminActiveSuppliersView',
       'supplier-applicants-list': 'adminSupplierApplicantsView',
       'supplier-invites': 'adminSupInvitesView',
+      'pm-invites': 'adminPMInvitesView',
       teams: 'adminTeamsView',
       'client-detail': 'adminClientDetailView',
       'supplier-detail': 'adminSupplierDetailView',
@@ -29795,18 +30142,27 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     { initials: 'SR', color: '#7c3aed', name: 'Sam R...', email: '', company: 'KEY RIDERS LTD', phone: '+447889922110', joined: '11 Jun 2026', business: true, discovery: true, properties: 'No properties yet', spend: 'No spend yet', completion: 27 }
   ];
 
+  /* Status vocabulary matches Supplier Applicants: New / In Progress / In Review / Requests /
+     Rejected (displayed "Archived"). "Approved" survives as a valid terminal value — the
+     existing Approve action still sets it — but it isn't one of the five staged-workflow tabs,
+     since an approved applicant has left the pipeline the tabs represent. */
   var pmApplicants = [
-    { initials: 'JJ', color: '#2563eb', name: 'John John', email: 'john@house.com', company: 'johnhouseltd', phone: '+4407991197253', joined: '7 Jul 2026', business: true, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 25, status: 'Incomplete', locations: ['London', 'Oxford'] },
-    { initials: 'RA', color: '#7c3aed', name: 'raman', email: 'naman@gmail.com', company: 'raman ltd', phone: '+447999542811', joined: '3 Jul 2026', business: true, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 25, status: 'Incomplete', photo: 'https://i.pravatar.cc/150?img=33', locations: ['Manchester', 'Leeds'] },
-    { initials: 'VK', color: '#f2542d', name: 'veera kumari', email: 'veera@gmail.com', company: 'kumari pvt ltd', phone: '+447766885588', joined: '30 Jun 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 100, status: 'Approved', photo: 'https://i.pravatar.cc/150?img=47', locations: ['Birmingham', 'Coventry', 'Leicester'] },
-    { initials: 'TE', color: '#2563eb', name: 'Testing', email: 'tt@gmail.com', company: '', phone: '+44 7543 218992', joined: '26 Jun 2026', business: false, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 15, status: 'Incomplete', locations: ['London'] },
+    { initials: 'JJ', color: '#2563eb', name: 'John John', email: 'john@house.com', company: 'johnhouseltd', phone: '+4407991197253', joined: '7 Jul 2026', business: true, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 25, status: 'In Progress', locations: ['London', 'Oxford'] },
+    { initials: 'RA', color: '#7c3aed', name: 'raman', email: 'naman@gmail.com', company: 'raman ltd', phone: '+447999542811', joined: '3 Jul 2026', business: true, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 25, status: 'In Progress', photo: 'https://i.pravatar.cc/150?img=33', locations: ['Manchester', 'Leeds'] },
+    { initials: 'VK', color: '#f2542d', name: 'veera kumari', email: 'veera@gmail.com', company: 'kumari pvt ltd', phone: '+447766885588', joined: '30 Jun 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 100, status: 'In Review', photo: 'https://i.pravatar.cc/150?img=47', locations: ['Birmingham', 'Coventry', 'Leicester'] },
+    { initials: 'TE', color: '#2563eb', name: 'Testing', email: 'tt@gmail.com', company: '', phone: '+44 7543 218992', joined: '26 Jun 2026', business: false, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 15, status: 'New', locations: ['London'] },
     { initials: 'GS', color: '#f2542d', name: 'Gurpreet Singh', email: 'inderbb9@gmail.com', company: '123123', phone: '', joined: '24 Jun 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 27, status: 'Rejected', photo: 'https://i.pravatar.cc/150?img=52', locations: ['Leeds', 'Bradford'] },
-    { initials: 'PR', color: '#7c3aed', name: 'PropertiesItd', email: 'propertieslt@gg.com', company: 'KEY RIDERS LTD', phone: '', joined: '11 Jun 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 27, status: 'Incomplete', locations: ['Bristol', 'Bath', 'Cardiff'] },
+    { initials: 'PR', color: '#7c3aed', name: 'PropertiesItd', email: 'propertieslt@gg.com', company: 'KEY RIDERS LTD', phone: '', joined: '11 Jun 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 27, status: 'In Progress', locations: ['Bristol', 'Bath', 'Cardiff'] },
     { initials: 'AM', color: '#2563eb', name: 'Amara Osei', email: 'amara.osei@propman.co.uk', company: 'Osei Property Group', phone: '+447712345098', joined: '9 Jul 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 100, status: 'Approved', photo: 'https://i.pravatar.cc/150?img=25', locations: ['Nottingham', 'Sheffield'] },
     { initials: 'DW', color: '#f2542d', name: 'Daniel Wren', email: 'daniel.wren@wrenlets.com', company: 'Wren Lettings', phone: '+447890123456', joined: '5 Jul 2026', business: true, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 100, status: 'Approved', locations: ['Cambridge'] },
-    { initials: 'HC', color: '#7c3aed', name: 'Harriet Cole', email: 'harriet.cole@colepm.co.uk', company: 'Cole Property Management', phone: '+447701998877', joined: '2 Jul 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 100, status: 'Approved', photo: 'https://i.pravatar.cc/150?img=36', locations: ['Edinburgh', 'Glasgow'] },
+    { initials: 'HC', color: '#7c3aed', name: 'Harriet Cole', email: 'harriet.cole@colepm.co.uk', company: 'Cole Property Management', phone: '+447701998877', joined: '2 Jul 2026', business: true, discovery: true, properties: '0 properties', spend: 'No spend yet', completion: 100, status: 'In Review', photo: 'https://i.pravatar.cc/150?img=36', locations: ['Edinburgh', 'Glasgow'] },
     { initials: 'MK', color: '#2563eb', name: 'Marcus King', email: '', company: 'King Estates', phone: '+447655221190', joined: '28 Jun 2026', business: false, discovery: false, properties: '0 properties', spend: 'No spend yet', completion: 12, status: 'Rejected', locations: ['Newcastle'] }
   ];
+  /* Two applicants carry an outstanding profile-edit request, so Edit Requests has something to
+     show and the chip is visible somewhere other than a hand-crafted one-off test record. */
+  (function seedPmApplicantEditRequests() {
+    [0, 6].forEach(function (i) { if (pmApplicants[i]) pmApplicants[i].editRequest = true; });
+  })();
 
   var activeSuppliers = [
     { initials: 'RA', color: '#16a34a', name: 'rajat', email: 'nopod62636@icotz.com', phone: '+447555281444', type: 'Company', joined: '3 Jul 2026', status: 'Approved', activeState: 'Active' },
@@ -30604,7 +30960,24 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     '</div>';
   }
 
+  /* Same five-value vocabulary and colour language as Supplier Applicants, so the pill reads
+     identically whichever module it's viewed in. */
+  function appStatusClass(eff) {
+    if (eff === 'New') return 'incomplete';
+    if (eff === 'In Progress') return 'in-progress';
+    if (eff === 'In Review') return 'pending';
+    if (eff === 'Requests') return 'edit-requests';
+    if (eff === 'Rejected') return 'rejected';
+    return 'approved';
+  }
+  function appStatusDisplayText(eff) {
+    if (eff === 'Requests') return 'Edit Requests';
+    if (eff === 'Rejected') return 'Archived';
+    return eff;
+  }
   function renderApplicantCard(c, i) {
+    var eff = appEffectiveStatus(c);
+    var pct = c.completion === undefined ? 0 : c.completion;
     return '<div class="pm-client-card app-client-card supapp-card" data-idx="' + i + '">' +
       '<div class="pm-card-top">' +
         '<div class="pm-card-avatar">' + supAppAvatarHtml(c) + '</div>' +
@@ -30625,9 +30998,14 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         '<div class="supapp-info-cell" data-tooltip="' + supjrEscapeHtml((c.locations || []).join(', ')) + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><span>' + supAppLocationsText(c.locations) + '</span></div>' +
       '</div>' +
       '<div class="supapp-card-divider"></div>' +
+      '<div class="supapp-progress-row">' +
+        '<span class="supapp-progress-label">Onboarding Complete</span>' +
+        '<span class="supapp-progress-pct' + (pct >= 100 ? ' complete' : '') + '">' + pct + '%</span>' +
+      '</div>' +
+      '<div class="supapp-progress-track"><div class="supapp-progress-fill' + (pct >= 100 ? ' complete' : '') + '" style="width:' + pct + '%;"></div></div>' +
+      '<div class="supapp-card-divider"></div>' +
       '<div class="supplier-pill-row">' +
-        '<span class="supplier-approved-pill ' + supAppStatusClass(c.status) + '">' + supAppStatusDisplayText(c.status) + '</span>' +
-        '<div class="pm-verified-badge unverified">' + unverifiedIconSvg + 'Unverified</div>' +
+        '<span class="supplier-approved-pill ' + appStatusClass(eff) + '">' + appStatusDisplayText(eff) + '</span>' +
       '</div>' +
       '<div class="supapp-card-divider supapp-card-divider-footer"></div>' +
       '<div class="supapp-card-footer" style="justify-content:space-between;">' +
@@ -30637,12 +31015,18 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   }
 
   function renderApplicantTableRow(c, i) {
+    var eff = appEffectiveStatus(c);
+    var pct = c.completion === undefined ? 0 : c.completion;
     return '<tr class="pm-table-row app-table-row" data-idx="' + i + '">' +
-      '<td><div class="pm-name-cell"><div class="pm-card-avatar">' + supAppAvatarHtml(c) + '</div><div><div class="nm-name">' + c.name + '</div><div class="nm-email">' + (c.email || '') + '</div></div></div></td>' +
-      '<td><span class="pm-unverified-tag">' + unverifiedIconSvg + 'No</span></td>' +
-      '<td>' + (c.company || '—') + '</td>' +
-      '<td>' + (c.phone || '—') + '</td>' +
-      '<td><span class="supplier-approved-pill ' + supAppStatusClass(c.status) + '">' + supAppStatusDisplayText(c.status) + '</span></td>' +
+      '<td><div class="pm-name-cell"><div class="pm-card-avatar">' + supAppAvatarHtml(c) + '</div><div class="supapp-table-name-wrap">' +
+        '<div class="nm-name">' + c.name + '</div><div class="nm-email">' + (c.email || '') + '</div>' +
+        '<div class="supapp-table-progress-row"><div class="supapp-table-progress-track"><div class="supapp-table-progress-fill' + (pct >= 100 ? ' complete' : '') + '" style="width:' + pct + '%;"></div></div><span class="supapp-table-progress-pct' + (pct >= 100 ? ' complete' : '') + '">' + pct + '%</span></div>' +
+      '</div></div></td>' +
+      '<td>' + (c.company || '\u2014') + '</td>' +
+      '<td>' + (c.phone || '\u2014') + '</td>' +
+      '<td><div class="supapp-table-status-stack">' +
+        '<span class="supplier-approved-pill ' + appStatusClass(eff) + '">' + appStatusDisplayText(eff) + '</span>' +
+      '</div></td>' +
       '<td>' + c.joined + '</td>' +
     '</tr>';
   }
@@ -30753,7 +31137,14 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       '<td><span class="supplier-type-pill' + (c.type === 'Sole Trader' ? ' sole-trader' : '') + '">' + typeIcon + c.type + '</span></td>' +
       '<td><div class="supapp-table-categories-cell">' + supAppCategoryChipsHtmlStatic(c.categories, 1) + '</div></td>' +
       '<td>' + supAppLocationsTableCellHtml(c.locations) + '</td>' +
-      '<td><div style="display:flex;flex-direction:column;gap:4px;align-items:flex-start;"><span class="' + supStatusPillClass(c.status) + '">' + supStatusDisplayText(c.status) + '</span>' + (expiryPill || '') + '</div></td>' +
+      '<td><span class="supapp-tid-pill tid-' + supTrustIdStatusOf(c) + '">' + SUP_TRUSTID_LABELS[supTrustIdStatusOf(c)] + '</span></td>' +
+      /* Edit Request stacks with the status rather than taking its own column — it qualifies
+         the status rather than replacing it, exactly as it does on the card. */
+      '<td><div class="supapp-table-status-stack">' +
+        '<span class="' + supStatusPillClass(c.status) + '">' + supStatusDisplayText(c.status) + '</span>' +
+        (c.editRequest ? '<span class="supplier-approved-pill edit-requests">Edit Request</span>' : '') +
+        (expiryPill || '') +
+      '</div></td>' +
       '<td>' + c.joined + '</td>' +
     '</tr>';
   }
@@ -30950,11 +31341,20 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   var appLocationFilter = [];
   var appSortOrder = 'Newest';
 
+  /* An outstanding edit request takes over the status the same way it does for Supplier
+     Applicants: whatever stage the application is otherwise at, a pending request is the thing
+     that needs an admin's attention right now, so it's what both the pill and the Edit Requests
+     tab key off. */
+  function appEffectiveStatus(c) { return c.editRequest ? 'Requests' : c.status; }
+
   function getFilteredApplicants() {
     return pmApplicants.map(function (c, origIdx) { return { c: c, origIdx: origIdx }; }).filter(function (entry) {
       var c = entry.c;
-      if (appActiveTab === 'complete' && c.status !== 'Approved') return false;
-      if (appActiveTab === 'incomplete' && c.status !== 'Incomplete') return false;
+      var eff = appEffectiveStatus(c);
+      if (appActiveTab === 'new' && eff !== 'New') return false;
+      if (appActiveTab === 'in-progress' && eff !== 'In Progress') return false;
+      if (appActiveTab === 'in-review' && eff !== 'In Review') return false;
+      if (appActiveTab === 'requests' && eff !== 'Requests') return false;
       if (appActiveTab === 'archived' && c.status !== 'Rejected') return false;
       var joinedDate = c.joined ? new Date(c.joined) : null;
       if (appDateJoinedFilter === 'Today' && (!joinedDate || joinedDate < daysAgo(0))) return false;
@@ -30996,6 +31396,13 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     renderPageNumberButtons('appPageNumbers', appCurrentPage, totalPages, function (p) { appCurrentPage = p; renderApplicantList(); });
     wireAppCardEvents();
   }
+
+  document.getElementById('appSortToggleBtn').addEventListener('click', function () {
+    appSortOrder = appSortOrder === 'Newest' ? 'Oldest' : 'Newest';
+    this.setAttribute('data-tooltip', 'Sort: ' + appSortOrder + ' first');
+    appCurrentPage = 1;
+    renderApplicantList();
+  });
 
   function closeAllAppDropdowns() {
     document.querySelectorAll('.app-dropdown-menu.open').forEach(function (m) { m.classList.remove('open'); });
@@ -31125,7 +31532,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   setTimeout(function () {
     var optsList = document.getElementById('appLocationOptionsList');
     if (!optsList || typeof UK_LOCATIONS === 'undefined') return;
-    optsList.innerHTML = UK_LOCATIONS.map(function (loc) {
+    optsList.innerHTML = appLocationList().map(function (loc) {
       var mainItem = '<div class="supapp-ms-item" data-value="' + loc + '"><span class="supapp-ms-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>' + loc + '</div>';
       if (loc !== 'London') return mainItem;
       var zoneItems = LONDON_ZONES.map(function (zone) {
@@ -32281,6 +32688,222 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       if (!el) return;
       if ('value' in el) el.value = change.newValue; else el.textContent = change.newValue;
     });
+  }
+
+  /* =========================================================
+     PM PROFILE EDIT REQUESTS — shared card renderer
+     Mirrors sinbFieldCardHtml / sinbEditRequestCardHtml (the supplier equivalent) exactly in
+     shape and CSS classes, so a PM's edit-request card and a supplier's are visually identical.
+     Kept as a separate, parallel implementation rather than generalizing the supplier functions
+     with a "kind" flag — pmChangeRequests and supplierChangeRequests are different stores, and
+     duplicating this one rendering layer is a smaller, safer change than threading a kind
+     parameter through six deeply-coupled supplier functions that already work.
+  ========================================================== */
+  var PM_CR_STATUS_META = {
+    pending: { label: 'Awaiting review', class: 'pending' },
+    approved: { label: 'Approved \u00b7 live on profile', class: 'approved' },
+    declined: { label: 'Declined', class: 'declined' },
+    resubmit: { label: 'Needs your update', class: 'resubmit' }
+  };
+  function pmcrFieldCardHtml(batch, ch, forAdmin) {
+    var meta = PM_CR_STATUS_META[ch.status] || PM_CR_STATUS_META.pending;
+    var body = '';
+    if (ch.status === 'resubmit' && forAdmin) {
+      body = '<div class="sinb-field-context">Waiting on the PM to update and resubmit this.</div>' +
+        '<div class="sinb-field-value-row"><span class="sinb-field-new">' + sinbEsc(String(ch.newValue)) + '</span></div>';
+    } else if (ch.status === 'resubmit' && !forAdmin) {
+      body = '<div class="sinb-field-context">Admin asked you to double-check and update this.</div>' +
+        '<div class="sinb-field-value-row"><span class="sinb-field-new">' + sinbEsc(String(ch.newValue)) + '</span></div>' +
+        '<div class="sinb-field-context" style="margin-top:6px;">Update this from your Profile tab, then resubmit.</div>';
+    } else if (ch.status === 'pending') {
+      body = '<div class="sinb-field-context">' + (forAdmin ? 'PM requested this change.' : 'Waiting for admin to review.') + '</div>' +
+        '<div class="sinb-field-value-row"><span class="sinb-field-old">' + sinbEsc(String(ch.oldValue)) + '</span>' +
+        '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>' +
+        '<span class="sinb-field-new">' + sinbEsc(String(ch.newValue)) + '</span></div>' +
+        (forAdmin ? '<div class="sinb-field-actions"><button type="button" class="sinb-cr-action-btn approve" data-pmcr-action="approve" data-batch-id="' + batch.id + '" data-change-id="' + ch.id + '">Accept</button><button type="button" class="sinb-cr-action-btn resubmit" data-pmcr-action="resubmit" data-batch-id="' + batch.id + '" data-change-id="' + ch.id + '">Ask to resubmit</button><button type="button" class="sinb-cr-action-btn decline" data-pmcr-action="decline" data-batch-id="' + batch.id + '" data-change-id="' + ch.id + '">Decline</button></div>' : '');
+    } else if (ch.status === 'approved') {
+      body = '<div class="sinb-field-value-row"><span class="sinb-field-new">' + sinbEsc(String(ch.newValue)) + '</span></div>';
+    } else if (ch.status === 'declined') {
+      body = '<div class="sinb-field-context">This update was not applied.</div><div class="sinb-field-value-row"><span class="sinb-field-old" style="text-decoration:none;">' + sinbEsc(String(ch.newValue)) + '</span></div>';
+    }
+    return '<div class="sinb-field-card ' + meta.class + '" data-change-id="' + ch.id + '">' +
+      '<div class="sinb-field-card-head"><span class="sinb-field-icon">' + SUP_CR_FIELD_ICON + '</span><span class="sinb-field-title">' + sinbEsc(ch.fieldLabel) + '</span><span class="sinb-field-status-pill ' + meta.class + '">' + meta.label + '</span></div>' +
+      '<div class="sinb-field-card-body">' + body + '</div>' +
+    '</div>';
+  }
+  function pmcrEditRequestCardHtml(batch, forAdmin) {
+    var cards = batch.changes.map(function (ch) { return pmcrFieldCardHtml(batch, ch, forAdmin); }).join('');
+    var pendingCount = batch.changes.filter(function (ch) { return ch.status === 'pending' || (!forAdmin && ch.status === 'resubmit'); }).length;
+    var introText = forAdmin
+      ? 'Requested ' + batch.changes.length + ' profile update' + (batch.changes.length === 1 ? '' : 's') + '.'
+      : 'I\u2019d like to update the following on my profile:';
+    var submittedLabel = batch.submittedDate ? '<span class="sinb-cr-submitted-time">' + sinbFormatTimestamp(batch.submittedDate) + '</span>' : '';
+    return '<div class="sinb-cr-group">' +
+      '<div class="sinb-cr-group-intro">' + introText + (pendingCount ? ' <span class="sinb-cr-pending-badge">' + pendingCount + ' need' + (pendingCount === 1 ? 's' : '') + ' action</span>' : '') + submittedLabel + '</div>' +
+      cards +
+    '</div>';
+  }
+  function pmcrFindBatch(batchId, name) {
+    var batches = (pmChangeRequests && pmChangeRequests[name]) || [];
+    for (var i = 0; i < batches.length; i++) { if (batches[i].id === batchId) return batches[i]; }
+    return null;
+  }
+  function pmcrFindChange(batchId, changeId, name) {
+    var batch = pmcrFindBatch(batchId, name);
+    if (!batch) return null;
+    for (var i = 0; i < batch.changes.length; i++) { if (batch.changes[i].id === changeId) return batch.changes[i]; }
+    return null;
+  }
+  function pmcrHandleAction(change, action, name) {
+    change.status = action === 'approve' ? 'approved' : action === 'decline' ? 'declined' : 'resubmit';
+    if (action === 'approve' && typeof applyApprovedPmField === 'function') applyApprovedPmField(change);
+    if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
+    pmChatAddMessage(name, {
+      kind: 'text', fromAdmin: true,
+      text: action === 'approve'
+        ? '\u201c' + change.fieldLabel + '\u201d was approved \u2014 your profile has been updated.'
+        : action === 'decline'
+          ? '\u201c' + change.fieldLabel + '\u201d was declined.'
+          : 'Please update \u201c' + change.fieldLabel + '\u201d and resubmit.'
+    });
+  }
+
+  /* =========================================================
+     PM CHAT — one shared per-name message store.
+     Unlike the supplier system (one hardcoded "live" demo account synced with everyone else on
+     static per-name logs), PM chat is always keyed by name on both sides. There's no live/static
+     split to maintain: whatever name the PM-side demo session is using, and whatever name admin
+     opens in PM Applicants, read and write the exact same array when they match — genuinely
+     shared state with less bookkeeping, appropriate for a single in-memory demo.
+  ========================================================== */
+  var PM_CHAT_MESSAGES = {}; // keyed by PM name
+  function pmChatKeyFor(name) { return name || ''; }
+  function pmChatAddMessage(name, partial) {
+    var key = pmChatKeyFor(name);
+    if (!PM_CHAT_MESSAGES[key]) PM_CHAT_MESSAGES[key] = [];
+    var msg = Object.assign({ ts: Date.now(), time: sinbNowTimestamp() }, partial);
+    PM_CHAT_MESSAGES[key].push(msg);
+    return msg;
+  }
+  function seedPmChatIfNeeded(name) {
+    var key = pmChatKeyFor(name);
+    if (PM_CHAT_MESSAGES[key]) return;
+    if (name === 'John John') {
+      var d = new Date(); d.setDate(d.getDate() - 3); d.setHours(11, 20, 0, 0);
+      PM_CHAT_MESSAGES[key] = [
+        { kind: 'text', fromAdmin: true, text: 'Hi John \u2014 thanks for the update. A couple of the address fields need a second look before we can approve, details below.', ts: d.getTime(), time: sinbFormatTimestamp(d) }
+      ];
+    } else {
+      PM_CHAT_MESSAGES[key] = [];
+    }
+  }
+
+  function pmChatQuoteBlockHtml() { return ''; } // no reply-to-field quoting on the PM side yet — kept simple deliberately
+
+  function renderClientChatThread() {
+    var threadEl = document.getElementById('clientChatThreadCard');
+    var innerEl = document.getElementById('clientChatMessagesInner');
+    if (!threadEl || !innerEl) return;
+    var c = (typeof currentDetailRecord !== 'undefined') ? currentDetailRecord : null;
+    if (!c) return;
+    var name = c.name;
+    if (typeof loadChangeRequestsFromStorage === 'function') loadChangeRequestsFromStorage();
+    if (typeof seedPmChangeRequestsIfNeeded === 'function') seedPmChangeRequestsIfNeeded(c);
+    seedPmChatIfNeeded(name);
+    var batches = pmChangeRequests[name] || [];
+
+    var timeline = batches.map(function (batch) {
+      var ts = batch.submittedDate ? new Date(batch.submittedDate).getTime() : 0;
+      return { ts: ts, html: '<div class="chat-msg-row" data-batch-anchor="' + batch.id + '"><div class="chat-msg-bubble">' + pmcrEditRequestCardHtml(batch, true) + '</div></div>' };
+    });
+    (PM_CHAT_MESSAGES[pmChatKeyFor(name)] || []).forEach(function (m) {
+      var html = '<div class="chat-msg-row' + (m.fromAdmin ? '' : ' theirs') + '"><div class="chat-msg-bubble"><div class="cmb-text">' + sinbEsc(m.text) + '</div><div class="cmb-meta">' + (m.fromAdmin ? 'You' : sinbEsc(name)) + '<span class="dot-sep"></span>' + m.time + '</div></div></div>';
+      timeline.push({ ts: m.ts || 0, html: html });
+    });
+    timeline.sort(function (a, b) { return a.ts - b.ts; });
+    var timelineHtml = timeline.map(function (item) { return item.html; }).join('');
+    innerEl.innerHTML = timelineHtml
+      ? '<div class="chat-day-divider"><span>Today</span></div>' + timelineHtml
+      : '<div style="padding:40px 20px;text-align:center;font-size:13px;color:var(--text-body-muted);">No messages yet with ' + sinbEsc(name) + '.</div>';
+    threadEl.scrollTop = threadEl.scrollHeight;
+    if (typeof sinbWireScrollBottomBtn === 'function') sinbWireScrollBottomBtn(threadEl, document.getElementById('clientChatScrollBottomBtn'));
+
+    threadEl.querySelectorAll('[data-pmcr-action]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var action = btn.getAttribute('data-pmcr-action');
+        var change = pmcrFindChange(btn.getAttribute('data-batch-id'), btn.getAttribute('data-change-id'), name);
+        if (!change) return;
+        pmcrHandleAction(change, action, name);
+        renderClientChatThread();
+        showToast(action === 'approve' ? 'Response sent to ' + name + '.' : change.fieldLabel + ' updated \u2014 ' + name + ' has been notified.');
+      });
+    });
+  }
+
+  function pmChatSend(text) {
+    var c = (typeof currentDetailRecord !== 'undefined') ? currentDetailRecord : null;
+    if (!c || !text) return;
+    pmChatAddMessage(c.name, { kind: 'text', fromAdmin: true, text: text });
+    if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
+    renderClientChatThread();
+  }
+
+  /* =========================================================
+     PM ADMIN NOTES — persistent right-side panel (not a drawer: the PM detail page shows it
+     alongside Profile/Chat at all times, per spec, rather than toggled open like the supplier
+     side's notes drawer).
+  ========================================================== */
+  var pmClientAdminNotes = {}; // keyed by PM name
+  function pmNotesKeyFor(c) { return c ? c.name : ''; }
+  function seedPmAdminNotesIfNeeded(c) {
+    var key = pmNotesKeyFor(c);
+    if (pmClientAdminNotes[key]) return;
+    if (c && c.name === 'John John') {
+      var d1 = new Date(); d1.setDate(d1.getDate() - 2);
+      pmClientAdminNotes[key] = [
+        { author: 'Priya Shah', role: 'Sub-admin', initials: 'PS', text: 'Confirmed the registered address by phone \\u2014 matches Companies House. Still waiting on the trading address before approving that field.', timestamp: d1 }
+      ];
+    } else {
+      pmClientAdminNotes[key] = [];
+    }
+  }
+  function renderPmNotesList() {
+    var c = (typeof currentDetailRecord !== 'undefined') ? currentDetailRecord : null;
+    seedPmAdminNotesIfNeeded(c);
+    var notes = pmClientAdminNotes[pmNotesKeyFor(c)] || [];
+    var listEl = document.getElementById('clientNotesList');
+    var emptyEl = document.getElementById('clientNotesEmpty');
+    if (!listEl) return;
+    if (!notes.length) {
+      listEl.innerHTML = '';
+      if (emptyEl) emptyEl.style.display = '';
+    } else {
+      if (emptyEl) emptyEl.style.display = 'none';
+      listEl.innerHTML = notes.slice().reverse().map(function (n, revIdx) {
+        var idx = notes.length - 1 - revIdx;
+        var roleClass = n.role === 'Sub-admin' ? ' sub-admin' : '';
+        return '<div class="supnote-item">' +
+          '<div class="pm-card-avatar" style="width:30px;height:30px;font-size:11.5px;background:rgba(24,48,96,0.12);color:#183060;flex-shrink:0;">' + n.initials + '</div>' +
+          '<div style="flex:1;min-width:0;">' +
+            '<div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">' +
+              '<span style="font-weight:700;font-size:12.5px;color:var(--text-heading);">' + n.author + '</span>' +
+              '<span class="supnote-role-badge' + roleClass + '">' + n.role + '</span>' +
+            '</div>' +
+            '<div style="font-size:11px;color:var(--text-body-muted);margin-top:1px;">' + supNoteRelativeTime(n.timestamp) + '</div>' +
+            '<div style="font-size:12.5px;color:var(--text-heading);margin-top:5px;line-height:1.5;white-space:pre-wrap;">' + n.text + '</div>' +
+          '</div>' +
+          (n.author === CURRENT_ADMIN_USER.name ? '<button type="button" class="supnote-delete-btn" data-pmnote-idx="' + idx + '" aria-label="Delete note"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>' : '') +
+        '</div>';
+      }).join('');
+      listEl.querySelectorAll('.supnote-delete-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          pmClientAdminNotes[pmNotesKeyFor(c)].splice(parseInt(btn.getAttribute('data-pmnote-idx'), 10), 1);
+          renderPmNotesList();
+        });
+      });
+    }
+    var countEl = document.getElementById('clientNotesCount');
+    if (countEl) countEl.textContent = notes.length;
   }
   function renderAdminRequestsListShared() {
     var c = adminRequestsCtx.getRecordFn();
@@ -33502,6 +34125,25 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     });
     return list;
   }
+  // PM Applicants' location filter uses the exact same curated list as Supplier Applicants
+  // (same base cities, same exclusions) — just sourced from pmApplicants instead of
+  // supplierApplicants, so any custom city a PM applicant actually entered still surfaces.
+  // Coventry, Bradford and Bath are excluded on top of the shared list: they only ever appear
+  // in the PM applicant seed data, not the supplier one, so they're kept as a PM-specific
+  // addition rather than folded into the shared exclusion list both modules read from.
+  var PM_APP_BASE_LOCATIONS = SUP_APP_BASE_LOCATIONS.slice();
+  var PM_APP_EXCLUDED_LOCATIONS = SUP_APP_EXCLUDED_LOCATIONS.concat(['Coventry', 'Bradford', 'Bath']);
+  function appLocationList() {
+    var list = PM_APP_BASE_LOCATIONS.slice();
+    (typeof pmApplicants !== 'undefined' ? pmApplicants : []).forEach(function (c) {
+      (c.locations || []).forEach(function (loc) {
+        if (LONDON_ZONES && LONDON_ZONES.indexOf(loc) !== -1) return;
+        if (PM_APP_EXCLUDED_LOCATIONS.indexOf(loc) !== -1) return;
+        if (list.indexOf(loc) === -1) list.push(loc);
+      });
+    });
+    return list;
+  }
   // Active Suppliers' location filter mirrors the Applicants module exactly: a curated base list
   // plus whatever custom cities actually appear in the data, rather than the full static UK_LOCATIONS.
   var SUP_BASE_LOCATIONS = ['London', 'Manchester', 'Birmingham', 'Leeds', 'Liverpool', 'Cambridge', 'Oxford'];
@@ -34389,6 +35031,147 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     }
   });
 
+  /* ---- PM invitations ----
+     Direct parallel of the supplier tracker above: same record shape, same status
+     derivation (supInviteStatus/supInviteRelative/supInviteExact/SUP_INVITE_META are all
+     already entity-agnostic — they take the record, not the store — so they're reused
+     as-is here rather than re-implemented). */
+  var pmInvites = [];
+
+  (function seedPmInvites() {
+    var pool = pmApplicants.filter(function (c) { return c.email; });
+    for (var i = 0; i < Math.min(4, pool.length); i++) {
+      var c = pool[(i * 3) % pool.length];
+      pmInvites.push(supMakeInvite(c.email, 15 + i * 4, 'accepted', c.name, i % 2 ? 'Priya Nair' : 'Admin'));
+    }
+    [['leyton.pm@brightgate-lettings.co.uk', 3], ['hello@meridianestates.co.uk', 6],
+     ['office@northfieldpm.co.uk', 10]]
+      .forEach(function (p, i) { pmInvites.push(supMakeInvite(p[0], p[1], 'pending', '', i % 2 ? 'Tom Blake' : 'Admin')); });
+    pmInvites.push(supMakeInvite('stale.lead@example.com', 22, 'pending', '', 'Admin'));
+  })();
+
+  var pmInvitesTab = 'all';
+  var pmInvitesSearch = '';
+
+  function pmInvitesFiltered() {
+    var term = pmInvitesSearch.trim().toLowerCase();
+    return pmInvites.filter(function (inv) {
+      if (pmInvitesTab !== 'all' && supInviteStatus(inv) !== pmInvitesTab) return false;
+      if (!term) return true;
+      return (inv.email + ' ' + inv.name + ' ' + inv.sender).toLowerCase().indexOf(term) !== -1;
+    }).sort(function (a, b) { return b.lastSentAt - a.lastSentAt; });
+  }
+  function pmInvitesCountBy(status) {
+    return pmInvites.filter(function (inv) { return supInviteStatus(inv) === status; }).length;
+  }
+  function renderPmInvitesBadge() {
+    var badge = document.getElementById('appInvitesBadge');
+    if (!badge) return;
+    var outstanding = pmInvitesCountBy('pending') + pmInvitesCountBy('expired');
+    badge.textContent = outstanding;
+    badge.style.display = outstanding ? '' : 'none';
+  }
+  function pmInviteById(id) {
+    for (var i = 0; i < pmInvites.length; i++) { if (pmInvites[i].id === id) return pmInvites[i]; }
+    return null;
+  }
+  function renderPmInvites() {
+    var tbody = document.getElementById('pmInvitesTableBody');
+    if (!tbody) return;
+    var list = pmInvitesFiltered();
+
+    document.getElementById('pmInvitesCount').textContent = list.length + ' invitation' + (list.length === 1 ? '' : 's');
+    document.getElementById('pmInvitesStats').innerHTML = [
+      { k: 'pending', n: pmInvitesCountBy('pending'), label: 'Awaiting sign-up' },
+      { k: 'expired', n: pmInvitesCountBy('expired'), label: 'Expired' },
+      { k: 'accepted', n: pmInvitesCountBy('accepted'), label: 'Accepted' }
+    ].map(function (s) {
+      return '<div class="sup-inv-stat ' + s.k + '"><div class="sis-num">' + s.n + '</div><div class="sis-label">' + s.label + '</div></div>';
+    }).join('');
+
+    document.getElementById('pmInvitesTableWrap').style.display = list.length ? '' : 'none';
+    document.getElementById('pmInvitesEmpty').style.display = list.length ? 'none' : '';
+    if (!list.length) {
+      var filtering = pmInvitesSearch.trim() || pmInvitesTab !== 'all';
+      document.getElementById('pmInvitesEmptyTitle').textContent = filtering ? 'Nothing matches those filters' : 'No invitations yet';
+      document.getElementById('pmInvitesEmptyDesc').textContent = filtering
+        ? 'Try a different search term, or switch back to All.'
+        : 'Invites you send to property managers will be tracked here so you can see who hasn\u2019t signed up yet.';
+      tbody.innerHTML = '';
+      renderPmInvitesBadge();
+      return;
+    }
+
+    tbody.innerHTML = list.map(function (inv) {
+      var st = supInviteStatus(inv);
+      var meta = SUP_INVITE_META[st];
+      var resolved = st === 'accepted';
+      return '<tr>' +
+        '<td><div class="sup-inv-who">' +
+          '<div class="sup-inv-email">' + supjrEscapeHtml(inv.email) + '</div>' +
+          (inv.name ? '<div class="sup-inv-name">Signed up as ' + supjrEscapeHtml(inv.name) + '</div>' : '') +
+        '</div></td>' +
+        '<td><div class="sup-inv-when">' + supjrEscapeHtml(supInviteRelative(inv.sentAt)) + '</div>' +
+          '<div class="sup-inv-sub">' + supjrEscapeHtml(supInviteExact(inv.sentAt)) + '</div></td>' +
+        '<td>' + supjrEscapeHtml(inv.sender) + '</td>' +
+        '<td>' + inv.sendCount + (inv.sendCount > 1 ? '<div class="sup-inv-sub">last ' + supjrEscapeHtml(supInviteRelative(inv.lastSentAt)) + '</div>' : '') + '</td>' +
+        '<td><span class="sup-inv-chip ' + meta.cls + '">' + meta.label + '</span></td>' +
+        '<td><div class="sup-inv-actions">' +
+          (resolved ? '' :
+            '<button type="button" class="btn btn-secondary-light sup-inv-btn" data-pminv-resend="' + inv.id + '">' +
+              (st === 'expired' ? 'Send again' : 'Resend') + '</button>') +
+          '<button type="button" class="svcp-icon-btn" data-pminv-copy="' + inv.id + '" data-tooltip="Copy invite link" aria-label="Copy invite link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>' +
+        '</div></td>' +
+      '</tr>';
+    }).join('');
+
+    renderPmInvitesBadge();
+  }
+
+  function openPMInvitesView() {
+    showAdminView('pm-invites');
+    renderPmInvites();
+  }
+  document.getElementById('appViewInvitesBtn').addEventListener('click', openPMInvitesView);
+  document.getElementById('pmInvitesBackBtn').addEventListener('click', function () {
+    showAdminView('pm-applicants-list');
+  });
+  document.getElementById('pmInvitesSearch').addEventListener('input', function () {
+    pmInvitesSearch = this.value;
+    renderPmInvites();
+  });
+  document.getElementById('pmInvitesTabs').addEventListener('click', function (e) {
+    var pillEl = e.target.closest('[data-inv-tab]');
+    if (!pillEl) return;
+    pmInvitesTab = pillEl.getAttribute('data-inv-tab');
+    this.querySelectorAll('.pm-tab-pill').forEach(function (p) { p.classList.toggle('active', p === pillEl); });
+    renderPmInvites();
+  });
+  document.getElementById('pmInvitesInviteBtn').addEventListener('click', function () {
+    document.getElementById('appInviteBtn').click();
+  });
+  document.getElementById('pmInvitesTableBody').addEventListener('click', function (e) {
+    var resend = e.target.closest('[data-pminv-resend]');
+    if (resend) {
+      var r = pmInviteById(resend.getAttribute('data-pminv-resend'));
+      if (!r) return;
+      r.lastSentAt = new Date();
+      r.sendCount += 1;
+      r.status = 'pending';
+      renderPmInvites();
+      showToast('Invitation resent to ' + r.email + '. The previous link is now void.');
+      return;
+    }
+    var copy = e.target.closest('[data-pminv-copy]');
+    if (copy) {
+      var ci = pmInviteById(copy.getAttribute('data-pminv-copy'));
+      if (!ci) return;
+      var link = 'https://app.keylr.com/join/' + ci.id;
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(link).catch(function () {});
+      showToast('Invite link copied.');
+    }
+  });
+
   var supAppInviteContext = 'supplier';
   document.getElementById('supAppInviteBtn').addEventListener('click', function () {
     supAppInviteContext = 'supplier';
@@ -34453,6 +35236,25 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         }
       });
       renderSupInvites();
+    }
+    if (supAppInviteContext === 'applicant') {
+      supAppInviteEmails.forEach(function (email) {
+        var existing = null;
+        for (var i = 0; i < pmInvites.length; i++) {
+          if (pmInvites[i].email.toLowerCase() === email.toLowerCase() && pmInvites[i].status !== 'accepted') { existing = pmInvites[i]; break; }
+        }
+        if (existing) {
+          existing.lastSentAt = new Date();
+          existing.sendCount += 1;
+          existing.status = 'pending';
+        } else {
+          var freshPm = supMakeInvite(email, 0, 'pending', '', 'Admin');
+          freshPm.sentAt = new Date();
+          freshPm.lastSentAt = new Date();
+          pmInvites.unshift(freshPm);
+        }
+      });
+      renderPmInvites();
     }
     supAppInviteModal.close();
     var noun = supAppInviteContext === 'applicant' ? 'applicants' : 'suppliers';
@@ -35249,7 +36051,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       appCurrentPage = 1;
       renderApplicantList();
     },
-    appSort: function (v) { appSortOrder = v; appCurrentPage = 1; renderApplicantList(); },
+
     pmDateJoined: function (v) {
       pmDateJoinedFilter = v;
       var rangeRow = document.getElementById('pmDateJoinedCustomRange');
@@ -35972,13 +36774,12 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       appSidebarWrap.style.display = '';
       if (typeof renderClientCompNavList === 'function') renderClientCompNavList();
     }
-    // Properties & Jobs tabs are removed entirely — Profile / Requests / Chat only, for both.
+    // Properties & Jobs tabs are removed entirely — Profile / Chat only, for both. Requests is
+    // gone too — edit requests now render as cards inside Chat (renderClientChatThread).
     var tabBtnProperties = document.getElementById('clientTabBtnProperties');
     if (tabBtnProperties) tabBtnProperties.style.display = 'none';
     var tabBtnJobs = document.getElementById('clientTabBtnJobs');
     if (tabBtnJobs) tabBtnJobs.style.display = 'none';
-    var tabBtnRequests = document.getElementById('clientTabBtnRequests');
-    if (tabBtnRequests) tabBtnRequests.style.display = '';
     // Always land back on the Profile tab when opening a detail page fresh.
     document.querySelectorAll('.client-tab').forEach(function (t) { t.classList.toggle('active', t.getAttribute('data-tab') === 'profile'); });
     if (typeof clientTabPanelIds !== 'undefined') {
@@ -36086,7 +36887,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (!c) return;
     var isApplicant = currentDetailSource === 'app';
     if (c.status === 'Rejected') {
-      c.status = isApplicant ? 'Incomplete' : 'Approved';
+      /* Restore to wherever completion actually sits, rather than a hardcoded guess — a 100%
+         applicant unarchives to In Review, not back to New. */
+      c.status = isApplicant ? (c.completion >= 100 ? 'In Review' : c.completion > 0 ? 'In Progress' : 'New') : 'Approved';
       showToast(c.name + (isApplicant ? '\u2019s application was unarchived.' : ' was unarchived.'));
     } else {
       c.status = 'Rejected';
@@ -36101,7 +36904,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     }
   });
 
-  var clientTabPanelIds = { profile: 'clientTabProfile', properties: 'clientTabProperties', jobs: 'clientTabJobs', requests: 'clientTabRequests', chat: 'clientTabChat' };
+  var clientTabPanelIds = { profile: 'clientTabProfile', properties: 'clientTabProperties', jobs: 'clientTabJobs', chat: 'clientTabChat' };
   document.querySelectorAll('.client-tab').forEach(function (tab) {
     tab.addEventListener('click', function () {
       document.querySelectorAll('.client-tab').forEach(function (t) { t.classList.remove('active'); });
@@ -36110,7 +36913,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       Object.keys(clientTabPanelIds).forEach(function (k) {
         document.getElementById(clientTabPanelIds[k]).style.display = (k === key) ? '' : 'none';
       });
-      if (key === 'requests' && typeof renderClientRequestsListRich === 'function') renderClientRequestsListRich();
+      if (key === 'chat' && typeof renderClientChatThread === 'function') renderClientChatThread();
       var appStickyBarEl = document.getElementById('clientAppStickyBar');
       if (appStickyBarEl) {
         appStickyBarEl.style.display = (key === 'profile') ? 'flex' : 'none';
@@ -36144,58 +36947,63 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     });
   }
 
-  /* Chat tab filter pills (cosmetic — only one seed message exists) */
-  var chatFilterPillsGroup = document.getElementById('chatFilterPills');
-  if (chatFilterPillsGroup) {
-    chatFilterPillsGroup.querySelectorAll('.chat-filter-pill').forEach(function (pill) {
-      pill.addEventListener('click', function () {
-        chatFilterPillsGroup.querySelectorAll('.chat-filter-pill').forEach(function (p) { p.classList.remove('active'); });
-        pill.classList.add('active');
-      });
-    });
-  }
-
-  /* Chat send message */
-  function chatFormatNowTime() {
-    var now = new Date();
-    var h = now.getHours(); var m = now.getMinutes();
-    return calPad2(h) + ':' + calPad2(m);
-  }
-  function sendChatMessage() {
-    var input = document.getElementById('chatMessageInput');
+  /* Chat tab: composer sends into the shared PM_CHAT_MESSAGES store and re-renders through
+     renderClientChatThread, so a sent message survives switching tabs/applicants (unlike the
+     old placeholder, which only ever appended a DOM node that vanished on the next render). */
+  function clientChatSend() {
+    var input = document.getElementById('clientChatMessageInput');
     var text = input.value.trim();
     if (!text) return;
-    var thread = document.getElementById('chatThreadCard');
-    var row = document.createElement('div');
-    row.className = 'chat-msg-row out';
-    var bubble = document.createElement('div');
-    bubble.className = 'chat-msg-bubble';
-    var textEl = document.createElement('div');
-    textEl.className = 'cmb-text';
-    textEl.textContent = text;
-    var metaEl = document.createElement('div');
-    metaEl.className = 'cmb-meta';
-    metaEl.innerHTML = 'You<span class="dot-sep"></span>' + chatFormatNowTime() + ' <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
-    bubble.appendChild(textEl);
-    bubble.appendChild(metaEl);
-    row.appendChild(bubble);
-    thread.appendChild(row);
+    pmChatSend(text);
     input.value = '';
     input.style.height = 'auto';
-    thread.scrollTop = thread.scrollHeight;
   }
-  var chatSendBtn = document.getElementById('chatSendBtn');
-  var chatMessageInput = document.getElementById('chatMessageInput');
-  if (chatSendBtn && chatMessageInput) {
-    chatSendBtn.addEventListener('click', sendChatMessage);
-    chatMessageInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); }
+  var clientChatSendBtn = document.getElementById('clientChatSendBtn');
+  var clientChatMessageInput = document.getElementById('clientChatMessageInput');
+  if (clientChatSendBtn && clientChatMessageInput) {
+    clientChatSendBtn.addEventListener('click', clientChatSend);
+    clientChatMessageInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); clientChatSend(); }
     });
-    chatMessageInput.addEventListener('input', function () {
+    clientChatMessageInput.addEventListener('input', function () {
       this.style.height = 'auto';
       this.style.height = Math.min(this.scrollHeight, 120) + 'px';
     });
   }
+
+  /* Admin notes: slide-in drawer, opened from the icon button beside the tabs — same pattern
+     as the Supplier Applicants module's notes drawer. */
+  var clientAddNoteBtn = document.getElementById('clientAddNoteBtn');
+  if (clientAddNoteBtn) {
+    clientAddNoteBtn.addEventListener('click', function () {
+      var input = document.getElementById('clientNoteInput');
+      var text = input.value.trim();
+      if (!text) { input.focus(); return; }
+      var c = (typeof currentDetailRecord !== 'undefined') ? currentDetailRecord : null;
+      var key = pmNotesKeyFor(c);
+      if (!pmClientAdminNotes[key]) pmClientAdminNotes[key] = [];
+      pmClientAdminNotes[key].push({ author: CURRENT_ADMIN_USER.name, role: CURRENT_ADMIN_USER.role, initials: CURRENT_ADMIN_USER.initials, text: text, timestamp: new Date() });
+      input.value = '';
+      renderPmNotesList();
+      showToast('Note added \u2014 visible to the admin team only.');
+    });
+  }
+  var clientNotesDrawerBtn = document.getElementById('clientNotesDrawerBtn');
+  if (clientNotesDrawerBtn) {
+    clientNotesDrawerBtn.addEventListener('click', function () {
+      document.getElementById('clientNotesDrawerOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+      renderPmNotesList();
+    });
+  }
+  function closeClientNotesDrawer() {
+    document.getElementById('clientNotesDrawerOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  var clientNotesDrawerCloseBtn = document.getElementById('clientNotesDrawerCloseBtn');
+  if (clientNotesDrawerCloseBtn) clientNotesDrawerCloseBtn.addEventListener('click', closeClientNotesDrawer);
+  var clientNotesDrawerOverlay = document.getElementById('clientNotesDrawerOverlay');
+  if (clientNotesDrawerOverlay) clientNotesDrawerOverlay.addEventListener('click', function (e) { if (e.target === this) closeClientNotesDrawer(); });
 
   document.querySelectorAll('.client-show-pill').forEach(function (pill) {
     pill.addEventListener('click', function () {
@@ -40683,6 +41491,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   renderSvcpList();
   pmsvcSync();
 
+  renderPmInvitesBadge();
   renderPMList();
   renderApplicantList();
   renderSupplierList();
