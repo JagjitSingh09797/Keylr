@@ -2029,6 +2029,172 @@
     #supObApp .ob-step[data-stepkey="payment"] .vat-verify-row { flex-direction: column; }
   }
 
+  /* ==========================================================================
+     PM ONBOARDING — mobile responsive (<=420px)
+     Mirrors the Supplier block above, scoped under #obApp so it never touches
+     the Supplier wizard, Account Settings, or Admin views that reuse the same
+     ob-, ab-, callout-, and ocs- component classes outside of onboarding.
+     PM's own DOM differs in three ways that change what needs mirroring here:
+     it has no #obApp .ob-topbar-logo-group of its own until this file adds one
+     (done inline in the markup), no inline progress track in the topbar (its
+     progress bar already sits full-width below the topbar, so it never
+     competes for row space the way Supplier's did), and its steps carry no
+     data-stepkey attribute at all — so the Supplier fixes scoped to
+     [data-stepkey="insurance"|"background"|"payment"] and #crpRolesGrid have
+     nothing to target here and are left out rather than copied uselessly.
+     ========================================================================== */
+  @media (max-width: 420px) {
+    #obApp .ob-content {
+      overflow-y: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    #obApp .ob-content::-webkit-scrollbar { display: none; }
+    #obApp { scrollbar-width: none; -ms-overflow-style: none; }
+    #obApp::-webkit-scrollbar { display: none; }
+
+    /* Topbar: just the logo and the step label, parallel. The action buttons
+       move to a fixed bottom bar below instead of crowding the topbar. */
+    #obApp .ob-topbar { height: auto; padding: 12px 0; }
+    #obApp .ob-topbar-inner { flex-wrap: nowrap; }
+    #obApp .ob-topbar-logo-group { order: 1; }
+    #obApp .ob-step-label {
+      position: static; left: auto; top: auto; transform: none;
+      display: flex; align-items: center; order: 2; margin-left: auto;
+      flex: 0 1 auto; font-size: 12px;
+    }
+
+    /* Action buttons: a floating white bar pinned to the bottom of the screen,
+       same treatment as Supplier's. */
+    #obApp .ob-actions {
+      position: fixed; left: 0; right: 0; bottom: 0; margin-left: 0; z-index: 392;
+      background: #fff; border-top: 1px solid var(--border-subtle);
+      box-shadow: 0 -6px 20px rgba(16, 24, 40, 0.08);
+      padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+      display: flex; align-items: center; flex-wrap: nowrap; gap: 8px;
+    }
+    #obApp .ob-actions .btn { font-size: 12.5px; padding: 9px 12px; }
+    #obApp .ob-actions #obSaveSkipBtn,
+    #obApp .ob-actions #obNextBtn { flex: 1 1 0; white-space: nowrap; }
+    /* Leave room at the bottom of the scroll area so the last field(s) don't
+       end up hidden behind the fixed action bar. */
+    #obApp .ob-content { padding-bottom: 90px; }
+
+    /* Back button: icon only, no label text. */
+    #obApp .ob-back-btn { padding: 9px; }
+    #obApp .ob-back-btn .ob-back-btn-text { display: none; }
+
+    /* Section titles: flex removed entirely on mobile (not just switched to column) so an inline
+       badge like "Select all that apply" simply wraps in normal text flow instead of being
+       force-stacked onto its own flex line. */
+    #obApp .ob-section-title { display: block; }
+
+    /* Attention banners: icon+title stack above the sub-copy, and the left
+       indent that used to align text under the (now stacked) icon is removed. */
+    #obApp .ab-head { flex-direction: column; align-items: baseline; }
+    #obApp .ab-sub { margin-left: 0; }
+    #obApp .attention-jump-row { margin-left: 0; }
+
+    /* Callouts: icon stacks above the body text instead of sitting beside it. */
+    #obApp .callout.callout-info { flex-direction: column; }
+
+    /* Card-section headers (icon + title [+ optional badge]): tighter, more
+       consistent spacing, whether or not the header wraps onto two lines. */
+    #obApp .ocs-head { row-gap: 0px; margin-bottom: 16px; }
+
+    /* Two-up field rows stack to a single column across every step. */
+    #obApp .ob-row-2 { display: block; }
+
+    /* Payment Setup > Billing Cycle Approval Process: four numbered rows (badge + text), each
+       given as an inline style rather than a shared class, so they need !important here to win.
+       Flex removed entirely — the number sits inline before the text and wraps with it, rather
+       than being pinned beside it at a fixed gap regardless of how long the line runs. */
+    #obApp #approvalProcessCallout .callout-body > div { display: block !important; }
+    #obApp #approvalProcessCallout .callout-body > div > span:first-child { display: inline-flex !important; margin-right: 8px; }
+
+    /* Payment Setup > "Manage Payment Methods" card: icon stacks above the title/description
+       instead of sitting beside them at a fixed 40px + gap that doesn't leave enough room for
+       the text on a narrow screen. */
+    #obApp .sup-bg-check-card[style*="flex-wrap"] { display: block !important; }
+    #obApp .sup-bg-check-card[style*="flex-wrap"] > div:first-child { margin-bottom: 12px; }
+
+    /* Working Hours "To" time picker: anchored to the left edge of its trigger by default, which
+       runs the fixed 160px popup off the right side of the screen when the trigger itself is
+       already near that edge (the second field in a From/To row). Anchoring from the right edge
+       instead keeps it fully on-screen regardless of where the trigger sits. */
+    #obApp [data-tp-popup="stgHoursTo"] { left: auto; right: 0; }
+  }
+
+  /* ==========================================================================
+     PM ACCOUNT SETTINGS — mobile responsive (<=420px)
+     Mirrors Supplier's own #supSettingsTabs treatment: the tabs row scrolls
+     horizontally instead of wrapping/overflowing, and Edit moves out of that
+     row entirely (to the dedicated mobile button added next to the Settings
+     heading) so the tabs have the full row width to scroll within. PM has no
+     completion ring competing for header space the way Supplier does, so its
+     mobile Edit button sits directly in the header row rather than needing a
+     second dedicated progress-bar row the way Supplier's does.
+     ========================================================================== */
+  @media (max-width: 420px) {
+    #pmSettingsTabs {
+      overflow-x: auto; flex-wrap: nowrap;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none; -ms-overflow-style: none;
+    }
+    #pmSettingsTabs::-webkit-scrollbar { display: none; }
+    #pmSettingsTabs .pm-settings-tab-item { flex-shrink: 0; }
+
+    /* Company Details and Contacts view cards: both already collapse to a single grid column at
+       560px, but stay display:grid even then. At this width they go fully block instead, with
+       gap replaced by margin on each field, since gap has no effect once a container isn't
+       grid/flex anymore. */
+    #pmCompanyDetailsViewCard .detail-mini-grid-3col,
+    #pmContactsViewCard .detail-mini-grid-4col {
+      display: block;
+    }
+    #pmCompanyDetailsViewCard .detail-mini-grid-3col .detail-mini-field,
+    #pmContactsViewCard .detail-mini-grid-4col .detail-mini-field {
+      margin-bottom: 14px;
+    }
+    #pmCompanyDetailsViewCard .detail-mini-grid-3col .detail-mini-field:last-child,
+    #pmContactsViewCard .detail-mini-grid-4col .detail-mini-field:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Settings heading row specifically (where the mobile Edit button lives): keep the heading
+       and that button on one row rather than letting the button wrap onto its own line
+       underneath. Scoped to this one view rather than every .dash-header across the PM dashboard,
+       since other pages' headers weren't reviewed for this change and may have different content
+       that's fine wrapping. */
+    #pmSettingsView .dash-header { flex-wrap: nowrap; }
+
+    /* Payment Setup tab, in Account Settings view mode (separate from the onboarding wizard's own
+       Billing step, which already got this same treatment). Direct Debit card: the icon+content
+       row inside it goes block instead of side-by-side, with the icon getting its own bottom
+       margin now that gap (a flex/grid-only property) no longer applies. Manage Payment Methods
+       card: same treatment for the card's own icon+text+button row. */
+    #pmSettingsPanelBillingpayments .sup-bg-check-card > div[style*="flex-start"] {
+      display: block;
+    }
+    #pmSettingsPanelBillingpayments .sup-bg-check-card > div[style*="flex-start"] > div:first-child {
+      margin-bottom: 12px;
+    }
+    #pmSettingsPanelBillingpayments .sup-bg-check-card[style*="flex-wrap"] {
+      display: block;
+    }
+    #pmSettingsPanelBillingpayments .sup-bg-check-card[style*="flex-wrap"] > div:first-child {
+      margin-bottom: 12px;
+    }
+    #pmSettingsPanelBillingpayments .sup-bg-check-card[style*="flex-wrap"] > div:nth-child(2) {
+      margin-bottom: 14px;
+    }
+
+    /* .ob-section-title gets the exact same treatment here as inside the wizard (see the #obApp
+       rule above) — Account Settings' Portfolio tab reuses this class for the same questions
+       outside the wizard, so it needs the same fix independently. */
+    #pmSettingsPanelPortfolio .ob-section-title { display: block; }
+  }
+
 
   .crp-role-chip {
     display: flex; align-items: center; gap: 8px;
@@ -2921,27 +3087,37 @@
      markup): tighter side padding, no horizontal scroll, and both scrollbars hidden while
      scrolling itself stays functional, plus wider message bubbles and a "Please update X / Update
      here" jump-card that stacks its button below the text instead of squeezing everything onto one
-     line. Scoped to these two specific mounts — the onboarding floating widget already has its own
+     line. Scoped to these specific mounts — the onboarding floating widget already has its own
      separate, more specific mobile rules for the same shared classes (see .ob-chat-panel above),
-     which take precedence there. */
+     which take precedence there. #pmOwnChatScroll (PM's own Settings > Chat) and #ainChatScroll
+     (the admin Inbox) render the exact same sinb-* markup as the other two and get the identical
+     treatment for the same reason. */
   @media (max-width: 420px) {
-    #sinbChatScroll, #supInboxChatScroll {
+    #sinbChatScroll, #supInboxChatScroll, #pmOwnChatScroll, #ainChatScroll {
       padding-left: 8px; padding-right: 8px;
       overflow-x: hidden;
       scrollbar-width: none; -ms-overflow-style: none;
     }
-    #sinbChatScroll::-webkit-scrollbar, #supInboxChatScroll::-webkit-scrollbar { display: none; }
-    #sinbChatScroll .sinb-msg-stack, #supInboxChatScroll .sinb-msg-stack { max-width: 85%; }
+    #sinbChatScroll::-webkit-scrollbar, #supInboxChatScroll::-webkit-scrollbar,
+    #pmOwnChatScroll::-webkit-scrollbar, #ainChatScroll::-webkit-scrollbar { display: none; }
+    #sinbChatScroll .sinb-msg-stack, #supInboxChatScroll .sinb-msg-stack,
+    #pmOwnChatScroll .sinb-msg-stack, #ainChatScroll .sinb-msg-stack { max-width: 85%; }
     #sinbChatScroll .sinb-msg-stack-wide, #supInboxChatScroll .sinb-msg-stack-wide,
-    #sinbChatScroll .sinb-system-card, #supInboxChatScroll .sinb-system-card { max-width: 100%; }
+    #sinbChatScroll .sinb-system-card, #supInboxChatScroll .sinb-system-card,
+    #pmOwnChatScroll .sinb-msg-stack-wide, #ainChatScroll .sinb-msg-stack-wide,
+    #pmOwnChatScroll .sinb-system-card, #ainChatScroll .sinb-system-card { max-width: 100%; }
     #sinbChatScroll .sinb-msg-bubble, #supInboxChatScroll .sinb-msg-bubble,
-    #sinbChatScroll .sinb-attachment-bubble, #supInboxChatScroll .sinb-attachment-bubble {
+    #sinbChatScroll .sinb-attachment-bubble, #supInboxChatScroll .sinb-attachment-bubble,
+    #pmOwnChatScroll .sinb-msg-bubble, #ainChatScroll .sinb-msg-bubble,
+    #pmOwnChatScroll .sinb-attachment-bubble, #ainChatScroll .sinb-attachment-bubble {
       word-break: break-word; overflow-wrap: break-word;
     }
-    #sinbChatScroll .sinb-jump-card, #supInboxChatScroll .sinb-jump-card {
+    #sinbChatScroll .sinb-jump-card, #supInboxChatScroll .sinb-jump-card,
+    #pmOwnChatScroll .sinb-jump-card, #ainChatScroll .sinb-jump-card {
       flex-direction: column; align-items: flex-start; gap: 8px;
     }
-    #sinbChatScroll .sinb-jump-btn, #supInboxChatScroll .sinb-jump-btn { align-self: flex-start; }
+    #sinbChatScroll .sinb-jump-btn, #supInboxChatScroll .sinb-jump-btn,
+    #pmOwnChatScroll .sinb-jump-btn, #ainChatScroll .sinb-jump-btn { align-self: flex-start; }
   }
 
   /* Hides the visible scrollbar on the main content scroll area for every dashboard (PM, Supplier,
@@ -5917,6 +6093,30 @@
   .supcal-avail-day-row.avail { background: #eafaf0; color: #1a7a3e; }
   .supcal-avail-day-row.toggle { background: var(--surface-soft); color: var(--text-heading); cursor: pointer; }
 
+  /* Day Detail modal (Availability tab \u2014 replaces the old instant tap-to-toggle) */
+  .supcal-dd-status-row { display: flex; align-items: center; gap: 9px; padding: 12px 14px; border-radius: 9px; background: #eafaf0; font-size: 13px; font-weight: 700; color: #1a7a3e; margin-bottom: 10px; }
+  .supcal-dd-status-dot { width: 8px; height: 8px; border-radius: 50%; background: #1a7a3e; flex-shrink: 0; }
+  .supcal-dd-status-row.off { background: #fef2f2; color: #b91c1c; }
+  .supcal-dd-status-row.off .supcal-dd-status-dot { background: #b91c1c; }
+  .supcal-dd-status-row.partial { background: #fef6e7; color: #8a5a06; }
+  .supcal-dd-status-row.partial .supcal-dd-status-dot { background: #d99a1f; }
+  .supcal-dd-range-note { font-size: 12px; color: var(--text-body-muted); text-align: center; margin: -4px 0 10px; }
+  .supcal-dd-jobs-section { border: 1px solid var(--border-subtle); border-radius: 9px; padding: 10px 12px; margin-bottom: 14px; }
+  .supcal-dd-jobs-label { font-size: 11.5px; font-weight: 700; color: var(--text-heading); margin-bottom: 8px; }
+  .supcal-dd-jobs-list { display: flex; flex-direction: column; gap: 6px; max-height: 140px; overflow-y: auto; }
+  .supcal-dd-job-row { display: flex; align-items: baseline; gap: 8px; font-size: 12px; color: var(--text-body-muted); }
+  .supcal-dd-job-row .ddjr-time { font-weight: 700; color: var(--text-heading); flex-shrink: 0; width: 44px; }
+  .supcal-dd-job-row .ddjr-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .supcal-dd-jobs-more { font-size: 11.5px; color: var(--text-body-muted); font-style: italic; padding-top: 2px; }
+  .supcal-dd-hours-link { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; background: none; border: none; padding: 12px 0 2px; font-size: 12.5px; font-weight: 700; color: var(--accent-blue); cursor: pointer; }
+  .supcal-dd-hours-link:hover { text-decoration: underline; }
+  /* .modal-card's base style is display:grid with a 352px side-panel column, for modals that
+     pair a .modal-side image with content (see the two real uses of .modal-side elsewhere). This
+     modal only has a stacked head + body, with no side panel, so left in the base grid it placed
+     them side-by-side into those two columns instead of stacking — scoped here rather than
+     changed globally, since other modals genuinely need the grid behavior. */
+  #supcalDayDetailOverlay .modal-card { display: inline-block; }
+
   /* ---------- Availability responsiveness ---------- */
   @media (max-width: 1100px) {
     /* The 280px side panel starves the calendar first, so drop it below at tablet width. */
@@ -8121,6 +8321,17 @@
     <button type="button" class="suprq-float-notif-close" id="supRequestFloatNotifClose" aria-label="Dismiss"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
   </div>
 
+  <div class="suprq-float-notif" id="pmRequestFloatNotif">
+    <div class="suprq-float-notif-icon">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
+    </div>
+    <div class="suprq-float-notif-body">
+      <div class="suprq-float-notif-title" id="pmRequestFloatNotifTitle">Changes requested</div>
+      <div class="suprq-float-notif-sub">Tap to review and resubmit</div>
+    </div>
+    <button type="button" class="suprq-float-notif-close" id="pmRequestFloatNotifClose" aria-label="Dismiss"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+
   <div class="suprq-float-notif" id="adminRequestFloatNotif">
     <div class="suprq-float-notif-icon">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4z"/></svg>
@@ -8228,7 +8439,7 @@
   <div class="ob-app" id="obApp">
     <div class="ob-topbar">
       <div class="ob-topbar-inner">
-      <div class="logo">
+      <div class="logo ob-topbar-logo-group">
         <svg viewBox="0 0 852 151" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Keylr">
           <path d="M0.160002 144.91C0.0400018 141.58 0 107.67 0 69.5298L0.0799999 0.209765L18.62 0.0897655L37.12 0.00976562V75.4698V150.93H18.74H0.360001L0.160002 144.91Z"/>
           <path d="M111.001 148.19C108.621 145.58 63.5807 96.97 50.7507 83.19C46.9907 79.15 43.5407 75.35 43.0707 74.75C42.2007 73.64 42.2007 73.64 42.9507 72.77C43.3907 72.29 47.5507 67.78 52.2207 62.79C56.8907 57.76 62.4807 51.7 64.6607 49.32C66.8407 46.94 75.2407 37.83 83.2807 29.12C91.3607 20.37 100.671 10.26 104.041 6.62L110.141 0H134.111H158.121L156.541 1.7C155.671 2.61 151.031 7.64 146.241 12.87C135.701 24.4 122.201 39.09 110.981 51.29C90.9007 73.12 86.6607 77.83 86.7407 78.11C86.8207 78.27 90.7007 82.39 95.3807 87.22C104.021 96.21 146.921 140.58 153.371 147.27L156.941 150.91L135.151 150.87L113.401 150.83L111.021 148.18L111.001 148.19Z"/>
@@ -8247,7 +8458,7 @@
         </button>
         <button type="button" class="ob-back-btn" id="obBackBtn" hidden>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          Back
+          <span class="ob-back-btn-text">Back</span>
         </button>
         <button type="button" class="btn btn-secondary-light" id="obSaveSkipBtn" style="display:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M20 6L9 17l-5-5"/></svg>Submit &amp; skip other steps</button>
         <button type="button" class="btn btn-primary" id="obNextBtn">Continue <span class="arrow">→</span></button>
@@ -8353,7 +8564,7 @@
           <div class="ob-section">
             <div class="ob-section-title">Is this your only location or part of a wider group?</div>
             <div class="tile-row-2" id="locationTypeTiles">
-              <div class="choice-tile" data-value="single" tabindex="0" role="radio" aria-checked="true">
+              <div class="choice-tile selected" data-value="single" tabindex="0" role="radio" aria-checked="true">
                 <div class="tile-body">
                 <div class="tile-title">Single location</div>
                 <div class="tile-desc">One office or operating location</div>
@@ -10195,8 +10406,15 @@
         </div>
         <button type="button" class="bell-btn" id="pmBellBtn" aria-label="Notifications" style="margin-left:auto;">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-          <span class="bell-dot"></span>
+          <span class="bell-dot" id="pmBellDot"></span>
         </button>
+        <div class="notif-panel" id="pmNotifPanel">
+          <div class="notif-panel-head">
+            <h3>Notifications</h3>
+          </div>
+          <div id="pmNotifListContent"></div>
+          <div id="pmNotifEmpty" style="display:none;padding:32px 20px;text-align:center;font-size:13px;color:var(--text-body-muted);">No new notifications.</div>
+        </div>
       </div>
 
       <div class="dash-scroll-area">
@@ -10530,8 +10748,7 @@
             <div class="dash-section">
               <div class="dash-header">
                 <div>
-                  <div style="font-size:11px;font-weight:700;letter-spacing:0.06em;color:#94a3b8;margin-bottom:4px;">ACCOUNT</div>
-                  <h2 style="background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); -webkit-background-clip: text; background-clip: text; color: transparent;">Settings</h2>
+                  <h2 style="color: var(--accent-blue);">Account Settings</h2>
                   <div class="dash-content-sub">Manage your profile, business &amp; subscription.</div>
                 </div>
               </div>
@@ -12432,6 +12649,37 @@
               <div class="modal-card-foot">
                 <button type="button" class="btn btn-secondary-light" id="supcalTimeOffCancelBtn">Cancel</button>
                 <button type="button" class="btn btn-primary" id="supcalTimeOffSaveBtn" disabled>Add Time Off</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Availability: clicking a day now opens this instead of instantly toggling it off —
+               a single accidental tap could no longer silently block a day with jobs on it. Shows
+               the day's current status, any jobs already booked that day (so the decision is made
+               with real context, not blind), and two clear paths forward: a straightforward
+               whole-day toggle, or a link into the existing Add Time Off modal (pre-filled with
+               this date) for anything more specific than a full day off. -->
+          <div class="modal-overlay" id="supcalDayDetailOverlay">
+            <div class="modal-card" style="max-width:420px;">
+              <div class="modal-card-head">
+                <h3 id="supcalDayDetailTitle">Wednesday, 1 July</h3>
+                <button type="button" class="modal-close-btn" id="supcalDayDetailCloseBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+              </div>
+              <div class="modal-card-body">
+                <div class="supcal-dd-status-row" id="supcalDayDetailStatusRow">
+                  <span class="supcal-dd-status-dot"></span>
+                  <span id="supcalDayDetailStatusText">Available</span>
+                </div>
+                <div class="supcal-dd-range-note" id="supcalDayDetailRangeNote" style="display:none;"></div>
+                <div class="supcal-dd-jobs-section" id="supcalDayDetailJobsSection" style="display:none;">
+                  <div class="supcal-dd-jobs-label" id="supcalDayDetailJobsLabel"></div>
+                  <div class="supcal-dd-jobs-list" id="supcalDayDetailJobsList"></div>
+                </div>
+                <button type="button" class="btn btn-primary" id="supcalDayDetailToggleBtn" style="width:100%;margin-top:4px;"></button>
+                <button type="button" class="supcal-dd-hours-link" id="supcalDayDetailHoursLink">
+                  Block specific hours instead
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </button>
               </div>
             </div>
           </div>
@@ -17565,6 +17813,11 @@
                   </div>
                 </div>
                 <div class="chat-window-input-area">
+                  <div class="sinb-reply-preview" id="clientChatReplyPreview" style="display:none;">
+                    <div class="sinb-reply-preview-bar"></div>
+                    <div class="sinb-reply-preview-body"><span class="sinb-reply-preview-label">Replying to</span><span class="sinb-reply-preview-field" id="clientChatReplyPreviewField"></span></div>
+                    <button type="button" class="sinb-reply-preview-close" id="clientChatReplyPreviewClose"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+                  </div>
                   <div class="chat-input-row">
                     <textarea id="clientChatMessageInput" rows="1" placeholder="Message this applicant..."></textarea>
                     <button type="button" class="chat-send-btn" id="clientChatSendBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg></button>
@@ -18922,6 +19175,31 @@
     });
     return { percent: Math.round((doneCount / OB_CHECKLIST.length) * 100), firstPendingStep: firstPendingStep, complete: doneCount === OB_CHECKLIST.length };
   }
+  // A single Edit button, physically relocated rather than duplicated: on mobile (<500px) it
+  // moves into the dash-header row next to the heading; at 500px and above it moves back to its
+  // original spot beside the Settings tabs. Using one real element (moved via appendChild) instead
+  // of two separate buttons toggled by visibility avoids the two ever being able to disagree with
+  // each other, and removes the need for a click-proxy between them.
+  var pmAcctEditBtnHomeParent = null; // set on first use — wherever the button starts in the markup
+  function pmRepositionEditBtn() {
+    var editBtn = document.getElementById('pmAcctEditBtn');
+    var dashHeader = document.querySelector('#pmSettingsView .dash-header');
+    if (!editBtn || !dashHeader) return;
+    if (!pmAcctEditBtnHomeParent) pmAcctEditBtnHomeParent = editBtn.parentElement;
+    var isMobileWidth = (typeof window !== 'undefined') && window.innerWidth < 500;
+    if (isMobileWidth) {
+      if (editBtn.parentElement !== dashHeader) dashHeader.appendChild(editBtn);
+    } else {
+      if (editBtn.parentElement !== pmAcctEditBtnHomeParent) pmAcctEditBtnHomeParent.appendChild(editBtn);
+    }
+  }
+  window.addEventListener('resize', pmRepositionEditBtn);
+  function pmSyncAcctEditButtons(visible) {
+    pmRepositionEditBtn();
+    var editBtn = document.getElementById('pmAcctEditBtn');
+    if (editBtn) editBtn.style.display = visible ? '' : 'none';
+  }
+
   function pmObUpdateBanner() {
     var result = pmObComputeCompletion();
     var banner = document.getElementById('onboardingBanner');
@@ -18939,7 +19217,7 @@
       if (result.complete) editBtn.removeAttribute('data-ob-incomplete'); else editBtn.setAttribute('data-ob-incomplete', '1');
       var activeTab = document.querySelector('#pmSettingsTabs .pm-settings-tab-item.active');
       if (activeTab && activeTab.getAttribute('data-settingstab') === 'profile') {
-        editBtn.style.display = result.complete ? '' : 'none';
+        pmSyncAcctEditButtons(result.complete);
       }
     }
     return result;
@@ -18981,7 +19259,7 @@
     var meta = obStepMeta[step];
     var isLastVisible = visible[visible.length - 1] === step;
     obStepLabel.textContent = meta.label;
-    obNextBtn.innerHTML = (isLastVisible ? 'Submit for Approval' : meta.next) + ' <span class="arrow">→</span>';
+    obNextBtn.innerHTML = (isLastVisible ? (obEditFromSettings ? 'Submit for Review' : 'Submit for Approval') : meta.next) + ' <span class="arrow">→</span>';
     obBackBtn.hidden = posInVisible === 1;
     obProgressFill.style.width = ((posInVisible / visible.length) * 100) + '%';
 
@@ -19101,6 +19379,18 @@
       if (typeof pmChatAddMessage === 'function') {
         pmChatAddMessage(pmName, { kind: 'text', fromAdmin: false, text: 'I\u2019d like to update ' + newBatch.changes.length + ' field' + (newBatch.changes.length === 1 ? '' : 's') + ' on my profile \u2014 details above.' });
       }
+      // Admin doesn't currently get told about a *new* Supplier or PM edit-request submission
+      // either (only fresh signups push a notification) — added here for PM specifically, since
+      // that's what this fix asked for, without touching Supplier's separate, already-established
+      // notification flow.
+      if (typeof pushAdminNotification === 'function') {
+        pushAdminNotification({
+          type: 'request',
+          title: 'PM Profile Update Request',
+          desc: pmName + ' \u2014 ' + newBatch.changes.length + ' field' + (newBatch.changes.length === 1 ? '' : 's') + ' need review',
+          onClick: function () { if (typeof adminNotifOpenPmApplicant === 'function') adminNotifOpenPmApplicant(pmName, 'chat'); }
+        });
+      }
     }
     obApp.classList.remove('visible');
     setTimeout(function () {
@@ -19154,7 +19444,7 @@
       if (m.kind === 'attachment') {
         html = '<div class="sinb-msg-row' + (mine ? ' mine' : '') + '"><div class="sinb-msg-stack"><div class="sinb-msg-bubble sinb-attachment-bubble"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (m.isImage ? '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>' : '<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/>') + '</svg><span>' + sinbEsc(m.fileName) + '</span></div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
       } else {
-        html = '<div class="sinb-msg-row' + (mine ? ' mine' : '') + '"><div class="sinb-msg-stack"><div class="sinb-msg-bubble">' + sinbEsc(m.text) + '</div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
+        html = '<div class="sinb-msg-row' + (mine ? ' mine' : '') + '"><div class="sinb-msg-stack">' + pmChatQuoteBlockHtml(m) + '<div class="sinb-msg-bubble">' + sinbEsc(m.text) + '</div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
       }
       timeline.push({ ts: m.ts || 0, html: html });
     });
@@ -19169,15 +19459,116 @@
       var anchor = scrollEl.querySelector('[data-batch-anchor="' + highlightBatchId + '"]');
       if (anchor) anchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
+    innerEl.querySelectorAll('[data-pmfield-reply-btn]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        pmChatReplyingTo = { changeId: btn.getAttribute('data-change-id'), fieldLabel: btn.getAttribute('data-field-label') };
+        var replyPreviewField = document.getElementById('pmOwnChatReplyPreviewField');
+        if (replyPreviewField) replyPreviewField.textContent = pmChatReplyingTo.fieldLabel;
+        var replyPreview = document.getElementById('pmOwnChatReplyPreview');
+        if (replyPreview) replyPreview.style.display = 'flex';
+        var msgInput = document.getElementById('pmOwnChatMessageInput');
+        if (msgInput) msgInput.focus();
+      });
+    });
+    innerEl.querySelectorAll('[data-pmjump-change]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var changeId = btn.getAttribute('data-pmjump-change');
+        var target = innerEl.querySelector('.sinb-field-card[data-change-id="' + changeId + '"]');
+        if (!target) return;
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.classList.remove('sinb-field-card-flash');
+        void target.offsetWidth;
+        target.classList.add('sinb-field-card-flash');
+      });
+    });
+
+    // Wire up the real editing widgets rendered inside a "resubmit" field card (see
+    // buildPmResubmitInputHtml) — clicking a billing-card or choice-tile selects it and syncs the
+    // paired hidden input; clicking the toggle flips it. Each widget is scoped to its own change
+    // id via the data attribute, so this works correctly with any number of resubmit cards open
+    // in the same thread at once.
+    innerEl.querySelectorAll('[data-pm-resubmit-radio]').forEach(function (wrap) {
+      var changeId = wrap.getAttribute('data-pm-resubmit-radio');
+      wrap.querySelectorAll('.billing-card').forEach(function (card) {
+        card.addEventListener('click', function () {
+          wrap.querySelectorAll('.billing-card').forEach(function (c) { c.classList.remove('selected'); });
+          card.classList.add('selected');
+          var hidden = innerEl.querySelector('[data-pm-resubmit-input="' + changeId + '"]');
+          if (hidden) hidden.value = card.getAttribute('data-radio-value');
+        });
+      });
+    });
+    innerEl.querySelectorAll('[data-pm-resubmit-tiles]').forEach(function (wrap) {
+      var changeId = wrap.getAttribute('data-pm-resubmit-tiles');
+      wrap.querySelectorAll('.choice-tile').forEach(function (tile) {
+        tile.addEventListener('click', function () {
+          wrap.querySelectorAll('.choice-tile').forEach(function (t) { t.classList.remove('selected'); t.setAttribute('aria-checked', 'false'); });
+          tile.classList.add('selected');
+          tile.setAttribute('aria-checked', 'true');
+          var hidden = innerEl.querySelector('[data-pm-resubmit-input="' + changeId + '"]');
+          var display = tile.querySelector('.tile-title').textContent.trim();
+          if (hidden) hidden.value = display;
+        });
+      });
+    });
+    innerEl.querySelectorAll('[data-pm-resubmit-toggle]').forEach(function (toggle) {
+      toggle.addEventListener('click', function () {
+        var changeId = toggle.getAttribute('data-pm-resubmit-toggle');
+        var nowOn = !toggle.classList.contains('on');
+        toggle.classList.toggle('on', nowOn);
+        var hidden = innerEl.querySelector('[data-pm-resubmit-input="' + changeId + '"]');
+        if (hidden) hidden.value = nowOn ? 'Yes' : 'No';
+      });
+    });
+
+    innerEl.querySelectorAll('[data-pmcr-resubmit-save]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var batchId = btn.getAttribute('data-pmcr-resubmit-save');
+        var changeId = btn.getAttribute('data-change-id');
+        var change = pmcrFindChange(batchId, changeId, pmCurrentName());
+        if (!change) return;
+        var hidden = innerEl.querySelector('[data-pm-resubmit-input="' + changeId + '"]');
+        var newVal = hidden ? hidden.value : change.newValue;
+        if (newVal === '' || newVal === null || typeof newVal === 'undefined') {
+          showToast('Enter a value before resubmitting.');
+          return;
+        }
+        change.newValue = newVal;
+        change.status = 'pending';
+        if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
+        pmChatAddMessage(pmCurrentName(), { kind: 'text', fromAdmin: false, text: 'I\u2019ve updated \u201c' + change.fieldLabel + '\u201d and resubmitted it for review.' });
+        if (typeof logPmChatActivity === 'function') {
+          logPmChatActivity(pmCurrentName(), { type: 'resubmitted', actor: pmCurrentName(), action: 'resubmitted', fieldLabel: change.fieldLabel, newValue: newVal });
+        }
+        // Admin doesn't get a fresh notification for this specific event yet (the original "PM
+        // Profile Update Request" notification already exists for the batch) — flagged as a gap
+        // worth closing in a follow-up rather than bolted on here without checking whether it
+        // should merge into that existing entry or stand alone.
+        showToast('Resubmitted \u201c' + change.fieldLabel + '\u201d for review.');
+        renderPmOwnChatThread();
+      });
+    });
+  }
+  var pmOwnChatReplyPreviewCloseBtn = document.getElementById('pmOwnChatReplyPreviewClose');
+  if (pmOwnChatReplyPreviewCloseBtn) {
+    pmOwnChatReplyPreviewCloseBtn.addEventListener('click', function () {
+      pmChatReplyingTo = null;
+      document.getElementById('pmOwnChatReplyPreview').style.display = 'none';
+    });
   }
   function pmOwnChatSend() {
     var input = document.getElementById('pmOwnChatMessageInput');
     var text = input.value.trim();
     if (!text) return;
-    pmChatAddMessage(pmCurrentName(), { kind: 'text', fromAdmin: false, text: text });
+    var msg = { kind: 'text', fromAdmin: false, text: text };
+    if (pmChatReplyingTo) { msg.replyToChangeId = pmChatReplyingTo.changeId; msg.replyToFieldLabel = pmChatReplyingTo.fieldLabel; }
+    pmChatAddMessage(pmCurrentName(), msg);
     if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
     input.value = '';
     if (pmOwnChatSendBtn) pmOwnChatSendBtn.disabled = true;
+    pmChatReplyingTo = null;
+    var replyPreview = document.getElementById('pmOwnChatReplyPreview');
+    if (replyPreview) replyPreview.style.display = 'none';
     renderPmOwnChatThread();
   }
   var pmOwnChatSendBtn = document.getElementById('pmOwnChatSendBtn');
@@ -22020,7 +22411,7 @@
     // A PM can only start an edit request once their initial onboarding is actually complete —
     // same rule the Supplier side enforces (renderSupOnboardingCompletionState) — so this defers
     // to whatever pmObUpdateBanner most recently computed rather than showing it unconditionally.
-    if (editBtn) editBtn.style.display = (key === 'profile' && !editBtn.hasAttribute('data-ob-incomplete')) ? '' : 'none';
+    pmSyncAcctEditButtons(key === 'profile' && !!editBtn && !editBtn.hasAttribute('data-ob-incomplete'));
     if (key === 'chat' && typeof renderPmOwnChatThread === 'function') renderPmOwnChatThread(highlightBatchId);
   }
   document.querySelectorAll('#pmSettingsTabs .pm-settings-tab-item').forEach(function (tab) {
@@ -22151,10 +22542,18 @@
     var tradingNameEl = document.getElementById('tradingName');
     if (signupData.companyName) tradingNameEl.value = signupData.companyName;
 
-    var fullName = signupData.fullName || 'Jordan Blake';
-    var jobTitle = signupData.jobTitle || 'Portfolio Manager';
-    var phone = (signupData.countryCode || '+44') + ' ' + (signupData.phoneNumber || '7700 900123');
-    var email = signupData.email || 'jordan@thameshouse.co.uk';
+    // A genuine fresh signup has no support-contact info yet, so defaulting it to the account
+    // owner's own name/email is a reasonable starting point. But this function also runs every
+    // time an already-onboarded PM reopens the wizard to edit something — and until this fix, it
+    // unconditionally overwrote whatever real support contact they'd already saved with their own
+    // identity again, which is how "Company registration number" being the only intended change
+    // could still show Full Name and Email as unintended ones. Preferring the already-saved
+    // supportName/supportEmail (etc.) when present fixes that; the account-owner fallback only
+    // fires when there's genuinely nothing saved yet.
+    var fullName = signupData.supportName || signupData.fullName || 'Jordan Blake';
+    var jobTitle = signupData.supportTitle || signupData.jobTitle || 'Portfolio Manager';
+    var phone = signupData.supportPhone || ((signupData.countryCode || '+44') + ' ' + (signupData.phoneNumber || '7700 900123'));
+    var email = signupData.supportEmail || signupData.email || 'jordan@thameshouse.co.uk';
 
     document.getElementById('supportName').value = fullName;
     document.getElementById('supportTitle').value = jobTitle;
@@ -22184,7 +22583,11 @@
   var supObEditSnapshot = null;
   var SUP_OB_FIELD_MAP = {
     businessType: { label: 'How do you operate', section: 'Business Type', fieldType: 'business-type' },
-    fullName: { label: 'Full legal name', section: 'Identity' },
+    // fullName intentionally excluded: a change of legal name is an identity change, not a
+    // profile edit, and shouldn't be approvable through a casual chat exchange the way a phone
+    // number or address can be. It's still asked for and required at signup (see
+    // SUP_OB_REQUIRED_SOLE below, which is a separate list) — it just never becomes a submittable
+    // change-request field once onboarding is already complete.
     homeAddress: { label: 'Home address', section: 'Identity' },
     nationality: { label: 'Nationality', section: 'Identity', fieldType: 'nationality', selectOptions: ['British', 'Austrian', 'Irish', 'Polish', 'Other'] },
     niNumber: { label: 'NI number', section: 'Identity' },
@@ -24015,6 +24418,15 @@
   function showPMDashboard(signupData, mode) {
     closeAnyLeakedGlobalModals();
     signupData = signupData || {};
+    // pmCurrentName() (and everything keyed off it — the PM's own Chat tab, change-request
+    // lookups) reads from signupCapturedData, not from this function's local parameter. Without
+    // this merge, a PM who logs in and goes straight to Chat without ever opening Edit first sees
+    // an empty conversation, since signupCapturedData would still be sitting at its {} default —
+    // the on-screen name was already right (set below, from the parameter directly), but the
+    // identity everything else keys off of was not. Merged rather than reassigned so it can only
+    // add to whatever signupCapturedData already holds this session, never blank out richer data
+    // already collected (e.g. mid-session after a real onboarding pass).
+    if (typeof signupCapturedData !== 'undefined') Object.assign(signupCapturedData, signupData);
     var fullName = signupData.fullName || 'Jordan Blake';
     var firstName = fullName.trim().split(/\s+/)[0];
     var email = signupData.email || 'jordan@thameshouse.co.uk';
@@ -27125,6 +27537,67 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
   /* One tap marks a day off, another tap frees it again — the same gesture both ways, so there's
      no dead end where a marked day can only be undone from the side panel. */
+  /* Clicking a day in the Availability tab opens this instead of instantly toggling it \u2014 shows
+     the day's current status and any jobs already on it, so a decision to block the day is made
+     with real context rather than one accidental tap silently taking effect. */
+  var supcalDayDetailDate = null;
+  function supcalOpenDayDetail(date) {
+    supcalDayDetailDate = supcalMidnight(date);
+    var d = supcalDayDetailDate;
+    var key = supcalDateKey(d);
+    var unavailable = !!supcalUnavailableDays[key];
+    var partial = supcalPartialDays[key];
+    document.getElementById('supcalDayDetailTitle').textContent = SUPCAL_DAY_NAMES[(d.getDay() + 6) % 7] + ', ' + d.getDate() + ' ' + SUPCAL_MONTHS[d.getMonth()];
+
+    var statusRow = document.getElementById('supcalDayDetailStatusRow');
+    var statusText = document.getElementById('supcalDayDetailStatusText');
+    statusRow.className = 'supcal-dd-status-row' + (unavailable ? ' off' : partial ? ' partial' : '');
+    statusText.textContent = unavailable ? 'Unavailable \u2014 all day' : partial ? 'Partially unavailable \u2014 ' + supcalRangeHours(partial) : 'Available';
+
+    var rangeNote = document.getElementById('supcalDayDetailRangeNote');
+    var range = supcalRangeContaining(d);
+    if (range && range.allDay !== false && supcalRangeDays(range) > 1) {
+      rangeNote.textContent = 'Part of ' + supcalRangeTitle(range);
+      rangeNote.style.display = '';
+    } else {
+      rangeNote.style.display = 'none';
+    }
+
+    var jobsSection = document.getElementById('supcalDayDetailJobsSection');
+    var jobsForDay = supcalDemoJobs.filter(function (j) { return supcalSameDay(j.date, d); }).sort(function (a, b) { return a.time.localeCompare(b.time); });
+    if (jobsForDay.length) {
+      document.getElementById('supcalDayDetailJobsLabel').textContent = jobsForDay.length === 1 ? '1 job already booked this day' : jobsForDay.length + ' jobs already booked this day';
+      var shown = jobsForDay.slice(0, 4);
+      var extra = jobsForDay.length - shown.length;
+      document.getElementById('supcalDayDetailJobsList').innerHTML = shown.map(function (j) {
+        return '<div class="supcal-dd-job-row"><span class="ddjr-time">' + j.time + '</span><span class="ddjr-title">' + supjrEscapeHtml(j.title) + '</span></div>';
+      }).join('') + (extra > 0 ? '<div class="supcal-dd-jobs-more">+' + extra + ' more</div>' : '');
+      jobsSection.style.display = '';
+    } else {
+      jobsSection.style.display = 'none';
+    }
+
+    var toggleBtn = document.getElementById('supcalDayDetailToggleBtn');
+    toggleBtn.textContent = unavailable ? 'Make this day available' : jobsForDay.length ? 'Mark this day as time off anyway' : 'Mark this day as time off';
+    toggleBtn.className = 'btn ' + (unavailable ? 'btn-secondary-light' : 'btn-primary');
+
+    document.getElementById('supcalDayDetailOverlay').classList.add('open');
+  }
+  function supcalCloseDayDetail() { document.getElementById('supcalDayDetailOverlay').classList.remove('open'); }
+  document.getElementById('supcalDayDetailCloseBtn').addEventListener('click', supcalCloseDayDetail);
+  document.getElementById('supcalDayDetailOverlay').addEventListener('click', function (e) { if (e.target === this) supcalCloseDayDetail(); });
+  document.getElementById('supcalDayDetailToggleBtn').addEventListener('click', function () {
+    if (!supcalDayDetailDate) return;
+    supcalToggleDay(supcalDayDetailDate);
+    supcalCloseDayDetail();
+  });
+  document.getElementById('supcalDayDetailHoursLink').addEventListener('click', function () {
+    if (!supcalDayDetailDate) return;
+    var d = supcalDayDetailDate;
+    supcalCloseDayDetail();
+    supcalOpenTimeOffModal(-1, d);
+  });
+
   function supcalToggleDay(date) {
     var d = supcalMidnight(date);
     var existing = supcalRangeContaining(d);
@@ -27174,7 +27647,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       var unavailable = !!supcalUnavailableDays[key];
       var selected = supcalSameDay(d, supcalAvailSelectedDate);
       var partial = supcalPartialDays[key];
-      html += '<div class="supcal-day-card' + (selected ? ' selected' : '') + (unavailable ? ' unavailable' : '') + (partial ? ' partial' : '') + supcalRangeEdgeClass(d) + '" data-supcal-day="' + key + '" role="button" tabindex="0" title="' + (unavailable || partial ? 'Tap to make available' : 'Tap to mark as time off') + '">' +
+      html += '<div class="supcal-day-card' + (selected ? ' selected' : '') + (unavailable ? ' unavailable' : '') + (partial ? ' partial' : '') + supcalRangeEdgeClass(d) + '" data-supcal-day="' + key + '" role="button" tabindex="0" title="View this day">' +
         '<div class="dc-dow">' + SUPCAL_DOW[d.getDay()] + '</div>' +
         '<div class="dc-num">' + d.getDate() + '</div>' +
         '<div class="dc-status' + (unavailable ? ' closed' : '') + '">' + (unavailable ? 'Time off' : partial ? supcalRangeHours(partial) : 'Open') + '</div>' +
@@ -27183,7 +27656,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     html += '</div>';
     document.getElementById('supcalAvailBody').innerHTML = html;
     document.getElementById('supcalAvailMonthLabel').textContent = SUPCAL_MONTHS[weekStart.getMonth()] + ' ' + weekStart.getFullYear();
-    document.getElementById('supcalAvailHint').textContent = 'Tap a day to book it off \u2014 tap it again to free it up. Consecutive days group into one period automatically.';
+    document.getElementById('supcalAvailHint').textContent = 'Tap a day to see its details and set time off.';
     wireSupcalDayCards();
   }
   function supcalRenderAvailMonth() {
@@ -27198,18 +27671,18 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       var selected = supcalSameDay(date, supcalAvailSelectedDate);
       var isUnavailable = !!supcalUnavailableDays[supcalDateKey(date)];
       var isPartial = !!supcalPartialDays[supcalDateKey(date)];
-      html += '<div class="supcal-avail-month-cell' + (selected ? ' selected' : '') + (isUnavailable ? ' unavailable' : '') + (isPartial ? ' partial' : '') + supcalRangeEdgeClass(date) + '" data-supcal-monthday="' + d + '" role="button" tabindex="0" title="' + (isUnavailable ? 'Tap to make available' : isPartial ? 'Part of this day is blocked \u2014 tap to clear' : 'Tap to mark as time off') + '">' + d + (isUnavailable || isPartial ? '<span class="supcal-avail-month-dot"></span>' : '') + '</div>';
+      html += '<div class="supcal-avail-month-cell' + (selected ? ' selected' : '') + (isUnavailable ? ' unavailable' : '') + (isPartial ? ' partial' : '') + supcalRangeEdgeClass(date) + '" data-supcal-monthday="' + d + '" role="button" tabindex="0" title="View this day">' + d + (isUnavailable || isPartial ? '<span class="supcal-avail-month-dot"></span>' : '') + '</div>';
     }
     html += '</div>';
     document.getElementById('supcalAvailBody').innerHTML = html;
     document.getElementById('supcalAvailMonthLabel').textContent = SUPCAL_MONTHS[m] + ' ' + y;
-    document.getElementById('supcalAvailHint').textContent = 'Tap a date to book it off \u2014 tap it again to free it up. Consecutive days group into one period automatically.';
+    document.getElementById('supcalAvailHint').textContent = 'Tap a date to see its details and set time off.';
     document.querySelectorAll('.supcal-avail-month-cell[data-supcal-monthday]').forEach(function (cell) {
       function fire() {
         var day = parseInt(cell.getAttribute('data-supcal-monthday'), 10);
         var clickedDate = new Date(y, m, day);
         supcalAvailSelectedDate = clickedDate;
-        supcalToggleDay(clickedDate);
+        supcalOpenDayDetail(clickedDate);
       }
       cell.addEventListener('click', fire);
       cell.addEventListener('keydown', function (e) {
@@ -27227,18 +27700,18 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       '<div class="supcal-avail-day-title">' + SUPCAL_DAY_NAMES[(d.getDay() + 6) % 7] + ', ' + d.getDate() + ' ' + SUPCAL_MONTHS[d.getMonth()] + ' ' + d.getFullYear() + '</div>' +
       '<div class="supcal-avail-day-row ' + (unavailable ? '' : 'avail') + '" style="' + (unavailable ? 'background:#fef2f2;color:#b91c1c;' : '') + '"><span>Availability</span><span>' + (unavailable ? 'Time off' : 'Available') + '</span></div>' +
       (partOf ? '<div class="supcal-avail-day-row" style="justify-content:center;font-size:12px;color:var(--text-body-muted);">Part of ' + supcalRangeTitle(partOf) + '</div>' : '') +
-      '<div class="supcal-avail-day-row toggle" id="supcalDayToggleRow">' + (unavailable ? 'Tap to make this day available' : 'Tap to mark as time off') + '</div>' +
+      '<div class="supcal-avail-day-row toggle" id="supcalDayToggleRow">View details &amp; set time off</div>' +
     '</div>';
     document.getElementById('supcalAvailBody').innerHTML = html;
     document.getElementById('supcalAvailMonthLabel').textContent = SUPCAL_MONTHS[d.getMonth()] + ' ' + d.getFullYear();
-    document.getElementById('supcalAvailHint').textContent = 'Tap the row below to switch this day between available and time off.';
-    document.getElementById('supcalDayToggleRow').addEventListener('click', function () { supcalToggleDay(d); });
+    document.getElementById('supcalAvailHint').textContent = 'Tap the row below to see this day\u2019s details and set time off.';
+    document.getElementById('supcalDayToggleRow').addEventListener('click', function () { supcalOpenDayDetail(d); });
   }
   function wireSupcalDayCards() {
     document.querySelectorAll('.supcal-day-card[data-supcal-day]').forEach(function (card) {
       function fire() {
         var parts = card.getAttribute('data-supcal-day').split('-');
-        supcalToggleDay(new Date(parseInt(parts[0], 10), parseInt(parts[1], 10), parseInt(parts[2], 10)));
+        supcalOpenDayDetail(new Date(parseInt(parts[0], 10), parseInt(parts[1], 10), parseInt(parts[2], 10)));
       }
       card.addEventListener('click', fire);
       card.addEventListener('keydown', function (e) {
@@ -27365,7 +27838,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     document.getElementById('supcalTimeOffSaveBtn').disabled = !(f && t);
   }
 
-  function supcalOpenTimeOffModal(idx) {
+  function supcalOpenTimeOffModal(idx, presetDate) {
     supcalEditingTimeOffIdx = typeof idx === 'number' ? idx : -1;
     var editing = supcalEditingTimeOffIdx > -1 && supcalTimeOffRanges[supcalEditingTimeOffIdx];
     document.getElementById('supcalTimeOffModalTitle').textContent = editing ? 'Edit Time Off' : 'Mark Time Off';
@@ -27376,8 +27849,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     supcalRenderSlots();
     supcalSetTimeOffScope(editing && editing.allDay === false ? 'part' : 'all');
     document.getElementById('supcalTimeOffError').classList.remove('show');
-    calState.supcalTimeOffFrom.selected = editing ? new Date(editing.from) : null;
-    calState.supcalTimeOffTo.selected = editing ? new Date(editing.to) : null;
+    calState.supcalTimeOffFrom.selected = editing ? new Date(editing.from) : (presetDate ? new Date(presetDate) : null);
+    calState.supcalTimeOffTo.selected = editing ? new Date(editing.to) : (presetDate ? new Date(presetDate) : null);
     if (typeof updateCalFieldDisplay === 'function') { updateCalFieldDisplay('supcalTimeOffFrom'); updateCalFieldDisplay('supcalTimeOffTo'); }
     supcalUpdateTimeOffSummary();
     document.getElementById('supcalTimeOffOverlay').classList.add('open');
@@ -27558,10 +28031,24 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       supcalAddTimeOffRange(newFrom, newTo, opts);
       showToast('Time off updated \u2014 ' + whenText + supcalRangeTitle({ from: newFrom, to: newTo }) + '.');
     } else {
+      // If the new range overlaps one or more entries the supplier already has (whether they
+      // reopened Add Time Off for a date they'd forgotten they'd marked, or genuinely meant to
+      // change it), replace what's there instead of stacking a second, duplicate card for the
+      // same date in Upcoming Time Off. Only relevant here — the branch above already replaces
+      // cleanly when editing a specific entry via its own Edit button.
+      var overlapping = supcalTimeOffRanges.filter(function (r) {
+        return supcalMidnight(r.from) <= newTo && supcalMidnight(r.to) >= newFrom;
+      });
+      overlapping.forEach(function (r) {
+        var idx = supcalTimeOffRanges.indexOf(r);
+        if (idx > -1) supcalTimeOffRanges.splice(idx, 1);
+      });
       supcalAddTimeOffRange(newFrom, newTo, opts);
-      showToast(isPart
-        ? 'Blocked ' + slotText + ' on ' + supcalRangeTitle({ from: newFrom, to: newTo }) + '.'
-        : days + ' day' + (days === 1 ? '' : 's') + ' booked off \u2014 ' + supcalRangeTitle({ from: newFrom, to: newTo }) + '.');
+      showToast(overlapping.length
+        ? 'Updated \u2014 ' + whenText + supcalRangeTitle({ from: newFrom, to: newTo }) + ' now reflects this instead.'
+        : isPart
+          ? 'Blocked ' + slotText + ' on ' + supcalRangeTitle({ from: newFrom, to: newTo }) + '.'
+          : days + ' day' + (days === 1 ? '' : 's') + ' booked off \u2014 ' + supcalRangeTitle({ from: newFrom, to: newTo }) + '.');
     }
     supcalEditingTimeOffIdx = -1;
     supcalRenderTimeOff();
@@ -29478,6 +29965,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
   var adminNotifications = []; // populated dynamically as real events happen (onboarding submitted, edit requests, resubmissions, chat, document resubmits)
   var supNotifications = [];   // same idea, supplier-side (chat from admin, approved/declined, resubmit requested)
+  var pmNotifications = [];    // same idea again, PM-side
 
   var jobIcon = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>';
   var alertIcon = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>';
@@ -29511,6 +29999,12 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     entry.date = entry.date || 'Just now';
     supNotifications.unshift(entry);
     if (typeof renderSupNotifications === 'function') renderSupNotifications();
+  }
+  function pushPmNotification(entry) {
+    entry.unread = true;
+    entry.date = entry.date || 'Just now';
+    pmNotifications.unshift(entry);
+    if (typeof renderPmNotifications === 'function') renderPmNotifications();
   }
   // Repeated events of the same kind (e.g. admin approves several fields in a row) fold into one
   // row with a running count, as long as the previous one is still unread — reading it resets the
@@ -29557,10 +30051,87 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     openSupplierDetail(idx, 'app');
     setTimeout(function () { if (typeof switchSupTab === 'function') switchSupTab(tabKey); }, 60);
   }
+  // Same idea for a PM applicant notification — separate from adminNotifOpenApplicant above since
+  // that one is hardcoded to supplierApplicants/openSupplierDetail/switchSupTab specifically, none
+  // of which exist for the PM side. openApplicantDetail has no equivalent of switchSupTab to call
+  // afterward (PM's tab-switching is plain click-delegated, not a named function), so this
+  // simulates a click on the real tab instead of duplicating that logic.
+  function adminNotifOpenPmApplicant(pmName, tabKey) {
+    if (typeof pmApplicants === 'undefined') return;
+    var idx = -1;
+    for (var i = 0; i < pmApplicants.length; i++) { if (pmApplicants[i].name === pmName) { idx = i; break; } }
+    if (idx === -1 || typeof openApplicantDetail !== 'function' || typeof showAdminView !== 'function') return;
+    openApplicantDetail(idx);
+    setTimeout(function () {
+      var tab = document.querySelector('.client-tab[data-tab="' + tabKey + '"]');
+      if (tab) tab.click();
+    }, 60);
+  }
   function supNotifOpenSettingsTab(tabKey, highlightBatchId) {
     if (typeof showSupplierView === 'function') showSupplierView('profile-settings');
     setTimeout(function () { if (typeof switchSupSettingsTab === 'function') switchSupSettingsTab(tabKey, highlightBatchId); }, 60);
   }
+  function pmNotifOpenSettingsTab(tabKey, highlightBatchId) {
+    if (typeof showPMView === 'function') showPMView('settings');
+    setTimeout(function () { if (typeof switchPMSettingsTab === 'function') switchPMSettingsTab(tabKey, highlightBatchId); }, 60);
+  }
+
+  // PM's own floating "changes requested" toast, mirroring checkSupResubmitNotification /
+  // syncSupResubmitNotifEntry exactly — reads pmChangeRequests directly for the currently logged
+  // in PM rather than through a "live demo account" helper, since PM's chat store doesn't have the
+  // seeded/live split Supplier's does (see the PM chat rebuild from earlier this session).
+  function checkPmResubmitNotification() {
+    var notif = document.getElementById('pmRequestFloatNotif');
+    if (!notif) return;
+    var pmDash = document.getElementById('pmDashboard');
+    if (!pmDash || !pmDash.classList.contains('active')) { notif.classList.remove('show'); return; }
+    if (typeof loadChangeRequestsFromStorage === 'function') loadChangeRequestsFromStorage();
+    var name = (typeof pmCurrentName === 'function') ? pmCurrentName() : '';
+    var batches = (pmChangeRequests && pmChangeRequests[name]) || [];
+    var needsFix = [];
+    batches.forEach(function (b) { b.changes.forEach(function (ch) { if (ch.status === 'resubmit') needsFix.push(ch.id); }); });
+    syncPmResubmitNotifEntry(needsFix.length);
+    var unreadCount = pmNotifications.filter(function (n) { return n.unread; }).length;
+    var dot = document.getElementById('pmBellDot');
+    if (dot) dot.style.display = unreadCount > 0 ? '' : 'none';
+    if (!needsFix.length) { notif.classList.remove('show'); return; }
+    var sig = needsFix.sort().join(',');
+    var seen = suprqGetSeenSignatures();
+    if (sig === seen.pm) return;
+    var titleEl = document.getElementById('pmRequestFloatNotifTitle');
+    if (titleEl) titleEl.textContent = needsFix.length === 1 ? '1 change needs your attention' : needsFix.length + ' changes need your attention';
+    notif.classList.add('show');
+  }
+  function syncPmResubmitNotifEntry(count) {
+    syncStateNotification(pmNotifications, 'resubmit-requested', count > 0 ? {
+      type: 'resubmit',
+      title: 'Action Required: Resubmit Information',
+      desc: 'Admin has requested you to resubmit ' + count + ' item' + (count === 1 ? '' : 's') + '.',
+      onClick: function () { pmNotifOpenSettingsTab('chat'); }
+    } : null);
+    if (typeof renderPmNotifications === 'function') renderPmNotifications();
+  }
+  document.getElementById('pmRequestFloatNotif').addEventListener('click', function (e) {
+    if (e.target.closest('#pmRequestFloatNotifClose')) return;
+    var name = (typeof pmCurrentName === 'function') ? pmCurrentName() : '';
+    var batches = (pmChangeRequests && pmChangeRequests[name]) || [];
+    var needsFix = [];
+    batches.forEach(function (b) { b.changes.forEach(function (ch) { if (ch.status === 'resubmit') needsFix.push(ch.id); }); });
+    suprqSetSeenSignature('pm', needsFix.sort().join(','));
+    this.classList.remove('show');
+    pmNotifOpenSettingsTab('chat');
+  });
+  document.getElementById('pmRequestFloatNotifClose').addEventListener('click', function (e) {
+    e.stopPropagation();
+    var name = (typeof pmCurrentName === 'function') ? pmCurrentName() : '';
+    var batches = (pmChangeRequests && pmChangeRequests[name]) || [];
+    var needsFix = [];
+    batches.forEach(function (b) { b.changes.forEach(function (ch) { if (ch.status === 'resubmit') needsFix.push(ch.id); }); });
+    suprqSetSeenSignature('pm', needsFix.sort().join(','));
+    document.getElementById('pmRequestFloatNotif').classList.remove('show');
+  });
+  setInterval(checkPmResubmitNotification, 3000);
+  setTimeout(checkPmResubmitNotification, 1500);
 
   function renderNotifications() {
     var list = document.getElementById('notifListContent');
@@ -30975,7 +31546,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       '<div class="pm-card-top">' +
         '<div class="pm-card-avatar">' + supAppAvatarHtml(c) + '</div>' +
         '<div class="pm-card-name-wrap">' +
-          '<div class="pm-card-name">' + c.name + checkSvgSm.replace('width="12" height="12"', 'width="13" height="13"') + '</div>' +
+          '<div class="pm-card-name">' + c.name + '</div>' +
           '<div class="pm-card-email">' + (c.email || '\u2014') + '</div>' +
         '</div>' +
         '<div class="pm-card-actions">' +
@@ -30999,7 +31570,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       '<div class="supapp-card-divider"></div>' +
       '<div class="supplier-pill-row">' +
         '<span class="supplier-approved-pill ' + pmClientStatusClass(eff) + '">' + pmClientStatusDisplayText(eff) + '</span>' +
-        (c.business ? '<div class="pm-verified-badge">' + checkSvgSm + 'Verified</div>' : '<div class="pm-verified-badge unverified">' + unverifiedIconSvg + 'Unverified</div>') +
       '</div>' +
       '<div class="supapp-card-divider supapp-card-divider-footer"></div>' +
       '<div class="supapp-card-footer" style="justify-content:space-between;">' +
@@ -32388,6 +32958,36 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       });
     });
   }
+  // PM's own equivalent — same shape as renderSupNotifications, minus the supplier-only floating
+  // toast integration (supRequestFloatNotif), which PM doesn't have.
+  function renderPmNotifications() {
+    var list = document.getElementById('pmNotifListContent');
+    var empty = document.getElementById('pmNotifEmpty');
+    if (!list) return;
+    list.innerHTML = pmNotifications.map(function (n, i) {
+      return '<div class="notif-row' + (n.unread ? ' unread' : '') + '" data-pm-notif-idx="' + i + '">' +
+        '<div class="nr-icon ' + notifIconClass(n.type) + '">' + notifIconHtml(n.type) + '</div>' +
+        '<div class="nr-body"><div class="nr-title">' + n.title + '</div><div class="nr-desc">' + n.desc + '</div><div class="nr-date">' + n.date + '</div></div>' +
+        (n.unread ? '<div class="nr-dot"></div>' : '') +
+      '</div>';
+    }).join('');
+    if (empty) empty.style.display = pmNotifications.length ? 'none' : '';
+    var unreadCount = pmNotifications.filter(function (n) { return n.unread; }).length;
+    var dot = document.getElementById('pmBellDot');
+    if (dot) dot.style.display = unreadCount > 0 ? '' : 'none';
+    list.querySelectorAll('.notif-row').forEach(function (row) {
+      row.addEventListener('click', function () {
+        var idx = parseInt(row.getAttribute('data-pm-notif-idx'), 10);
+        var n = pmNotifications[idx];
+        if (!n) return;
+        n.unread = false;
+        var panel = document.getElementById('pmNotifPanel');
+        if (panel) panel.classList.remove('open');
+        if (typeof n.onClick === 'function') n.onClick();
+        renderPmNotifications();
+      });
+    });
+  }
   function checkAdminNewRequestNotification() {
     var notif = document.getElementById('adminRequestFloatNotif');
     if (!notif) return;
@@ -32496,6 +33096,16 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var supNotifPanel = document.getElementById('supNotifPanel');
     if (supNotifPanel && supNotifPanel.classList.contains('open') && !supNotifPanel.contains(e.target) && e.target.id !== 'supBellBtn') {
       supNotifPanel.classList.remove('open');
+    }
+  });
+  document.getElementById('pmBellBtn').addEventListener('click', function (e) {
+    e.stopPropagation();
+    document.getElementById('pmNotifPanel').classList.toggle('open');
+  });
+  document.addEventListener('click', function (e) {
+    var pmNotifPanel = document.getElementById('pmNotifPanel');
+    if (pmNotifPanel && pmNotifPanel.classList.contains('open') && !pmNotifPanel.contains(e.target) && e.target.id !== 'pmBellBtn') {
+      pmNotifPanel.classList.remove('open');
     }
   });
   // Seed one starting example of each purely event-driven notification type (the ones with no
@@ -32829,6 +33439,57 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     declined: { label: 'Declined', class: 'declined' },
     resubmit: { label: 'Needs your update', class: 'resubmit' }
   };
+  // PM's own version of Supplier's buildResubmitInputHtml — same idea (show the real editing
+  // control for this field's type instead of a plain text box), scoped to the four field types
+  // PM's onboarding actually has: plain text (the default), toggle, billing-cycle, and
+  // location-type. Reuses Supplier's exact .billing-card markup for billing-cycle since PM offers
+  // the identical three options, and PM's own .choice-tile markup (from locationTypeTiles in the
+  // wizard) for location-type, so both render pixel-identical to their wizard counterparts.
+  function buildPmResubmitInputHtml(ch) {
+    var type = ch.fieldType || 'text';
+    if (type === 'billing-cycle') {
+      var BILLING_OPTIONS = [
+        { value: 'Pay upfront', title: 'Pay upfront', desc: 'Pay per job at the time of booking using your card on file. Available immediately on activation \u2014 no approval needed.', sub: '\uD83D\uDEE1 Payment held in escrow until job is completed' },
+        { value: 'Fortnightly', title: 'Fortnightly', desc: 'Consolidated invoice every 2 weeks settled by Direct Debit. Balanced for steady-volume operations.' },
+        { value: 'Monthly (4 weeks)', title: 'Monthly (4 weeks)', desc: 'Single monthly consolidated invoice via Direct Debit. Most common for established operators.' }
+      ];
+      return '<div data-pm-resubmit-radio="' + ch.id + '">' +
+        BILLING_OPTIONS.map(function (opt) {
+          var selected = opt.value === ch.newValue;
+          return '<div class="billing-card' + (selected ? ' selected' : '') + '" data-radio-value="' + supjrEscapeHtml(opt.value) + '">' +
+            '<div class="bc-top"><div class="bc-radio"></div><div class="bc-title">' + opt.title + '</div></div>' +
+            '<div class="bc-desc">' + opt.desc + '</div>' +
+            (opt.sub ? '<div class="bc-sub">' + opt.sub + '</div>' : '') +
+          '</div>';
+        }).join('') +
+      '</div>' +
+      '<input type="hidden" data-pm-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '">';
+    }
+    if (type === 'location-type') {
+      var LOC_OPTIONS = [
+        { value: 'single', title: 'Single location', desc: 'One office or operating location' },
+        { value: 'branch', title: 'Branch / part of a group', desc: 'One of multiple offices or franchises' }
+      ];
+      var currentLocValue = (ch.newValue === 'Single location') ? 'single' : (ch.newValue === 'Branch / part of a group') ? 'branch' : ch.newValue;
+      return '<div class="tile-row-2" data-pm-resubmit-tiles="' + ch.id + '">' +
+        LOC_OPTIONS.map(function (opt) {
+          var selected = opt.value === currentLocValue;
+          return '<div class="choice-tile' + (selected ? ' selected' : '') + '" data-value="' + opt.value + '" tabindex="0" role="radio" aria-checked="' + selected + '">' +
+            '<div class="tile-body"><div class="tile-title">' + opt.title + '</div><div class="tile-desc">' + opt.desc + '</div></div>' +
+            '<div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>' +
+          '</div>';
+        }).join('') +
+      '</div>' +
+      '<input type="hidden" data-pm-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(ch.newValue) + '" data-pm-resubmit-loctype="1">';
+    }
+    if (type === 'toggle') {
+      var toggleOn = ch.newValue === 'Yes' || ch.newValue === true;
+      return '<button type="button" class="toggle-switch' + (toggleOn ? ' on' : '') + '" data-pm-resubmit-toggle="' + ch.id + '"></button>' +
+        '<input type="hidden" data-pm-resubmit-input="' + ch.id + '" value="' + (toggleOn ? 'Yes' : 'No') + '">';
+    }
+    // Default: plain text input, pre-filled with the value the PM originally submitted.
+    return '<input class="field-input" type="text" data-pm-resubmit-input="' + ch.id + '" value="' + supjrEscapeHtml(String(ch.newValue)) + '">';
+  }
   function pmcrFieldCardHtml(batch, ch, forAdmin) {
     var meta = PM_CR_STATUS_META[ch.status] || PM_CR_STATUS_META.pending;
     var body = '';
@@ -32837,8 +33498,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         '<div class="sinb-field-value-row"><span class="sinb-field-new">' + sinbEsc(String(ch.newValue)) + '</span></div>';
     } else if (ch.status === 'resubmit' && !forAdmin) {
       body = '<div class="sinb-field-context">Admin asked you to double-check and update this.</div>' +
-        '<div class="sinb-field-value-row"><span class="sinb-field-new">' + sinbEsc(String(ch.newValue)) + '</span></div>' +
-        '<div class="sinb-field-context" style="margin-top:6px;">Update this from your Profile tab, then resubmit.</div>';
+        '<div class="sinb-field-resubmit-widget" data-pm-resubmit-widget="' + ch.id + '">' + buildPmResubmitInputHtml(ch) + '</div>' +
+        '<div class="sinb-field-actions"><button type="button" class="sinb-cr-action-btn approve" data-pmcr-resubmit-save="' + batch.id + '" data-change-id="' + ch.id + '">Resubmit</button></div>';
     } else if (ch.status === 'pending') {
       body = '<div class="sinb-field-context">' + (forAdmin ? 'PM requested this change.' : 'Waiting for admin to review.') + '</div>' +
         '<div class="sinb-field-value-row"><span class="sinb-field-old">' + sinbEsc(String(ch.oldValue)) + '</span>' +
@@ -32850,9 +33511,11 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     } else if (ch.status === 'declined') {
       body = '<div class="sinb-field-context">This update was not applied.</div><div class="sinb-field-value-row"><span class="sinb-field-old" style="text-decoration:none;">' + sinbEsc(String(ch.newValue)) + '</span></div>';
     }
+    var replyFooter = '<button type="button" class="sinb-field-reply-btn" data-pmfield-reply-btn data-batch-id="' + batch.id + '" data-change-id="' + ch.id + '" data-field-label="' + supjrEscapeHtml(ch.fieldLabel) + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17H4a1 1 0 01-1-1v-4a1 1 0 011-1h5m0-4l-6 6 6 6M21 7v6a4 4 0 01-4 4H8"/></svg>Reply</button>';
     return '<div class="sinb-field-card ' + meta.class + '" data-change-id="' + ch.id + '">' +
       '<div class="sinb-field-card-head"><span class="sinb-field-icon">' + SUP_CR_FIELD_ICON + '</span><span class="sinb-field-title">' + sinbEsc(ch.fieldLabel) + '</span><span class="sinb-field-status-pill ' + meta.class + '">' + meta.label + '</span></div>' +
       '<div class="sinb-field-card-body">' + body + '</div>' +
+      '<div class="sinb-field-card-foot">' + replyFooter + '</div>' +
     '</div>';
   }
   function pmcrEditRequestCardHtml(batch, forAdmin) {
@@ -32928,6 +33591,39 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       oldValue: change.oldValue,
       newValue: change.newValue
     });
+    // Notify the PM, same as Supplier's equivalent action does — folds repeated actions of the
+    // same kind into one running-count row rather than spamming a fresh one per field.
+    if (typeof pushOrMergeUnread === 'function') {
+      if (action === 'approve') {
+        pushOrMergeUnread(pmNotifications, 'approved', function (count) {
+          return {
+            type: 'approved',
+            title: 'Profile Update Approved',
+            desc: 'Your ' + count + ' requested change' + (count === 1 ? ' has' : 's have') + ' been approved and updated.',
+            onClick: function () { pmNotifOpenSettingsTab('profile'); }
+          };
+        });
+      } else if (action === 'decline') {
+        pushOrMergeUnread(pmNotifications, 'declined', function (count) {
+          return {
+            type: 'declined',
+            title: 'Profile Update Declined',
+            desc: 'Your request to update ' + count + ' item' + (count === 1 ? '' : 's') + ' was declined.',
+            onClick: function () { pmNotifOpenSettingsTab('chat'); }
+          };
+        });
+      } else {
+        pushOrMergeUnread(pmNotifications, 'resubmit', function (count) {
+          return {
+            type: 'resubmit',
+            title: 'Resubmission Needed',
+            desc: 'Admin asked you to double-check ' + count + ' item' + (count === 1 ? '' : 's') + ' before it can be approved.',
+            onClick: function () { pmNotifOpenSettingsTab('chat'); }
+          };
+        });
+      }
+      if (typeof renderPmNotifications === 'function') renderPmNotifications();
+    }
   }
 
   /* =========================================================
@@ -32947,6 +33643,14 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     PM_CHAT_MESSAGES[key].push(msg);
     return msg;
   }
+  // { changeId, fieldLabel } while composing a reply, else null — one shared variable since
+  // only one chat surface (admin's PM Applicant Chat, or the PM's own Settings Chat) is ever
+  // open and being typed into at a time.
+  var pmChatReplyingTo = null;
+  function pmChatQuoteBlockHtml(m) {
+    if (!m.replyToChangeId) return '';
+    return '<div class="sinb-quote-block" data-pmjump-change="' + m.replyToChangeId + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4z"/></svg>' + sinbEsc(m.replyToFieldLabel) + '</div>';
+  }
   function seedPmChatIfNeeded(name) {
     var key = pmChatKeyFor(name);
     if (PM_CHAT_MESSAGES[key]) return;
@@ -32959,8 +33663,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       PM_CHAT_MESSAGES[key] = [];
     }
   }
-
-  function pmChatQuoteBlockHtml() { return ''; } // no reply-to-field quoting on the PM side yet — kept simple deliberately
 
   function renderClientChatThread() {
     var threadEl = document.getElementById('clientChatThreadCard');
@@ -32979,7 +33681,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       return { ts: ts, html: '<div class="chat-msg-row" data-batch-anchor="' + batch.id + '"><div class="chat-msg-bubble">' + pmcrEditRequestCardHtml(batch, true) + '</div></div>' };
     });
     (PM_CHAT_MESSAGES[pmChatKeyFor(name)] || []).forEach(function (m) {
-      var html = '<div class="chat-msg-row' + (m.fromAdmin ? '' : ' theirs') + '"><div class="chat-msg-bubble"><div class="cmb-text">' + sinbEsc(m.text) + '</div><div class="cmb-meta">' + (m.fromAdmin ? 'You' : sinbEsc(name)) + '<span class="dot-sep"></span>' + m.time + '</div></div></div>';
+      var html = '<div class="chat-msg-row' + (m.fromAdmin ? '' : ' theirs') + '"><div class="chat-msg-bubble">' + pmChatQuoteBlockHtml(m) + '<div class="cmb-text">' + sinbEsc(m.text) + '</div><div class="cmb-meta">' + (m.fromAdmin ? 'You' : sinbEsc(name)) + '<span class="dot-sep"></span>' + m.time + '</div></div></div>';
       timeline.push({ ts: m.ts || 0, html: html });
     });
     timeline.sort(function (a, b) { return a.ts - b.ts; });
@@ -32996,18 +33698,70 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         var change = pmcrFindChange(btn.getAttribute('data-batch-id'), btn.getAttribute('data-change-id'), name);
         if (!change) return;
         pmcrHandleAction(change, action, name);
+        if (action === 'decline' || action === 'resubmit') {
+          // Let the admin write a more detailed reason on top of the guaranteed baseline
+          // notification already sent — pre-fill the composer with a starter template and set
+          // the reply context to this field, same as the Supplier side.
+          pmChatReplyingTo = { changeId: change.id, fieldLabel: change.fieldLabel };
+          var replyPreviewField = document.getElementById('clientChatReplyPreviewField');
+          if (replyPreviewField) replyPreviewField.textContent = change.fieldLabel;
+          var replyPreview = document.getElementById('clientChatReplyPreview');
+          if (replyPreview) replyPreview.style.display = 'flex';
+          var msgInput = document.getElementById('clientChatMessageInput');
+          if (msgInput) {
+            msgInput.value = action === 'decline'
+              ? 'Declining \u201c' + change.fieldLabel + '\u201d because '
+              : 'Please resubmit \u201c' + change.fieldLabel + '\u201d \u2014 ';
+            msgInput.focus();
+            if (msgInput.setSelectionRange) msgInput.setSelectionRange(msgInput.value.length, msgInput.value.length);
+          }
+        }
         renderClientChatThread();
-        showToast(action === 'approve' ? 'Response sent to ' + name + '.' : change.fieldLabel + ' updated \u2014 ' + name + ' has been notified.');
+        showToast(action === 'approve' ? 'Response sent to ' + name + '.' : change.fieldLabel + ' updated \u2014 add your reason below and hit Send to notify ' + name + '.');
       });
+    });
+    threadEl.querySelectorAll('[data-pmfield-reply-btn]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        pmChatReplyingTo = { changeId: btn.getAttribute('data-change-id'), fieldLabel: btn.getAttribute('data-field-label') };
+        var replyPreviewField = document.getElementById('clientChatReplyPreviewField');
+        if (replyPreviewField) replyPreviewField.textContent = pmChatReplyingTo.fieldLabel;
+        var replyPreview = document.getElementById('clientChatReplyPreview');
+        if (replyPreview) replyPreview.style.display = 'flex';
+        var msgInput = document.getElementById('clientChatMessageInput');
+        if (msgInput) msgInput.focus();
+      });
+    });
+    threadEl.querySelectorAll('[data-pmjump-change]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var changeId = btn.getAttribute('data-pmjump-change');
+        var target = threadEl.querySelector('.sinb-field-card[data-change-id="' + changeId + '"]');
+        if (!target) return;
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.classList.remove('sinb-field-card-flash');
+        void target.offsetWidth;
+        target.classList.add('sinb-field-card-flash');
+      });
+    });
+  }
+  var clientChatReplyPreviewCloseBtn = document.getElementById('clientChatReplyPreviewClose');
+  if (clientChatReplyPreviewCloseBtn) {
+    clientChatReplyPreviewCloseBtn.addEventListener('click', function () {
+      pmChatReplyingTo = null;
+      document.getElementById('clientChatReplyPreview').style.display = 'none';
     });
   }
 
   function pmChatSend(text) {
     var c = (typeof currentDetailRecord !== 'undefined') ? currentDetailRecord : null;
     if (!c || !text) return;
-    pmChatAddMessage(c.name, { kind: 'text', fromAdmin: true, text: text });
+    var msg = { kind: 'text', fromAdmin: true, text: text };
+    if (pmChatReplyingTo) { msg.replyToChangeId = pmChatReplyingTo.changeId; msg.replyToFieldLabel = pmChatReplyingTo.fieldLabel; }
+    pmChatAddMessage(c.name, msg);
     if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
-    logPmChatActivity(c.name, { type: 'message', actor: 'Admin', action: 'sent a message to ' + c.name, messageText: text });
+    logPmChatActivity(c.name, { type: 'message', actor: 'Admin', action: pmChatReplyingTo ? 'replied to ' + c.name : 'sent a message to ' + c.name, messageText: text });
+    pmChatReplyingTo = null;
+    var replyPreview = document.getElementById('clientChatReplyPreview');
+    if (replyPreview) replyPreview.style.display = 'none';
     renderClientChatThread();
   }
 
@@ -39237,9 +39991,12 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   }
 
   var TEAM_MODULE_GROUPS = [
-    { id: 'console', name: 'Console', modules: [{ id: 'overview', name: 'Overview' }] },
+    { id: 'overview', name: 'Overview', modules: [
+      { id: 'overview', name: 'Overview' },
+      { id: 'inbox', name: 'Inbox' }
+    ] },
     { id: 'network', name: 'Network', modules: [
-      { id: 'pm', name: 'Property Managers' },
+      { id: 'pm', name: 'Property Manager' },
       { id: 'pmApplicants', name: 'PM Applicants' },
       { id: 'suppliers', name: 'Active Suppliers' },
       { id: 'supplierApplicants', name: 'Supplier Applicants' }
@@ -39248,7 +40005,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       { id: 'jobs', name: 'Jobs' },
       { id: 'quotes', name: 'Quotes' },
       { id: 'disputes', name: 'Disputes' },
-      { id: 'services', name: 'Services & Pricing' }
+      { id: 'services', name: 'Services' }
     ] },
     { id: 'finance', name: 'Finance', modules: [
       { id: 'invoices', name: 'Invoices' },
@@ -39256,7 +40013,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       { id: 'markup', name: 'Markup Tiers' }
     ] },
     { id: 'system', name: 'System', modules: [
-      { id: 'inbox', name: 'Messages' },
       { id: 'teams', name: 'Teams' },
       { id: 'logs', name: 'Activity Logs' }
     ] }
@@ -39396,9 +40152,15 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     });
   }
   function teamFilteredRoles() {
+    // Owner and Administrator always carry full access to everything and can't be edited,
+    // deactivated, or deleted — there's nothing to manage about them, so they're left out of
+    // this list entirely rather than shown as two permanently-locked, non-interactive rows.
+    // They still fully exist as real roles: teamRoleById, the Members table, and the role picker
+    // all still resolve and assign them normally — this only affects what's listed here.
+    var manageable = teamRoles.filter(function (r) { return !r.system; });
     var t = teamSearch.trim().toLowerCase();
-    if (!t) return teamRoles;
-    return teamRoles.filter(function (r) {
+    if (!t) return manageable;
+    return manageable.filter(function (r) {
       return (r.name + ' ' + r.description).toLowerCase().indexOf(t) !== -1;
     });
   }
@@ -39448,7 +40210,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var active = teamMembers.filter(function (m) { return m.status === 'active'; }).length;
     var invited = teamMembers.filter(function (m) { return m.status === 'invited'; }).length;
     var custom = teamMembers.filter(function (m) { return teamOverrideCount(m) > 0; }).length;
-    var activeRoles = teamRoles.filter(function (r) { return r.active; }).length;
+    // Matches teamFilteredRoles: Owner/Administrator aren't shown as manageable rows, so they're
+    // not counted here either — otherwise this number wouldn't match what's actually in the table.
+    var activeRoles = teamRoles.filter(function (r) { return r.active && !r.system; }).length;
     box.innerHTML = [
       { n: active, label: 'Active members' },
       { n: invited, label: 'Invites pending', tint: invited > 0 },
@@ -39552,7 +40316,12 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
      so repeating a level here was both redundant and, once permissions went per-module,
      wrong. */
   function teamRoleDDHtml(role, extraAttrs) {
-    var options = teamRoles.filter(function (r) { return r.active; });
+    // Owner/Administrator are excluded here the same way they're excluded from the Roles table
+    // (see teamFilteredRoles) — promoting someone to full, unrestricted access isn't meant to be
+    // as casual as picking it from this list. A member who already holds one of these still shows
+    // it correctly as their current role (the `role` param, independent of `options` below) —
+    // this only affects what's offered as something to switch *to*.
+    var options = teamRoles.filter(function (r) { return r.active && !r.system; });
     return svcpDDShell('data-ddrole="team-role" ' + (extraAttrs || '') + ' class="pm-custom-dd-btn"',
       role ? role.id : '', role ? role.name : 'Select a role\u2026', !role,
       options.map(function (r) { return svcpDDItem(r.id, r.name, role && r.id === role.id); }).join('')
@@ -39573,8 +40342,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   function teamRenderInviteRoleDD() {
     var wrap = document.getElementById('teamInviteRoleDD');
     var role = teamRoleById(teamInviteRoleId);
-    if (!role || !role.active) {
-      var firstActive = teamRoles.filter(function (r) { return r.active; })[0];
+    if (!role || !role.active || role.system) {
+      var firstActive = teamRoles.filter(function (r) { return r.active && !r.system; })[0];
       role = firstActive || null;
       teamInviteRoleId = role ? role.id : '';
     }
