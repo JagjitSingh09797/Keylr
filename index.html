@@ -8920,6 +8920,51 @@
         </section>
       </div>
     </div>
+
+    <!-- Floating "Keylr Support" chat widget — a fresh, standalone conversation for while the PM
+         is still mid-onboarding, same pattern as the Supplier wizard's own widget. -->
+    <div class="ob-chat-fab-wrap" id="pmObChatFabWrap">
+      <div class="ob-chat-panel" id="pmObChatPanel">
+        <div class="ob-chat-panel-topbar">
+          <div class="sinb-chat-header" id="pmObChatHeader"></div>
+          <button type="button" class="ob-chat-panel-close" id="pmObChatPanelCloseBtn" aria-label="Close chat"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+        </div>
+        <div class="sinb-chat-thread-wrap">
+          <div class="sinb-chat-scroll" id="pmObChatScroll">
+            <div id="pmObChatMessagesInner"></div>
+            <div class="sinb-scroll-anchor"><button type="button" class="sinb-scroll-bottom-btn" id="pmObChatScrollBottomBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg><span>Go to bottom</span></button></div>
+          </div>
+        </div>
+        <div class="sinb-composer" id="pmObChatComposer">
+          <div class="sinb-reply-preview" id="pmObChatReplyPreview" style="display:none;">
+            <div class="sinb-reply-preview-bar"></div>
+            <div class="sinb-reply-preview-body"><span class="sinb-reply-preview-label">Replying to</span><span class="sinb-reply-preview-field" id="pmObChatReplyPreviewField"></span></div>
+            <button type="button" class="sinb-reply-preview-close" id="pmObChatReplyPreviewClose"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+          </div>
+          <div class="sinb-composer-icons">
+            <div style="position:relative;">
+              <button type="button" class="sinb-icon-btn" id="pmObChatEmojiBtn" data-tooltip="Add emoji"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg></button>
+              <div class="sinb-emoji-popover" id="pmObChatEmojiPopover">
+                <span data-emoji="👍">👍</span><span data-emoji="👌">👌</span><span data-emoji="🙂">🙂</span><span data-emoji="😀">😀</span><span data-emoji="🙌">🙌</span><span data-emoji="👋">👋</span>
+                <span data-emoji="✅">✅</span><span data-emoji="🔧">🔧</span><span data-emoji="🚐">🚐</span><span data-emoji="⏰">⏰</span><span data-emoji="📷">📷</span><span data-emoji="👊">👊</span>
+              </div>
+            </div>
+            <button type="button" class="sinb-icon-btn" id="pmObChatAttachBtn" data-tooltip="Attach image or PDF"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button>
+            <input type="file" id="pmObChatAttachInput" accept="image/*,video/*,.pdf" style="display:none;">
+          </div>
+          <div class="sinb-input-row">
+            <input type="text" id="pmObChatMessageInput" placeholder="Message...">
+            <button type="button" class="sinb-send-btn" id="pmObChatSendBtn" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg></button>
+          </div>
+          <div class="sinb-composer-hint">Enter to send · Shift + Enter for new line · Images, videos + PDFs up to 10 MB.</div>
+        </div>
+      </div>
+      <button type="button" class="ob-chat-fab" id="pmObChatFabBtn" aria-label="Chat with Keylr Support">
+        <svg class="ob-chat-fab-icon-chat" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+        <svg class="ob-chat-fab-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        <span class="ob-chat-fab-badge" id="pmObChatFabBadge" hidden>1</span>
+      </button>
+    </div>
   </div>
 
   <!-- ============ SUPPLIER ONBOARDING WIZARD ============ -->
@@ -25622,6 +25667,17 @@
     ]
   };
   function obChatGetConv() { return OB_CHAT_CONV; }
+  // Same idea, PM side — a fresh, standalone conversation for while a PM is still mid-onboarding.
+  // Deliberately not persisted and not the same conversation as Account Settings > Chat (see
+  // OB_CHAT_CONV's comment above for the reasoning, which applies identically here).
+  var PM_OB_CHAT_CONV = {
+    id: 'pm-ob-support', name: 'Keylr Support', initials: 'KS', type: 'support',
+    presence: 'Online', lastActivityLabel: 'just now',
+    messages: [
+      { kind: 'text', mine: false, text: 'Hi, this is Keylr Support \u2014 how can we help with your onboarding today?', ts: Date.now(), time: sinbNowTimestamp() }
+    ]
+  };
+  function pmObChatGetConv() { return PM_OB_CHAT_CONV; }
   var SUP_CHAT_EXTRA_MESSAGES = {}; // keyed by supplier name — admin's own sent messages + replies for suppliers other than the live-synced demo one
   var SINB_MSG_STORAGE_KEY = 'keylrDemoSinbMessages_v1';
   var SUP_CHAT_EXTRA_STORAGE_KEY = 'keylrDemoSupChatExtra_v1';
@@ -25918,11 +25974,13 @@
   var SINB_MOUNTS = [
     { header: 'sinbChatHeader', scroll: 'sinbChatScroll', inner: 'sinbMessagesInner', scrollBtn: 'sinbScrollBottomBtn', replyPreview: 'sinbReplyPreview', replyPreviewField: 'sinbReplyPreviewField', replyPreviewClose: 'sinbReplyPreviewClose', messageInput: 'sinbMessageInput', sendBtn: 'sinbSendBtn', emojiBtn: 'sinbEmojiBtn', emojiPopover: 'sinbEmojiPopover', attachBtn: 'sinbAttachBtn', attachInput: 'sinbAttachInput', getConv: sinbGetActiveConv },
     { header: 'supInboxChatHeader', scroll: 'supInboxChatScroll', inner: 'supInboxMessagesInner', scrollBtn: 'supInboxScrollBottomBtn', replyPreview: 'supInboxReplyPreview', replyPreviewField: 'supInboxReplyPreviewField', replyPreviewClose: 'supInboxReplyPreviewClose', messageInput: 'supInboxMessageInput', sendBtn: 'supInboxSendBtn', emojiBtn: 'supInboxEmojiBtn', emojiPopover: 'supInboxEmojiPopover', attachBtn: 'supInboxAttachBtn', attachInput: 'supInboxAttachInput', getConv: sinbGetActiveConv },
-    { header: 'obChatHeader', scroll: 'obChatScroll', inner: 'obChatMessagesInner', scrollBtn: 'obChatScrollBottomBtn', replyPreview: 'obChatReplyPreview', replyPreviewField: 'obChatReplyPreviewField', replyPreviewClose: 'obChatReplyPreviewClose', messageInput: 'obChatMessageInput', sendBtn: 'obChatSendBtn', emojiBtn: 'obChatEmojiBtn', emojiPopover: 'obChatEmojiPopover', attachBtn: 'obChatAttachBtn', attachInput: 'obChatAttachInput', getConv: obChatGetConv, standalone: true }
+    { header: 'obChatHeader', scroll: 'obChatScroll', inner: 'obChatMessagesInner', scrollBtn: 'obChatScrollBottomBtn', replyPreview: 'obChatReplyPreview', replyPreviewField: 'obChatReplyPreviewField', replyPreviewClose: 'obChatReplyPreviewClose', messageInput: 'obChatMessageInput', sendBtn: 'obChatSendBtn', emojiBtn: 'obChatEmojiBtn', emojiPopover: 'obChatEmojiPopover', attachBtn: 'obChatAttachBtn', attachInput: 'obChatAttachInput', getConv: obChatGetConv, standalone: true },
+    { header: 'pmObChatHeader', scroll: 'pmObChatScroll', inner: 'pmObChatMessagesInner', scrollBtn: 'pmObChatScrollBottomBtn', replyPreview: 'pmObChatReplyPreview', replyPreviewField: 'pmObChatReplyPreviewField', replyPreviewClose: 'pmObChatReplyPreviewClose', messageInput: 'pmObChatMessageInput', sendBtn: 'pmObChatSendBtn', emojiBtn: 'pmObChatEmojiBtn', emojiPopover: 'pmObChatEmojiPopover', attachBtn: 'pmObChatAttachBtn', attachInput: 'pmObChatAttachInput', getConv: pmObChatGetConv, standalone: true }
   ]; // Account Settings > Chat and the Dashboard > Inbox page both show the exact same live "Keylr
      // Support" conversation and stay in sync via getConv (both point at sinbGetActiveConv). The
-     // onboarding floating widget is deliberately its own separate conversation (getConv points at
-     // obChatGetConv instead) — see OB_CHAT_CONV above.
+     // two onboarding floating widgets (Supplier and PM) are each their own separate, standalone
+     // conversation instead (getConv points at obChatGetConv / pmObChatGetConv) — see OB_CHAT_CONV
+     // and PM_OB_CHAT_CONV above.
 
   function sinbBuildHeaderHtml(c) {
     return '<div class="sinb-conv-avatar" style="background:' + sinbAvatarColor(c.initials) + ';color:#1e40af;">' + c.initials + (c.presence ? '<span class="presence-dot"></span>' : '') + '</div>' +
@@ -26191,6 +26249,29 @@
       if (fabWrap.classList.contains('open')) closeObChatPanel(); else openObChatPanel();
     });
     if (closeBtn) closeBtn.addEventListener('click', function (e) { e.stopPropagation(); closeObChatPanel(); });
+  })();
+
+  /* ---------------- Onboarding floating "Keylr Support" chat widget — PM side ---------------- */
+  (function () {
+    var fabWrap = document.getElementById('pmObChatFabWrap');
+    var fabBtn = document.getElementById('pmObChatFabBtn');
+    var closeBtn = document.getElementById('pmObChatPanelCloseBtn');
+    if (!fabWrap || !fabBtn) return;
+    function openPmObChatPanel() {
+      fabWrap.classList.add('open');
+      if (typeof initSupInboxOnce === 'function') initSupInboxOnce();
+      var badge = document.getElementById('pmObChatFabBadge');
+      if (badge) badge.hidden = true;
+      setTimeout(function () {
+        var msgInput = document.getElementById('pmObChatMessageInput');
+        if (msgInput) msgInput.focus();
+      }, 260);
+    }
+    function closePmObChatPanel() { fabWrap.classList.remove('open'); }
+    fabBtn.addEventListener('click', function () {
+      if (fabWrap.classList.contains('open')) closePmObChatPanel(); else openPmObChatPanel();
+    });
+    if (closeBtn) closeBtn.addEventListener('click', function (e) { e.stopPropagation(); closePmObChatPanel(); });
   })();
 
   function initSupjrOnce() {
