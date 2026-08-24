@@ -753,12 +753,15 @@
     .invite-btn-responsive svg { margin-right: 0 !important; }
   }
   @media (max-width: 420px) {
-    /* Supplier Applicants specifically keeps the full icon+text "Invite Supplier" button (unlike
+    /* Supplier Applicants and PM Applicants both keep the full icon+text Invite button (unlike
        the generic icon-only collapse above), pushed to the right of its row now that the filter
        bar next to it is hidden. */
     #supAppInviteBtn.invite-btn-responsive { padding: 9px 16px !important; margin-left: auto; }
     #supAppInviteBtn.invite-btn-responsive .invite-btn-text { display: inline !important; }
     #supAppInviteBtn.invite-btn-responsive svg { margin-right: 6px !important; }
+    #appInviteBtn.invite-btn-responsive { padding: 9px 16px !important; margin-left: auto; }
+    #appInviteBtn.invite-btn-responsive .invite-btn-text { display: inline !important; }
+    #appInviteBtn.invite-btn-responsive svg { margin-right: 6px !important; }
   }
 
   .modal-card {
@@ -4392,11 +4395,27 @@
   @media (max-width: 600px) {
     .sup-comp-field-grid { grid-template-columns: 1fr; }
     .pm-table-wrap { display: none !important; }
+    /* PM Invitations and Supplier Invitations are table-only views — neither was ever given a
+       card/grid alternative the way the modules below were, so hiding their table here (like every
+       other .pm-table-wrap) would leave the page showing nothing at all. Restored to the class's
+       own base display (flex column) so the table itself remains visible, scrolling internally via
+       .pm-table-scroll's own overflow:auto rather than switching to a card layout that doesn't exist. */
+    #pmInvitesTableWrap, #supInvitesTableWrap { display: flex !important; flex-direction: column; }
+    /* The table already scrolls horizontally via .pm-table-scroll (overflow:auto), so cell content
+       wrapping onto multiple lines just makes rows taller and harder to scan for no benefit — one
+       line per cell, and the table itself grows wider instead, which is what the horizontal scroll
+       is already there to handle. */
+    #pmInvitesTableWrap td, #pmInvitesTableWrap th,
+    #supInvitesTableWrap td, #supInvitesTableWrap th { white-space: nowrap; }
     .pm-view-toggle { display: none !important; }
     /* With the table force-hidden here, a list left in table view would show nothing at all.
        Every list that offers a grid/table toggle needs the same fallback. */
     #pmsvcCardGrid:not([data-empty="1"]) { display: grid !important; }
     #supGridView, #supAppGridView, #appGridView, #pmGridView { display: grid !important; }
+    /* PM/Supplier Applicants: the Sent Invitations / Invite action row sits directly under the
+       filter bar above it, which stacks onto more lines at this width — without this, the row runs
+       straight into whatever the filter bar just wrapped down to. */
+    .supapp-action-row { margin-top: 16px; }
   }
   .sup-comp-field { margin-top: 16px; margin-bottom: 16px; min-width: 0; }
   .sup-comp-field .scf-label { font-size: 12.5px; font-weight: 600; color: var(--text-body-muted); margin-bottom: 6px; }
@@ -7233,7 +7252,7 @@
 
   /* ---------- Supplier invitations tracker ---------- */
   .sup-inv-badge {
-    display: inline-flex; align-items: center; justify-content: center; min-width: 19px; height: 19px;
+    display: inline-flex; align-items: center; justify-content: center; min-width: 19px; height: 16px;
     margin-left: 8px; padding: 0 6px; border-radius: 999px;
     background: #fef6e7; color: #8a5a06; border: 1px solid #f2ddb4;
     font-size: 11px; font-weight: 800;
@@ -7619,6 +7638,91 @@
     .client-tabs-row::-webkit-scrollbar { display: none; }
     .client-tabs-row .client-tab { flex-shrink: 0; }
     .pmc-chat-layout { height: 420px; }
+  }
+  /* =========================================================
+     PROFILE UPDATE TRACKING — actor attribution, request history,
+     needs-action state, admin inbox topic filters, chat context summary.
+     Added at the end of the stylesheet on purpose so these rules (and any
+     mobile overrides among them) always win the cascade over earlier base rules.
+  ========================================================== */
+  /* Same stacking fix suprqBulkConfirmOverlay needed: the dashboard chrome sits above the
+     base .modal-overlay z-index, so this overlay must be raised to render on top of it. */
+  #crSendRequestOverlay { z-index: 900; }
+  /* Actor attribution rows inside a profile-update field card */
+  .sinb-cr-meta { display: flex; flex-wrap: wrap; gap: 4px 18px; padding: 8px 12px; border-top: 1px dashed var(--border-subtle); margin-top: 2px; }
+  .sinb-cr-meta-item { display: flex; align-items: baseline; gap: 5px; font-size: 11px; min-width: 0; }
+  .sinb-cr-meta-label { color: var(--text-body-muted); font-weight: 600; white-space: nowrap; }
+  .sinb-cr-meta-value { color: var(--text-heading); font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sinb-cr-meta-value .sinb-cr-meta-time { color: var(--text-body-muted); font-weight: 500; }
+  .sinb-cr-reason { font-size: 12px; color: var(--text-heading); background: var(--surface-soft); border-radius: 8px; padding: 8px 10px; margin: 6px 0 2px; }
+  .sinb-cr-reason b { font-weight: 700; }
+  .sinb-cr-action-required { font-size: 11.5px; color: #2d5a9e; font-weight: 600; margin-top: 4px; }
+  /* Needs action chip — Keylr blue family, deliberately subtle */
+  .sinb-needs-action-chip { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; color: #284890; background: #e8f0f8; border: 1px solid #c9d8ec; padding: 1px 7px; border-radius: 999px; flex-shrink: 0; }
+  .sinb-needs-action-chip::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: #284890; }
+  /* Highlight flash for a whole newly-created request batch */
+  @keyframes crBatchFlash { 0% { box-shadow: 0 0 0 3px rgba(40,72,144,0.35); } 100% { box-shadow: 0 0 0 3px rgba(40,72,144,0); } }
+  .sinb-batch-flash { animation: crBatchFlash 1.6s ease-out 2; border-radius: 12px; }
+  /* Contextual summary above the admin's per-supplier / per-PM chat */
+  .sup-chat-context-summary { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; margin-right: auto; }
+  .sup-chat-context-summary .ccs-name { font-size: 13.5px; font-weight: 800; color: var(--text-heading); }
+  .sup-chat-context-summary .ccs-sub { font-size: 12px; color: var(--text-body-muted); }
+  .sup-chat-context-summary .ccs-sep { width: 3px; height: 3px; border-radius: 50%; background: #cbd5e1; }
+  .sup-chat-context-summary .ccs-pu { font-size: 11.5px; font-weight: 700; color: #2d5a9e; background: #eaf1fb; padding: 2px 9px; border-radius: 999px; }
+  /* Chat topic filter pills row shared by the admin detail chats + PM own chat */
+  .sinb-detail-filter-row { display: flex; align-items: center; gap: 6px; padding: 10px 16px; border-bottom: 1px solid var(--border-subtle); flex-wrap: wrap; }
+  /* Admin Inbox — two-level filters + topic/status on conversation rows */
+  /* Topic tabs are the page-level primary filter, sitting between the Inbox heading and the
+     conversation panels rather than inside the sidebar. */
+  #ainTopicTabs { padding: 0 0 14px; margin-top: -6px; }
+  /* WHO row sits first in the list panel, so it carries the top padding search used to */
+  #ainFilterTabs { padding-top: 16px; }
+  #adminInboxView .ain-search-row { padding-top: 4px; padding-bottom: 4px; }
+  .ain-conv-topic-row { display: flex; align-items: center; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+  .ain-conv-topic-pill { font-size: 10px; font-weight: 700; letter-spacing: 0.02em; padding: 1px 7px; border-radius: 999px; background: var(--surface-soft); color: var(--text-body-muted); flex-shrink: 0; }
+  .ain-conv-topic-pill.pu { background: #eaf1fb; color: #2d5a9e; }
+  .ain-conv-status { font-size: 10.5px; font-weight: 700; color: var(--text-body-muted); }
+  .ain-conv-status.needs-action { color: #284890; display: inline-flex; align-items: center; gap: 4px; }
+  .ain-conv-status.needs-action::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: #284890; }
+  /* Profile update request modal (send flagged Overview item to chat) */
+  .cr-send-modal-card { width: 100%; max-width: 460px; background: #fff; border-radius: 18px; padding: 26px 28px; box-shadow: 0 30px 80px rgba(0,0,0,0.35); transform: translateY(18px) scale(0.98); opacity: 0; transition: transform 300ms cubic-bezier(0.16,1,0.3,1), opacity 300ms ease-out; }
+  .modal-overlay.open .cr-send-modal-card { transform: none; opacity: 1; }
+  .cr-send-modal-card h3 { font-size: 17px; font-weight: 800; color: var(--text-heading); margin-bottom: 4px; }
+  .cr-send-modal-sub { font-size: 12.5px; color: var(--text-body-muted); margin-bottom: 16px; }
+  .cr-send-modal-field { font-size: 14px; font-weight: 800; color: var(--text-heading); background: var(--surface-soft); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 10px 14px; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .cr-send-modal-field svg { color: var(--accent-blue); flex-shrink: 0; }
+  .cr-send-modal-label { font-size: 11.5px; font-weight: 700; color: var(--text-body-muted); margin-bottom: 6px; }
+  .cr-send-modal-card textarea { width: 100%; border: 1px solid var(--border-subtle); border-radius: 10px; padding: 10px 12px; font-family: inherit; font-size: 13px; color: var(--text-heading); resize: vertical; min-height: 74px; background: #fff; }
+  .cr-send-modal-card textarea:focus { outline: none; border-color: var(--accent-blue); }
+  .cr-send-modal-btns { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; }
+  .cr-send-modal-cancel { padding: 9px 18px; border-radius: 10px; border: 1.5px solid var(--border-subtle); background: #fff; font-size: 13px; font-weight: 700; color: var(--text-heading); cursor: pointer; font-family: inherit; }
+  .cr-send-modal-send { display: inline-flex; align-items: center; gap: 7px; padding: 9px 18px; border-radius: 10px; border: none; background: #284890; color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; transition: background-color 150ms ease-out; }
+  .cr-send-modal-send:hover { background: #22447f; }
+  /* Needs-action selectable chip — same visual family as the filter pills. In the detail chats it
+     sits above the composer (attachment + type field) while Profile Updates is active; in the
+     Inbox thread it sits inline with the emoji + attachment icons. Selecting it narrows the
+     thread to actionable cards; deselecting restores the full view. */
+  .sinb-na-chip-row { display: flex; padding: 0 0 10px; }
+  .sinb-na-chip { font-size: 12px; font-weight: 600; color: var(--text-body-muted); padding: 6px 13px; border-radius: 999px; border: 1px solid var(--border-subtle); white-space: nowrap; cursor: pointer; user-select: none; transition: background-color 150ms ease-out, color 150ms ease-out; }
+  .sinb-na-chip:not(.active):hover { background: var(--surface-soft); }
+  .sinb-na-chip.active { background: linear-gradient(135deg, #22447f 0%, #0d1b3d 100%); border-color: transparent; color: #fff; }
+  .sinb-na-chip.active span { color: #fff; }
+  .sinb-composer-icons .sinb-na-chip { margin-left: 2px; }
+  /* PM-side card resubmit button breathing room — scoped by the PM save attribute so the
+     supplier side's identical-looking button keeps its existing spacing untouched. */
+  .sinb-field-resubmit-btn[data-pmcr-resubmit-save] { margin-top: 12px; }
+  /* Chat header row — JS re-renders the .sinb-chat-header contents, so the Activity log button
+     lives as a static sibling on the right; the row carries the divider the header used to. */
+  .sinb-chat-header-row { display: flex; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-right: 16px; flex-shrink: 0; }
+  .sinb-chat-header-row .sinb-chat-header { border-bottom: none; flex: 1; min-width: 0; }
+  /* "Send to chat" on a flagged compliance/overview item — Keylr blue, matches sibling buttons */
+  .sup-check-actions button.sca-send-chat { color: #284890; border-color: #c9d8ec; }
+  .sup-check-actions button.sca-send-chat:hover:not(:disabled) { background: #e8f0f8; }
+  @media (max-width: 640px) {
+    .sinb-cr-meta { gap: 3px 14px; padding: 7px 10px; }
+    .sup-chat-context-summary .ccs-name { font-size: 12.5px; }
+    .ain-filter-tabs.ain-topic-tabs { overflow-x: auto; flex-wrap: nowrap; }
+    .cr-send-modal-card { max-width: calc(100vw - 32px); padding: 20px; }
   }
 </style>
 </head>
@@ -8352,6 +8456,69 @@
       <div class="confirm-modal-btns">
         <button type="button" class="pmprop-del-cancel" id="suprqBulkConfirmCancelBtn">Cancel</button>
         <button type="button" class="confirm-modal-confirm" id="suprqBulkConfirmActionBtn">Approve all</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ ACTIVITY LOG DRAWERS (top-level so they open from the Admin Inbox thread as well
+       as the supplier / PM detail pages — a fixed overlay nested inside a hidden detail view never
+       renders, which is exactly why these live here and not inside those views) ============ -->
+  <div class="svc-role-drawer-overlay" id="supChatActivityLogOverlay">
+    <div class="svc-role-drawer">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--border-subtle);flex-shrink:0;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="dch-icon" style="width:32px;height:32px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg></div>
+          <h3 style="font-size:15.5px;font-weight:800;color:var(--text-heading);">Activity Log</h3>
+        </div>
+        <button type="button" id="supChatActivityLogCloseBtn" aria-label="Close" style="background:none;border:none;cursor:pointer;color:var(--text-body-muted);padding:4px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+      </div>
+      <div style="padding:22px;flex:1;overflow-y:auto;">
+        <div class="callout callout-neutral" style="margin-bottom:16px;">
+          <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg></div>
+          <div>
+            <div class="callout-title">Full history</div>
+            <div class="callout-body">Every action taken on this supplier's profile requests — approvals, declines, resubmission requests, and resubmissions — tracked chronologically.</div>
+          </div>
+        </div>
+        <div id="supChatActivityLogList"></div>
+        <div id="supChatActivityLogEmpty" style="display:none;padding:8px 0 16px;font-size:13px;color:var(--text-body-muted);">No activity yet on this supplier's requests.</div>
+      </div>
+    </div>
+  </div>
+  <div class="svc-role-drawer-overlay" id="clientChatActivityLogOverlay">
+    <div class="svc-role-drawer">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--border-subtle);flex-shrink:0;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="dch-icon" style="width:32px;height:32px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg></div>
+          <h3 style="font-size:15.5px;font-weight:800;color:var(--text-heading);">Activity Log</h3>
+        </div>
+        <button type="button" id="clientChatActivityLogCloseBtn" aria-label="Close" style="background:none;border:none;cursor:pointer;color:var(--text-body-muted);padding:4px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+      </div>
+      <div style="padding:22px;flex:1;overflow-y:auto;">
+        <div class="callout callout-neutral" style="margin-bottom:16px;">
+          <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg></div>
+          <div>
+            <div class="callout-title">Full history</div>
+            <div class="callout-body">Every action taken on this applicant's profile requests &mdash; approvals, declines, resubmission requests, and messages &mdash; tracked chronologically.</div>
+          </div>
+        </div>
+        <div id="clientChatActivityLogList"></div>
+        <div id="clientChatActivityLogEmpty" style="display:none;padding:8px 0 16px;font-size:13px;color:var(--text-body-muted);">No activity yet on this applicant.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SEND PROFILE UPDATE REQUEST MODAL (flagged Overview/Compliance item → Chat) ============ -->
+  <div class="modal-overlay" id="crSendRequestOverlay">
+    <div class="cr-send-modal-card">
+      <h3>Send profile update request</h3>
+      <div class="cr-send-modal-sub">This creates a tracked Profile Update request in the chat — the supplier is asked to fix it, and every reply and review stays linked to this request.</div>
+      <div class="cr-send-modal-field"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg><span id="crSendRequestFieldName">Proof of Address</span></div>
+      <div class="cr-send-modal-label">Reason</div>
+      <textarea id="crSendRequestReason" placeholder="Why does this need updating?"></textarea>
+      <div class="cr-send-modal-btns">
+        <button type="button" class="cr-send-modal-cancel" id="crSendRequestCancelBtn">Cancel</button>
+        <button type="button" class="cr-send-modal-send" id="crSendRequestSendBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>Send request</button>
       </div>
     </div>
   </div>
@@ -11120,7 +11287,15 @@
                 <div class="sinb-shell">
                   <div class="sinb-body sinb-body-solo">
                     <div class="sinb-chat-col sinb-chat-col-full" id="pmOwnChatCol">
-                      <div class="sinb-chat-header" id="pmOwnChatHeader"></div>
+                      <div class="sinb-chat-header-row">
+                        <div class="sinb-chat-header" id="pmOwnChatHeader"></div>
+                        <button type="button" class="sinb-activity-log-btn" id="pmOwnActivityLogBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>Activity log</button>
+                      </div>
+                      <div class="pm-tab-pills sinb-filter-pills" id="pmOwnChatFilterPills" style="padding:10px 16px;border-bottom:1px solid var(--border-subtle);">
+                        <div class="pm-tab-pill active" data-pmown-filter="all">All Chat</div>
+                        <div class="pm-tab-pill" data-pmown-filter="support">Support</div>
+                        <div class="pm-tab-pill" data-pmown-filter="profile-updates">Profile Updates</div>
+                      </div>
                       <div class="sinb-chat-thread-wrap">
                         <div class="sinb-chat-scroll" id="pmOwnChatScroll">
                           <div id="pmOwnChatMessagesInner"></div>
@@ -11143,6 +11318,7 @@
                           </div>
                           <button type="button" class="sinb-icon-btn" id="pmOwnChatAttachBtn" data-tooltip="Attach image or PDF"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button>
                           <input type="file" id="pmOwnChatAttachInput" accept="image/*,video/*,.pdf" style="display:none;">
+                          <div class="sinb-na-chip" id="pmOwnNaChip" role="button" tabindex="0" aria-pressed="false" style="display:none;">Needs action (<span id="pmOwnNaChipCount">0</span>)</div>
                         </div>
                         <div class="sinb-input-row">
                           <input type="text" id="pmOwnChatMessageInput" placeholder="Message...">
@@ -14053,7 +14229,15 @@
             <div class="sinb-shell">
               <div class="sinb-body sinb-body-solo">
                 <div class="sinb-chat-col sinb-chat-col-full" id="sinbChatCol">
-                  <div class="sinb-chat-header" id="sinbChatHeader"></div>
+                  <div class="sinb-chat-header-row">
+                    <div class="sinb-chat-header" id="sinbChatHeader"></div>
+                    <button type="button" class="sinb-activity-log-btn" id="supOwnActivityLogBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>Activity log</button>
+                  </div>
+                  <div class="pm-tab-pills sinb-filter-pills" id="sinbFilterPills" style="padding:10px 16px;border-bottom:1px solid var(--border-subtle);">
+                    <div class="pm-tab-pill active" data-sinb-filter="all">All Chat</div>
+                    <div class="pm-tab-pill" data-sinb-filter="support">Support</div>
+                    <div class="pm-tab-pill" data-sinb-filter="edit-requests">Profile Updates</div>
+                  </div>
                   <div class="sinb-chat-thread-wrap">
                     <div class="sinb-chat-scroll" id="sinbChatScroll">
                       <div id="sinbMessagesInner"></div>
@@ -14076,6 +14260,7 @@
                       </div>
                       <button type="button" class="sinb-icon-btn" id="sinbAttachBtn" data-tooltip="Attach image or PDF"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button>
                       <input type="file" id="sinbAttachInput" accept="image/*,video/*,.pdf" style="display:none;">
+                      <div class="sinb-na-chip" id="sinbNaChip" role="button" tabindex="0" aria-pressed="false" style="display:none;">Needs action (<span id="sinbNaChipCount">0</span>)</div>
                     </div>
                     <div class="sinb-input-row">
                       <input type="text" id="sinbMessageInput" placeholder="Message...">
@@ -14662,21 +14847,29 @@
               <div><h2>Inbox</h2><div class="dash-content-sub">Chat directly with suppliers and property managers.</div></div>
             </div>
 
+            <!-- Primary filter — WHAT is the conversation about? The WHO tabs inside the list
+                 panel then narrow within whichever topic is selected here. -->
+            <div class="ain-filter-tabs ain-topic-tabs" id="ainTopicTabs">
+              <div class="ain-filter-tab active" data-aintopic="all">All</div>
+              <div class="ain-filter-tab" data-aintopic="support">Support</div>
+              <div class="ain-filter-tab" data-aintopic="profile-updates">Profile Updates (<span id="ainTabPuCount">0</span>)</div>
+              <div class="ain-filter-tab" data-aintopic="unread">Unread (<span id="ainTabUnreadCount">0</span>)</div>
+            </div>
+
             <div class="ain-layout">
               <div class="ain-list-panel">
+                <!-- Level 1 — WHO am I talking to? -->
+                <div class="ain-filter-tabs" id="ainFilterTabs">
+                  <div class="ain-filter-tab active" data-ainfilter="all">All (<span id="ainTabAllCount">0</span>)</div>
+                  <div class="ain-filter-tab" data-ainfilter="suppliers">Suppliers (<span id="ainTabSuppliersCount">0</span>)</div>
+                  <div class="ain-filter-tab" data-ainfilter="pms">PMs (<span id="ainTabPMsCount">0</span>)</div>
+                </div>
                 <div class="ain-search-row">
                   <div class="ain-search-box">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
                     <input type="text" id="ainSearchInput" placeholder="Search conversations">
                   </div>
                   <button type="button" class="ain-refresh-btn" id="ainRefreshBtn" aria-label="Refresh"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg></button>
-                </div>
-                <div class="ain-filter-tabs" id="ainFilterTabs">
-                  <div class="ain-filter-tab active" data-ainfilter="all">All (<span id="ainTabAllCount">0</span>)</div>
-                  <div class="ain-filter-tab" data-ainfilter="unread">Unread (<span id="ainTabUnreadCount">0</span>)</div>
-                  <div class="ain-filter-tab" data-ainfilter="suppliers">Suppliers (<span id="ainTabSuppliersCount">0</span>)</div>
-                  <div class="ain-filter-tab" data-ainfilter="pms">PMs (<span id="ainTabPMsCount">0</span>)</div>
-                  <div class="ain-filter-tab" data-ainfilter="favourites">Favourites (<span id="ainTabFavCount">0</span>)</div>
                 </div>
                 <div class="ain-conv-list" id="ainConvList"></div>
               </div>
@@ -14691,6 +14884,7 @@
                   <div class="ain-thread-header">
                     <button type="button" class="ain-icon-btn ain-back-btn" id="ainBackBtn" aria-label="Back to conversations"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
                     <div class="sinb-chat-header" id="ainThreadHeaderInner"></div>
+                    <button type="button" class="ain-icon-btn" id="ainActivityBtn" data-tooltip="Activity log"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg></button>
                     <button type="button" class="ain-icon-btn" id="ainPinBtn" data-tooltip="Pin conversation"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5M9 3h6l-1 7 4 3H6l4-3-1-7z"/></svg></button>
                     <button type="button" class="ain-icon-btn" id="ainStarBtn" data-tooltip="Star conversation"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
                     <button type="button" class="ain-icon-btn" id="ainExpandBtn" data-tooltip="View full profile"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
@@ -14717,6 +14911,7 @@
                       </div>
                       <button type="button" class="sinb-icon-btn" id="ainAttachBtn" data-tooltip="Attach image or PDF"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button>
                       <input type="file" id="ainAttachInput" accept="image/*,video/*,.pdf" style="display:none;">
+                      <div class="sinb-na-chip" id="ainNaChip" role="button" tabindex="0" aria-pressed="false" style="display:none;">Needs action (<span id="ainNaChipCount">0</span>)</div>
                     </div>
                     <div class="sinb-input-row">
                       <input type="text" id="ainMessageInput" placeholder="Reply...">
@@ -15189,7 +15384,7 @@
                 <div class="pm-tab-pills" id="pmTabPills">
                   <div class="pm-tab-pill active" data-filter="all">All</div>
                   <div class="pm-tab-pill" data-filter="approved">Approved</div>
-                  <div class="pm-tab-pill" data-filter="requests">Edit Requests</div>
+                  <div class="pm-tab-pill" data-filter="requests">Profile Updates</div>
                   <div class="pm-tab-pill" data-filter="archived">Archived</div>
                 </div>
                 <div class="pm-count-actions">
@@ -15335,7 +15530,7 @@
                   <div class="pm-tab-pill" data-filter="new">New</div>
                   <div class="pm-tab-pill" data-filter="in-progress">In Progress</div>
                   <div class="pm-tab-pill" data-filter="in-review">In Review</div>
-                  <div class="pm-tab-pill" data-filter="requests">Edit Requests</div>
+                  <div class="pm-tab-pill" data-filter="requests">Profile Updates</div>
                   <div class="pm-tab-pill" data-filter="archived">Archived</div>
                 </div>
                 <div class="pm-count-actions">
@@ -15491,7 +15686,7 @@
                 <div class="pm-tab-pills" id="supTabPills">
                   <div class="pm-tab-pill" data-filter="all">All</div>
                   <div class="pm-tab-pill active" data-filter="approved">Approved</div>
-                  <div class="pm-tab-pill" data-filter="requests">Edit Requests</div>
+                  <div class="pm-tab-pill" data-filter="requests">Profile Updates</div>
                   <div class="pm-tab-pill" data-filter="archived">Archived</div>
                   <div class="pm-tab-pill" data-filter="certs-expiring" id="supCertsExpiringPill">Certs Expiring<span class="pm-count-text" id="supCertsExpiringCount" style="margin-left:6px;background:#fef3c7;color:#92620a;padding:1px 7px;border-radius:999px;font-weight:700;font-size:10.5px;"></span></div>
                 </div>
@@ -15855,7 +16050,7 @@
                   <div class="pm-tab-pill" data-filter="new">New</div>
                   <div class="pm-tab-pill" data-filter="in-progress">In Progress</div>
                   <div class="pm-tab-pill" data-filter="in-review">In Review</div>
-                  <div class="pm-tab-pill" data-filter="requests">Edit Requests</div>
+                  <div class="pm-tab-pill" data-filter="requests">Profile Updates</div>
                   <div class="pm-tab-pill" data-filter="archived">Archived</div>
                 </div>
                 <div class="pm-count-actions">
@@ -16948,28 +17143,6 @@
                   </div>
                 </div>
 
-                <div class="svc-role-drawer-overlay" id="supChatActivityLogOverlay">
-                  <div class="svc-role-drawer">
-                    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--border-subtle);flex-shrink:0;">
-                      <div style="display:flex;align-items:center;gap:10px;">
-                        <div class="dch-icon" style="width:32px;height:32px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg></div>
-                        <h3 style="font-size:15.5px;font-weight:800;color:var(--text-heading);">Activity Log</h3>
-                      </div>
-                      <button type="button" id="supChatActivityLogCloseBtn" aria-label="Close" style="background:none;border:none;cursor:pointer;color:var(--text-body-muted);padding:4px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-                    </div>
-                    <div style="padding:22px;flex:1;overflow-y:auto;">
-                      <div class="callout callout-neutral" style="margin-bottom:16px;">
-                        <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg></div>
-                        <div>
-                          <div class="callout-title">Full history</div>
-                          <div class="callout-body">Every action taken on this supplier's profile requests — approvals, declines, resubmission requests, and resubmissions — tracked chronologically.</div>
-                        </div>
-                      </div>
-                      <div id="supChatActivityLogList"></div>
-                      <div id="supChatActivityLogEmpty" style="display:none;padding:8px 0 16px;font-size:13px;color:var(--text-body-muted);">No activity yet on this supplier's requests.</div>
-                    </div>
-                  </div>
-                </div>
 
                 <div id="supTabRequests" style="display:none;">
                   <div class="callout callout-neutral" style="margin-bottom:16px;">
@@ -16987,7 +17160,13 @@
                   <div class="sup-chat-layout">
                   <div class="chat-window-card">
                     <div class="sinb-chat-toolbar">
+                      <div class="sup-chat-context-summary" id="supChatContextSummary"></div>
                       <button type="button" class="sinb-activity-log-btn" id="supChatActivityLogBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>Activity log</button>
+                    </div>
+                    <div class="pm-tab-pills sinb-detail-filter-row" id="supChatFilterPills">
+                      <div class="pm-tab-pill active" data-supchat-filter="all">All Chat</div>
+                      <div class="pm-tab-pill" data-supchat-filter="support">Support</div>
+                      <div class="pm-tab-pill" data-supchat-filter="profile-updates">Profile Updates</div>
                     </div>
                     <div class="sinb-chat-thread-wrap">
                       <div class="chat-window-thread" id="supChatThreadCard">
@@ -16999,6 +17178,7 @@
                       </div>
                     </div>
                     <div class="chat-window-input-area">
+                      <div class="sinb-na-chip-row" id="supChatNaChipRow" style="display:none;"><div class="sinb-na-chip" id="supChatNaChip" role="button" tabindex="0" aria-pressed="false">Needs action (<span id="supChatNaChipCount">0</span>)</div></div>
                       <div class="sinb-reply-preview" id="supChatReplyPreview" style="display:none;">
                         <div class="sinb-reply-preview-bar"></div>
                         <div class="sinb-reply-preview-body"><span class="sinb-reply-preview-label">Replying to</span><span class="sinb-reply-preview-field" id="supChatReplyPreviewField"></span></div>
@@ -17849,7 +18029,13 @@
               <div class="pmc-chat-layout">
               <div class="chat-window-card">
                 <div class="sinb-chat-toolbar">
+                  <div class="sup-chat-context-summary" id="clientChatContextSummary"></div>
                   <button type="button" class="sinb-activity-log-btn" id="clientChatActivityLogBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>Activity log</button>
+                </div>
+                <div class="pm-tab-pills sinb-detail-filter-row" id="clientChatFilterPills">
+                  <div class="pm-tab-pill active" data-pmchat-filter="all">All Chat</div>
+                  <div class="pm-tab-pill" data-pmchat-filter="support">Support</div>
+                  <div class="pm-tab-pill" data-pmchat-filter="profile-updates">Profile Updates</div>
                 </div>
                 <div class="sinb-chat-thread-wrap">
                   <div class="chat-window-thread" id="clientChatThreadCard">
@@ -17858,6 +18044,7 @@
                   </div>
                 </div>
                 <div class="chat-window-input-area">
+                  <div class="sinb-na-chip-row" id="clientChatNaChipRow" style="display:none;"><div class="sinb-na-chip" id="clientChatNaChip" role="button" tabindex="0" aria-pressed="false">Needs action (<span id="clientChatNaChipCount">0</span>)</div></div>
                   <div class="sinb-reply-preview" id="clientChatReplyPreview" style="display:none;">
                     <div class="sinb-reply-preview-bar"></div>
                     <div class="sinb-reply-preview-body"><span class="sinb-reply-preview-label">Replying to</span><span class="sinb-reply-preview-field" id="clientChatReplyPreviewField"></span></div>
@@ -17873,28 +18060,6 @@
               </div>
             </div>
 
-            <div class="svc-role-drawer-overlay" id="clientChatActivityLogOverlay">
-              <div class="svc-role-drawer">
-                <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--border-subtle);flex-shrink:0;">
-                  <div style="display:flex;align-items:center;gap:10px;">
-                    <div class="dch-icon" style="width:32px;height:32px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg></div>
-                    <h3 style="font-size:15.5px;font-weight:800;color:var(--text-heading);">Activity Log</h3>
-                  </div>
-                  <button type="button" id="clientChatActivityLogCloseBtn" aria-label="Close" style="background:none;border:none;cursor:pointer;color:var(--text-body-muted);padding:4px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-                </div>
-                <div style="padding:22px;flex:1;overflow-y:auto;">
-                  <div class="callout callout-neutral" style="margin-bottom:16px;">
-                    <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg></div>
-                    <div>
-                      <div class="callout-title">Full history</div>
-                      <div class="callout-body">Every action taken on this applicant's profile requests &mdash; approvals, declines, resubmission requests, and messages &mdash; tracked chronologically.</div>
-                    </div>
-                  </div>
-                  <div id="clientChatActivityLogList"></div>
-                  <div id="clientChatActivityLogEmpty" style="display:none;padding:8px 0 16px;font-size:13px;color:var(--text-body-muted);">No activity yet on this applicant.</div>
-                </div>
-              </div>
-            </div>
 
             <div class="sup-sticky-bar" id="clientAppStickyBar" style="display:none;">
               <span class="ssb-score"><span class="dot"></span>Profile completion: <span id="clientAppStickyScore">25%</span></span>
@@ -19394,8 +19559,9 @@
     // not tracked here.
     if (!changes.length) return null;
     var batchId = 'pmbatch' + Date.now();
-    changes.forEach(function (ch, i) { ch.id = batchId + '-c' + i; ch.status = 'pending'; });
-    return { id: batchId, displayId: (typeof suprqNextId === 'function' ? suprqNextId() : Date.now() % 10000), submittedDate: new Date(), changes: changes };
+    var pmRequester = obEditSnapshot.fullName || 'PM';
+    changes.forEach(function (ch, i) { ch.id = batchId + '-c' + i; ch.status = 'pending'; ch.requestedBy = pmRequester; ch.requestedAtLabel = sinbNowTimestamp(); });
+    return { id: batchId, displayId: (typeof suprqNextId === 'function' ? suprqNextId() : Date.now() % 10000), submittedDate: new Date(), requestedBy: pmRequester, participant: pmRequester, participantType: 'pm', changes: changes };
   }
 
   document.getElementById('pmAcctEditBtn').addEventListener('click', function () {
@@ -19422,7 +19588,7 @@
       // shows up as a real message in the same Chat tab admin reads, so "submitted" and "visible
       // to admin" are the same moment rather than two separate systems that could drift.
       if (typeof pmChatAddMessage === 'function') {
-        pmChatAddMessage(pmName, { kind: 'text', fromAdmin: false, text: 'I\u2019d like to update ' + newBatch.changes.length + ' field' + (newBatch.changes.length === 1 ? '' : 's') + ' on my profile \u2014 details above.' });
+        pmChatAddMessage(pmName, { kind: 'text', fromAdmin: false, topic: 'profile-update', text: 'I\u2019d like to update ' + newBatch.changes.length + ' field' + (newBatch.changes.length === 1 ? '' : 's') + ' on my profile \u2014 details above.' });
       }
       // Admin doesn't currently get told about a *new* Supplier or PM edit-request submission
       // either (only fresh signups push a notification) — added here for PM specifically, since
@@ -19469,6 +19635,8 @@
       '<div style="min-width:0;"><div class="sinb-chat-header-name-row"><h3>Keylr Support</h3></div>' +
       '<div class="sinb-chat-header-sub"><span class="online">Online</span></div></div>';
   }
+  var pmOwnChatFilter = 'all'; // All Chat / Support / Profile Updates filter for the PM's own chat
+  var pmOwnNaOnly = false; // Needs-action chip state in the PM's own Profile Updates view
   function renderPmOwnChatThread(highlightBatchId) {
     var innerEl = document.getElementById('pmOwnChatMessagesInner');
     var scrollEl = document.getElementById('pmOwnChatScroll');
@@ -19481,7 +19649,12 @@
     var timeline = batches.map(function (batch) {
       var ts = batch.submittedDate ? new Date(batch.submittedDate).getTime() : 0;
       var timeLabel = batch.submittedDate ? sinbFormatTimestamp(new Date(batch.submittedDate)) : '';
-      return { ts: ts, html: '<div class="sinb-msg-row mine" data-batch-anchor="' + batch.id + '"><div class="sinb-msg-stack sinb-msg-stack-wide">' + pmcrEditRequestCardHtml(batch, false) + '<div class="sinb-msg-time">You \u00b7 ' + timeLabel + '</div></div></div>' };
+      // Batches the admin raised sit on the "theirs" side of the thread — the PM received this
+      // request, they didn't send it.
+      var adminInitiated = batch.requestedBy === 'Admin';
+      var rowClass = adminInitiated ? '' : ' mine';
+      var timeMeta = (adminInitiated ? 'Keylr Admin' : 'You') + ' \u00b7 ' + timeLabel;
+      return { ts: ts, cat: 'pu', html: '<div class="sinb-msg-row' + rowClass + '" data-batch-anchor="' + batch.id + '"><div class="sinb-msg-stack sinb-msg-stack-wide">' + pmcrEditRequestCardHtml(batch, false) + '<div class="sinb-msg-time">' + timeMeta + '</div></div></div>' };
     });
     (typeof PM_CHAT_MESSAGES === 'object' ? (PM_CHAT_MESSAGES[name] || []) : []).forEach(function (m) {
       var mine = !m.fromAdmin;
@@ -19491,13 +19664,44 @@
       } else {
         html = '<div class="sinb-msg-row' + (mine ? ' mine' : '') + '"><div class="sinb-msg-stack">' + pmChatQuoteBlockHtml(m) + '<div class="sinb-msg-bubble">' + sinbEsc(m.text) + '</div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
       }
-      timeline.push({ ts: m.ts || 0, html: html });
+      timeline.push({ ts: m.ts || 0, cat: crMessageIsProfileUpdate(m) ? 'pu' : 'support', html: html });
     });
     timeline.sort(function (a, b) { return a.ts - b.ts; });
-    var timelineHtml = timeline.map(function (item) { return item.html; }).join('');
-    innerEl.innerHTML = timelineHtml
-      ? '<div class="sinb-date-sep"><span>Today</span></div>' + timelineHtml
-      : '<div class="sinb-empty-chat">Send a message to start the conversation with Keylr Support.</div>';
+    // Needs-action chip — with the emoji + attachment icons, Profile Updates view only.
+    // From the PM's side "needs action" means fields the admin sent back for resubmission.
+    var pmOwnNeedsAction = function (ch) { return ch.status === 'resubmit'; };
+    var pmOwnNaCount = 0;
+    batches.forEach(function (b) { b.changes.forEach(function (ch) { if (pmOwnNeedsAction(ch)) pmOwnNaCount++; }); });
+    var pmOwnChip = document.getElementById('pmOwnNaChip');
+    if (pmOwnChip) {
+      pmOwnChip.style.display = pmOwnChatFilter === 'profile-updates' ? '' : 'none';
+      document.getElementById('pmOwnNaChipCount').textContent = pmOwnNaCount;
+      pmOwnChip.classList.toggle('active', pmOwnNaOnly);
+      pmOwnChip.setAttribute('aria-pressed', pmOwnNaOnly ? 'true' : 'false');
+    }
+    if (pmOwnChatFilter === 'profile-updates' && pmOwnNaOnly) {
+      var pmOwnNaHtml = batches.map(function (b) {
+        var actionable = b.changes.filter(pmOwnNeedsAction);
+        if (!actionable.length) return '';
+        var naBatch = Object.assign({}, b, { changes: actionable });
+        return '<div class="sinb-msg-row" data-batch-anchor="' + b.id + '"><div class="sinb-msg-stack sinb-msg-stack-wide">' + pmcrEditRequestCardHtml(naBatch, false) + '</div></div>';
+      }).join('');
+      innerEl.innerHTML = pmOwnNaHtml || '<div class="sinb-empty-chat">Nothing needs your action right now.</div>';
+    } else {
+      var visible = timeline.filter(function (item) {
+        if (pmOwnChatFilter === 'support') return item.cat === 'support';
+        if (pmOwnChatFilter === 'profile-updates') return item.cat === 'pu';
+        return true;
+      });
+      var timelineHtml = visible.map(function (item) { return item.html; }).join('');
+      if (timelineHtml) {
+        innerEl.innerHTML = '<div class="sinb-date-sep"><span>Today</span></div>' + timelineHtml;
+      } else if (timeline.length) {
+        innerEl.innerHTML = '<div class="sinb-empty-chat">' + (pmOwnChatFilter === 'profile-updates' ? 'No profile updates yet.' : 'No support messages yet.') + '</div>';
+      } else {
+        innerEl.innerHTML = '<div class="sinb-empty-chat">Send a message to start the conversation with Keylr Support.</div>';
+      }
+    }
     scrollEl.scrollTop = scrollEl.scrollHeight;
     if (typeof sinbWireScrollBottomBtn === 'function') sinbWireScrollBottomBtn(scrollEl, document.getElementById('pmOwnChatScrollBottomBtn'));
     if (highlightBatchId) {
@@ -19578,12 +19782,18 @@
           showToast('Enter a value before resubmitting.');
           return;
         }
+        var prevVal = change.newValue; // what was on the request before this resubmission
         change.newValue = newVal;
         change.status = 'pending';
+        // Accountability: attribute the resubmission to the PM by name for the admin's card.
+        change.respondedBy = pmCurrentName() || 'PM';
+        change.respondedAt = Date.now();
+        change.respondedAtLabel = sinbNowTimestamp();
         if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
-        pmChatAddMessage(pmCurrentName(), { kind: 'text', fromAdmin: false, text: 'I\u2019ve updated \u201c' + change.fieldLabel + '\u201d and resubmitted it for review.' });
+        pmChatAddMessage(pmCurrentName(), { kind: 'text', fromAdmin: false, topic: 'profile-update', replyToChangeId: change.id, replyToFieldLabel: change.fieldLabel, text: 'I\u2019ve updated \u201c' + change.fieldLabel + '\u201d and resubmitted it for review.' });
         if (typeof logPmChatActivity === 'function') {
-          logPmChatActivity(pmCurrentName(), { type: 'resubmitted', actor: pmCurrentName(), action: 'resubmitted', fieldLabel: change.fieldLabel, newValue: newVal });
+          // Current -> new values so the log answers "what was replaced with what" at a glance.
+          logPmChatActivity(pmCurrentName(), { type: 'resubmitted', actor: pmCurrentName(), action: 'resubmitted', fieldLabel: change.fieldLabel, oldValue: prevVal, newValue: newVal });
         }
         // Admin doesn't get a fresh notification for this specific event yet (the original "PM
         // Profile Update Request" notification already exists for the batch) — flagged as a gap
@@ -19601,6 +19811,31 @@
       document.getElementById('pmOwnChatReplyPreview').style.display = 'none';
     });
   }
+  // Topic filter pills for the PM's own chat — parity with the Supplier chat pills.
+  (function wirePmOwnChatFilterPills() {
+    var pillsRow = document.getElementById('pmOwnChatFilterPills');
+    if (!pillsRow) return;
+    pillsRow.querySelectorAll('[data-pmown-filter]').forEach(function (pill) {
+      pill.addEventListener('click', function () {
+        pillsRow.querySelectorAll('[data-pmown-filter]').forEach(function (p) { p.classList.remove('active'); });
+        pill.classList.add('active');
+        pmOwnChatFilter = pill.getAttribute('data-pmown-filter');
+        pmOwnNaOnly = false; // each view starts unfiltered; the chip is a within-view refinement
+        renderPmOwnChatThread();
+      });
+    });
+    var pmOwnNaChipEl = document.getElementById('pmOwnNaChip');
+    if (pmOwnNaChipEl) pmOwnNaChipEl.addEventListener('click', function () {
+      pmOwnNaOnly = !pmOwnNaOnly;
+      renderPmOwnChatThread();
+    });
+    var pmOwnActBtn = document.getElementById('pmOwnActivityLogBtn');
+    if (pmOwnActBtn) pmOwnActBtn.addEventListener('click', function () {
+      // Same per-name store the admin's views read — one shared, identical log per person.
+      if (typeof renderClientChatActivityLog === 'function') renderClientChatActivityLog(pmCurrentName());
+      document.getElementById('clientChatActivityLogOverlay').classList.add('open');
+    });
+  })();
   function pmOwnChatSend() {
     var input = document.getElementById('pmOwnChatMessageInput');
     var text = input.value.trim();
@@ -23440,13 +23675,14 @@
 
     if (!changes.length) return null;
     var batchId = 'ownbatch' + Date.now();
-    changes.forEach(function (ch, i) { ch.id = batchId + '-c' + i; ch.status = 'pending'; });
+    var supRequester = (typeof SUP_OWN_DEMO_NAME !== 'undefined' && SUP_OWN_DEMO_NAME) ? SUP_OWN_DEMO_NAME : 'Supplier';
+    changes.forEach(function (ch, i) { ch.id = batchId + '-c' + i; ch.status = 'pending'; ch.requestedBy = supRequester; ch.requestedAtLabel = sinbNowTimestamp(); });
     // Business-type conversion requests use a distinct numeric range (900000+) so they're visually
     // distinct from routine field-edit requests (#480001 etc.) while staying numeric-only.
     var displayId = isBizTypeChange
       ? (900000 + (++suprqConvIdCounter))
       : (typeof suprqNextId === 'function' ? suprqNextId() : Date.now() % 10000);
-    return { id: batchId, displayId: displayId, isBusinessTypeChange: isBizTypeChange, submittedDate: new Date(), changes: changes };
+    return { id: batchId, displayId: displayId, isBusinessTypeChange: isBizTypeChange, submittedDate: new Date(), requestedBy: supRequester, participant: supRequester, participantType: 'supplier', changes: changes };
   }
 
   function openEditFromCurrentTab() {
@@ -25780,6 +26016,9 @@
   }
   function sinbFieldCardHtml(batch, ch, forAdmin) {
     var meta = SUP_CR_STATUS_META[ch.status] || SUP_CR_STATUS_META.pending;
+    // The same 'resubmit' state reads differently depending on who's looking: the supplier sees
+    // "Needs your update", the admin sees "Awaiting supplier" — one status, two honest labels.
+    if (forAdmin && ch.status === 'resubmit') meta = { label: 'Awaiting supplier', class: 'resubmit' };
     var isDoc = ch.fieldType !== 'date' && (sinbFieldWantsUpload(ch) || ch.isDocument);
     function viewDocBtn(which, value) {
       if (!isDoc || !value || /^(not set|not uploaded|—)$/i.test(String(value))) return '';
@@ -25812,10 +26051,16 @@
     } else if (ch.status === 'declined') {
       body = '<div class="sinb-field-context">This update was not applied.</div><div class="sinb-field-value-row"><span class="sinb-field-old" style="text-decoration:none;">' + sinbEsc(String(ch.newValue)) + '</span>' + viewDocBtn('new', ch.newValue) + '</div>';
     }
+    // Reason + required action, present on admin-initiated requests created from a flagged item.
+    if (ch.reason) body = '<div class="sinb-cr-reason"><b>Reason:</b> ' + sinbEsc(ch.reason) + '</div>' + body;
+    if (ch.actionRequired && ch.status === 'resubmit') body += '<div class="sinb-cr-action-required">Action required: ' + sinbEsc(ch.actionRequired) + '</div>';
+    var participantLabel = batch.participant || (typeof SUP_OWN_DEMO_NAME !== 'undefined' ? SUP_OWN_DEMO_NAME : 'Supplier');
+    var needsActionChip = crNeedsAction(ch, forAdmin) ? '<span class="sinb-needs-action-chip">Needs action</span>' : '';
     var replyFooter = '<button type="button" class="sinb-field-reply-btn" data-field-reply-btn data-batch-id="' + batch.id + '" data-change-id="' + ch.id + '" data-field-label="' + supjrEscapeHtml(ch.fieldLabel) + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17H4a1 1 0 01-1-1v-4a1 1 0 011-1h5m0-4l-6 6 6 6M21 7v6a4 4 0 01-4 4H8"/></svg>Reply</button>';
     return '<div class="sinb-field-card ' + meta.class + '" data-change-id="' + ch.id + '">' +
-      '<div class="sinb-field-card-head"><span class="sinb-field-icon">' + SUP_CR_FIELD_ICON + '</span><span class="sinb-field-title">' + sinbEsc(ch.fieldLabel) + '</span><span class="sinb-field-status-pill ' + meta.class + '">' + meta.label + '</span></div>' +
+      '<div class="sinb-field-card-head"><span class="sinb-field-icon">' + SUP_CR_FIELD_ICON + '</span><span class="sinb-field-title">' + sinbEsc(ch.fieldLabel) + '</span>' + needsActionChip + '<span class="sinb-field-status-pill ' + meta.class + '">' + meta.label + '</span></div>' +
       '<div class="sinb-field-card-body">' + body + '</div>' +
+      crCardMetaHtml(batch, ch, forAdmin, participantLabel) +
       '<div class="sinb-field-card-foot">' + replyFooter + '</div>' +
     '</div>';
   }
@@ -25838,9 +26083,19 @@
   function sinbEditRequestCardHtml(batch, forAdmin) {
     var cards = batch.changes.map(function (ch) { return sinbFieldCardHtml(batch, ch, forAdmin); }).join('');
     var pendingCount = batch.changes.filter(function (ch) { return forAdmin ? ch.status === 'pending' : (ch.status === 'pending' || ch.status === 'resubmit'); }).length;
-    var introText = forAdmin
-      ? 'Requested ' + batch.changes.length + ' profile update' + (batch.changes.length === 1 ? '' : 's') + '.'
-      : 'I\u2019d like to update the following on my profile:';
+    var adminInitiated = batch.requestedBy === 'Admin';
+    var introText;
+    if (adminInitiated) {
+      // Requests the admin raised (e.g. from a flagged Overview item) read differently on each
+      // side — admin sees their own outbound request, the supplier sees who's asking.
+      introText = forAdmin
+        ? 'You requested ' + batch.changes.length + ' profile update' + (batch.changes.length === 1 ? '' : 's') + ' from ' + sinbEsc(batch.participant || 'this supplier') + '.'
+        : '<b>Keylr Admin</b> requested ' + batch.changes.length + ' profile update' + (batch.changes.length === 1 ? '' : 's') + ':';
+    } else {
+      introText = forAdmin
+        ? 'Requested ' + batch.changes.length + ' profile update' + (batch.changes.length === 1 ? '' : 's') + '.'
+        : 'I\u2019d like to update the following on my profile:';
+    }
     var submittedLabel = batch.submittedDate ? '<span class="sinb-cr-submitted-time">' + sinbFormatTimestamp(batch.submittedDate) + '</span>' : '';
     return '<div class="sinb-cr-group">' +
       '<div class="sinb-cr-group-intro">' + introText + (pendingCount ? ' <span class="sinb-cr-pending-badge">' + pendingCount + ' need' + (pendingCount === 1 ? 's' : '') + ' action</span>' : '') + submittedLabel + '</div>' +
@@ -25864,7 +26119,9 @@
     if (typeof sinbRenderChat === 'function') sinbRenderChat();
   }
   function sinbAddEditResponseMessage(text) {
-    SINB_SUPPORT_CONV.messages.push({ kind: 'text', mine: false, text: text, ts: Date.now(), time: sinbNowTimestamp() });
+    // topic tag keeps these approval/decline confirmations classified under Profile Updates in
+    // every chat filter, rather than leaking into Support just because they're plain text.
+    SINB_SUPPORT_CONV.messages.push({ kind: 'text', mine: false, text: text, topic: 'profile-update', ts: Date.now(), time: sinbNowTimestamp() });
     saveSinbMessages();
     if (typeof sinbRenderChat === 'function') sinbRenderChat();
   }
@@ -25877,6 +26134,11 @@
   // calling this, so it stays with each caller instead of being generalized here.
   function sinbHandleCrAction(change, action, name) {
     change.status = action === 'approve' ? 'approved' : action === 'decline' ? 'declined' : 'resubmit';
+    // Accountability: record who reviewed this change and when — this is what the card's
+    // "Reviewed by" row reads from, and the Activity log entry below carries the old → new values.
+    change.reviewedBy = 'Admin';
+    change.reviewedAt = Date.now();
+    change.reviewedAtLabel = sinbNowTimestamp();
     if (action === 'approve' && typeof sinbApplyApprovedChange === 'function') sinbApplyApprovedChange(change);
     if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
     logSupChatActivity(name, {
@@ -26001,7 +26263,14 @@
       // means in the stored data itself (which would break the other three mounts).
       var mine = forAdmin ? !m.mine : m.mine;
       if (m.kind === 'date') return '<div class="sinb-date-sep"><span>' + m.label + '</span></div>';
-      if (m.kind === 'system') return '<div class="sinb-msg-row system"><div class="sinb-system-card"><div class="sinb-system-card-inner' + (m.warn ? ' warn' : '') + '"><div class="sinb-system-card-title">' + sinbEsc(m.title) + '</div><div class="sinb-system-card-body">' + sinbEsc(m.body) + '</div></div><div class="sinb-system-card-time">' + m.time + '</div></div></div>';
+      if (m.kind === 'system') {
+        // Platform notifications are addressed to the supplier ("your payout", "your invoice") —
+        // in the admin's view of the conversation they're noise, not dialogue, so they're hidden
+        // entirely, same as jump-notification below. This also covers older system messages still
+        // sitting in localStorage from before they stopped being seeded.
+        if (forAdmin) return '';
+        return '<div class="sinb-msg-row system"><div class="sinb-system-card"><div class="sinb-system-card-inner' + (m.warn ? ' warn' : '') + '"><div class="sinb-system-card-title">' + sinbEsc(m.title) + '</div><div class="sinb-system-card-body">' + sinbEsc(m.body) + '</div></div><div class="sinb-system-card-time">' + m.time + '</div></div></div>';
+      }
       if (m.kind === 'attachment') return '<div class="sinb-msg-row' + (mine ? ' mine' : '') + '"><div class="sinb-msg-stack">' + supChatQuoteBlockHtml(m) + '<div class="sinb-msg-bubble sinb-attachment-bubble"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (m.isImage ? '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>' : '<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/>') + '</svg><span>' + sinbEsc(m.fileName) + '</span></div><div class="sinb-msg-time">' + m.time + '</div></div></div>';
       if (m.kind === 'edit-request') {
         // forAdmin defaults to false (existing behaviour for Settings > Chat, Dashboard > Inbox, and
@@ -26043,6 +26312,28 @@
       }
     });
   }
+  // Account Settings > Chat's own filter chips (All Chat / Support / Profile Updates) — scoped to
+  // just this one mount below, not the Admin Inbox or either onboarding widget, none of which have
+  // the chip row. Builds a filtered *copy* of the conversation rather than touching c.messages
+  // directly, since SINB_SUPPORT_CONV is the same shared object other mounts render from.
+  var sinbChatFilter = 'all';
+  var sinbNaOnly = false; // Needs-action chip state in the supplier's own Profile Updates view
+  function sinbFilterMessagesForChips(messages, filterKind) {
+    if (filterKind === 'all') return messages;
+    // Classification is per-message and by topic, not by kind alone — plain-text replies that
+    // reference a profile-update field (replyToChangeId / topic tag) belong with the workflow
+    // they're about, not in Support just because they're text bubbles.
+    var keep = filterKind === 'edit-requests' ? crMessageIsProfileUpdate : function (m) { return !crMessageIsProfileUpdate(m); };
+    var filtered = [];
+    var pendingDateSep = null;
+    messages.forEach(function (m) {
+      if (m.kind === 'date') { pendingDateSep = m; return; }
+      if (!keep(m)) return;
+      if (pendingDateSep) { filtered.push(pendingDateSep); pendingDateSep = null; }
+      filtered.push(m);
+    });
+    return filtered;
+  }
   function sinbRenderChatMount(mount) {
     var headerEl = document.getElementById(mount.header);
     var scrollEl = document.getElementById(mount.scroll);
@@ -26050,7 +26341,41 @@
     if (!headerEl || !scrollEl || !innerEl) return;
     var c = (mount.getConv || sinbGetActiveConv)();
     headerEl.innerHTML = sinbBuildHeaderHtml(c);
-    innerEl.innerHTML = sinbBuildMessagesHtml(c);
+    var convForRender = c;
+    if (mount.inner === 'sinbMessagesInner' && sinbChatFilter !== 'all') {
+      convForRender = Object.assign({}, c, { messages: sinbFilterMessagesForChips(c.messages, sinbChatFilter) });
+    }
+    innerEl.innerHTML = sinbBuildMessagesHtml(convForRender);
+    if (mount.inner === 'sinbMessagesInner' && sinbChatFilter !== 'all' && convForRender.messages.length === 0 && c.messages.length > 0) {
+      innerEl.innerHTML = '<div class="sinb-empty-chat">' + (sinbChatFilter === 'edit-requests' ? 'No profile updates yet.' : 'No support messages yet.') + '</div>';
+    }
+    // Needs-action chip for the supplier's own view — sits with the emoji + attachment icons and
+    // only shows on Profile Updates. "Needs action" from the supplier's side means fields the
+    // admin sent back for resubmission (status 'resubmit'), so selecting it surfaces exactly the
+    // cards carrying their resubmit widgets. Settings mount only — the onboarding widgets never
+    // render edit-request cards.
+    if (mount.inner === 'sinbMessagesInner') {
+      var ownBatches = supplierChangeRequests[SUP_OWN_DEMO_NAME] || [];
+      var ownNeedsAction = function (ch) { return ch.status === 'resubmit'; };
+      var ownNaCount = 0;
+      ownBatches.forEach(function (b) { b.changes.forEach(function (ch) { if (ownNeedsAction(ch)) ownNaCount++; }); });
+      var ownChip = document.getElementById('sinbNaChip');
+      if (ownChip) {
+        ownChip.style.display = sinbChatFilter === 'edit-requests' ? '' : 'none';
+        document.getElementById('sinbNaChipCount').textContent = ownNaCount;
+        ownChip.classList.toggle('active', sinbNaOnly);
+        ownChip.setAttribute('aria-pressed', sinbNaOnly ? 'true' : 'false');
+      }
+      if (sinbChatFilter === 'edit-requests' && sinbNaOnly) {
+        var ownNaHtml = ownBatches.map(function (b) {
+          var actionable = b.changes.filter(ownNeedsAction);
+          if (!actionable.length) return '';
+          var naBatch = Object.assign({}, b, { changes: actionable });
+          return '<div class="sinb-msg-row" data-batch-anchor="' + b.id + '"><div class="sinb-msg-stack sinb-msg-stack-wide">' + sinbEditRequestCardHtml(naBatch, false) + '</div></div>';
+        }).join('');
+        innerEl.innerHTML = ownNaHtml || '<div class="sinb-empty-chat">Nothing needs your action right now.</div>';
+      }
+    }
     scrollEl.scrollTop = scrollEl.scrollHeight;
     sinbWireScrollBottomBtn(scrollEl, document.getElementById(mount.scrollBtn));
 
@@ -26123,6 +26448,36 @@
     sinbRenderChat();
 
     SINB_MOUNTS.forEach(wireSinbComposer);
+
+    var sinbNaChipEl = document.getElementById('sinbNaChip');
+    if (sinbNaChipEl && !sinbNaChipEl.dataset.wired) {
+      sinbNaChipEl.dataset.wired = '1';
+      sinbNaChipEl.addEventListener('click', function () {
+        sinbNaOnly = !sinbNaOnly;
+        sinbRenderChat();
+      });
+    }
+    var supOwnActBtn = document.getElementById('supOwnActivityLogBtn');
+    if (supOwnActBtn && !supOwnActBtn.dataset.wired) {
+      supOwnActBtn.dataset.wired = '1';
+      supOwnActBtn.addEventListener('click', function () {
+        // Same per-name store the admin's views read — one shared, identical log per person.
+        if (typeof renderSupChatActivityLog === 'function') renderSupChatActivityLog(SUP_OWN_DEMO_NAME);
+        document.getElementById('supChatActivityLogOverlay').classList.add('open');
+      });
+    }
+    var filterPills = document.getElementById('sinbFilterPills');
+    if (filterPills) {
+      filterPills.querySelectorAll('[data-sinb-filter]').forEach(function (pill) {
+        pill.addEventListener('click', function () {
+          filterPills.querySelectorAll('[data-sinb-filter]').forEach(function (p) { p.classList.remove('active'); });
+          pill.classList.add('active');
+          sinbChatFilter = pill.getAttribute('data-sinb-filter');
+          sinbNaOnly = false; // each view starts unfiltered; the chip is a within-view refinement
+          sinbRenderChat();
+        });
+      });
+    }
   }
   function wireSinbComposer(mount) {
     var msgInput = document.getElementById(mount.messageInput);
@@ -28842,6 +29197,12 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
           change.newValue = newVal;
         }
         change.status = 'resubmitted';
+        // Accountability: the resubmission is attributed to the supplier by name, so the admin's
+        // card answers "who responded" without any chat archaeology.
+        var responderName = (typeof SUP_OWN_DEMO_NAME !== 'undefined' && SUP_OWN_DEMO_NAME) ? SUP_OWN_DEMO_NAME : 'Supplier';
+        change.respondedBy = responderName;
+        change.respondedAt = Date.now();
+        change.respondedAtLabel = sinbNowTimestamp();
         if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
         showToast(change.fieldLabel + ' resubmitted for review.');
         // Document-type fields get their own specific admin notification on top of the general
@@ -30955,7 +31316,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   // and remove the "display:none" this adds to the PMs stat card + filter tab in initAdminInboxOnce,
   // once PM chat is ready to ship. Nothing else needs to change: the data-building, filtering, and
   // stat-counting logic all already handle PM conversations correctly, they're just not included.
-  var ADMIN_INBOX_SHOW_PMS = false;
+  // PM conversations are now first-class in the Admin Inbox — the two-level filter (WHO row:
+  // All / Suppliers / PMs) requires both participant types present, per the tracking spec.
+  var ADMIN_INBOX_SHOW_PMS = true;
   var ADMIN_INBOX_SYSTEM_POOL = [
     { title: 'Welcome', body: 'We\u2019re here when you need us.' },
     { title: 'VAT Verification Failed', body: 'Your VAT registration could not be verified. Please check your details and resubmit.' },
@@ -30975,17 +31338,17 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   var adminInboxConversations = [];
   var adminInboxInitDone = false;
   var adminInboxActiveId = null;
-  var adminInboxFilter = 'all';
+  var ainNaOnly = false; // Inbox thread needs-action toggle (within a conversation's profile updates)
+  var adminInboxFilter = 'all'; // Level 1 — WHO: all / suppliers / pms
+  var adminInboxTopicFilter = 'all'; // Level 2 — WHAT: all / support / profile-updates / needs-action / unread / favourites
   var adminInboxSearchQuery = '';
 
   function adminInboxSeedMessages(idx) {
+    // Platform notifications ("Payout Deposited", "Bill Finalised", etc.) are addressed to the
+    // supplier, not to the admin — they no longer seed into the admin's view of a conversation.
+    // Only genuine person-sent messages remain, so the admin thread reads as a real dialogue.
     var msgs = [];
     var base = Date.now() - (idx * 3 + 10) * 60000;
-    var welcome = ADMIN_INBOX_SYSTEM_POOL[0];
-    msgs.push({ kind: 'system', title: welcome.title, body: welcome.body, time: sinbFormatTimestamp(base - 900000), ts: base - 900000 });
-    var poolIdx = 1 + ((idx * 47 + 13) % (ADMIN_INBOX_SYSTEM_POOL.length - 1));
-    var pick = ADMIN_INBOX_SYSTEM_POOL[poolIdx];
-    msgs.push({ kind: 'system', title: pick.title, body: pick.body, time: sinbFormatTimestamp(base - 300000), ts: base - 300000 });
     if (idx % 3 === 0) {
       var reply = ADMIN_INBOX_PERSON_LAST[idx % ADMIN_INBOX_PERSON_LAST.length];
       // mine:true here matches the same convention SINB_SUPPORT_CONV uses everywhere else in this
@@ -31007,13 +31370,16 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       var unread = (idx % 5 === 0) ? (((idx * 3 + 1) % 12) + 1) : 0;
       var lastEntry;
       if (isLive) {
-        var liveMsgs = SINB_SUPPORT_CONV.messages;
+        // Preview mirrors the thread: system/platform notifications are hidden from the admin's
+        // view, so the preview reads the last non-system message rather than possibly quoting a
+        // card the admin will never see when they open the conversation.
+        var liveMsgs = SINB_SUPPORT_CONV.messages.filter(function (m) { return m.kind !== 'system'; });
         var lastLive = liveMsgs.length ? liveMsgs[liveMsgs.length - 1] : null;
-        lastEntry = lastLive ? (lastLive.text || (lastLive.title ? lastLive.title + ' ' + (lastLive.body || '') : 'Attachment')) : 'We\u2019re here when you need us.';
+        lastEntry = lastLive ? (lastLive.text || (lastLive.kind === 'edit-request' ? 'Profile update request' : 'Attachment')) : 'No messages yet';
       } else {
         var seedMsgs = adminInboxSeedMessages(idx);
-        var last = seedMsgs[seedMsgs.length - 1];
-        lastEntry = last.kind === 'system' ? (last.title + ' ' + last.body) : last.text;
+        var last = seedMsgs.length ? seedMsgs[seedMsgs.length - 1] : null;
+        lastEntry = last ? last.text : 'No messages yet';
       }
       list.push({
         id: type + '-' + idx,
@@ -31038,7 +31404,64 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     }
     list.sort(function (a, b) { return b.lastTs - a.lastTs; });
     adminInboxConversations = list;
+    // Make sure the reference demo request data exists before topic derivation reads it — these
+    // are the same seeds each detail page would create on open, just triggered up-front so the
+    // Inbox's Profile Updates / Needs action filters and status lines are truthful immediately.
+    if (typeof seedChangeRequestsIfNeeded === 'function') {
+      seedChangeRequestsIfNeeded({ name: (typeof suprqAdminFocusName === 'function') ? suprqAdminFocusName() : 'Ferna' });
+      seedChangeRequestsIfNeeded({ name: 'Nadia Reid' });
+    }
+    if (typeof seedPmChangeRequestsIfNeeded === 'function') seedPmChangeRequestsIfNeeded({ name: 'John John' });
+    // A profile-update conversation waiting on the admin behaves like unread mail — the person
+    // acted and the admin hasn't looked yet — so give those conversations an unread count. This
+    // puts Profile Updates under the Unread tab alongside unread Support, per the spec. The live
+    // demo supplier stays at 0 unread, same as before.
+    list.forEach(function (c) {
+      if (c.isLive || c.unread > 0) return;
+      var info = adminInboxConvTopicInfo(c);
+      if (info.topic === 'profile-update' && info.needsAction) c.unread = 1;
+    });
     return list;
+  }
+  // Derives the conversation's topic + workflow status straight from the shared change-request
+  // stores — the same data every chat surface renders from — so the Inbox row, the detail chat
+  // and the participant's own view can never disagree about the state of a request.
+  function adminInboxConvTopicInfo(c) {
+    var store = c.type === 'pm' ? (typeof pmChangeRequests === 'object' ? pmChangeRequests : {}) : (typeof supplierChangeRequests === 'object' ? supplierChangeRequests : {});
+    var batches = store[c.name] || [];
+    var hasAny = false, pendingField = null, resubmittedField = null, awaitingField = null, allResolved = true;
+    batches.forEach(function (b) {
+      (b.changes || []).forEach(function (ch) {
+        hasAny = true;
+        if (ch.status === 'resubmitted' && !resubmittedField) resubmittedField = ch.fieldLabel;
+        else if (ch.status === 'pending' && !pendingField) pendingField = ch.fieldLabel;
+        if (ch.status === 'resubmit' && !awaitingField) awaitingField = ch.fieldLabel;
+        if (ch.status === 'pending' || ch.status === 'resubmitted' || ch.status === 'resubmit') allResolved = false;
+      });
+    });
+    if (!hasAny) return { topic: 'support', needsAction: false, statusLabel: '', preview: null };
+    if (resubmittedField) return { topic: 'profile-update', needsAction: true, statusLabel: 'Needs review', preview: resubmittedField + ' resubmitted' };
+    if (pendingField) return { topic: 'profile-update', needsAction: true, statusLabel: 'Needs review', preview: pendingField + ' submitted' };
+    if (awaitingField) return { topic: 'profile-update', needsAction: false, statusLabel: 'Awaiting ' + (c.type === 'pm' ? 'PM' : 'supplier'), preview: awaitingField + ' \u2014 awaiting ' + (c.type === 'pm' ? 'PM' : 'supplier') };
+    if (allResolved) return { topic: 'profile-update', needsAction: false, statusLabel: 'Completed', preview: null };
+    return { topic: 'profile-update', needsAction: false, statusLabel: '', preview: null };
+  }
+  // Called when a profile update request is created from a flagged Overview item — bumps the
+  // matching Inbox conversation to the top with an honest preview, without a full rebuild.
+  function adminInboxNoteProfileUpdate(name, previewText) {
+    var list = adminInboxBuildConversations();
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].name === name) {
+        list[i].lastMessageText = previewText;
+        list[i].lastTs = Date.now();
+        break;
+      }
+    }
+    var inboxView = document.getElementById('adminInboxView');
+    if (inboxView && inboxView.style.display !== 'none') {
+      adminInboxRenderList();
+      adminInboxRenderStats();
+    }
   }
   function adminInboxConv(id) {
     return adminInboxBuildConversations().filter(function (c) { return c.id === id; })[0];
@@ -31056,25 +31479,45 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var all = adminInboxBuildConversations();
     var q = adminInboxSearchQuery.trim().toLowerCase();
     return all.filter(function (c) {
-      if (adminInboxFilter === 'unread' && !c.unread) return false;
+      // Level 1 — WHO
       if (adminInboxFilter === 'suppliers' && c.type !== 'supplier') return false;
       if (adminInboxFilter === 'pms' && c.type !== 'pm') return false;
-      if (adminInboxFilter === 'favourites' && !c.starred) return false;
+      // Primary topic filter (the bar under the Inbox heading) — same predicate the WHO
+      // counts use, so list contents and tab numbers can never disagree.
+      if (!adminInboxConvMatchesTopic(c)) return false;
       if (q && c.name.toLowerCase().indexOf(q) === -1) return false;
       return true;
     });
   }
+  function adminInboxConvMatchesTopic(c) {
+    if (adminInboxTopicFilter === 'all') return true;
+    if (adminInboxTopicFilter === 'unread') return c.unread > 0;
+    var info = adminInboxConvTopicInfo(c);
+    if (adminInboxTopicFilter === 'support') return info.topic === 'support';
+    if (adminInboxTopicFilter === 'profile-updates') return info.topic === 'profile-update';
+    return true;
+  }
   function adminInboxRenderStats() {
     var all = adminInboxBuildConversations();
-    var suppliers = all.filter(function (c) { return c.type === 'supplier'; }).length;
-    var pms = all.filter(function (c) { return c.type === 'pm'; }).length;
-    var unread = all.filter(function (c) { return c.unread > 0; }).length;
-    var favourites = all.filter(function (c) { return c.starred; }).length;
-    document.getElementById('ainTabAllCount').textContent = all.length;
+    var suppliers = 0, pms = 0, allCount = 0, unread = 0, puCount = 0;
+    all.forEach(function (c) {
+      // Topic counts are global — the top bar describes the whole inbox.
+      if (c.unread > 0) unread++;
+      var info = adminInboxConvTopicInfo(c);
+      if (info.topic === 'profile-update') puCount++;
+      // WHO counts follow the selected topic — with "Profile Updates" active up top,
+      // "Suppliers (2)" means two supplier profile-update conversations.
+      if (!adminInboxConvMatchesTopic(c)) return;
+      allCount++;
+      if (c.type === 'supplier') suppliers++;
+      if (c.type === 'pm') pms++;
+    });
+    document.getElementById('ainTabAllCount').textContent = allCount;
     document.getElementById('ainTabUnreadCount').textContent = unread;
     document.getElementById('ainTabSuppliersCount').textContent = suppliers;
     document.getElementById('ainTabPMsCount').textContent = pms;
-    document.getElementById('ainTabFavCount').textContent = favourites;
+    var puCountEl = document.getElementById('ainTabPuCount');
+    if (puCountEl) puCountEl.textContent = puCount;
     var badge = document.getElementById('adminInboxNavBadge');
     // Uses the hidden attribute (not an inline style) specifically so the .collapsed sidebar's own
     // "always hide nav badges" rule can still win when the sidebar is collapsed — an inline
@@ -31094,6 +31537,15 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       return;
     }
     listEl.innerHTML = items.map(function (c) {
+      var info = adminInboxConvTopicInfo(c);
+      var isPu = info.topic === 'profile-update';
+      // An honest preview for profile-update conversations — what changed, not just the last
+      // chat line — so the admin understands the conversation without opening it.
+      var previewText = (isPu && info.preview) ? info.preview : c.lastMessageText;
+      var topicRow = '<div class="ain-conv-topic-row">' +
+        '<span class="ain-conv-topic-pill' + (isPu ? ' pu' : '') + '">' + (isPu ? 'Profile Update' : 'Support') + '</span>' +
+        (info.statusLabel ? '<span class="ain-conv-status' + (info.needsAction ? ' needs-action' : '') + '">' + sinbEsc(info.statusLabel) + '</span>' : '') +
+      '</div>';
       return '<div class="ain-conv-item' + (c.unread ? ' unread' : '') + (c.id === adminInboxActiveId ? ' active' : '') + '" data-ain-conv="' + c.id + '">' +
         '<div class="ain-conv-avatar">' + supAppAvatarHtml(c) + '</div>' +
         '<div class="ain-conv-body">' +
@@ -31102,7 +31554,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
             '<span class="ain-conv-role-badge ' + c.type + '">' + (c.type === 'pm' ? 'PM' : 'SUPPLIER') + '</span>' +
             '<span class="ain-conv-time">' + adminInboxRelTime(c.lastTs) + '</span>' +
           '</div>' +
-          '<div class="ain-conv-preview">' + sinbEsc(c.lastMessageText) + '</div>' +
+          topicRow +
+          '<div class="ain-conv-preview">' + sinbEsc(previewText) + '</div>' +
           '<div class="ain-conv-meta-row">' +
             '<svg class="ain-conv-icon-btn' + (c.pinned ? ' active' : '') + '" data-ain-pin="' + c.id + '" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5M9 3h6l-1 7 4 3H6l4-3-1-7z"/></svg>' +
             '<svg class="ain-conv-icon-btn' + (c.starred ? ' active' : '') + '" data-ain-star="' + c.id + '" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>' +
@@ -31138,6 +31591,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   function adminInboxOpenConversation(id) {
     var c = adminInboxConv(id);
     if (!c) return;
+    if (adminInboxActiveId !== id) ainNaOnly = false; // toggle is per-conversation, not sticky across them
     adminInboxActiveId = id;
     c.unread = 0;
     document.getElementById('ainEmptyState').style.display = 'none';
@@ -31204,11 +31658,66 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var data = adminInboxGetActiveConvData();
     if (!data) return;
     document.getElementById('ainThreadHeaderInner').innerHTML = adminInboxBuildHeaderHtml(data);
-    document.getElementById('ainMessagesInner').innerHTML = sinbBuildMessagesHtml(data, true);
+    var convRec = adminInboxConv(adminInboxActiveId);
+    var isPmConv = !!(convRec && convRec.type === 'pm');
+    var crStore = isPmConv
+      ? (typeof pmChangeRequests === 'object' ? pmChangeRequests : {})
+      : (typeof supplierChangeRequests === 'object' ? supplierChangeRequests : {});
+    var convBatches = (convRec && crStore[convRec.name]) || [];
+    var ainNeedsAction = function (ch) { return isPmConv ? ch.status === 'pending' : (ch.status === 'pending' || ch.status === 'resubmitted'); };
+    var naCount = 0, hasPu = false;
+    convBatches.forEach(function (b) { b.changes.forEach(function (ch) { hasPu = true; if (ainNeedsAction(ch)) naCount++; }); });
+    // Needs-action chip inline with the emoji + attachment icons — only offered when this
+    // specific chat has profile updates to filter; selecting it narrows to actionable cards.
+    var naChip = document.getElementById('ainNaChip');
+    if (naChip) {
+      naChip.style.display = hasPu ? '' : 'none';
+      document.getElementById('ainNaChipCount').textContent = naCount;
+      naChip.classList.toggle('active', ainNaOnly);
+      naChip.setAttribute('aria-pressed', ainNaOnly ? 'true' : 'false');
+    }
+    var messagesHtml;
+    if (hasPu && ainNaOnly) {
+      // Only the field cards awaiting the admin — same filtered-batch pattern the detail chats
+      // use, so a card acts identically here and there. Everything else returns when toggled off.
+      messagesHtml = convBatches.map(function (b) {
+        var actionable = b.changes.filter(ainNeedsAction);
+        if (!actionable.length) return '';
+        var naBatch = Object.assign({}, b, { changes: actionable });
+        var cardHtml = isPmConv ? pmcrEditRequestCardHtml(naBatch, true) : sinbEditRequestCardHtml(naBatch, true);
+        var timeLabel = b.submittedDate ? sinbFormatTimestamp(b.submittedDate) : '';
+        return '<div class="sinb-msg-row" data-batch-anchor="' + b.id + '"><div class="sinb-msg-stack sinb-msg-stack-wide">' + cardHtml + '<div class="sinb-msg-time">' + timeLabel + '</div></div></div>';
+      }).join('');
+      if (!messagesHtml) messagesHtml = '<div class="sinb-empty-chat">Nothing needs your action right now.</div>';
+    } else {
+      // Filter system messages out of the data itself (not just at render) so the emptiness check
+      // below is deterministic — a conversation whose only content was platform notifications is
+      // genuinely empty from the admin's point of view.
+      var adminVisibleMsgs = (data.messages || []).filter(function (m) { return m.kind !== 'system'; });
+      messagesHtml = adminVisibleMsgs.length ? sinbBuildMessagesHtml(Object.assign({}, data, { messages: adminVisibleMsgs }), true) : '';
+      // The same profile-update request must be visible here, in the participant's own chat, and in
+      // the detail page's Chat tab. Live-synced conversations already carry an edit-request message
+      // per batch; conversations without one (non-live suppliers like Nadia Reid, and every PM) get
+      // their batches rendered as the same cards directly, deduped against any message-borne copies.
+      var alreadyShown = (convRec && convRec.isLive && typeof SINB_SUPPORT_CONV !== 'undefined')
+        ? SINB_SUPPORT_CONV.messages.filter(function (m) { return m.kind === 'edit-request'; }).map(function (m) { return m.batchId; })
+        : [];
+      var cardsHtml = convBatches.filter(function (b) { return alreadyShown.indexOf(b.id) === -1; }).map(function (b) {
+        var cardHtml = isPmConv ? pmcrEditRequestCardHtml(b, true) : sinbEditRequestCardHtml(b, true);
+        var timeLabel = b.submittedDate ? sinbFormatTimestamp(b.submittedDate) : '';
+        return '<div class="sinb-msg-row" data-batch-anchor="' + b.id + '"><div class="sinb-msg-stack sinb-msg-stack-wide">' + cardHtml + '<div class="sinb-msg-time">' + timeLabel + '</div></div></div>';
+      }).join('');
+      messagesHtml = cardsHtml + messagesHtml;
+      if (!messagesHtml.trim()) {
+        messagesHtml = '<div class="sinb-empty-chat">No messages yet with ' + sinbEsc(convRec ? convRec.name : 'this contact') + '. Send a message below to start the conversation.</div>';
+      }
+    }
+    document.getElementById('ainMessagesInner').innerHTML = messagesHtml;
     var scrollEl = document.getElementById('ainChatScroll');
     scrollEl.scrollTop = scrollEl.scrollHeight;
     sinbWireScrollBottomBtn(scrollEl, document.getElementById('ainScrollBottomBtn'));
     adminInboxWireCrActions();
+    adminInboxWirePmCrActions();
     // Wires the "View document" eye icon on any pending/resubmit/approved/declined field card (and,
     // for completeness, the same resubmit-upload/date-picker/etc. plumbing wireOwnResubmitInputs
     // already handles elsewhere) — this was never called for the Admin Inbox at all, which is why
@@ -31306,6 +31815,34 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       });
     });
   }
+  // PM conversations in the Inbox render the same Accept / Ask to resubmit / Decline actions
+  // their detail-page Chat tab has (data-pmcr-action) — routed through the exact same
+  // pmcrHandleAction so an action taken from either place behaves identically.
+  function adminInboxWirePmCrActions() {
+    var c = adminInboxConv(adminInboxActiveId);
+    if (!c || c.type !== 'pm') return;
+    document.querySelectorAll('#ainMessagesInner [data-pmcr-action]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var action = btn.getAttribute('data-pmcr-action');
+        var change = pmcrFindChange(btn.getAttribute('data-batch-id'), btn.getAttribute('data-change-id'), c.name);
+        if (!change) return;
+        pmcrHandleAction(change, action, c.name);
+        adminInboxRenderThread();
+        var msgInput = document.getElementById('ainMessageInput');
+        if ((action === 'decline' || action === 'resubmit') && msgInput) {
+          msgInput.value = action === 'decline'
+            ? 'Declining \u201c' + change.fieldLabel + '\u201d because '
+            : 'Please resubmit \u201c' + change.fieldLabel + '\u201d \u2014 ';
+          msgInput.dispatchEvent(new Event('input'));
+          msgInput.focus();
+          if (msgInput.setSelectionRange) msgInput.setSelectionRange(msgInput.value.length, msgInput.value.length);
+          showToast(change.fieldLabel + ' updated \u2014 add your reason below and hit Send to notify ' + c.name + '.');
+        } else {
+          showToast('Response sent to ' + c.name + '.');
+        }
+      });
+    });
+  }
   // "Reply" (on a field card) and the little quote block a reply-message shows pointing back at
   // the field it replied to (data-jump-change) — same behaviour as every other chat surface
   // (sinbRenderChatMount's mounts, and the Supplier Detail page's own Chat tab), just never wired
@@ -31367,10 +31904,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     adminInboxRenderList();
     if (adminInboxInitDone) return;
     adminInboxInitDone = true;
-    if (!ADMIN_INBOX_SHOW_PMS) {
-      var pmTab = document.querySelector('[data-ainfilter="pms"]');
-      if (pmTab) pmTab.style.display = 'none';
-    }
     document.getElementById('ainSearchInput').addEventListener('input', function () {
       adminInboxSearchQuery = this.value;
       adminInboxRenderList();
@@ -31391,6 +31924,16 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         adminInboxRenderList();
       });
     });
+    // Level 2 — topic tabs filter within whichever WHO slice is currently active.
+    document.querySelectorAll('#ainTopicTabs .ain-filter-tab').forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        document.querySelectorAll('#ainTopicTabs .ain-filter-tab').forEach(function (t) { t.classList.remove('active'); });
+        tab.classList.add('active');
+        adminInboxTopicFilter = tab.getAttribute('data-aintopic');
+        adminInboxRenderList();
+        adminInboxRenderStats(); // WHO counts are scoped to the selected topic, so refresh them
+      });
+    });
     document.getElementById('ainPinBtn').addEventListener('click', function () {
       var c = adminInboxConv(adminInboxActiveId);
       if (!c) return;
@@ -31408,6 +31951,24 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     });
     document.getElementById('ainExpandBtn').addEventListener('click', function () {
       if (adminInboxActiveId) adminInboxOpenProfile(adminInboxActiveId);
+    });
+    var ainNaChipEl = document.getElementById('ainNaChip');
+    if (ainNaChipEl) ainNaChipEl.addEventListener('click', function () {
+      ainNaOnly = !ainNaOnly;
+      adminInboxRenderThread();
+    });
+    document.getElementById('ainActivityBtn').addEventListener('click', function () {
+      var c = adminInboxConv(adminInboxActiveId);
+      if (!c) return;
+      // Same per-name activity stores the detail pages read/write — one log per person,
+      // identical from the Inbox and from the profile's Chat tab.
+      if (c.type === 'pm') {
+        if (typeof renderClientChatActivityLog === 'function') renderClientChatActivityLog(c.name);
+        document.getElementById('clientChatActivityLogOverlay').classList.add('open');
+      } else {
+        if (typeof renderSupChatActivityLog === 'function') renderSupChatActivityLog(c.name);
+        document.getElementById('supChatActivityLogOverlay').classList.add('open');
+      }
     });
     document.getElementById('ainBackBtn').addEventListener('click', adminInboxCloseThreadMobile);
     var ainInput = document.getElementById('ainMessageInput');
@@ -31431,6 +31992,16 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var ainEmojiPopover = document.getElementById('ainEmojiPopover');
     ainEmojiBtn.addEventListener('click', function (e) {
       e.stopPropagation();
+      var wasOpen = ainEmojiPopover.classList.contains('open');
+      if (!wasOpen) {
+        // The popover is position:fixed, so without explicit coordinates it renders at its
+        // static-flow spot — the bottom of the viewport — and falls off-screen. Anchor it
+        // above the emoji button instead, same as every other chat mount's popover.
+        var rect = ainEmojiBtn.getBoundingClientRect();
+        ainEmojiPopover.style.left = rect.left + 'px';
+        ainEmojiPopover.style.bottom = (window.innerHeight - rect.top + 8) + 'px';
+        ainEmojiPopover.style.top = 'auto';
+      }
       ainEmojiPopover.classList.toggle('open');
     });
     ainEmojiPopover.querySelectorAll('[data-emoji]').forEach(function (span) {
@@ -31616,7 +32187,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     return '';
   }
   function pmClientStatusDisplayText(eff) {
-    if (eff === 'Requests') return 'Edit Requests';
+    if (eff === 'Requests') return 'Profile Updates';
     if (eff === 'Rejected') return 'Archived';
     return eff;
   }
@@ -31704,7 +32275,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     return 'approved';
   }
   function appStatusDisplayText(eff) {
-    if (eff === 'Requests') return 'Edit Requests';
+    if (eff === 'Requests') return 'Profile Updates';
     if (eff === 'Rejected') return 'Archived';
     return eff;
   }
@@ -33344,9 +33915,19 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     }
     (supplierChangeRequests[key] || []).forEach(function (batch) {
       if (!batch.displayId) batch.displayId = suprqNextId();
+      // Accountability: every batch knows who it belongs to and who initiated it. Seeded batches
+      // here are all supplier-initiated profile edits, so the requester defaults to the supplier.
+      if (!batch.participant) batch.participant = key;
+      if (!batch.participantType) batch.participantType = 'supplier';
+      if (!batch.requestedBy) batch.requestedBy = key;
       batch.changes.forEach(function (ch, i) {
         if (!ch.id) ch.id = batch.id + '-c' + i;
         if (!ch.status) ch.status = 'pending';
+        if (!ch.requestedBy) ch.requestedBy = batch.requestedBy;
+        // Seed realistic responder/reviewer attribution for fields already past first submission,
+        // so the demo data answers "who did what" the same way live actions do.
+        if (ch.status === 'resubmitted' && !ch.respondedBy) { ch.respondedBy = key; ch.respondedAtLabel = batch.submittedDate ? sinbFormatTimestamp(batch.submittedDate) : ''; }
+        if ((ch.status === 'approved' || ch.status === 'declined') && !ch.reviewedBy) { ch.reviewedBy = 'Admin'; ch.reviewedAtLabel = batch.submittedDate ? sinbFormatTimestamp(batch.submittedDate) : ''; }
       });
     });
   }
@@ -33392,11 +33973,52 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     }
     (pmChangeRequests[c.name] || []).forEach(function (batch) {
       if (!batch.displayId) batch.displayId = suprqNextId();
+      // Same accountability normalization as the supplier seed — PM-initiated edits default the
+      // requester to the PM themselves; admin-initiated requests set requestedBy explicitly.
+      if (!batch.participant) batch.participant = c.name;
+      if (!batch.participantType) batch.participantType = 'pm';
+      if (!batch.requestedBy) batch.requestedBy = c.name;
       batch.changes.forEach(function (ch, i) {
         if (!ch.id) ch.id = batch.id + '-c' + i;
         if (!ch.status) ch.status = 'pending';
+        if (!ch.requestedBy) ch.requestedBy = batch.requestedBy;
+        if ((ch.status === 'approved' || ch.status === 'declined') && !ch.reviewedBy) { ch.reviewedBy = 'Admin'; ch.reviewedAtLabel = batch.submittedDate ? sinbFormatTimestamp(batch.submittedDate) : ''; }
       });
     });
+  }
+  /* =========================================================
+     PROFILE UPDATE ACCOUNTABILITY — shared helpers.
+     Every profile-update request keeps actor + timestamp information (who requested it, who
+     responded, who reviewed/completed it), so the admin never
+     has to reconstruct the state of a request from raw chat scrollback. Shared by the supplier
+     and PM card renderers, both admin detail chats, the Admin Inbox, and the participants'
+     own chat views — one implementation, identical output everywhere the same request shows.
+  ========================================================== */
+  // True when this change is waiting on the current viewer to do something.
+  function crNeedsAction(ch, forAdmin) {
+    if (forAdmin) return ch.status === 'pending' || ch.status === 'resubmitted';
+    return ch.status === 'resubmit';
+  }
+  // The actor attribution block rendered at the bottom of every profile-update field card —
+  // per-request deep history lives in the Activity log drawer, not on the card. participantLabel is the person's name where known,
+  // falling back to "Supplier" / "PM".
+  function crCardMetaHtml(batch, ch, forAdmin, participantLabel) {
+    var requestedBy = ch.requestedBy || batch.requestedBy || participantLabel;
+    var requestedTime = ch.requestedAtLabel || (batch.submittedDate ? sinbFormatTimestamp(batch.submittedDate) : '');
+    function item(label, who, when) {
+      return '<span class="sinb-cr-meta-item"><span class="sinb-cr-meta-label">' + label + '</span><span class="sinb-cr-meta-value">' + sinbEsc(who) + (when ? ' <span class="sinb-cr-meta-time">\u00b7 ' + sinbEsc(when) + '</span>' : '') + '</span></span>';
+    }
+    var meta = item('Requested by', requestedBy, requestedTime);
+    if (ch.respondedBy) meta += item('Responded by', ch.respondedBy, ch.respondedAtLabel || '');
+    if (ch.reviewedBy) meta += item((ch.status === 'approved' || ch.status === 'declined') ? 'Reviewed by' : 'Reviewed by', ch.reviewedBy, ch.reviewedAtLabel || '');
+    if (ch.status === 'approved' && ch.reviewedAtLabel) meta += item('Completed', ch.reviewedAtLabel, '');
+    return '<div class="sinb-cr-meta">' + meta + '</div>';
+  }
+  // Message-level topic classification: profile-update workflow traffic vs genuine support.
+  // Classification is by the purpose of the message, never by who sent it — an admin support
+  // reply stays Support, a supplier's "I've resubmitted X" reply stays Profile Updates.
+  function crMessageIsProfileUpdate(m) {
+    return m.kind === 'edit-request' || m.kind === 'jump-notification' || m.topic === 'profile-update' || !!m.replyToChangeId;
   }
   function suprqToggleCard(card, forceOpen) {
     var detail = card.querySelector('.suprq-detail');
@@ -33573,6 +34195,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   }
   function pmcrFieldCardHtml(batch, ch, forAdmin) {
     var meta = PM_CR_STATUS_META[ch.status] || PM_CR_STATUS_META.pending;
+    // Same one-status-two-labels rule as the supplier card: the PM sees "Needs your update",
+    // the admin sees "Awaiting PM" — the state is identical, the reading is viewer-honest.
+    if (forAdmin && ch.status === 'resubmit') meta = { label: 'Awaiting PM', class: 'resubmit' };
     var body = '';
     if (ch.status === 'resubmit' && forAdmin) {
       body = '<div class="sinb-field-context">Waiting on the PM to update and resubmit this.</div>' +
@@ -33580,7 +34205,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     } else if (ch.status === 'resubmit' && !forAdmin) {
       body = '<div class="sinb-field-context">Admin asked you to double-check and update this.</div>' +
         '<div class="sinb-field-resubmit-widget" data-pm-resubmit-widget="' + ch.id + '">' + buildPmResubmitInputHtml(ch) + '</div>' +
-        '<div class="sinb-field-actions"><button type="button" class="sinb-cr-action-btn approve" data-pmcr-resubmit-save="' + batch.id + '" data-change-id="' + ch.id + '">Resubmit</button></div>';
+        '<button type="button" class="sinb-field-resubmit-btn" data-pmcr-resubmit-save="' + batch.id + '" data-change-id="' + ch.id + '">Resubmit</button>';
     } else if (ch.status === 'pending') {
       body = '<div class="sinb-field-context">' + (forAdmin ? 'PM requested this change.' : 'Waiting for admin to review.') + '</div>' +
         '<div class="sinb-field-value-row"><span class="sinb-field-old">' + sinbEsc(String(ch.oldValue)) + '</span>' +
@@ -33592,19 +34217,32 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     } else if (ch.status === 'declined') {
       body = '<div class="sinb-field-context">This update was not applied.</div><div class="sinb-field-value-row"><span class="sinb-field-old" style="text-decoration:none;">' + sinbEsc(String(ch.newValue)) + '</span></div>';
     }
+    if (ch.reason) body = '<div class="sinb-cr-reason"><b>Reason:</b> ' + sinbEsc(ch.reason) + '</div>' + body;
+    if (ch.actionRequired && ch.status === 'resubmit') body += '<div class="sinb-cr-action-required">Action required: ' + sinbEsc(ch.actionRequired) + '</div>';
+    var participantLabel = batch.participant || 'PM';
+    var needsActionChip = crNeedsAction(ch, forAdmin) ? '<span class="sinb-needs-action-chip">Needs action</span>' : '';
     var replyFooter = '<button type="button" class="sinb-field-reply-btn" data-pmfield-reply-btn data-batch-id="' + batch.id + '" data-change-id="' + ch.id + '" data-field-label="' + supjrEscapeHtml(ch.fieldLabel) + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17H4a1 1 0 01-1-1v-4a1 1 0 011-1h5m0-4l-6 6 6 6M21 7v6a4 4 0 01-4 4H8"/></svg>Reply</button>';
     return '<div class="sinb-field-card ' + meta.class + '" data-change-id="' + ch.id + '">' +
-      '<div class="sinb-field-card-head"><span class="sinb-field-icon">' + SUP_CR_FIELD_ICON + '</span><span class="sinb-field-title">' + sinbEsc(ch.fieldLabel) + '</span><span class="sinb-field-status-pill ' + meta.class + '">' + meta.label + '</span></div>' +
+      '<div class="sinb-field-card-head"><span class="sinb-field-icon">' + SUP_CR_FIELD_ICON + '</span><span class="sinb-field-title">' + sinbEsc(ch.fieldLabel) + '</span>' + needsActionChip + '<span class="sinb-field-status-pill ' + meta.class + '">' + meta.label + '</span></div>' +
       '<div class="sinb-field-card-body">' + body + '</div>' +
+      crCardMetaHtml(batch, ch, forAdmin, participantLabel) +
       '<div class="sinb-field-card-foot">' + replyFooter + '</div>' +
     '</div>';
   }
   function pmcrEditRequestCardHtml(batch, forAdmin) {
     var cards = batch.changes.map(function (ch) { return pmcrFieldCardHtml(batch, ch, forAdmin); }).join('');
     var pendingCount = batch.changes.filter(function (ch) { return ch.status === 'pending' || (!forAdmin && ch.status === 'resubmit'); }).length;
-    var introText = forAdmin
-      ? 'Requested ' + batch.changes.length + ' profile update' + (batch.changes.length === 1 ? '' : 's') + '.'
-      : 'I\u2019d like to update the following on my profile:';
+    var adminInitiated = batch.requestedBy === 'Admin';
+    var introText;
+    if (adminInitiated) {
+      introText = forAdmin
+        ? 'You requested ' + batch.changes.length + ' profile update' + (batch.changes.length === 1 ? '' : 's') + ' from ' + sinbEsc(batch.participant || 'this PM') + '.'
+        : '<b>Keylr Admin</b> requested ' + batch.changes.length + ' profile update' + (batch.changes.length === 1 ? '' : 's') + ':';
+    } else {
+      introText = forAdmin
+        ? 'Requested ' + batch.changes.length + ' profile update' + (batch.changes.length === 1 ? '' : 's') + '.'
+        : 'I\u2019d like to update the following on my profile:';
+    }
     var submittedLabel = batch.submittedDate ? '<span class="sinb-cr-submitted-time">' + sinbFormatTimestamp(batch.submittedDate) + '</span>' : '';
     return '<div class="sinb-cr-group">' +
       '<div class="sinb-cr-group-intro">' + introText + (pendingCount ? ' <span class="sinb-cr-pending-badge">' + pendingCount + ' need' + (pendingCount === 1 ? 's' : '') + ' action</span>' : '') + submittedLabel + '</div>' +
@@ -33654,10 +34292,14 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
   function pmcrHandleAction(change, action, name) {
     change.status = action === 'approve' ? 'approved' : action === 'decline' ? 'declined' : 'resubmit';
+    // Accountability: mirror the supplier side exactly — reviewer identity + timestamp.
+    change.reviewedBy = 'Admin';
+    change.reviewedAt = Date.now();
+    change.reviewedAtLabel = sinbNowTimestamp();
     if (action === 'approve' && typeof applyApprovedPmField === 'function') applyApprovedPmField(change);
     if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
     pmChatAddMessage(name, {
-      kind: 'text', fromAdmin: true,
+      kind: 'text', fromAdmin: true, topic: 'profile-update', replyToChangeId: change.id, replyToFieldLabel: change.fieldLabel,
       text: action === 'approve'
         ? '\u201c' + change.fieldLabel + '\u201d was approved \u2014 your profile has been updated.'
         : action === 'decline'
@@ -33745,6 +34387,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     }
   }
 
+  var pmChatDetailFilter = 'all'; // All Chat / Support / Profile Updates topic filter for the admin's per-PM chat
+  var clientChatNaOnly = false; // Needs-action toggle state within the Profile Updates view
   function renderClientChatThread() {
     var threadEl = document.getElementById('clientChatThreadCard');
     var innerEl = document.getElementById('clientChatMessagesInner');
@@ -33756,20 +34400,63 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (typeof seedPmChangeRequestsIfNeeded === 'function') seedPmChangeRequestsIfNeeded(c);
     seedPmChatIfNeeded(name);
     var batches = pmChangeRequests[name] || [];
+    // Contextual summary — identical logic to the supplier side, PM-labelled. Field-level count,
+    // same unit the Needs action toggle uses, so the two numbers always reconcile.
+    var pmNeedsAction = function (ch) { return ch.status === 'pending'; };
+    var needsActionCount = 0, totalChanges = 0;
+    batches.forEach(function (b) { b.changes.forEach(function (ch) { totalChanges++; if (pmNeedsAction(ch)) needsActionCount++; }); });
+    var summaryEl = document.getElementById('clientChatContextSummary');
+    if (summaryEl) {
+      summaryEl.innerHTML = '<span class="ccs-name">' + sinbEsc(name) + '</span><span class="ccs-sep"></span><span class="ccs-sub">Property Manager</span>' +
+        (totalChanges ? '<span class="ccs-sep"></span><span class="ccs-pu">' + totalChanges + ' Profile Update' + (totalChanges === 1 ? '' : 's') + '</span>' : '');
+    }
+    var naChipRow = document.getElementById('clientChatNaChipRow');
+    if (naChipRow) {
+      naChipRow.style.display = pmChatDetailFilter === 'profile-updates' ? '' : 'none';
+      document.getElementById('clientChatNaChipCount').textContent = needsActionCount;
+      var naChip = document.getElementById('clientChatNaChip');
+      naChip.classList.toggle('active', clientChatNaOnly);
+      naChip.setAttribute('aria-pressed', clientChatNaOnly ? 'true' : 'false');
+    }
 
     var timeline = batches.map(function (batch) {
       var ts = batch.submittedDate ? new Date(batch.submittedDate).getTime() : 0;
-      return { ts: ts, html: '<div class="chat-msg-row" data-batch-anchor="' + batch.id + '"><div class="chat-msg-bubble">' + pmcrEditRequestCardHtml(batch, true) + '</div></div>' };
+      return { ts: ts, cat: 'pu', html: '<div class="chat-msg-row" data-batch-anchor="' + batch.id + '"><div class="chat-msg-bubble">' + pmcrEditRequestCardHtml(batch, true) + '</div></div>' };
     });
     (PM_CHAT_MESSAGES[pmChatKeyFor(name)] || []).forEach(function (m) {
       var html = '<div class="chat-msg-row' + (m.fromAdmin ? '' : ' theirs') + '"><div class="chat-msg-bubble">' + pmChatQuoteBlockHtml(m) + '<div class="cmb-text">' + sinbEsc(m.text) + '</div><div class="cmb-meta">' + (m.fromAdmin ? 'You' : sinbEsc(name)) + '<span class="dot-sep"></span>' + m.time + '</div></div></div>';
-      timeline.push({ ts: m.ts || 0, html: html });
+      timeline.push({ ts: m.ts || 0, cat: crMessageIsProfileUpdate(m) ? 'pu' : 'support', html: html });
     });
     timeline.sort(function (a, b) { return a.ts - b.ts; });
-    var timelineHtml = timeline.map(function (item) { return item.html; }).join('');
-    innerEl.innerHTML = timelineHtml
-      ? '<div class="chat-day-divider"><span>Today</span></div>' + timelineHtml
-      : '<div style="padding:40px 20px;text-align:center;font-size:13px;color:var(--text-body-muted);">No messages yet with ' + sinbEsc(name) + '.</div>';
+    if (pmChatDetailFilter === 'profile-updates' && clientChatNaOnly) {
+      // Only the cards awaiting the admin, each carrying its Accept / Ask to resubmit / Decline
+      // actions. Approved / declined / resubmission-asked cards stay under Profile Updates,
+      // which always shows everything. The shared wiring below the innerHTML assignment still
+      // runs, so these cards behave exactly like their Profile Updates twins.
+      var naHtml = batches.map(function (batch) {
+        var actionable = batch.changes.filter(pmNeedsAction);
+        if (!actionable.length) return '';
+        var naBatch = Object.assign({}, batch, { changes: actionable });
+        return '<div class="chat-msg-row" data-batch-anchor="' + batch.id + '"><div class="chat-msg-bubble">' + pmcrEditRequestCardHtml(naBatch, true) + '</div></div>';
+      }).join('');
+      innerEl.innerHTML = naHtml
+        ? '<div class="chat-day-divider"><span>Today</span></div>' + naHtml
+        : '<div style="padding:40px 20px;text-align:center;font-size:13px;color:var(--text-body-muted);">Nothing needs your action right now.</div>';
+    } else {
+      var visible = timeline.filter(function (item) {
+        if (pmChatDetailFilter === 'support') return item.cat === 'support';
+        if (pmChatDetailFilter === 'profile-updates') return item.cat === 'pu';
+        return true;
+      });
+      var timelineHtml = visible.map(function (item) { return item.html; }).join('');
+      if (timelineHtml) {
+        innerEl.innerHTML = '<div class="chat-day-divider"><span>Today</span></div>' + timelineHtml;
+      } else if (timeline.length) {
+        innerEl.innerHTML = '<div style="padding:40px 20px;text-align:center;font-size:13px;color:var(--text-body-muted);">' + (pmChatDetailFilter === 'profile-updates' ? 'No profile updates yet with ' + sinbEsc(name) + '.' : 'No support messages yet with ' + sinbEsc(name) + '.') + '</div>';
+      } else {
+        innerEl.innerHTML = '<div style="padding:40px 20px;text-align:center;font-size:13px;color:var(--text-body-muted);">No messages yet with ' + sinbEsc(name) + '.</div>';
+      }
+    }
     threadEl.scrollTop = threadEl.scrollHeight;
     if (typeof sinbWireScrollBottomBtn === 'function') sinbWireScrollBottomBtn(threadEl, document.getElementById('clientChatScrollBottomBtn'));
 
@@ -33831,6 +34518,25 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       document.getElementById('clientChatReplyPreview').style.display = 'none';
     });
   }
+  // Topic filter pills for the admin's per-PM chat — static elements, wired once.
+  (function wireClientChatFilterPills() {
+    var pillsRow = document.getElementById('clientChatFilterPills');
+    if (!pillsRow) return;
+    pillsRow.querySelectorAll('[data-pmchat-filter]').forEach(function (pill) {
+      pill.addEventListener('click', function () {
+        pillsRow.querySelectorAll('[data-pmchat-filter]').forEach(function (p) { p.classList.remove('active'); });
+        pill.classList.add('active');
+        pmChatDetailFilter = pill.getAttribute('data-pmchat-filter');
+        clientChatNaOnly = false; // each view starts unfiltered; the toggle is a within-view refinement
+        renderClientChatThread();
+      });
+    });
+    var naChipEl = document.getElementById('clientChatNaChip');
+    if (naChipEl) naChipEl.addEventListener('click', function () {
+      clientChatNaOnly = !clientChatNaOnly;
+      renderClientChatThread();
+    });
+  })();
 
   function pmChatSend(text) {
     var c = (typeof currentDetailRecord !== 'undefined') ? currentDetailRecord : null;
@@ -34254,6 +34960,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
           '<button type="button" class="sca-verify" data-check-action="verify" data-check-id="' + item.id + '"' + (item.status === 'verified' ? ' disabled' : '') + '><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Mark verified</button>' +
           '<button type="button" class="sca-flag" data-check-action="flag" data-check-id="' + item.id + '"' + (item.status === 'issue' ? ' disabled' : '') + '><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>Flag issue</button>' +
           '<button type="button" data-check-action="resubmit" data-check-id="' + item.id + '"' + (item.method !== 'manual' ? ' disabled' : '') + '><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14M5 2h14M17 22v-4.17a2 2 0 00-.59-1.42L12 12l-4.41 4.41a2 2 0 00-.59 1.42V22M7 2v4.17a2 2 0 00.59 1.42L12 12l4.41-4.41A2 2 0 0017 6.17V2"/></svg>Request resubmission</button>' +
+          (item.status === 'issue' ? '<button type="button" class="sca-send-chat" data-check-action="send-chat" data-check-id="' + item.id + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>Send to chat</button>' : '') +
         '</div></div>';
     }
     return '<div class="sup-check-row" data-check-id="' + item.id + '">' +
@@ -34313,13 +35020,112 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         var item = findCheckItem(btn.getAttribute('data-check-id'));
         if (!item) return;
         if (action === 'verify') { item.status = 'verified'; showToast(item.name + ' marked as verified.'); }
-        else if (action === 'flag') { item.status = 'issue'; showToast(item.name + ' flagged as an issue.'); }
-        else if (action === 'resubmit') { showToast('Resubmission requested for ' + item.name + '.'); }
+        else if (action === 'flag') { item.status = 'issue'; showToast(item.name + ' flagged as an issue \u2014 you can now send it to chat as a profile update request.'); }
+        else if (action === 'resubmit' || action === 'send-chat') {
+          // Both paths create the same tracked Profile Update request (never a plain support
+          // message) — the modal captures the reason, then the request is created, linked into
+          // the chat, and the supplier is asked to fix it. See crOpenSendRequestModal below.
+          crOpenSendRequestModal(item);
+          return;
+        }
         renderComplianceSummary();
         renderChecklistGroups();
       });
     });
   }
+
+  /* =========================================================
+     FLAGGED ITEM → PROFILE UPDATE REQUEST
+     "Send to chat" on a flagged Overview/Compliance item never produces a loose support
+     message. It creates a structured, tracked Profile Update request that:
+       1. is linked to this supplier by name in supplierChangeRequests (the same store every
+          chat surface reads), 2. opens the supplier's Chat on the Profile Updates filter,
+       3. scrolls to + highlights the new request, 4. shows as "Awaiting supplier",
+       5. surfaces in the Admin Inbox and the supplier's own Profile Updates, and
+       6. keeps the same request id across every later reply, resubmission and review.
+  ========================================================== */
+  var crSendRequestItem = null;
+  function crOpenSendRequestModal(item) {
+    crSendRequestItem = item;
+    document.getElementById('crSendRequestFieldName').textContent = item.name;
+    var reasonEl = document.getElementById('crSendRequestReason');
+    reasonEl.value = item.status === 'issue' ? 'Document could not be verified.' : 'Please double-check and resubmit this item.';
+    document.getElementById('crSendRequestOverlay').classList.add('open');
+    setTimeout(function () { reasonEl.focus(); reasonEl.setSelectionRange(reasonEl.value.length, reasonEl.value.length); }, 120);
+  }
+  function crCloseSendRequestModal() {
+    document.getElementById('crSendRequestOverlay').classList.remove('open');
+    crSendRequestItem = null;
+  }
+  document.getElementById('crSendRequestCancelBtn').addEventListener('click', crCloseSendRequestModal);
+  document.getElementById('crSendRequestOverlay').addEventListener('click', function (e) { if (e.target === this) crCloseSendRequestModal(); });
+  document.getElementById('crSendRequestSendBtn').addEventListener('click', function () {
+    if (!crSendRequestItem || !supDetailCurrentSupplier) { crCloseSendRequestModal(); return; }
+    var item = crSendRequestItem;
+    var reason = document.getElementById('crSendRequestReason').value.trim() || 'Please review and update this item.';
+    var name = supDetailCurrentSupplier.name;
+    if (typeof seedChangeRequestsIfNeeded === 'function') seedChangeRequestsIfNeeded(supDetailCurrentSupplier);
+    if (!supplierChangeRequests[name]) supplierChangeRequests[name] = [];
+    // Current value: reuse the actual document on file when the flagged check maps to one.
+    var mappedDocId = (typeof checkToDocMap === 'object') ? checkToDocMap[item.id] : null;
+    var mappedDoc = mappedDocId ? supDetailDocuments.filter(function (d) { return d.id === mappedDocId; })[0] : null;
+    var currentValue = mappedDoc ? (mappedDoc.file || mappedDoc.name) : 'Not set';
+    var batchId = 'admreq' + Date.now();
+    var change = {
+      id: batchId + '-c0',
+      section: 'Compliance',
+      fieldLabel: item.name,
+      oldValue: currentValue,
+      newValue: currentValue,
+      isDocument: !!mappedDoc,
+      status: 'resubmit', // "Awaiting supplier" on the admin side, "Needs your update" on theirs
+      reason: reason,
+      actionRequired: 'Upload a valid ' + item.name.toLowerCase() + '.',
+      requestedBy: 'Admin',
+      requestedAtLabel: sinbNowTimestamp()
+    };
+    var batch = {
+      id: batchId,
+      displayId: (typeof suprqNextId === 'function' ? suprqNextId() : Date.now() % 10000),
+      submittedDate: new Date(),
+      requestedBy: 'Admin',
+      participant: name,
+      participantType: 'supplier',
+      changes: [change]
+    };
+    supplierChangeRequests[name].push(batch);
+    if (typeof saveChangeRequestsToStorage === 'function') saveChangeRequestsToStorage();
+    // Accountability trail in the existing activity log.
+    if (typeof logSupChatActivity === 'function') {
+      logSupChatActivity(name, { type: 'resubmit_requested', actor: 'Admin', action: 'sent a profile update request for', fieldLabel: item.name, messageText: reason });
+    }
+    // Live supplier (the two-way demo session): the request lands as a real message in their own
+    // All Chat + Profile Updates, exactly like a supplier-initiated batch would.
+    if (typeof supChatIsLiveSupplier === 'function' && supChatIsLiveSupplier(name) && typeof SINB_SUPPORT_CONV !== 'undefined') {
+      SINB_SUPPORT_CONV.messages.push({ kind: 'edit-request', mine: false, batchId: batch.id, ts: Date.now(), time: sinbNowTimestamp() });
+      if (typeof saveSinbMessages === 'function') saveSinbMessages();
+      if (typeof sinbRenderChat === 'function') sinbRenderChat();
+    }
+    // Surface in the Admin Inbox conversation list without waiting for a rebuild.
+    if (typeof adminInboxNoteProfileUpdate === 'function') adminInboxNoteProfileUpdate(name, item.name + ' \u2014 profile update requested');
+    crCloseSendRequestModal();
+    // End-to-end UX: jump straight into this supplier's Chat, on the Profile Updates filter,
+    // scrolled to and highlighting the request that was just created.
+    supChatDetailFilter = 'profile-updates';
+    var pillsRow = document.getElementById('supChatFilterPills');
+    if (pillsRow) pillsRow.querySelectorAll('[data-supchat-filter]').forEach(function (p) { p.classList.toggle('active', p.getAttribute('data-supchat-filter') === 'profile-updates'); });
+    switchSupTab('chat');
+    setTimeout(function () {
+      var threadEl = document.getElementById('supChatThreadCard');
+      var anchor = threadEl ? threadEl.querySelector('[data-batch-anchor="' + batch.id + '"]') : null;
+      if (anchor) {
+        anchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        anchor.classList.add('sinb-batch-flash');
+        setTimeout(function () { anchor.classList.remove('sinb-batch-flash'); }, 3500);
+      }
+    }, 120);
+    showToast('Profile update request sent to ' + name + ' \u2014 status: Awaiting supplier.');
+  });
 
   document.querySelectorAll('#supChecklistTabs .sup-check-tab-pill').forEach(function (pill) {
     pill.addEventListener('click', function () {
@@ -34505,6 +35311,25 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   });
 
   document.getElementById('supChatFlagClose').addEventListener('click', function () { document.getElementById('supChatFlagBanner').style.display = 'none'; });
+  // Topic filter pills for the admin's per-supplier chat — static elements, wired once.
+  (function wireSupChatFilterPills() {
+    var pillsRow = document.getElementById('supChatFilterPills');
+    if (!pillsRow) return;
+    pillsRow.querySelectorAll('[data-supchat-filter]').forEach(function (pill) {
+      pill.addEventListener('click', function () {
+        pillsRow.querySelectorAll('[data-supchat-filter]').forEach(function (p) { p.classList.remove('active'); });
+        pill.classList.add('active');
+        supChatDetailFilter = pill.getAttribute('data-supchat-filter');
+        supChatNaOnly = false; // each view starts unfiltered; the toggle is a within-view refinement
+        renderSupChatThread();
+      });
+    });
+    var naChipEl = document.getElementById('supChatNaChip');
+    if (naChipEl) naChipEl.addEventListener('click', function () {
+      supChatNaOnly = !supChatNaOnly;
+      renderSupChatThread();
+    });
+  })();
 
   document.getElementById('supChatSendBtn').addEventListener('click', function () {
     var input = document.getElementById('supChatMessageInput');
@@ -34894,7 +35719,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     return status === 'Rejected' ? 'Archived' : status;
   }
   function supAppStatusDisplayText(status) {
-    if (status === 'Requests') return 'Edit Requests';
+    if (status === 'Requests') return 'Profile Updates';
     return status || 'New';
   }
   function supAppDropdownHtml(idx) {
@@ -36308,7 +37133,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (!listEl) return;
     var log = SUP_CHAT_ACTIVITY_LOG[name] || [];
     emptyEl.style.display = log.length ? 'none' : '';
-    if (emptyEl) emptyEl.textContent = 'No activity yet on this supplier.';
+    if (emptyEl) emptyEl.textContent = 'No activity yet.';
     listEl.innerHTML = log.map(function (e) {
       var valueRow = (e.oldValue !== undefined && e.newValue !== undefined)
         ? '<div class="sinb-field-value-row" style="margin-top:4px;"><span class="sinb-field-old">' + sinbEsc(String(e.oldValue)) + '</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span class="sinb-field-new">' + sinbEsc(String(e.newValue)) + '</span></div>'
@@ -36324,6 +37149,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     }).join('');
   }
   var supChatReplyingTo = null; // { changeId, fieldLabel } while composing a reply, else null
+  var supChatDetailFilter = 'all'; // All Chat / Support / Profile Updates topic filter for the admin's per-supplier chat
+  var supChatNaOnly = false; // Needs-action toggle state within the Profile Updates view
   function supChatQuoteBlockHtml(m) {
     if (!m.replyToChangeId) return '';
     return '<div class="sinb-quote-block" data-jump-change="' + m.replyToChangeId + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4z"/></svg>' + sinbEsc(m.replyToFieldLabel) + '</div>';
@@ -36336,9 +37163,53 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (typeof loadChangeRequestsFromStorage === 'function') loadChangeRequestsFromStorage();
     if (typeof seedChangeRequestsIfNeeded === 'function') seedChangeRequestsIfNeeded(supDetailCurrentSupplier);
     var batches = supplierChangeRequests[name] || [];
+    // Contextual summary above the thread: how many Profile Updates exist and how many need the
+    // admin's attention right now — visible before reading a single message.
+    var supNeedsAction = function (ch) { return ch.status === 'pending' || ch.status === 'resubmitted'; };
+    var needsActionCount = 0, totalChanges = 0;
+    batches.forEach(function (b) { b.changes.forEach(function (ch) { totalChanges++; if (supNeedsAction(ch)) needsActionCount++; }); });
+    var summaryEl = document.getElementById('supChatContextSummary');
+    if (summaryEl) {
+      // Counts individual field changes, not requests — one request can bundle several fields,
+      // and the Needs action toggle counts fields too, so the two numbers use the same unit
+      // and needs-action can never exceed the Profile Updates total.
+      summaryEl.innerHTML = '<span class="ccs-name">' + sinbEsc(name) + '</span><span class="ccs-sep"></span><span class="ccs-sub">Supplier</span>' +
+        (totalChanges ? '<span class="ccs-sep"></span><span class="ccs-pu">' + totalChanges + ' Profile Update' + (totalChanges === 1 ? '' : 's') + '</span>' : '');
+    }
+    // Needs-action chip sits above the composer and only shows on the Profile Updates view.
+    var naChipRow = document.getElementById('supChatNaChipRow');
+    if (naChipRow) {
+      naChipRow.style.display = supChatDetailFilter === 'profile-updates' ? '' : 'none';
+      document.getElementById('supChatNaChipCount').textContent = needsActionCount;
+      var naChip = document.getElementById('supChatNaChip');
+      naChip.classList.toggle('active', supChatNaOnly);
+      naChip.setAttribute('aria-pressed', supChatNaOnly ? 'true' : 'false');
+    }
+    // Needs action view (Profile Updates + toggle on): only the field cards awaiting the admin,
+    // so every visible card carries its Accept / Ask to resubmit / Decline actions. All other
+    // statuses (approved, declined, resubmission asked) remain visible with the toggle off,
+    // since Profile Updates shows every card.
+    if (supChatDetailFilter === 'profile-updates' && supChatNaOnly) {
+      var naHtml = batches.map(function (batch) {
+        var actionable = batch.changes.filter(supNeedsAction);
+        if (!actionable.length) return '';
+        var naBatch = Object.assign({}, batch, { changes: actionable });
+        return '<div class="chat-msg-row" data-batch-anchor="' + batch.id + '"><div class="chat-msg-bubble">' + sinbEditRequestCardHtml(naBatch, true) + '</div></div>';
+      }).join('');
+      if (naHtml) {
+        innerEl.innerHTML = '<div class="chat-day-divider"><span>Today</span></div>' + naHtml;
+      } else {
+        innerEl.innerHTML = '<div style="padding:40px 20px;text-align:center;font-size:13px;color:var(--text-body-muted);">Nothing needs your action right now.</div>';
+      }
+      threadEl.scrollTop = 0;
+      sinbWireScrollBottomBtn(threadEl, document.getElementById('supChatScrollBottomBtn'));
+      wireOwnResubmitInputs(threadEl, function () { return batches; }, function () { renderSupChatThread(); });
+      supChatWireCrActionsAndReplies(threadEl, name);
+      return;
+    }
     var timeline = batches.map(function (batch) {
       var ts = batch.submittedDate ? new Date(batch.submittedDate).getTime() : 0;
-      return { ts: ts, html: '<div class="chat-msg-row" data-batch-anchor="' + batch.id + '"><div class="chat-msg-bubble">' + sinbEditRequestCardHtml(batch, true) + '</div></div>' };
+      return { ts: ts, cat: 'pu', html: '<div class="chat-msg-row" data-batch-anchor="' + batch.id + '"><div class="chat-msg-bubble">' + sinbEditRequestCardHtml(batch, true) + '</div></div>' };
     });
     // Ferna (SUP_OWN_DEMO_NAME) has a live two-way session, so admin reads from the exact same
     // store the supplier's own Inbox writes to — one shared conversation, not two parallel copies.
@@ -36346,7 +37217,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var isLiveSupplier = supChatIsLiveSupplier(name);
     var extraMsgs = isLiveSupplier
       ? SINB_SUPPORT_CONV.messages.filter(function (m) { return m.kind === 'text' || m.kind === 'attachment'; }).map(function (m) {
-          return { kind: m.kind, fromAdmin: !m.mine, text: m.text, fileName: m.fileName, time: m.time, ts: m.ts, replyToChangeId: m.replyToChangeId, replyToFieldLabel: m.replyToFieldLabel };
+          return { kind: m.kind, fromAdmin: !m.mine, text: m.text, fileName: m.fileName, time: m.time, ts: m.ts, topic: m.topic, replyToChangeId: m.replyToChangeId, replyToFieldLabel: m.replyToFieldLabel };
         })
       : (SUP_CHAT_EXTRA_MESSAGES[name] || []);
     extraMsgs.forEach(function (m) {
@@ -36356,16 +37227,33 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       } else {
         html = '<div class="chat-msg-row' + (m.fromAdmin ? '' : ' theirs') + '"><div class="chat-msg-bubble">' + supChatQuoteBlockHtml(m) + '<div class="cmb-text">' + sinbEsc(m.text) + '</div><div class="cmb-meta">' + (m.fromAdmin ? 'You' : sinbEsc(name)) + '<span class="dot-sep"></span>' + m.time + '</div></div></div>';
       }
-      timeline.push({ ts: m.ts || 0, html: html });
+      // Classified by topic (what the message is about), never by sender.
+      timeline.push({ ts: m.ts || 0, cat: crMessageIsProfileUpdate(m) ? 'pu' : 'support', html: html });
     });
     timeline.sort(function (a, b) { return a.ts - b.ts; });
-    var timelineHtml = timeline.map(function (item) { return item.html; }).join('');
-    innerEl.innerHTML = timelineHtml
-      ? '<div class="chat-day-divider"><span>Today</span></div>' + timelineHtml
-      : '<div style="padding:40px 20px;text-align:center;font-size:13px;color:var(--text-body-muted);">No messages yet with ' + sinbEsc(name) + '.</div>';
+    var visible = timeline.filter(function (item) {
+      if (supChatDetailFilter === 'support') return item.cat === 'support';
+      if (supChatDetailFilter === 'profile-updates') return item.cat === 'pu';
+      return true;
+    });
+    var timelineHtml = visible.map(function (item) { return item.html; }).join('');
+    if (timelineHtml) {
+      innerEl.innerHTML = '<div class="chat-day-divider"><span>Today</span></div>' + timelineHtml;
+    } else if (timeline.length) {
+      innerEl.innerHTML = '<div style="padding:40px 20px;text-align:center;font-size:13px;color:var(--text-body-muted);">' + (supChatDetailFilter === 'profile-updates' ? 'No profile updates yet with ' + sinbEsc(name) + '.' : 'No support messages yet with ' + sinbEsc(name) + '.') + '</div>';
+    } else {
+      innerEl.innerHTML = '<div style="padding:40px 20px;text-align:center;font-size:13px;color:var(--text-body-muted);">No messages yet with ' + sinbEsc(name) + '.</div>';
+    }
     threadEl.scrollTop = threadEl.scrollHeight;
     sinbWireScrollBottomBtn(threadEl, document.getElementById('supChatScrollBottomBtn'));
     wireOwnResubmitInputs(threadEl, function () { return batches; }, function () { renderSupChatThread(); });
+    supChatWireCrActionsAndReplies(threadEl, name);
+  }
+
+  // Shared wiring for the admin's per-supplier chat cards — Accept / Ask to resubmit / Decline,
+  // per-field Reply, and quote-block jump — used by both the normal thread render and the
+  // Needs action view, so a card behaves identically wherever it appears.
+  function supChatWireCrActionsAndReplies(threadEl, name) {
     threadEl.querySelectorAll('[data-cr-action]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var action = btn.getAttribute('data-cr-action');
