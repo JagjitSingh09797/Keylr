@@ -7160,48 +7160,69 @@
     .supcal-wstrip-cell.is-today .ws-num { width: 19px; height: 19px; }
   }
 
-  /* ---------- Google Calendar sync ---------- */
+  /* ---------- Year picker (Calendar tab toolbar) ----------
+     A compact, self-contained dropdown (not part of the generic [data-dd] system, since its
+     11-item list is static and only needs its own open/close + selection wiring — same pattern
+     as #supcalFilterBtn/#supcalFilterMenu just above). Deliberately small: just the year and a
+     chevron, so it sits naturally next to the existing prev/next arrows without lengthening the
+     toolbar. */
+  .supcal-year-field { position: relative; width: auto; flex-shrink: 0; }
+  .supcal-year-btn { width: auto; height: 34px; padding: 0 10px; gap: 5px; }
+  .supcal-year-btn .cdd-value { font-size: 12.5px; font-weight: 700; }
+  #supcalYearMenu { left: auto; right: 0; width: 84px; max-height: 224px; }
+
+  /* ---------- Calendar sync (Google + Microsoft) ----------
+     Two short "icon + name" buttons under one "Sync with:" label, instead of one long
+     "Sync with Google Calendar" button per provider — keeps the header from running out of
+     room once a second provider is added. */
   .supcal-header { gap: 14px; }
-  .supcal-gcal-btn {
-    display: inline-flex; align-items: center; gap: 9px; flex-shrink: 0;
-    padding: 9px 15px; border-radius: 10px; border: 1px solid var(--border-subtle);
-    background: #fff; font-family: inherit; font-size: 13px; font-weight: 700;
+  .supcal-sync-group { display: flex; align-items: center; gap: 8px; flex-shrink: 0; flex-wrap: wrap; }
+  .supcal-sync-label { font-size: 12px; font-weight: 700; color: var(--text-body-muted); flex-shrink: 0; }
+  .supcal-sync-btn {
+    display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0;
+    padding: 9px 14px; border-radius: 10px; border: 1px solid var(--border-subtle);
+    background: #fff; font-family: inherit; font-size: 12.5px; font-weight: 700;
     color: var(--text-heading); cursor: pointer; white-space: nowrap;
     box-shadow: 0 1px 2px rgba(16,24,40,0.05);
     transition: border-color 150ms ease-out, box-shadow 150ms ease-out, transform 150ms ease-out, background-color 150ms ease-out;
   }
-  .supcal-gcal-btn:hover { border-color: #c9d8ee; box-shadow: 0 5px 14px rgba(16,24,40,0.10); transform: translateY(-1px); }
-  .supcal-gcal-btn:active { transform: translateY(0); box-shadow: 0 1px 2px rgba(16,24,40,0.05); }
-  .supcal-gcal-btn .gcal-mark { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .supcal-sync-btn:hover { border-color: #c9d8ee; box-shadow: 0 5px 14px rgba(16,24,40,0.10); transform: translateY(-1px); }
+  .supcal-sync-btn:active { transform: translateY(0); box-shadow: 0 1px 2px rgba(16,24,40,0.05); }
+  .supcal-sync-btn .gcal-mark, .supcal-sync-btn .ms-mark { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .supcal-sync-btn .gcal-mark svg, .supcal-sync-btn .ms-mark svg { display: block; }
+  /* Connected state keeps the provider's own icon and name as-is (so identity never disappears)
+     and just appends a small green filled tick after the text \u2014 no icon swap, no text change
+     to "Connected". */
+  .supcal-sync-btn .sync-tick { display: none; align-items: center; justify-content: center; flex-shrink: 0; }
+  .supcal-sync-btn.connected .sync-tick { display: inline-flex; }
+  .supcal-sync-btn .sync-tick svg { display: block; }
   /* Connected reads as a settled state rather than a call to action. */
-  .supcal-gcal-btn.connected { border-color: #bfe3cc; background: #f4fbf7; color: #15803d; }
-  .supcal-gcal-btn.connected:hover { border-color: #9ed4b4; box-shadow: 0 5px 14px rgba(22,101,52,0.12); }
+  .supcal-sync-btn.connected { border-color: #bfe3cc; background: #f4fbf7; color: #15803d; }
+  .supcal-sync-btn.connected:hover { border-color: #9ed4b4; box-shadow: 0 5px 14px rgba(22,101,52,0.12); }
 
   .supcal-gcal-modal-icon { background: #fff; border: 1px solid var(--border-subtle); }
   .supcal-gcal-modal-icon.connected { background: #eafaf0; border-color: #bfe3cc; color: #15803d; }
+  .supcal-gcal-modal-icon svg { display: block; }
 
   @media (max-width: 620px) {
     .supcal-header { flex-wrap: wrap; }
-    .supcal-gcal-btn { width: 100%; justify-content: center; }
+    /* "Sync with:" moves above the buttons so each button keeps its icon + name on one line
+       rather than the whole group squeezing down to the point of wrapping mid-label. */
+    .supcal-sync-group { width: 100%; flex-wrap: wrap; row-gap: 8px; }
+    .supcal-sync-label { width: 100%; }
+    .supcal-sync-btn { flex: 1; justify-content: center; }
   }
 
-  /* ---------- Round-eleven: official Google mark ---------- */
-  /* The logo carries its own white card and colour, so the surround stays neutral —
-     no tint, no border ring competing with it. */
-  .supcal-gcal-btn .gcal-mark svg { display: block; }
-  .supcal-gcal-modal-icon { background: #fff; border: 1px solid var(--border-subtle); }
-  .supcal-gcal-modal-icon svg { display: block; }
-
-  /* ---------- Google Calendar modal: keep the action label on one line ---------- */
+  /* ---------- Calendar sync modal: keep the action label on one line ---------- */
   /* The shared confirm modal splits its two buttons 50/50, which is fine for "Delete" but
-     breaks "Connect Google Calendar" across two lines. Here the action takes the space it
-     needs and Cancel shrinks to its label. */
-  #supcalGcalCard { max-width: 460px; }
-  #supcalGcalCard .confirm-modal-btns button { white-space: nowrap; }
+     breaks "Connect Google Calendar" / "Connect Microsoft Outlook" across two lines. Here the
+     action takes the space it needs and Cancel shrinks to its label. */
+  #supcalGcalCard, #supcalMsCard { max-width: 460px; }
+  #supcalGcalCard .confirm-modal-btns button, #supcalMsCard .confirm-modal-btns button { white-space: nowrap; }
 
   /* Below this the two buttons genuinely can't share a row, so stack them action-first. */
   @media (max-width: 420px) {
-    #supcalGcalCard { padding: 26px 20px; }
+    #supcalGcalCard, #supcalMsCard { padding: 26px 20px; }
   }
 
   /* ---------- TrustID status badge ---------- */
@@ -12630,15 +12651,28 @@
                 <h1 style="font-size:22px;font-weight:800;color:var(--text-heading);margin-bottom:4px;">Calendar</h1>
                 <p style="font-size:13.5px;color:var(--text-body-muted);">Manage your jobs and availability.</p>
               </div>
-              <button type="button" class="supcal-gcal-btn" id="supcalGcalBtn">
-                <span class="gcal-mark" id="supcalGcalMark" aria-hidden="true"></span>
-                <span id="supcalGcalBtnText">Sync with Google Calendar</span>
-              </button>
+              <div class="supcal-sync-group">
+                <span class="supcal-sync-label">Sync with:</span>
+                <button type="button" class="supcal-sync-btn" id="supcalGcalBtn">
+                  <span class="gcal-mark" id="supcalGcalMark" aria-hidden="true"></span>
+                  <span id="supcalGcalBtnText">Google Calendar</span>
+                  <span class="sync-tick" id="supcalGcalTick" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="supcal-sync-btn" id="supcalMsBtn">
+                  <span class="ms-mark" id="supcalMsMark" aria-hidden="true"></span>
+                  <span id="supcalMsBtnText">Microsoft</span>
+                  <span class="sync-tick" id="supcalMsTick" aria-hidden="true"></span>
+                </button>
+              </div>
             </div>
 
             <!-- Google Calendar connect / manage -->
             <div class="modal-overlay" id="supcalGcalOverlay">
               <div class="confirm-modal-card" id="supcalGcalCard"></div>
+            </div>
+            <!-- Microsoft Outlook connect / manage -->
+            <div class="modal-overlay" id="supcalMsOverlay">
+              <div class="confirm-modal-card" id="supcalMsCard"></div>
             </div>
 
             <div class="supcal-tabs">
@@ -12654,6 +12688,13 @@
                   <button type="button" class="supcal-nav-btn" id="supcalPrevBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
                   <div class="supcal-date-label" id="supcalDateLabel">July 2026</div>
                   <button type="button" class="supcal-nav-btn" id="supcalNextBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+                  <div class="pm-filter-field supcal-year-field">
+                    <button type="button" class="pm-custom-dd-btn supcal-year-btn" id="supcalYearBtn" aria-label="Jump to year">
+                      <span class="cdd-value" id="supcalYearLabel">2026</span>
+                      <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="pm-custom-dd-menu" id="supcalYearMenu"></div>
+                  </div>
                   <div class="supcal-view-toggle">
                     <button type="button" class="active" data-supcal-view="week">Week</button>
                     <button type="button" data-supcal-view="month">Month</button>
@@ -12877,9 +12918,9 @@
           <!-- Availability: clicking a day now opens this instead of instantly toggling it off —
                a single accidental tap could no longer silently block a day with jobs on it. Shows
                the day's current status, any jobs already booked that day (so the decision is made
-               with real context, not blind), and two clear paths forward: a straightforward
-               whole-day toggle, or a link into the existing Add Time Off modal (pre-filled with
-               this date) for anything more specific than a full day off. -->
+               with real context, not blind), and the same "how much of the day" control the
+               standalone Mark Time Off modal uses — chosen directly here rather than behind a
+               second link/modal, for both an available day and one that's already unavailable. -->
           <div class="modal-overlay" id="supcalDayDetailOverlay">
             <div class="modal-card" style="max-width:420px;">
               <div class="modal-card-head">
@@ -12896,13 +12937,34 @@
                   <div class="supcal-dd-jobs-label" id="supcalDayDetailJobsLabel"></div>
                   <div class="supcal-dd-jobs-list" id="supcalDayDetailJobsList"></div>
                 </div>
-                <button type="button" class="btn btn-primary" id="supcalDayDetailToggleBtn" style="width:100%;margin-top:4px;"></button>
-                <button type="button" class="supcal-dd-hours-link" id="supcalDayDetailHoursLink">
-                  Block specific hours instead
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+
+                <div class="ob-field" style="margin-top:2px;margin-bottom:0;">
+                  <label>How much of the day?</label>
+                  <div class="supcal-tos-seg" id="supcalDdScope">
+                    <button type="button" class="supcal-tos-btn active" data-dd-tos="all">All day</button>
+                    <button type="button" class="supcal-tos-btn" data-dd-tos="part">Specific hours</button>
+                  </div>
+                  <div id="supcalDdHours" style="display:none;margin-top:12px;">
+                    <div id="supcalDdSlotRows"></div>
+                    <button type="button" class="supcal-slot-add" id="supcalDdAddSlotBtn">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                      Add another slot
+                    </button>
+                    <div class="helper">You'll still be bookable outside these hours.</div>
+                  </div>
+                  <div class="svcp-inline-error" id="supcalDdError"></div>
+                </div>
+
+                <button type="button" class="supcal-dd-hours-link" id="supcalDdMakeAvailableBtn" style="display:none;">
+                  Make this day fully available
                 </button>
               </div>
+              <div class="modal-card-foot">
+                <button type="button" class="btn btn-secondary-light" id="supcalDdCancelBtn">Cancel</button>
+                <button type="button" class="btn btn-primary" id="supcalDdSaveBtn">Mark as time off</button>
+              </div>
             </div>
+          </div>
           </div>
 
 
@@ -15485,7 +15547,7 @@
             <div id="pmTableViewWrap" class="pm-table-wrap" style="display:none;">
               <div class="pm-table-scroll">
                 <table class="admin-table" style="min-width:720px;">
-                  <thead><tr><th>Name</th><th>Verified</th><th>Company</th><th>Contact</th><th>Status</th><th>Joined</th></tr></thead>
+                  <thead><tr><th>Name</th><th>Company</th><th>Contact</th><th>Status</th><th>Joined</th></tr></thead>
                   <tbody id="pmTableBody"></tbody>
                 </table>
               </div>
@@ -27706,6 +27768,55 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       document.getElementById('supcalDateLabel').textContent = weekStart.getDate() + ' \u2013 ' + weekEnd.getDate() + ' ' + SUPCAL_MONTHS[weekEnd.getMonth()].slice(0, 3) + ' ' + weekEnd.getFullYear();
       supcalRenderWeekGrid();
     }
+    supcalSyncYearPicker();
+  }
+
+  /* ---------- Year picker ----------
+     Lets the supplier jump straight to a different year instead of clicking through months or
+     weeks one at a time. Self-contained (same pattern as the Filter dropdown just above it) since
+     its list is a fixed, one-time-rendered set of years — no need for the generic [data-dd] system. */
+  var SUPCAL_YEAR_SPAN = 5; // years shown on either side of the year this device thinks is "now"
+  (function supcalWireYearPicker() {
+    var btn = document.getElementById('supcalYearBtn');
+    var menu = document.getElementById('supcalYearMenu');
+    if (!btn || !menu) return;
+    var baseYear = new Date().getFullYear();
+    var years = [];
+    for (var y = baseYear - SUPCAL_YEAR_SPAN; y <= baseYear + SUPCAL_YEAR_SPAN; y++) years.push(y);
+    menu.innerHTML = years.map(function (y) { return '<div class="cdd-item" data-year="' + y + '">' + y + '</div>'; }).join('');
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var wasOpen = btn.classList.contains('open');
+      if (typeof closeAllCustomDropdowns === 'function') closeAllCustomDropdowns();
+      if (!wasOpen) { btn.classList.add('open'); menu.classList.add('open'); }
+    });
+    menu.addEventListener('click', function (e) {
+      var item = e.target.closest('.cdd-item');
+      if (!item) return;
+      e.stopPropagation();
+      supcalCurrentDate.setFullYear(parseInt(item.getAttribute('data-year'), 10));
+      supcalCurrentDate = new Date(supcalCurrentDate);
+      menu.classList.remove('open');
+      btn.classList.remove('open');
+      supcalRenderScheduleGrid();
+    });
+    document.addEventListener('click', function (e) {
+      if (!menu.classList.contains('open')) return;
+      if (!menu.contains(e.target) && e.target !== btn && !btn.contains(e.target)) { menu.classList.remove('open'); btn.classList.remove('open'); }
+    });
+  })();
+  // Keeps the picker's own label and highlighted year in step with whichever year the toolbar
+  // is currently showing, including after Today / prev / next navigation (not just after a
+  // year-menu pick), so the two controls can never disagree about what's on screen.
+  function supcalSyncYearPicker() {
+    var label = document.getElementById('supcalYearLabel');
+    var menu = document.getElementById('supcalYearMenu');
+    if (!label || !menu) return;
+    var year = supcalCurrentDate.getFullYear();
+    label.textContent = year;
+    menu.querySelectorAll('.cdd-item').forEach(function (item) {
+      item.classList.toggle('selected', parseInt(item.getAttribute('data-year'), 10) === year);
+    });
   }
 
   document.querySelectorAll('#supcalPanelSchedule .supcal-view-toggle button').forEach(function (btn) {
@@ -27971,12 +28082,14 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
   var supcalEditingTimeOffIdx = -1;
 
-  /* One tap marks a day off, another tap frees it again — the same gesture both ways, so there's
-     no dead end where a marked day can only be undone from the side panel. */
   /* Clicking a day in the Availability tab opens this instead of instantly toggling it \u2014 shows
      the day's current status and any jobs already on it, so a decision to block the day is made
-     with real context rather than one accidental tap silently taking effect. */
+     with real context rather than one accidental tap silently taking effect. The "How much of the
+     day?" control (All day / Specific hours) sits directly in this modal \u2014 no second modal hop \u2014
+     and pre-fills from whatever the day's current state already is, for an available day and an
+     unavailable one alike. */
   var supcalDayDetailDate = null;
+  var supcalDdSlots = [{ start: '09:00', end: '13:00' }];
   function supcalOpenDayDetail(date) {
     supcalDayDetailDate = supcalMidnight(date);
     var d = supcalDayDetailDate;
@@ -28013,46 +28126,144 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       jobsSection.style.display = 'none';
     }
 
-    var toggleBtn = document.getElementById('supcalDayDetailToggleBtn');
-    toggleBtn.textContent = unavailable ? 'Make this day available' : jobsForDay.length ? 'Mark this day as time off anyway' : 'Mark this day as time off';
-    toggleBtn.className = 'btn ' + (unavailable ? 'btn-secondary-light' : 'btn-primary');
+    // Pre-fill "How much of the day?" from whatever's already true for this day \u2014 existing
+    // specific-hours slots load in for editing rather than the modal opening blank.
+    supcalDdSlots = (partial && partial.slots && partial.slots.length)
+      ? partial.slots.map(function (sl) { return { start: sl.start, end: sl.end }; })
+      : [{ start: '09:00', end: '13:00' }];
+    supcalRenderDdSlots();
+    supcalSetDdScope(partial ? 'part' : 'all');
+    document.getElementById('supcalDdError').classList.remove('show');
+
+    var makeAvailBtn = document.getElementById('supcalDdMakeAvailableBtn');
+    makeAvailBtn.style.display = (unavailable || partial) ? '' : 'none';
+
+    var saveBtn = document.getElementById('supcalDdSaveBtn');
+    saveBtn.textContent = (unavailable || partial) ? 'Save changes' : (jobsForDay.length ? 'Block time anyway' : 'Mark as time off');
 
     document.getElementById('supcalDayDetailOverlay').classList.add('open');
   }
   function supcalCloseDayDetail() { document.getElementById('supcalDayDetailOverlay').classList.remove('open'); }
   document.getElementById('supcalDayDetailCloseBtn').addEventListener('click', supcalCloseDayDetail);
   document.getElementById('supcalDayDetailOverlay').addEventListener('click', function (e) { if (e.target === this) supcalCloseDayDetail(); });
-  document.getElementById('supcalDayDetailToggleBtn').addEventListener('click', function () {
-    if (!supcalDayDetailDate) return;
-    supcalToggleDay(supcalDayDetailDate);
-    supcalCloseDayDetail();
-  });
-  document.getElementById('supcalDayDetailHoursLink').addEventListener('click', function () {
-    if (!supcalDayDetailDate) return;
-    var d = supcalDayDetailDate;
-    supcalCloseDayDetail();
-    supcalOpenTimeOffModal(-1, d);
+  document.getElementById('supcalDdCancelBtn').addEventListener('click', supcalCloseDayDetail);
+
+  /* ---------- "How much of the day?" segmented control + slot editor ----------
+     Same visual component and time-picker markup (supcalTpField) as the standalone Mark Time
+     Off modal, but its own state array and container \u2014 the two modals are never open together,
+     but keeping them fully independent avoids any risk of one clobbering the other's fields. */
+  var supcalDdScope = 'all';
+  function supcalSetDdScope(scope) {
+    supcalDdScope = scope;
+    document.querySelectorAll('#supcalDdScope .supcal-tos-btn').forEach(function (b) {
+      b.classList.toggle('active', b.getAttribute('data-dd-tos') === scope);
+    });
+    document.getElementById('supcalDdHours').style.display = scope === 'part' ? '' : 'none';
+  }
+  document.querySelectorAll('#supcalDdScope .supcal-tos-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      supcalSetDdScope(btn.getAttribute('data-dd-tos'));
+      document.getElementById('supcalDdError').classList.remove('show');
+    });
   });
 
-  function supcalToggleDay(date) {
-    var d = supcalMidnight(date);
-    var existing = supcalRangeContaining(d);
-    if (existing && existing.allDay === false) {
-      supcalRemoveDay(d);
-      showToast(supcalShortDate(d, false) + ' is fully available again.');
-      supcalRenderAvailBody();
-      supcalRenderTimeOff();
+  function supcalRenderDdSlots() {
+    var wrap = document.getElementById('supcalDdSlotRows');
+    wrap.innerHTML = supcalDdSlots.map(function (sl, i) {
+      return '<div class="supcal-slot-row">' +
+        supcalTpField(i + '-start', sl.start, i === 0 ? 'Unavailable from' : 'And from') +
+        supcalTpField(i + '-end', sl.end, 'Until') +
+        '<button type="button" class="supcal-slot-del" data-dd-slot-del="' + i + '"' + (supcalDdSlots.length <= 1 ? ' disabled' : '') + ' aria-label="Remove this slot">' +
+          '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg>' +
+        '</button>' +
+      '</div>';
+    }).join('');
+  }
+  document.getElementById('supcalDdSlotRows').addEventListener('click', function (e) {
+    var trigger = e.target.closest('[data-supcal-tp]');
+    if (trigger) {
+      e.stopPropagation();
+      var popup = trigger.parentNode.querySelector('[data-supcal-tp-popup]');
+      var wasOpen = trigger.classList.contains('open');
+      supcalCloseSlotPickers();
+      if (typeof closeAllTimePickers === 'function') closeAllTimePickers();
+      if (!wasOpen) {
+        trigger.classList.add('open');
+        popup.classList.add('open');
+        var room = window.innerHeight - trigger.getBoundingClientRect().bottom;
+        popup.classList.toggle('supcal-tp-up', room < popup.offsetHeight + 16);
+        popup.querySelectorAll('.tp-item.selected').forEach(function (it) {
+          var col = it.parentNode;
+          col.scrollTop = it.offsetTop - col.clientHeight / 2 + it.offsetHeight / 2;
+        });
+      }
       return;
     }
-    if (existing) {
-      var wasMulti = supcalRangeDays(existing) > 1;
-      var label = supcalRangeTitle(existing);
-      supcalRemoveDay(d);
-      showToast(wasMulti
-        ? supcalShortDate(d, false) + ' is now available again (was part of ' + label + ').'
-        : supcalShortDate(d, false) + ' is now available again.');
+
+    var tpItem = e.target.closest('.tp-item');
+    if (tpItem) {
+      e.stopPropagation();
+      var pop = tpItem.closest('[data-supcal-tp-popup]');
+      var key = pop.getAttribute('data-supcal-tp-popup').split('-');
+      var slot = supcalDdSlots[+key[0]];
+      var field = key[1];
+      var cur = String(slot[field] || '09:00').split(':');
+      if (tpItem.getAttribute('data-tp-col') === 'hour') cur[0] = supcalTpPad(tpItem.getAttribute('data-tp-val'));
+      else cur[1] = supcalTpPad(tpItem.getAttribute('data-tp-val'));
+      slot[field] = cur[0] + ':' + cur[1];
+      pop.querySelectorAll('.tp-item[data-tp-col="' + tpItem.getAttribute('data-tp-col') + '"]').forEach(function (it) { it.classList.remove('selected'); });
+      tpItem.classList.add('selected');
+      pop.parentNode.querySelector('.cdd-value').textContent = slot[field];
+      document.getElementById('supcalDdError').classList.remove('show');
+      return;
+    }
+
+    var del = e.target.closest('[data-dd-slot-del]');
+    if (!del || del.disabled) return;
+    supcalDdSlots.splice(parseInt(del.getAttribute('data-dd-slot-del'), 10), 1);
+    supcalRenderDdSlots();
+    document.getElementById('supcalDdError').classList.remove('show');
+  });
+  document.getElementById('supcalDdAddSlotBtn').addEventListener('click', function () {
+    var last = supcalDdSlots[supcalDdSlots.length - 1];
+    var startH = last ? Math.min(23, parseInt(last.end.split(':')[0], 10) + 1) : 14;
+    supcalDdSlots.push({ start: ('0' + startH).slice(-2) + ':00', end: ('0' + Math.min(23, startH + 2)).slice(-2) + ':00' });
+    supcalRenderDdSlots();
+    document.getElementById('supcalDdError').classList.remove('show');
+  });
+
+  document.getElementById('supcalDdSaveBtn').addEventListener('click', function () {
+    if (!supcalDayDetailDate) return;
+    var d = supcalDayDetailDate;
+    var isPart = supcalDdScope === 'part';
+    var err = document.getElementById('supcalDdError');
+    if (isPart) {
+      for (var si = 0; si < supcalDdSlots.length; si++) {
+        var sl = supcalDdSlots[si];
+        if (!sl.start || !sl.end) { err.textContent = 'Slot ' + (si + 1) + ' needs both a start and an end time.'; err.classList.add('show'); return; }
+        if (sl.start >= sl.end) { err.textContent = 'Slot ' + (si + 1) + ': the end time has to be later than the start time.'; err.classList.add('show'); return; }
+      }
+      var ordered = supcalDdSlots.slice().sort(function (a, b) { return a.start < b.start ? -1 : 1; });
+      for (var oi = 1; oi < ordered.length; oi++) {
+        if (ordered[oi].start < ordered[oi - 1].end) {
+          err.textContent = 'Two slots overlap \u2014 give each one its own hours.';
+          err.classList.add('show'); return;
+        }
+      }
+    }
+    err.classList.remove('show');
+
+    // Carve this single day out of whatever range it's currently part of (shortens/splits a
+    // multi-day range at the edges or in the middle, exactly like the old toggle did), then add
+    // it back fresh with whichever scope is chosen \u2014 the same semantics, just covering
+    // Specific hours too instead of only a full-day block.
+    supcalRemoveDay(d);
+    if (isPart) {
+      var slotsCopy = supcalDdSlots.map(function (sl) { return { start: sl.start, end: sl.end }; }).sort(function (a, b) { return a.start < b.start ? -1 : 1; });
+      supcalAddTimeOffRange(d, d, { allDay: false, slots: slotsCopy });
+      showToast(supcalRangeHoursFull({ allDay: false, slots: slotsCopy }) + ' blocked on ' + supcalShortDate(d, false) + '.');
     } else {
-      supcalAddTimeOffRange(d, d);
+      supcalAddTimeOffRange(d, d, { allDay: true });
       var merged = supcalRangeContaining(d);
       showToast(merged && supcalRangeDays(merged) > 1
         ? supcalShortDate(d, false) + ' added \u2014 now booked off ' + supcalRangeTitle(merged) + '.'
@@ -28060,7 +28271,23 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     }
     supcalRenderAvailBody();
     supcalRenderTimeOff();
-  }
+    supcalCloseDayDetail();
+  });
+
+  document.getElementById('supcalDdMakeAvailableBtn').addEventListener('click', function () {
+    if (!supcalDayDetailDate) return;
+    var d = supcalDayDetailDate;
+    var existing = supcalRangeContaining(d);
+    var wasMulti = existing && supcalRangeDays(existing) > 1;
+    var label = existing ? supcalRangeTitle(existing) : '';
+    supcalRemoveDay(d);
+    showToast(wasMulti
+      ? supcalShortDate(d, false) + ' is now available again (was part of ' + label + ').'
+      : supcalShortDate(d, false) + ' is fully available again.');
+    supcalRenderAvailBody();
+    supcalRenderTimeOff();
+    supcalCloseDayDetail();
+  });
 
   /* Marks where a day sits inside its block so a run of days reads as one continuous bar. */
   function supcalRangeEdgeClass(date) {
@@ -28533,34 +28760,47 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   });
 
   var supcalInitDone = false;
-  /* ---- Google Calendar sync ----
+  /* ---- Calendar sync: Google Calendar + Microsoft Outlook ----
      The official Google Calendar mark, used to label the integration it actually points at.
      Google's brand guidelines require the logo be used as-is: don't recolour it, redraw it,
      stretch it, or fold it into another shape. */
   var SUPCAL_GCAL_MARK =
     '<svg width="17" height="17" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M195.368 60.632H60.632v134.736h134.736z"/><path fill="#ea4335" d="M195.368 256L256 195.368l-30.316-5.172l-30.316 5.172l-5.533 27.73z"/><path fill="#188038" d="M0 195.368v40.421C0 246.956 9.044 256 20.21 256h40.422l6.225-30.316l-6.225-30.316l-33.033-5.172z"/><path fill="#1967d2" d="M256 60.632V20.21C256 9.044 246.956 0 235.79 0h-40.422q-5.532 22.554-5.533 33.196q0 10.641 5.533 27.436q20.115 5.76 30.316 5.76T256 60.631"/><path fill="#fbbc04" d="M256 60.632h-60.632v134.736H256z"/><path fill="#34a853" d="M195.368 195.368H60.632V256h134.736z"/><path fill="#4285f4" d="M195.368 0H20.211C9.044 0 0 9.044 0 20.21v175.158h60.632V60.632h134.736z"/><path fill="#4285f4" d="M88.27 165.154c-5.036-3.402-8.523-8.37-10.426-14.94l11.689-4.816q1.59 6.063 5.558 9.398c2.627 2.223 5.827 3.318 9.566 3.318q5.734 0 9.852-3.487c2.746-2.324 4.127-5.288 4.127-8.875q0-5.508-4.345-8.994c-2.897-2.324-6.535-3.486-10.88-3.486h-6.754v-11.57h6.063q5.608 0 9.448-3.033c2.56-2.02 3.84-4.783 3.84-8.303c0-3.132-1.145-5.625-3.435-7.494c-2.29-1.87-5.188-2.813-8.708-2.813c-3.436 0-6.164.91-8.185 2.745a16.1 16.1 0 0 0-4.413 6.754l-11.57-4.817c1.532-4.345 4.345-8.185 8.471-11.503s9.398-4.985 15.798-4.985c4.733 0 8.994.91 12.767 2.745c3.772 1.836 6.736 4.379 8.875 7.613c2.14 3.25 3.2 6.888 3.2 10.93c0 4.126-.993 7.613-2.98 10.476s-4.43 5.052-7.327 6.585v.69a22.25 22.25 0 0 1 9.398 7.327c2.442 3.284 3.672 7.208 3.672 11.79c0 4.58-1.163 8.673-3.487 12.26c-2.324 3.588-5.54 6.417-9.617 8.472c-4.092 2.055-8.69 3.1-13.793 3.1c-5.912.016-11.369-1.685-16.405-5.087m71.797-58.005l-12.833 9.28l-6.417-9.734l23.023-16.607h8.825v78.333h-12.598z"/></svg>';
+  /* Microsoft's four-colour "flag" mark, likewise used as-is per Microsoft's own trademark
+     guidelines (no recolouring, no reshaping). Stands in for both Outlook Calendar and
+     Microsoft 365 — the modal copy underneath says Outlook specifically. */
+  var SUPCAL_MS_MARK =
+    '<svg width="17" height="17" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="9" height="9" fill="#f25022"/><rect x="11" y="1" width="9" height="9" fill="#7fba00"/><rect x="1" y="11" width="9" height="9" fill="#00a4ef"/><rect x="11" y="11" width="9" height="9" fill="#ffb900"/></svg>';
   var SUPCAL_CHECK_SVG =
     '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+  /* Small filled badge appended after the button's own text once connected \u2014 the provider's
+     icon and name stay exactly as they are; this is the only thing that changes. */
+  var SUPCAL_SYNC_TICK =
+    '<svg width="14" height="14" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#15803d"/><path d="M7 12.3l3.2 3.2L17 8.8" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
-  var supcalGcalConnected = false;
-  var supcalGcalLastSync = null;
-
-  function supcalGcalSyncedLabel() {
-    if (!supcalGcalLastSync) return 'just now';
-    var mins = Math.floor((Date.now() - supcalGcalLastSync) / 60000);
+  // Shared by both providers so "synced 5 minutes ago" reads identically either way.
+  function supcalSyncedLabel(lastSync) {
+    if (!lastSync) return 'just now';
+    var mins = Math.floor((Date.now() - lastSync) / 60000);
     if (mins < 1) return 'just now';
     if (mins < 60) return mins + ' minute' + (mins === 1 ? '' : 's') + ' ago';
     var hrs = Math.floor(mins / 60);
     return hrs + ' hour' + (hrs === 1 ? '' : 's') + ' ago';
   }
 
+  var supcalGcalConnected = false;
+  var supcalGcalLastSync = null;
+  function supcalGcalSyncedLabel() { return supcalSyncedLabel(supcalGcalLastSync); }
+
   function supcalRenderGcalBtn() {
     var btn = document.getElementById('supcalGcalBtn');
     if (!btn) return;
     btn.classList.toggle('connected', supcalGcalConnected);
-    document.getElementById('supcalGcalMark').innerHTML = supcalGcalConnected ? SUPCAL_CHECK_SVG : SUPCAL_GCAL_MARK;
-    document.getElementById('supcalGcalBtnText').textContent =
-      supcalGcalConnected ? 'Google Calendar connected' : 'Sync with Google Calendar';
+    // Identity (icon + name) never changes \u2014 only the appended tick shows/hides via the
+    // .connected class in CSS, so "Google Calendar" and its mark stay put either way.
+    document.getElementById('supcalGcalMark').innerHTML = SUPCAL_GCAL_MARK;
+    document.getElementById('supcalGcalBtnText').textContent = 'Google Calendar';
+    document.getElementById('supcalGcalTick').innerHTML = SUPCAL_SYNC_TICK;
     /* No hover tooltip: the label already says what the button does, and the modal carries
        the detail. Kept as an aria-label so the state still reaches screen readers. */
     btn.setAttribute('aria-label', supcalGcalConnected
@@ -28632,6 +28872,92 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       }
     });
     supcalRenderGcalBtn();
+  })();
+
+  /* ---- Microsoft Outlook sync ----
+     Same shape as Google Calendar above (own connected state, own modal, own toast copy) so the
+     two providers behave identically apart from the branding — a supplier can connect one, both,
+     or neither, independently. */
+  var supcalMsConnected = false;
+  var supcalMsLastSync = null;
+  function supcalMsSyncedLabel() { return supcalSyncedLabel(supcalMsLastSync); }
+
+  function supcalRenderMsBtn() {
+    var btn = document.getElementById('supcalMsBtn');
+    if (!btn) return;
+    btn.classList.toggle('connected', supcalMsConnected);
+    document.getElementById('supcalMsMark').innerHTML = SUPCAL_MS_MARK;
+    document.getElementById('supcalMsBtnText').textContent = 'Microsoft';
+    document.getElementById('supcalMsTick').innerHTML = SUPCAL_SYNC_TICK;
+    btn.setAttribute('aria-label', supcalMsConnected
+      ? 'Microsoft Outlook connected, synced ' + supcalMsSyncedLabel() + '. Manage sync.'
+      : 'Sync with Microsoft Outlook');
+  }
+
+  function supcalRenderMsModal() {
+    var card = document.getElementById('supcalMsCard');
+    if (!card) return;
+    if (!supcalMsConnected) {
+      card.innerHTML =
+        '<div class="confirm-modal-icon supcal-gcal-modal-icon">' + SUPCAL_MS_MARK.replace('width="17" height="17"', 'width="30" height="30"') + '</div>' +
+        '<div class="confirm-modal-title">Sync with Microsoft Outlook</div>' +
+        '<div class="confirm-modal-desc">Your confirmed jobs appear in Outlook Calendar with the address and time, and any time off you mark here blocks the matching hours. Keylr never reads your personal events.</div>' +
+        '<div class="confirm-modal-btns">' +
+          '<button type="button" class="pmprop-del-cancel" data-ms-cancel>Cancel</button>' +
+          '<button type="button" class="confirm-modal-confirm" data-ms-connect>Connect Microsoft Outlook</button>' +
+        '</div>';
+    } else {
+      card.innerHTML =
+        '<div class="confirm-modal-icon supcal-gcal-modal-icon connected">' + SUPCAL_CHECK_SVG.replace('width="16" height="16"', 'width="26" height="26"') + '</div>' +
+        '<div class="confirm-modal-title">Microsoft Outlook connected</div>' +
+        '<div class="confirm-modal-desc">Synced ' + supcalMsSyncedLabel() + '. Jobs and time off stay in step automatically \u2014 you only need to sync by hand if something looks out of date.</div>' +
+        '<div class="confirm-modal-btns">' +
+          '<button type="button" class="pmprop-del-cancel" data-ms-disconnect style="color:#b91c1c;">Disconnect</button>' +
+          '<button type="button" class="confirm-modal-confirm" data-ms-syncnow>Sync now</button>' +
+        '</div>';
+    }
+  }
+
+  function supcalOpenMsModal() {
+    supcalRenderMsModal();
+    document.getElementById('supcalMsOverlay').classList.add('open');
+  }
+  function supcalCloseMsModal() {
+    document.getElementById('supcalMsOverlay').classList.remove('open');
+  }
+
+  (function supcalWireMs() {
+    var btn = document.getElementById('supcalMsBtn');
+    if (!btn) return;
+    btn.addEventListener('click', supcalOpenMsModal);
+    var overlay = document.getElementById('supcalMsOverlay');
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) { supcalCloseMsModal(); return; }
+      if (e.target.closest('[data-ms-cancel]')) { supcalCloseMsModal(); return; }
+      if (e.target.closest('[data-ms-connect]')) {
+        supcalMsConnected = true;
+        supcalMsLastSync = Date.now();
+        supcalRenderMsBtn();
+        supcalCloseMsModal();
+        showToast('Microsoft Outlook connected \u2014 your confirmed jobs will appear there.');
+        return;
+      }
+      if (e.target.closest('[data-ms-syncnow]')) {
+        supcalMsLastSync = Date.now();
+        supcalRenderMsBtn();
+        supcalCloseMsModal();
+        showToast('Calendar synced.');
+        return;
+      }
+      if (e.target.closest('[data-ms-disconnect]')) {
+        supcalMsConnected = false;
+        supcalMsLastSync = null;
+        supcalRenderMsBtn();
+        supcalCloseMsModal();
+        showToast('Microsoft Outlook disconnected. Jobs stay in Keylr.');
+      }
+    });
+    supcalRenderMsBtn();
   })();
 
   function initSupcalOnce() {
@@ -32238,7 +32564,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         '<div class="nm-name">' + c.name + '</div><div class="nm-email">' + (c.email || '') + '</div>' +
         '<div class="supapp-table-progress-row"><div class="supapp-table-progress-track"><div class="supapp-table-progress-fill' + (pct >= 100 ? ' complete' : '') + '" style="width:' + pct + '%;"></div></div><span class="supapp-table-progress-pct' + (pct >= 100 ? ' complete' : '') + '">' + pct + '%</span></div>' +
       '</div></div></td>' +
-      '<td>' + yesNoTag(!!c.business) + '</td>' +
       '<td>' + (c.company || '—') + '</td>' +
       '<td>' + (c.phone || '—') + '</td>' +
       '<td><span class="supplier-approved-pill ' + pmClientStatusClass(eff) + '">' + pmClientStatusDisplayText(eff) + '</span></td>' +
