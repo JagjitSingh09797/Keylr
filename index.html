@@ -5639,9 +5639,18 @@
   #pmpropPageNumbers .pm-page-num.active { border: 1.5px solid var(--accent-blue); background: var(--icon-tint-bg); color: var(--accent-blue); font-weight: 800; }
 
   .pmprop-avatar { width: 38px; height: 38px; border-radius: 10px; background: var(--icon-tint-bg); color: var(--accent-blue); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0; }
-  .pmprop-name-cell { display: flex; align-items: center; gap: 12px; }
-  .pmprop-name-main { font-size: 13.5px; font-weight: 700; color: var(--text-heading); }
-  .pmprop-name-sub { font-size: 12px; color: var(--text-body-muted); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 420px; }
+  .pmprop-name-cell { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  /* The text block is a flex child, and flex children don't shrink below their content's natural
+     width unless min-width:0 is set explicitly \u2014 without it, a long address renders at full
+     width regardless of the column's actual size and visually spills into the next column
+     instead of being clipped. overflow:hidden on this wrapper is the actual clip boundary; the
+     ellipsis rules on the two lines below just decide how each line's own overflow looks. */
+  .pmprop-name-text { min-width: 0; overflow: hidden; flex: 1; }
+  .pmprop-name-main { font-size: 13.5px; font-weight: 700; color: var(--text-heading); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pmprop-name-sub { font-size: 12px; color: var(--text-body-muted); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* Tooltip is centered on the hovered element by default; for the leftmost table column that can
+     push the tooltip's left edge past the table's own edge, so it's pinned to the left instead. */
+  .pmprop-name-cell[data-tooltip]::after, .pmprop-list-card-top[data-tooltip]::after { left: 0; transform: none; }
   .pmprop-occ-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 999px; background: var(--surface-soft); color: var(--text-body-muted); }
   .pmprop-occ-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: #94a3b8; flex-shrink: 0; }
   .pmprop-occ-badge.occupied { background: var(--icon-tint-bg); color: var(--accent-blue); }
@@ -5657,6 +5666,83 @@
   @media (max-width: 900px) {
     .pmprop-table-wrap { overflow-x: auto; }
   }
+  /* ---------- Properties list + map: side by side by default ----------
+     Below 1240px there isn't room for a table, a map, and the sidebar without crushing one of
+     them, so the two stack instead. Below 640px (handled in JS via pmpropIsMobile) the map
+     becomes the primary surface with a horizontal strip of properties at its bottom and the
+     table/card list gated behind "View all Properties" \u2014 see the mobile map-first block further
+     down this stylesheet. */
+  .pmprop-content-row { display: flex; flex-direction: column; gap: 22px; align-items: flex-start; }
+  .pmprop-list-col { min-width: 0; width: 100%; }
+  /* Whenever the two are stacked (anywhere below 1240px, mobile map-first included), the map
+     reads first \u2014 order alone flips the visual stacking without touching DOM order, so it has
+     no effect once the 1240px rule below switches back to side-by-side and resets it. */
+  .pmprop-map-col { order: -1; }
+  .pmprop-map-col {
+    min-width: 0; width: 100%; background: #fff; border: 1px solid var(--border-subtle);
+    border-radius: 14px; padding: 14px; flex-shrink: 0;
+  }
+  .pmprop-map-col.hidden { display: none; }
+  .pmprop-map-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+  .pmprop-map-hide-btn {
+    width: 26px; height: 26px; border-radius: 7px; border: 1px solid var(--border-subtle); background: #fff;
+    display: flex; align-items: center; justify-content: center; color: var(--text-body-muted); cursor: pointer; flex-shrink: 0;
+  }
+  .pmprop-map-hide-btn:hover { background: var(--surface-soft); color: var(--text-heading); }
+  .pmprop-map-el { height: 380px; border-radius: 10px; overflow: hidden; border: 1px solid var(--border-subtle); }
+  @media (min-width: 1240px) {
+    .pmprop-content-row { flex-direction: row; gap: 24px; }
+    .pmprop-list-col { flex: 1 1 56%; }
+    .pmprop-map-col { flex: 1 1 44%; position: sticky; top: 24px; order: 0; }
+    .pmprop-map-el { height: 560px; }
+  }
+  @media (max-width: 640px) {
+    .pmprop-map-el { height: min(56vh, 460px); }
+    .pmprop-map-col { padding: 12px; }
+  }
+
+  /* ---------- Mobile map-first browsing ----------
+     Below 640px the map is the primary surface (no side-by-side room for a table or a card
+     list), so a horizontal strip of every matching property sits at the bottom of the map panel
+     instead. Visibility for all of these is set directly in JS (not via CSS media queries) so
+     there's exactly one place that decides what's showing \u2014 this codebase has been bitten before
+     by mobile overrides losing a cascade fight against base rules, so the safest fix is to not
+     rely on the cascade for show/hide at all here. */
+  .pmprop-map-strip { display: flex; gap: 10px; overflow-x: auto; -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity; padding: 12px 2px 4px; margin-top: 4px; scrollbar-width: thin; }
+  .pmprop-map-strip-card {
+    flex: 0 0 auto; scroll-snap-align: start; width: 196px; background: #fff;
+    border: 1.5px solid var(--border-subtle); border-radius: 12px; padding: 12px; cursor: pointer;
+    transition: border-color 150ms ease-out, box-shadow 150ms ease-out;
+  }
+  .pmprop-map-strip-card.selected { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(40,72,144,0.12); }
+  .pmprop-map-strip-card .pmprop-name-main { font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pmprop-map-strip-card .pmprop-name-sub { font-size: 11px; max-width: none; margin-top: 2px; }
+  .pmprop-map-strip-card .pmprop-occ-badge { margin-top: 8px; font-size: 10.5px; padding: 3px 9px; }
+  .pmprop-view-all-btn, .pmprop-view-map-btn {
+    width: 100%; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 7px;
+    padding: 11px; border-radius: 10px; border: 1.5px solid var(--border-subtle); background: #fff;
+    font-family: inherit; font-size: 13px; font-weight: 700; color: var(--text-heading); cursor: pointer;
+  }
+  .pmprop-view-all-btn:hover, .pmprop-view-map-btn:hover { background: var(--surface-soft); }
+  .pmprop-view-map-btn { margin-top: 0; margin-bottom: 14px; }
+
+  /* ---------- Property cards (narrow-screen stand-in for the table) ----------
+     Reuses the exact same sub-pieces as the table row \u2014 .pmprop-avatar, .pmprop-name-main/sub,
+     .pmprop-occ-badge, .pmprop-row-menu-btn \u2014 just arranged as a stacked card instead of columns,
+     so a property reads identically whichever presentation is showing. */
+  .pmprop-cards-wrap { display: flex; flex-direction: column; gap: 10px; }
+  /* Namespaced "list-card" (not "card") — .pmprop-card already names the unrelated property
+     FORM's outer wrapper card elsewhere in this stylesheet; reusing that name here would have
+     silently inherited its padding/border-radius and let its click-to-edit wiring double up
+     onto the form wrapper too. */
+  .pmprop-list-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 14px; cursor: pointer; transition: border-color 150ms ease-out, box-shadow 150ms ease-out; }
+  .pmprop-list-card:hover { border-color: #c9d8ee; box-shadow: 0 3px 10px rgba(16,24,40,0.06); }
+  .pmprop-list-card-top { display: flex; align-items: flex-start; gap: 12px; }
+  .pmprop-list-card-top .pmprop-name-sub { max-width: none; white-space: normal; }
+  .pmprop-list-card-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 18px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-subtle); }
+  .pmprop-list-card-meta-item { font-size: 11.5px; color: var(--text-body-muted); }
+  .pmprop-list-card-meta-item b { color: var(--text-heading); font-weight: 700; }
+  .pmprop-list-card-menu-cell { position: relative; margin-left: auto; flex-shrink: 0; }
   .pmprop-map-legend { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; font-size: 10.5px; font-weight: 600; color: var(--text-body-muted); }
   .pmprop-map-legend span { display: inline-flex; align-items: center; }
   .pmprop-map-legend .dot { display: inline-block; flex-shrink: 0; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
@@ -11742,7 +11828,7 @@
                   <div class="dash-content-sub">Manage your portfolio, compliance, and tenant access in one place.</div>
                 </div>
                 <div class="pmprop-header-actions">
-                  <button type="button" class="pmprop-quickadd-btn" id="pmpropViewMapBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4z"/><path d="M8 2v16M16 6v16"/></svg> View Map</button>
+                  <button type="button" class="pmprop-quickadd-btn" id="pmpropViewMapBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4z"/><path d="M8 2v16M16 6v16"/></svg> Hide Map</button>
                   <button type="button" class="pmprop-quickadd-btn" id="pmpropQuickAddEntryBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M13 2L3 14h7l-1 8 11-14h-7l1-6z"/></svg> Quick Add</button>
                   <button type="button" class="pmprop-create-btn" id="pmpropCreateEntryBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Create Property</button>
                 </div>
@@ -11756,43 +11842,68 @@
                 <div class="pmprop-count-pill" id="pmpropCountPill">21 properties</div>
               </div>
 
-              <div id="pmpropMapWrap" style="display:none;">
-                <div class="pmprop-map-legend">
-                  <span><span class="dot" style="background-color:#284890;"></span>Occupied</span>
-                  <span><span class="dot" style="background-color:#f0b429;"></span>Void / Vacant</span>
-                  <span><span class="dot" style="background-color:#94a3b8;"></span>Not set</span>
-                </div>
-                <div id="pmpropMapEl" style="height:520px;border-radius:14px;overflow:hidden;border:1px solid var(--border-subtle);"></div>
-              </div>
-
-              <div class="pm-table-wrap pmprop-table-wrap" id="pmpropTableWrap">
-                <div class="pm-table-scroll">
-                  <table class="admin-table" style="min-width:760px;">
-                    <thead><tr><th>Property</th><th>Type</th><th>Occupancy</th><th>Last Updated</th><th></th></tr></thead>
-                    <tbody id="pmpropTableBody"></tbody>
-                  </table>
-                </div>
-              </div>
-
-              <div class="dash-header" style="margin-top:16px;flex-wrap:wrap;gap:12px;" id="pmpropPaginationRow">
-                <span class="pm-count-text" style="display:flex;align-items:center;gap:8px;">Rows per page
-                  <div class="pm-filter-field" style="width:76px;">
-                    <button type="button" class="pm-custom-dd-btn" data-dd="pmpropRowsPerPage" style="padding:6px 10px;">
-                      <span class="cdd-value">10</span>
-                      <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-                    </button>
-                    <div class="pm-custom-dd-menu drop-up" data-dd-menu="pmpropRowsPerPage">
-                      <div class="cdd-item selected" data-value="10">10</div>
-                      <div class="cdd-item" data-value="25">25</div>
-                      <div class="cdd-item" data-value="50">50</div>
+              <!-- List and map now sit side by side by default (map on the right) on wide screens,
+                   stack with the map below on medium screens, and on narrow screens the list
+                   switches from a table to full-width cards \u2014 a table has no room to breathe once
+                   it's sharing the row with a map, so cards resolve that conflict rather than the
+                   table getting crushed or scrolling sideways forever. -->
+              <div class="pmprop-content-row" id="pmpropContentRow">
+                <div class="pmprop-list-col" id="pmpropListCol">
+                  <div class="pm-table-wrap pmprop-table-wrap" id="pmpropTableWrap">
+                    <div class="pm-table-scroll">
+                      <table class="admin-table" style="min-width:560px;table-layout:fixed;">
+                        <colgroup>
+                          <col style="width:34%;"><col style="width:16%;"><col style="width:22%;"><col style="width:20%;"><col style="width:44px;">
+                        </colgroup>
+                        <thead><tr><th>Property</th><th>Type</th><th>Occupancy</th><th>Last Updated</th><th></th></tr></thead>
+                        <tbody id="pmpropTableBody"></tbody>
+                      </table>
                     </div>
                   </div>
-                </span>
-                <span class="pm-count-text" id="pmpropShowingText">Showing 1–10 of 21</span>
-                <div style="display:flex;gap:4px;align-items:center;">
-                  <button type="button" class="pmprop-page-btn" id="pmpropPagePrev" aria-label="Previous page"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg> Prev</button>
-                  <div style="display:flex;gap:4px;" id="pmpropPageNumbers"></div>
-                  <button type="button" class="pmprop-page-btn" id="pmpropPageNext" aria-label="Next page">Next <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+                  <button type="button" class="pmprop-view-map-btn" id="pmpropViewMapReturnBtn" style="display:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4z"/><path d="M8 2v16M16 6v16"/></svg> View Map</button>
+                  <div class="pmprop-cards-wrap" id="pmpropCardsWrap" style="display:none;"></div>
+
+                  <div class="dash-header" style="margin-top:16px;flex-wrap:wrap;gap:12px;" id="pmpropPaginationRow">
+                    <span class="pm-count-text" style="display:flex;align-items:center;gap:8px;">Rows per page
+                      <div class="pm-filter-field" style="width:76px;">
+                        <button type="button" class="pm-custom-dd-btn" data-dd="pmpropRowsPerPage" style="padding:6px 10px;">
+                          <span class="cdd-value">10</span>
+                          <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                        </button>
+                        <div class="pm-custom-dd-menu drop-up" data-dd-menu="pmpropRowsPerPage">
+                          <div class="cdd-item selected" data-value="10">10</div>
+                          <div class="cdd-item" data-value="25">25</div>
+                          <div class="cdd-item" data-value="50">50</div>
+                        </div>
+                      </div>
+                    </span>
+                    <span class="pm-count-text" id="pmpropShowingText">Showing 1–10 of 21</span>
+                    <div style="display:flex;gap:4px;align-items:center;">
+                      <button type="button" class="pmprop-page-btn" id="pmpropPagePrev" aria-label="Previous page"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg> Prev</button>
+                      <div style="display:flex;gap:4px;" id="pmpropPageNumbers"></div>
+                      <button type="button" class="pmprop-page-btn" id="pmpropPageNext" aria-label="Next page">Next <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pmprop-map-col" id="pmpropMapWrap">
+                  <div class="pmprop-map-head">
+                    <div class="pmprop-map-legend">
+                      <span><span class="dot" style="background-color:#284890;"></span>Occupied</span>
+                      <span><span class="dot" style="background-color:#f0b429;"></span>Void / Vacant</span>
+                      <span><span class="dot" style="background-color:#94a3b8;"></span>Not set</span>
+                    </div>
+                    <button type="button" class="pmprop-map-hide-btn" id="pmpropHideMapBtn" aria-label="Hide map"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+                  </div>
+                  <div id="pmpropMapEl" class="pmprop-map-el"></div>
+                  <!-- Mobile-only: the map is the primary surface on narrow screens, so instead of
+                       a full list beside/below it, every matching property gets a compact card in
+                       a horizontal strip anchored to the map's bottom edge. Tapping a map pin
+                       scrolls to and highlights its card here; tapping the card itself opens that
+                       property's detail page. "View all Properties" is the escape hatch back to
+                       the familiar searchable, paginated list. -->
+                  <div class="pmprop-map-strip" id="pmpropMapStrip"></div>
+                  <button type="button" class="pmprop-view-all-btn" id="pmpropMobileListToggleBtn">View all Properties</button>
                 </div>
               </div>
             </div>
@@ -21783,9 +21894,26 @@
     return '<span class="pmprop-occ-badge"><span class="dot"></span>\u2014</span>';
   }
 
+  // Below this the mobile map-first experience takes over \u2014 the map becomes the primary
+  // surface with a horizontal strip of every matching property, instead of a side-by-side or
+  // stacked table/card list. Triggers on either a genuinely narrow viewport, or the content row
+  // itself being squeezed to 940px or less (e.g. the PM sidebar sitting open beside a still-fairly
+  // narrow window) \u2014 the row's own rendered width is what actually determines whether the table
+  // and map have room, not the raw viewport number.
+  function pmpropIsMobile() {
+    if (window.innerWidth <= 640) return true;
+    var row = document.getElementById('pmpropContentRow');
+    return !!(row && row.offsetWidth > 0 && row.offsetWidth <= 940);
+  }
+
+  // data-tooltip lives on the outer cell, not the inner .pmprop-name-text \u2014 that inner wrapper
+  // needs overflow:hidden to truncate the long name/address with an ellipsis, and overflow:hidden
+  // clips a generated ::after tooltip sitting inside that same box even though it's absolutely
+  // positioned to escape above/below it. One level up avoids the two rules fighting each other.
   function pmpropRowHtml(p) {
+    var fullText = p.name + (p.addr ? ' \u2014 ' + p.addr : '');
     return '<tr class="pmprop-table-row" data-prop-id="' + p.id + '">' +
-      '<td><div class="pmprop-name-cell"><div class="pmprop-avatar">' + pmpropEscapeHtml(p.initials || pmpropInitials(p.name)) + '</div><div><div class="pmprop-name-main">' + pmpropEscapeHtml(p.name) + '</div><div class="pmprop-name-sub">' + pmpropEscapeHtml(p.addr) + '</div></div></div></td>' +
+      '<td><div class="pmprop-name-cell" data-tooltip="' + pmpropEscapeHtml(fullText) + '"><div class="pmprop-avatar">' + pmpropEscapeHtml(p.initials || pmpropInitials(p.name)) + '</div><div class="pmprop-name-text"><div class="pmprop-name-main">' + pmpropEscapeHtml(p.name) + '</div><div class="pmprop-name-sub">' + pmpropEscapeHtml(p.addr) + '</div></div></div></td>' +
       '<td>' + pmpropEscapeHtml(p.type) + '</td>' +
       '<td>' + pmpropOccBadgeHtml(p.occupancy) + '</td>' +
       '<td>' + pmpropEscapeHtml(p.lastUpdated) + '</td>' +
@@ -21798,9 +21926,103 @@
       '</tr>';
   }
 
+  // Same fields, same sub-components (.pmprop-avatar, .pmprop-name-main/sub, .pmprop-occ-badge,
+  // .pmprop-row-menu-btn) as the table row above \u2014 a property looks identical whichever
+  // presentation is on screen, just laid out as a stacked card instead of table columns.
+  function pmpropCardHtml(p) {
+    var fullText = p.name + (p.addr ? ' \u2014 ' + p.addr : '');
+    return '<div class="pmprop-list-card" data-prop-id="' + p.id + '">' +
+      '<div class="pmprop-list-card-top" data-tooltip="' + pmpropEscapeHtml(fullText) + '">' +
+        '<div class="pmprop-avatar">' + pmpropEscapeHtml(p.initials || pmpropInitials(p.name)) + '</div>' +
+        '<div class="pmprop-name-text"><div class="pmprop-name-main">' + pmpropEscapeHtml(p.name) + '</div><div class="pmprop-name-sub">' + pmpropEscapeHtml(p.addr) + '</div></div>' +
+        '<div class="pmprop-list-card-menu-cell">' +
+          '<button type="button" class="pmprop-row-menu-btn" data-prop-menu="' + p.id + '"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>' +
+          '<div class="pm-dropdown-menu" data-prop-menu-panel="' + p.id + '">' +
+            '<button type="button" data-prop-edit="' + p.id + '"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg> Edit</button>' +
+            '<button type="button" data-prop-delete="' + p.id + '" style="color:#dc2626;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg> Delete</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="pmprop-list-card-meta">' +
+        pmpropOccBadgeHtml(p.occupancy) +
+        '<span class="pmprop-list-card-meta-item"><b>' + pmpropEscapeHtml(p.type) + '</b></span>' +
+        '<span class="pmprop-list-card-meta-item">Updated ' + pmpropEscapeHtml(p.lastUpdated) + '</span>' +
+      '</div>' +
+    '</div>';
+  }
+
+  // Compact stand-in for the full card, sized for the horizontal strip under the mobile map —
+  // same data, just trimmed to what fits a 196px-wide tile.
+  function pmpropMiniCardHtml(p) {
+    var fullText = p.name + (p.addr ? ' \u2014 ' + p.addr : '');
+    // Native title, not data-tooltip: this card sits inside a horizontally-scrolling strip that's
+    // exactly one row tall, so there's no vertical room within that container for the custom
+    // tooltip to render regardless of which way it flips \u2014 the browser's own tooltip isn't
+    // bound by the page's overflow at all, so it's the one that actually works here.
+    return '<div class="pmprop-map-strip-card" data-prop-id="' + p.id + '" title="' + pmpropEscapeHtml(fullText) + '">' +
+      '<div class="pmprop-name-main">' + pmpropEscapeHtml(p.name) + '</div>' +
+      '<div class="pmprop-name-sub">' + pmpropEscapeHtml(p.addr) + '</div>' +
+      pmpropOccBadgeHtml(p.occupancy) +
+    '</div>';
+  }
+  function pmpropRenderMapStrip(list) {
+    var strip = document.getElementById('pmpropMapStrip');
+    if (!strip) return;
+    strip.innerHTML = list.length
+      ? list.map(pmpropMiniCardHtml).join('')
+      : '<div style="padding:14px 6px;color:var(--text-body-muted);font-size:12.5px;">No properties match your search.</div>';
+    // Tapping the card itself is the explicit "go to this property" action — tapping a map pin
+    // only selects/scrolls to the card (see pmpropSelectMapCard), it doesn't navigate on its own.
+    strip.querySelectorAll('.pmprop-map-strip-card').forEach(function (card) {
+      card.addEventListener('click', function () { pmpropOpenEdit(card.getAttribute('data-prop-id')); });
+    });
+  }
+  // Called when a map pin is tapped on mobile: brings that property's card into view in the
+  // strip and highlights it, without navigating away — the card itself is the navigation step.
+  function pmpropSelectMapCard(id) {
+    var strip = document.getElementById('pmpropMapStrip');
+    if (!strip) return;
+    strip.querySelectorAll('.pmprop-map-strip-card.selected').forEach(function (c) { c.classList.remove('selected'); });
+    var card = strip.querySelector('.pmprop-map-strip-card[data-prop-id="' + id + '"]');
+    if (card) {
+      card.classList.add('selected');
+      card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
+  }
+
   var pmpropMapInstance = null;
   var pmpropMapMarkers = [];
-  var pmpropMapMode = false;
+  var pmpropMapVisible = true; // desktop/tablet only — shown by default, side by side with the list
+  var pmpropMobileListOpen = false; // mobile only — false = map-first view, true = the full searchable list
+
+  // The side-by-side table+map layout needs room to work with, and below 1240px the PM sidebar's
+  // own 258px eats into exactly the space that layout needs \u2014 so entering Properties at a
+  // narrower width collapses the sidebar automatically to free that room back up, and puts it
+  // back exactly as it was the moment the supplier leaves Properties or the window grows wide
+  // enough again. Scoped to this one module: nothing else on the PM side auto-collapses.
+  var pmpropAutoCollapsed = false; // true while the sidebar is collapsed because of this logic, not the person
+  var pmpropCollapseOverridden = false; // true once the person manually touches the button during this visit
+  function pmpropSyncSidebarCollapse(view) {
+    var sidebar = document.getElementById('dashSidebar');
+    if (!sidebar) return;
+    if (view !== 'properties') {
+      // Leaving Properties: put back anything this logic collapsed, and clear the per-visit
+      // override so the next visit gets a fresh chance to auto-collapse on its own terms.
+      if (pmpropAutoCollapsed) { sidebar.classList.remove('collapsed'); pmpropAutoCollapsed = false; }
+      pmpropCollapseOverridden = false;
+      return;
+    }
+    if (pmpropCollapseOverridden) return; // the person already made their own call for this visit
+    if (window.innerWidth <= 1240) {
+      if (!sidebar.classList.contains('collapsed')) {
+        sidebar.classList.add('collapsed');
+        pmpropAutoCollapsed = true;
+      }
+    } else if (pmpropAutoCollapsed) {
+      sidebar.classList.remove('collapsed');
+      pmpropAutoCollapsed = false;
+    }
+  }
 
   function pmpropOccColor(occupancy) {
     if (occupancy === 'occupied') return '#284890';
@@ -21838,11 +22060,15 @@
     '</div>';
   }
   function pmpropRenderMap() {
+    var list = pmpropFilteredList();
+    // The horizontal strip doesn't depend on Leaflet at all \u2014 render it unconditionally so
+    // mobile browsing still works even if the map library/tiles fail to load (slow network, an
+    // ad-blocker, offline). The pins themselves stay gated behind Leaflet below.
+    pmpropRenderMapStrip(list);
     if (typeof supsaEnsureLeaflet !== 'function') return;
     supsaEnsureLeaflet(function () {
       var el = document.getElementById('pmpropMapEl');
       if (!el) return;
-      var list = pmpropFilteredList();
       var byPrefixCount = {};
       var prefixOf = function (p) { return (p.postcode || '').trim().split(' ')[0] || 'XX'; };
       list.forEach(function (p) { var pre = prefixOf(p); byPrefixCount[pre] = (byPrefixCount[pre] || 0) + 1; });
@@ -21877,7 +22103,13 @@
           marker.bindPopup(pmpropBuildMapCardHtml(pt.p), { closeButton: true, offset: [0, -6], maxWidth: 280, minWidth: 240 });
           marker.on('mouseover', function () { marker.openPopup(); });
           marker.on('mouseout', function () { marker.closePopup(); });
-          marker.on('click', function () { pmpropOpenEdit(pt.p.id); });
+          // Mobile: tapping a pin selects its card in the strip below \u2014 a second, deliberate tap
+          // on the card is what actually navigates. Desktop/tablet: go straight to the property,
+          // unchanged from before.
+          marker.on('click', function () {
+            if (pmpropIsMobile()) pmpropSelectMapCard(pt.p.id);
+            else pmpropOpenEdit(pt.p.id);
+          });
           pmpropMapMarkers.push(marker);
           bounds.push([pt.lat, pt.lng]);
         });
@@ -21888,62 +22120,126 @@
       setTimeout(function () { if (pmpropMapInstance) pmpropMapInstance.invalidateSize(); }, 100);
     });
   }
-  function pmpropShowMapView() {
-    pmpropMapMode = true;
-    document.getElementById('pmpropMapWrap').style.display = '';
-    document.getElementById('pmpropTableWrap').style.display = 'none';
-    document.getElementById('pmpropPaginationRow').style.display = 'none';
-    document.getElementById('pmpropViewMapBtn').classList.add('active-toggle');
-    document.getElementById('pmpropViewMapBtn').innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M9 4v18"/></svg> View List';
-    pmpropRenderMap();
+  // Map now shows by default alongside the list rather than replacing it (desktop/tablet) \u2014
+  // this just tracks whether the supplier has chosen to collapse it back for more list room.
+  // Only meaningful when not on mobile: mobile's map-vs-list state is pmpropMobileListOpen
+  // instead, and this toggle's own button is hidden there (see pmpropRenderList), so the two
+  // can't fight.
+  function pmpropSetMapVisible(visible) {
+    pmpropMapVisible = visible;
+    var btn = document.getElementById('pmpropViewMapBtn');
+    btn.classList.toggle('active-toggle', !visible);
+    btn.innerHTML = visible
+      ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4z"/><path d="M8 2v16M16 6v16"/></svg> Hide Map'
+      : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4z"/><path d="M8 2v16M16 6v16"/></svg> Show Map';
+    pmpropApplyMapColVisibility();
   }
-  function pmpropShowTableView() {
-    pmpropMapMode = false;
-    document.getElementById('pmpropMapWrap').style.display = 'none';
-    document.getElementById('pmpropTableWrap').style.display = '';
-    document.getElementById('pmpropPaginationRow').style.display = '';
-    document.getElementById('pmpropViewMapBtn').classList.remove('active-toggle');
-    document.getElementById('pmpropViewMapBtn').innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4z"/><path d="M8 2v16M16 6v16"/></svg> View Map';
+  // Single source of truth for whether the map panel itself is on screen. Desktop/tablet follow
+  // the Hide/Show Map toggle; mobile follows whether the full list has been opened instead.
+  function pmpropApplyMapColVisibility() {
+    var visible = pmpropIsMobile() ? !pmpropMobileListOpen : pmpropMapVisible;
+    document.getElementById('pmpropMapWrap').classList.toggle('hidden', !visible);
+    if (visible) pmpropRenderMap();
   }
-  document.getElementById('pmpropViewMapBtn').addEventListener('click', function () {
-    if (pmpropMapMode) pmpropShowTableView(); else pmpropShowMapView();
+  document.getElementById('pmpropViewMapBtn').addEventListener('click', function () { pmpropSetMapVisible(!pmpropMapVisible); });
+  document.getElementById('pmpropHideMapBtn').addEventListener('click', function () { pmpropSetMapVisible(false); });
+  document.getElementById('pmpropMobileListToggleBtn').addEventListener('click', function () {
+    pmpropMobileListOpen = true;
+    pmpropRenderList();
   });
+  document.getElementById('pmpropViewMapReturnBtn').addEventListener('click', function () {
+    pmpropMobileListOpen = false;
+    pmpropRenderList();
+  });
+
+  // Wires whichever list container (table rows or cards) is currently on screen \u2014 both use the
+  // identical data-prop-* attributes, so one wiring pass covers either presentation.
+  function pmpropWireListInteractions(container) {
+    container.querySelectorAll('.pmprop-table-row, .pmprop-list-card').forEach(function (row) {
+      row.addEventListener('click', function (e) {
+        if (e.target.closest('.pmprop-row-menu-cell, .pmprop-list-card-menu-cell')) return;
+        pmpropOpenEdit(row.getAttribute('data-prop-id'));
+      });
+    });
+    container.querySelectorAll('.pmprop-row-menu-btn').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var panel = container.querySelector('[data-prop-menu-panel="' + btn.getAttribute('data-prop-menu') + '"]');
+        var wasOpen = panel.classList.contains('open');
+        container.querySelectorAll('.pm-dropdown-menu.open').forEach(function (m) { m.classList.remove('open'); });
+        if (!wasOpen) panel.classList.add('open');
+      });
+    });
+    container.querySelectorAll('[data-prop-edit]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) { e.stopPropagation(); pmpropOpenEdit(btn.getAttribute('data-prop-edit')); });
+    });
+    container.querySelectorAll('[data-prop-delete]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) { e.stopPropagation(); pmpropOpenDeleteModal(btn.getAttribute('data-prop-delete')); });
+    });
+  }
 
   function pmpropRenderList() {
     var list = pmpropFilteredList();
     document.getElementById('pmpropCountPill').textContent = list.length + ' propert' + (list.length === 1 ? 'y' : 'ies');
-    if (pmpropMapMode) { pmpropRenderMap(); return; }
+
+    var mobile = pmpropIsMobile();
     var totalPages = Math.max(1, Math.ceil(list.length / pmpropRowsPerPage));
     if (pmpropCurrentPage > totalPages) pmpropCurrentPage = totalPages;
     var start = (pmpropCurrentPage - 1) * pmpropRowsPerPage;
     var pageItems = list.slice(start, start + pmpropRowsPerPage);
-    var tbody = document.getElementById('pmpropTableBody');
-    tbody.innerHTML = pageItems.length ? pageItems.map(pmpropRowHtml).join('') : '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-body-muted);">No properties match your search.</td></tr>';
 
-    tbody.querySelectorAll('.pmprop-table-row').forEach(function (row) {
-      row.addEventListener('click', function (e) {
-        if (e.target.closest('.pmprop-row-menu-cell')) return;
-        pmpropOpenEdit(row.getAttribute('data-prop-id'));
-      });
-    });
-    tbody.querySelectorAll('.pmprop-row-menu-btn').forEach(function (btn) {
-      btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        var panel = tbody.querySelector('[data-prop-menu-panel="' + btn.getAttribute('data-prop-menu') + '"]');
-        var wasOpen = panel.classList.contains('open');
-        tbody.querySelectorAll('.pm-dropdown-menu.open').forEach(function (m) { m.classList.remove('open'); });
-        if (!wasOpen) panel.classList.add('open');
-      });
-    });
-    tbody.querySelectorAll('[data-prop-edit]').forEach(function (btn) {
-      btn.addEventListener('click', function (e) { e.stopPropagation(); pmpropOpenEdit(btn.getAttribute('data-prop-edit')); });
-    });
-    tbody.querySelectorAll('[data-prop-delete]').forEach(function (btn) {
-      btn.addEventListener('click', function (e) { e.stopPropagation(); pmpropOpenDeleteModal(btn.getAttribute('data-prop-delete')); });
-    });
+    var tableWrap = document.getElementById('pmpropTableWrap');
+    var cardsWrap = document.getElementById('pmpropCardsWrap');
+    var paginationRow = document.getElementById('pmpropPaginationRow');
+    var mapStrip = document.getElementById('pmpropMapStrip');
+    var viewAllBtn = document.getElementById('pmpropMobileListToggleBtn');
+    var viewMapReturnBtn = document.getElementById('pmpropViewMapReturnBtn');
+
+    // Desktop/tablet: the Hide/Show Map header button and the in-panel \u00d7 both apply. Mobile
+    // switches between map and list through View all Properties / View Map instead, so those two
+    // controls are hidden there rather than offering two different ways to do the same thing.
+    document.getElementById('pmpropViewMapBtn').style.display = mobile ? 'none' : '';
+    document.getElementById('pmpropHideMapBtn').style.display = mobile ? 'none' : '';
+
+    if (mobile && !pmpropMobileListOpen) {
+      // Map-first (the mobile default): table and card list both stay out of the visible flow
+      // entirely. The horizontal strip \u2014 populated inside pmpropRenderMap so it always matches
+      // the pins on screen \u2014 carries every matching property unpaginated, mirroring the full pin
+      // set rather than just one page of it.
+      tableWrap.style.display = 'none';
+      cardsWrap.style.display = 'none';
+      paginationRow.style.display = 'none';
+      mapStrip.style.display = '';
+      viewAllBtn.style.display = '';
+      viewMapReturnBtn.style.display = 'none';
+    } else if (mobile && pmpropMobileListOpen) {
+      // The escape hatch back to the familiar searchable, paginated list \u2014 map hidden, "View
+      // Map" offered to switch back.
+      tableWrap.style.display = 'none';
+      cardsWrap.style.display = '';
+      paginationRow.style.display = '';
+      mapStrip.style.display = 'none';
+      viewAllBtn.style.display = 'none';
+      viewMapReturnBtn.style.display = '';
+      cardsWrap.innerHTML = pageItems.length ? pageItems.map(pmpropCardHtml).join('') : '<div style="text-align:center;padding:40px 20px;color:var(--text-body-muted);font-size:13px;">No properties match your search.</div>';
+      pmpropWireListInteractions(cardsWrap);
+    } else {
+      // Desktop / tablet: plain table beside (or stacked above) the map, same as before.
+      tableWrap.style.display = '';
+      cardsWrap.style.display = 'none';
+      paginationRow.style.display = '';
+      mapStrip.style.display = 'none';
+      viewAllBtn.style.display = 'none';
+      viewMapReturnBtn.style.display = 'none';
+      var tbody = document.getElementById('pmpropTableBody');
+      tbody.innerHTML = pageItems.length ? pageItems.map(pmpropRowHtml).join('') : '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-body-muted);">No properties match your search.</td></tr>';
+      pmpropWireListInteractions(tbody);
+    }
 
     document.getElementById('pmpropShowingText').textContent = list.length ? ('Showing ' + (start + 1) + '\u2013' + Math.min(start + pageItems.length, list.length) + ' of ' + list.length) : 'No properties found';
     renderPageNumberButtons('pmpropPageNumbers', pmpropCurrentPage, totalPages, function (p) { pmpropCurrentPage = p; pmpropRenderList(); });
+
+    pmpropApplyMapColVisibility();
   }
 
   function pmpropCustomSelectHtml(key, defaultLabel, options, currentValue) {
@@ -22585,6 +22881,35 @@
     pmpropRenderList();
     pmpropWireCustomSelects(document.getElementById('pmpropComplianceGrid'));
 
+    // The list swaps table<->mobile-map-first when pmpropIsMobile's threshold is crossed, and the
+    // map panel moves between a side column, a full-width stacked block, and the mobile layout at
+    // various breakpoints \u2014 Leaflet caches its container size internally, so invalidateSize()
+    // keeps it honest through any of these reflows instead of leaving stale, mis-fitted tiles.
+    var pmpropLastMobile = pmpropIsMobile();
+    var pmpropResizeTimer = null;
+    function pmpropHandlePossibleResize() {
+      clearTimeout(pmpropResizeTimer);
+      pmpropResizeTimer = setTimeout(function () {
+        if (document.getElementById('pmPropertiesView').style.display === 'none') return;
+        pmpropSyncSidebarCollapse('properties');
+        var nowMobile = pmpropIsMobile();
+        if (nowMobile !== pmpropLastMobile) {
+          pmpropLastMobile = nowMobile;
+          pmpropRenderList();
+        } else if (pmpropMapInstance && !document.getElementById('pmpropMapWrap').classList.contains('hidden')) {
+          pmpropMapInstance.invalidateSize();
+        }
+      }, 150);
+    }
+    window.addEventListener('resize', pmpropHandlePossibleResize);
+    // A window resize isn't the only thing that changes the content row's own width \u2014 the PM
+    // sidebar auto-collapsing/expanding for this module (see pmpropSyncSidebarCollapse) reflows it
+    // too, with no window-level resize event at all. Observing the row itself catches every cause.
+    if (typeof ResizeObserver === 'function') {
+      var pmpropContentRowEl = document.getElementById('pmpropContentRow');
+      if (pmpropContentRowEl) new ResizeObserver(pmpropHandlePossibleResize).observe(pmpropContentRowEl);
+    }
+
     document.getElementById('pmpropSearchInput').addEventListener('input', function (e) {
       pmpropSearchQuery = e.target.value;
       pmpropCurrentPage = 1;
@@ -22676,6 +23001,7 @@
     var pmDashContent = document.querySelector('#pmDashboard .dash-content');
     if (pmDashContent) pmDashContent.classList.toggle('dash-content-full', view === 'responses');
     if (pmDashContent) pmDashContent.classList.toggle('dash-content-narrow-pad', view === 'properties' || view === 'propertyform' || view === 'servicespricing' || view === 'servicetemplate');
+    if (typeof pmpropSyncSidebarCollapse === 'function') pmpropSyncSidebarCollapse(view);
     document.querySelector('#pmDashboard .dash-scroll-area').scrollTo({ top: 0, behavior: 'smooth' });
     if (view === 'propertyform') {
       var pmpropFormEl = document.getElementById('pmPropertyFormView');
@@ -24818,7 +25144,20 @@
   /* Sidebar collapse */
   var dashSidebar = document.getElementById('dashSidebar');
   document.getElementById('sidebarCollapseBtn').addEventListener('click', function () {
-    dashSidebar.classList.toggle('collapsed');
+    // On narrow/mobile widths the sidebar is a slide-in drawer, not a collapsible rail \u2014 the same
+    // button should close the drawer there instead of shrinking it to icon-only width. Mirrors the
+    // Supplier side's collapse button exactly.
+    if (window.innerWidth <= 420) {
+      dashSidebar.classList.remove('mobile-open');
+    } else {
+      dashSidebar.classList.toggle('collapsed');
+      pmpropAutoCollapsed = false; // a manual click always overrides the Properties auto-collapse below
+      // If they're on Properties right now, this is a deliberate override for the rest of this
+      // visit \u2014 stop auto re-collapsing/re-expanding it out from under them until they leave
+      // and come back.
+      var pmpropViewEl = document.getElementById('pmPropertiesView');
+      if (pmpropViewEl && pmpropViewEl.style.display !== 'none') pmpropCollapseOverridden = true;
+    }
   });
 
   /* Sidebar nav item selection (single active item; most routes are stubs in this prototype) */
@@ -24837,6 +25176,9 @@
       } else if (item.getAttribute('data-nav') === 'properties') {
         showPMView('properties');
         initPmpropOnce();
+        // Leaflet caches its container size, so a resize that happened while this view was
+        // hidden (or the very first paint) can leave it mis-fitted until nudged.
+        if (pmpropMapVisible && pmpropMapInstance) setTimeout(function () { pmpropMapInstance.invalidateSize(); }, 60);
       } else if (item.getAttribute('data-nav') === 'tickets') {
         showPMView('tickets');
         initPmTicketsOnce();
