@@ -4640,7 +4640,7 @@
     content: attr(data-tooltip);
     position: absolute; bottom: calc(100% + 7px); left: 50%; transform: translateX(-50%);
     background: var(--navy-900); color: #fff; font-size: 11px; font-weight: 600;
-    padding: 5px 9px; border-radius: 6px; white-space: normal; max-width: 220px; width: max-content; text-align: center; line-height: 1.4; z-index: 30;
+    padding: 5px 9px; border-radius: 6px; white-space: pre-line; max-width: 220px; width: max-content; text-align: center; line-height: 1.4; z-index: 30;
     opacity: 0; visibility: hidden; transition: opacity 150ms ease-out, visibility 150ms ease-out;
     pointer-events: none;
   }
@@ -5651,12 +5651,20 @@
   /* Tooltip is centered on the hovered element by default; for the leftmost table column that can
      push the tooltip's left edge past the table's own edge, so it's pinned to the left instead. */
   .pmprop-name-cell[data-tooltip]::after, .pmprop-list-card-top[data-tooltip]::after { left: 0; transform: none; }
-  .pmprop-occ-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 999px; background: var(--surface-soft); color: var(--text-body-muted); }
+  .pmprop-occ-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 999px; background: var(--surface-soft); color: var(--text-body-muted); white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+  .pmprop-comp-badge-wrap { display: inline-block; max-width: 100%; min-width: 0; vertical-align: middle; }
   .pmprop-occ-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: #94a3b8; flex-shrink: 0; }
   .pmprop-occ-badge.occupied { background: var(--icon-tint-bg); color: var(--accent-blue); }
   .pmprop-occ-badge.occupied .dot { background: var(--accent-blue); }
   .pmprop-occ-badge.void { background: #fff7e0; color: #92720c; }
   .pmprop-occ-badge.void .dot { background: #f0b429; }
+  /* Compliance badge: yellow while a certificate still has time left on it (still actionable),
+     blue once it's actually past due \u2014 same colour values as occupied/void above, just under
+     names that describe what they mean in this context instead. */
+  .pmprop-occ-badge.expiring { background: #fff7e0; color: #92720c; cursor: default; }
+  .pmprop-occ-badge.expiring .dot { background: #f0b429; }
+  .pmprop-occ-badge.expired { background: var(--icon-tint-bg); color: var(--accent-blue); cursor: default; }
+  .pmprop-occ-badge.expired .dot { background: var(--accent-blue); }
   .pmprop-table-row { cursor: pointer; }
   .pmprop-table-row:hover { background: var(--surface-soft); }
   .pmprop-row-menu-btn { width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--border-subtle); background: #fff; display: flex; align-items: center; justify-content: center; color: var(--text-body-muted); cursor: pointer; }
@@ -5757,6 +5765,7 @@
   .pmprop-back-btn { width: 36px; height: 36px; border-radius: 9px; border: 1px solid var(--border-subtle); background: #fff; display: flex; align-items: center; justify-content: center; color: var(--text-heading); cursor: pointer; flex-shrink: 0; }
   .pmprop-back-btn:hover { background: var(--surface-soft); }
   .pmprop-form-title { font-size: 19px; font-weight: 800; color: var(--text-heading); }
+  .pmprop-comp-settings-subhead { font-size: 12.5px; color: var(--text-body-muted); margin-top: 2px; }
   .pmprop-delete-btn { display: inline-flex; align-items: center; gap: 7px; background: #fff; border: 1.5px solid #fecaca; color: #dc2626; border-radius: 9px; padding: 9px 16px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; }
   .pmprop-delete-btn:hover { background: #fef2f2; }
 
@@ -5863,11 +5872,20 @@
   .pmprop-comp-title { font-size: 14px; font-weight: 800; color: var(--text-heading); }
   .pmprop-comp-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; padding: 2px 9px; border-radius: 999px; background: var(--icon-tint-bg); color: var(--accent-blue); }
   .pmprop-comp-tag.optional { background: var(--surface-soft); color: var(--text-body-muted); }
-  .pmprop-comp-missing { font-size: 11px; font-weight: 700; color: #dc2626; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; flex-shrink: 0; background: #fef2f2; padding: 5px 12px; border-radius: 999px; }
-  .pmprop-comp-missing .dot { width: 6px; height: 6px; border-radius: 50%; background: #dc2626; }
+  /* Was red (#dc2626) \u2014 not part of the Keylr system, which uses blue/amber only. Amber here
+     matches the same "needs attention" language as the occupancy/compliance badges elsewhere;
+     the .on-file variant switches to blue once a certificate genuinely has a date on file, rather
+     than permanently reading "Compliance Missing" regardless of what's actually been entered. */
+  .pmprop-comp-missing { font-size: 11px; font-weight: 700; color: #92720c; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; flex-shrink: 0; background: #fff7e0; padding: 5px 12px; border-radius: 999px; }
+  .pmprop-comp-missing .dot { width: 6px; height: 6px; border-radius: 50%; background: #f0b429; }
+  .pmprop-comp-missing.on-file { color: var(--accent-blue); background: var(--icon-tint-bg); }
+  .pmprop-comp-missing.on-file .dot { background: var(--accent-blue); }
   .pmprop-comp-desc { font-size: 12.5px; color: var(--text-body-muted); margin-top: 6px; line-height: 1.5; }
   .pmprop-comp-freq { font-size: 11.5px; color: #94a3b8; margin-top: 2px; }
   .pmprop-comp-dropzone { border: 1.5px dashed var(--border-subtle); border-radius: 12px; padding: 22px 14px; text-align: center; background: var(--surface-soft); cursor: pointer; margin-top: 14px; }
+  /* Auto-filled from a completed job \u2014 no manual input needed, so the dropzone reads as settled
+     rather than an empty action waiting to happen. */
+  .pmprop-comp-dropzone.pmprop-comp-dropzone-locked { border-style: solid; border-color: #bfe3cc; background: #f4fbf7; cursor: default; opacity: 0.85; }
   .pmprop-comp-dropzone:hover { border-color: #90a8c8; }
   .pmprop-comp-dropzone-title { font-size: 12.5px; font-weight: 700; color: var(--text-heading); }
   .pmprop-comp-dropzone-title a { color: var(--accent-blue); text-decoration: underline; }
@@ -5876,6 +5894,55 @@
   .pmprop-comp-info { font-size: 11.5px; color: var(--text-body-muted); font-style: italic; margin-top: 12px; line-height: 1.5; }
   .pmprop-comp-optional-box { background: var(--surface-soft); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 14px 16px; margin-top: 14px; }
   .pmprop-comp-optional-box .pmprop-comp-info { margin-top: 0; }
+  /* Compliance Settings entry point, and the interval-driven reminder hint that replaces a
+     per-property expiry date for certificates with no hard legal deadline (FRA, Legionella,
+     Asbestos) \u2014 the hint reflects whatever default renewal interval is configured globally,
+     rather than asking the PM to enter a date on every single property. */
+  .pmprop-comp-settings-link {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--accent-blue);
+    background: var(--icon-tint-bg); border: 1px solid #c9d8ee; border-radius: 8px; padding: 6px 12px; cursor: pointer;
+    font-family: inherit; white-space: nowrap; flex-shrink: 0;
+  }
+  .pmprop-comp-settings-link:hover { background: #dde8f8; }
+  /* Next Review Date \u2014 computed and shown read-only once an Issue Date is picked and a review
+     period is configured; never a field the PM types into directly. */
+  .pmprop-comp-next-review { margin-top: 12px; }
+  .pmprop-comp-next-review .pmprop-comp-next-review-box { background: #eaf1fb; border: 1px solid #c9d8ec; border-radius: 10px; padding: 10px 12px; font-size: 12px; color: #183060; line-height: 1.5; }
+  .pmprop-comp-next-review .pmprop-comp-next-review-box b { font-weight: 800; }
+  .pmprop-comp-next-review .pmprop-comp-next-review-notify { font-size: 11px; color: #2d5a9e; margin-top: 4px; }
+  .pmprop-comp-next-review .pmprop-comp-next-review-empty { font-size: 11.5px; color: var(--text-body-muted); line-height: 1.5; padding-top: 10px; border-top: 1px dashed var(--border-subtle); }
+  .pmprop-comp-next-review .pmprop-comp-next-review-empty a { color: var(--accent-blue); font-weight: 700; cursor: pointer; }
+  /* Same treatment for the fixed-expiry cards (CP12/EICR/EPC/LOLER) once a notification default
+     is configured \u2014 shown right under their Expiry date field. */
+  .pmprop-comp-notify-line { font-size: 11px; color: #2d5a9e; margin-top: 8px; }
+  /* Marks a compliance record that was filled in automatically from a completed job, rather than
+     typed in by the PM \u2014 read-only while it stays in that state. */
+  .pmprop-comp-autofill-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 700; color: #15803d; background: #eafaf0; border: 1px solid #bfe3cc; padding: 2px 9px; border-radius: 999px; margin-top: 8px; }
+  .pmprop-comp-autofill-badge svg { flex-shrink: 0; }
+  .pmprop-compsettings-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 13px 0; border-bottom: 1px solid var(--border-subtle); }
+  .pmprop-compsettings-label { font-size: 13.5px; font-weight: 700; color: var(--text-heading); }
+  .pmprop-compsettings-card-head { margin-bottom: 4px; }
+  /* Bulk-apply row: visually distinct from the individual rows below it (tinted background, its
+     own bottom border) so it reads as "set them all at once" rather than one more row in the list. */
+  .pmprop-compsettings-bulk-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; background: var(--icon-tint-bg); border: 1px solid #c9d8ec; border-radius: 10px; padding: 12px 14px; margin: 14px 0 6px; }
+  .pmprop-compsettings-bulk-label { font-size: 12.5px; font-weight: 700; color: var(--accent-blue); flex: 1; min-width: 160px; }
+  .pmprop-compsettings-bulk-row .pmprop-comp-settings-link { flex-shrink: 0; }
+  .pmprop-compsettings-savebar { display: flex; justify-content: flex-end; gap: 10px; margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border-subtle); position: sticky; bottom: 0; background: #F9FAFB; padding-bottom: 4px; }
+  .pmprop-notify-field { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .pmprop-notify-field input.pmprop-notify-days { width: 64px; height: 36px; text-align: center; padding: 0 8px; font-weight: 700; }
+  .pmprop-notify-field span { font-size: 12px; color: var(--text-body-muted); white-space: nowrap; }
+  /* Contacts: repeatable rows, each an optional managing agent / PM / landlord entry. */
+  .pmprop-contact-row { background: var(--surface-soft); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
+  .pmprop-contact-row-top { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .pmprop-contact-role-select {
+    height: 38px; border-radius: 9px; border: 1px solid var(--border-subtle); background: #fff;
+    padding: 0 12px; font-family: inherit; font-size: 12.5px; font-weight: 700; color: var(--text-heading); cursor: pointer;
+  }
+  .pmprop-contact-primary-label { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--text-body-muted); cursor: pointer; }
+  .pmprop-contact-primary-label input { accent-color: var(--accent-blue); width: 15px; height: 15px; cursor: pointer; }
+  .pmprop-contact-primary-label:has(input:checked) { color: var(--accent-blue); font-weight: 700; }
+  .pmprop-contact-remove-btn { margin-left: auto; width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--border-subtle); background: #fff; color: var(--text-body-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+  .pmprop-contact-remove-btn:hover { background: #fdecea; color: #c0392b; border-color: #fbc7c0; }
   .pmprop-comp-sub-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
   .pmprop-comp-sub-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; color: #94a3b8; text-transform: uppercase; margin-bottom: 5px; }
 
@@ -6221,6 +6288,7 @@
      them side-by-side into those two columns instead of stacking — scoped here rather than
      changed globally, since other modals genuinely need the grid behavior. */
   #supcalDayDetailOverlay .modal-card { display: inline-block; }
+  #pmpropCompSettingsOverlay .modal-card { display: inline-block; }
 
   /* ---------- Availability responsiveness ---------- */
   @media (max-width: 1100px) {
@@ -10819,7 +10887,7 @@
 
           <div class="dash-section">
             <div class="dash-two-col">
-              <div class="dash-card">
+              <div class="dash-card" id="certificatesCard">
                 <div class="dash-card-head"><h3>Certificates Expiring</h3><span class="view-all">View all →</span></div>
                 <div id="certificatesContent">
                   <div class="dash-empty">
@@ -11829,6 +11897,7 @@
                 </div>
                 <div class="pmprop-header-actions">
                   <button type="button" class="pmprop-quickadd-btn" id="pmpropViewMapBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4z"/><path d="M8 2v16M16 6v16"/></svg> Hide Map</button>
+                  <button type="button" class="pmprop-quickadd-btn" id="pmpropCompSettingsBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg> Compliance Settings</button>
                   <button type="button" class="pmprop-quickadd-btn" id="pmpropQuickAddEntryBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M13 2L3 14h7l-1 8 11-14h-7l1-6z"/></svg> Quick Add</button>
                   <button type="button" class="pmprop-create-btn" id="pmpropCreateEntryBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Create Property</button>
                 </div>
@@ -11853,9 +11922,9 @@
                     <div class="pm-table-scroll">
                       <table class="admin-table" style="min-width:560px;table-layout:fixed;">
                         <colgroup>
-                          <col style="width:40%;"><col style="width:28%;"><col style="width:24%;"><col style="width:44px;">
+                          <col style="width:26%;"><col style="width:32%;"><col style="width:34%;"><col style="width:48px;">
                         </colgroup>
-                        <thead><tr><th>Property</th><th>Occupancy</th><th>Last Updated</th><th></th></tr></thead>
+                        <thead><tr><th>Property</th><th>Access Method</th><th>Compliance</th><th></th></tr></thead>
                         <tbody id="pmpropTableBody"></tbody>
                       </table>
                     </div>
@@ -11924,6 +11993,20 @@
               <div class="pmprop-card">
                 <div id="pmpropIdentityCard"></div>
 
+              <div id="pmpropContactsCard" style="display:none;border-top:1px solid var(--border-subtle);margin-top:24px;padding-top:24px;">
+                <div class="pmprop-toggle-section-head">
+                  <div>
+                    <div class="pmprop-toggle-section-title">Contacts (optional)</div>
+                  </div>
+                  <button type="button" class="toggle-switch" id="pmpropContactsToggle" role="switch" aria-checked="false"><span class="thumb"></span></button>
+                </div>
+                <div class="field-collapsible" id="pmpropContactsField">
+                  <div class="pmprop-toggle-section-desc">Add whoever should be contacted about this property &mdash; a managing agent, property manager or the landlord. When a job goes out, whichever contact is marked primary is the one that's shown.</div>
+                  <div id="pmpropContactsList"></div>
+                  <button type="button" class="pmprop-comp-settings-link" id="pmpropAddContactBtn" style="margin-top:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Add contact</button>
+                </div>
+              </div>
+
               <div id="pmpropMediaCard" style="display:none;border-top:1px solid var(--border-subtle);margin-top:24px;padding-top:24px;">
                 <div class="pmprop-toggle-section-head">
                   <div>
@@ -11956,12 +12039,12 @@
                   <button type="button" class="toggle-switch" id="pmpropComplianceToggle" role="switch" aria-checked="false"><span class="thumb"></span></button>
                 </div>
                 <div class="field-collapsible" id="pmpropComplianceField">
-                  <div class="pmprop-toggle-section-desc">Upload your compliance documents and add the expiry date shown on each.</div>
+                  <div class="pmprop-toggle-section-desc">Upload your compliance documents and add the details shown on each.</div>
                   <div class="pmprop-compliance-grid" id="pmpropComplianceGrid">
                     <div class="pmprop-comp-card">
                       <div class="pmprop-comp-head">
                         <div class="pmprop-comp-title-row"><span class="pmprop-comp-title">CP12 &mdash; Gas Safety</span><span class="pmprop-comp-tag">Recommended</span></div>
-                        <span class="pmprop-comp-missing"><span class="dot"></span>Compliance Missing</span>
+                        <span class="pmprop-comp-missing" data-comp-status-chip="cp12"><span class="dot"></span><span class="pmprop-comp-missing-text">Compliance Missing</span></span>
                       </div>
                       <div class="pmprop-comp-desc">Annual gas appliance safety check.</div>
                       <div class="pmprop-comp-freq">Renewed annually</div>
@@ -11989,21 +12072,13 @@
                         </div>
                         <input type="hidden" id="cp12ExpiryInput" value="">
                       </div>
-                      <div class="pmprop-comp-optional-box">
-                        <div class="pmprop-comp-info">Optional but recommended &mdash; these can be asked at booking if missing and we'll remember the answer.</div>
-                        <div class="pmprop-comp-sub-row">
-                          <div><div class="pmprop-comp-sub-label">Heating type</div><div class="pm-filter-field pmprop-select-field"><button type="button" class="pm-custom-dd-btn" data-pmprop-select="heatingType"><span class="cdd-value">Select heating...</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="pm-custom-dd-menu" data-pmprop-select-menu="heatingType"><div class="cdd-item" data-value="Gas central heating">Gas central heating</div><div class="cdd-item" data-value="Electric heating">Electric heating</div><div class="cdd-item" data-value="Heat pump">Heat pump</div></div></div></div>
-                          <div><div class="pmprop-comp-sub-label">Boiler make</div><div class="pm-filter-field pmprop-select-field"><button type="button" class="pm-custom-dd-btn" data-pmprop-select="boilerMake"><span class="cdd-value">Select make...</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="pm-custom-dd-menu" data-pmprop-select-menu="boilerMake"><div class="cdd-item" data-value="Worcester Bosch">Worcester Bosch</div><div class="cdd-item" data-value="Vaillant">Vaillant</div><div class="cdd-item" data-value="Baxi">Baxi</div><div class="cdd-item" data-value="Ideal">Ideal</div></div></div></div>
-                        </div>
-                        <div class="pmprop-comp-sub-label" style="margin-top:10px;">Gas appliances</div>
-                        <div class="pm-filter-field pmprop-select-field"><button type="button" class="pm-custom-dd-btn" data-pmprop-select="gasAppliances"><span class="cdd-value">Count</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="pm-custom-dd-menu" data-pmprop-select-menu="gasAppliances"><div class="cdd-item" data-value="1">1</div><div class="cdd-item" data-value="2">2</div><div class="cdd-item" data-value="3">3</div><div class="cdd-item" data-value="4+">4+</div></div></div>
-                      </div>
+                      <div class="pmprop-comp-notify-line" data-comp-notify-line="cp12"></div>
                     </div>
 
                     <div class="pmprop-comp-card">
                       <div class="pmprop-comp-head">
                         <div class="pmprop-comp-title-row"><span class="pmprop-comp-title">EICR &mdash; Electrical</span><span class="pmprop-comp-tag">Recommended</span></div>
-                        <span class="pmprop-comp-missing"><span class="dot"></span>Compliance Missing</span>
+                        <span class="pmprop-comp-missing" data-comp-status-chip="eicr"><span class="dot"></span><span class="pmprop-comp-missing-text">Compliance Missing</span></span>
                       </div>
                       <div class="pmprop-comp-desc">Electrical Installation Condition Report.</div>
                       <div class="pmprop-comp-freq">Renewed every 5 years</div>
@@ -12031,17 +12106,13 @@
                         </div>
                         <input type="hidden" id="eicrExpiryInput" value="">
                       </div>
-                      <div class="pmprop-comp-optional-box">
-                        <div class="pmprop-comp-info">Modern houses typically have 10&ndash;20 circuits; larger / renovated homes 30&ndash;40.</div>
-                        <div class="pmprop-comp-sub-label" style="margin-top:10px;">Number of circuits</div>
-                        <div class="pm-filter-field pmprop-select-field"><button type="button" class="pm-custom-dd-btn" data-pmprop-select="numCircuits"><span class="cdd-value">Select...</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="pm-custom-dd-menu" data-pmprop-select-menu="numCircuits"><div class="cdd-item" data-value="Under 10">Under 10</div><div class="cdd-item" data-value="10–20">10–20</div><div class="cdd-item" data-value="20–30">20–30</div><div class="cdd-item" data-value="30–40">30–40</div><div class="cdd-item" data-value="40+">40+</div></div></div>
-                      </div>
+                      <div class="pmprop-comp-notify-line" data-comp-notify-line="eicr"></div>
                     </div>
 
                     <div class="pmprop-comp-card">
                       <div class="pmprop-comp-head">
                         <div class="pmprop-comp-title-row"><span class="pmprop-comp-title">EPC &mdash; Energy Performance</span><span class="pmprop-comp-tag">Recommended</span></div>
-                        <span class="pmprop-comp-missing"><span class="dot"></span>Compliance Missing</span>
+                        <span class="pmprop-comp-missing" data-comp-status-chip="epc"><span class="dot"></span><span class="pmprop-comp-missing-text">Compliance Missing</span></span>
                       </div>
                       <div class="pmprop-comp-desc">Energy Performance Certificate.</div>
                       <div class="pmprop-comp-freq">Renewed every 10 years</div>
@@ -12071,32 +12142,81 @@
                       </div>
                       <div class="pmprop-comp-sub-label" style="margin-top:14px;">Energy rating</div>
                       <div class="pm-filter-field pmprop-select-field"><button type="button" class="pm-custom-dd-btn" data-pmprop-select="energyRating"><span class="cdd-value">A – F</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="pm-custom-dd-menu" data-pmprop-select-menu="energyRating"><div class="cdd-item" data-value="A">A</div><div class="cdd-item" data-value="B">B</div><div class="cdd-item" data-value="C">C</div><div class="cdd-item" data-value="D">D</div><div class="cdd-item" data-value="E">E</div><div class="cdd-item" data-value="F">F</div></div></div>
+                      <div class="pmprop-comp-notify-line" data-comp-notify-line="epc"></div>
                     </div>
 
                     <div class="pmprop-comp-card">
                       <div class="pmprop-comp-head">
                         <div class="pmprop-comp-title-row"><span class="pmprop-comp-title">FRA &mdash; Fire Risk Assessment</span><span class="pmprop-comp-tag">Recommended</span></div>
-                        <span class="pmprop-comp-missing"><span class="dot"></span>Compliance Missing</span>
+                        <span class="pmprop-comp-missing" data-comp-status-chip="fra"><span class="dot"></span><span class="pmprop-comp-missing-text">Compliance Missing</span></span>
                       </div>
-                      <div class="pmprop-comp-desc">No statutory expiry &mdash; review every 2 years.</div>
-                      <div class="pmprop-comp-freq">Reviewed every 2 years</div>
+                      <div class="pmprop-comp-desc">No statutory expiry &mdash; a best-practice review.</div>
+                      <div class="pmprop-comp-freq">Best practice: every 2 years</div>
                       <div class="pmprop-comp-dropzone" data-pmprop-comp-upload="fra"><div class="pmprop-comp-dropzone-title">Drag &amp; drop or <a href="javascript:void(0)">browse</a></div><div class="pmprop-comp-dropzone-sub">PDF / JPG / PNG &middot; 10 MB max</div><input type="file" style="display:none;" accept="image/*,.pdf"></div>
+                      <div class="pmprop-comp-expiry-label">Issue date</div>
+                      <div class="pm-filter-field" style="width:100%;">
+                        <button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="fraIssueDate" style="width:100%;height:48px;">
+                          <span class="cdd-value cal-value placeholder" data-cal-text="fraIssueDate">dd/mm/yyyy</span>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                        </button>
+                        <div class="pm-cal-popup" data-cal-popup="fraIssueDate">
+                          <div class="pm-cal-head">
+                            <button type="button" class="pm-cal-month-label" data-cal-monthlabel="fraIssueDate"><span data-cal-monthtext="fraIssueDate">July 2026</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                            <div class="pm-cal-nav">
+                              <button type="button" class="pm-cal-nav-btn" data-cal-prev="fraIssueDate" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+                              <button type="button" class="pm-cal-nav-btn" data-cal-next="fraIssueDate" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
+                            </div>
+                          </div>
+                          <div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
+                          <div class="pm-cal-grid" data-cal-grid="fraIssueDate"></div>
+                          <div class="pm-cal-footer">
+                            <button type="button" class="pm-cal-link" data-cal-clear="fraIssueDate">Clear</button>
+                            <button type="button" class="pm-cal-link" data-cal-today="fraIssueDate">Today</button>
+                          </div>
+                        </div>
+                        <input type="hidden" id="fraIssueDateInput" value="">
+                      </div>
+                      <div class="pmprop-comp-next-review" data-comp-next-review="fra"></div>
                     </div>
 
                     <div class="pmprop-comp-card">
                       <div class="pmprop-comp-head">
                         <div class="pmprop-comp-title-row"><span class="pmprop-comp-title">Legionella Risk Assessment</span><span class="pmprop-comp-tag">Recommended</span></div>
-                        <span class="pmprop-comp-missing"><span class="dot"></span>Compliance Missing</span>
+                        <span class="pmprop-comp-missing" data-comp-status-chip="legionella"><span class="dot"></span><span class="pmprop-comp-missing-text">Compliance Missing</span></span>
                       </div>
-                      <div class="pmprop-comp-desc">Water hygiene risk assessment &mdash; review every 2 years.</div>
-                      <div class="pmprop-comp-freq">Reviewed every 2 years</div>
+                      <div class="pmprop-comp-desc">No statutory expiry &mdash; a water hygiene best-practice review.</div>
+                      <div class="pmprop-comp-freq">Best practice: every 2 years</div>
                       <div class="pmprop-comp-dropzone" data-pmprop-comp-upload="legionella"><div class="pmprop-comp-dropzone-title">Drag &amp; drop or <a href="javascript:void(0)">browse</a></div><div class="pmprop-comp-dropzone-sub">PDF / JPG / PNG &middot; 10 MB max</div><input type="file" style="display:none;" accept="image/*,.pdf"></div>
+                      <div class="pmprop-comp-expiry-label">Issue date</div>
+                      <div class="pm-filter-field" style="width:100%;">
+                        <button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="legionellaIssueDate" style="width:100%;height:48px;">
+                          <span class="cdd-value cal-value placeholder" data-cal-text="legionellaIssueDate">dd/mm/yyyy</span>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                        </button>
+                        <div class="pm-cal-popup" data-cal-popup="legionellaIssueDate">
+                          <div class="pm-cal-head">
+                            <button type="button" class="pm-cal-month-label" data-cal-monthlabel="legionellaIssueDate"><span data-cal-monthtext="legionellaIssueDate">July 2026</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                            <div class="pm-cal-nav">
+                              <button type="button" class="pm-cal-nav-btn" data-cal-prev="legionellaIssueDate" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+                              <button type="button" class="pm-cal-nav-btn" data-cal-next="legionellaIssueDate" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
+                            </div>
+                          </div>
+                          <div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
+                          <div class="pm-cal-grid" data-cal-grid="legionellaIssueDate"></div>
+                          <div class="pm-cal-footer">
+                            <button type="button" class="pm-cal-link" data-cal-clear="legionellaIssueDate">Clear</button>
+                            <button type="button" class="pm-cal-link" data-cal-today="legionellaIssueDate">Today</button>
+                          </div>
+                        </div>
+                        <input type="hidden" id="legionellaIssueDateInput" value="">
+                      </div>
+                      <div class="pmprop-comp-next-review" data-comp-next-review="legionella"></div>
                     </div>
 
                     <div class="pmprop-comp-card">
                       <div class="pmprop-comp-head">
                         <div class="pmprop-comp-title-row"><span class="pmprop-comp-title">LOLER &mdash; Lifting Equipment</span><span class="pmprop-comp-tag optional">Optional</span></div>
-                        <span class="pmprop-comp-missing"><span class="dot"></span>Compliance Missing</span>
+                        <span class="pmprop-comp-missing" data-comp-status-chip="loler"><span class="dot"></span><span class="pmprop-comp-missing-text">Compliance Missing</span></span>
                       </div>
                       <div class="pmprop-comp-desc">For passenger lifts, accessories or goods lifts.</div>
                       <div class="pmprop-comp-freq">Every 6 / 12 months</div>
@@ -12124,24 +12244,41 @@
                         </div>
                         <input type="hidden" id="lolerExpiryInput" value="">
                       </div>
-                      <div class="pmprop-comp-optional-box">
-                        <div class="pmprop-comp-info">LOLER expiry depends on lift type. Use the suggestion to fill the date from the last inspection.</div>
-                        <div class="pmprop-comp-sub-label" style="margin-top:10px;">Lift type</div>
-                        <div class="pm-filter-field pmprop-select-field"><button type="button" class="pm-custom-dd-btn" data-pmprop-select="liftType"><span class="cdd-value">Select lift type...</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="pm-custom-dd-menu" data-pmprop-select-menu="liftType"><div class="cdd-item" data-value="Passenger lift">Passenger lift</div><div class="cdd-item" data-value="Goods lift">Goods lift</div><div class="cdd-item" data-value="Stairlift">Stairlift</div><div class="cdd-item" data-value="Platform lift">Platform lift</div></div></div>
-                        <div class="pmprop-comp-sub-label" style="margin-top:10px;">Suggested expiry</div>
-                        <input type="text" class="field-input" placeholder="Upload + pick lift type" id="lolerSuggestedExpiry">
-                        <div class="pmprop-comp-info" style="margin-top:6px;">Pick a lift type to see the recommended interval.</div>
-                      </div>
+                      <div class="pmprop-comp-notify-line" data-comp-notify-line="loler"></div>
                     </div>
 
                     <div class="pmprop-comp-card">
                       <div class="pmprop-comp-head">
-                        <div class="pmprop-comp-title-row"><span class="pmprop-comp-title">Asbestos Register</span><span class="pmprop-comp-tag optional">Optional</span></div>
-                        <span class="pmprop-comp-missing"><span class="dot"></span>Compliance Missing</span>
+                        <div class="pmprop-comp-title-row"><span class="pmprop-comp-title">Asbestos Register / Management Plan</span><span class="pmprop-comp-tag optional">Optional</span></div>
+                        <span class="pmprop-comp-missing" data-comp-status-chip="asbestos"><span class="dot"></span><span class="pmprop-comp-missing-text">Compliance Missing</span></span>
                       </div>
-                      <div class="pmprop-comp-desc">Required for pre-2000 buildings, blocks and commercial.</div>
-                      <div class="pmprop-comp-freq">No expiry</div>
+                      <div class="pmprop-comp-desc">Required for pre-2000 buildings, blocks and commercial. No statutory expiry.</div>
+                      <div class="pmprop-comp-freq">No fixed expiry</div>
                       <div class="pmprop-comp-dropzone" data-pmprop-comp-upload="asbestos"><div class="pmprop-comp-dropzone-title">Drag &amp; drop or <a href="javascript:void(0)">browse</a></div><div class="pmprop-comp-dropzone-sub">PDF / JPG / PNG &middot; 10 MB max</div><input type="file" style="display:none;" accept="image/*,.pdf"></div>
+                      <div class="pmprop-comp-expiry-label">Issue date</div>
+                      <div class="pm-filter-field" style="width:100%;">
+                        <button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="asbestosIssueDate" style="width:100%;height:48px;">
+                          <span class="cdd-value cal-value placeholder" data-cal-text="asbestosIssueDate">dd/mm/yyyy</span>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                        </button>
+                        <div class="pm-cal-popup" data-cal-popup="asbestosIssueDate">
+                          <div class="pm-cal-head">
+                            <button type="button" class="pm-cal-month-label" data-cal-monthlabel="asbestosIssueDate"><span data-cal-monthtext="asbestosIssueDate">July 2026</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                            <div class="pm-cal-nav">
+                              <button type="button" class="pm-cal-nav-btn" data-cal-prev="asbestosIssueDate" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+                              <button type="button" class="pm-cal-nav-btn" data-cal-next="asbestosIssueDate" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
+                            </div>
+                          </div>
+                          <div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
+                          <div class="pm-cal-grid" data-cal-grid="asbestosIssueDate"></div>
+                          <div class="pm-cal-footer">
+                            <button type="button" class="pm-cal-link" data-cal-clear="asbestosIssueDate">Clear</button>
+                            <button type="button" class="pm-cal-link" data-cal-today="asbestosIssueDate">Today</button>
+                          </div>
+                        </div>
+                        <input type="hidden" id="asbestosIssueDateInput" value="">
+                      </div>
+                      <div class="pmprop-comp-next-review" data-comp-next-review="asbestos"></div>
                     </div>
                   </div>
                 </div>
@@ -12153,6 +12290,140 @@
                 <button type="button" class="pmprop-cancel-btn" id="pmpropCancelBtn">Cancel</button>
                 <button type="button" class="pmprop-submit-btn" id="pmpropSubmitBtn">Submit Property</button>
               </div>
+            </div>
+          </div>
+
+          <!-- Compliance Settings modal: default renewal reminders (global, not per-property) for
+               certificate types with no hard legal deadline. Setting an interval here is itself
+               optional \u2014 leaving one unset just means that cert type never gets a reminder. -->
+          <div id="pmComplianceSettingsView" style="display:none;">
+            <div class="pmprop-form-head pmprop-form-head-fixed">
+              <div class="pmprop-form-head-left">
+                <button type="button" class="pmprop-back-btn" id="pmpropCompSettingsBackBtn" aria-label="Back"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+                <div>
+                  <div class="pmprop-form-title">Compliance Settings</div>
+                  <div class="pmprop-comp-settings-subhead">These apply across every property &mdash; nothing here is set per property.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="dash-section pmprop-form-shell">
+              <div class="pmprop-form-scroll" id="pmpropCompSettingsScroll">
+              <div class="dash-two-col" style="align-items:flex-start;">
+              <div class="pmprop-card" style="margin-bottom:0;">
+                <div class="pmprop-compsettings-card-head">
+                  <div class="pmprop-comp-title" style="font-size:15px;">Review periods</div>
+                  <div class="pmprop-toggle-section-desc" style="margin-top:4px;">These three have no fixed legal expiry &mdash; set a review period and the Next Review Date calculates automatically from the issue date.</div>
+                </div>
+
+                <div class="pmprop-compsettings-bulk-row">
+                  <span class="pmprop-compsettings-bulk-label">Set the same period for all three</span>
+                  <div class="pm-filter-field pmprop-select-field" style="width:150px;">
+                    <button type="button" class="pm-custom-dd-btn" data-pmprop-select="compBulkReview"><span class="cdd-value">Every 2 years</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                    <div class="pm-custom-dd-menu" data-pmprop-select-menu="compBulkReview">
+                      <div class="cdd-item" data-value="Not set">Not set</div>
+                      <div class="cdd-item" data-value="Every 1 year">Every 1 year</div>
+                      <div class="cdd-item selected" data-value="Every 2 years">Every 2 years</div>
+                      <div class="cdd-item" data-value="Every 3 years">Every 3 years</div>
+                      <div class="cdd-item" data-value="Every 5 years">Every 5 years</div>
+                      <div class="cdd-item" data-value="Every 7 years">Every 7 years</div>
+                    </div>
+                  </div>
+                  <button type="button" class="pmprop-comp-settings-link" id="pmpropBulkApplyReviewBtn">Apply to all</button>
+                </div>
+
+                <div class="pmprop-compsettings-row" data-compsettings-row="fra">
+                  <div class="pmprop-compsettings-label">FRA &mdash; Fire Risk Assessment</div>
+                  <div class="pm-filter-field pmprop-select-field" style="width:170px;">
+                    <button type="button" class="pm-custom-dd-btn" data-pmprop-select="compDefaultFra"><span class="cdd-value">Not set</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                    <div class="pm-custom-dd-menu" data-pmprop-select-menu="compDefaultFra">
+                      <div class="cdd-item selected" data-value="Not set">Not set</div>
+                      <div class="cdd-item" data-value="Every 1 year">Every 1 year</div>
+                      <div class="cdd-item" data-value="Every 2 years">Every 2 years</div>
+                      <div class="cdd-item" data-value="Every 3 years">Every 3 years</div>
+                      <div class="cdd-item" data-value="Every 5 years">Every 5 years</div>
+                      <div class="cdd-item" data-value="Every 7 years">Every 7 years</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="pmprop-compsettings-row" data-compsettings-row="legionella">
+                  <div class="pmprop-compsettings-label">Legionella Risk Assessment</div>
+                  <div class="pm-filter-field pmprop-select-field" style="width:170px;">
+                    <button type="button" class="pm-custom-dd-btn" data-pmprop-select="compDefaultLegionella"><span class="cdd-value">Not set</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                    <div class="pm-custom-dd-menu" data-pmprop-select-menu="compDefaultLegionella">
+                      <div class="cdd-item selected" data-value="Not set">Not set</div>
+                      <div class="cdd-item" data-value="Every 1 year">Every 1 year</div>
+                      <div class="cdd-item" data-value="Every 2 years">Every 2 years</div>
+                      <div class="cdd-item" data-value="Every 3 years">Every 3 years</div>
+                      <div class="cdd-item" data-value="Every 5 years">Every 5 years</div>
+                      <div class="cdd-item" data-value="Every 7 years">Every 7 years</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="pmprop-compsettings-row" data-compsettings-row="asbestos" style="border-bottom:none;">
+                  <div class="pmprop-compsettings-label">Asbestos Register / Management Plan</div>
+                  <div class="pm-filter-field pmprop-select-field" style="width:170px;">
+                    <button type="button" class="pm-custom-dd-btn" data-pmprop-select="compDefaultAsbestos"><span class="cdd-value">Not set</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                    <div class="pm-custom-dd-menu" data-pmprop-select-menu="compDefaultAsbestos">
+                      <div class="cdd-item selected" data-value="Not set">Not set</div>
+                      <div class="cdd-item" data-value="Every 1 year">Every 1 year</div>
+                      <div class="cdd-item" data-value="Every 2 years">Every 2 years</div>
+                      <div class="cdd-item" data-value="Every 3 years">Every 3 years</div>
+                      <div class="cdd-item" data-value="Every 5 years">Every 5 years</div>
+                      <div class="cdd-item" data-value="Every 7 years">Every 7 years</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pmprop-card" style="margin-bottom:0;">
+                <div class="pmprop-compsettings-card-head">
+                  <div class="pmprop-comp-title" style="font-size:15px;">Notification reminders</div>
+                  <div class="pmprop-toggle-section-desc" style="margin-top:4px;">Days before the due date to remind you. Fixed-expiry types count from the expiry date; the other three count from the Next Review Date.</div>
+                </div>
+
+                <div class="pmprop-compsettings-bulk-row">
+                  <span class="pmprop-compsettings-bulk-label">Set the same reminder for all seven</span>
+                  <div class="pmprop-notify-field"><input type="number" class="field-input pmprop-notify-days" id="pmpropBulkNotifyDays" min="0" max="365" value="30"><span>days before</span></div>
+                  <button type="button" class="pmprop-comp-settings-link" id="pmpropBulkApplyNotifyBtn">Apply to all</button>
+                </div>
+
+                <div class="pmprop-compsettings-row" data-compsettings-row="notify-cp12">
+                  <div class="pmprop-compsettings-label">CP12 &mdash; Gas Safety</div>
+                  <div class="pmprop-notify-field"><input type="number" class="field-input pmprop-notify-days" min="0" max="365" data-notify-days="cp12" value="30"><span>days before</span></div>
+                </div>
+                <div class="pmprop-compsettings-row" data-compsettings-row="notify-eicr">
+                  <div class="pmprop-compsettings-label">EICR &mdash; Electrical</div>
+                  <div class="pmprop-notify-field"><input type="number" class="field-input pmprop-notify-days" min="0" max="365" data-notify-days="eicr" value="60"><span>days before</span></div>
+                </div>
+                <div class="pmprop-compsettings-row" data-compsettings-row="notify-epc">
+                  <div class="pmprop-compsettings-label">EPC &mdash; Energy Performance</div>
+                  <div class="pmprop-notify-field"><input type="number" class="field-input pmprop-notify-days" min="0" max="365" data-notify-days="epc" value="90"><span>days before</span></div>
+                </div>
+                <div class="pmprop-compsettings-row" data-compsettings-row="notify-loler">
+                  <div class="pmprop-compsettings-label">LOLER &mdash; Lifting Equipment</div>
+                  <div class="pmprop-notify-field"><input type="number" class="field-input pmprop-notify-days" min="0" max="365" data-notify-days="loler" value="30"><span>days before</span></div>
+                </div>
+                <div class="pmprop-compsettings-row" data-compsettings-row="notify-fra">
+                  <div class="pmprop-compsettings-label">FRA &mdash; Fire Risk Assessment</div>
+                  <div class="pmprop-notify-field"><input type="number" class="field-input pmprop-notify-days" min="0" max="365" data-notify-days="fra" value="30"><span>days before</span></div>
+                </div>
+                <div class="pmprop-compsettings-row" data-compsettings-row="notify-legionella">
+                  <div class="pmprop-compsettings-label">Legionella Risk Assessment</div>
+                  <div class="pmprop-notify-field"><input type="number" class="field-input pmprop-notify-days" min="0" max="365" data-notify-days="legionella" value="30"><span>days before</span></div>
+                </div>
+                <div class="pmprop-compsettings-row" data-compsettings-row="notify-asbestos" style="border-bottom:none;">
+                  <div class="pmprop-compsettings-label">Asbestos Register / Management Plan</div>
+                  <div class="pmprop-notify-field"><input type="number" class="field-input pmprop-notify-days" min="0" max="365" data-notify-days="asbestos" value="60"><span>days before</span></div>
+                </div>
+              </div>
+              </div>
+              </div>
+            </div>
+
+            <div class="pmprop-form-footer pmprop-form-footer-fixed">
+              <button type="button" class="pmprop-cancel-btn" id="pmpropCompSettingsCancelBtn">Cancel</button>
+              <button type="button" class="pmprop-submit-btn" id="pmpropCompSettingsSaveBtn">Save Settings</button>
             </div>
           </div>
 
@@ -18545,13 +18816,22 @@
     if (!el) return;
     if (isOpen) {
       el.classList.add('open');
-      el.style.maxHeight = '1200px';
+      // A fixed max-height clips any section whose content is taller than that guess (exactly
+      // what was happening to the compliance grid) \u2014 scrollHeight sizes to what's actually
+      // there, so nothing gets cut off regardless of how many cards or fields a section holds.
+      el.style.maxHeight = el.scrollHeight + 'px';
       el.style.opacity = '1';
     } else {
       el.style.maxHeight = '0px';
       el.style.opacity = '0';
       el.classList.remove('open');
     }
+  }
+  // For a section that's already open when its own content changes size (e.g. a Next Review Date
+  // appearing once an Issue Date is picked, or Compliance Settings changing what's shown) \u2014
+  // re-measures without touching the open/closed state itself.
+  function refreshCollapsibleHeight(el) {
+    if (el && el.classList.contains('open')) el.style.maxHeight = el.scrollHeight + 'px';
   }
 
   /* ---------------- Admin Login / Forgot Password ---------------- */
@@ -21819,14 +22099,23 @@
   };
 
   var PMPROP_PROPERTIES = [
-    { id: 'prop-1', name: 'travelodge hotel', addr: 'Travelodge Hotels Ltd, 3 Smythe Close, London, London, N9 0TW \u00b7 London', type: 'Residential', occupancy: null, lastUpdated: '1 weeks ago', postcode: 'N9 0TW', street: 'Travelodge Hotels Ltd, 3 Smythe Close, London, London, N9 0TW', city: 'London', region: 'London', unit: '', bedroom: 'Studio', inclusions: pmpropDefaultInclusions(), description: '' },
-    { id: 'prop-2', name: 'Homeland 2', addr: 'Q & Q Recovery, West Road, Barnsley, South Yorkshire, S75 2DH \u00b7 Barnsley', type: 'Residential', occupancy: 'occupied', lastUpdated: '1 weeks ago', postcode: 'S75 2DH', street: 'Q & Q Recovery, West Road', city: 'Barnsley', region: 'South Yorkshire', unit: '', bedroom: '2 Bed', inclusions: pmpropDefaultInclusions(), description: '' },
-    { id: 'prop-3', name: 'Homeland Heights', addr: 'Carrington, PO Box 81490, London, London, SW18 9WR \u00b7 London', type: 'Residential', occupancy: 'occupied', lastUpdated: '1 weeks ago', postcode: 'SW18 9WR', street: 'Carrington, PO Box 81490', city: 'London', region: 'London', unit: '', bedroom: '2 Bed', inclusions: pmpropDefaultInclusions(), description: '' },
-    { id: 'prop-4', name: 'Flat 59, 128 Mill Lane', addr: 'Caffe Concerto, 43 Whitehall, London, London, SW1A 2BX \u00b7 London', type: 'Residential', occupancy: 'occupied', lastUpdated: '11 Jun 2026', postcode: 'SW1A 2BX', street: 'Caffe Concerto, 43 Whitehall', city: 'London', region: 'London', unit: 'Flat 59', bedroom: '1 Bed', inclusions: pmpropDefaultInclusions(), description: '' },
-    { id: 'prop-5', name: 'Flat 53, 114 Station Road', addr: 'Flat 4, 39 Whitehall, London, London, SW1A 2BX \u00b7 London \u00b7 SW1A 2BX', type: 'Residential', occupancy: 'occupied', lastUpdated: '11 Jun 2026', postcode: 'SW1A 2BX', street: 'Flat 4, 39 Whitehall', city: 'London', region: 'London', unit: 'Flat 53', bedroom: '1 Bed', inclusions: pmpropDefaultInclusions(), description: '' },
-    { id: 'prop-6', name: 'Flat 62, 135 Kings Road', addr: '45-47 Whitehall, London, London, SW1A 2BX \u00b7 London \u00b7 SW1A 2BX', type: 'Residential', occupancy: 'void', lastUpdated: '11 Jun 2026', postcode: 'SW1A 2BX', street: '45-47 Whitehall', city: 'London', region: 'London', unit: 'Flat 62', bedroom: '2 Bed', inclusions: pmpropDefaultInclusions(), description: '' },
-    { id: 'prop-7', name: 'Flat 47, 100 Church Lane', addr: 'Flat 2, 39 Whitehall, London, London, SW1A 2BX \u00b7 London \u00b7 SW1A 2BX', type: 'Hotels & Hostels', occupancy: 'occupied', lastUpdated: '11 Jun 2026', postcode: 'SW1A 2BX', street: 'Flat 2, 39 Whitehall', city: 'London', region: 'London', unit: 'Flat 47', bedroom: 'Studio', inclusions: pmpropDefaultInclusions(), description: '' },
-    { id: 'prop-8', name: 'Flat 44, 93 Victoria Road', addr: 'Flat 1, 39 Whitehall, London, London, SW1A 2BX \u00b7 London \u00b7 SW1A 2BX', type: 'Residential', occupancy: 'void', lastUpdated: '11 Jun 2026', postcode: 'SW1A 2BX', street: 'Flat 1, 39 Whitehall', city: 'London', region: 'London', unit: 'Flat 44', bedroom: '1 Bed', inclusions: pmpropDefaultInclusions(), description: '' }
+    { id: 'prop-1', name: 'travelodge hotel', addr: 'Travelodge Hotels Ltd, 3 Smythe Close, London, London, N9 0TW \u00b7 London', type: 'Residential', occupancy: null, lastUpdated: '1 weeks ago', postcode: 'N9 0TW', street: 'Travelodge Hotels Ltd, 3 Smythe Close, London, London, N9 0TW', city: 'London', region: 'London', unit: '', bedroom: 'Studio', inclusions: pmpropDefaultInclusions(), description: '', accessMethod: 'Reception Desk' },
+    { id: 'prop-2', name: 'Homeland 2', addr: 'Q & Q Recovery, West Road, Barnsley, South Yorkshire, S75 2DH \u00b7 Barnsley', type: 'Residential', occupancy: 'occupied', lastUpdated: '1 weeks ago', postcode: 'S75 2DH', street: 'Q & Q Recovery, West Road', city: 'Barnsley', region: 'South Yorkshire', unit: '', bedroom: '2 Bed', inclusions: pmpropDefaultInclusions(), description: '', accessMethod: 'Key Safe',
+      compliance: { cp12: { hasDoc: true, expiry: '2026-03-31', source: 'manual' } },
+      contacts: [{ id: 'seed-c1', role: 'Managing Agent', name: 'Priya Shah', email: 'priya@qandqrecovery.co.uk', phone: '0113 555 0142', primary: true }] },
+    { id: 'prop-3', name: 'Homeland Heights', addr: 'Carrington, PO Box 81490, London, London, SW18 9WR \u00b7 London', type: 'Residential', occupancy: 'occupied', lastUpdated: '1 weeks ago', postcode: 'SW18 9WR', street: 'Carrington, PO Box 81490', city: 'London', region: 'London', unit: '', bedroom: '2 Bed', inclusions: pmpropDefaultInclusions(), description: '', accessMethod: 'Smart Lock',
+      // eicr is a manual upload nearing its deadline; epc was populated automatically because the
+      // EPC assessment was completed as a service job \u2014 source:'service' is what tells the
+      // property form to show it as auto-filled and read-only rather than PM-entered.
+      compliance: { eicr: { hasDoc: true, expiry: '2026-10-15', source: 'manual' }, epc: { hasDoc: true, expiry: '2028-02-13', rating: 'C', source: 'service', sourceJobId: 'JOB-3391' } } },
+    { id: 'prop-4', name: 'Flat 59, 128 Mill Lane', addr: 'Caffe Concerto, 43 Whitehall, London, London, SW1A 2BX \u00b7 London', type: 'Residential', occupancy: 'occupied', lastUpdated: '11 Jun 2026', postcode: 'SW1A 2BX', street: 'Caffe Concerto, 43 Whitehall', city: 'London', region: 'London', unit: 'Flat 59', bedroom: '1 Bed', inclusions: pmpropDefaultInclusions(), description: '', accessMethod: 'Landlord Provides Access',
+      // Lands exactly 5 days out from "today" (26 Aug 2026) so the list has a real example
+      // matching the "Expiring in 5 days" style of urgent notice, not just a hypothetical.
+      compliance: { epc: { hasDoc: true, expiry: '2026-08-31', rating: 'D', source: 'manual' } } },
+    { id: 'prop-5', name: 'Flat 53, 114 Station Road', addr: 'Flat 4, 39 Whitehall, London, London, SW1A 2BX \u00b7 London \u00b7 SW1A 2BX', type: 'Residential', occupancy: 'occupied', lastUpdated: '11 Jun 2026', postcode: 'SW1A 2BX', street: 'Flat 4, 39 Whitehall', city: 'London', region: 'London', unit: 'Flat 53', bedroom: '1 Bed', inclusions: pmpropDefaultInclusions(), description: '', accessMethod: 'Keys at KeyNest' },
+    { id: 'prop-6', name: 'Flat 62, 135 Kings Road', addr: '45-47 Whitehall, London, London, SW1A 2BX \u00b7 London \u00b7 SW1A 2BX', type: 'Residential', occupancy: 'void', lastUpdated: '11 Jun 2026', postcode: 'SW1A 2BX', street: '45-47 Whitehall', city: 'London', region: 'London', unit: 'Flat 62', bedroom: '2 Bed', inclusions: pmpropDefaultInclusions(), description: '', accessMethod: 'Keys at Agency / Office' },
+    { id: 'prop-7', name: 'Flat 47, 100 Church Lane', addr: 'Flat 2, 39 Whitehall, London, London, SW1A 2BX \u00b7 London \u00b7 SW1A 2BX', type: 'Hotels & Hostels', occupancy: 'occupied', lastUpdated: '11 Jun 2026', postcode: 'SW1A 2BX', street: 'Flat 2, 39 Whitehall', city: 'London', region: 'London', unit: 'Flat 47', bedroom: 'Studio', inclusions: pmpropDefaultInclusions(), description: '', accessMethod: 'Agent Provides Access' },
+    { id: 'prop-8', name: 'Flat 44, 93 Victoria Road', addr: 'Flat 1, 39 Whitehall, London, London, SW1A 2BX \u00b7 London \u00b7 SW1A 2BX', type: 'Residential', occupancy: 'void', lastUpdated: '11 Jun 2026', postcode: 'SW1A 2BX', street: 'Flat 1, 39 Whitehall', city: 'London', region: 'London', unit: 'Flat 44', bedroom: '1 Bed', inclusions: pmpropDefaultInclusions(), description: '', accessMethod: 'Tenant Provides Access' }
   ];
   (function pmpropSeedExtra() {
     var extra = [
@@ -21844,13 +22133,24 @@
       ['Castle View Apartments', 'Hotels & Hostels', 'occupied'],
       ['Flat 6, 30 Church Road', 'Residential', 'void']
     ];
+    // A local, self-contained list \u2014 PMPROP_ACCESS_METHODS is declared further down the file and
+    // (being a var) isn't actually assigned yet at the point this IIFE runs, so referencing it
+    // here directly would read undefined rather than the real options.
+    var accessMethodCycle = ['Key Safe', 'Reception Desk', 'Smart Lock', 'Agent Provides Access', 'Landlord Provides Access', 'Tenant Provides Access', 'Keys at Agency / Office', 'Keys at KeyNest'];
     extra.forEach(function (row, i) {
       var name = row[0];
       PMPROP_PROPERTIES.push({
         id: 'prop-' + (9 + i), name: name, addr: name + ', London, London, SW1A 2BX \u00b7 London \u00b7 SW1A 2BX', type: row[1], occupancy: row[2], lastUpdated: '11 Jun 2026',
-        postcode: 'SW1A 2BX', street: name, city: 'London', region: 'Greater London', unit: '', bedroom: '1 Bed', inclusions: pmpropDefaultInclusions(), description: ''
+        postcode: 'SW1A 2BX', street: name, city: 'London', region: 'Greater London', unit: '', bedroom: '1 Bed', inclusions: pmpropDefaultInclusions(), description: '',
+        accessMethod: accessMethodCycle[i % accessMethodCycle.length]
       });
     });
+    // A couple more spread across the list so the compliance column shows a realistic mix
+    // (already-expired, comfortably-fine, and nothing-on-file) rather than just the first two.
+    var p11 = PMPROP_PROPERTIES.find(function (p) { return p.id === 'prop-11'; });
+    if (p11) p11.compliance = { cp12: { hasDoc: true, expiry: '2026-06-15', source: 'manual' } };
+    var p14 = PMPROP_PROPERTIES.find(function (p) { return p.id === 'prop-14'; });
+    if (p14) p14.compliance = { cp12: { hasDoc: true, expiry: '2026-07-01', source: 'manual' }, loler: { hasDoc: true, expiry: '2027-03-20', source: 'manual' } };
   })();
 
   var pmpropCurrentPage = 1;
@@ -21894,6 +22194,76 @@
     return '<span class="pmprop-occ-badge"><span class="dot"></span>\u2014</span>';
   }
 
+  function pmpropAccessMethodLabel(p) {
+    return p.accessMethod || 'Not set';
+  }
+
+  // A cert's "due date" is either its own stored expiry (CP12/EICR/EPC/LOLER), or \u2014 for
+  // FRA/Legionella/Asbestos \u2014 computed from its issue date plus whatever review period is
+  // currently configured globally. Mirrors the exact arithmetic pmpropRenderComplianceComputedFields
+  // uses on the property form itself, so the list/card/map never disagree with that page.
+  function pmpropComplianceDueDate(rec, key) {
+    if (!rec) return null;
+    if (rec.expiry) return rec.expiry;
+    if (rec.issueDate && typeof PMPROP_COMPLIANCE_DEFAULTS !== 'undefined' && PMPROP_COMPLIANCE_DEFAULTS[key]) {
+      var years = (typeof PMPROP_REVIEW_YEARS !== 'undefined' && PMPROP_REVIEW_YEARS[PMPROP_COMPLIANCE_DEFAULTS[key]]) || 0;
+      if (years) return pmpropAddYears(new Date(rec.issueDate + 'T00:00:00'), years).toISOString().slice(0, 10);
+    }
+    return null;
+  }
+  var PMPROP_COMP_SHORT_LABELS = { cp12: 'CP12', eicr: 'EICR', epc: 'EPC', loler: 'LOLER', fra: 'FRA', legionella: 'Legionella', asbestos: 'Asbestos' };
+  var PMPROP_COMP_FIXED_KEYS = ['cp12', 'eicr', 'epc', 'loler']; // have their own stored expiry date
+  var PMPROP_COMP_ALL_KEYS = PMPROP_COMP_FIXED_KEYS.concat(['fra', 'legionella', 'asbestos']); // + the review-period group
+
+  // One accurate, human phrase for a single certificate's status \u2014 shared by the single-cert
+  // badge and every line of the multi-cert hover tooltip, so the wording (and the exact day
+  // count) is never out of step between them.
+  function pmpropCertStatusPhrase(diffDays) {
+    if (diffDays < 0) return 'expired ' + Math.abs(diffDays) + ' day' + (Math.abs(diffDays) === 1 ? '' : 's') + ' ago';
+    if (diffDays === 0) return 'expires today';
+    return 'expiring in ' + diffDays + ' day' + (diffDays === 1 ? '' : 's');
+  }
+
+  // Every certificate on this property that actually has a due date (its own expiry, or a
+  // computed Next Review Date) \u2014 each with its exact day count, sorted soonest-due first so
+  // the most pressing one always leads both the badge text and the tooltip.
+  function pmpropComplianceItems(p) {
+    if (!p.compliance) return [];
+    var todayIso = new Date().toISOString().slice(0, 10);
+    var items = [];
+    Object.keys(p.compliance).forEach(function (key) {
+      var due = pmpropComplianceDueDate(p.compliance[key], key);
+      if (!due) return;
+      var diffDays = Math.round((new Date(due + 'T00:00:00') - new Date(todayIso + 'T00:00:00')) / 86400000);
+      items.push({ key: key, label: PMPROP_COMP_SHORT_LABELS[key] || key, due: due, diffDays: diffDays });
+    });
+    items.sort(function (a, b) { return a.due < b.due ? -1 : 1; });
+    return items;
+  }
+  // The badge itself: names the certificate directly when there's only one, or a plain count
+  // ("3 expiring") when there's more \u2014 hovering the count always reveals the full accurate
+  // breakdown, one certificate per line. Yellow while a certificate still has time left on it,
+  // blue once it's actually past due \u2014 the same rule everywhere this badge appears.
+  function pmpropComplianceStatusHtml(p) {
+    var items = pmpropComplianceItems(p);
+    if (!items.length) return '<span class="pmprop-occ-badge"><span class="dot"></span>No certificates on file</span>';
+
+    var hasUpcoming = items.some(function (it) { return it.diffDays >= 0; });
+    var colorClass = hasUpcoming ? 'expiring' : 'expired';
+    var text = items.length === 1
+      ? items[0].label + ' ' + pmpropCertStatusPhrase(items[0].diffDays)
+      : items.length + ' expiring';
+    var tooltip = items.map(function (it) { return it.label + ' \u2014 ' + pmpropCertStatusPhrase(it.diffDays); }).join('\n');
+
+    // data-tooltip sits on this wrapper, not the badge itself \u2014 the badge needs its own
+    // overflow:hidden so a long name never spills into the row menu next to it (see the ellipsis
+    // rule above), and overflow:hidden on the same element would clip a ::after tooltip trying to
+    // escape that box (the exact issue already fixed once for the property name tooltip).
+    // Included even for a single certificate, so the full text is always one hover away if the
+    // badge itself ever has to truncate on a narrow column.
+    return '<span class="pmprop-comp-badge-wrap" data-tooltip="' + pmpropEscapeHtml(tooltip) + '"><span class="pmprop-occ-badge ' + colorClass + '"><span class="dot"></span>' + pmpropEscapeHtml(text) + '</span></span>';
+  }
+
   // Below this the mobile map-first experience takes over \u2014 the map becomes the primary
   // surface with a horizontal strip of every matching property, instead of a side-by-side or
   // stacked table/card list. Triggers on either a genuinely narrow viewport, or the content row
@@ -21914,8 +22284,8 @@
     var fullText = p.name + (p.addr ? ' \u2014 ' + p.addr : '');
     return '<tr class="pmprop-table-row" data-prop-id="' + p.id + '">' +
       '<td><div class="pmprop-name-cell" data-tooltip="' + pmpropEscapeHtml(fullText) + '"><div class="pmprop-avatar">' + pmpropEscapeHtml(p.initials || pmpropInitials(p.name)) + '</div><div class="pmprop-name-text"><div class="pmprop-name-main">' + pmpropEscapeHtml(p.name) + '</div><div class="pmprop-name-sub">' + pmpropEscapeHtml(p.addr) + '</div></div></div></td>' +
-      '<td>' + pmpropOccBadgeHtml(p.occupancy) + '</td>' +
-      '<td>' + pmpropEscapeHtml(p.lastUpdated) + '</td>' +
+      '<td>' + pmpropEscapeHtml(pmpropAccessMethodLabel(p)) + '</td>' +
+      '<td>' + pmpropComplianceStatusHtml(p) + '</td>' +
       '<td class="pmprop-row-menu-cell">' +
       '<button type="button" class="pmprop-row-menu-btn" data-prop-menu="' + p.id + '"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>' +
       '<div class="pm-dropdown-menu" data-prop-menu-panel="' + p.id + '">' +
@@ -21943,8 +22313,8 @@
         '</div>' +
       '</div>' +
       '<div class="pmprop-list-card-meta">' +
-        pmpropOccBadgeHtml(p.occupancy) +
-        '<span class="pmprop-list-card-meta-item">Updated ' + pmpropEscapeHtml(p.lastUpdated) + '</span>' +
+        pmpropComplianceStatusHtml(p) +
+        '<span class="pmprop-list-card-meta-item">' + pmpropEscapeHtml(pmpropAccessMethodLabel(p)) + '</span>' +
       '</div>' +
     '</div>';
   }
@@ -21960,7 +22330,7 @@
     return '<div class="pmprop-map-strip-card" data-prop-id="' + p.id + '" title="' + pmpropEscapeHtml(fullText) + '">' +
       '<div class="pmprop-name-main">' + pmpropEscapeHtml(p.name) + '</div>' +
       '<div class="pmprop-name-sub">' + pmpropEscapeHtml(p.addr) + '</div>' +
-      pmpropOccBadgeHtml(p.occupancy) +
+      pmpropComplianceStatusHtml(p) +
     '</div>';
   }
   function pmpropRenderMapStrip(list) {
@@ -22027,19 +22397,14 @@
     if (occupancy === 'void') return '#f0b429';
     return '#94a3b8';
   }
-  function pmpropOccLabel(occupancy) {
-    if (occupancy === 'occupied') return 'Occupied';
-    if (occupancy === 'void') return 'Void / Vacant';
-    return 'Not set';
-  }
-  function pmpropOccPillColors(occupancy) {
-    if (occupancy === 'occupied') return { bg: '#e8f0f8', fg: '#284890' };
-    if (occupancy === 'void') return { bg: '#fff7e0', fg: '#92720c' };
-    return { bg: '#f1f5f9', fg: '#64748b' };
-  }
   function pmpropBuildMapCardHtml(p) {
-    var pillColors = pmpropOccPillColors(p.occupancy);
     var cleanAddr = [p.street, p.city, p.postcode].filter(Boolean).join(', ');
+    var compItems = pmpropComplianceItems(p);
+    var compLabel = compItems.length === 0 ? 'No certificates on file'
+      : compItems.length === 1 ? compItems[0].label + ' ' + pmpropCertStatusPhrase(compItems[0].diffDays)
+      : compItems.length + ' expiring';
+    var compHasUpcoming = compItems.some(function (it) { return it.diffDays >= 0; });
+    var compColor = compItems.length === 0 ? '#64748b' : (compHasUpcoming ? '#92720c' : '#284890');
     return '<div style="font-family:inherit;min-width:236px;max-width:260px;">' +
       '<div style="display:flex;align-items:center;gap:10px;">' +
         '<div style="width:38px;height:38px;border-radius:10px;background:#e8f0f8;color:#284890;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;">' + pmpropEscapeHtml(p.initials || pmpropInitials(p.name)) + '</div>' +
@@ -22048,12 +22413,9 @@
         '</div>' +
       '</div>' +
       '<div style="font-size:11.5px;color:#64748b;line-height:1.45;margin-top:6px;">' + pmpropEscapeHtml(cleanAddr) + '</div>' +
-      '<div style="display:inline-flex;align-items:center;gap:5px;background:' + pillColors.bg + ';color:' + pillColors.fg + ';font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;margin-top:10px;">' +
-        '<span style="width:6px;height:6px;border-radius:50%;background:' + pillColors.fg + ';display:inline-block;"></span>' + pmpropOccLabel(p.occupancy) +
-      '</div>' +
       '<div style="display:flex;gap:16px;margin-top:12px;padding-top:10px;border-top:1px solid #e5e9f0;">' +
-        '<div style="flex:1;min-width:0;"><div style="font-size:10px;font-weight:700;letter-spacing:0.03em;color:#94a3b8;text-transform:uppercase;margin-bottom:3px;">Type</div><div style="font-size:12px;font-weight:700;color:#0f172a;">' + pmpropEscapeHtml(p.type) + '</div></div>' +
-        '<div style="flex:1;min-width:0;"><div style="font-size:10px;font-weight:700;letter-spacing:0.03em;color:#94a3b8;text-transform:uppercase;margin-bottom:3px;">Updated</div><div style="font-size:12px;font-weight:700;color:#0f172a;">' + pmpropEscapeHtml(p.lastUpdated) + '</div></div>' +
+        '<div style="flex:1;min-width:0;"><div style="font-size:10px;font-weight:700;letter-spacing:0.03em;color:#94a3b8;text-transform:uppercase;margin-bottom:3px;">Access Method</div><div style="font-size:12px;font-weight:700;color:#0f172a;">' + pmpropEscapeHtml(pmpropAccessMethodLabel(p)) + '</div></div>' +
+        '<div style="flex:1;min-width:0;"><div style="font-size:10px;font-weight:700;letter-spacing:0.03em;color:#94a3b8;text-transform:uppercase;margin-bottom:3px;">Compliance</div><div style="font-size:12px;font-weight:700;color:' + compColor + ';">' + pmpropEscapeHtml(compLabel) + '</div></div>' +
       '</div>' +
     '</div>';
   }
@@ -22535,15 +22897,350 @@
   }
 
   function pmpropResetMediaComplianceToggles() {
-    ['pmpropMediaToggle', 'pmpropComplianceToggle'].forEach(function (toggleId) {
+    ['pmpropMediaToggle', 'pmpropComplianceToggle', 'pmpropContactsToggle'].forEach(function (toggleId) {
       var t = document.getElementById(toggleId);
       if (t) { t.classList.remove('on'); t.setAttribute('aria-checked', 'false'); }
     });
     var mediaField = document.getElementById('pmpropMediaField');
     var complianceField = document.getElementById('pmpropComplianceField');
+    var contactsField = document.getElementById('pmpropContactsField');
     if (mediaField) { mediaField.classList.remove('open'); mediaField.style.maxHeight = ''; }
     if (complianceField) { complianceField.classList.remove('open'); complianceField.style.maxHeight = ''; }
+    if (contactsField) { contactsField.classList.remove('open'); contactsField.style.maxHeight = ''; }
+    pmpropRenderComplianceComputedFields();
   }
+
+  /* =========================================================
+     COMPLIANCE SETTINGS \u2014 review periods + notification reminders
+     Lives at the Properties module level (opened from the list header), not per property \u2014
+     everything here is global, in-memory for this prototype session, and applies across every
+     property at once.
+
+     Review periods (FRA / Legionella / Asbestos): these three have no fixed legal expiry, so
+     instead of asking for a date on every property, the PM sets ONE review period per type here.
+     Setting one is itself optional; leaving it "Not set" just means that item never gets a Next
+     Review Date. Once a period is set AND a property has an Issue Date on that document, the Next
+     Review Date computes automatically \u2014 it is never typed in directly.
+
+     Notification reminders: apply to all seven types. For CP12 / EICR / EPC / LOLER the countdown
+     is always against the document's own actual expiry date \u2014 the review period above is never
+     used to calculate a legal expiry for these, per the requirement. For FRA / Legionella /
+     Asbestos it's against the computed Next Review Date instead.
+  ========================================================== */
+  var PMPROP_COMPLIANCE_DEFAULTS = { fra: null, legionella: null, asbestos: null };
+  var PMPROP_COMP_LABELS = { fra: 'FRA', legionella: 'Legionella', asbestos: 'the Asbestos Register / Management Plan' };
+  var PMPROP_REVIEW_YEARS = { 'Every 1 year': 1, 'Every 2 years': 2, 'Every 3 years': 3, 'Every 5 years': 5, 'Every 7 years': 7 };
+  // Defaults mirror the examples given \u2014 FRA 30 / Legionella 30 / Asbestos 60 / EPC 90 \u2014 with
+  // sensible values filled in for the remaining fixed-expiry types.
+  var PMPROP_NOTIFICATION_DAYS = { cp12: 30, eicr: 60, epc: 90, loler: 30, fra: 30, legionella: 30, asbestos: 60 };
+
+  function pmpropAddDays(date, days) { var d = new Date(date); d.setDate(d.getDate() + days); return d; }
+  function pmpropAddYears(date, years) { var d = new Date(date); d.setFullYear(d.getFullYear() + years); return d; }
+
+  // Renders both halves of the compliance grid's computed fields: the Next Review Date box for
+  // FRA/Legionella/Asbestos, and the notification line under CP12/EICR/EPC/LOLER's own expiry
+  // date. Safe to call even when the property form isn't open \u2014 each querySelector just finds
+  // nothing and skips, so this can run right after Compliance Settings is saved from the list
+  // view with no property open at all.
+  function pmpropRenderComplianceComputedFields() {
+    ['fra', 'legionella', 'asbestos'].forEach(function (key) {
+      var box = document.querySelector('[data-comp-next-review="' + key + '"]');
+      if (!box) return;
+      var issueSt = calState[key + 'IssueDate'];
+      var issueDate = issueSt && issueSt.selected;
+      var periodLabel = PMPROP_COMPLIANCE_DEFAULTS[key];
+      if (issueDate && periodLabel) {
+        var nextReview = pmpropAddYears(issueDate, PMPROP_REVIEW_YEARS[periodLabel] || 0);
+        var notifyDays = PMPROP_NOTIFICATION_DAYS[key];
+        var notifyDate = pmpropAddDays(nextReview, -notifyDays);
+        box.innerHTML =
+          '<div class="pmprop-comp-next-review-box">Next Review Date: <b>' + calFormatDMY(nextReview) + '</b><br>Calculated from the issue date plus your ' + periodLabel.toLowerCase() + ' review period.</div>' +
+          '<div class="pmprop-comp-next-review-notify">You\u2019ll be notified ' + notifyDays + ' day' + (notifyDays === 1 ? '' : 's') + ' before, on ' + calFormatDMY(notifyDate) + '.</div>';
+      } else if (issueDate && !periodLabel) {
+        box.innerHTML = '<div class="pmprop-comp-next-review-empty">No review period set for ' + PMPROP_COMP_LABELS[key] + ' \u2014 <a data-comp-open-settings>set one in Compliance Settings</a> to calculate a Next Review Date automatically.</div>';
+      } else {
+        box.innerHTML = '<div class="pmprop-comp-next-review-empty">Pick an issue date above to calculate the Next Review Date' + (periodLabel ? '' : ' (and set a review period in <a data-comp-open-settings>Compliance Settings</a> first)') + '.</div>';
+      }
+    });
+    ['cp12', 'eicr', 'epc', 'loler'].forEach(function (key) {
+      var line = document.querySelector('[data-comp-notify-line="' + key + '"]');
+      if (!line) return;
+      var expirySt = calState[key + 'Expiry'];
+      var expiryDate = expirySt && expirySt.selected;
+      var notifyDays = PMPROP_NOTIFICATION_DAYS[key];
+      if (expiryDate && notifyDays) {
+        var notifyDate = pmpropAddDays(expiryDate, -notifyDays);
+        line.textContent = 'You\u2019ll be notified ' + notifyDays + ' day' + (notifyDays === 1 ? '' : 's') + ' before, on ' + calFormatDMY(notifyDate) + '.';
+        line.style.display = '';
+      } else {
+        line.textContent = '';
+        line.style.display = 'none';
+      }
+    });
+    // Each card's header chip reflects whether that specific certificate actually has a value
+    // set right now \u2014 previously this always read "Compliance Missing" regardless of what was
+    // on file, which contradicted a date the form had just pre-filled in right below it.
+    PMPROP_COMP_ALL_KEYS.forEach(function (key) {
+      var chip = document.querySelector('[data-comp-status-chip="' + key + '"]');
+      if (!chip) return;
+      var isFixedType = PMPROP_COMP_FIXED_KEYS.indexOf(key) !== -1;
+      var st = calState[key + (isFixedType ? 'Expiry' : 'IssueDate')];
+      var hasValue = !!(st && st.selected);
+      chip.classList.toggle('on-file', hasValue);
+      var textEl = chip.querySelector('.pmprop-comp-missing-text');
+      if (textEl) textEl.textContent = hasValue ? 'On File' : 'Compliance Missing';
+    });
+    // Whichever section is currently expanded just changed height (a box appeared, a line of
+    // text got longer/shorter) \u2014 keep it from clipping without needing another toggle click.
+    refreshCollapsibleHeight(document.getElementById('pmpropComplianceField'));
+  }
+  // A picked or cleared date on ANY calendar field dispatches this (see updateCalFieldDisplay) \u2014
+  // only recompute when it's actually one of the compliance fields we care about, so this isn't
+  // doing pointless work every time a date changes anywhere else in the whole app.
+  var PMPROP_COMP_DATE_KEYS = ['cp12Expiry', 'eicrExpiry', 'epcExpiry', 'lolerExpiry', 'fraIssueDate', 'legionellaIssueDate', 'asbestosIssueDate'];
+  document.addEventListener('cal-value-changed', function (e) {
+    var key = e.target.getAttribute('data-cal-text');
+    if (PMPROP_COMP_DATE_KEYS.indexOf(key) !== -1) pmpropRenderComplianceComputedFields();
+  });
+
+  var PMPROP_COMP_TYPE_LABELS = {
+    cp12: 'Gas Safety Certificate (CP12)', eicr: 'EICR \u2014 Electrical Inspection Report',
+    epc: 'EPC \u2014 Energy Performance Certificate', fra: 'FRA \u2014 Fire Risk Assessment',
+    legionella: 'Legionella Risk Assessment', loler: 'LOLER \u2014 Lifting Equipment', asbestos: 'Asbestos Register'
+  };
+  function pmpropFormatUkDate(iso) {
+    var d = new Date(iso + 'T00:00:00');
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+  }
+  // PM Home's "Certificates Expiring" card, driven entirely by what's actually been uploaded
+  // against real properties \u2014 no more hardcoded demo rows. A pivoted summary of nothing is just
+  // noise, so the whole card hides itself the moment there's genuinely nothing configured
+  // anywhere, rather than sitting there showing an empty state forever.
+  function pmpropRenderCertificatesWidget() {
+    var card = document.getElementById('certificatesCard');
+    var content = document.getElementById('certificatesContent');
+    if (!card || !content) return;
+    var rows = [];
+    (typeof PMPROP_PROPERTIES !== 'undefined' ? PMPROP_PROPERTIES : []).forEach(function (p) {
+      if (!p.compliance) return;
+      Object.keys(p.compliance).forEach(function (key) {
+        var rec = p.compliance[key];
+        if (!rec || !rec.expiry) return; // no expiry (FRA/Legionella/Asbestos with no default interval yet) has nothing to pivot on
+        rows.push({
+          name: p.name, type: PMPROP_COMP_TYPE_LABELS[key] || key,
+          expiry: rec.expiry, source: rec.source || 'manual'
+        });
+      });
+    });
+    if (!rows.length) { card.style.display = 'none'; return; }
+    card.style.display = '';
+    var todayIso = new Date().toISOString().slice(0, 10);
+    rows.sort(function (a, b) { return a.expiry < b.expiry ? -1 : 1; });
+    var expiredCount = rows.filter(function (r) { return r.expiry < todayIso; }).length;
+    var html = '<div style="margin-bottom:12px;"><span class="meta-badge required-badge" style="text-transform:none;">' + expiredCount + ' expired</span></div>';
+    rows.forEach(function (r) {
+      var isExpired = r.expiry < todayIso;
+      html +=
+        '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0;border-top:1px solid var(--border-subtle);border-left:3px solid ' + (isExpired ? '#e8482c' : '#22c55e') + ';padding-left:10px;">' +
+          '<div style="min-width:0;">' +
+            '<div style="font-size:13px;font-weight:600;color:var(--text-heading);">' + pmpropEscapeHtml(r.name) + '</div>' +
+            '<div style="font-size:12px;color:var(--text-body-muted);">' + pmpropEscapeHtml(r.type) + (r.source === 'service' ? ' &middot; auto-filled' : '') + '</div>' +
+          '</div>' +
+          '<div style="text-align:right;flex-shrink:0;">' +
+            '<div style="font-size:12px;color:var(--text-body-muted);margin-bottom:3px;">' + pmpropFormatUkDate(r.expiry) + '</div>' +
+            '<span class="meta-badge" style="text-transform:none;background:' + (isExpired ? '#f8e8e8' : '#d8f8e0') + ';color:' + (isExpired ? '#b5424a' : '#1a7a3e') + ';">' + (isExpired ? 'Expired' : 'Compliant') + '</span>' +
+          '</div>' +
+        '</div>';
+    });
+    content.innerHTML = html;
+  }
+
+  // If a certificate was completed as a service job, the property side should never ask the PM
+  // to re-type what the job already captured \u2014 this finds the matching card by its upload key,
+  // marks it as auto-filled and read-only, and shows which job it came from. Called on every
+  // form open so a badge from a previously-edited property never lingers onto a different one.
+  function pmpropApplyComplianceAutofillBadges(p) {
+    var compliance = (p && p.compliance) || {};
+    document.querySelectorAll('[data-pmprop-comp-upload]').forEach(function (dropzone) {
+      var key = dropzone.getAttribute('data-pmprop-comp-upload');
+      var card = dropzone.closest('.pmprop-comp-card');
+      if (!card) return;
+      var existing = card.querySelector('.pmprop-comp-autofill-badge');
+      if (existing) existing.remove();
+      dropzone.classList.remove('pmprop-comp-dropzone-locked');
+      var rec = compliance[key];
+      if (rec && rec.source === 'service') {
+        dropzone.classList.add('pmprop-comp-dropzone-locked');
+        var badge = document.createElement('div');
+        badge.className = 'pmprop-comp-autofill-badge';
+        badge.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Auto-filled from completed job' + (rec.sourceJobId ? ' #' + pmpropEscapeHtml(rec.sourceJobId.replace('JOB-', '')) : '');
+        dropzone.insertAdjacentElement('afterend', badge);
+      }
+    });
+  }
+
+  function pmpropOpenCompSettings() {
+    var map = { fra: 'compDefaultFra', legionella: 'compDefaultLegionella', asbestos: 'compDefaultAsbestos' };
+    Object.keys(map).forEach(function (key) {
+      var value = PMPROP_COMPLIANCE_DEFAULTS[key] || 'Not set';
+      var btn = document.querySelector('[data-pmprop-select="' + map[key] + '"]');
+      var menu = document.querySelector('[data-pmprop-select-menu="' + map[key] + '"]');
+      if (btn) btn.querySelector('.cdd-value').textContent = value;
+      if (menu) menu.querySelectorAll('.cdd-item').forEach(function (item) {
+        item.classList.toggle('selected', item.getAttribute('data-value') === value);
+      });
+    });
+    // Re-reads from state every time the page opens so leaving without saving never carries
+    // half-typed, unsaved numbers over to next time.
+    document.querySelectorAll('[data-notify-days]').forEach(function (input) {
+      var key = input.getAttribute('data-notify-days');
+      input.value = PMPROP_NOTIFICATION_DAYS[key];
+    });
+    showPMView('compliancesettings');
+  }
+  function pmpropCloseCompSettings() { showPMView('properties'); }
+
+  (function pmpropWireCompSettings() {
+    var pageEl = document.getElementById('pmComplianceSettingsView');
+    if (!pageEl) return;
+    pmpropWireCustomSelects(pageEl);
+    document.addEventListener('click', function (e) {
+      if (e.target.closest('#pmpropCompSettingsBtn') || e.target.closest('[data-comp-open-settings]')) {
+        e.preventDefault();
+        pmpropOpenCompSettings();
+      }
+    });
+    document.getElementById('pmpropCompSettingsBackBtn').addEventListener('click', pmpropCloseCompSettings);
+    document.getElementById('pmpropCompSettingsCancelBtn').addEventListener('click', pmpropCloseCompSettings);
+
+    // Bulk-apply: sets every review-period dropdown to the same picked value in one go, without
+    // saving anything yet \u2014 still just editing the form, exactly like adjusting any one row by
+    // hand. Nothing is committed until Save Settings is pressed.
+    document.getElementById('pmpropBulkApplyReviewBtn').addEventListener('click', function () {
+      var bulkBtn = document.querySelector('[data-pmprop-select="compBulkReview"]');
+      var value = bulkBtn.querySelector('.cdd-value').textContent.trim();
+      ['compDefaultFra', 'compDefaultLegionella', 'compDefaultAsbestos'].forEach(function (targetKey) {
+        var btn = document.querySelector('[data-pmprop-select="' + targetKey + '"]');
+        var menu = document.querySelector('[data-pmprop-select-menu="' + targetKey + '"]');
+        if (btn) btn.querySelector('.cdd-value').textContent = value;
+        if (menu) menu.querySelectorAll('.cdd-item').forEach(function (item) {
+          item.classList.toggle('selected', item.getAttribute('data-value') === value);
+        });
+      });
+      showToast('Set all three review periods to ' + value.toLowerCase() + '. Save to apply.');
+    });
+    // Same idea for notification days \u2014 one number, copied into all seven fields.
+    document.getElementById('pmpropBulkApplyNotifyBtn').addEventListener('click', function () {
+      var raw = parseInt(document.getElementById('pmpropBulkNotifyDays').value, 10);
+      var value = (isNaN(raw) || raw < 0) ? 0 : raw;
+      document.getElementById('pmpropBulkNotifyDays').value = value;
+      document.querySelectorAll('[data-notify-days]').forEach(function (input) { input.value = value; });
+      showToast('Set all seven reminders to ' + value + ' day' + (value === 1 ? '' : 's') + ' before. Save to apply.');
+    });
+
+    document.getElementById('pmpropCompSettingsSaveBtn').addEventListener('click', function () {
+      var map = { fra: 'compDefaultFra', legionella: 'compDefaultLegionella', asbestos: 'compDefaultAsbestos' };
+      var changedCount = 0;
+      Object.keys(map).forEach(function (key) {
+        var btn = document.querySelector('[data-pmprop-select="' + map[key] + '"]');
+        var value = btn ? btn.querySelector('.cdd-value').textContent.trim() : 'Not set';
+        var newVal = value === 'Not set' ? null : value;
+        if (newVal !== PMPROP_COMPLIANCE_DEFAULTS[key]) changedCount++;
+        PMPROP_COMPLIANCE_DEFAULTS[key] = newVal;
+      });
+      pageEl.querySelectorAll('[data-notify-days]').forEach(function (input) {
+        var key = input.getAttribute('data-notify-days');
+        var raw = parseInt(input.value, 10);
+        var newVal = (isNaN(raw) || raw < 0) ? 0 : raw;
+        input.value = newVal; // reflects any clamping straight back into the field
+        if (newVal !== PMPROP_NOTIFICATION_DAYS[key]) changedCount++;
+        PMPROP_NOTIFICATION_DAYS[key] = newVal;
+      });
+      pmpropRenderComplianceComputedFields();
+      showToast(changedCount ? 'Compliance Settings updated.' : 'No changes to save.');
+      showPMView('properties');
+    });
+  })();
+
+  /* =========================================================
+     CONTACTS \u2014 managing agent / property manager / landlord, per property
+     Purpose: when a job goes out for this property, whichever contact is marked primary is the
+     one whose details get shown \u2014 e.g. the managing agent if the property is agency-run, or the
+     landlord directly if self-managed. Entirely optional, any number of contacts, exactly one
+     (or none) marked primary at a time.
+  ========================================================== */
+  var PMPROP_CONTACT_ROLES = ['Property Manager', 'Managing Agent', 'Letting Agent', 'Landlord / Owner', 'Other'];
+  var pmpropContacts = [];
+  var pmpropContactIdSeq = 0;
+
+  function pmpropContactRowHtml(c) {
+    return '<div class="pmprop-contact-row" data-contact-id="' + c.id + '">' +
+      '<div class="pmprop-contact-row-top">' +
+        '<select class="pmprop-contact-role-select" data-contact-field="role">' +
+          PMPROP_CONTACT_ROLES.map(function (r) { return '<option value="' + r + '"' + (c.role === r ? ' selected' : '') + '>' + r + '</option>'; }).join('') +
+        '</select>' +
+        '<label class="pmprop-contact-primary-label"><input type="radio" name="pmpropPrimaryContact" data-contact-field="primary"' + (c.primary ? ' checked' : '') + '>Primary contact for jobs</label>' +
+        '<button type="button" class="pmprop-contact-remove-btn" data-contact-remove aria-label="Remove contact"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>' +
+      '</div>' +
+      '<div class="pmprop-field-row" style="margin-top:12px;">' +
+        '<div class="field-group" style="margin-bottom:0;"><label>Name</label><input type="text" class="field-input" data-contact-field="name" placeholder="Full name" value="' + pmpropEscapeHtml(c.name) + '"></div>' +
+        '<div class="field-group" style="margin-bottom:0;"><label>Email</label><input type="email" class="field-input" data-contact-field="email" placeholder="name@company.com" value="' + pmpropEscapeHtml(c.email) + '"></div>' +
+        '<div class="field-group" style="margin-bottom:0;"><label>Phone</label><input type="text" class="field-input" data-contact-field="phone" placeholder="07123 456789" value="' + pmpropEscapeHtml(c.phone) + '"></div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  // Field edits and the primary radio mutate pmpropContacts directly with no re-render \u2014
+  // re-rendering on every keystroke would blow away focus and cursor position mid-type. Only
+  // Add and Remove (structural changes) call pmpropRenderContacts().
+  function pmpropWireContactRows() {
+    var wrap = document.getElementById('pmpropContactsList');
+    if (!wrap) return;
+    wrap.querySelectorAll('.pmprop-contact-row').forEach(function (row) {
+      var id = row.getAttribute('data-contact-id');
+      var contact = pmpropContacts.find(function (c) { return c.id === id; });
+      if (!contact) return;
+      row.querySelectorAll('[data-contact-field]').forEach(function (field) {
+        var key = field.getAttribute('data-contact-field');
+        var evtName = (field.tagName === 'SELECT' || field.type === 'radio') ? 'change' : 'input';
+        field.addEventListener(evtName, function () {
+          if (key === 'primary') {
+            // Radios sharing one name group already uncheck each other in the browser \u2014 this
+            // just keeps the data model in step with whichever one is now checked.
+            pmpropContacts.forEach(function (c) { c.primary = false; });
+            contact.primary = true;
+          } else {
+            contact[key] = field.value;
+          }
+        });
+      });
+      row.querySelector('[data-contact-remove]').addEventListener('click', function () {
+        var wasPrimary = contact.primary;
+        pmpropContacts = pmpropContacts.filter(function (c) { return c.id !== id; });
+        if (wasPrimary && pmpropContacts.length) pmpropContacts[0].primary = true; // always exactly one primary if any remain
+        pmpropRenderContacts();
+      });
+    });
+  }
+
+  function pmpropRenderContacts() {
+    var wrap = document.getElementById('pmpropContactsList');
+    if (!wrap) return;
+    wrap.innerHTML = pmpropContacts.length
+      ? pmpropContacts.map(pmpropContactRowHtml).join('')
+      : '<div class="pmprop-comp-info" style="margin-top:0;">No contacts added yet \u2014 they\u2019re optional, add one if this property has a managing agent, letting agent or landlord to keep on file.</div>';
+    pmpropWireContactRows();
+    // Adding or removing a contact changes how tall this section is \u2014 without this, the
+    // collapsible stays frozen at whatever height it had when the toggle was switched on, and
+    // Media & Documents (the next section down) renders right on top of the new contact's fields.
+    refreshCollapsibleHeight(document.getElementById('pmpropContactsField'));
+  }
+
+  document.getElementById('pmpropAddContactBtn').addEventListener('click', function () {
+    pmpropContacts.push({ id: 'contact-' + (++pmpropContactIdSeq), role: 'Property Manager', name: '', email: '', phone: '', primary: pmpropContacts.length === 0 });
+    pmpropRenderContacts();
+  });
 
   function pmpropOpenNew(quickAdd) {
     pmpropEditingId = null;
@@ -22551,6 +23248,8 @@
     pmpropBedroomValue = 'Studio';
     pmpropInclusionsCollapsed = false;
     pmpropInclusionsValues = pmpropDefaultInclusions();
+    pmpropContacts = [];
+    pmpropAccessMethod = null; // otherwise a previously-edited property's method would carry over
     document.getElementById('pmpropFormTitle').textContent = 'New Property';
     document.getElementById('pmpropFormDeleteBtn').style.display = 'none';
     document.getElementById('pmpropSubmitBtn').textContent = 'Submit Property';
@@ -22558,8 +23257,70 @@
     var showFull = !quickAdd;
     document.getElementById('pmpropMediaCard').style.display = showFull ? '' : 'none';
     document.getElementById('pmpropComplianceCard').style.display = showFull ? '' : 'none';
+    document.getElementById('pmpropContactsCard').style.display = showFull ? '' : 'none';
+    pmpropRenderContacts();
+    pmpropApplyComplianceAutofillBadges(null);
+    pmpropPopulateComplianceForm(null);
     pmpropResetMediaComplianceToggles();
     showPMView('propertyform');
+  }
+
+  // Reflects a property's existing compliance data into the grid's date pickers / rating
+  // dropdown when opening it for editing \u2014 without this the pickers always look empty even when
+  // the property genuinely has certificates on file already. Passing no property (a brand new
+  // one) clears every field back to its default empty state.
+  function pmpropPopulateComplianceForm(p) {
+    var compliance = (p && p.compliance) || {};
+    ['cp12', 'eicr', 'epc', 'loler'].forEach(function (key) {
+      var rec = compliance[key];
+      var stKey = key + 'Expiry';
+      if (!calState[stKey]) return;
+      calState[stKey].selected = (rec && rec.expiry) ? new Date(rec.expiry + 'T00:00:00') : null;
+      updateCalFieldDisplay(stKey);
+    });
+    ['fra', 'legionella', 'asbestos'].forEach(function (key) {
+      var rec = compliance[key];
+      var stKey = key + 'IssueDate';
+      if (!calState[stKey]) return;
+      calState[stKey].selected = (rec && rec.issueDate) ? new Date(rec.issueDate + 'T00:00:00') : null;
+      updateCalFieldDisplay(stKey);
+    });
+    var ratingValue = (compliance.epc && compliance.epc.rating) ? compliance.epc.rating : 'A \u2013 F';
+    var ratingBtn = document.querySelector('[data-pmprop-select="energyRating"]');
+    var ratingMenu = document.querySelector('[data-pmprop-select-menu="energyRating"]');
+    if (ratingBtn) ratingBtn.querySelector('.cdd-value').textContent = ratingValue;
+    if (ratingMenu) ratingMenu.querySelectorAll('.cdd-item').forEach(function (item) {
+      item.classList.toggle('selected', item.getAttribute('data-value') === ratingValue);
+    });
+  }
+  // Writes whatever's currently in the compliance grid's date pickers / rating dropdown back into
+  // the property record on save, so the Properties list immediately shows an accurate day count
+  // for anything the PM actually set here. Only touches a certificate the PM picked a value for
+  // this session \u2014 a field left at its empty default never overwrites or clears data already on
+  // file (e.g. an auto-filled service record for a different certificate on the same property).
+  function pmpropCommitComplianceFromForm(p) {
+    if (!p) return;
+    var compliance = p.compliance ? Object.assign({}, p.compliance) : {};
+    ['cp12', 'eicr', 'epc', 'loler'].forEach(function (key) {
+      var st = calState[key + 'Expiry'];
+      if (!st || !st.selected) return;
+      var rec = Object.assign({ hasDoc: true, source: 'manual' }, compliance[key] || {});
+      rec.expiry = calFormatISO(st.selected);
+      if (key === 'epc') {
+        var ratingBtn = document.querySelector('[data-pmprop-select="energyRating"]');
+        var ratingVal = ratingBtn ? ratingBtn.querySelector('.cdd-value').textContent.trim() : '';
+        if (ratingVal && ratingVal !== 'A \u2013 F') rec.rating = ratingVal;
+      }
+      compliance[key] = rec;
+    });
+    ['fra', 'legionella', 'asbestos'].forEach(function (key) {
+      var st = calState[key + 'IssueDate'];
+      if (!st || !st.selected) return;
+      var rec = Object.assign({ hasDoc: true, source: 'manual' }, compliance[key] || {});
+      rec.issueDate = calFormatISO(st.selected);
+      compliance[key] = rec;
+    });
+    p.compliance = Object.keys(compliance).length ? compliance : undefined;
   }
 
   function pmpropOpenEdit(id) {
@@ -22570,6 +23331,12 @@
     pmpropBedroomValue = p.bedroom || 'Studio';
     pmpropInclusionsCollapsed = false;
     pmpropInclusionsValues = Object.assign({}, pmpropDefaultInclusions(), p.inclusions || {});
+    // Existing contacts load in for editing; a fresh copy each open so cancelling doesn't leave
+    // stray edits sitting in memory for next time.
+    pmpropContacts = (p.contacts || []).map(function (c) { return Object.assign({}, c); });
+    // Matches exactly what the Properties list already shows for this property, rather than the
+    // dropdown always starting on "Select..." regardless of what's actually on file.
+    pmpropAccessMethod = p.accessMethod || null;
     document.getElementById('pmpropFormTitle').textContent = p.name;
     document.getElementById('pmpropFormDeleteBtn').style.display = '';
     document.getElementById('pmpropFormDeleteBtn').setAttribute('data-prop-id', p.id);
@@ -22577,6 +23344,10 @@
     pmpropRenderIdentityCard();
     document.getElementById('pmpropMediaCard').style.display = '';
     document.getElementById('pmpropComplianceCard').style.display = '';
+    document.getElementById('pmpropContactsCard').style.display = '';
+    pmpropRenderContacts();
+    pmpropApplyComplianceAutofillBadges(p);
+    pmpropPopulateComplianceForm(p);
     pmpropResetMediaComplianceToggles();
     showPMView('propertyform');
   }
@@ -22925,6 +23696,11 @@
     document.getElementById('pmpropCancelBtn').addEventListener('click', function () { showPMView('properties'); });
     document.getElementById('pmpropSubmitBtn').addEventListener('click', function () {
       var isEdit = !!pmpropEditingId;
+      if (isEdit) {
+        var editedProp = PMPROP_PROPERTIES.find(function (x) { return x.id === pmpropEditingId; });
+        if (editedProp) editedProp.accessMethod = pmpropAccessMethod;
+        pmpropCommitComplianceFromForm(editedProp);
+      }
       showToast(isEdit ? 'Property updated.' : 'Property created.');
       showPMView('properties');
       pmpropRenderList();
@@ -22955,6 +23731,7 @@
 
     initObToggle('pmpropMediaToggle', 'pmpropMediaField', false);
     initObToggle('pmpropComplianceToggle', 'pmpropComplianceField', false);
+    initObToggle('pmpropContactsToggle', 'pmpropContactsField', false);
 
     document.getElementById('pmpropDelCancelBtn').addEventListener('click', pmpropCloseDeleteModal);
     document.getElementById('pmpropDeleteOverlay').addEventListener('click', function (e) { if (e.target === this) pmpropCloseDeleteModal(); });
@@ -22982,7 +23759,7 @@
 
   /* ---- PM Settings view ---- */
   function showPMView(view) {
-    var viewIds = { home: 'pmHomeView', settings: 'pmSettingsView', explore: 'pmExploreView', responses: 'pmResponsesView', properties: 'pmPropertiesView', propertyform: 'pmPropertyFormView', tickets: 'pmTicketsView', servicespricing: 'pmServicesPricingView', servicetemplate: 'pmServiceTemplateView' };
+    var viewIds = { home: 'pmHomeView', settings: 'pmSettingsView', explore: 'pmExploreView', responses: 'pmResponsesView', properties: 'pmPropertiesView', propertyform: 'pmPropertyFormView', compliancesettings: 'pmComplianceSettingsView', tickets: 'pmTicketsView', servicespricing: 'pmServicesPricingView', servicetemplate: 'pmServiceTemplateView' };
     Object.keys(viewIds).forEach(function (key) {
       var el = document.getElementById(viewIds[key]);
       if (key === view) {
@@ -22996,23 +23773,32 @@
     });
     var pmDashContent = document.querySelector('#pmDashboard .dash-content');
     if (pmDashContent) pmDashContent.classList.toggle('dash-content-full', view === 'responses');
-    if (pmDashContent) pmDashContent.classList.toggle('dash-content-narrow-pad', view === 'properties' || view === 'propertyform' || view === 'servicespricing' || view === 'servicetemplate');
+    if (pmDashContent) pmDashContent.classList.toggle('dash-content-narrow-pad', view === 'properties' || view === 'propertyform' || view === 'compliancesettings' || view === 'servicespricing' || view === 'servicetemplate');
     if (typeof pmpropSyncSidebarCollapse === 'function') pmpropSyncSidebarCollapse(view);
     document.querySelector('#pmDashboard .dash-scroll-area').scrollTo({ top: 0, behavior: 'smooth' });
     if (view === 'propertyform') {
       var pmpropFormEl = document.getElementById('pmPropertyFormView');
       var pmpropOnAnimEnd = function () {
         pmpropFormEl.removeEventListener('animationend', pmpropOnAnimEnd);
-        pmpropSizeFormShell();
+        pmpropSizeFormShell('#pmPropertyFormView');
       };
       pmpropFormEl.addEventListener('animationend', pmpropOnAnimEnd);
-      setTimeout(pmpropSizeFormShell, 350);
+      setTimeout(function () { pmpropSizeFormShell('#pmPropertyFormView'); }, 350);
+    } else if (view === 'compliancesettings') {
+      var pmpropCompSettingsEl = document.getElementById('pmComplianceSettingsView');
+      var pmpropCompSettingsOnAnimEnd = function () {
+        pmpropCompSettingsEl.removeEventListener('animationend', pmpropCompSettingsOnAnimEnd);
+        pmpropSizeFormShell('#pmComplianceSettingsView');
+      };
+      pmpropCompSettingsEl.addEventListener('animationend', pmpropCompSettingsOnAnimEnd);
+      setTimeout(function () { pmpropSizeFormShell('#pmComplianceSettingsView'); }, 350);
     }
   }
-  function pmpropSizeFormShell() {
-    var shell = document.querySelector('#pmPropertyFormView .pmprop-form-shell');
-    var header = document.querySelector('#pmPropertyFormView .pmprop-form-head-fixed');
-    var footer = document.querySelector('#pmPropertyFormView .pmprop-form-footer-fixed');
+  function pmpropSizeFormShell(viewSelector) {
+    viewSelector = viewSelector || '#pmPropertyFormView';
+    var shell = document.querySelector(viewSelector + ' .pmprop-form-shell');
+    var header = document.querySelector(viewSelector + ' .pmprop-form-head-fixed');
+    var footer = document.querySelector(viewSelector + ' .pmprop-form-footer-fixed');
     var scrollArea = document.querySelector('#pmDashboard .dash-scroll-area');
     var dashMain = document.querySelector('#pmDashboard .dash-main');
     var dashTopbar = document.querySelector('#pmDashboard .dash-topbar');
@@ -23024,6 +23810,11 @@
       header.style.left = dashMainRect.left + 'px';
       header.style.width = dashMainRect.width + 'px';
       header.style.top = topbarBottom + 'px';
+      // Measured from the header's own real content height rather than assumed \u2014 the property
+      // form's single-line title and Compliance Settings' two-line title+subheading render at
+      // different heights, and this keeps the scroll area starting right below whichever one is
+      // actually showing instead of a fixed guess that only fits one of them.
+      shell.style.marginTop = header.offsetHeight + 'px';
     }
     if (footer) {
       footer.style.left = dashMainRect.left + 'px';
@@ -23038,15 +23829,18 @@
     var available = scrollAreaRect.bottom - shellRect.top - bottomPadding;
     shell.style.height = Math.max(300, available) + 'px';
   }
-  window.addEventListener('resize', function () {
-    if (document.getElementById('pmPropertyFormView').style.display !== 'none') pmpropSizeFormShell();
-  });
+  // Sizes whichever of the two form-shell views is actually on screen right now \u2014 harmless to
+  // call for a hidden one, since pmpropSizeFormShell just no-ops when it can't find that view's
+  // elements, but only the visible view's fixed header/footer actually need repositioning.
+  function pmpropSizeVisibleFormShell() {
+    if (document.getElementById('pmPropertyFormView').style.display !== 'none') pmpropSizeFormShell('#pmPropertyFormView');
+    if (document.getElementById('pmComplianceSettingsView').style.display !== 'none') pmpropSizeFormShell('#pmComplianceSettingsView');
+  }
+  window.addEventListener('resize', pmpropSizeVisibleFormShell);
   var pmSidebarCollapseBtn = document.querySelector('#pmDashboard .sidebar-collapse-btn');
   if (pmSidebarCollapseBtn) {
     pmSidebarCollapseBtn.addEventListener('click', function () {
-      setTimeout(function () {
-        if (document.getElementById('pmPropertyFormView').style.display !== 'none') pmpropSizeFormShell();
-      }, 260);
+      setTimeout(pmpropSizeVisibleFormShell, 260);
     });
   }
   document.querySelector('#pmDashboard .dash-account-avatar').style.cursor = 'pointer';
@@ -24834,12 +25628,7 @@
       document.getElementById('feeTierProgressFill').style.width = '0%';
       document.getElementById('feeTierSpent').textContent = '£0.00 spent';
 
-      document.getElementById('certificatesContent').innerHTML =
-        '<div class="dash-empty">' +
-          '<div class="empty-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 15h6M9 11h6"/></svg></div>' +
-          '<div class="empty-title">No certificates expiring soon</div>' +
-          '<div class="empty-sub">Anything within 60 days of expiry will surface here as soon as it\'s logged against a property.</div>' +
-        '</div>';
+      pmpropRenderCertificatesWidget();
 
       document.getElementById('spendOverTimeContent').innerHTML =
         '<div class="mini-chart-empty"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg></div>';
@@ -24873,30 +25662,7 @@
     document.getElementById('feeTierProgressFill').style.width = '22.3%';
     document.getElementById('feeTierSpent').textContent = '£3,340.80 spent';
 
-    var certs = [
-      { name: 'Homeland Heights', type: 'Gas Safety Certificate (CP12)', date: '31 Mar 2026', status: 'Expired' },
-      { name: 'Flat 27, 151 High Street', type: 'Gas Safety Certificate (CP12)', date: '8 Apr 2026', status: 'Expired' },
-      { name: 'Homeland Heights', type: 'EICR — Electrical Inspection Report', date: '31 Oct 2026', status: 'Compliant' },
-      { name: 'Flat 27, 151 High Street', type: 'EICR — Electrical Inspection Report', date: '27 Oct 2027', status: 'Compliant' },
-      { name: 'Flat 27, 151 High Street', type: 'EPC — Energy Performance Certificate', date: '13 Feb 2028', status: 'Compliant' }
-    ];
-    var expiredCount = certs.filter(function (c) { return c.status === 'Expired'; }).length;
-    var certsHtml = '<div style="margin-bottom:12px;"><span class="meta-badge required-badge" style="text-transform:none;">' + expiredCount + ' expired</span></div>';
-    certs.forEach(function (c) {
-      var isExpired = c.status === 'Expired';
-      certsHtml +=
-        '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0;border-top:1px solid var(--border-subtle);border-left:3px solid ' + (isExpired ? '#e8482c' : '#22c55e') + ';padding-left:10px;">' +
-          '<div style="min-width:0;">' +
-            '<div style="font-size:13px;font-weight:600;color:var(--text-heading);">' + c.name + '</div>' +
-            '<div style="font-size:12px;color:var(--text-body-muted);">' + c.type + '</div>' +
-          '</div>' +
-          '<div style="text-align:right;flex-shrink:0;">' +
-            '<div style="font-size:12px;color:var(--text-body-muted);margin-bottom:3px;">' + c.date + '</div>' +
-            '<span class="meta-badge" style="text-transform:none;background:' + (isExpired ? '#f8e8e8' : '#d8f8e0') + ';color:' + (isExpired ? '#b5424a' : '#1a7a3e') + ';">' + c.status + '</span>' +
-          '</div>' +
-        '</div>';
-    });
-    document.getElementById('certificatesContent').innerHTML = certsHtml;
+    pmpropRenderCertificatesWidget();
 
     document.getElementById('spendOverTimeContent').innerHTML = buildSpendOverTimeChart({
       value: '£3,340.80',
@@ -38856,6 +39622,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     eicrExpiry: { viewYear: null, viewMonth: null, selected: null },
     epcExpiry: { viewYear: null, viewMonth: null, selected: null },
     lolerExpiry: { viewYear: null, viewMonth: null, selected: null },
+    fraIssueDate: { viewYear: null, viewMonth: null, selected: null },
+    legionellaIssueDate: { viewYear: null, viewMonth: null, selected: null },
+    asbestosIssueDate: { viewYear: null, viewMonth: null, selected: null },
     obSupDob: { viewYear: null, viewMonth: null, selected: null },
     obDbsIssueDate: { viewYear: null, viewMonth: null, selected: null },
     obInsExpiry: { viewYear: null, viewMonth: null, selected: null },
@@ -38886,6 +39655,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     eicrExpiry: 'eicrExpiryInput',
     epcExpiry: 'epcExpiryInput',
     lolerExpiry: 'lolerExpiryInput',
+    fraIssueDate: 'fraIssueDateInput',
+    legionellaIssueDate: 'legionellaIssueDateInput',
+    asbestosIssueDate: 'asbestosIssueDateInput',
     supAppDateSubmittedFrom: 'supAppDateSubmittedFromInput',
     supAppDateSubmittedTo: 'supAppDateSubmittedToInput',
     supDateJoinedFrom: 'supDateJoinedFromInput',
