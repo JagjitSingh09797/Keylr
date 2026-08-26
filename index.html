@@ -11853,9 +11853,9 @@
                     <div class="pm-table-scroll">
                       <table class="admin-table" style="min-width:560px;table-layout:fixed;">
                         <colgroup>
-                          <col style="width:34%;"><col style="width:16%;"><col style="width:22%;"><col style="width:20%;"><col style="width:44px;">
+                          <col style="width:40%;"><col style="width:28%;"><col style="width:24%;"><col style="width:44px;">
                         </colgroup>
-                        <thead><tr><th>Property</th><th>Type</th><th>Occupancy</th><th>Last Updated</th><th></th></tr></thead>
+                        <thead><tr><th>Property</th><th>Occupancy</th><th>Last Updated</th><th></th></tr></thead>
                         <tbody id="pmpropTableBody"></tbody>
                       </table>
                     </div>
@@ -21914,7 +21914,6 @@
     var fullText = p.name + (p.addr ? ' \u2014 ' + p.addr : '');
     return '<tr class="pmprop-table-row" data-prop-id="' + p.id + '">' +
       '<td><div class="pmprop-name-cell" data-tooltip="' + pmpropEscapeHtml(fullText) + '"><div class="pmprop-avatar">' + pmpropEscapeHtml(p.initials || pmpropInitials(p.name)) + '</div><div class="pmprop-name-text"><div class="pmprop-name-main">' + pmpropEscapeHtml(p.name) + '</div><div class="pmprop-name-sub">' + pmpropEscapeHtml(p.addr) + '</div></div></div></td>' +
-      '<td>' + pmpropEscapeHtml(p.type) + '</td>' +
       '<td>' + pmpropOccBadgeHtml(p.occupancy) + '</td>' +
       '<td>' + pmpropEscapeHtml(p.lastUpdated) + '</td>' +
       '<td class="pmprop-row-menu-cell">' +
@@ -21945,7 +21944,6 @@
       '</div>' +
       '<div class="pmprop-list-card-meta">' +
         pmpropOccBadgeHtml(p.occupancy) +
-        '<span class="pmprop-list-card-meta-item"><b>' + pmpropEscapeHtml(p.type) + '</b></span>' +
         '<span class="pmprop-list-card-meta-item">Updated ' + pmpropEscapeHtml(p.lastUpdated) + '</span>' +
       '</div>' +
     '</div>';
@@ -22383,11 +22381,9 @@
       '</div>';
 
     if (quickAdd) {
-      html += '<div class="field-group" style="max-width:340px;"><label>Property type <span class="req">*</span></label>' + pmpropCustomSelectHtml('typeQuick', 'Select type', ['Residential', 'Hotels & Hostels', 'Commercial'], p ? p.type : null) + '</div>' +
-        '<div class="pmprop-callout"><b>Turn Quick add off</b> to open the full form with address, rooms, compliance, media and access details.</div>';
+      html += '<div class="pmprop-callout"><b>Turn Quick add off</b> to open the full form with address, rooms, compliance, media and access details.</div>';
     } else {
       html += '<div class="pmprop-field-row">' +
-        '<div class="field-group"><label>Property type</label>' + pmpropCustomSelectHtml('type', 'Select type', ['Residential', 'Hotels & Hostels', 'Commercial'], p ? p.type : null) + '</div>' +
         '<div class="field-group"><label>Occupancy</label>' + pmpropCustomSelectHtml('occupancy', 'Select occupancy', ['Occupied', 'Void / Vacant'], p && p.occupancy === 'occupied' ? 'Occupied' : (p && p.occupancy === 'void' ? 'Void / Vacant' : null)) + '</div>' +
         '<div class="field-group"><label>Access method <span class="req">*</span></label>' + pmpropAccessMethodDropdownHtml() + '</div>' +
         '</div>';
