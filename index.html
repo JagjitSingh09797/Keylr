@@ -2078,6 +2078,7 @@
     }
     #obApp .ob-actions .btn { font-size: 12.5px; padding: 9px 12px; }
     #obApp .ob-actions #obSaveSkipBtn,
+    #obApp .ob-actions #obContinueOnlyBtn,
     #obApp .ob-actions #obNextBtn { flex: 1 1 0; white-space: nowrap; }
     /* Leave room at the bottom of the scroll area so the last field(s) don't
        end up hidden behind the fixed action bar. */
@@ -2390,6 +2391,12 @@
   @keyframes supViewFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   .sup-view-animate { animation: supViewFadeIn 320ms cubic-bezier(0.16,1,0.3,1); }
   .dash-content { max-width: 1240px; margin: 0 auto; padding: 24px 32px 60px; background: #F9FAFB; }
+  /* Account Settings and Inbox control their own padding directly (see #supProfileSettingsView
+     .dash-section and #supInboxView below) instead of relying on dash-content's shared padding —
+     this negative margin exactly cancels dash-content's padding for just these two views, so
+     every other view sharing this same dash-content (Jobs, Calendar, Service Area, etc.) is
+     completely unaffected. */
+  #supProfileSettingsView, #supInboxView { margin: -24px -32px -60px; }
   .dash-content.dash-content-inbox-mode { max-width: none; margin: 0; padding: 0; }
   .dash-content.dash-content-full { max-width: none; margin: 0; }
   .dash-content.dash-content-narrow-pad { padding-left: 16px; padding-right: 16px; }
@@ -2484,6 +2491,14 @@
 
   /* ---- Section rhythm: consistent spacing for every dashboard block ---- */
   .dash-section { margin-bottom: 20px; }
+  /* Account Settings' own sections and the Inbox view carry their own padding now instead of
+     inheriting dash-content's (see the negative-margin cancellation on those two views above). */
+  #supProfileSettingsView .dash-section { padding: 24px 32px 60px; }
+  #supInboxView { padding: 24px 32px 60px; }
+  @media (max-width: 860px) {
+    #supProfileSettingsView .dash-section { padding: 20px 16px 50px; }
+    #supInboxView { padding: 20px 16px 50px; }
+  }
   .dash-section:last-child { margin-bottom: 0; }
 
   /* ---- Stat card row ---- */
@@ -2635,6 +2650,7 @@
   @media (max-width: 860px) {
     .dash-sidebar { position: fixed; z-index: 310; box-shadow: 0 0 0 9999px rgba(0,0,0,0); }
     .dash-content { padding: 20px 16px 50px; }
+    #supProfileSettingsView, #supInboxView { margin: -20px -16px -50px; }
     /* Tablet widths get the same hamburger-menu / hidden-drawer sidebar as phones, rather than a
        permanently-visible fixed-position sidebar with no way to collapse or hide it \u2014 previously
        this only kicked in below 450px, leaving the whole 451-860px tablet range stuck with the
@@ -4783,7 +4799,9 @@
   .client-tab, .sup-tab-item { padding: 12px 2px; font-size: 14px; font-weight: 600; color: var(--text-body-muted); border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; }
   .client-tab.active, .sup-tab-item.active { color: var(--accent-blue); border-bottom-color: var(--accent-blue); font-weight: 700; }
   .client-tab:hover:not(.active), .sup-tab-item:hover:not(.active) { color: var(--text-heading); }
-  .pm-settings-tabs-row { display: flex; gap: 28px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 20px; }
+  .pm-settings-tabs-row { display: flex; gap: 28px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 20px; min-width: 0; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .pm-settings-tabs-row::-webkit-scrollbar { display: none; }
+  .pm-settings-tabs-row .pm-settings-tab-item { flex-shrink: 0; }
   .pm-settings-tab-item { padding: 12px 2px; font-size: 14px; font-weight: 600; color: var(--text-body-muted); border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; }
   .pm-settings-tab-item.active { color: var(--accent-blue); border-bottom-color: var(--accent-blue); font-weight: 700; }
   .pm-settings-tab-item[data-supsettingstab="inbox"] { display: ruby; }
@@ -8802,7 +8820,8 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
           <span class="ob-back-btn-text">Back</span>
         </button>
-        <button type="button" class="btn btn-secondary-light" id="obSaveSkipBtn" style="display:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M20 6L9 17l-5-5"/></svg>Submit &amp; skip other steps</button>
+        <button type="button" class="btn btn-secondary-light" id="obSaveSkipBtn" style="display:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M20 6L9 17l-5-5"/></svg>Submit &amp; Skip</button>
+        <button type="button" class="btn btn-secondary-light" id="obContinueOnlyBtn" style="display:none;">Skip</button>
         <button type="button" class="btn btn-primary" id="obNextBtn">Continue <span class="arrow">→</span></button>
       </div>
       </div>
@@ -8836,10 +8855,10 @@
                 </div>
                 <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
               </div>
-              <div class="choice-tile" data-value="hotels-hostels" tabindex="0" role="checkbox" aria-checked="false">
+              <div class="choice-tile disabled" data-value="hotels-hostels" aria-disabled="true" data-tooltip="Hotels &amp; Hostels support is coming soon">
                 <div class="tile-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M4 21V9l5-4 5 4v12M9 21v-4h4v4M14 12h5v9"/></svg></div>
                                 <div class="tile-body">
-                <div class="tile-title">Hotels &amp; Hostels</div>
+                <div class="tile-title">Hotels &amp; Hostels <span class="meta-badge coming-soon">Coming Soon</span></div>
                 <div class="tile-desc">Commercial hospitality — hotels, boutique hotels, hostels and serviced accommodation.</div>
                 </div>
                 <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
@@ -9032,10 +9051,10 @@
             <div class="ob-field" style="margin-bottom:0;">
               <label>Company logo <span class="meta-badge optional">Optional</span></label>
               <div class="file-dropzone" id="logoDropzone" data-title="Upload Company Logo">
-                <input type="file" id="logoInput" accept="image/png,image/svg+xml" style="display:none;">
+                <input type="file" id="logoInput" accept="image/png,image/jpeg,image/svg+xml" style="display:none;">
                 <div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>
-                <div class="fd-label">Upload PNG or SVG</div>
-                <div class="helper" style="margin-top:2px;">PNG or SVG. Shown to service providers.</div>
+                <div class="fd-label">Upload PNG, JPG or SVG</div>
+                <div class="helper" style="margin-top:2px;">PNG, JPG or SVG. Shown to service providers.</div>
               </div>
             </div>
           </div>
@@ -9335,7 +9354,7 @@
           <span class="ob-back-btn-text">Back</span>
         </button>
         <button type="button" class="btn btn-secondary-light" id="supObSaveSkipBtn" style="display:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M20 6L9 17l-5-5"/></svg>Submit &amp; skip other steps</button>
-        <button type="button" class="btn btn-secondary-light" id="supObContinueOnlyBtn" style="display:none;">Finish Later</button>
+        <button type="button" class="btn btn-secondary-light" id="supObContinueOnlyBtn" style="display:none;">Skip</button>
         <button type="button" class="btn btn-primary" id="supObNextBtn">Save &amp; Continue <span class="arrow">→</span></button>
       </div>
       </div>
@@ -11124,6 +11143,7 @@
                 <div class="banner-text">
                   <div class="banner-title">Complete Your Onboarding Details</div>
                   <div class="banner-desc">Your account can't be reviewed until all verification details are submitted.</div>
+                  <div class="banner-missing-docs" id="onboardingMissingItems" style="display:none;"></div>
                 </div>
                 <button type="button" class="btn btn-outline-amber btn-sm" id="completeOnboardingBtn">Complete Onboarding <span class="arrow">→</span></button>
                 <div class="banner-progress-wrap">
@@ -11349,14 +11369,14 @@
                   <div class="ob-section" style="margin-top:24px;">
                     <div class="ob-field" style="margin-bottom:0;">
                       <label>Company logo <span class="meta-badge optional">Optional</span></label>
-                      <input type="file" id="stgLogoInput" accept="image/png,image/svg+xml" style="display:none;">
+                      <input type="file" id="stgLogoInput" accept="image/png,image/jpeg,image/svg+xml" style="display:none;">
                       <div style="display:flex;align-items:center;gap:12px;border:1px solid var(--border-subtle);border-radius:10px;padding:10px 14px;">
                         <div style="width:36px;height:36px;border-radius:8px;background:var(--surface-soft);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--text-body-muted);flex-shrink:0;overflow:hidden;" id="stgLogoThumb">Comp</div>
-                        <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--text-heading);" id="stgLogoName">Current logo</div><div style="font-size:11.5px;color:var(--text-body-muted);">PNG or SVG · shown to service providers</div></div>
+                        <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--text-heading);" id="stgLogoName">Current logo</div><div style="font-size:11.5px;color:var(--text-body-muted);">PNG, JPG or SVG · shown to service providers</div></div>
                         <span style="font-size:12.5px;font-weight:600;color:var(--accent-blue);cursor:pointer;" id="stgLogoReplaceBtn">Replace</span>
                         <span style="cursor:pointer;color:var(--text-body-muted);" id="stgLogoRemoveBtn">&times;</span>
                       </div>
-                      <div class="helper">PNG or SVG. Shown to service providers.</div>
+                      <div class="helper">PNG, JPG or SVG. Shown to service providers.</div>
                     </div>
                   </div>
 
@@ -13347,21 +13367,6 @@
               </div>
             </div>
           </div>
-          </div>
-
-
-          <!-- Supplier calendar: remove time off confirmation -->
-          <div class="modal-overlay" id="supcalDeleteTimeOffOverlay">
-            <div class="confirm-modal-card">
-              <div class="confirm-modal-icon" style="background:#eef4ff;color:var(--accent-blue);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
-              <div class="confirm-modal-title">Remove this time off?</div>
-              <div class="confirm-modal-desc" id="supcalDeleteTimeOffDesc"></div>
-              <div class="confirm-modal-btns">
-                <button type="button" class="pmprop-del-cancel" id="supcalDeleteTimeOffCancel">Keep it</button>
-                <button type="button" class="confirm-modal-confirm" id="supcalDeleteTimeOffConfirm">Remove Time Off</button>
-              </div>
-            </div>
-          </div>
 
           <div id="supProfileSettingsView" style="display:none;">
             <div class="dash-section" id="supOnboardingBanner">
@@ -13763,7 +13768,7 @@
                   <div class="ob-section" id="supCommercialSubTypes">
                     <div class="ob-section-title" style="font-size:13.5px;">Commercial sub-types <span class="meta-badge optional">(optional)</span></div>
                     <div class="simple-chip-row" id="supComSubChips">
-                      <div class="simple-chip selected" data-value="hotels">Hotels &amp; Hostels</div>
+                      <div class="simple-chip simple-chip-disabled" data-value="hotels" aria-disabled="true" data-tooltip="Commercial sub-types are coming soon">Hotels &amp; Hostels</div>
                     </div>
                   </div>
                   </div>
@@ -14761,6 +14766,21 @@
                     <div class="sinb-composer-hint">Enter to send · Shift + Enter for new line · Images, videos + PDFs up to 10 MB.</div>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+          </div>
+
+
+          <!-- Supplier calendar: remove time off confirmation -->
+          <div class="modal-overlay" id="supcalDeleteTimeOffOverlay">
+            <div class="confirm-modal-card">
+              <div class="confirm-modal-icon" style="background:#eef4ff;color:var(--accent-blue);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+              <div class="confirm-modal-title">Remove this time off?</div>
+              <div class="confirm-modal-desc" id="supcalDeleteTimeOffDesc"></div>
+              <div class="confirm-modal-btns">
+                <button type="button" class="pmprop-del-cancel" id="supcalDeleteTimeOffCancel">Keep it</button>
+                <button type="button" class="confirm-modal-confirm" id="supcalDeleteTimeOffConfirm">Remove Time Off</button>
               </div>
             </div>
           </div>
@@ -16803,7 +16823,7 @@
                           <div class="sup-comp-field" id="supAdminCommercialSubTypes" style="margin-top:14px;margin-bottom:0;">
                             <div class="scf-label">Commercial sub-types <span style="font-weight:500;color:#94a3b8;">(optional)</span></div>
                             <div class="simple-chip-row" id="supAdminComSubChips">
-                              <div class="simple-chip" data-value="hotels" tabindex="0">Hotels &amp; Hostels</div>
+                              <div class="simple-chip simple-chip-disabled" data-value="hotels" aria-disabled="true" data-tooltip="Commercial sub-types are coming soon">Hotels &amp; Hostels</div>
                             </div>
                           </div>
 
@@ -19444,6 +19464,11 @@
 
   function openSignup(role) {
     signupPicker.setRole(role || 'pm');
+    // Belt-and-braces reset, as early as possible: a genuine new signup must never be able to
+    // inherit obEditFromSettings=true from an earlier "Edit" session in the same page. The wizard
+    // itself is also reset at launch time, but clearing it here too means there's no window at
+    // all between opening the signup form and starting the wizard where a stale flag could matter.
+    if ((role || 'pm') === 'pm') obEditFromSettings = false;
     signupModal.open();
     focusFirstField(signupOverlay);
   }
@@ -19626,6 +19651,11 @@
       signupModal.close();
       signupForm.reset();
       if (signupCapturedData.role === 'pm') {
+        // A genuine fresh signup must never inherit obEditFromSettings=true left over from an
+        // earlier "Edit" session in the same page \u2014 that flag is what filters Portfolio (step 1)
+        // and Locations (step 3) out of the wizard, which is correct for editing an existing
+        // profile but would wrongly leave a brand new PM with only 3 of the 5 steps.
+        obEditFromSettings = false;
         setTimeout(function () { startPMOnboarding(signupCapturedData); }, 300);
       } else {
         setTimeout(function () { startSupplierOnboarding(signupCapturedData); }, 300);
@@ -19803,28 +19833,28 @@
 
   /* Real onboarding completion tracking — checks actual field values rather than a hardcoded percentage */
   var OB_CHECKLIST = [
-    { step: 2, done: function () { var el = document.getElementById('tradingName'); return !!(el && el.value.trim()); } },
-    { step: 5, done: function () {
+    { step: 2, label: 'Trading name', done: function () { var el = document.getElementById('tradingName'); return !!(el && el.value.trim()); } },
+    { step: 5, label: 'Support contact', done: function () {
         var n = document.getElementById('supportName'), p = document.getElementById('supportPhone');
         return !!(n && n.value.trim() && p && p.value.trim());
       } },
-    { step: 5, done: function () {
+    { step: 5, label: 'Finance contact', done: function () {
         var same = document.getElementById('sameAsFinance');
         if (same && same.checked) return true;
         return Array.prototype.some.call(document.querySelectorAll('#financeFields input.field-input'), function (i) { return i.value.trim().length > 0; });
       } },
-    { step: 5, done: function () {
+    { step: 5, label: 'Manager contact', done: function () {
         var same = document.getElementById('sameAsManager');
         if (same && same.checked) return true;
         return Array.prototype.some.call(document.querySelectorAll('#managerFields input.field-input'), function (i) { return i.value.trim().length > 0; });
       } },
-    { step: 2, done: function () { var el = document.getElementById('legalCompanyName'); return !!(el && el.value.trim()); } },
-    { step: 2, done: function () { var el = document.getElementById('registeredAddress'); return !!(el && el.value.trim()); } },
-    { step: 2, done: function () {
+    { step: 2, label: 'Legal company name', done: function () { var el = document.getElementById('legalCompanyName'); return !!(el && el.value.trim()); } },
+    { step: 2, label: 'Registered address', done: function () { var el = document.getElementById('registeredAddress'); return !!(el && el.value.trim()); } },
+    { step: 2, label: 'Trading address', done: function () {
         var same = document.getElementById('sameAsRegistered'), el = document.getElementById('tradingAddressInput');
         return !!(same && same.checked) || !!(el && el.value.trim());
       } },
-    { step: 2, done: function () {
+    { step: 2, label: 'VAT number', done: function () {
         var toggle = document.getElementById('vatToggle'), el = document.getElementById('vatNumber');
         return !(toggle && toggle.classList.contains('on')) || !!(el && el.value.trim());
       } }
@@ -19832,11 +19862,15 @@
   function pmObComputeCompletion() {
     var doneCount = 0;
     var firstPendingStep = null;
+    var missingItems = [];
     OB_CHECKLIST.forEach(function (item) {
       if (item.done()) { doneCount++; }
-      else if (firstPendingStep === null || item.step < firstPendingStep) { firstPendingStep = item.step; }
+      else {
+        missingItems.push(item.label);
+        if (firstPendingStep === null || item.step < firstPendingStep) firstPendingStep = item.step;
+      }
     });
-    return { percent: Math.round((doneCount / OB_CHECKLIST.length) * 100), firstPendingStep: firstPendingStep, complete: doneCount === OB_CHECKLIST.length };
+    return { percent: Math.round((doneCount / OB_CHECKLIST.length) * 100), firstPendingStep: firstPendingStep, complete: doneCount === OB_CHECKLIST.length, missingItems: missingItems };
   }
   // A single Edit button, physically relocated rather than duplicated: on mobile (<500px) it
   // moves into the dash-header row next to the heading; at 500px and above it moves back to its
@@ -19871,6 +19905,16 @@
     if (fill) fill.style.width = result.percent + '%';
     if (label) label.textContent = result.percent + '% verified';
     if (banner) banner.style.display = result.complete ? 'none' : '';
+    var missingWrap = document.getElementById('onboardingMissingItems');
+    if (missingWrap) {
+      if (!result.complete && result.missingItems.length) {
+        missingWrap.style.display = '';
+        missingWrap.innerHTML = '<span class="banner-missing-label">Still needed:</span>' +
+          result.missingItems.map(function (itemLabel) { return '<span class="banner-missing-chip">' + pmpropEscapeHtml(itemLabel) + '</span>'; }).join('');
+      } else {
+        missingWrap.style.display = 'none';
+      }
+    }
     // A PM can only submit a profile-edit request once onboarding is genuinely 100% complete —
     // recorded here as a marker attribute (rather than a display toggle directly) because this
     // function can run while a different Settings tab is active, and only switchPMSettingsTab
@@ -19890,7 +19934,7 @@
   var obEditFromSettings = false; // declared early since PM_OB_ALL_STEPS below needs it at render time
 
   var obStepMeta = {
-    1: { label: 'Setup', next: 'Continue' },
+    1: { label: 'Setup', next: 'Save &amp; Continue' },
     2: { label: 'Business Information', next: 'Save &amp; Continue' },
     3: { label: 'Business Information', next: 'Save &amp; Continue' },
     4: { label: 'Billing', next: 'Save &amp; Continue' },
@@ -19923,8 +19967,13 @@
     var isLastVisible = visible[visible.length - 1] === step;
     obStepLabel.textContent = meta.label;
     obNextBtn.innerHTML = (isLastVisible ? (obEditFromSettings ? 'Submit for Review' : 'Submit for Approval') : meta.next) + ' <span class="arrow">→</span>';
-    obBackBtn.hidden = posInVisible === 1;
+    obBackBtn.hidden = false;
     obProgressFill.style.width = ((posInVisible / visible.length) * 100) + '%';
+    // Lets a PM pause a fresh (or resumed-incomplete) signup and leave without formally
+    // submitting, e.g. to come back later via the Complete Onboarding banner \u2014 not shown while
+    // editing an already-approved profile, where "Submit & Skip" (a change-request submission) is
+    // the equivalent action instead.
+    document.getElementById('obContinueOnlyBtn').style.display = !obEditFromSettings ? 'inline-flex' : 'none';
 
     // Hide Operating Hours / Company Logo within the Company Details step when editing —
     // these moved to the Portfolio tab in Account Settings, so they shouldn't be editable here too.
@@ -19942,7 +19991,15 @@
   obBackBtn.addEventListener('click', function () {
     var visible = pmObVisibleSteps();
     var idx = visible.indexOf(obCurrentStep);
-    if (idx > 0) goToObStep(visible[idx - 1]);
+    if (idx > 0) {
+      goToObStep(visible[idx - 1]);
+    } else {
+      // Nowhere earlier in the wizard to go back to \u2014 exits to Account Settings instead,
+      // covering both a fresh signup (step 1, Portfolio) and editing from Settings (where
+      // Portfolio itself is skipped, so a different step ends up first).
+      if (typeof showPMView === 'function') showPMView('settings');
+      closeObAppToExistingDashboard();
+    }
   });
 
   function closeObAppToExistingDashboard() {
@@ -20026,7 +20083,6 @@
     obEditSnapshot.phone = document.getElementById('pmSettingsPhoneView').textContent.trim();
     startPMOnboarding(typeof signupCapturedData !== 'undefined' ? signupCapturedData : {});
     goToObStep(pmObVisibleSteps()[0]);
-    document.getElementById('obCloseBtn').hidden = false;
     document.getElementById('obSaveSkipBtn').style.display = 'inline-flex';
   });
   function pmObSubmitEditRequest() {
@@ -20067,6 +20123,19 @@
     }, 200);
   }
   document.getElementById('obSaveSkipBtn').addEventListener('click', pmObSubmitEditRequest);
+  document.getElementById('obContinueOnlyBtn').addEventListener('click', function () {
+    // A brand-new signup that hasn't yet reached step 5 has never had the PM dashboard shell
+    // itself activated \u2014 showPMDashboard is normally only called on final submission. showPMView
+    // alone only controls which view is active *within* an already-active dashboard, so without
+    // this the wizard would close onto nothing. Not needed for Edit or Complete Onboarding, since
+    // both of those are only ever reachable from within an already-active dashboard to begin with.
+    if (!document.getElementById('pmDashboard').classList.contains('active')) {
+      pmObCollectWizardData();
+      showPMDashboard(typeof signupCapturedData !== 'undefined' ? signupCapturedData : {}, 'skipped');
+    }
+    if (typeof showPMView === 'function') showPMView('settings');
+    closeObAppToExistingDashboard();
+  });
 
   /* ---- PM's own Chat tab (Account Settings) ----
      Reads the exact same PM_CHAT_MESSAGES / pmChangeRequests stores admin's PM Applicant Chat
@@ -20397,6 +20466,7 @@
   function initMultiSelectTiles(container) {
     if (!container) return;
     container.querySelectorAll('.choice-tile, .count-tile, .simple-chip:not(.simple-chip-action), .supq-check-tile').forEach(function (tile) {
+      if (tile.getAttribute('aria-disabled') === 'true') return; // e.g. "coming soon" chips \u2014 styled disabled, and now genuinely inert
       tile.addEventListener('click', function () {
         var isSelected = tile.classList.toggle('selected');
         if (tile.hasAttribute('aria-checked')) tile.setAttribute('aria-checked', isSelected ? 'true' : 'false');
@@ -24291,13 +24361,14 @@
     var isLast = step === order.length;
     supObStepLabel.textContent = label;
     supObNextBtn.innerHTML = (isLast ? 'Submit for Review' : 'Save & Continue') + ' <span class="arrow">→</span>';
-    supObBackBtn.hidden = step === 1;
+    supObBackBtn.hidden = false;
     var canSkip = supObEditFromSettings && !supObIsBusinessTypeChanging();
     document.getElementById('supObSaveSkipBtn').style.display = canSkip ? 'inline-flex' : 'none';
-    // On the last step of a first-time (not editing-from-settings) run through the wizard, offer a
-    // lighter "Continue" alongside "Submit for Review" — lets the supplier land on Account Settings
-    // without formally submitting yet, e.g. to come back and finish later via the completion banner.
-    document.getElementById('supObContinueOnlyBtn').style.display = (isLast && !supObEditFromSettings) ? 'inline-flex' : 'none';
+    // Offers a lighter "Skip" alongside "Save & Continue" on every step of a first-time (not
+    // editing-from-settings) run — lets the supplier pause and leave without formally submitting,
+    // e.g. to come back and finish later via the completion banner, rather than only once
+    // they've already filled in every other step.
+    document.getElementById('supObContinueOnlyBtn').style.display = !supObEditFromSettings ? 'inline-flex' : 'none';
     supObProgressFill.style.width = ((step / order.length) * 100) + '%';
 
     var stepper = document.getElementById('supProfileDotStepper');
@@ -24325,6 +24396,14 @@
     if (supObCurrentStep > 1) {
       supObCollectWizardData();
       goToSupObStep(supObCurrentStep - 1);
+    } else {
+      // Nowhere earlier in the wizard to go back to \u2014 exits to Account Settings instead.
+      if (typeof showSupplierView === 'function') showSupplierView('profile-settings');
+      supObApp.classList.remove('visible');
+      setTimeout(function () {
+        supObApp.classList.remove('active');
+        document.body.style.overflow = '';
+      }, 200);
     }
   });
 
@@ -25886,8 +25965,11 @@
       pmDashboard.classList.add('visible');
     });
 
-    if (mode !== 'populated') {
+    if (mode !== 'populated' && mode !== 'skipped') {
       // Show the post-submission confirmation toast shortly after landing (new-account flow only)
+      // \u2014 'skipped' deliberately excluded here too: a PM who paused onboarding partway through
+      // hasn't actually submitted a complete profile, so this toast claiming it's "being reviewed"
+      // would directly contradict the incomplete-onboarding banner shown right above it.
       setTimeout(function () {
         document.getElementById('dashToast').classList.add('show');
       }, 500);
@@ -25985,10 +26067,13 @@
     showToast('This would redirect to a secure Stripe payment setup page.');
   });
   document.getElementById('completeOnboardingBtn').addEventListener('click', function () {
+    // Resuming an incomplete signup is not the same thing as editing an already-approved
+    // profile, so this must never inherit obEditFromSettings=true left over from an earlier
+    // "Edit" session \u2014 same reasoning as the fresh-signup reset above.
+    obEditFromSettings = false;
     var result = pmObComputeCompletion();
     var pendingStep = result.firstPendingStep || 1;
     obReentryMode = true;
-    document.getElementById('obCloseBtn').hidden = false;
     obApp.classList.add('active');
     document.body.style.overflow = 'hidden';
     requestAnimationFrame(function () {
