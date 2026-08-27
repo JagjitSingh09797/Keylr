@@ -1567,6 +1567,17 @@
   .contact-card .cc-head { display: flex; align-items: center; gap: 10px; margin-bottom: 3px; }
   .contact-card .cc-title { font-size: 15.5px; font-weight: 700; color: var(--text-heading); }
   .contact-card .cc-subtext { font-size: 12.5px; color: var(--text-body-muted); margin-bottom: 14px; }
+  /* Wraps Registered Company Details + addresses in a card, labeled "Main Branch", but only once
+     the PM has said they're part of a wider group \u2014 a single-location company just sees its
+     details plainly, since calling it a "branch" wouldn't make sense there. */
+  #pmObMainBranchWrap, #clientCompMainBranchWrap { margin-bottom: 8px; }
+  #pmObMainBranchWrap.pmob-branch-mode, #clientCompMainBranchWrap.pmob-branch-mode { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 22px; margin-bottom: 20px; }
+  #pmObMainBranchLabel, #clientCompMainBranchLabel { font-size: 12px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent-blue); margin-top: 0; margin-bottom: 10px; }
+  #obApp .ob-step[data-step="2"] .ob-toggle-card { margin-top: 16px; }
+  #obApp .ob-step[data-step="5"] .ai-hint-pill { margin-top: 0; margin-bottom: 16px; }
+  .pmob-branch-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 22px; margin-bottom: 16px; }
+  .pmob-branch-card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .pmob-branch-card-title { font-size: 13.5px; font-weight: 700; color: var(--text-heading); }
   .same-as-row {
     display: flex; align-items: center; gap: 9px; margin-bottom: 16px;
     padding-bottom: 16px; border-bottom: 1px solid var(--border-subtle);
@@ -1579,6 +1590,9 @@
   }
   .contact-fields.locked { opacity: 0.55; }
   .contact-fields.locked .field-input { background: var(--surface-soft); pointer-events: none; }
+  .pmob-extra-contact { margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--border-subtle); }
+  .pmob-extra-contact-remove-btn { display: inline-flex; align-items: center; gap: 5px; margin-top: 10px; font-size: 12px; font-weight: 600; color: var(--text-body-muted); background: none; border: none; cursor: pointer; padding: 0; }
+  .pmob-extra-contact-remove-btn:hover { color: var(--accent-blue); }
 
   /* Final confirmation screen */
   .ob-complete { text-align: center; padding: 60px 24px; max-width: 480px; margin: 0 auto; }
@@ -8855,14 +8869,6 @@
                 </div>
                 <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
               </div>
-              <div class="choice-tile disabled" data-value="hotels-hostels" aria-disabled="true" data-tooltip="Hotels &amp; Hostels support is coming soon">
-                <div class="tile-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M4 21V9l5-4 5 4v12M9 21v-4h4v4M14 12h5v9"/></svg></div>
-                                <div class="tile-body">
-                <div class="tile-title">Hotels &amp; Hostels <span class="meta-badge coming-soon">Coming Soon</span></div>
-                <div class="tile-desc">Commercial hospitality — hotels, boutique hotels, hostels and serviced accommodation.</div>
-                </div>
-                <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
-              </div>
             </div>
           </div>
 
@@ -8942,43 +8948,43 @@
             </div>
           </div>
 
-          <div class="ob-section-heading">Registered Company Details</div>
+          <div id="pmObMainBranchWrap">
+            <div class="ob-section-heading" id="pmObMainBranchLabel" style="display:none;">Main Branch</div>
+            <div class="ob-section-heading">Registered Company Details</div>
 
-          <div class="ob-row-2">
-            <div class="ob-field">
-              <label for="companyRegNo">Company registration number</label>
-              <input class="field-input" type="text" id="companyRegNo" placeholder="e.g. 12345678">
-              <div class="ai-hint-pill"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg>Auto-fills company name &amp; registered address</div>
+            <div class="ob-row-2">
+              <div class="ob-field">
+                <label for="companyRegNo">Company registration number</label>
+                <input class="field-input" type="text" id="companyRegNo" placeholder="e.g. 12345678">
+                <div class="ai-hint-pill"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg>Auto-fills company name &amp; registered address</div>
+              </div>
+              <div class="ob-field">
+                <label for="legalCompanyName">Legal company name <span class="meta-badge auto">Auto</span></label>
+                <input class="field-input" type="text" id="legalCompanyName" placeholder="Auto-filled from Companies House — edit.">
+              </div>
             </div>
+
             <div class="ob-field">
-              <label for="legalCompanyName">Legal company name <span class="meta-badge auto">Auto</span></label>
-              <input class="field-input" type="text" id="legalCompanyName" placeholder="Auto-filled from Companies House — edit.">
+              <label>Registered address <span class="meta-badge auto">Auto</span></label>
+              <input class="field-input" type="text" id="registeredAddress" placeholder="Official registered business address — auto-filled, editable.">
+            </div>
+
+            <div class="ob-field">
+              <label>Trading address <span class="meta-badge optional" style="text-transform:none;font-size:11px;">If different</span></label>
+              <div class="same-as-row" style="margin-bottom:8px;padding-bottom:8px;">
+                <input type="checkbox" id="sameAsRegistered" checked>
+                <label for="sameAsRegistered" style="font-size:12.5px;">Same as registered address</label>
+              </div>
+              <div class="contact-fields locked" id="tradingAddressFields">
+                <input class="field-input" type="text" id="tradingAddressInput" placeholder="Start typing a postcode or address">
+              </div>
+              <div class="helper">No separate trading address? Your registered address works fine here.</div>
             </div>
           </div>
 
-          <div class="ob-field">
-            <label>Registered address <span class="meta-badge auto">Auto</span></label>
-            <input class="field-input" type="text" id="registeredAddress" placeholder="Official registered business address — auto-filled, editable.">
-          </div>
-
-          <div class="ob-section-heading" style="margin-bottom:14px;">Trading address <span class="meta-badge optional" style="text-transform:none;font-size:11px;">If different</span></div>
-
-          <div class="same-as-row" style="border-bottom:none;padding-bottom:0;">
-            <input type="checkbox" id="sameAsRegistered" checked>
-            <label for="sameAsRegistered">Same as registered address</label>
-          </div>
-          <div class="contact-fields locked" id="tradingAddressFields" style="margin-top:14px;">
-            <div class="ob-field">
-              <label>Trading address</label>
-              <input class="field-input" type="text" id="tradingAddressInput" placeholder="Start typing a postcode or address">
-            </div>
-          </div>
-
-          <div class="ob-section-heading" id="pmOperatingAddressHeading" style="margin-bottom:14px;">Operating address</div>
-
-          <div class="ob-field" id="pmOperatingAddressField">
-            <label>Operating address</label>
-            <input class="field-input" type="text" id="operatingAddress" placeholder="Start typing a postcode or address">
+          <div id="pmObBranchesSection" style="display:none;">
+            <div id="pmObBranchesList"></div>
+            <button type="button" class="pmprop-comp-settings-link" id="pmObAddBranchBtn" style="margin-top:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Add Branch</button>
           </div>
 
           <div class="ob-toggle-card">
@@ -8993,7 +8999,10 @@
               <div class="otc-body">
                 <div class="ob-field" style="margin-bottom:0;">
                   <label for="vatNumber">VAT number</label>
-                  <input class="field-input" type="text" id="vatNumber" placeholder="GB 123 456 789">
+                  <div class="vat-verify-row">
+                    <input class="field-input" type="text" id="vatNumber" placeholder="GB 123 456 789">
+                    <button type="button" class="btn btn-muted-action" id="pmVerifyHmrcBtn" disabled>Verify with HMRC</button>
+                  </div>
                   <div class="helper">Format: GB followed by 9 digits.</div>
                 </div>
               </div>
@@ -9001,7 +9010,7 @@
           </div>
 
           <div class="ob-field">
-            <label for="companyWebsite">Website <span class="meta-badge optional">Optional</span></label>
+            <label for="companyWebsite">Website</label>
             <input class="field-input" type="url" id="companyWebsite" placeholder="https://yourcompany.co.uk">
           </div>
 
@@ -9049,7 +9058,7 @@
 
           <div class="ob-section" style="margin-top:24px;margin-bottom:0;" id="pmCompanyLogoSection">
             <div class="ob-field" style="margin-bottom:0;">
-              <label>Company logo <span class="meta-badge optional">Optional</span></label>
+              <label>Company logo</label>
               <div class="file-dropzone" id="logoDropzone" data-title="Upload Company Logo">
                 <input type="file" id="logoInput" accept="image/png,image/jpeg,image/svg+xml" style="display:none;">
                 <div class="fd-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/></svg></div>
@@ -9081,7 +9090,7 @@
               <div class="simple-chip simple-chip-action" data-value="all-london">All London</div>
             </div>
 
-            <div class="ob-section-title" style="font-size:13.5px;">Other cities / regions <span class="meta-badge optional">Optional</span></div>
+            <div class="ob-section-title" style="font-size:13.5px;">Other cities / regions</div>
             <div class="simple-chip-row" id="otherRegions" style="margin-bottom:12px;">
               <div class="simple-chip" data-value="manchester">Manchester</div>
               <div class="simple-chip" data-value="birmingham">Birmingham</div>
@@ -9095,7 +9104,7 @@
           </div>
 
           <div class="ob-section" style="margin-bottom:0;">
-            <div class="ob-section-title">Do you use any PMS or CRM tools? <span class="meta-badge optional">Optional</span></div>
+            <div class="ob-section-title">Do you use any PMS or CRM tools?</div>
             <div class="chip-multiselect" id="pmsMultiselect">
               <div class="chip-search-input">
                 <input class="field-input" type="text" id="pmsSearchInput" placeholder="Search PMS / CRM or type your own..." autocomplete="off">
@@ -9116,15 +9125,15 @@
             <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg></div>
             <div>
               <div class="callout-title">A payment card is required to activate your account</div>
-              <div class="callout-body">Once your account is approved, you'll be asked to add a card on file. This is used for pay-upfront jobs. Your card is never charged without your approval.</div>
+              <div class="callout-body">Once your account is approved, you will be asked to add a payment card. This is used for Pay Upfront jobs and any payments made before your billing cycle is activated.</div>
             </div>
           </div>
 
           <div class="callout callout-warning">
             <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg></div>
             <div>
-              <div class="callout-title">Billing Cycles Require Approval</div>
-              <div class="callout-body">If you select a billing cycle (fortnightly or monthly), we will review your account and contact you to approve and activate your Direct Debit. Until then, your account operates on pay-upfront.</div>
+              <div class="callout-title">Fortnightly and Monthly billing require approval</div>
+              <div class="callout-body">If you select Fortnightly or Monthly billing, Keylr will review your account and contact you to set up your Direct Debit mandate. Until your billing cycle is approved and activated, you can continue using Pay Upfront.</div>
             </div>
           </div>
 
@@ -9134,11 +9143,10 @@
               <div class="billing-card selected" data-value="upfront">
                 <div class="bc-top">
                   <div class="bc-radio"></div>
-                  <div class="bc-title">Pay upfront</div>
-                  <span class="meta-badge default" style="margin-left:auto;">Default · Instant</span>
+                  <div class="bc-title">Pay Upfront</div>
+                  <span class="meta-badge default" style="margin-left:auto;">Default · Available Immediately</span>
                 </div>
-                <div class="bc-desc">Pay per job at the time of booking using your card on file. Available immediately on activation — no approval needed.</div>
-                <div class="bc-sub">🛡 Payment held in escrow until job is completed</div>
+                <div class="bc-desc">Pay for each job using your card when payment is required. Your payment is held securely in escrow and released to the supplier once the job is completed.</div>
               </div>
               <div class="billing-card" data-value="fortnightly">
                 <div class="bc-top">
@@ -9146,7 +9154,7 @@
                   <div class="bc-title">Fortnightly</div>
                   <span class="meta-badge approval" style="margin-left:auto;">Approval required</span>
                 </div>
-                <div class="bc-desc">Consolidated invoice every 2 weeks settled by Direct Debit. Balanced for steady-volume operations. Our team will contact you to activate.</div>
+                <div class="bc-desc">Receive a consolidated statement every 2 weeks for your completed and payable jobs. Payments are collected by Direct Debit once your billing cycle and mandate have been approved and activated by Keylr.</div>
               </div>
               <div class="billing-card" data-value="monthly">
                 <div class="bc-top">
@@ -9154,7 +9162,7 @@
                   <div class="bc-title">Monthly (4 weeks)</div>
                   <span class="meta-badge approval" style="margin-left:auto;">Approval required</span>
                 </div>
-                <div class="bc-desc">Single monthly consolidated invoice via Direct Debit. Most common for established operators. Our team will contact you to activate.</div>
+                <div class="bc-desc">Receive a consolidated statement every 4 weeks for your completed and payable jobs. Payments are collected by Direct Debit once your billing cycle and mandate have been approved and activated by Keylr.</div>
               </div>
             </div>
           </div>
@@ -9162,7 +9170,7 @@
           <div class="callout callout-neutral" id="depositsCallout">
             <div>
               <div class="callout-title">About Supplier Deposits</div>
-              <div class="callout-body">Some suppliers may request a deposit for certain jobs. In these cases Keylr generates an option to pay the deposit upfront and leaves the remaining amount for your billing cycle. This is always shown clearly before you confirm a job.</div>
+              <div class="callout-body">Some suppliers may require a deposit before starting certain jobs. If required, Keylr will show the deposit amount before you confirm the job. You can pay the deposit upfront, with the remaining amount handled according to your selected billing cycle.</div>
             </div>
           </div>
 
@@ -9170,24 +9178,34 @@
             <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg></div>
             <div style="width:100%;">
               <div class="callout-title">Billing Cycle Approval Process</div>
-              <div class="callout-body" style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
-                <div style="display:flex;gap:10px;align-items:flex-start;"><span style="background:#102048;color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">1</span> Your preferred billing cycle is noted when you submit your profile</div>
-                <div style="display:flex;gap:10px;align-items:flex-start;"><span style="background:#102048;color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">2</span> Keylr reviews your account — one of our team members will contact you directly</div>
-                <div style="display:flex;gap:10px;align-items:flex-start;"><span style="background:#102048;color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">3</span> Once approved, your Direct Debit is activated and your billing cycle goes live</div>
-                <div style="display:flex;gap:10px;align-items:flex-start;"><span style="background:#102048;color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">4</span> You can book services on pay-upfront immediately while approval is in progress</div>
+              <div class="callout-body" style="display:flex;flex-direction:column;gap:12px;margin-top:8px;">
+                <div style="display:flex;gap:10px;align-items:flex-start;">
+                  <span style="background:#102048;color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px;">1</span>
+                  <div><div style="font-weight:700;color:#8a6416;">Select your preferred billing cycle</div><div style="margin-top:2px;">Your selected billing cycle is recorded when you submit your profile.</div></div>
+                </div>
+                <div style="display:flex;gap:10px;align-items:flex-start;">
+                  <span style="background:#102048;color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px;">2</span>
+                  <div><div style="font-weight:700;color:#8a6416;">Keylr reviews your account</div><div style="margin-top:2px;">A member of the Keylr team will contact you to complete the billing setup.</div></div>
+                </div>
+                <div style="display:flex;gap:10px;align-items:flex-start;">
+                  <span style="background:#102048;color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px;">3</span>
+                  <div><div style="font-weight:700;color:#8a6416;">Set up your Direct Debit mandate</div><div style="margin-top:2px;">For Fortnightly or Monthly billing, your Direct Debit mandate must be completed and approved before the billing cycle can be activated.</div></div>
+                </div>
+                <div style="display:flex;gap:10px;align-items:flex-start;">
+                  <span style="background:#102048;color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px;">4</span>
+                  <div><div style="font-weight:700;color:#8a6416;">Billing cycle is activated</div><div style="margin-top:2px;">Once approved, your selected billing cycle becomes active and payments are collected according to that cycle.</div></div>
+                </div>
+                <div style="display:flex;gap:10px;align-items:flex-start;">
+                  <span style="background:#102048;color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px;">5</span>
+                  <div><div style="font-weight:700;color:#8a6416;">Until approval</div><div style="margin-top:2px;">You can continue booking and paying for services using Pay Upfront while your billing cycle approval is in progress.</div></div>
+                </div>
               </div>
             </div>
           </div>
 
           <div class="callout callout-success">
             <div class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
-            <div class="callout-body" style="color:#145c2e;">You approve every job before it starts. All charges are shown clearly — no surprise fees regardless of billing cycle.</div>
-          </div>
-
-          <div class="ob-field" style="margin-top:8px;">
-            <label for="billingEmail">Billing email address <span class="meta-badge optional">Optional</span></label>
-            <input class="field-input" type="email" id="billingEmail" placeholder="finance@company.com">
-            <div class="helper">Add a dedicated email for invoices if your finance team handles payments separately.</div>
+            <div class="callout-body" style="color:#145c2e;"><strong>You approve every job before it starts.</strong><br>All charges are shown clearly before you confirm a job, regardless of your selected billing cycle.</div>
           </div>
         </section>
 
@@ -9229,12 +9247,13 @@
               <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/></svg>
               Pre-filled from sign up — untick to enter a different person
             </div>
+            <div id="pmObSupportExtraContacts"></div>
+            <button type="button" class="pmprop-comp-settings-link" id="pmObAddSupportContactBtn" style="margin-top:12px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Add another contact</button>
           </div>
 
           <div class="contact-card">
             <div class="cc-head">
               <div class="cc-title">Finance &amp; invoicing contact</div>
-              <span class="meta-badge optional">Optional</span>
             </div>
             <div class="cc-subtext">Who handles billing, invoices, and payments</div>
             <div class="same-as-row">
@@ -9251,12 +9270,13 @@
                 <div class="ob-field"><label>Email</label><input class="field-input" type="email" id="financeEmail" placeholder="name@company.com"></div>
               </div>
             </div>
+            <div id="pmObFinanceExtraContacts"></div>
+            <button type="button" class="pmprop-comp-settings-link" id="pmObAddFinanceContactBtn" style="margin-top:12px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Add another contact</button>
           </div>
 
           <div class="contact-card">
             <div class="cc-head">
               <div class="cc-title">Manager / office contact</div>
-              <span class="meta-badge optional">Optional</span>
             </div>
             <div class="cc-subtext">Branch manager or office lead for escalations</div>
             <div class="same-as-row">
@@ -9273,6 +9293,8 @@
                 <div class="ob-field"><label>Email</label><input class="field-input" type="email" id="managerEmail" placeholder="name@company.com"></div>
               </div>
             </div>
+            <div id="pmObManagerExtraContacts"></div>
+            <button type="button" class="pmprop-comp-settings-link" id="pmObAddManagerContactBtn" style="margin-top:12px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Add another contact</button>
           </div>
 
           <div class="callout callout-neutral" style="margin-bottom:0;">
@@ -11229,23 +11251,22 @@
                   <div class="acct-view-card" id="pmCompanyDetailsViewCard">
                     <div class="detail-card-head"><div class="dch-left"><div class="dch-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></div><h3>Company Details</h3></div></div>
                     <div class="detail-mini-grid-3col aev-view-only">
-                      <div class="detail-mini-field" style="grid-column:span 3;"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>Is this your only location or part of a wider group?</div><div class="dmf-value">Single location</div></div>
+                      <div class="detail-mini-field" style="grid-column:span 3;"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>Is this your only location or part of a wider group?</div><div class="dmf-value">Branch / part of a group</div></div>
                       <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>Trading name</div><div class="dmf-value">KEY RIDERS LTD</div></div>
                       <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/></svg>Company reg. number</div><div class="dmf-value">15019055</div></div>
                       <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>Legal company name</div><div class="dmf-value">KEY RIDERS LTD</div></div>
                       <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Registered address</div><div class="dmf-value">60 Tottenham Court Road, Suite 3260a, Fitzrovia, London, W1T 2EW, United Kingdom</div></div>
                       <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Trading address</div><div class="dmf-value">60 Tottenham Court Road, Suite 3260a, Fitzrovia, London, W1T 2EW, United Kingdom</div></div>
-                      <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Operating address</div><div class="dmf-value acct-view-empty">Not set</div></div>
                       <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>VAT registered</div><div class="dmf-value">Yes — GB868776770</div></div>
                       <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>Website</div><div class="dmf-value acct-view-empty">Not set</div></div>
                     </div>
+                    <div id="pmAcctBranchesView"></div>
                   </div>
 
                   <div class="acct-view-card">
                     <div class="detail-card-head"><div class="dch-left"><div class="dch-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><h3>Billing Preference</h3></div></div>
                     <div class="detail-mini-grid-3col aev-view-only">
                       <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Billing cycle</div><div class="dmf-value">Fortnightly <span style="font-size:10.5px;font-weight:700;color:#1a7a3e;">✓ Approved</span></div></div>
-                      <div class="detail-mini-field" style="grid-column:span 2;"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>Billing email</div><div class="dmf-value acct-view-empty">Not set</div></div>
                     </div>
                   </div>
 
@@ -11258,6 +11279,7 @@
                       <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Phone</div><div class="dmf-value" data-tooltip="+44 7888 542811">+44 7888 542811</div></div>
                       <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>Email</div><div class="dmf-value" data-tooltip="pm.thomas.davies.6@keylr-seed.co.uk">pm.thomas.davies.6@keylr-seed.co.uk</div></div>
                     </div>
+                    <div id="pmAcctSupportExtraContactsView"></div>
                     <div class="supapp-card-divider"></div>
                     <div class="detail-mini-grid-4col aev-view-only">
                       <div class="detail-mini-field" style="grid-column:span 4;"><div class="dmf-label" style="font-size:11px;font-weight:700;color:var(--text-body-muted);">FINANCE &amp; INVOICING CONTACT</div></div>
@@ -11266,6 +11288,7 @@
                       <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Phone</div><div class="dmf-value" data-tooltip="+44 7888 542811">+44 7888 542811</div></div>
                       <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>Email</div><div class="dmf-value" data-tooltip="pm.thomas.davies.6@keylr-seed.co.uk">pm.thomas.davies.6@keylr-seed.co.uk</div></div>
                     </div>
+                    <div id="pmAcctFinanceExtraContactsView"></div>
                     <div class="supapp-card-divider"></div>
                     <div class="detail-mini-grid-4col aev-view-only">
                       <div class="detail-mini-field" style="grid-column:span 4;"><div class="dmf-label" style="font-size:11px;font-weight:700;color:var(--text-body-muted);">MANAGER / OFFICE CONTACT</div></div>
@@ -11274,6 +11297,7 @@
                       <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Phone</div><div class="dmf-value" data-tooltip="+44 7888 542811">+44 7888 542811</div></div>
                       <div class="detail-mini-field"><div class="dmf-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>Email</div><div class="dmf-value" data-tooltip="pm.thomas.davies.6@keylr-seed.co.uk">pm.thomas.davies.6@keylr-seed.co.uk</div></div>
                     </div>
+                    <div id="pmAcctManagerExtraContactsView"></div>
                   </div>
                 </div>
               </div>
@@ -11292,11 +11316,6 @@
                       <div class="choice-tile selected" data-value="str-operator" tabindex="0" role="checkbox" aria-checked="true">
                         <div class="tile-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></div>
                         <div class="tile-body"><div class="tile-title">Short-Term Rental Operator</div><div class="tile-desc">Serviced apartments, holiday lets, Airbnb-style rentals and STR management companies.</div></div>
-                        <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
-                      </div>
-                      <div class="choice-tile selected" data-value="hotels-hostels" tabindex="0" role="checkbox" aria-checked="true">
-                        <div class="tile-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M4 21V9l5-4 5 4v12M9 21v-4h4v4M14 12h5v9"/></svg></div>
-                        <div class="tile-body"><div class="tile-title">Hotels &amp; Hostels</div><div class="tile-desc">Commercial hospitality — hotels, boutique hotels, hostels and serviced accommodation.</div></div>
                         <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
                       </div>
                     </div>
@@ -17911,11 +17930,6 @@
                             <div class="tile-body"><div class="tile-title">Short-Term Rental Operator</div><div class="tile-desc">Serviced apartments, holiday lets, Airbnb-style rentals and STR management companies.</div></div>
                             <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
                           </div>
-                          <div class="choice-tile" data-value="hotels-hostels" tabindex="0" role="checkbox" aria-checked="false">
-                            <div class="tile-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M4 21V9l5-4 5 4v12M9 21v-4h4v4M14 12h5v9"/></svg></div>
-                            <div class="tile-body"><div class="tile-title">Hotels &amp; Hostels</div><div class="tile-desc">Commercial hospitality — hotels, boutique hotels, hostels and serviced accommodation.</div></div>
-                            <div class="tile-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
-                          </div>
                         </div>
 
                         <div class="scf-label" style="margin-bottom:8px;">How many properties do you currently manage?</div>
@@ -17964,13 +17978,21 @@
                           </div>
                         </div>
 
-                        <div class="sup-comp-field-grid">
-                          <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Trading name</div><input type="text" class="field-input" id="clientCompTradingName" value="johnhouseltd"></div>
-                          <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Company reg. number</div><input type="text" class="field-input" id="clientCompRegNo" value="15019055"></div>
+                        <div id="clientCompMainBranchWrap">
+                          <div class="ob-section-heading" id="clientCompMainBranchLabel" style="display:none;margin-top:0;">Main Branch</div>
+                          <div class="sup-comp-field-grid">
+                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Trading name</div><input type="text" class="field-input" id="clientCompTradingName" value="johnhouseltd"></div>
+                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Company reg. number</div><input type="text" class="field-input" id="clientCompRegNo" value="15019055"></div>
+                          </div>
+                          <div class="sup-comp-field" style="margin-bottom:12px;"><div class="scf-label">Legal company name</div><input type="text" class="field-input" id="clientCompLegalName" value="johnhouseltd"></div>
+                          <div class="sup-comp-field" style="margin-bottom:12px;"><div class="scf-label">Registered address</div><input type="text" class="field-input" id="clientCompRegAddress" value="60 Tottenham Court Road, London, W1T 2EW"></div>
+                          <div class="sup-comp-field" style="margin-bottom:16px;"><div class="scf-label">Trading address</div><input type="text" class="field-input" id="clientCompTradingAddress" value="60 Tottenham Court Road, London, W1T 2EW"></div>
                         </div>
-                        <div class="sup-comp-field" style="margin-bottom:12px;"><div class="scf-label">Legal company name</div><input type="text" class="field-input" id="clientCompLegalName" value="johnhouseltd"></div>
-                        <div class="sup-comp-field" style="margin-bottom:12px;"><div class="scf-label">Registered address</div><input type="text" class="field-input" id="clientCompRegAddress" value="60 Tottenham Court Road, London, W1T 2EW"></div>
-                        <div class="sup-comp-field" style="margin-bottom:16px;"><div class="scf-label">Trading address</div><input type="text" class="field-input" id="clientCompTradingAddress" value="60 Tottenham Court Road, London, W1T 2EW"></div>
+
+                        <div id="clientCompBranchesSection" style="display:none;">
+                          <div id="clientCompBranchesList"></div>
+                          <button type="button" class="pmprop-comp-settings-link" id="clientCompAddBranchBtn" style="margin-top:4px;margin-bottom:16px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Add Branch</button>
+                        </div>
 
                         <div class="ob-toggle-card">
                           <div class="otc-top">
@@ -17978,7 +18000,12 @@
                             <button type="button" class="toggle-switch on" id="clientCompVatToggle" role="switch" aria-checked="true"><span class="thumb"></span></button>
                           </div>
                           <div class="otc-body field-collapsible open" id="clientCompVatField" style="max-height:1200px;opacity:1;">
-                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">VAT number</div><input type="text" class="field-input" id="clientCompVatNumber" value="GB868776770"></div>
+                            <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">VAT number</div>
+                              <div class="vat-verify-row">
+                                <input type="text" class="field-input" id="clientCompVatNumber" value="GB868776770">
+                                <button type="button" class="btn btn-muted-action" id="clientCompVerifyHmrcBtn">Verify with HMRC</button>
+                              </div>
+                            </div>
                           </div>
                         </div>
 
@@ -18023,7 +18050,7 @@
                         <div class="scf-label" style="margin-bottom:8px;">Company Logo</div>
                         <div style="display:flex;align-items:center;gap:12px;border:1px solid var(--border-subtle);border-radius:10px;padding:10px 14px;">
                           <div style="width:36px;height:36px;border-radius:8px;background:var(--surface-soft);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--text-body-muted);flex-shrink:0;overflow:hidden;">Comp</div>
-                          <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--text-heading);">Current logo</div><div style="font-size:11.5px;color:var(--text-body-muted);">PNG or SVG · shown to service providers</div></div>
+                          <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--text-heading);">Current logo</div><div style="font-size:11.5px;color:var(--text-body-muted);">PNG, JPG or SVG · shown to service providers</div></div>
                           <span style="font-size:12.5px;font-weight:600;color:var(--accent-blue);cursor:pointer;">Replace</span>
                         </div>
                         <div style="display:flex;justify-content:flex-end;margin-top:20px;"><button type="button" class="btn btn-primary">Update</button></div>
@@ -18093,29 +18120,25 @@
                           <div class="billing-card" data-value="upfront">
                             <div class="bc-top">
                               <div class="bc-radio"></div>
-                              <div class="bc-title">Pay upfront</div>
+                              <div class="bc-title">Pay Upfront</div>
                             </div>
-                            <div class="bc-desc">Pay per job at the time of booking using card on file. Available immediately on activation — no approval needed.</div>
-                            <div class="bc-sub">🛡 Payment held in escrow until job is completed</div>
+                            <div class="bc-desc">Pay for each job using card on file when payment is required. Payment is held securely in escrow and released to the supplier once the job is completed.</div>
                           </div>
                           <div class="billing-card selected" data-value="fortnightly">
                             <div class="bc-top">
                               <div class="bc-radio"></div>
                               <div class="bc-title">Fortnightly</div>
                             </div>
-                            <div class="bc-desc">Consolidated invoice every 2 weeks settled by Direct Debit. Balanced for steady-volume operations.</div>
+                            <div class="bc-desc">Receive a consolidated statement every 2 weeks for completed and payable jobs. Payments are collected by Direct Debit once the billing cycle and mandate have been approved and activated.</div>
                           </div>
                           <div class="billing-card" data-value="monthly">
                             <div class="bc-top">
                               <div class="bc-radio"></div>
                               <div class="bc-title">Monthly (4 weeks)</div>
                             </div>
-                            <div class="bc-desc">Single monthly consolidated invoice via Direct Debit. Most common for established operators.</div>
+                            <div class="bc-desc">Receive a consolidated statement every 4 weeks for completed and payable jobs. Payments are collected by Direct Debit once the billing cycle and mandate have been approved and activated.</div>
                           </div>
                         </div>
-
-                        <div class="scf-label" style="margin-bottom:8px;">Billing email address <span class="meta-badge optional">Optional</span></div>
-                        <input class="field-input" type="email" id="clientCompBillingEmail" placeholder="finance@company.com">
                         <div style="display:flex;justify-content:flex-end;margin-top:20px;"><button type="button" class="btn btn-primary">Update</button></div>
                       </div>
                     </div>
@@ -18132,20 +18155,24 @@
                           <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Full name</div><input type="text" class="field-input" id="clientCompSupportName" value="John John"></div>
                           <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Job title</div><input type="text" class="field-input" id="clientCompSupportTitle" placeholder="Not set"></div>
                         </div>
-                        <div class="sup-comp-field-grid" style="margin-bottom:20px;">
+                        <div class="sup-comp-field-grid" style="margin-bottom:8px;">
                           <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Phone</div><input type="text" class="field-input" id="clientCompSupportPhone" value="+44 7991 197253"></div>
                           <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Email</div><input type="email" class="field-input" id="clientCompSupportEmail" value="john@house.com"></div>
                         </div>
+                        <div id="clientCompSupportExtraContacts"></div>
+                        <button type="button" class="pmprop-comp-settings-link" id="clientCompAddSupportContactBtn" style="margin-bottom:20px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Add another contact</button>
 
                         <div class="scf-label" style="margin-bottom:8px;font-size:11px;">FINANCE &amp; INVOICING CONTACT</div>
                         <div class="sup-comp-field-grid" style="margin-bottom:8px;">
                           <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Full name</div><input type="text" class="field-input" id="clientCompFinanceName" value="John John"></div>
                           <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Job title</div><input type="text" class="field-input" id="clientCompFinanceTitle" placeholder="Not set"></div>
                         </div>
-                        <div class="sup-comp-field-grid" style="margin-bottom:20px;">
+                        <div class="sup-comp-field-grid" style="margin-bottom:8px;">
                           <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Phone</div><input type="text" class="field-input" id="clientCompFinancePhone" value="+44 7991 197253"></div>
                           <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Email</div><input type="email" class="field-input" id="clientCompFinanceEmail" value="john@house.com"></div>
                         </div>
+                        <div id="clientCompFinanceExtraContacts"></div>
+                        <button type="button" class="pmprop-comp-settings-link" id="clientCompAddFinanceContactBtn" style="margin-bottom:20px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Add another contact</button>
 
                         <div class="scf-label" style="margin-bottom:8px;font-size:11px;">MANAGER / OFFICE CONTACT</div>
                         <div class="sup-comp-field-grid" style="margin-bottom:8px;">
@@ -18156,6 +18183,8 @@
                           <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Phone</div><input type="text" class="field-input" id="clientCompManagerPhone" value="+44 7991 197253"></div>
                           <div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Email</div><input type="email" class="field-input" id="clientCompManagerEmail" value="john@house.com"></div>
                         </div>
+                        <div id="clientCompManagerExtraContacts"></div>
+                        <button type="button" class="pmprop-comp-settings-link" id="clientCompAddManagerContactBtn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Add another contact</button>
                         <div style="display:flex;justify-content:flex-end;margin-top:20px;"><button type="button" class="btn btn-primary">Update</button></div>
                       </div>
                     </div>
@@ -19491,7 +19520,7 @@
 
   /* signup step 1 -> step 2 (OTP) */
   var signupForm = document.getElementById('signupForm');
-  var signupCapturedData = {};
+  var signupCapturedData = { locationType: 'branch' };
   function pmObCollectWizardData() {
     function selectedValues(containerId, selector) {
       var el = document.getElementById(containerId);
@@ -20023,12 +20052,10 @@
     legalCompanyName: { label: 'Legal company name', section: 'Company Details' },
     registeredAddress: { label: 'Registered address', section: 'Company Details' },
     tradingAddress: { label: 'Trading address', section: 'Company Details' },
-    operatingAddress: { label: 'Operating address', section: 'Company Details' },
     vatRegistered: { label: 'VAT registered', section: 'Company Details', fieldType: 'toggle' },
     vatNumber: { label: 'VAT number', section: 'Company Details' },
     companyWebsite: { label: 'Website', section: 'Company Details' },
     billingCycle: { label: 'Preferred billing cycle', section: 'Billing', fieldType: 'billing-cycle' },
-    billingEmail: { label: 'Billing email address', section: 'Billing' },
     supportName: { label: 'Support contact: Full name', section: 'Contacts' },
     supportTitle: { label: 'Support contact: Job title', section: 'Contacts' },
     supportPhone: { label: 'Support contact: Phone', section: 'Contacts' },
@@ -20064,6 +20091,49 @@
       if (!newDisplay || newDisplay === 'Not set') return;
       changes.push({ section: map.section, fieldLabel: map.label, oldValue: oldDisplay, newValue: newDisplay, fieldType: map.fieldType });
     });
+    // Branches and the extra (beyond-the-first) contacts per category are arrays, not simple
+    // scalar values, so they don't fit the field-by-field comparison above. Each *branch* gets
+    // its own separate Name and Location change entries (fieldLabel "Branch 1: Name", "Branch 1:
+    // Location"...), diffed by the branch's persistent id against the snapshot \u2014 matching the
+    // same pattern contacts already use (Full name, Job title, Phone, Email as separate cards
+    // rather than one combined value), so a new or edited branch's name and address each show as
+    // their own card in chat rather than being merged into a single value.
+    var oldBranchesList = obEditSnapshot.branches || [];
+    PM_OB_BRANCHES.forEach(function (branch, i) {
+      if (!branch.name || !branch.name.trim()) return; // incomplete/empty branch, nothing to report
+      var oldMatch = oldBranchesList.filter(function (b) { return b.id === branch.id; })[0];
+      var branchNum = i + 1;
+      var oldName = (oldMatch && oldMatch.name && oldMatch.name.trim()) || 'Not set';
+      var newName = branch.name.trim();
+      if (oldName !== newName) {
+        changes.push({ section: 'Company Details', fieldLabel: 'Branch ' + branchNum + ': Name', oldValue: oldName, newValue: newName, rawData: JSON.parse(JSON.stringify(branch)), isBranchChange: true });
+      }
+      var oldAddress = (oldMatch && oldMatch.address && oldMatch.address.trim()) || 'Not set';
+      var newAddress = (branch.address && branch.address.trim()) || 'Not set';
+      if (oldAddress !== newAddress && newAddress !== 'Not set') {
+        changes.push({ section: 'Company Details', fieldLabel: 'Branch ' + branchNum + ': Location', oldValue: oldAddress, newValue: newAddress, rawData: JSON.parse(JSON.stringify(branch)), isBranchChange: true });
+      }
+    });
+    // Same per-item, per-field approach as branches above: each extra contact's individual
+    // fields (Full name, Job title, Phone, Email) get their own separate change entries rather
+    // than every contact in a category being merged into one comma-separated summary.
+    var PM_OB_CONTACT_CATEGORY_LABELS = { support: 'Support', finance: 'Finance', manager: 'Manager' };
+    var PM_OB_CONTACT_FIELD_LABELS = { name: 'Full name', title: 'Job title', phone: 'Phone', email: 'Email' };
+    ['support', 'finance', 'manager'].forEach(function (category) {
+      var oldList = (obEditSnapshot.extraContacts && obEditSnapshot.extraContacts[category]) || [];
+      PM_OB_EXTRA_CONTACTS[category].forEach(function (contact, i) {
+        if (!contact.name || !contact.name.trim()) return; // incomplete/empty contact, nothing to report
+        var oldMatch = oldList.filter(function (c) { return c.id === contact.id; })[0];
+        var contactLabel = 'Additional ' + PM_OB_CONTACT_CATEGORY_LABELS[category] + ' Contact ' + (i + 1);
+        ['name', 'title', 'phone', 'email'].forEach(function (field) {
+          var oldFieldVal = (oldMatch && oldMatch[field] && oldMatch[field].trim()) || 'Not set';
+          var newFieldVal = (contact[field] && contact[field].trim()) || 'Not set';
+          if (oldFieldVal !== newFieldVal && newFieldVal !== 'Not set') {
+            changes.push({ section: 'Contacts', fieldLabel: contactLabel + ': ' + PM_OB_CONTACT_FIELD_LABELS[field], oldValue: oldFieldVal, newValue: newFieldVal, rawData: JSON.parse(JSON.stringify(contact)), contactCategory: category });
+          }
+        });
+      });
+    });
     // Full name is fixed at signup and Email/Phone are edited directly from the Profile tab view —
     // none of these go through the request/approval flow, so Personal Details is intentionally
     // not tracked here.
@@ -20081,9 +20151,30 @@
     obEditSnapshot.fullName = document.getElementById('pmSettingsFullNameView').textContent.trim();
     obEditSnapshot.email = document.getElementById('pmSettingsEmailView').textContent.trim();
     obEditSnapshot.phone = document.getElementById('pmSettingsPhoneView').textContent.trim();
+    obEditSnapshot.branches = JSON.parse(JSON.stringify(PM_OB_BRANCHES));
+    obEditSnapshot.extraContacts = JSON.parse(JSON.stringify(PM_OB_EXTRA_CONTACTS));
     startPMOnboarding(typeof signupCapturedData !== 'undefined' ? signupCapturedData : {});
     goToObStep(pmObVisibleSteps()[0]);
     document.getElementById('obSaveSkipBtn').style.display = 'inline-flex';
+    // Branches/extra contacts already on file (from an earlier session) otherwise wouldn't show
+    // in the form at all when re-opening Edit \u2014 these render functions are normally only
+    // triggered by their own Add button, never on form-open.
+    // The location-type tile selector is static HTML, not data-bound, so it always starts on
+    // "Single location" by default \u2014 without this, a PM who previously chose "Branch / part of a
+    // group" and added branches would see the form silently reset to Single location on re-open,
+    // hiding their branches section even though the branch data itself is still intact.
+    (function () {
+      var savedType = signupCapturedData.locationType || 'single';
+      var tiles = document.querySelectorAll('#locationTypeTiles .choice-tile');
+      tiles.forEach(function (t) {
+        var isMatch = t.getAttribute('data-value') === savedType;
+        t.classList.toggle('selected', isMatch);
+        if (t.hasAttribute('aria-checked')) t.setAttribute('aria-checked', isMatch ? 'true' : 'false');
+      });
+      pmObSetBranchMode(savedType === 'branch');
+    })();
+    pmObRenderBranches();
+    ['support', 'finance', 'manager'].forEach(pmObRenderExtraContacts);
   });
   function pmObSubmitEditRequest() {
     pmObCollectWizardData();
@@ -20117,6 +20208,8 @@
       obApp.classList.remove('active');
       document.body.style.overflow = '';
       obEditFromSettings = false;
+      pmAcctRenderBranchesView();
+      pmAcctRenderContactsView();
       showToast(newBatch ? newBatch.changes.length + ' change' + (newBatch.changes.length === 1 ? '' : 's') + ' submitted for review.' : 'No changes to submit.');
       showPMView('settings');
       if (typeof switchPMSettingsTab === 'function') switchPMSettingsTab(newBatch ? 'chat' : 'profile', newBatch ? newBatch.id : undefined);
@@ -20501,7 +20594,58 @@
   initSingleSelectTiles(document.getElementById('countTiles'));
 
   // Step 2
-  initSingleSelectTiles(document.getElementById('locationTypeTiles'));
+  function pmObSetBranchMode(isBranch) {
+    document.getElementById('pmObMainBranchWrap').classList.toggle('pmob-branch-mode', isBranch);
+    document.getElementById('pmObMainBranchLabel').style.display = isBranch ? '' : 'none';
+    document.getElementById('pmObBranchesSection').style.display = isBranch ? '' : 'none';
+  }
+  initSingleSelectTiles(document.getElementById('locationTypeTiles'), function (value) {
+    pmObSetBranchMode(value === 'branch');
+  });
+  pmObSetBranchMode(document.querySelector('#locationTypeTiles .choice-tile.selected').getAttribute('data-value') === 'branch');
+
+  /* Step 2: "Add Branch" \u2014 only relevant once the PM has said they're part of a wider group.
+     Same generic add/remove/edit pattern as the step-5 "Add another contact" cards. */
+  var PM_OB_BRANCHES = [
+    { id: 'pmob-branch-seed-1', name: 'Manchester Office', address: '14 King Street, Manchester, M2 6AG' },
+    { id: 'pmob-branch-seed-2', name: 'Birmingham Office', address: '8 Colmore Row, Birmingham, B3 2QD' }
+  ];
+  var pmObBranchIdSeq = 0;
+  function pmObBranchCardHtml(branch, index) {
+    return '<div class="pmob-branch-card" data-branch-id="' + branch.id + '">' +
+      '<div class="pmob-branch-card-head">' +
+        '<div class="pmob-branch-card-title">Branch ' + (index + 1) + '</div>' +
+        '<button type="button" class="pmob-extra-contact-remove-btn" data-remove-branch="' + branch.id + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg>Remove branch</button>' +
+      '</div>' +
+      '<div class="ob-row-2">' +
+        '<div class="ob-field"><label>Branch name</label><input class="field-input" type="text" data-field="name" placeholder="e.g. Manchester Office" value="' + pmpropEscapeHtml(branch.name) + '"></div>' +
+        '<div class="ob-field"><label>Address</label><input class="field-input" type="text" data-field="address" placeholder="Start typing a postcode or address" value="' + pmpropEscapeHtml(branch.address) + '"></div>' +
+      '</div>' +
+    '</div>';
+  }
+  function pmObRenderBranches() {
+    var wrap = document.getElementById('pmObBranchesList');
+    wrap.innerHTML = PM_OB_BRANCHES.map(pmObBranchCardHtml).join('');
+    wrap.querySelectorAll('[data-remove-branch]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var id = btn.getAttribute('data-remove-branch');
+        PM_OB_BRANCHES = PM_OB_BRANCHES.filter(function (b) { return b.id !== id; });
+        pmObRenderBranches();
+      });
+    });
+    wrap.querySelectorAll('.pmob-branch-card').forEach(function (card) {
+      var id = card.getAttribute('data-branch-id');
+      var branch = PM_OB_BRANCHES.filter(function (b) { return b.id === id; })[0];
+      if (!branch) return;
+      card.querySelectorAll('[data-field]').forEach(function (input) {
+        input.addEventListener('input', function () { branch[input.getAttribute('data-field')] = input.value; });
+      });
+    });
+  }
+  document.getElementById('pmObAddBranchBtn').addEventListener('click', function () {
+    PM_OB_BRANCHES.push({ id: 'pmob-branch-' + (++pmObBranchIdSeq), name: '', address: '' });
+    pmObRenderBranches();
+  });
 
   var sameAsRegistered = document.getElementById('sameAsRegistered');
   var tradingAddressFields = document.getElementById('tradingAddressFields');
@@ -20517,6 +20661,21 @@
     vatToggle.setAttribute('aria-checked', isOn ? 'true' : 'false');
     setCollapsibleOpen(vatField, isOn);
     setTimeout(pmCompanyBanner.update, 0);
+  });
+
+  var pmVatNumberInput = document.getElementById('vatNumber');
+  var pmVerifyHmrcBtn = document.getElementById('pmVerifyHmrcBtn');
+  pmVatNumberInput.addEventListener('input', function () {
+    pmVerifyHmrcBtn.disabled = pmVatNumberInput.value.trim().length === 0;
+    pmVerifyHmrcBtn.textContent = 'Verify with HMRC';
+  });
+  pmVerifyHmrcBtn.addEventListener('click', function () {
+    if (pmVerifyHmrcBtn.disabled) return;
+    pmVerifyHmrcBtn.textContent = 'Verifying...';
+    setTimeout(function () {
+      pmVerifyHmrcBtn.textContent = 'Verified \u2713';
+      showToast('VAT number verified with HMRC.');
+    }, 900);
   });
 
   var pmCompanyBanner = initAttentionBanner('pmCompanyAttentionBanner', [
@@ -20729,6 +20888,110 @@
   ['sameAsSupport', 'sameAsFinance', 'sameAsManager'].forEach(function (id) {
     document.getElementById(id).addEventListener('change', function () { setTimeout(pmContactsBanner.update, 0); });
   });
+
+  /* Step 5: "Add another contact" \u2014 each category (support/finance/manager) keeps its own list of
+     additional contacts beyond the one fixed set of fields already on the card. One generic
+     render/add/remove implementation shared across all three rather than repeating it per card. */
+  var PM_OB_EXTRA_CONTACTS = {
+    support: [
+      { id: 'pmob-extra-seed-1', name: 'Sarah Mitchell', title: 'Senior Lettings Coordinator', phone: '+44 7700 900321', email: 'sarah.mitchell@keylr-seed.co.uk' },
+      { id: 'pmob-extra-seed-2', name: 'James Cooper', title: 'Tenant Support Lead', phone: '+44 7700 900654', email: 'james.cooper@keylr-seed.co.uk' }
+    ],
+    finance: [], manager: []
+  };
+  var pmObExtraContactIdSeq = 0;
+  function pmObExtraContactRowHtml(contact, index) {
+    return '<div class="pmob-branch-card" data-extra-contact-id="' + contact.id + '">' +
+      '<div class="pmob-branch-card-head">' +
+        '<div class="pmob-branch-card-title">Additional contact ' + (index + 1) + '</div>' +
+        '<button type="button" class="pmob-extra-contact-remove-btn" data-remove-extra-contact="' + contact.id + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg>Remove contact</button>' +
+      '</div>' +
+      '<div class="ob-row-2">' +
+        '<div class="ob-field"><label>Full name</label><input class="field-input" type="text" data-field="name" placeholder="Full name" value="' + pmpropEscapeHtml(contact.name) + '"></div>' +
+        '<div class="ob-field"><label>Job title</label><input class="field-input" type="text" data-field="title" placeholder="e.g. Lettings Manager" value="' + pmpropEscapeHtml(contact.title) + '"></div>' +
+      '</div>' +
+      '<div class="ob-row-2">' +
+        '<div class="ob-field"><label>Phone</label><input class="field-input" type="tel" data-field="phone" placeholder="+44 7700 000000" value="' + pmpropEscapeHtml(contact.phone) + '"></div>' +
+        '<div class="ob-field"><label>Email</label><input class="field-input" type="email" data-field="email" placeholder="name@company.com" value="' + pmpropEscapeHtml(contact.email) + '"></div>' +
+      '</div>' +
+    '</div>';
+  }
+  function pmObRenderExtraContacts(category) {
+    var wrap = document.getElementById('pmOb' + category.charAt(0).toUpperCase() + category.slice(1) + 'ExtraContacts');
+    if (!wrap) return;
+    wrap.innerHTML = PM_OB_EXTRA_CONTACTS[category].map(pmObExtraContactRowHtml).join('');
+    wrap.querySelectorAll('[data-remove-extra-contact]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var id = btn.getAttribute('data-remove-extra-contact');
+        PM_OB_EXTRA_CONTACTS[category] = PM_OB_EXTRA_CONTACTS[category].filter(function (c) { return c.id !== id; });
+        pmObRenderExtraContacts(category);
+      });
+    });
+    // Field edits mutate the array directly rather than triggering a re-render, so the person
+    // doesn't lose their cursor position/focus mid-keystroke \u2014 only add/remove rebuilds the DOM.
+    wrap.querySelectorAll('.pmob-branch-card').forEach(function (row) {
+      var id = row.getAttribute('data-extra-contact-id');
+      var contact = PM_OB_EXTRA_CONTACTS[category].filter(function (c) { return c.id === id; })[0];
+      if (!contact) return;
+      row.querySelectorAll('[data-field]').forEach(function (input) {
+        input.addEventListener('input', function () { contact[input.getAttribute('data-field')] = input.value; });
+      });
+    });
+  }
+  ['support', 'finance', 'manager'].forEach(function (category) {
+    var addBtnId = 'pmObAdd' + category.charAt(0).toUpperCase() + category.slice(1) + 'ContactBtn';
+    var addBtn = document.getElementById(addBtnId);
+    if (!addBtn) return;
+    addBtn.addEventListener('click', function () {
+      PM_OB_EXTRA_CONTACTS[category].push({ id: 'pmob-extra-' + (++pmObExtraContactIdSeq), name: '', title: '', phone: '', email: '' });
+      pmObRenderExtraContacts(category);
+    });
+  });
+
+  /* Profile tab (view mode): reflects whatever's currently in PM_OB_BRANCHES / PM_OB_EXTRA_CONTACTS
+     \u2014 the same arrays the edit form itself reads and writes \u2014 so a PM who's added branches or
+     extra contacts sees them listed here too, not just inside the edit flow. Re-run after a
+     successful submission (see pmObSubmitEditRequest) and once at load in case seed data ever
+     includes any. */
+  function pmAcctRenderBranchesView() {
+    var card = document.getElementById('pmCompanyDetailsViewCard');
+    var wrap = document.getElementById('pmAcctBranchesView');
+    if (!card || !wrap) return;
+    var named = PM_OB_BRANCHES.filter(function (b) { return b.name && b.name.trim(); });
+    if (!named.length) { wrap.innerHTML = ''; return; }
+    wrap.innerHTML = '<div class="supapp-card-divider"></div>' +
+      '<div class="detail-mini-grid-3col aev-view-only">' +
+        '<div class="detail-mini-field" style="grid-column:span 3;"><div class="dmf-label" style="font-size:11px;font-weight:700;color:var(--text-body-muted);">ADDITIONAL BRANCHES</div></div>' +
+        named.map(function (b, i) {
+          var addr = b.address && b.address.trim();
+          return '<div class="detail-mini-field"><div class="dmf-label">Branch ' + (i + 1) + ' name</div><div class="dmf-value">' + pmpropEscapeHtml(b.name.trim()) + '</div></div>' +
+                 '<div class="detail-mini-field" style="grid-column:span 2;"><div class="dmf-label">Address</div><div class="dmf-value' + (addr ? '' : ' acct-view-empty') + '">' + pmpropEscapeHtml(addr || 'Not set') + '</div></div>';
+        }).join('') +
+      '</div>';
+  }
+  function pmAcctRenderContactsView() {
+    var PM_OB_CONTACT_CATEGORY_LABELS = { support: 'SUPPORT', finance: 'FINANCE', manager: 'MANAGER' };
+    ['support', 'finance', 'manager'].forEach(function (category) {
+      var wrap = document.getElementById('pmAcct' + category.charAt(0).toUpperCase() + category.slice(1) + 'ExtraContactsView');
+      if (!wrap) return;
+      var named = PM_OB_EXTRA_CONTACTS[category].filter(function (c) { return c.name && c.name.trim(); });
+      if (!named.length) { wrap.innerHTML = ''; return; }
+      wrap.innerHTML = named.map(function (c, i) {
+        var title = c.title && c.title.trim();
+        var phone = c.phone && c.phone.trim();
+        var email = c.email && c.email.trim();
+        return '<div class="detail-mini-grid-4col aev-view-only" style="margin-top:10px;">' +
+          '<div class="detail-mini-field" style="grid-column:span 4;"><div class="dmf-label" style="font-size:11px;font-weight:700;color:var(--text-body-muted);">ADDITIONAL ' + PM_OB_CONTACT_CATEGORY_LABELS[category] + ' CONTACT ' + (i + 1) + '</div></div>' +
+          '<div class="detail-mini-field"><div class="dmf-label">Full name</div><div class="dmf-value">' + pmpropEscapeHtml(c.name.trim()) + '</div></div>' +
+          '<div class="detail-mini-field"><div class="dmf-label">Job title</div><div class="dmf-value' + (title ? '' : ' acct-view-empty') + '">' + pmpropEscapeHtml(title || 'Not set') + '</div></div>' +
+          '<div class="detail-mini-field"><div class="dmf-label">Phone</div><div class="dmf-value' + (phone ? '' : ' acct-view-empty') + '">' + pmpropEscapeHtml(phone || 'Not set') + '</div></div>' +
+          '<div class="detail-mini-field"><div class="dmf-label">Email</div><div class="dmf-value' + (email ? '' : ' acct-view-empty') + '">' + pmpropEscapeHtml(email || 'Not set') + '</div></div>' +
+        '</div>';
+      }).join('');
+    });
+  }
+  pmAcctRenderBranchesView();
+  pmAcctRenderContactsView();
 
   /* ---- Launch onboarding after signup OTP confirm ---- */
 
@@ -26080,6 +26343,24 @@
       obApp.classList.add('visible');
     });
     goToObStep(pendingStep);
+    // A PM resuming an incomplete signup may already have branches or extra contacts saved
+    // from an earlier partial session \u2014 without this, the sections render empty until the
+    // person clicks Add, at which point the *entire* existing array suddenly appears merged in
+    // with the new blank entry, looking like duplicates rather than their actual saved data.
+    // Same fix as the Edit button, and for the same reason: these render functions are normally
+    // only triggered by their own Add button, never on wizard-open.
+    (function () {
+      var savedType = signupCapturedData.locationType || 'single';
+      var tiles = document.querySelectorAll('#locationTypeTiles .choice-tile');
+      tiles.forEach(function (t) {
+        var isMatch = t.getAttribute('data-value') === savedType;
+        t.classList.toggle('selected', isMatch);
+        if (t.hasAttribute('aria-checked')) t.setAttribute('aria-checked', isMatch ? 'true' : 'false');
+      });
+      pmObSetBranchMode(savedType === 'branch');
+    })();
+    pmObRenderBranches();
+    ['support', 'finance', 'manager'].forEach(pmObRenderExtraContacts);
   });
   document.getElementById('managePropertiesBtn').addEventListener('click', function () {
     showToast('Manage Properties isn\u2019t wired up in this prototype yet.');
@@ -35462,14 +35743,12 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
           { section: 'Company Details', fieldLabel: 'Legal company name', oldValue: 'Not set', newValue: 'John House Property Management Ltd', status: 'resubmit' },
           { section: 'Company Details', fieldLabel: 'Registered address', oldValue: 'Not set', newValue: '60 Tottenham Court Road, London, W1T 2EW', status: 'resubmit' },
           { section: 'Company Details', fieldLabel: 'Trading address', oldValue: 'Not set', newValue: '12 Baker Street, London, NW1 6XE', status: 'pending' },
-          { section: 'Company Details', fieldLabel: 'Operating address', oldValue: 'Not set', newValue: '12 Baker Street, London, NW1 6XE', status: 'pending' },
           { section: 'Company Details', fieldLabel: 'VAT registered', oldValue: 'No', newValue: 'Yes', fieldType: 'toggle', status: 'approved' },
           { section: 'Company Details', fieldLabel: 'VAT number', oldValue: 'Not set', newValue: 'GB868776770', status: 'approved' },
           { section: 'Company Details', fieldLabel: 'Website', oldValue: 'Not set', newValue: 'https://johnhouseproperties.co.uk', status: 'pending' }
         ] },
         { id: 'pmbatch2', submittedDate: d2, changes: [
           { section: 'Billing', fieldLabel: 'Preferred billing cycle', oldValue: 'Pay upfront', newValue: 'Fortnightly', fieldType: 'billing-cycle', status: 'pending' },
-          { section: 'Billing', fieldLabel: 'Billing email address', oldValue: 'Not set', newValue: 'finance@johnhouseproperties.co.uk', status: 'resubmit' },
           { section: 'Contacts', fieldLabel: 'Support contact: Full name', oldValue: 'John John', newValue: 'Amara Osei', status: 'approved' },
           { section: 'Contacts', fieldLabel: 'Support contact: Job title', oldValue: 'Not set', newValue: 'Portfolio Manager', status: 'approved' },
           { section: 'Contacts', fieldLabel: 'Support contact: Phone', oldValue: '+44 7991 197253', newValue: '+44 7712 345098', status: 'pending' },
@@ -35589,7 +35868,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     'Website': ['clientCompWebsite'],
     'VAT number': ['clientCompVatNumber'],
     "Preferred billing cycle": [],
-    'Billing email address': ['clientCompBillingEmail'],
     'Support contact: Full name': ['clientCompSupportName'],
     'Support contact: Job title': ['clientCompSupportTitle'],
     'Support contact: Phone': ['clientCompSupportPhone'],
@@ -35623,6 +35901,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         var isBranch = tile.getAttribute('data-value') === 'branch';
         tile.classList.toggle('selected', isBranch === branchSelected);
       });
+      if (typeof clientCompSetBranchMode === 'function') clientCompSetBranchMode(branchSelected);
       return;
     }
     if (change.fieldType === 'billing-cycle') {
@@ -35630,6 +35909,25 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       document.querySelectorAll('#clientCompBillingCycleCards .billing-card').forEach(function (card) {
         card.classList.toggle('selected', card.getAttribute('data-value') === cycleValue);
       });
+      return;
+    }
+    if (change.isBranchChange && change.rawData) {
+      if (typeof CLIENT_COMP_BRANCHES !== 'undefined') {
+        var existingIdx = CLIENT_COMP_BRANCHES.findIndex(function (b) { return b.id === change.rawData.id; });
+        if (existingIdx > -1) { CLIENT_COMP_BRANCHES[existingIdx] = change.rawData; }
+        else { CLIENT_COMP_BRANCHES.push(change.rawData); }
+        if (typeof clientCompRenderBranches === 'function') clientCompRenderBranches();
+      }
+      return;
+    }
+    if (change.contactCategory && change.rawData) {
+      if (typeof CLIENT_COMP_EXTRA_CONTACTS !== 'undefined') {
+        var list = CLIENT_COMP_EXTRA_CONTACTS[change.contactCategory];
+        var existingContactIdx = list.findIndex(function (c) { return c.id === change.rawData.id; });
+        if (existingContactIdx > -1) { list[existingContactIdx] = change.rawData; }
+        else { list.push(change.rawData); }
+        if (typeof clientCompRenderExtraContacts === 'function') clientCompRenderExtraContacts(change.contactCategory);
+      }
       return;
     }
     var targets = PM_FIELD_LABEL_TO_TARGETS[change.fieldLabel];
@@ -40138,11 +40436,20 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   document.querySelectorAll('#clientCompPanelLocations .simple-chip').forEach(function (chip) {
     chip.addEventListener('click', function () { chip.classList.toggle('selected'); });
   });
+  function clientCompSetBranchMode(isBranch) {
+    var wrap = document.getElementById('clientCompMainBranchWrap');
+    var label = document.getElementById('clientCompMainBranchLabel');
+    var section = document.getElementById('clientCompBranchesSection');
+    if (wrap) wrap.classList.toggle('pmob-branch-mode', isBranch);
+    if (label) label.style.display = isBranch ? '' : 'none';
+    if (section) section.style.display = isBranch ? '' : 'none';
+  }
   document.querySelectorAll('#clientCompLocationTypeTiles .choice-tile').forEach(function (tile) {
     tile.addEventListener('click', function () {
       document.querySelectorAll('#clientCompLocationTypeTiles .choice-tile').forEach(function (t) { t.classList.remove('selected'); t.setAttribute('aria-checked', 'false'); });
       tile.classList.add('selected');
       tile.setAttribute('aria-checked', 'true');
+      clientCompSetBranchMode(tile.getAttribute('data-value') === 'branch');
     });
   });
   var clientCompVatToggleEl = document.getElementById('clientCompVatToggle');
@@ -40156,6 +40463,107 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       field.style.opacity = isOn ? '1' : '0';
     }
   });
+  var clientCompVerifyHmrcBtn = document.getElementById('clientCompVerifyHmrcBtn');
+  if (clientCompVerifyHmrcBtn) clientCompVerifyHmrcBtn.addEventListener('click', function () {
+    clientCompVerifyHmrcBtn.textContent = 'Verifying...';
+    setTimeout(function () {
+      clientCompVerifyHmrcBtn.textContent = 'Verified \u2713';
+      if (typeof showToast === 'function') showToast('VAT number verified with HMRC.');
+    }, 900);
+  });
+
+  /* Admin's PM Applicant view: Branches and per-category extra contacts, mirroring PM's own
+     onboarding/edit-flow systems exactly (same card markup, same add/remove pattern) so admin can
+     directly manage the same data a PM would manage themselves \u2014 and so an approved change from
+     a PM's submission (see applyApprovedPmField) can populate these same arrays and render
+     identically here. */
+  var CLIENT_COMP_BRANCHES = [];
+  var clientCompBranchIdSeq = 0;
+  function clientCompBranchCardHtml(branch, index) {
+    return '<div class="pmob-branch-card" data-branch-id="' + branch.id + '">' +
+      '<div class="pmob-branch-card-head">' +
+        '<div class="pmob-branch-card-title">Branch ' + (index + 1) + '</div>' +
+        '<button type="button" class="pmob-extra-contact-remove-btn" data-remove-branch="' + branch.id + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg>Remove branch</button>' +
+      '</div>' +
+      '<div class="sup-comp-field-grid">' +
+        '<div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Branch name</div><input class="field-input" type="text" data-field="name" placeholder="e.g. Manchester Office" value="' + pmpropEscapeHtml(branch.name) + '"></div>' +
+        '<div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Address</div><input class="field-input" type="text" data-field="address" placeholder="Start typing a postcode or address" value="' + pmpropEscapeHtml(branch.address) + '"></div>' +
+      '</div>' +
+    '</div>';
+  }
+  function clientCompRenderBranches() {
+    var wrap = document.getElementById('clientCompBranchesList');
+    if (!wrap) return;
+    wrap.innerHTML = CLIENT_COMP_BRANCHES.map(clientCompBranchCardHtml).join('');
+    wrap.querySelectorAll('[data-remove-branch]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var id = btn.getAttribute('data-remove-branch');
+        CLIENT_COMP_BRANCHES = CLIENT_COMP_BRANCHES.filter(function (b) { return b.id !== id; });
+        clientCompRenderBranches();
+      });
+    });
+    wrap.querySelectorAll('.pmob-branch-card').forEach(function (card) {
+      var id = card.getAttribute('data-branch-id');
+      var branch = CLIENT_COMP_BRANCHES.filter(function (b) { return b.id === id; })[0];
+      if (!branch) return;
+      card.querySelectorAll('[data-field]').forEach(function (input) {
+        input.addEventListener('input', function () { branch[input.getAttribute('data-field')] = input.value; });
+      });
+    });
+  }
+  var clientCompAddBranchBtn = document.getElementById('clientCompAddBranchBtn');
+  if (clientCompAddBranchBtn) clientCompAddBranchBtn.addEventListener('click', function () {
+    CLIENT_COMP_BRANCHES.push({ id: 'clientcomp-branch-' + (++clientCompBranchIdSeq), name: '', address: '' });
+    clientCompRenderBranches();
+  });
+
+  var CLIENT_COMP_EXTRA_CONTACTS = { support: [], finance: [], manager: [] };
+  var clientCompExtraContactIdSeq = 0;
+  function clientCompExtraContactRowHtml(contact, index) {
+    return '<div class="pmob-branch-card" data-extra-contact-id="' + contact.id + '">' +
+      '<div class="pmob-branch-card-head">' +
+        '<div class="pmob-branch-card-title">Additional contact ' + (index + 1) + '</div>' +
+        '<button type="button" class="pmob-extra-contact-remove-btn" data-remove-extra-contact="' + contact.id + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg>Remove contact</button>' +
+      '</div>' +
+      '<div class="sup-comp-field-grid" style="margin-bottom:8px;">' +
+        '<div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Full name</div><input class="field-input" type="text" data-field="name" placeholder="Full name" value="' + pmpropEscapeHtml(contact.name) + '"></div>' +
+        '<div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Job title</div><input class="field-input" type="text" data-field="title" placeholder="e.g. Lettings Manager" value="' + pmpropEscapeHtml(contact.title) + '"></div>' +
+      '</div>' +
+      '<div class="sup-comp-field-grid">' +
+        '<div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Phone</div><input class="field-input" type="tel" data-field="phone" placeholder="+44 7700 000000" value="' + pmpropEscapeHtml(contact.phone) + '"></div>' +
+        '<div class="sup-comp-field" style="margin-bottom:0;"><div class="scf-label">Email</div><input class="field-input" type="email" data-field="email" placeholder="name@company.com" value="' + pmpropEscapeHtml(contact.email) + '"></div>' +
+      '</div>' +
+    '</div>';
+  }
+  function clientCompRenderExtraContacts(category) {
+    var wrap = document.getElementById('clientComp' + category.charAt(0).toUpperCase() + category.slice(1) + 'ExtraContacts');
+    if (!wrap) return;
+    wrap.innerHTML = CLIENT_COMP_EXTRA_CONTACTS[category].map(clientCompExtraContactRowHtml).join('');
+    wrap.querySelectorAll('[data-remove-extra-contact]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var id = btn.getAttribute('data-remove-extra-contact');
+        CLIENT_COMP_EXTRA_CONTACTS[category] = CLIENT_COMP_EXTRA_CONTACTS[category].filter(function (c) { return c.id !== id; });
+        clientCompRenderExtraContacts(category);
+      });
+    });
+    wrap.querySelectorAll('.pmob-branch-card').forEach(function (row) {
+      var id = row.getAttribute('data-extra-contact-id');
+      var contact = CLIENT_COMP_EXTRA_CONTACTS[category].filter(function (c) { return c.id === id; })[0];
+      if (!contact) return;
+      row.querySelectorAll('[data-field]').forEach(function (input) {
+        input.addEventListener('input', function () { contact[input.getAttribute('data-field')] = input.value; });
+      });
+    });
+  }
+  ['support', 'finance', 'manager'].forEach(function (category) {
+    var addBtn = document.getElementById('clientCompAdd' + category.charAt(0).toUpperCase() + category.slice(1) + 'ContactBtn');
+    if (!addBtn) return;
+    addBtn.addEventListener('click', function () {
+      CLIENT_COMP_EXTRA_CONTACTS[category].push({ id: 'clientcomp-extra-' + (++clientCompExtraContactIdSeq), name: '', title: '', phone: '', email: '' });
+      clientCompRenderExtraContacts(category);
+    });
+  });
+
   document.querySelectorAll('#clientCompDayPills .day-pill').forEach(function (pill) {
     pill.addEventListener('click', function () { pill.classList.toggle('selected'); });
   });
