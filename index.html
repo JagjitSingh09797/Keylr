@@ -8352,6 +8352,101 @@
     .ain-filter-tabs.ain-topic-tabs { overflow-x: auto; flex-wrap: nowrap; }
     .cr-send-modal-card { max-width: calc(100vw - 32px); padding: 20px; }
   }
+
+  /* =========================================================
+     SUPPLIER — SERVICES & PRICING ("Your pricing")
+     Single page: two-pane category/role picker (restored circular-
+     checkbox role cards) + role-triggered pmsvc-sec pricing cards.
+     Most components reuse existing classes as-is (svcp-panel,
+     cat-role-picker/crp-*, cat-selected-chip, pmsvc-sec*, svcp-sla-*,
+     cert-required-card, verif-chip). Only the rules below are new.
+  ========================================================== */
+
+  /* ---- Picker controls panel: mode toggle + divider + chips + search + addable pills ---- */
+  .supsvc-picker-toprow { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .supsvc-mode-toggle { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .supsvc-mode-toggle .svcp-chip { cursor: pointer; border: none; font-family: inherit; }
+  .supsvc-mode-toggle .svcp-chip.outline { border: 1px solid #c9d8ee; }
+  .supsvc-picker-divider { width: 1px; align-self: stretch; background: var(--border-subtle); flex-shrink: 0; }
+  .supsvc-selected-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+  .supsvc-cat-chip { cursor: pointer; transition: background-color 150ms ease-out, color 150ms ease-out; }
+  .supsvc-cat-chip.active {
+    background: linear-gradient(135deg, #22447f 0%, #0d1b3d 100%); color: #fff;
+  }
+  .supsvc-cat-chip.active strong { color: #fff; }
+  .supsvc-cat-chip.active .csc-remove { color: #fff; }
+  .supsvc-cat-chip.active .csc-remove:hover { background: rgba(255,255,255,0.2); }
+  .supsvc-add-cat-btn { flex-shrink: 0; cursor: pointer; border: 1px solid #c9d8ee; background: #fff; font-family: inherit; }
+  .supsvc-role-search { margin-top: 14px; }
+  .supsvc-addable-cats { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .supsvc-addcat-pill { cursor: pointer; border: 1px solid var(--border-subtle); background: #fff; font-family: inherit; }
+  .supsvc-addcat-pill:hover { border-color: #c9d8ee; background: var(--surface-soft); }
+
+  /* ---- Left sidebar: selected categories only ---- */
+  .supsvc-cat-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    padding: 12px 14px; cursor: pointer; border-left: 3px solid transparent;
+    transition: background-color 150ms ease-out;
+  }
+  .supsvc-cat-row:hover { background: var(--surface-soft); }
+  .supsvc-cat-row.active { background: var(--icon-tint-bg); border-left-color: var(--accent-blue); }
+  .supsvc-cat-row-main { min-width: 0; }
+  .supsvc-cat-row-name { font-size: 13.5px; font-weight: 700; color: var(--text-heading); }
+  .supsvc-cat-row.active .supsvc-cat-row-name { color: var(--accent-blue); }
+  .supsvc-cat-row-sub { font-size: 11px; color: var(--text-body-muted); margin-top: 3px; }
+  .supsvc-status-label { font-weight: 700; }
+  .supsvc-status-label.priced { color: #1a7a3e; }
+  .supsvc-status-label.partial { color: #92620a; }
+  .supsvc-status-label.quote { color: #64748b; }
+  .supsvc-picker-empty { padding: 30px 16px; text-align: center; font-size: 12.5px; color: var(--text-body-muted); }
+
+  /* ---- Right panel: role cards (circular checkbox) ---- */
+  .supsvc-roles-eyebrow { font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #94a3b8; }
+  .supsvc-roles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+  .supsvc-role-card {
+    display: flex; align-items: flex-start; gap: 10px;
+    border: 1px solid var(--border-subtle); border-radius: 10px; padding: 12px 13px;
+    cursor: pointer; transition: background-color 150ms ease-out, border-color 150ms ease-out;
+  }
+  .supsvc-role-card:hover { border-color: #90a8c8; }
+  .supsvc-role-card.selected { background: var(--tile-selected-bg, #e8f0f8); border-color: var(--tile-selected-border, #284890); }
+  .supsvc-role-card .rc-circle {
+    width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid #cbd5e1; background: #fff; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; color: #fff; margin-top: 1px;
+    transition: background-color 150ms ease-out, border-color 150ms ease-out;
+  }
+  .supsvc-role-card.selected .rc-circle { background: var(--accent-blue); border-color: var(--accent-blue); }
+  .supsvc-role-card-text { min-width: 0; }
+  .supsvc-role-card-text > span:first-child { font-size: 13px; font-weight: 600; color: var(--text-heading); }
+  .supsvc-role-card.selected .supsvc-role-card-text > span:first-child { color: var(--accent-blue); font-weight: 700; }
+
+  .supsvc-cert-badge {
+    display: inline-flex; align-items: center; font-size: 10.5px; font-weight: 700;
+    border-radius: 999px; padding: 3px 8px; margin-top: 6px; width: fit-content;
+  }
+  .supsvc-cert-badge.required { color: #b5424a; background: #fdecea; }
+  .supsvc-cert-badge.warn { color: #92620a; background: #fef3c7; }
+  .supsvc-cert-badge.ok { color: #1a7a3e; background: #eafaf0; }
+
+  /* ---- Role-triggered pricing cards live below the roles grid, reusing pmsvc-sec ---- */
+  #supsvcRolePricingCards { margin-top: 16px; }
+  #supsvcRolePricingCards .pmsvc-sec:last-child { margin-bottom: 0; }
+
+  /* ---- Cancellation pills disabled outside Admin's allowed range ---- */
+  .svcp-sla-pill:disabled { opacity: 0.4; cursor: not-allowed; }
+  .svcp-sla-pill:disabled:hover { border-color: var(--border-subtle); }
+
+  /* ---- verif-chip only ships ok/warn/info elsewhere in the app; 'required' is new,
+     matching the same red already used by .cert-required-card / .sup-required-badge. ---- */
+  .verif-chip.required { color: #b5424a; background: #fdecea; }
+
+  @media (max-width: 700px) {
+    .supsvc-roles-grid { grid-template-columns: 1fr; }
+    .supsvc-picker-divider { display: none; }
+    .supsvc-picker-toprow { flex-direction: column; align-items: stretch; gap: 12px; }
+    .supsvc-selected-chips { flex: none; }
+    .supsvc-add-cat-btn { align-self: flex-start; }
+  }
 </style>
 </head>
 <body>
@@ -13566,6 +13661,73 @@
             </div>
           </div>
 
+          <!-- ============ SUPPLIER SERVICES & PRICING VIEW ============ -->
+          <!-- Single-page, no list/detail navigation. Categories & roles use the two-pane
+               picker (left = selected categories only, right = roles for the active one,
+               circular checkboxes) with a top row of removable category chips + addable
+               category pills. Checking a role reveals its own collapsible card, titled with
+               the role name, holding Pricing + Cancellation Policy for whichever service(s)
+               that role unlocks. Edits commit live — no separate save/discard step. -->
+          <div id="supPricingView" style="display:none;">
+            <div class="dash-section">
+              <div class="dash-header">
+                <div>
+                  <h2 style="display:flex;align-items:center;gap:9px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 7c0-5.333-8-5.333-8 0"/><path d="M10 7v14"/><path d="M6 21h12"/><path d="M6 13h10"/></svg>Your pricing</h2>
+                  <div class="dash-content-sub">Pick categories and roles, then set your own rates on the services they unlock.</div>
+                </div>
+              </div>
+
+              <!-- Extra fees -->
+              <div class="svcp-panel">
+                <div class="svcp-meta-label">Extra fees</div>
+                <div class="svcp-section-title">Charges you pass on</div>
+                <p class="svcp-section-sub">Optional fees applied across all your services. Shown to PMs for reference — confirmed on the booking quote.</p>
+                <div class="pmsvc-addons-grid" id="supsvcAddonsGrid"></div>
+              </div>
+
+              <!-- Picker controls: mode toggle, selected category chips, search, addable categories -->
+              <div class="svcp-panel supsvc-picker-controls">
+                <div class="supsvc-picker-toprow">
+                  <div class="supsvc-mode-toggle" id="supsvcModeToggle"></div>
+                  <div class="supsvc-picker-divider"></div>
+                  <div class="supsvc-selected-chips" id="supsvcSelectedCatChipsRow"></div>
+                  <button type="button" class="svcp-chip outline supsvc-add-cat-btn" id="supsvcAddCategoryBtn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><path d="M12 5v14M5 12h14"/></svg>Add category</button>
+                </div>
+                <div class="svcp-search supsvc-role-search">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                  <input type="text" id="supsvcRoleSearchInput" placeholder="Search by role — e.g. EPC, gas engineer, locksmith...">
+                </div>
+                <div class="supsvc-addable-cats" id="supsvcAddableCats"></div>
+              </div>
+
+              <!-- Two-pane: selected categories (left) + roles for the active one (right) -->
+              <div class="cat-role-picker supsvc-picker" id="supsvcPickerSection">
+                <div class="crp-cats" id="supsvcCatListWrap">
+                  <div id="supsvcCatList"></div>
+                </div>
+                <div class="crp-roles">
+                  <div class="crp-roles-head">
+                    <div>
+                      <div class="supsvc-roles-eyebrow" id="supsvcRolesEyebrow">YOUR ROLES IN</div>
+                      <div class="crp-roles-title" id="supsvcRolesCatTitle">&mdash;</div>
+                    </div>
+                    <span class="svcp-chip navy" id="supsvcRolesPickedBadge" style="display:none;"></span>
+                  </div>
+                  <p class="svcp-section-sub" id="supsvcRolesSub" style="margin-top:-4px;margin-bottom:14px;">You&rsquo;ll be routed jobs that require these roles. Cert requirements come from the roles you pick.</p>
+                  <div class="supsvc-roles-grid" id="supsvcRolesGrid"></div>
+
+                  <div class="svcp-empty" id="supsvcNoCategoryEmpty" style="display:none;">
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41L13.42 20.6a2 2 0 01-2.83 0L2.5 12.5V2.5h10l8.09 8.09a2 2 0 010 2.82z"/><circle cx="7" cy="7" r="1.5"/></svg>
+                    <div class="svcp-empty-title">Pick a category to see its roles</div>
+                    <div class="svcp-empty-desc">Add a category above, or pick one from the left once you have.</div>
+                  </div>
+
+                  <div id="supsvcRolePricingCards"></div>
+                </div>
+              </div>
+            </div>
+          </div>
           <!-- ============ SUPPLIER CALENDAR VIEW ============ -->
           <div id="supCalendarView" style="display:none;">
             <div class="dash-header supcal-header" style="align-items:flex-start;">
@@ -27713,7 +27875,15 @@
       supplierCapturedData.niNumber = 'QQ 778823 A';
       supplierCapturedData.homeAddress = '14 Rowan Street, Leeds';
       supplierCapturedData.proofAddressFile = 'proof-of-address.pdf';
-      supplierCapturedData.selectedRoles = [{ category: 'Plumbing', role: 'General Plumber' }];
+      // Spans a certificate-gated role (Gas Safe Engineer) and two cert-free roles so
+      // Services & Pricing has real, valid categories/roles to pre-fill and demonstrate
+      // every pricing/lock state with, rather than a category name ('Plumbing') that
+      // doesn't exist in categoryRoles below.
+      supplierCapturedData.selectedRoles = [
+        { category: 'Gas & Heating', role: 'Gas Safe Engineer' },
+        { category: 'Electrical', role: 'Electrician' },
+        { category: 'Inventory & Inspections', role: 'Inventory Clerk' }
+      ];
       supplierCapturedData.pliCertFile = 'public-liability-cert.pdf';
       supplierCapturedData.pliExpiry = '08 Aug 2027';
       supplierCapturedData.dbsCertFile = 'dbs-certificate.pdf';
@@ -28137,6 +28307,7 @@
     'my-jobs': 'supMyJobsView',
     'job-requests': 'supJobRequestsView',
     'service-area': 'supServiceAreaView',
+    'pricing': 'supPricingView',
     'calendar': 'supCalendarView',
     'profile-settings': 'supProfileSettingsView',
     'inbox': 'supInboxView'
@@ -28192,6 +28363,9 @@
         showSupplierView('service-area');
         initSupsaOnce();
         setTimeout(function () { if (supsaMap) supsaMap.invalidateSize(); }, 160);
+      } else if (nav === 'pricing') {
+        showSupplierView('pricing');
+        initSupsvcOnce();
       } else if (nav === 'calendar') {
         showSupplierView('calendar');
         if (typeof initSupcalOnce === 'function') initSupcalOnce();
@@ -44655,6 +44829,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var savedActive = svcpWorking.active;
     closeSvcpDetail(); // pricing saved — return to the cards, which now show the updated summary
     pmsvcAdminChanged();
+    supsvcAdminChanged();
     showToast(!savedCount
       ? savedName + ' saved as a draft \u2014 it needs at least one pricing variable to go active.'
       : savedActive
@@ -45066,6 +45241,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       }
       renderSvcpList();
       pmsvcAdminChanged();
+      supsvcAdminChanged();
       closeSvcpServiceModal();
       showToast(name + ' updated.');
     } else {
@@ -45073,6 +45249,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       svcpServices.unshift(created);
       renderSvcpList();
       pmsvcAdminChanged();
+      supsvcAdminChanged();
       closeSvcpServiceModal();
       showToast(name + ' created \u2014 add at least one pricing variable to make it active.');
       /* Straight into the new service, since a service isn't usable until pricing is configured. */
@@ -45136,6 +45313,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     document.getElementById('svcpDeleteServiceOverlay').classList.remove('open');
     renderSvcpList();
     pmsvcAdminChanged();
+    supsvcAdminChanged();
     showToast((s ? s.name : 'Service') + ' deleted.');
   });
 
@@ -48443,6 +48621,1084 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (pmsvcInited && document.getElementById('pmServicesPricingView').style.display !== 'none') {
       pmsvcRefreshFilters();
       pmsvcRenderList();
+    }
+  }
+
+  /* =========================================================
+     SUPPLIER — SERVICES & PRICING ("Your pricing")
+     Single page, no list/detail navigation. Two-pane category/role
+     picker (left = selected categories only, right = roles for the
+     active one, circular checkboxes) with a top row of removable
+     category chips + addable category pills, mirroring the approved
+     reference design. Checking a role reveals its own collapsible
+     card — titled with the role name — holding Pricing + Cancellation
+     Policy for whichever service(s) that role unlocks. Edits commit
+     live directly into supsvcPricing; there is no separate draft/save
+     step. Admin's svcpServices remains the only source of pricing-
+     structure truth; every £ figure here is the supplier's own.
+  ========================================================== */
+
+  /* ---------- Icons ---------- */
+  var SUPSVC_X_SM_SVG = '<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>';
+  var SUPSVC_LOCK_SM_SVG = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="margin-right:3px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>';
+  var SUPSVC_CHECK_SM_SVG = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+  var SUPSVC_STAR_SM_SVG = '<svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+  var SUPSVC_BOLT_SVG = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="margin-right:6px;flex-shrink:0;"><path d="M13 2L3 14h7l-1 8 11-14h-7l1-6z"/></svg>';
+  var SUPSVC_CLOCK_AMBER_SVG = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#b06a08;"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>';
+  var SUPSVC_SIREN_SVG = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>';
+  var SUPSVC_CHEVRON_RIGHT_SVG = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>';
+  function supsvcEscAttr(s) { return pmsvcEsc(s); }
+
+  var supsvcInited = false;
+
+  /* ---------- Extra fees: Congestion charge + Parking only ---------- */
+  var supsvcAddons = {
+    congestionCharge: { on: true, amount: '' },
+    parking: { on: true, amount: '', onlyInZone: false }
+  };
+  function supsvcAddonCardHtml(key, opts) {
+    var a = supsvcAddons[key];
+    return '<div class="pmsvc-addon-card">' +
+      '<div class="pmsvc-addon-head">' +
+        '<button type="button" class="toggle-switch sm' + (a.on ? ' on' : '') + '" data-supsvc-addon-toggle="' + key + '" role="switch" aria-checked="' + (a.on ? 'true' : 'false') + '" aria-label="' + opts.title + '"><span class="thumb"></span></button>' +
+        '<div class="pmsvc-addon-headtext"><div class="pmsvc-addon-title">' + opts.title + '</div><div class="pmsvc-addon-desc">' + opts.desc + '</div></div>' +
+        (a.on ? '<div class="pmsvc-addon-amount">' + pmsvcMoneyInput('supsvc-addon', a.amount, 'data-key="' + key + '"', '0.00') + '</div>' : '') +
+      '</div>' +
+      (a.on && opts.hasZoneOnly ? '<label class="pmsvc-addon-radio-row"><input type="checkbox" data-supsvc-addon-zoneonly="' + key + '"' + (a.onlyInZone ? ' checked' : '') + '> Only within the congestion zone</label>' : '') +
+    '</div>';
+  }
+  function supsvcRenderAddons() {
+    var wrap = document.getElementById('supsvcAddonsGrid');
+    if (!wrap) return;
+    wrap.innerHTML =
+      supsvcAddonCardHtml('congestionCharge', { title: 'Congestion charge', desc: 'Flat fee for jobs inside the zone.' }) +
+      supsvcAddonCardHtml('parking', { title: 'Parking', desc: 'Flat parking fee per visit.', hasZoneOnly: true });
+  }
+
+  /* =========================================================
+     CATEGORIES & ROLES
+  ========================================================== */
+  var supsvcSelectedCategories = {};  // { cat: true }
+  var supsvcSelectedRoles = {};       // { role: true }
+  var supsvcActiveCategory = null;
+  var supsvcMode = 'category';        // 'category' | 'role'
+  var supsvcRoleSearch = '';
+  var supsvcOpenRoleCards = {};       // { role: true } — which role cards are expanded
+
+  function supsvcSeedFromOnboarding() {
+    var list = (typeof supplierCapturedData === 'object' && supplierCapturedData && supplierCapturedData.selectedRoles) || [];
+    list.forEach(function (item) {
+      if (!item || !item.category || !item.role) return;
+      if (!categoryRoles[item.category]) return;
+      if (categoryRoles[item.category].indexOf(item.role) === -1) return;
+      supsvcSelectedCategories[item.category] = true;
+      supsvcSelectedRoles[item.role] = true;
+    });
+    if (!supsvcActiveCategory) {
+      var cats = supsvcPickedCategoriesList();
+      if (cats.length) supsvcActiveCategory = cats[0];
+    }
+  }
+  function supsvcPickedCategoriesList() {
+    return Object.keys(supsvcSelectedCategories).filter(function (c) { return supsvcSelectedCategories[c]; });
+  }
+  function supsvcAllCategoriesSorted() {
+    return Object.keys(categoryRoles).sort(function (a, b) { return a.localeCompare(b); });
+  }
+  function supsvcAddableCategories() {
+    var term = supsvcRoleSearch.trim().toLowerCase();
+    return supsvcAllCategoriesSorted().filter(function (c) {
+      if (supsvcSelectedCategories[c]) return false;
+      if (!term) return true;
+      return c.toLowerCase().indexOf(term) !== -1;
+    });
+  }
+
+  /* ---------- Certificate gating ----------
+     Reads Admin's real Compliance-tab config (getSvcRoleConfig), scoped to
+     this supplier's business type, never a hardcoded role list. */
+  function supsvcIsCompany() { return supplierCapturedData && supplierCapturedData.businessType === 'company'; }
+  function supsvcRoleRequiresCert(role) {
+    if (typeof getSvcRoleConfig !== 'function') return false;
+    var cfg = getSvcRoleConfig(role);
+    if (!cfg || !cfg.cert) return false;
+    return !!(supsvcIsCompany() ? cfg.cert.company : cfg.cert.soleTrader);
+  }
+  function supsvcCertLabel(role) {
+    return (typeof CERT_REQUIRED_ROLES !== 'undefined' && CERT_REQUIRED_ROLES[role] && CERT_REQUIRED_ROLES[role].label) || (role + ' certificate');
+  }
+  var supsvcCertApproval = {}; // { role: 'pending' | 'approved' }
+  function supsvcCertStatus(role) {
+    if (!supsvcRoleRequiresCert(role)) return 'none';
+    if (supsvcCertApproval[role] === 'approved') return 'approved';
+    var entries = (typeof roleCertData !== 'undefined' && roleCertData[role]) || null;
+    var submitted = entries && entries[0] && (entries[0].regNumber || entries[0].fileName);
+    if (submitted || supsvcCertApproval[role] === 'pending') return 'pending';
+    return 'required';
+  }
+  function supsvcCertStatusMeta(status) {
+    if (status === 'approved') return { label: 'Approved', cls: 'ok' };
+    if (status === 'pending') return { label: 'Pending Approval', cls: 'warn' };
+    return { label: 'Required', cls: 'required' };
+  }
+  function supsvcRoleLocked(role) {
+    var st = supsvcCertStatus(role);
+    return st === 'required' || st === 'pending';
+  }
+
+  /* =========================================================
+     SERVICES per role/category (Admin's svcpServices only)
+  ========================================================== */
+  function supsvcServicesForRole(role) {
+    return svcpServices.filter(function (s) { return s.active && s.roles.indexOf(role) !== -1; });
+  }
+  function supsvcAllSelectedRolesFlat() {
+    var out = [];
+    Object.keys(supsvcSelectedRoles).forEach(function (r) { if (supsvcSelectedRoles[r] && out.indexOf(r) === -1) out.push(r); });
+    return out;
+  }
+  function supsvcServicesForCategory(cat) {
+    var roles = supsvcAllSelectedRolesFlat();
+    if (!roles.length) return [];
+    return svcpServices.filter(function (s) { return s.active && s.categories.indexOf(cat) !== -1 && s.roles.some(function (r) { return roles.indexOf(r) !== -1; }); });
+  }
+  function supsvcSelectableVars(svc) {
+    if (!svc) return [];
+    var enabled = svc.variables.filter(function (v) { return v.pmsp !== false; });
+    return svc.allowSelect ? enabled : enabled.slice(0, 1);
+  }
+
+  /* =========================================================
+     PER-SERVICE PRICING (committed live, no draft)
+  ========================================================== */
+  var supsvcPricing = {}; // { serviceId: { varId, rates, packages, meet, uplifts, slaPolicy } }
+  function supsvcDefaultPricing(svc) {
+    var sla = svc.slaPolicy || {};
+    return {
+      varId: '',
+      rates: {},
+      packages: null,
+      meet: null,
+      uplifts: { on: false, cells: {}, ooh: { on: false, amount: '' }, emergency: { on: false, amount: '' } },
+      slaPolicy: {
+        freeCancellation: sla.freeCancellation || '2d',
+        fullCharge: sla.fullCharge || '12h',
+        partialChargePercent: sla.partialChargePercent === undefined ? 15 : sla.partialChargePercent
+      }
+    };
+  }
+  function supsvcPricingFor(svc) {
+    if (!supsvcPricing[svc.id]) supsvcPricing[svc.id] = supsvcDefaultPricing(svc);
+    return supsvcPricing[svc.id];
+  }
+  function supsvcSync() {
+    Object.keys(supsvcPricing).forEach(function (sid) {
+      var svc = svcpServiceById(sid);
+      if (!svc || !svc.active) { delete supsvcPricing[sid]; return; }
+      var p = supsvcPricing[sid];
+      if (p.varId && !supsvcSelectableVars(svc).some(function (v) { return v.id === p.varId; })) {
+        p.varId = ''; p.rates = {}; p.packages = null; p.meet = null;
+      }
+    });
+  }
+  function supsvcVarOf(svc) {
+    var p = supsvcPricingFor(svc);
+    if (!p.varId) return null;
+    for (var i = 0; i < svc.variables.length; i++) { if (svc.variables[i].id === p.varId) return svc.variables[i]; }
+    return null;
+  }
+  function supsvcHeadlineRate(svc) {
+    var v = supsvcVarOf(svc);
+    if (!v) return null;
+    var r = supsvcPricingFor(svc).rates || {};
+    if (v.type === 'fixed') return r.price;
+    if (v.type === 'hourly') return r.hour;
+    if (v.type === 'callout') return r.callout;
+    if (v.type === 'baseUnit' || v.type === 'baseMulti' || v.type === 'meet') return r.base;
+    if (v.type === 'tier') return r['tier:0'];
+    if (v.type === 'package') { var pk = supsvcPricingFor(svc).packages; return (pk && pk.length) ? pk[0].price : null; }
+    return null;
+  }
+  function supsvcIsPriced(svc) {
+    var raw = supsvcHeadlineRate(svc);
+    return raw !== undefined && raw !== null && raw !== '' && pmsvcNum(raw) > 0;
+  }
+  function supsvcPricingSummary(svc) {
+    var v = supsvcVarOf(svc);
+    if (!v) return 'No pricing structure chosen yet';
+    var raw = supsvcHeadlineRate(svc);
+    var label = (raw === undefined || raw === null || raw === '') ? '\u00a3\u2014' : (pmsvcMoney(raw) + (v.type === 'hourly' ? '/hr' : ''));
+    return svcpVarType(v.type).name + ' \u00b7 ' + label;
+  }
+
+  /* ---------- Category status (left sidebar) ---------- */
+  function supsvcCategoryStats(cat) {
+    var services = supsvcServicesForCategory(cat);
+    var priced = services.filter(function (s) { return !supsvcServiceLockedFully(s) && supsvcIsPriced(s); }).length;
+    var roles = categoryRoles[cat] || [];
+    var pickedInCat = roles.filter(function (r) { return supsvcSelectedRoles[r]; }).length;
+    return { rolesPicked: pickedInCat, rolesTotal: roles.length, priced: priced, total: services.length };
+  }
+  function supsvcCategoryStatusLabel(stats) {
+    if (!stats.total) return 'Quote';
+    if (stats.priced >= stats.total) return 'Priced';
+    if (stats.priced > 0) return 'Partial';
+    return 'Quote';
+  }
+  /* A service is locked only if every one of its roles that the supplier actually holds
+     is itself still locked — one clear, cert-approved route in is enough. */
+  function supsvcMatchingRoles(svc) {
+    var mine = supsvcAllSelectedRolesFlat();
+    return svc.roles.filter(function (r) { return mine.indexOf(r) !== -1; });
+  }
+  function supsvcServiceLockedFully(svc) {
+    var matching = supsvcMatchingRoles(svc);
+    if (!matching.length) return false;
+    return matching.every(function (r) { return supsvcRoleLocked(r); });
+  }
+  /* =========================================================
+     RENDER — picker controls (mode toggle, chips, search, addable pills)
+  ========================================================== */
+  function supsvcRenderModeToggle() {
+    var wrap = document.getElementById('supsvcModeToggle');
+    if (!wrap) return;
+    wrap.innerHTML =
+      '<button type="button" class="svcp-chip ' + (supsvcMode === 'category' ? 'solid' : 'outline') + '" data-supsvc-mode="category">By category</button>' +
+      '<button type="button" class="svcp-chip ' + (supsvcMode === 'role' ? 'solid' : 'outline') + '" data-supsvc-mode="role">By role</button>';
+  }
+  function supsvcRenderChipsRow() {
+    var row = document.getElementById('supsvcSelectedCatChipsRow');
+    if (!row) return;
+    row.innerHTML = supsvcPickedCategoriesList().map(function (cat) {
+      var active = supsvcMode === 'category' && cat === supsvcActiveCategory;
+      return '<span class="cat-selected-chip supsvc-cat-chip' + (active ? ' active' : '') + '" data-supsvc-cat-select="' + supsvcEscAttr(cat) + '">' + pmsvcEsc(cat) +
+        ' <button type="button" class="csc-remove" data-supsvc-cat-remove="' + supsvcEscAttr(cat) + '" aria-label="Remove ' + supsvcEscAttr(cat) + '">' + SUPSVC_X_SM_SVG + '</button></span>';
+    }).join('');
+  }
+  function supsvcRenderAddableCats() {
+    var wrap = document.getElementById('supsvcAddableCats');
+    if (!wrap) return;
+    var list = supsvcAddableCategories();
+    wrap.innerHTML = list.map(function (c) {
+      return '<button type="button" class="svcp-chip outline supsvc-addcat-pill" data-supsvc-cat-add="' + supsvcEscAttr(c) + '">' +
+        '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><path d="M12 5v14M5 12h14"/></svg>' + pmsvcEsc(c) + '</button>';
+    }).join('');
+  }
+
+  /* =========================================================
+     RENDER — two-pane picker
+  ========================================================== */
+  function supsvcRenderCatList() {
+    var wrap = document.getElementById('supsvcCatList');
+    if (!wrap) return;
+    var cats = supsvcPickedCategoriesList();
+    if (!cats.length) { wrap.innerHTML = '<div class="supsvc-picker-empty">Add a category above to get started.</div>'; return; }
+    wrap.innerHTML = cats.map(function (cat) {
+      var stats = supsvcCategoryStats(cat);
+      var status = supsvcCategoryStatusLabel(stats);
+      return '<div class="supsvc-cat-row' + (cat === supsvcActiveCategory ? ' active' : '') + '" data-supsvc-cat-select="' + supsvcEscAttr(cat) + '">' +
+        '<div class="supsvc-cat-row-main"><div class="supsvc-cat-row-name">' + pmsvcEsc(cat) + '</div>' +
+        '<div class="supsvc-cat-row-sub">' + stats.rolesPicked + '/' + stats.rolesTotal + ' roles \u00b7 ' + stats.priced + '/' + stats.total + ' priced' +
+        ' \u00b7 <span class="supsvc-status-label ' + status.toLowerCase() + '">' + status + '</span></div></div>' +
+        SUPSVC_CHEVRON_RIGHT_SVG +
+      '</div>';
+    }).join('');
+  }
+
+  function supsvcRoleCardChipHtml(role) {
+    var picked = !!supsvcSelectedRoles[role];
+    var certStatus = supsvcCertStatus(role);
+    var certBadge = '';
+    if (certStatus !== 'none') {
+      var meta = supsvcCertStatusMeta(certStatus);
+      certBadge = '<span class="supsvc-cert-badge ' + meta.cls + '">' + SUPSVC_STAR_SM_SVG + '&nbsp;' + supsvcCertLabel(role) + ' \u00b7 ' + meta.label + '</span>';
+    }
+    return '<div class="supsvc-role-card' + (picked ? ' selected' : '') + '" data-supsvc-role="' + supsvcEscAttr(role) + '">' +
+      '<span class="rc-circle">' + (picked ? SUPSVC_CHECK_SM_SVG : '') + '</span>' +
+      '<div class="supsvc-role-card-text"><span>' + pmsvcEsc(role) + '</span>' + certBadge + '</div>' +
+    '</div>';
+  }
+
+  function supsvcRenderRolesPanel() {
+    var titleEl = document.getElementById('supsvcRolesCatTitle');
+    var eyebrowEl = document.getElementById('supsvcRolesEyebrow');
+    var subEl = document.getElementById('supsvcRolesSub');
+    var badgeEl = document.getElementById('supsvcRolesPickedBadge');
+    var grid = document.getElementById('supsvcRolesGrid');
+    var emptyEl = document.getElementById('supsvcNoCategoryEmpty');
+    if (!grid) return;
+
+    if (supsvcMode === 'role') {
+      eyebrowEl.textContent = 'ALL YOUR ROLES';
+      titleEl.textContent = 'Across every category';
+      subEl.textContent = 'Every role from the categories you\u2019ve added. Cert requirements come from the roles you pick.';
+      var term = supsvcRoleSearch.trim().toLowerCase();
+      var seen = {}; var flat = [];
+      supsvcPickedCategoriesList().forEach(function (cat) {
+        (categoryRoles[cat] || []).forEach(function (r) { if (!seen[r]) { seen[r] = true; flat.push(r); } });
+      });
+      flat.sort(function (a, b) { return a.localeCompare(b); });
+      if (term) flat = flat.filter(function (r) { return r.toLowerCase().indexOf(term) !== -1; });
+      var pickedCount = flat.filter(function (r) { return supsvcSelectedRoles[r]; }).length;
+      badgeEl.style.display = pickedCount ? '' : 'none';
+      badgeEl.textContent = pickedCount + ' PICKED';
+      emptyEl.style.display = supsvcPickedCategoriesList().length ? 'none' : '';
+      grid.innerHTML = flat.map(supsvcRoleCardChipHtml).join('');
+      return;
+    }
+
+    // category mode
+    var cat = supsvcActiveCategory;
+    if (!cat || !supsvcSelectedCategories[cat]) {
+      eyebrowEl.textContent = 'YOUR ROLES IN';
+      titleEl.textContent = '\u2014';
+      subEl.textContent = '';
+      badgeEl.style.display = 'none';
+      grid.innerHTML = '';
+      emptyEl.style.display = '';
+      return;
+    }
+    emptyEl.style.display = 'none';
+    eyebrowEl.textContent = 'YOUR ROLES IN';
+    titleEl.textContent = cat;
+    subEl.textContent = 'You\u2019ll be routed jobs in this category that require these roles. Cert requirements come from the roles you pick.';
+    var roles = (categoryRoles[cat] || []).slice().sort(function (a, b) { return a.localeCompare(b); });
+    var term2 = supsvcRoleSearch.trim().toLowerCase();
+    if (term2) roles = roles.filter(function (r) { return r.toLowerCase().indexOf(term2) !== -1; });
+    var pickedInCat = (categoryRoles[cat] || []).filter(function (r) { return supsvcSelectedRoles[r]; }).length;
+    badgeEl.style.display = pickedInCat ? '' : 'none';
+    badgeEl.textContent = pickedInCat + ' PICKED';
+    grid.innerHTML = roles.map(supsvcRoleCardChipHtml).join('');
+  }
+
+  /* =========================================================
+     ROLE-TRIGGERED PRICING CARDS
+  ========================================================== */
+  var SUPSVC_SEC_ICONS_LOCAL = { pricing: PMSVC_SEC_ICONS.pricing, cancellation: PMSVC_SEC_ICONS.sla };
+
+  function supsvcRoleCardSummary(role, services) {
+    if (supsvcRoleLocked(role)) return 'Locked \u2014 certificate pending approval';
+    if (!services.length) return 'No service published for this role yet';
+    var pricedCount = services.filter(supsvcIsPriced).length;
+    if (services.length === 1) return supsvcPricingSummary(services[0]);
+    return pricedCount + ' of ' + services.length + ' service' + (services.length === 1 ? '' : 's') + ' priced';
+  }
+
+  function supsvcServiceSubBlock(svc, showName) {
+    var chosen = supsvcVarOf(svc);
+    var options = supsvcSelectableVars(svc);
+    var html = showName ? '<div class="svcp-section-title" style="font-size:13px;margin-bottom:12px;">' + pmsvcEsc(svc.name) + '</div>' : '';
+
+    if (!options.length) {
+      return html + '<div class="pmsvc-fromadmin">' + PMSVC_INFO_SVG + '<div>Keylr hasn\u2019t published a pricing structure for <b>' + pmsvcEsc(svc.name) + '</b> yet.</div></div>';
+    }
+
+    html += '<div class="pmsvc-label" style="margin-top:0;">Pricing <span style="text-transform:none;letter-spacing:0;font-weight:600;color:var(--text-body-muted);">&mdash; structure published by Keylr</span></div>' +
+      '<div class="pmsvc-tiles three">' + options.map(function (v) {
+        return '<button type="button" class="pmsvc-tile' + (supsvcPricingFor(svc).varId === v.id ? ' on' : '') + '" data-supsvc-var="' + svc.id + '|' + v.id + '">' +
+          '<div class="pmsvc-tile-name">' + pmsvcEsc(svcpVarType(v.type).name) + '</div><div class="pmsvc-tile-desc">' + pmsvcEsc(svcpVarSummary(v)) + '</div></button>';
+      }).join('') + '</div>';
+    if (!svc.allowSelect) {
+      html += '<div style="margin-top:12px;"><div class="pmsvc-fromadmin">' + PMSVC_INFO_SVG + '<div>Keylr has fixed the structure for this service, so there\u2019s only one to price against.</div></div></div>';
+    }
+    if (!chosen) {
+      html += '<div class="pmsvc-help" style="margin-top:14px;">Pick a structure above to enter your rates.</div>';
+    } else {
+      html += '<div class="pmsvc-label mt">Your rates</div>' + supsvcRateFields(svc, chosen);
+    }
+    html += supsvcRenderUplifts(svc);
+    html += '<div class="svcp-section-title" style="font-size:13px;margin:22px 0 2px;">Cancellation Policy</div>' +
+      '<div class="pmsvc-help" style="margin-top:0;margin-bottom:14px;">Keylr\u2019s policy for this service is shown as the limit \u2014 you can only be equal to it or friendlier to the PM.</div>' +
+      supsvcSlaBody(svc);
+    return html;
+  }
+
+  function supsvcRoleCardBodyHtml(role, services) {
+    if (supsvcRoleLocked(role)) {
+      var meta = supsvcCertStatusMeta(supsvcCertStatus(role));
+      return '<div class="cert-required-card" style="margin-bottom:0;">' +
+        '<div class="crc-header"><div class="crc-title">' + supsvcCertLabel(role) + '</div><div class="crc-sub">Required for ' + pmsvcEsc(role) + '</div></div>' +
+        '<div class="crc-body" style="padding:12px 18px;display:flex;align-items:center;justify-content:space-between;">' +
+          '<span style="font-size:12.5px;color:var(--text-body-muted);">' + (meta.label === 'Required' ? 'Upload this certificate in Account Settings to submit it for review.' : 'Submitted \u2014 waiting on Keylr\u2019s review before pricing unlocks.') + '</span>' +
+          '<span class="verif-chip ' + meta.cls + ' sup-chip-sm" style="cursor:default;">' + meta.label + '</span>' +
+        '</div></div>' +
+        '<div class="pmsvc-help" style="margin-top:10px;margin-bottom:0;">You can configure pricing and receive jobs for this role once the certificate above is approved.</div>';
+    }
+    if (!services.length) {
+      return '<div class="pmsvc-fromadmin">' + PMSVC_INFO_SVG + '<div>Keylr hasn\u2019t published a service for <b>' + pmsvcEsc(role) + '</b> yet. Check back once one is live.</div></div>';
+    }
+    return services.map(function (svc, i) {
+      return (i > 0 ? '<div style="margin-top:24px;padding-top:22px;border-top:1px solid var(--border-subtle);">' : '<div>') +
+        supsvcServiceSubBlock(svc, services.length > 1) + '</div>';
+    }).join('');
+  }
+
+  var SUPSVC_LOCK_ICON_17 = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>';
+  function supsvcRoleCardHtml(role) {
+    var services = supsvcServicesForRole(role);
+    var locked = supsvcRoleLocked(role);
+    var open = !!supsvcOpenRoleCards[role];
+    return '<div class="pmsvc-sec' + (open ? ' open' : '') + '" data-supsvc-role-card="' + supsvcEscAttr(role) + '">' +
+      '<button type="button" class="pmsvc-sec-head" data-supsvc-role-card-toggle="' + supsvcEscAttr(role) + '" aria-expanded="' + (open ? 'true' : 'false') + '">' +
+        '<span class="pmsvc-sec-icon">' + (locked ? SUPSVC_LOCK_ICON_17 : SUPSVC_SEC_ICONS_LOCAL.pricing) + '</span>' +
+        '<span class="pmsvc-sec-main">' +
+          '<span class="pmsvc-sec-title" style="display:block;">' + pmsvcEsc(role) + '</span>' +
+          '<span class="pmsvc-sec-sum" style="display:block;" data-supsvc-role-sum="' + supsvcEscAttr(role) + '">' + pmsvcEsc(supsvcRoleCardSummary(role, services)) + '</span>' +
+        '</span>' +
+        '<svg class="pmsvc-sec-chevron" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' +
+      '</button>' +
+      (open ? '<div class="pmsvc-sec-body">' + supsvcRoleCardBodyHtml(role, services) + '</div>' : '') +
+    '</div>';
+  }
+
+  function supsvcRenderRolePricingCards() {
+    var wrap = document.getElementById('supsvcRolePricingCards');
+    if (!wrap) return;
+    var roles = [];
+    if (supsvcMode === 'role') {
+      var seen = {};
+      supsvcPickedCategoriesList().forEach(function (cat) { (categoryRoles[cat] || []).forEach(function (r) { if (supsvcSelectedRoles[r] && !seen[r]) { seen[r] = true; roles.push(r); } }); });
+    } else {
+      var cat = supsvcActiveCategory;
+      roles = cat ? (categoryRoles[cat] || []).filter(function (r) { return supsvcSelectedRoles[r]; }) : [];
+    }
+    wrap.innerHTML = roles.map(supsvcRoleCardHtml).join('');
+  }
+  /* =========================================================
+     RATE-ENTRY ENGINE — svc-parameterized (several role cards, and
+     therefore several services, can be open at once), committing
+     directly into supsvcPricing. No preview, no draft/save step.
+  ========================================================== */
+  function supsvcQty(svc, key, fallback) {
+    var v = supsvcPricingFor(svc).rates[key];
+    if (v === undefined || v === null || v === '') return pmsvcNum(fallback);
+    return pmsvcNum(v);
+  }
+  function supsvcQtyValue(svc, key, fallback) {
+    var v = supsvcPricingFor(svc).rates[key];
+    return (v === undefined || v === null || v === '') ? fallback : v;
+  }
+  function supsvcBaseTemplate(svc, c) {
+    var v = supsvcPricingFor(svc).rates.baseTemplate;
+    return (v === undefined || v === null || v === '') ? (c.baseTemplate || SVCP_PROPERTY_TEMPLATES[0]) : v;
+  }
+  function supsvcRateRow(svc, key, label, sub, placeholder) {
+    var r = supsvcPricingFor(svc).rates;
+    return '<div class="pmsvc-row">' +
+      '<div class="pmsvc-row-main"><div class="pmsvc-row-label">' + label + '</div>' +
+      (sub ? '<div class="pmsvc-row-sub">' + sub + '</div>' : '') + '</div>' +
+      pmsvcMoneyInput('supsvc-rate', r[key], 'data-svc="' + svc.id + '" data-key="' + pmsvcEsc(key) + '"', placeholder) +
+    '</div>';
+  }
+  function supsvcQtyField(svc, u) {
+    return '<div class="pmsvc-mini"><label>' + pmsvcEsc(svcpPluralUnit(u.unit)) + '</label>' +
+      '<input type="number" min="0" step="1" class="pmsvc-num" data-supsvc-qty="' + pmsvcEsc(u.key) + '" data-svc="' + svc.id + '" value="' + pmsvcEsc(supsvcQtyValue(svc, u.key, u.base)) + '"></div>';
+  }
+  function supsvcPricedBlock(svc, o) {
+    var r = supsvcPricingFor(svc).rates;
+    return '<div class="pmsvc-base-block">' +
+      '<div class="pmsvc-row pmsvc-row-flush">' +
+        '<div class="pmsvc-row-main"><div class="pmsvc-row-label">' + o.label + '</div>' + (o.sub ? '<div class="pmsvc-row-sub">' + o.sub + '</div>' : '') + '</div>' +
+        pmsvcMoneyInput('supsvc-rate', r[o.priceKey], 'data-svc="' + svc.id + '" data-key="' + pmsvcEsc(o.priceKey) + '"') +
+      '</div>' +
+      (o.fields ? '<div class="pmsvc-base-qty"><div class="pmsvc-base-qty-label">' + pmsvcEsc(o.qtyLabel) + '</div><div class="pmsvc-qty-grid">' + o.fields + '</div></div>' : '') +
+    '</div>';
+  }
+  function supsvcBaseBlock(svc, fieldsHtml, sub) {
+    return supsvcPricedBlock(svc, { label: 'Base price', sub: sub, priceKey: 'base', qtyLabel: 'Included in the base price', fields: fieldsHtml });
+  }
+  function supsvcExtraSubText(svc, unit, qtyKey, base) {
+    return 'Added for each ' + unit + ' above the ' + supsvcQty(svc, qtyKey, base) + ' included.';
+  }
+  function supsvcExtraRow(svc, u) {
+    var r = supsvcPricingFor(svc).rates;
+    return '<div class="pmsvc-row">' +
+      '<div class="pmsvc-row-main"><div class="pmsvc-row-label">' + pmsvcEsc(svcpExtraLabel(u.unit)) + '</div>' +
+      '<div class="pmsvc-row-sub" data-supsvc-extra-sub data-svc="' + svc.id + '" data-unit="' + pmsvcEsc(u.unit) + '" data-qtykey="' + pmsvcEsc(u.key) + '" data-qtybase="' + pmsvcEsc(u.base) + '">' + pmsvcEsc(supsvcExtraSubText(svc, u.unit, u.key, u.base)) + '</div></div>' +
+      pmsvcMoneyInput('supsvc-rate', r[u.extraKey], 'data-svc="' + svc.id + '" data-key="' + pmsvcEsc(u.extraKey) + '"') +
+    '</div>';
+  }
+  function supsvcTierName(tr, i) { return tr.name || 'Tier ' + (i + 1); }
+  function supsvcTierFrom(svc, i, tr) { return supsvcQty(svc, 'tfrom:' + i, tr.from); }
+  function supsvcTierTo(svc, i, tr) { return supsvcQty(svc, 'tto:' + i, tr.to); }
+  function supsvcTierRow(svc, c, tr, i) {
+    var r = supsvcPricingFor(svc).rates;
+    return '<div class="pmsvc-row">' +
+      '<div class="pmsvc-row-main">' +
+        '<div class="pmsvc-row-label">' + pmsvcEsc(supsvcTierName(tr, i)) + '</div>' +
+        '<div class="pmsvc-row-sub">Range of ' + pmsvcEsc(svcpPluralUnit(c.unit).toLowerCase()) + ' this tier covers.</div></div>' +
+      '<div class="pmsvc-row-controls">' +
+        '<div class="pmsvc-mini pmsvc-mini-narrow"><label>From</label><input type="number" min="0" step="1" class="pmsvc-num" data-supsvc-qty="tfrom:' + i + '" data-svc="' + svc.id + '" value="' + pmsvcEsc(supsvcQtyValue(svc, 'tfrom:' + i, tr.from)) + '"></div>' +
+        '<div class="pmsvc-mini pmsvc-mini-narrow"><label>To</label><input type="number" min="0" step="1" class="pmsvc-num" data-supsvc-qty="tto:' + i + '" data-svc="' + svc.id + '" value="' + pmsvcEsc(supsvcQtyValue(svc, 'tto:' + i, tr.to)) + '"></div>' +
+        '<div class="pmsvc-mini"><label>Price</label>' + pmsvcMoneyInput('supsvc-rate', r['tier:' + i], 'data-svc="' + svc.id + '" data-key="tier:' + i + '"') + '</div>' +
+      '</div></div>';
+  }
+  function supsvcTierWarning(svc, c) {
+    var ts = (c.tiers || []).map(function (tr, i) { return { name: supsvcTierName(tr, i), from: supsvcTierFrom(svc, i, tr), to: supsvcTierTo(svc, i, tr) }; });
+    for (var i = 0; i < ts.length; i++) { if (ts[i].to < ts[i].from) return ts[i].name + ' ends before it starts.'; }
+    var sorted = ts.slice().sort(function (a, b) { return a.from - b.from; });
+    for (var j = 1; j < sorted.length; j++) {
+      if (sorted[j].from <= sorted[j - 1].to) return sorted[j - 1].name + ' and ' + sorted[j].name + ' overlap.';
+      if (sorted[j].from > sorted[j - 1].to + 1) {
+        var lo = sorted[j - 1].to + 1, hi = sorted[j].from - 1;
+        return 'Nothing is priced ' + (lo === hi ? 'at ' + lo : 'between ' + lo + ' and ' + hi) + '.';
+      }
+    }
+    return '';
+  }
+
+  /* ---- Packages ---- */
+  var supsvcPkgUid = 0;
+  function supsvcPkgId(prefix) { supsvcPkgUid += 1; return (prefix || 'spk') + '_' + supsvcPkgUid; }
+  function supsvcMakeItem(unit, qty) { return { id: supsvcPkgId('it'), unit: unit || '', customUnit: '', qty: qty == null ? 1 : qty }; }
+  function supsvcAdminPackages(v) { return ((v.config || {}).packages || []).filter(function (p) { return p.name; }); }
+  function supsvcSyncPackages(svc, v) {
+    var p = supsvcPricingFor(svc);
+    if (!p.packages) p.packages = [];
+    var admin = supsvcAdminPackages(v);
+    admin.forEach(function (pk) {
+      var mirror = null;
+      for (var i = 0; i < p.packages.length; i++) { if (p.packages[i].source === 'keylr' && p.packages[i].adminKey === pk.name) { mirror = p.packages[i]; break; } }
+      if (!mirror) {
+        p.packages.push({ id: supsvcPkgId(), source: 'keylr', adminKey: pk.name, name: pk.name, description: pk.description || '', price: '', items: (pk.items || []).filter(function (it) { return it.unit; }).map(function (it) { return supsvcMakeItem(it.unit, it.qty); }) });
+      } else { mirror.name = pk.name; mirror.description = pk.description || ''; }
+    });
+    p.packages = p.packages.filter(function (x) { return x.source !== 'keylr' || admin.some(function (pk) { return pk.name === x.adminKey; }); });
+    var order = admin.map(function (pk) { return pk.name; });
+    p.packages.sort(function (a, b) { if (a.source !== b.source) return a.source === 'keylr' ? -1 : 1; if (a.source === 'keylr') return order.indexOf(a.adminKey) - order.indexOf(b.adminKey); return 0; });
+    return p.packages;
+  }
+  function supsvcPkgById(svc, id) { var l = (supsvcPricingFor(svc).packages || []); for (var i = 0; i < l.length; i++) { if (l[i].id === id) return l[i]; } return null; }
+  function supsvcItemById(pk, id) { for (var i = 0; i < pk.items.length; i++) { if (pk.items[i].id === id) return pk.items[i]; } return null; }
+  function supsvcItemRow(svc, pk, it) {
+    var attrs = 'data-svc="' + svc.id + '" data-pkg="' + supsvcEscAttr(pk.id) + '" data-item="' + supsvcEscAttr(it.id) + '"';
+    return '<div class="pmsvc-item-row">' +
+      '<div class="pmsvc-mini pmsvc-mini-unit"><label>Item unit</label>' + pmsvcDD('supsvc-pkg-unit', it.unit, it.unit || 'Select a unit\u2026', !it.unit, SVCP_PACKAGE_ITEM_UNITS.map(function (u) { return svcpDDItem(u, u, u === it.unit); }).join(''), attrs) + '</div>' +
+      (it.unit === 'Custom' ? '<div class="pmsvc-mini pmsvc-mini-unit"><label>Unit name</label><input type="text" class="pmsvc-num pmsvc-text" data-supsvc-itemcustom ' + attrs + ' value="' + pmsvcEsc(it.customUnit || '') + '" placeholder="e.g. Twilight shot" autocomplete="off"></div>' : '') +
+      '<div class="pmsvc-mini pmsvc-mini-narrow"><label>Quantity</label><input type="number" min="0" step="1" class="pmsvc-num" data-supsvc-itemqty ' + attrs + ' value="' + pmsvcEsc(it.qty) + '"></div>' +
+      '<button type="button" class="svcp-row-del" data-supsvc-item-del ' + attrs + ' data-tooltip="Remove item" aria-label="Remove item">' + PMSVC_TRASH_SVG + '</button>' +
+    '</div>';
+  }
+  function supsvcPackageBlock(svc, pk) {
+    var own = pk.source === 'own';
+    var idAttr = 'data-svc="' + svc.id + '" data-pkg="' + supsvcEscAttr(pk.id) + '"';
+    return '<div class="pmsvc-pkg" ' + idAttr + '>' +
+      '<div class="pmsvc-pkg-head"><div class="pmsvc-pkg-main">' +
+        (own ? '<input type="text" class="pmsvc-pkg-name" data-supsvc-pkgfield="name" ' + idAttr + ' value="' + pmsvcEsc(pk.name) + '" placeholder="Package name">' : '<div class="pmsvc-pkg-name-static">' + pmsvcEsc(pk.name) + '<span class="pmsvc-src keylr">' + PMSVC_LOCK_SVG + 'Keylr</span></div>') +
+        (own ? '<input type="text" class="pmsvc-pkg-desc" data-supsvc-pkgfield="description" ' + idAttr + ' value="' + pmsvcEsc(pk.description) + '" placeholder="Short description (optional)">' : (pk.description ? '<div class="pmsvc-pkg-desc-static">' + pmsvcEsc(pk.description) + '</div>' : '')) +
+      '</div><div class="pmsvc-pkg-head-right">' +
+        '<div class="pmsvc-mini"><label>Package price</label>' + pmsvcMoneyInput('supsvc-pkgprice', pk.price, idAttr) + '</div>' +
+        (own ? '<button type="button" class="svcp-row-del pmsvc-pkg-del" data-supsvc-pkg-del ' + idAttr + ' data-tooltip="Remove package" aria-label="Remove package">' + PMSVC_TRASH_SVG + '</button>' : '') +
+      '</div></div>' +
+      '<div class="pmsvc-base-qty"><div class="pmsvc-base-qty-label">Items included in this package</div>' +
+        (pk.items.length ? pk.items.map(function (it) { return supsvcItemRow(svc, pk, it); }).join('') : '<div class="pmsvc-pick-empty">Nothing in this package yet \u2014 add an item below.</div>') +
+        '<button type="button" class="svcp-add-row-btn" data-supsvc-item-add data-svc="' + svc.id + '" data-pkg="' + supsvcEscAttr(pk.id) + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Add item</button>' +
+      '</div></div>';
+  }
+
+  /* ---- Meet & Greet ---- */
+  function supsvcSyncMeet(svc, v) {
+    var p = supsvcPricingFor(svc);
+    if (!p.meet) {
+      var c = v.config || {};
+      p.meet = { waiting: (c.waiting || []).slice().sort(function (a, b) { return a - b; }), cancellation: (c.cancellation || []).slice().sort(function (a, b) { return a - b; }) };
+    }
+    return p.meet;
+  }
+
+  function supsvcRateFields(svc, v) {
+    var c = v.config || {};
+    var rows = '';
+    if (v.type === 'fixed') {
+      rows = supsvcRateRow(svc, 'price', 'Price per job', 'Charged whatever the property size or how long it takes.');
+    } else if (v.type === 'hourly') {
+      rows = supsvcRateRow(svc, 'hour', 'Rate per hour', 'No call-out and no minimum \u2014 time only.');
+    } else if (v.type === 'callout') {
+      rows = supsvcRateRow(svc, 'callout', 'Call-out charge', 'Covers attendance and the first hour on site.') +
+        supsvcRateRow(svc, 'hour', 'Each additional hour', 'Charged per hour after the call-out.');
+    } else if (v.type === 'baseUnit') {
+      if (!c.unit) return '<div class="pmsvc-pick-empty">Keylr hasn\u2019t finished this structure yet \u2014 no unit has been set.</div>';
+      if (c.unit === 'Property Template') {
+        var cur = supsvcBaseTemplate(svc, c);
+        rows = supsvcBaseBlock(svc, '<div class="pmsvc-mini pmsvc-mini-wide"><label>Property template</label>' + pmsvcDD('supsvc-basetpl', cur, cur, false, SVCP_PROPERTY_TEMPLATES.map(function (o) { return svcpDDItem(o, o, o === cur); }).join(''), 'data-svc="' + svc.id + '"') + '</div>', 'Covers the property template set below.') +
+          supsvcRateRow(svc, 'extra', svcpExtraLabel(c.unit), 'Added for each configuration above the base template.');
+      } else {
+        var bu = { unit: c.unit, key: 'qty', base: c.base, extraKey: 'extra' };
+        rows = supsvcBaseBlock(svc, supsvcQtyField(svc, bu), 'Covers the quantity set below.') + supsvcExtraRow(svc, bu);
+      }
+    } else if (v.type === 'baseMulti') {
+      var units = (c.units || []).filter(function (u) { return u.unit; });
+      if (!units.length) return '<div class="pmsvc-pick-empty">Keylr hasn\u2019t finished this structure yet \u2014 no units have been added.</div>';
+      var mUnits = units.map(function (u, i) { return { unit: u.unit, key: 'qty:' + i, base: u.base, extraKey: 'extra:' + i }; });
+      rows = supsvcBaseBlock(svc, mUnits.map(function (u) { return supsvcQtyField(svc, u); }).join(''), 'Covers the quantities set below.') +
+        mUnits.map(function (u) { return supsvcExtraRow(svc, u); }).join('');
+    } else if (v.type === 'tier') {
+      var tiers = c.tiers || [];
+      if (!c.unit || !tiers.length) return '<div class="pmsvc-pick-empty">Keylr hasn\u2019t finished this structure yet \u2014 no tiers have been set.</div>';
+      rows = tiers.map(function (tr, i) { return supsvcTierRow(svc, c, tr, i); }).join('');
+      var tierWarn = supsvcTierWarning(svc, c);
+      rows += '<div class="pmsvc-warn" data-supsvc-tier-warn="' + svc.id + '"' + (tierWarn ? '' : ' style="display:none;"') + '>' + pmsvcEsc(tierWarn) + '</div>';
+    } else if (v.type === 'package') {
+      var pkgs = supsvcSyncPackages(svc, v);
+      rows = pkgs.map(function (pk) { return supsvcPackageBlock(svc, pk); }).join('') +
+        '<button type="button" class="svcp-add-row-btn pmsvc-add-pkg" data-supsvc-pkg-add data-svc="' + svc.id + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Add package</button>';
+    } else if (v.type === 'meet') {
+      var mu = { unit: 'Attendee', key: 'people', base: c.people, extraKey: 'attendee' };
+      var meet = supsvcSyncMeet(svc, v);
+      rows = supsvcBaseBlock(svc, supsvcQtyField(svc, mu), 'Covers the attendees set below.') +
+        (c.extraAttendee ? supsvcExtraRow(svc, mu) : '') +
+        '<div class="pmsvc-opt-group"><div class="pmsvc-base-qty-label">Waiting time options</div>' +
+        pmsvcChips('supsvc-wait-' + svc.id, SVCP_WAITING_OPTIONS.map(function (m) { return { value: m, label: m + ' min' }; }), meet.waiting, true) +
+        '<div class="pmsvc-help">How long you\u2019ll wait if the tenant is late. Not charged \u2014 it only sets what you agree to.</div></div>' +
+        '<div class="pmsvc-opt-group"><div class="pmsvc-base-qty-label">Cancellation notice options</div>' +
+        pmsvcChips('supsvc-cancel-' + svc.id, SVCP_CANCELLATION_OPTIONS.map(function (h) { return { value: h, label: h + ' hours' }; }), meet.cancellation, true) +
+        '<div class="pmsvc-help">Notice a PM needs to give you to call the visit off without a charge.</div></div>';
+    }
+    return '<div class="pmsvc-box' + (v.type === 'package' ? ' pmsvc-box-pkg' : '') + '">' + rows + '</div>';
+  }
+
+  /* ---- Schedule / OOH / Emergency uplifts — identical structure to PM's own. ---- */
+  function supsvcUpliftCount(svc) {
+    var u = supsvcPricingFor(svc).uplifts;
+    if (!u.on) return 0;
+    var n = 0;
+    Object.keys(u.cells).forEach(function (k) { if (u.cells[k] && u.cells[k].on) n += 1; });
+    if (u.ooh.on) n += 1;
+    if (u.emergency.on) n += 1;
+    return n;
+  }
+  function supsvcRenderUplifts(svc) {
+    var u = supsvcPricingFor(svc).uplifts;
+    var count = supsvcUpliftCount(svc);
+    var head = '<div class="pmsvc-uplift-head">' +
+      '<div style="flex:1;min-width:0;"><div class="pmsvc-uplift-title">' + SUPSVC_BOLT_SVG + 'Schedule uplifts</div>' +
+      '<div class="pmsvc-uplift-desc">Flat \u00a3 uplifts by day and time-of-day window \u2014 applied on top of the price above.</div></div>' +
+      '<div class="pmsvc-uplift-head-right">' + (count ? '<span class="svcp-chip neutral">' + count + ' active</span>' : '') +
+      '<button type="button" class="toggle-switch' + (u.on ? ' on' : '') + '" data-supsvc-uplift-master="' + svc.id + '" role="switch" aria-checked="' + (u.on ? 'true' : 'false') + '" aria-label="Schedule uplifts"><span class="thumb"></span></button></div></div>';
+    if (!u.on) return '<div class="pmsvc-uplift">' + head + '</div>';
+    var grid = '<div class="pmsvc-uplift-grid"><div></div>' +
+      PMSVC_UPLIFT_WINDOWS.map(function (w) { return '<div class="pmsvc-uplift-colhead">' + w.label + '<span>' + w.time + '</span></div>'; }).join('') +
+      PMSVC_UPLIFT_DAYS.map(function (d) {
+        return '<div class="pmsvc-uplift-day">' + d.label + '</div>' + PMSVC_UPLIFT_WINDOWS.map(function (w) {
+          var key = d.id + '|' + w.id; var cell = u.cells[key]; var on = !!(cell && cell.on);
+          return '<div class="pmsvc-uplift-cell" data-window="' + w.label + '"><button type="button" class="toggle-switch sm' + (on ? ' on' : '') + '" data-supsvc-uplift-cell="' + svc.id + '|' + key + '" role="switch" aria-checked="' + (on ? 'true' : 'false') + '" aria-label="' + w.label + ' uplift"><span class="thumb"></span></button>' +
+            (on ? pmsvcMoneyInput('supsvc-uplift', cell.amount, 'data-svc="' + svc.id + '" data-key="' + key + '"') : '') + '</div>';
+        }).join('');
+      }).join('') + '</div>';
+    function special(kind, title, sub, icon, cls) {
+      var st = u[kind];
+      return '<div class="pmsvc-special ' + cls + (st.on ? ' on' : '') + '"><div class="pmsvc-special-head">' +
+        '<div style="min-width:0;"><div class="pmsvc-special-name">' + icon + pmsvcEsc(title) + '</div><div class="pmsvc-special-sub">' + pmsvcEsc(sub) + '</div></div>' +
+        '<button type="button" class="toggle-switch sm' + (st.on ? ' on' : '') + '" data-supsvc-uplift-special="' + svc.id + '|' + kind + '" role="switch" aria-checked="' + (st.on ? 'true' : 'false') + '" aria-label="' + pmsvcEsc(title) + '"><span class="thumb"></span></button></div>' +
+        (st.on ? pmsvcMoneyInput('supsvc-uplift-special', st.amount, 'data-svc="' + svc.id + '" data-key="' + kind + '"') : '') + '</div>';
+    }
+    var specials = '<div class="pmsvc-uplift-special">' +
+      special('ooh', 'Out-of-hours flat uplift', 'Anything outside the windows above', SUPSVC_CLOCK_AMBER_SVG, 'ooh') +
+      special('emergency', 'Emergency uplift (24/7)', 'When the job is flagged as an emergency', SUPSVC_SIREN_SVG, 'emergency') + '</div>';
+    return '<div class="pmsvc-uplift">' + head + '<div class="pmsvc-uplift-body">' + grid + specials + '</div></div>';
+  }
+
+  /* ---- Cancellation policy, bounded to Admin's own policy for this service ----
+     Admin's Pricing tab stores one point value per field, not a min/max, so "within
+     Admin's limits" is applied directionally: Free Cancellation can only match or be
+     made *more* generous to the PM, Full Charge can only match or be made *less*
+     aggressive, and Partial Charge is capped at Admin's own percentage. */
+  function supsvcSlaAllowedFree(adminId) { var h = slaHoursOf(adminId); return SLA_FREE_CANCEL_OPTIONS.filter(function (id) { return slaHoursOf(id) >= h; }); }
+  function supsvcSlaAllowedFull(adminId) { var h = slaHoursOf(adminId); return SLA_FULL_CHARGE_OPTIONS.filter(function (id) { return slaHoursOf(id) <= h; }); }
+  function supsvcSlaCardHtml(svc, kind, sla, adminSla) {
+    if (kind === 'free') {
+      var allowedFree = supsvcSlaAllowedFree(adminSla.freeCancellation);
+      return '<div class="svcp-sla-card free">' +
+        '<div class="svcp-sla-card-label">' + SLA_CLOCK_SVG + '<span>Free Cancellation</span></div>' +
+        '<div class="svcp-sla-card-desc">' + slaFreeCancelText(sla.freeCancellation) + '</div>' +
+        '<div class="svcp-sla-pills">' + SLA_FREE_CANCEL_OPTIONS.map(function (id) {
+          var allowed = allowedFree.indexOf(id) !== -1;
+          return '<button type="button" class="svcp-sla-pill' + (sla.freeCancellation === id ? ' on' : '') + '"' +
+            (allowed ? ' data-supsvc-freecancel="' + svc.id + '|' + id + '"' : ' disabled data-tooltip="Below Keylr\u2019s minimum for this service"') + '>' + id + '</button>';
+        }).join('') + '</div>' +
+        '<div class="svcp-sla-hint">Keylr\u2019s minimum for this service is ' + adminSla.freeCancellation + ' \u2014 you can only be equally or more generous.</div>' +
+      '</div>';
+    }
+    if (kind === 'partial') {
+      var pct = sla.partialChargePercent, maxPct = adminSla.partialChargePercent;
+      return '<div class="svcp-sla-card partial">' +
+        '<div class="svcp-sla-card-label">' + SLA_CLOCK_SVG + '<span>Partial Charge</span></div>' +
+        '<div class="svcp-sla-card-desc">' + slaPartialChargeText(sla.freeCancellation, sla.fullCharge, pct) + '</div>' +
+        '<div class="pmsvc-slider-wrap" style="margin-top:14px;">' +
+          '<div class="pmsvc-slider-value" data-supsvc-slapercent-value>' + pct + '%</div>' +
+          '<input type="range" class="pmsvc-slider" min="5" max="' + maxPct + '" step="5" value="' + Math.min(pct, maxPct) + '" data-supsvc-slapercent="' + svc.id + '" style="' + pmsvcSliderFillCss(Math.min(pct, maxPct), 5, maxPct) + '">' +
+          '<div class="pmsvc-slider-ticks"><span>5%</span><span>' + maxPct + '% max</span></div>' +
+        '</div><div class="svcp-sla-hint">Capped at Keylr\u2019s policy of ' + maxPct + '% for this service.</div>' +
+      '</div>';
+    }
+    var allowedFull = supsvcSlaAllowedFull(adminSla.fullCharge);
+    return '<div class="svcp-sla-card full">' +
+      '<div class="svcp-sla-card-label">' + SLA_CLOCK_SVG + '<span>Full Charge</span></div>' +
+      '<div class="svcp-sla-card-desc">' + slaFullChargeText(sla.fullCharge) + '</div>' +
+      '<div class="svcp-sla-pills">' + SLA_FULL_CHARGE_OPTIONS.map(function (id) {
+        var allowed = allowedFull.indexOf(id) !== -1;
+        return '<button type="button" class="svcp-sla-pill' + (sla.fullCharge === id ? ' on' : '') + '"' +
+          (allowed ? ' data-supsvc-fullcharge="' + svc.id + '|' + id + '"' : ' disabled data-tooltip="Above Keylr\u2019s maximum for this service"') + '>' + id + '</button>';
+      }).join('') + '</div>' +
+      '<div class="svcp-sla-hint">Keylr\u2019s maximum for this service is ' + adminSla.fullCharge + ' \u2014 you can only match it or charge from closer to the job.</div>' +
+    '</div>';
+  }
+  function supsvcSlaBody(svc) {
+    var p = supsvcPricingFor(svc);
+    var admin = svc.slaPolicy || { freeCancellation: '2d', fullCharge: '12h', partialChargePercent: 15 };
+    return '<div class="svcp-sla-grid" data-supsvc-sla="' + svc.id + '">' + supsvcSlaCardHtml(svc, 'full', p.slaPolicy, admin) + supsvcSlaCardHtml(svc, 'free', p.slaPolicy, admin) + supsvcSlaCardHtml(svc, 'partial', p.slaPolicy, admin) + '</div>';
+  }
+
+  /* =========================================================
+     MASTER RENDER + INIT
+  ========================================================== */
+  function supsvcRenderAll() {
+    supsvcSync();
+    supsvcRenderAddons();
+    supsvcRenderModeToggle();
+    supsvcRenderChipsRow();
+    supsvcRenderAddableCats();
+    document.getElementById('supsvcCatListWrap').style.display = supsvcMode === 'category' ? '' : 'none';
+    document.getElementById('supsvcPickerSection').classList.toggle('role-mode', supsvcMode === 'role');
+    supsvcRenderCatList();
+    supsvcRenderRolesPanel();
+    supsvcRenderRolePricingCards();
+  }
+
+  function initSupsvcOnce() {
+    if (supsvcInited) { supsvcRenderAll(); return; }
+    supsvcInited = true;
+    supsvcSeedFromOnboarding();
+    supsvcRenderAll();
+    supsvcWireEvents();
+  }
+  /* ---------- Surgical refreshes (avoid tearing down focused inputs) ---------- */
+  function supsvcRefreshExtraSubs(svc) {
+    document.querySelectorAll('[data-supsvc-extra-sub][data-svc="' + svc.id + '"]').forEach(function (el) {
+      el.textContent = supsvcExtraSubText(svc, el.getAttribute('data-unit'), el.getAttribute('data-qtykey'), el.getAttribute('data-qtybase'));
+    });
+  }
+  function supsvcRefreshTierWarning(svc) {
+    var el = document.querySelector('[data-supsvc-tier-warn="' + svc.id + '"]');
+    if (!el) return;
+    var v = supsvcVarOf(svc);
+    var msg = (v && v.type === 'tier') ? supsvcTierWarning(svc, v.config || {}) : '';
+    el.textContent = msg;
+    el.style.display = msg ? '' : 'none';
+  }
+  /* Which role(s) reference this service, so a rate change refreshes every card/sidebar
+     row that could be showing it — a service can be reached by more than one role. */
+  function supsvcRolesReferencingService(svc) {
+    return svc.roles.filter(function (r) { return supsvcSelectedRoles[r]; });
+  }
+  function supsvcRefreshAfterRateChange(svc) {
+    supsvcRolesReferencingService(svc).forEach(function (role) {
+      var sumEl = document.querySelector('[data-supsvc-role-sum="' + role.replace(/"/g, '\\"') + '"]');
+      if (sumEl) sumEl.textContent = supsvcRoleCardSummary(role, supsvcServicesForRole(role));
+    });
+    supsvcRenderCatList();
+  }
+
+  /* =========================================================
+     EVENTS
+  ========================================================== */
+  function supsvcWireEvents() {
+    /* ---- Extra fees ---- */
+    document.getElementById('supsvcAddonsGrid').addEventListener('click', function (e) {
+      var t = e.target.closest('[data-supsvc-addon-toggle]');
+      if (t) { var k = t.getAttribute('data-supsvc-addon-toggle'); supsvcAddons[k].on = !supsvcAddons[k].on; supsvcRenderAddons(); }
+    });
+    document.getElementById('supsvcAddonsGrid').addEventListener('change', function (e) {
+      var z = e.target.closest('[data-supsvc-addon-zoneonly]');
+      if (z) supsvcAddons[z.getAttribute('data-supsvc-addon-zoneonly')].onlyInZone = z.checked;
+    });
+    document.getElementById('supsvcAddonsGrid').addEventListener('input', function (e) {
+      var money = e.target.closest('[data-pmsvc-money="supsvc-addon"]');
+      if (!money) return;
+      var key = money.getAttribute('data-key');
+      if (supsvcAddons[key]) supsvcAddons[key].amount = money.value;
+    });
+
+    /* ---- Mode toggle ---- */
+    document.getElementById('supsvcModeToggle').addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-supsvc-mode]');
+      if (!btn) return;
+      supsvcMode = btn.getAttribute('data-supsvc-mode');
+      supsvcRenderAll();
+    });
+
+    /* ---- Top chips row: select active / remove ---- */
+    document.getElementById('supsvcSelectedCatChipsRow').addEventListener('click', function (e) {
+      var rm = e.target.closest('[data-supsvc-cat-remove]');
+      if (rm) {
+        var cat = rm.getAttribute('data-supsvc-cat-remove');
+        delete supsvcSelectedCategories[cat];
+        (categoryRoles[cat] || []).forEach(function (r) { delete supsvcSelectedRoles[r]; });
+        if (supsvcActiveCategory === cat) { var remaining = supsvcPickedCategoriesList(); supsvcActiveCategory = remaining.length ? remaining[0] : null; }
+        supsvcRenderAll();
+        return;
+      }
+      var sel = e.target.closest('[data-supsvc-cat-select]');
+      if (sel) { supsvcActiveCategory = sel.getAttribute('data-supsvc-cat-select'); supsvcMode = 'category'; supsvcRenderAll(); }
+    });
+
+    /* ---- Add category button: reveal + focus the search/addable area ---- */
+    document.getElementById('supsvcAddCategoryBtn').addEventListener('click', function () {
+      var input = document.getElementById('supsvcRoleSearchInput');
+      var addable = document.getElementById('supsvcAddableCats');
+      if (addable) addable.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      if (input) input.focus();
+    });
+
+    /* ---- Search (filters addable categories + the roles panel) ---- */
+    document.getElementById('supsvcRoleSearchInput').addEventListener('input', function () {
+      supsvcRoleSearch = this.value;
+      supsvcRenderAddableCats();
+      supsvcRenderRolesPanel();
+    });
+
+    /* ---- Addable category pills ---- */
+    document.getElementById('supsvcAddableCats').addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-supsvc-cat-add]');
+      if (!btn) return;
+      var cat = btn.getAttribute('data-supsvc-cat-add');
+      supsvcSelectedCategories[cat] = true;
+      supsvcActiveCategory = cat;
+      supsvcMode = 'category';
+      supsvcRenderAll();
+    });
+
+    /* ---- Left sidebar: select active category ---- */
+    document.getElementById('supsvcCatList').addEventListener('click', function (e) {
+      var row = e.target.closest('[data-supsvc-cat-select]');
+      if (!row) return;
+      supsvcActiveCategory = row.getAttribute('data-supsvc-cat-select');
+      supsvcRenderCatList();
+      supsvcRenderRolesPanel();
+      supsvcRenderRolePricingCards();
+    });
+
+    /* ---- Roles grid: toggle a role ---- */
+    document.getElementById('supsvcRolesGrid').addEventListener('click', function (e) {
+      var card = e.target.closest('[data-supsvc-role]');
+      if (!card) return;
+      var role = card.getAttribute('data-supsvc-role');
+      supsvcSelectedRoles[role] = !supsvcSelectedRoles[role];
+      if (supsvcSelectedRoles[role]) supsvcOpenRoleCards[role] = true; else delete supsvcOpenRoleCards[role];
+      supsvcRenderCatList();
+      supsvcRenderRolesPanel();
+      supsvcRenderRolePricingCards();
+    });
+
+    /* ---- Role pricing cards: everything inside ---- */
+    var cardsWrap = document.getElementById('supsvcRolePricingCards');
+    cardsWrap.addEventListener('click', function (e) {
+      /* Custom dropdowns (property template, package item unit) — no free global handler
+         exists for this shell, so it's wired the same way PM's own detail view does it. */
+      var ddBtn = e.target.closest('.pmsvc-dd .pm-custom-dd-btn');
+      if (ddBtn) {
+        e.stopPropagation();
+        var menu = ddBtn.nextElementSibling;
+        var wasOpen = ddBtn.classList.contains('open');
+        if (typeof closeAllCustomDropdowns === 'function') closeAllCustomDropdowns();
+        if (!wasOpen && menu) {
+          ddBtn.classList.add('open'); menu.classList.add('open');
+          var spaceBelow = window.innerHeight - ddBtn.getBoundingClientRect().bottom;
+          menu.classList.toggle('drop-up', spaceBelow < Math.min(menu.scrollHeight + 20, 280));
+        }
+        return;
+      }
+      var ddItem = e.target.closest('.pmsvc-dd .cdd-item');
+      if (ddItem) {
+        e.stopPropagation();
+        var trigger = ddItem.closest('.pmsvc-dd').querySelector('.pm-custom-dd-btn');
+        var value = ddItem.getAttribute('data-svcp-dd-value');
+        var role2 = trigger.getAttribute('data-ddrole');
+        var svcForDd = svcpServiceById(trigger.getAttribute('data-svc'));
+        if (typeof closeAllCustomDropdowns === 'function') closeAllCustomDropdowns();
+        if (!svcForDd) return;
+        if (role2 === 'supsvc-basetpl') { supsvcPricingFor(svcForDd).rates.baseTemplate = value; supsvcRerenderRoleCards(); return; }
+        if (role2 === 'supsvc-pkg-unit') {
+          var pk = supsvcPkgById(svcForDd, trigger.getAttribute('data-pkg'));
+          var it = pk && supsvcItemById(pk, trigger.getAttribute('data-item'));
+          if (it) { it.unit = value; if (value !== 'Custom') it.customUnit = ''; }
+          supsvcRerenderRoleCards();
+        }
+        return;
+      }
+
+      var roleToggle = e.target.closest('[data-supsvc-role-card-toggle]');
+      if (roleToggle) {
+        var r = roleToggle.getAttribute('data-supsvc-role-card-toggle');
+        supsvcOpenRoleCards[r] = !supsvcOpenRoleCards[r];
+        supsvcRenderRolePricingCards();
+        return;
+      }
+
+      var varBtn = e.target.closest('[data-supsvc-var]');
+      if (varBtn) {
+        var parts = varBtn.getAttribute('data-supsvc-var').split('|');
+        var svc1 = svcpServiceById(parts[0]);
+        var p1 = supsvcPricingFor(svc1);
+        p1.varId = (p1.varId === parts[1]) ? '' : parts[1];
+        p1.rates = {}; p1.packages = null; p1.meet = null;
+        supsvcRerenderRoleCards();
+        return;
+      }
+
+      var upliftMaster = e.target.closest('[data-supsvc-uplift-master]');
+      if (upliftMaster) { var s2 = svcpServiceById(upliftMaster.getAttribute('data-supsvc-uplift-master')); supsvcPricingFor(s2).uplifts.on = !supsvcPricingFor(s2).uplifts.on; supsvcRerenderRoleCards(); return; }
+      var upliftCell = e.target.closest('[data-supsvc-uplift-cell]');
+      if (upliftCell) {
+        var parts2 = upliftCell.getAttribute('data-supsvc-uplift-cell').split('|');
+        var s3 = svcpServiceById(parts2[0]);
+        var key2 = parts2[1] + '|' + parts2[2];
+        var cells = supsvcPricingFor(s3).uplifts.cells;
+        if (!cells[key2]) cells[key2] = { on: true, amount: '' }; else cells[key2].on = !cells[key2].on;
+        supsvcRerenderRoleCards();
+        return;
+      }
+      var upliftSpecial = e.target.closest('[data-supsvc-uplift-special]');
+      if (upliftSpecial) {
+        var parts3 = upliftSpecial.getAttribute('data-supsvc-uplift-special').split('|');
+        var s4 = svcpServiceById(parts3[0]);
+        supsvcPricingFor(s4).uplifts[parts3[1]].on = !supsvcPricingFor(s4).uplifts[parts3[1]].on;
+        supsvcRerenderRoleCards();
+        return;
+      }
+
+      var chip = e.target.closest('[data-pmsvc-chip]');
+      if (chip) {
+        var croleAttr = chip.getAttribute('data-pmsvc-chip');
+        var m = croleAttr.match(/^supsvc-(wait|cancel)-(.+)$/);
+        if (m) {
+          var s5 = svcpServiceById(m[2]);
+          var meet = supsvcPricingFor(s5).meet;
+          var listKey = m[1] === 'wait' ? 'waiting' : 'cancellation';
+          var val = pmsvcNum(chip.getAttribute('data-value'));
+          var idx = meet[listKey].indexOf(val);
+          if (idx === -1) meet[listKey].push(val); else meet[listKey].splice(idx, 1);
+          meet[listKey].sort(function (a, b) { return a - b; });
+          supsvcRerenderRoleCards();
+        }
+        return;
+      }
+
+      var slaFree = e.target.closest('[data-supsvc-freecancel]');
+      if (slaFree) { var p2 = slaFree.getAttribute('data-supsvc-freecancel').split('|'); supsvcPricingFor(svcpServiceById(p2[0])).slaPolicy.freeCancellation = p2[1]; supsvcRerenderRoleCards(); return; }
+      var slaFull = e.target.closest('[data-supsvc-fullcharge]');
+      if (slaFull) { var p3 = slaFull.getAttribute('data-supsvc-fullcharge').split('|'); supsvcPricingFor(svcpServiceById(p3[0])).slaPolicy.fullCharge = p3[1]; supsvcRerenderRoleCards(); return; }
+
+      var pkgAdd = e.target.closest('[data-supsvc-pkg-add]');
+      if (pkgAdd) {
+        var s6 = svcpServiceById(pkgAdd.getAttribute('data-svc'));
+        var p6 = supsvcPricingFor(s6);
+        if (!p6.packages) p6.packages = [];
+        p6.packages.push({ id: supsvcPkgId(), source: 'own', adminKey: null, name: '', description: '', price: '', items: [supsvcMakeItem('Photo', 1)] });
+        supsvcRerenderRoleCards();
+        return;
+      }
+      var pkgDel = e.target.closest('[data-supsvc-pkg-del]');
+      if (pkgDel) {
+        var s7 = svcpServiceById(pkgDel.getAttribute('data-svc'));
+        var p7 = supsvcPricingFor(s7);
+        p7.packages = (p7.packages || []).filter(function (x) { return x.id !== pkgDel.getAttribute('data-pkg'); });
+        supsvcRerenderRoleCards();
+        return;
+      }
+      var itemAdd = e.target.closest('[data-supsvc-item-add]');
+      if (itemAdd) {
+        var s8 = svcpServiceById(itemAdd.getAttribute('data-svc'));
+        var pk8 = supsvcPkgById(s8, itemAdd.getAttribute('data-pkg'));
+        if (pk8) { pk8.items.push(supsvcMakeItem('Photo', 1)); supsvcRerenderRoleCards(); }
+        return;
+      }
+      var itemDel = e.target.closest('[data-supsvc-item-del]');
+      if (itemDel) {
+        var s9 = svcpServiceById(itemDel.getAttribute('data-svc'));
+        var pk9 = supsvcPkgById(s9, itemDel.getAttribute('data-pkg'));
+        if (pk9) { pk9.items = pk9.items.filter(function (it) { return it.id !== itemDel.getAttribute('data-item'); }); supsvcRerenderRoleCards(); }
+      }
+    });
+
+    cardsWrap.addEventListener('input', function (e) {
+      var money = e.target.closest('[data-pmsvc-money]');
+      if (money) {
+        var mrole = money.getAttribute('data-pmsvc-money');
+        var svcId = money.getAttribute('data-svc');
+        if (mrole === 'supsvc-rate') {
+          var svc = svcpServiceById(svcId);
+          supsvcPricingFor(svc).rates[money.getAttribute('data-key')] = money.value;
+          supsvcRefreshExtraSubs(svc);
+          supsvcRefreshTierWarning(svc);
+          supsvcRefreshAfterRateChange(svc);
+          return;
+        }
+        if (mrole === 'supsvc-uplift') {
+          var s10 = svcpServiceById(svcId);
+          var k = money.getAttribute('data-key');
+          var cells = supsvcPricingFor(s10).uplifts.cells;
+          if (!cells[k]) cells[k] = { on: true, amount: '' };
+          cells[k].amount = money.value;
+          return;
+        }
+        if (mrole === 'supsvc-uplift-special') { supsvcPricingFor(svcpServiceById(svcId)).uplifts[money.getAttribute('data-key')].amount = money.value; return; }
+        if (mrole === 'supsvc-pkgprice') {
+          var s11 = svcpServiceById(svcId);
+          var pk11 = supsvcPkgById(s11, money.getAttribute('data-pkg'));
+          if (pk11) { pk11.price = money.value; supsvcRefreshAfterRateChange(s11); }
+          return;
+        }
+        return;
+      }
+      var qty = e.target.closest('[data-supsvc-qty]');
+      if (qty) {
+        var svc2 = svcpServiceById(qty.getAttribute('data-svc'));
+        supsvcPricingFor(svc2).rates[qty.getAttribute('data-supsvc-qty')] = qty.value;
+        supsvcRefreshExtraSubs(svc2);
+        supsvcRefreshTierWarning(svc2);
+        return;
+      }
+      var slaPct = e.target.closest('[data-supsvc-slapercent]');
+      if (slaPct) {
+        var svc3 = svcpServiceById(slaPct.getAttribute('data-supsvc-slapercent'));
+        var val = pmsvcNum(slaPct.value);
+        supsvcPricingFor(svc3).slaPolicy.partialChargePercent = val;
+        slaPct.style.cssText += pmsvcSliderFillCss(val, parseFloat(slaPct.min), parseFloat(slaPct.max));
+        var valEl = slaPct.parentElement.querySelector('[data-supsvc-slapercent-value]');
+        if (valEl) valEl.textContent = val + '%';
+        var descEl = slaPct.closest('.svcp-sla-card').querySelector('.svcp-sla-card-desc');
+        if (descEl) descEl.textContent = slaPartialChargeText(supsvcPricingFor(svc3).slaPolicy.freeCancellation, supsvcPricingFor(svc3).slaPolicy.fullCharge, val);
+        return;
+      }
+      var pkgField = e.target.closest('[data-supsvc-pkgfield]');
+      if (pkgField) { var pkF = supsvcPkgById(svcpServiceById(pkgField.getAttribute('data-svc')), pkgField.getAttribute('data-pkg')); if (pkF) pkF[pkgField.getAttribute('data-supsvc-pkgfield')] = pkgField.value; return; }
+      var itemCustom = e.target.closest('[data-supsvc-itemcustom]');
+      if (itemCustom) {
+        var pkC = supsvcPkgById(svcpServiceById(itemCustom.getAttribute('data-svc')), itemCustom.getAttribute('data-pkg'));
+        var itC = pkC && supsvcItemById(pkC, itemCustom.getAttribute('data-item'));
+        if (itC) itC.customUnit = itemCustom.value;
+        return;
+      }
+      var itemQty = e.target.closest('[data-supsvc-itemqty]');
+      if (itemQty) {
+        var pkQ = supsvcPkgById(svcpServiceById(itemQty.getAttribute('data-svc')), itemQty.getAttribute('data-pkg'));
+        var itQ = pkQ && supsvcItemById(pkQ, itemQty.getAttribute('data-item'));
+        if (itQ) itQ.qty = itemQty.value;
+      }
+    });
+  }
+
+  function supsvcRerenderRoleCards() {
+    supsvcRenderRolePricingCards();
+    supsvcRenderCatList();
+  }
+
+  /* ---------- Keep in step with Admin's own Pricing/Compliance tabs mid-session ---------- */
+  function supsvcAdminChanged() {
+    supsvcSync();
+    if (supsvcInited && document.getElementById('supPricingView') && document.getElementById('supPricingView').style.display !== 'none') {
+      supsvcRenderAll();
     }
   }
 
