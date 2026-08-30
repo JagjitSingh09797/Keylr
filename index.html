@@ -7312,9 +7312,11 @@
   }
   .ckl-add-custom-section-btn:hover { border-color: var(--accent-blue); background: #dde4f2; }
   #pmsvcAddCommitmentBtn {
-    border: none; background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); color: #fff;
+    width: auto; display: inline-flex; align-items: center; gap: 5px;
+    padding: 7px 14px; border-radius: 999px; border: 1px solid #cfe0f5;
+    background: var(--icon-tint-bg); color: var(--accent-blue); font-weight: 700; margin-bottom: 0;
   }
-  #pmsvcAddCommitmentBtn:hover { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); filter: brightness(1.12); }
+  #pmsvcAddCommitmentBtn:hover { background: #dde9f9; border-color: var(--accent-blue); }
   .ckl-custom-chip { display: inline-flex; align-items: center; gap: 5px; }
   .ckl-custom-chip button { background: none; border: none; color: var(--text-body-muted); opacity: 0.7; cursor: pointer; padding: 0; font-size: 14px; line-height: 1; display: flex; }
   .ckl-custom-chip.on button { color: #fff; opacity: 0.8; }
@@ -7373,6 +7375,7 @@
   /* Report preview needs the same bump — opened from within the Admin dashboard's own layered
      views, the generic .modal-overlay z-index (100) isn't enough to reliably sit above them. */
   #cklReportOverlay { z-index: 900; }
+  #cklDeleteOverlay { z-index: 900; }
   .ckl-pm-modal { width: min(1000px, 100%); max-height: 88vh; display: flex; flex-direction: column; background: #fff; border-radius: 16px; overflow: hidden; }
   .ckl-pm-modal-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; padding: 20px 24px; border-bottom: 1px solid var(--border-subtle); flex-shrink: 0; }
   .ckl-pm-modal-body { padding: 20px 24px; overflow-y: auto; flex: 0 1 auto; height: auto; min-height: 0; }
@@ -9408,6 +9411,20 @@
         <button type="button" id="cklReportCloseBtn" aria-label="Close" style="background:none;border:none;cursor:pointer;color:var(--text-body-muted);padding:4px;flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
       </div>
       <div class="ckl-pm-modal-body" id="cklReportBody"></div>
+    </div>
+  </div>
+
+  <!-- Admin Checklist tab: delete confirmation, same confirm-modal-card pattern used everywhere
+       else a delete is destructive (svcpDeleteServiceOverlay etc). -->
+  <div class="modal-overlay" id="cklDeleteOverlay">
+    <div class="confirm-modal-card">
+      <div class="confirm-modal-icon" style="background:#fef2f2;color:#b91c1c;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></div>
+      <div class="confirm-modal-title">Delete this checklist?</div>
+      <div class="confirm-modal-desc" id="cklDeleteDesc">This can't be undone. Any job template attached to it will lose this checklist.</div>
+      <div class="confirm-modal-btns">
+        <button type="button" class="pmprop-del-cancel" id="cklDeleteCancel">Cancel</button>
+        <button type="button" class="confirm-modal-confirm" id="cklDeleteConfirm" style="background:#b91c1c;">Delete Checklist</button>
+      </div>
     </div>
   </div>
 
@@ -16564,7 +16581,7 @@
                 <div class="svcp-panel">
                   <div style="margin-bottom:16px;">
                     <div class="svcp-section-title">Access flow</div>
-                    <p class="svcp-section-sub">Select every pick-up and drop-off method this service supports. A PM will choose one of each for their own template, plus their own address and access details.</p>
+                    <p class="svcp-section-sub">Pick one pick-up and one drop-off method for this service. A PM's own template starts pre-selected with these, plus their own address and access details.</p>
                   </div>
 
                   <div class="pmsvc-access-grid" id="svcpAccessGrid"></div>
@@ -43019,7 +43036,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       // pattern as schedulingOptions above. pickupDefault/dropoffDefault is admin's own starting
       // choice among the enabled set; a PM's template pre-fills from it but can pick a different
       // enabled method for their own template without changing admin's default for anyone else.
-      accessOptions: o.accessOptions || { pickup: ['Key Safe', 'Smart Lock'], dropoff: ['Key Safe', 'Smart Lock'], pickupDefault: 'Key Safe', dropoffDefault: 'Key Safe' }
+      accessOptions: o.accessOptions || { pickup: ['Key Safe'], dropoff: ['Key Safe'], pickupDefault: 'Key Safe', dropoffDefault: 'Key Safe' }
     };
   }
 
@@ -43277,6 +43294,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   var cklAdminAttachOpen = {}; // { checklistId: true } — which cards have their inline attach-picker open
   var cklAdminAttachSearch = {}; // { checklistId: 'search text' }
   var cklReportPreviewId = null; // checklist id currently shown in the read-only Report popup
+  var cklPendingDeleteId = null; // checklist id awaiting delete confirmation, from either trigger point
   // cklAdminCtx/pmCklCtx each capture a direct reference to their own *Sections object once, so
   // resetting between checklists must clear it in place rather than reassigning to a new {} —
   // reassignment would silently orphan whichever reference the ctx object already captured.
@@ -43979,6 +43997,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (e.target.closest('.ckl-sec-popover') || e.target.closest('[data-ckl-sec-menu-toggle]')) return;
     ctx.setOpenMenu(null);
     ctx.renderSections();
+    cklOpenFloatingTrigger = null; cklOpenFloatingEl = null;
   }
 
   /* .pm-custom-dd-menu's app-wide default is position:absolute relative to its trigger, which
@@ -43990,9 +44009,13 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
      continuously repositioning, since a stale floating menu is a much rarer edge case than one
      that's silently cropped. */
   var cklFloatingOpenedAt = 0;
+  var cklOpenFloatingTrigger = null;
+  var cklOpenFloatingEl = null;
   function cklPositionFloating(trigger, el) {
     var rect = trigger.getBoundingClientRect();
     cklFloatingOpenedAt = Date.now();
+    cklOpenFloatingTrigger = trigger;
+    cklOpenFloatingEl = el;
     el.style.position = 'fixed';
     el.style.margin = '0';
     el.style.zIndex = '950';
@@ -44005,29 +44028,49 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var elW = el.offsetWidth || Math.max(rect.width, 180);
     var elH = el.offsetHeight || 200;
     var left = Math.max(8, Math.min(rect.left, window.innerWidth - elW - 8));
-    var openUp = (window.innerHeight - rect.bottom) < Math.min(elH + 20, 320) && rect.top > (window.innerHeight - rect.bottom);
+    var spaceBelow = window.innerHeight - rect.bottom;
+    var spaceAbove = rect.top;
+    var openUp = spaceBelow < Math.min(elH + 20, 320) && spaceAbove > spaceBelow;
     el.style.left = left + 'px';
     el.style.right = 'auto';
-    if (openUp) { el.style.top = 'auto'; el.style.bottom = (window.innerHeight - rect.top + 6) + 'px'; }
-    else { el.style.bottom = 'auto'; el.style.top = (rect.bottom + 6) + 'px'; }
+    if (openUp) {
+      // Clamped so the element's own top edge never goes above the viewport — without this, a
+      // tall popover opened near the top of the screen (not enough room above OR below) could
+      // still get pushed off-screen upward.
+      var bottomPos = window.innerHeight - rect.top + 6;
+      if (window.innerHeight - bottomPos - elH < 8) bottomPos = Math.max(8, window.innerHeight - elH - 8);
+      el.style.top = 'auto';
+      el.style.bottom = bottomPos + 'px';
+    } else {
+      el.style.bottom = 'auto';
+      el.style.top = (rect.bottom + 6) + 'px';
+    }
     el.classList.toggle('drop-up', openUp);
   }
   var cklFloatingCloseBound = false;
   function cklEnsureFloatingCloseListeners() {
     if (cklFloatingCloseBound) return;
     cklFloatingCloseBound = true;
-    var closeAll = function () {
-      // Switching an element to position:fixed shifts layout, which can itself fire a genuine
-      // scroll/resize event a few ms later — without this guard that self-inflicted event closes
-      // the very thing that was just opened. A real user scroll happening this fast is not a
-      // meaningful case to protect against.
-      if (Date.now() - cklFloatingOpenedAt < 200) return;
+    function closeAllFloating() {
       if (typeof closeAllCustomDropdowns === 'function') closeAllCustomDropdowns();
       if (cklOpenSectionMenu !== null) { cklOpenSectionMenu = null; cklAdminRenderSections(); }
       if (pmCklOpenSectionMenu !== null) { pmCklOpenSectionMenu = null; pmCklRenderSections(); }
+      cklOpenFloatingTrigger = null; cklOpenFloatingEl = null;
+    }
+    // A normal scroll/resize while a dropdown or popover is open shouldn't just make it vanish —
+    // it should follow its trigger, the way any well-behaved floating UI does. Only close it once
+    // the trigger has scrolled fully out of view, where there's no sensible position left to show
+    // it in.
+    var onScrollOrResize = function () {
+      if (Date.now() - cklFloatingOpenedAt < 200) return;
+      if (!cklOpenFloatingTrigger || !cklOpenFloatingEl || !document.body.contains(cklOpenFloatingTrigger)) return;
+      var rect = cklOpenFloatingTrigger.getBoundingClientRect();
+      var stillVisible = rect.bottom > 0 && rect.top < window.innerHeight && rect.right > 0 && rect.left < window.innerWidth;
+      if (!stillVisible) { closeAllFloating(); return; }
+      cklPositionFloating(cklOpenFloatingTrigger, cklOpenFloatingEl);
     };
-    window.addEventListener('scroll', closeAll, true);
-    window.addEventListener('resize', closeAll);
+    window.addEventListener('scroll', onScrollOrResize, true);
+    window.addEventListener('resize', onScrollOrResize);
   }
   /* ---------- Admin Checklist tab: navigation + dropdown delegate ---------- */
   var cklAdminCtx = {
@@ -44087,11 +44130,33 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     }
     cklAdminCloseEditView();
   });
+  function cklOpenDeleteConfirm(id) {
+    cklPendingDeleteId = id;
+    var c = cklChecklistById(id);
+    document.getElementById('cklDeleteDesc').textContent = c
+      ? 'This removes \u201c' + (c.name || 'this checklist') + '\u201d. This can\u2019t be undone, and any job template attached to it will lose this checklist.'
+      : 'This can\u2019t be undone. Any job template attached to it will lose this checklist.';
+    document.getElementById('cklDeleteOverlay').classList.add('open');
+  }
   document.getElementById('cklAdminDeleteBtn').addEventListener('click', function () {
     if (!cklActiveId) return;
-    svcpChecklists = svcpChecklists.filter(function (c) { return c.id !== cklActiveId; });
+    cklOpenDeleteConfirm(cklActiveId);
+  });
+  document.getElementById('cklDeleteCancel').addEventListener('click', function () {
+    document.getElementById('cklDeleteOverlay').classList.remove('open');
+    cklPendingDeleteId = null;
+  });
+  document.getElementById('cklDeleteOverlay').addEventListener('click', function (e) {
+    if (e.target === this) { this.classList.remove('open'); cklPendingDeleteId = null; }
+  });
+  document.getElementById('cklDeleteConfirm').addEventListener('click', function () {
+    if (!cklPendingDeleteId) return;
+    var wasActive = cklActiveId === cklPendingDeleteId;
+    svcpChecklists = svcpChecklists.filter(function (c) { return c.id !== cklPendingDeleteId; });
+    document.getElementById('cklDeleteOverlay').classList.remove('open');
+    cklPendingDeleteId = null;
     showToast('Checklist deleted.');
-    cklAdminCloseEditView();
+    if (wasActive) cklAdminCloseEditView(); else cklAdminRenderList();
   });
 
   /* ---------- Admin Checklist tab: list card interactions (report / attach / edit / delete) ---------- */
@@ -44099,9 +44164,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var del = e.target.closest('[data-ckl-del]');
     if (del) {
       e.stopPropagation();
-      svcpChecklists = svcpChecklists.filter(function (c) { return c.id !== del.getAttribute('data-ckl-del'); });
-      cklAdminRenderList();
-      showToast('Checklist deleted.');
+      cklOpenDeleteConfirm(del.getAttribute('data-ckl-del'));
       return;
     }
     var report = e.target.closest('[data-ckl-report]');
@@ -44741,26 +44804,21 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   }
 
   // Admin's own Access flow panel — same .pmsvc-access-panel shell the PM side uses, but
-  // multi-select (any number of methods can apply to this service, same gating pattern as
-  // Scheduling variables) and with no address/code/notes fields, since those describe a specific
-  // property, not something meaningful to set at the service level. Each enabled chip also carries
-  // a star: clicking it (separate from the chip body, which toggles enabled/disabled) marks that
-  // method as the default a PM's own template starts pre-selected with.
-  var CKL_STAR_SVG = '<svg width="12" height="12" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+  // single-select per explicit instruction: a service has exactly one pick-up and one drop-off
+  // method, not a set to choose from. Selecting a method sets it as both the service's method and
+  // the default a PM's own template starts pre-selected with — there's nothing else to distinguish,
+  // so no separate star affordance here (unlike PM's own panel, which still picks from every
+  // possible method and needs a way to say which one is *theirs*).
   function svcpAccessPanelHtml(kind, opts) {
-    var selected = (svcpWorking.accessOptions && svcpWorking.accessOptions[kind]) || [];
-    var defaultVal = svcpWorking.accessOptions ? svcpWorking.accessOptions[kind + 'Default'] : '';
+    var current = svcpWorking.accessOptions ? svcpWorking.accessOptions[kind + 'Default'] : '';
     return '<div class="pmsvc-access-panel">' +
       '<div class="pmsvc-access-panel-label">' + PMSVC_KEY_SVG + '<span>' + opts.label + '</span></div>' +
       '<div class="pmsvc-pill-row">' + opts.options.map(function (o) {
-        var on = selected.indexOf(o) !== -1;
-        var isDefault = on && defaultVal === o;
+        var on = current === o;
         var lbl = kind === 'dropoff' ? (PMSVC_DROPOFF_SHORT_LABELS[o] || o) : o;
-        return '<button type="button" class="pmsvc-pill sm ckl-access-pill' + (on ? ' on' : '') + '" data-svcp-access="' + kind + '" data-value="' + supjrEscapeHtml(o) + '">' + (on ? PMSVC_CHECK_SVG : '') + supjrEscapeHtml(lbl) +
-          (on ? '<span class="ckl-access-star' + (isDefault ? ' on' : '') + '" data-svcp-access-default="' + kind + '|' + supjrEscapeHtml(o) + '" data-tooltip="' + (isDefault ? 'Default method' : 'Set as default') + '">' + CKL_STAR_SVG + '</span>' : '') +
-        '</button>';
+        return '<button type="button" class="pmsvc-pill sm' + (on ? ' on' : '') + '" data-svcp-access="' + kind + '" data-value="' + supjrEscapeHtml(o) + '">' + (on ? PMSVC_CHECK_SVG : '') + supjrEscapeHtml(lbl) + '</button>';
       }).join('') + '</div>' +
-      '<div class="pmsvc-help" style="margin-top:8px;">Tick to enable a method for this service. Star one to set the default a PM\u2019s template starts with \u2014 PMs can still change it per template.</div>' +
+      '<div class="pmsvc-help" style="margin-top:8px;">Pick one method for this service \u2014 this is what a PM\u2019s template starts pre-selected with, though they can still change it per template.</div>' +
     '</div>';
   }
   function renderSvcpAccess() {
@@ -45159,25 +45217,16 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
   document.getElementById('svcpAccessGrid').addEventListener('click', function (e) {
     if (!svcpWorking) return;
-    var star = e.target.closest('[data-svcp-access-default]');
-    if (star) {
-      e.stopPropagation();
-      var starParts = star.getAttribute('data-svcp-access-default').split('|');
-      if (!svcpWorking.accessOptions) svcpWorking.accessOptions = {};
-      var curDefault = svcpWorking.accessOptions[starParts[0] + 'Default'];
-      // Clicking the current default's star clears it (no forced default); clicking another star
-      // makes that one the default instead.
-      svcpWorking.accessOptions[starParts[0] + 'Default'] = curDefault === starParts[1] ? '' : starParts[1];
-      renderSvcpAccess();
-      return;
-    }
     var pill = e.target.closest('[data-svcp-access]');
     if (!pill) return;
     var kind = pill.getAttribute('data-svcp-access');
     var val = pill.getAttribute('data-value');
-    var arr = svcpWorking.accessOptions[kind];
-    var idx = arr.indexOf(val);
-    if (idx === -1) arr.push(val); else arr.splice(idx, 1);
+    if (!svcpWorking.accessOptions) svcpWorking.accessOptions = {};
+    // Single-select per explicit instruction: picking a method replaces whichever was set before.
+    // Both the enabled-methods array and the default are set to just this one value — there's only
+    // ever one method now, so the two fields stay in lockstep rather than tracking separately.
+    svcpWorking.accessOptions[kind] = [val];
+    svcpWorking.accessOptions[kind + 'Default'] = val;
     renderSvcpAccess();
   });
 
@@ -48228,13 +48277,16 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     'Keys at Agency / Office': 'Agency/Office',
     'Keys at KeyNest': 'Keynest'
   };
+  // PM's own panel still picks from every possible method with a star marking their default —
+  // only Admin's side became single-select (see svcpAccessPanelHtml), so this stays.
+  var CKL_STAR_SVG = '<svg width="12" height="12" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
   function pmsvcAccessPanelHtml(kind, opts) {
     var current = pmsvcEffectiveAccessMethod(pmsvcWorking, kind);
     var interactiveHtml = '<div class="pmsvc-pill-row">' + PMPROP_ACCESS_METHODS.map(function (m) {
       var o = m.value;
       var lbl = kind === 'dropoff' ? (PMSVC_DROPOFF_SHORT_LABELS[o] || o) : o;
       var isCurrent = current === o;
-      return '<button type="button" class="pmsvc-pill sm ckl-access-pill" data-pmsvc-access="' + kind + '" data-value="' + pmsvcEsc(o) + '">' + pmsvcEsc(lbl) +
+      return '<button type="button" class="pmsvc-pill sm ckl-access-pill' + (isCurrent ? ' on' : '') + '" data-pmsvc-access="' + kind + '" data-value="' + pmsvcEsc(o) + '">' + pmsvcEsc(lbl) +
         '<span class="ckl-access-star' + (isCurrent ? ' on' : '') + '" data-tooltip="' + (isCurrent ? 'Default method' : 'Make Default') + '">' + CKL_STAR_SVG + '</span>' +
       '</button>';
     }).join('') + '</div>' +
