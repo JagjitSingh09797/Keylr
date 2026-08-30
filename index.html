@@ -2507,6 +2507,11 @@
     transition: background-color 150ms ease-out, border-color 150ms ease-out;
   }
   .btn-secondary-light:hover { background: var(--surface-soft); border-color: #c7d0dc; }
+  .btn-keylr-light {
+    background: var(--icon-tint-bg); border: 1px solid #cfe0f5; color: var(--accent-blue); font-weight: 700;
+    transition: background-color 150ms ease-out, border-color 150ms ease-out;
+  }
+  .btn-keylr-light:hover { background: #dde9f9; border-color: var(--accent-blue); }
   .bell-btn {
     width: 38px; height: 38px; border-radius: 10px;
     border: 1px solid var(--border-subtle); background: #fff;
@@ -7162,6 +7167,16 @@
   .pmsvc-access-panel { background: var(--surface-soft); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 16px; }
   .pmsvc-access-panel-label { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: var(--accent-blue); margin-bottom: 12px; }
   .pmsvc-access-panel-label svg { flex-shrink: 0; }
+  .ckl-access-pill { position: relative; padding-right: 26px !important; }
+  .ckl-access-star {
+    position: absolute; top: 50%; right: 6px; transform: translateY(-50%);
+    display: flex; align-items: center; justify-content: center; width: 16px; height: 16px;
+    color: rgba(255,255,255,0.55); cursor: pointer; border-radius: 50%;
+  }
+  .ckl-access-star:hover { color: #fff; }
+  .ckl-access-star svg { fill: none; }
+  .ckl-access-star.on { color: #ffd25a; }
+  .ckl-access-star.on svg { fill: #ffd25a; }
   .pmsvc-field-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   @media (max-width: 720px) {
     .pmsvc-access-grid { grid-template-columns: 1fr; }
@@ -7267,7 +7282,7 @@
      an ordered list of task rows. Reuses .svcp-order-btn (already proven for pricing variable
      card reordering) and .pmsvc-pill (already proven for response-type / required selection)
      rather than introducing parallel components for the same shapes. */
-  .ckl-section-card { border: 1px solid var(--border-subtle); border-radius: 12px; background: #fff; margin-bottom: 12px; overflow: hidden; }
+  .ckl-section-card { border: 1px solid var(--border-subtle); border-radius: 12px; background: #fff; margin-bottom: 12px; overflow: visible; }
   .ckl-section-head { display: flex; align-items: center; gap: 10px; padding: 13px 15px; }
   .ckl-section-order { display: flex; flex-direction: column; gap: 1px; flex-shrink: 0; }
   .ckl-section-title { flex: 1; min-width: 0; font-size: 14px; font-weight: 700; color: var(--text-heading); cursor: pointer; }
@@ -7317,24 +7332,18 @@
   .ckl-custom-section-input-row { display: flex; align-items: center; gap: 8px; margin-bottom: 18px; }
   .ckl-custom-section-input-row .field-input { flex: 1; }
   .ckl-custom-section-input-row .btn { padding: 9px 14px; font-size: 12.5px; flex-shrink: 0; }
-  .ckl-add-task-btn {
-    width: 100%; margin-top: 4px; padding: 11px; border: 1px dashed var(--border-subtle); border-radius: 10px; background: #fff;
-    font-family: inherit; font-size: 12.5px; font-weight: 700; color: var(--accent-blue); cursor: pointer; text-align: center;
-    transition: border-color 150ms ease-out, background-color 150ms ease-out;
-  }
-  .ckl-add-task-btn:hover { border-color: var(--accent-blue); background: var(--icon-tint-bg); }
 
   /* PM's checklist picker - a grid of small selectable cards (admin templates, or the PM's own
      saved ones) shown once a mode is chosen, plus a matching "new" card for Build custom. Clicking
      a card selects it directly (single-select); a separate View/Edit button opens the modal. */
-  .ckl-picker-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-top: 10px; }
+  .ckl-picker-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; margin-top: 10px; }
   .ckl-picker-card {
     position: relative; text-align: left; border: 1px solid var(--border-subtle); border-radius: 11px; background: #fff;
     padding: 13px 14px; cursor: pointer; transition: border-color 150ms ease-out, background-color 150ms ease-out;
   }
   .ckl-picker-card:hover { border-color: #c9d8ee; }
   .ckl-picker-card.on { border-color: var(--accent-blue); background: var(--icon-tint-bg); }
-  .ckl-picker-card-name { font-size: 13px; font-weight: 700; color: var(--text-heading); margin-bottom: 3px; padding-right: 20px; }
+  .ckl-picker-card-name { font-size: 13px; font-weight: 700; color: var(--text-heading); margin-bottom: 8px; padding-right: 20px; }
   .ckl-picker-card-meta { font-size: 11.5px; color: var(--text-body-muted); }
   .ckl-picker-card.on::after { content: ''; position: absolute; top: 12px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent-blue); }
   .ckl-picker-card-view {
@@ -7361,9 +7370,12 @@
      instruction that the PM side uses a modal rather than admin's on-page editor. Reuses the same
      generic .modal-overlay shell already used app-wide. */
   #pmCklModalOverlay { z-index: 900; }
+  /* Report preview needs the same bump — opened from within the Admin dashboard's own layered
+     views, the generic .modal-overlay z-index (100) isn't enough to reliably sit above them. */
+  #cklReportOverlay { z-index: 900; }
   .ckl-pm-modal { width: min(1000px, 100%); max-height: 88vh; display: flex; flex-direction: column; background: #fff; border-radius: 16px; overflow: hidden; }
   .ckl-pm-modal-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; padding: 20px 24px; border-bottom: 1px solid var(--border-subtle); flex-shrink: 0; }
-  .ckl-pm-modal-body { padding: 20px 24px; overflow-y: auto; flex: 1; min-height: 0; }
+  .ckl-pm-modal-body { padding: 20px 24px; overflow-y: auto; flex: 0 1 auto; height: auto; min-height: 0; }
   .ckl-pm-modal-foot { display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding: 16px 24px; border-top: 1px solid var(--border-subtle); flex-shrink: 0; }
   .ckl-pm-modal-foot .ckl-pm-delete-wrap { margin-right: auto; }
   .pmsvc-uplift-head-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
@@ -7462,30 +7474,44 @@
   .pmsvc-mini .pmsvc-money { width: 130px; }
   .pmsvc-preview-note { color: #5b7196; font-style: italic; }
 
-  /* Live Pricing Preview - the full supplier/Keylr/VAT breakdown a PM sees before confirming a
-     job. A navy header band anchors it to Keylr's own gradient language; the total row gets its
-     own tinted strip so it reads as the most prominent figure on the card, per the requirement
-     that it - not any individual line - is what the eye lands on first. */
-  .pmsvc-price-preview { margin-top: 18px; border: 1px solid var(--border-subtle); border-radius: 14px; background: #fff; overflow: hidden; box-shadow: 0 1px 3px rgba(13, 27, 61, 0.06); }
+  /* Live Price Preview - the full supplier/uplifts/Keylr/VAT breakdown a PM sees before
+     confirming a job. Heading uses Keylr's light-blue tint + accent-blue text per explicit
+     instruction (replacing the earlier navy gradient band); the total row keeps its own tinted
+     strip so it reads as the most prominent figure on the card. */
+  .pmsvc-price-preview { margin-top: 16px; border: 1px solid var(--border-subtle); border-radius: 14px; background: #fff; overflow: hidden; box-shadow: 0 1px 3px rgba(13, 27, 61, 0.06); }
   .pmsvc-price-preview-head {
-    font-size: 11px; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; color: #fff;
-    background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%);
-    padding: 12px 18px;
+    display: flex; align-items: center; gap: 7px;
+    font-size: 11.5px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent-blue);
+    background: var(--icon-tint-bg); padding: 10px 16px; border-bottom: 1px solid #dbe6f7;
   }
+  .pmsvc-price-preview-head svg { flex-shrink: 0; }
   .pmsvc-price-preview-row {
     display: flex; align-items: center; justify-content: space-between; gap: 12px;
-    padding: 11px 18px; font-size: 13px; border-bottom: 1px solid var(--border-subtle);
+    padding: 8px 16px; font-size: 12.5px; border-bottom: 1px solid var(--border-subtle);
   }
   .pmsvc-price-preview-row span:first-child { color: var(--text-body-muted); font-weight: 600; }
   .pmsvc-price-preview-row span:last-child { color: var(--text-heading); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .pmsvc-price-preview-row.uplift span:first-child { padding-left: 14px; position: relative; }
+  .pmsvc-price-preview-row.uplift span:first-child::before { content: '+'; position: absolute; left: 0; color: #94a3b8; }
+  .pmsvc-price-preview-row.uplift span:last-child { color: var(--accent-blue); }
+  .pmsvc-price-preview-fee-hint { display: block; font-size: 10px; font-weight: 600; color: #94a3b8; text-transform: none; letter-spacing: 0; margin-top: 1px; }
+  /* Schedule uplifts: one combined total up top, each day that has an active window listed below
+     it inline (e.g. "Weekday (Morning: £12, Evening: £13)") — not counted toward Supplier Service. */
+  .pmsvc-price-preview-sched { padding: 8px 16px; border-bottom: 1px solid var(--border-subtle); }
+  .pmsvc-price-preview-sched-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 12.5px; }
+  .pmsvc-price-preview-sched-head span:first-child { color: var(--text-body-muted); font-weight: 600; padding-left: 14px; position: relative; }
+  .pmsvc-price-preview-sched-head span:first-child::before { content: '+'; position: absolute; left: 0; color: #94a3b8; }
+  .pmsvc-price-preview-sched-head span:last-child { color: var(--accent-blue); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .pmsvc-price-preview-sched-line { font-size: 11.5px; color: var(--text-body-muted); padding-left: 14px; margin-top: 4px; line-height: 1.4; }
   .pmsvc-price-preview-total {
     display: flex; align-items: center; justify-content: space-between; gap: 12px;
-    padding: 16px 18px; background: #eaeef7;
+    padding: 13px 16px; background: #eaeef7;
   }
-  .pmsvc-price-preview-total span:first-child { font-size: 14px; font-weight: 800; color: #22447f; }
-  .pmsvc-price-preview-total span:last-child { font-size: 22px; font-weight: 800; color: #22447f; font-variant-numeric: tabular-nums; }
-  .pmsvc-price-preview-note { padding: 12px 18px 16px; font-size: 11.5px; line-height: 1.5; color: var(--text-body-muted); }
+  .pmsvc-price-preview-total span:first-child { font-size: 13px; font-weight: 800; color: #22447f; }
+  .pmsvc-price-preview-total span:last-child { font-size: 20px; font-weight: 800; color: #22447f; font-variant-numeric: tabular-nums; }
+  .pmsvc-price-preview-note { padding: 10px 16px 13px; font-size: 11px; line-height: 1.45; color: var(--text-body-muted); }
   .pmsvc-price-preview-empty { padding: 16px 18px; font-size: 12.5px; color: var(--text-body-muted); }
+
 
   /* Dropdown panels size to their longest option rather than to the trigger, so a long
      category or role name is never clipped. min-width keeps them at least trigger-wide. */
@@ -8447,6 +8473,155 @@
     .supsvc-selected-chips { flex: none; }
     .supsvc-add-cat-btn { align-self: flex-start; }
   }
+  /* =========================================================
+     CHECKLISTS — redesigned cards, icon chips, always-editable task
+     rows, section popover (repetition/evidence), inline Attach to
+     Job, Report preview, and PM's Job Media Permissions. Reuses
+     svcp-card/svcp-chip/svcp-panel/toggle-switch/pmsvc-* wherever
+     possible; only genuinely new pieces are defined below.
+  ========================================================== */
+  .ckl-card-desc { font-size: 12px; color: var(--text-body-muted); margin-top: 3px; line-height: 1.4; }
+  .ckl-badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .ckl-badge { display: inline-flex; align-items: center; gap: 5px; background: var(--surface-soft); border: 1px solid var(--border-subtle); border-radius: 999px; padding: 5px 11px; font-size: 11.5px; font-weight: 700; color: var(--text-heading); }
+  .ckl-badge svg { flex-shrink: 0; color: #94a3b8; }
+  .ckl-badge.sm { padding: 3px 8px; font-size: 10.5px; }
+  .ckl-attach-link { display: inline-flex; align-items: center; margin-top: 12px; background: none; border: none; padding: 0; cursor: pointer; color: var(--accent-blue); font-weight: 700; font-size: 12.5px; }
+  .ckl-attach-link:hover { text-decoration: underline; }
+  .ckl-attach-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; }
+  .ckl-attach-picker { margin-top: 10px; border: 1px solid var(--border-subtle); border-radius: 10px; background: var(--surface-soft); padding: 10px; }
+  .ckl-attach-search { display: flex; align-items: center; gap: 7px; background: #fff; border: 1px solid var(--border-subtle); border-radius: 8px; padding: 7px 10px; margin-bottom: 8px; }
+  .ckl-attach-search svg { color: #94a3b8; flex-shrink: 0; }
+  .ckl-attach-search input { border: none; outline: none; font-size: 12.5px; font-family: inherit; width: 100%; background: none; color: var(--text-heading); }
+  .ckl-attach-list { max-height: 190px; overflow-y: auto; display: flex; flex-direction: column; gap: 2px; }
+  .ckl-attach-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 9px; border-radius: 7px; cursor: pointer; font-size: 12.5px; color: var(--text-heading); transition: background-color 120ms ease-out; }
+  .ckl-attach-row:hover { background: #fff; }
+  .ckl-attach-row.on { color: var(--accent-blue); font-weight: 700; background: #fff; }
+  .ckl-attach-row svg { color: var(--accent-blue); flex-shrink: 0; }
+  .ckl-attach-empty { padding: 12px 9px; font-size: 12px; color: var(--text-body-muted); text-align: center; }
+  .ckl-card-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; padding-top: 14px; border-top: 1px solid var(--border-subtle); }
+  .ckl-card-foot-left { display: flex; align-items: center; gap: 8px; }
+
+  /* Attach to Job, inside the edit view/modal */
+  .ckl-attach-edit-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+
+  /* Section chips: icon + name + plus/tick */
+  .ckl-sec-chip {
+    display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--border-subtle); background: #fff;
+    border-radius: 999px; padding: 7px 12px 7px 10px; font-family: inherit; font-size: 12px; font-weight: 600; color: var(--text-heading);
+    cursor: pointer; transition: background-color 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out;
+  }
+  .ckl-sec-chip svg:first-child { color: #94a3b8; flex-shrink: 0; }
+  .ckl-sec-chip svg:last-child { flex-shrink: 0; color: #94a3b8; }
+  .ckl-sec-chip:hover { border-color: #c9d8ee; background: var(--surface-soft); }
+  .ckl-sec-chip.on { background: var(--icon-tint-bg); border-color: #c9d8ee; color: var(--accent-blue); }
+  .ckl-sec-chip.on svg:first-child, .ckl-sec-chip.on svg:last-child { color: var(--accent-blue); }
+  .ckl-sec-chip-custom { border-style: dashed; color: var(--accent-blue); font-weight: 700; }
+  .ckl-sec-chip-custom:hover { border-color: var(--accent-blue); background: var(--icon-tint-bg); }
+  .ckl-sec-chip-custom svg { color: var(--accent-blue); }
+
+  /* Section card head */
+  .ckl-section-icon { color: var(--accent-blue); flex-shrink: 0; }
+  .ckl-section-title-input {
+    border: none; background: none; font-size: 13.5px; font-weight: 700; color: var(--text-heading);
+    font-family: inherit; padding: 3px 6px; border-radius: 6px; min-width: 0; flex: 1;
+  }
+  .ckl-section-title-input:hover, .ckl-section-title-input:focus { background: var(--surface-soft); outline: none; }
+  .ckl-section-count { font-size: 11.5px; font-weight: 700; color: #94a3b8; flex-shrink: 0; }
+  .ckl-repeat-chip {
+    display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--border-subtle); background: #fff;
+    border-radius: 999px; padding: 5px 10px; font-family: inherit; font-size: 11px; font-weight: 700; color: var(--text-body-muted);
+    cursor: pointer; flex-shrink: 0; transition: background-color 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out;
+  }
+  .ckl-repeat-chip:hover { border-color: #c9d8ee; }
+  .ckl-repeat-chip.on { background: var(--icon-tint-bg); border-color: #c9d8ee; color: var(--accent-blue); }
+  .ckl-repeat-chip.sm { padding: 3px 8px; font-size: 10px; cursor: default; }
+  .ckl-sec-menu-wrap { position: relative; flex-shrink: 0; }
+
+  /* Section "..." popover */
+  .ckl-sec-popover {
+    position: absolute; top: calc(100% + 6px); right: 0; z-index: 60; width: 300px;
+    background: #fff; border: 1px solid var(--border-subtle); border-radius: 12px; box-shadow: 0 12px 32px rgba(16,24,40,0.14);
+    padding: 16px; text-align: left;
+  }
+  .ckl-pop-label { display: flex; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: #94a3b8; margin-bottom: 9px; }
+  .ckl-pop-text { font-size: 12px; line-height: 1.5; color: var(--text-body-muted); }
+  .ckl-pop-text b { color: var(--text-heading); }
+  .ckl-pop-divider { height: 1px; background: var(--border-subtle); margin: 14px 0; }
+  .ckl-pop-ev-row { display: flex; gap: 8px; }
+  .ckl-pop-ev-btn {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; border: 1px solid var(--border-subtle); background: #fff;
+    border-radius: 10px; padding: 9px 6px; font-family: inherit; font-size: 11px; font-weight: 700; color: var(--text-body-muted); cursor: pointer;
+    transition: background-color 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out;
+  }
+  .ckl-pop-ev-btn:hover { border-color: #c9d8ee; }
+  .ckl-pop-ev-btn.on { background: var(--icon-tint-bg); border-color: var(--accent-blue); color: var(--accent-blue); }
+  .ckl-pop-hint { font-size: 11px; color: #94a3b8; margin-top: 8px; }
+  .ckl-pop-tap-row { display: flex; align-items: center; gap: 10px; font-size: 12.5px; font-weight: 600; color: var(--text-heading); cursor: pointer; }
+  .ckl-pop-delete { display: flex; align-items: center; gap: 7px; background: none; border: none; padding: 0; color: #b91c1c; font-weight: 700; font-size: 12.5px; cursor: pointer; }
+  .ckl-pop-delete:hover { text-decoration: underline; }
+
+  /* Task row — always editable, single line */
+  .ckl-task-row { display: flex; align-items: center; gap: 8px; padding: 9px 0; border-bottom: 1px solid var(--border-subtle); flex-wrap: nowrap; }
+  .ckl-task-row:last-of-type { border-bottom: none; }
+  .ckl-task-row.dragging { opacity: 0.4; }
+  .ckl-task-row.drag-over { border-top: 2px solid var(--accent-blue); }
+  .ckl-task-drag { color: #cbd5e1; cursor: grab; flex-shrink: 0; display: flex; }
+  .ckl-task-desc-input {
+    flex: 1 1 200px; min-width: 120px; border: 1px solid transparent; background: none; font-size: 13px; color: var(--text-heading);
+    font-family: inherit; padding: 7px 8px; border-radius: 7px; transition: background-color 120ms ease-out, border-color 120ms ease-out;
+  }
+  .ckl-task-desc-input:hover { background: var(--surface-soft); }
+  .ckl-task-desc-input:focus { outline: none; background: #fff; border-color: #c9d8ee; }
+  .ckl-task-resp { flex-shrink: 0; width: 132px; }
+  .ckl-resp-dd .pm-custom-dd-btn { padding: 7px 10px; font-size: 12px; }
+  .ckl-task-evidence-group { display: flex; align-items: center; gap: 3px; flex-shrink: 0; }
+  .ckl-ev-btn {
+    width: 28px; height: 28px; border-radius: 7px; border: 1px solid var(--border-subtle); background: #fff; color: #94a3b8;
+    display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;
+    transition: background-color 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out;
+  }
+  .ckl-ev-btn:hover { border-color: #c9d8ee; color: var(--accent-blue); }
+  .ckl-ev-btn.on { background: var(--accent-blue); border-color: var(--accent-blue); color: #fff; }
+  .ckl-task-req { display: flex; align-items: center; gap: 6px; flex-shrink: 0; cursor: pointer; user-select: none; }
+  .ckl-task-req span { font-size: 11px; font-weight: 700; color: var(--text-body-muted); }
+  .ckl-task-del {
+    width: 28px; height: 28px; border-radius: 7px; border: none; background: none; color: #94a3b8;
+    display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;
+    transition: background-color 150ms ease-out, color 150ms ease-out;
+  }
+  .ckl-task-del:hover { background: #fef2f2; color: #b91c1c; }
+  .ckl-add-task-btn {
+    display: flex; align-items: center; gap: 6px; background: none; border: none; color: var(--accent-blue);
+    font-weight: 700; font-size: 12.5px; padding: 10px 2px 2px; cursor: pointer; font-family: inherit;
+  }
+  .ckl-add-task-btn:hover, .ckl-add-task-btn:focus, .ckl-add-task-btn:active { text-decoration: underline; background: transparent !important; box-shadow: none; outline: none; }
+
+  /* Report preview */
+  .ckl-report-modal { max-width: 620px; }
+  .ckl-report-section { margin-bottom: 20px; }
+  .ckl-report-section:last-child { margin-bottom: 0; }
+  .ckl-report-section-title { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 800; color: var(--text-heading); margin-bottom: 10px; }
+  .ckl-report-section-title svg { color: var(--accent-blue); }
+  .ckl-report-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 9px 0; border-bottom: 1px solid var(--border-subtle); font-size: 12.5px; }
+  .ckl-report-row:last-child { border-bottom: none; }
+  .ckl-report-row-desc { flex: 1; min-width: 140px; color: var(--text-heading); }
+
+  /* PM picker card badges */
+  .ckl-picker-card-badges { display: flex; gap: 5px; margin-bottom: 8px; }
+
+  /* Job Media Permissions (PM checklist modal) */
+  .ckl-mp-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
+  .ckl-mp-rows { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+  .ckl-mp-row { display: flex; align-items: center; gap: 18px; border: 1px solid var(--border-subtle); border-radius: 10px; padding: 10px 12px; flex-wrap: wrap; }
+  .ckl-mp-row-label { display: flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 700; color: var(--text-heading); flex: 1; min-width: 100px; }
+  .ckl-mp-row-label svg { color: var(--accent-blue); flex-shrink: 0; }
+  .ckl-mp-toggle { display: flex; align-items: center; gap: 8px; font-size: 11.5px; font-weight: 600; color: var(--text-body-muted); cursor: pointer; }
+
+  @media (max-width: 700px) {
+    .ckl-task-row { flex-wrap: wrap; }
+    .ckl-task-desc-input { flex-basis: 100%; }
+    .ckl-sec-popover { width: 260px; right: -40px; }
+  }
 </style>
 </head>
 <body>
@@ -9202,6 +9377,11 @@
           <label style="display:block;font-size:11.5px;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;color:#94a3b8;margin-bottom:6px;">Checklist name</label>
           <input type="text" class="field-input" id="pmCklNameInput" placeholder="e.g. My kitchen deep-clean checklist">
         </div>
+        <div class="pmsvc-field" style="margin-bottom:16px;">
+          <label style="display:block;font-size:11.5px;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;color:#94a3b8;margin-bottom:6px;">Description (optional)</label>
+          <textarea class="field-input" id="pmCklDescInput" rows="2" placeholder="What this checklist covers" style="resize:vertical;"></textarea>
+        </div>
+        <div id="pmCklMediaPermissions" style="margin-bottom:18px;"></div>
         <div class="pmsvc-help" id="pmCklSectionsHint" style="margin-top:0;margin-bottom:10px;">Add sections, then edit their tasks.</div>
         <div id="pmCklSectionChips" style="margin-bottom:14px;"></div>
         <div id="pmCklSectionsList"></div>
@@ -9215,6 +9395,22 @@
       </div>
     </div>
   </div>
+
+  <!-- Read-only Report preview: what suppliers will see and complete on the job, opened from a
+       checklist card's Report button. -->
+  <div class="modal-overlay" id="cklReportOverlay">
+    <div class="ckl-pm-modal ckl-report-modal">
+      <div class="ckl-pm-modal-head">
+        <div>
+          <h3 id="cklReportTitle" style="font-size:16.5px;font-weight:800;color:var(--text-heading);">Checklist report preview</h3>
+          <div class="dash-content-sub" id="cklReportSub" style="margin-top:2px;">What suppliers will see and complete on the job.</div>
+        </div>
+        <button type="button" id="cklReportCloseBtn" aria-label="Close" style="background:none;border:none;cursor:pointer;color:var(--text-body-muted);padding:4px;flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+      </div>
+      <div class="ckl-pm-modal-body" id="cklReportBody"></div>
+    </div>
+  </div>
+
 
   <!-- ============ ACTIVITY LOG DRAWERS (top-level so they open from the Admin Inbox thread as well
        as the supplier / PM detail pages — a fixed overlay nested inside a hidden detail view never
@@ -16423,9 +16619,13 @@
                       <input type="text" class="field-input" id="cklAdminNameInput" placeholder="e.g. Standard Gas Oven Igniter Repair checklist">
                     </div>
                     <div class="pmsvc-field">
-                      <label style="display:block;font-size:11.5px;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;color:#94a3b8;margin-bottom:6px;">Service this checklist is for</label>
-                      <div class="svcp-dd ckl-service-dd" id="cklAdminServiceDD"></div>
+                      <label style="display:block;font-size:11.5px;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;color:#94a3b8;margin-bottom:6px;">Attach to Job</label>
+                      <div id="cklAdminAttachWrap"></div>
                     </div>
+                  </div>
+                  <div class="pmsvc-field" style="margin-bottom:18px;">
+                    <label style="display:block;font-size:11.5px;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;color:#94a3b8;margin-bottom:6px;">Description (optional)</label>
+                    <textarea class="field-input" id="cklAdminDescInput" rows="2" placeholder="What this checklist covers" style="resize:vertical;"></textarea>
                   </div>
 
                   <div class="pmsvc-help" id="cklAdminSectionsHint" style="margin-top:0;margin-bottom:10px;">Sections + sample tasks mapped from this service &mdash; edit, then save.</div>
@@ -16445,6 +16645,7 @@
                 </div>
               </div>
             </div>
+          </div>
 
           <!-- Admin Services: Role detail drawer (opens when a role chip is clicked) -->
           <div class="svc-role-drawer-overlay" id="adminSvcRoleDrawerOverlay">
@@ -42815,8 +43016,10 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       // value always corresponds to a real, currently-offered choice.
       slaPolicy: o.slaPolicy || { freeCancellation: '2d', fullCharge: '12h', partialChargePercent: 15 },
       // Which pick-up/drop-off methods this service supports — same admin multi-select gating
-      // pattern as schedulingOptions above. A PM picks one of each for their own template.
-      accessOptions: o.accessOptions || { pickup: ['Key Safe', 'Smart Lock'], dropoff: ['Key Safe', 'Smart Lock'] }
+      // pattern as schedulingOptions above. pickupDefault/dropoffDefault is admin's own starting
+      // choice among the enabled set; a PM's template pre-fills from it but can pick a different
+      // enabled method for their own template without changing admin's default for anyone else.
+      accessOptions: o.accessOptions || { pickup: ['Key Safe', 'Smart Lock'], dropoff: ['Key Safe', 'Smart Lock'], pickupDefault: 'Key Safe', dropoffDefault: 'Key Safe' }
     };
   }
 
@@ -42941,6 +43144,27 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   ========================================================== */
   var CKL_TASK_TYPE_SECTIONS = ['Appliance', 'Boiler', 'Meter', 'Radiator', 'Fire Door', 'Smoke Alarm', 'CO Alarm', 'Circuit', 'Consumer Unit', 'Door', 'Visit', 'Person'];
   var CKL_ROOM_SECTIONS = ['Bedroom', 'Bathroom', 'Kitchen', 'Living Room', 'Hallway', 'Study', 'Stairs', 'Garden', 'Cinema', 'Gym', 'Shed', 'Laundry', 'Utility Room', 'Dining Room', 'Balcony', 'Garage', 'Conservatory', 'Terrace', 'Office', 'Pool', 'Dressing Room'];
+  // Room icons are the exact PMPROP_ROOM_ICONS set from the PM Properties module's own Property
+  // Inclusions section (same 21 names, same paths) — one canonical icon per room, not a second
+  // parallel set. Task-type sections aren't rooms, so they get their own small icon set below.
+  var CKL_TASKTYPE_ICONS = {
+    'Appliance': '<rect x="5" y="3" width="14" height="18" rx="2"/><line x1="9" y1="7" x2="15" y2="7"/><circle cx="9" cy="13" r="1.4"/><circle cx="15" cy="13" r="1.4"/>',
+    'Boiler': '<rect x="6" y="2" width="12" height="20" rx="2"/><path d="M9 7h6M9 11h6M12 15v3"/><circle cx="12" cy="15" r=".8" fill="currentColor"/>',
+    'Meter': '<circle cx="12" cy="13" r="8"/><path d="M12 13l3-3M9 4h6"/>',
+    'Radiator': '<rect x="3" y="6" width="18" height="12" rx="1"/><path d="M7 6v12M11 6v12M15 6v12"/>',
+    'Fire Door': '<rect x="5" y="2" width="14" height="20" rx="1"/><circle cx="15" cy="12" r=".8" fill="currentColor"/><path d="M2 22h20"/>',
+    'Smoke Alarm': '<circle cx="12" cy="10" r="7"/><path d="M12 17v4M9 21h6"/>',
+    'CO Alarm': '<circle cx="12" cy="10" r="7"/><path d="M9.5 7.5h2a1.5 1.5 0 010 3h-2v3M14.5 7.5V13.5"/><path d="M12 17v4M9 21h6"/>',
+    'Circuit': '<circle cx="5" cy="6" r="2"/><circle cx="19" cy="18" r="2"/><circle cx="19" cy="6" r="2"/><path d="M7 6h10M19 8v8M7 6a5 5 0 005 5h5"/>',
+    'Consumer Unit': '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8v8M12 8v8M16 8v8"/>',
+    'Door': '<rect x="5" y="2" width="14" height="20" rx="1"/><circle cx="15" cy="12" r=".8" fill="currentColor"/>',
+    'Visit': '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/><circle cx="8" cy="15" r="1.3" fill="currentColor"/>',
+    'Person': '<circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0116 0v1"/>'
+  };
+  var CKL_CUSTOM_SECTION_ICON = '<path d="M4 6h16M4 12h16M4 18h10"/>';
+  function cklSectionIcon(name) {
+    return PMPROP_ROOM_ICONS[name] || CKL_TASKTYPE_ICONS[name] || CKL_CUSTOM_SECTION_ICON;
+  }
   // Deliberately no green (Done) or red anywhere in this set — every response type reads the same
   // Keylr blue when selected, same "no traffic-light colors" rule already applied to SLA Policy.
   var CKL_RESPONSE_TYPES = [
@@ -42948,7 +43172,10 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     { id: 'yesno', name: 'Yes/No' },
     { id: 'goodbad', name: 'Good/Bad' },
     { id: 'passfail', name: 'Pass/Fail' },
-    { id: 'stars', name: '1\u20135 Stars' }
+    { id: 'stars', name: '1\u20135 Stars' },
+    { id: 'number', name: 'Number' },
+    { id: 'text', name: 'Text note' },
+    { id: 'tickbox', name: 'Tickbox' }
   ];
   function cklResponseTypeName(id) {
     var t = CKL_RESPONSE_TYPES.find(function (r) { return r.id === id; });
@@ -42959,28 +43186,47 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   function cklNextId(prefix) { cklUid += 1; return prefix + '_' + cklUid; }
 
   function cklMakeTask(description, responseType, required) {
-    return { id: cklNextId('task'), description: description || '', responseType: responseType || 'done', required: required !== false, imageRequired: false };
+    return {
+      id: cklNextId('task'), description: description || '', responseType: responseType || 'done', required: required !== false,
+      // Three independent capture toggles (camera / video / mic icons on the row) — replaces the
+      // old single "Image required" checkbox with the full evidence-type set the reference design
+      // shows, and is what both the section-level bulk-apply and Job Media Permissions read from.
+      evidence: { photo: false, video: false, voice: false }
+    };
   }
-  function cklMakeSection(name, tasks) {
-    return { id: cklNextId('sec'), name: name, tasks: tasks || [] };
+  function cklMakeSection(name, tasks, isCustom) {
+    return {
+      id: cklNextId('sec'), name: name, tasks: tasks || [],
+      isCustom: !!isCustom,               // only custom-origin sections get an inline-editable title
+      repeats: false,                      // room sections only: false = one-time, true = repeats per room count
+      requireTapComplete: false,
+      evidenceDefaults: { photo: false, video: false, voice: false } // new tasks in this section inherit these
+    };
   }
   function cklMakeChecklist(o) {
     return {
       id: cklNextId('ckl'),
       name: o.name || '',
+      description: o.description || '',
       source: o.source || 'admin', // 'admin' | 'pm'
-      serviceId: o.serviceId || '',
+      serviceIds: o.serviceIds || (o.serviceId ? [o.serviceId] : []), // which Job Template services this attaches to (admin-managed)
       sections: o.sections || [],
       active: o.active !== false,
-      // Custom section chip names, tracked independently from `sections` - a chip can exist as an
-      // available option (unselected) without an active section for it, same "chip vs. selected"
-      // separation the predefined chips already have.
-      customSectionNames: o.customSectionNames || []
+      // PM-side only (rendered in the PM checklist modal): what media actions the supplier's job
+      // flow is allowed to offer, at both the overall and per-evidence-type level.
+      mediaPermissions: o.mediaPermissions || cklDefaultMediaPermissions()
     };
   }
-  // A newly-added section starts with these three sample tasks, matching the reference design's
-  // own "sample tasks mapped from this service" starting point — the samples themselves don't vary
-  // by which section was picked, only the section name they're attached to does.
+  function cklDefaultMediaPermissions() {
+    return {
+      master: true,
+      photo: { capture: true, upload: true },
+      video: { capture: true, upload: true },
+      voice: { capture: true, upload: true }
+    };
+  }
+  // A newly-added predefined section starts with these three sample tasks, matching the reference
+  // design's own "sample tasks mapped from this service" starting point.
   function cklSampleTasks() {
     return [
       cklMakeTask('Confirm work area is safe to access', 'yesno', true),
@@ -42990,159 +43236,291 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   }
   function cklChecklistById(id) { return svcpChecklists.find(function (c) { return c.id === id; }); }
   function cklClone(o) { return JSON.parse(JSON.stringify(o)); }
+  function cklTaskEvidenceCount(t) { return (t.evidence && (t.evidence.photo || t.evidence.video || t.evidence.voice)) ? 1 : 0; }
+  function cklChecklistCounts(c) {
+    var sections = c.sections.length;
+    var checks = 0, evidence = 0;
+    c.sections.forEach(function (s) { s.tasks.forEach(function (t) { checks += 1; evidence += cklTaskEvidenceCount(t); }); });
+    return { sections: sections, checks: checks, evidence: evidence };
+  }
+  /* Which evidence types are actually used anywhere in this checklist — Job Media Permissions
+     only shows a Photo/Video/Voice row if that capture type is switched on for at least one task. */
+  function cklChecklistUsedEvidenceTypes(c) {
+    var used = { photo: false, video: false, voice: false };
+    c.sections.forEach(function (s) { s.tasks.forEach(function (t) {
+      if (t.evidence) { if (t.evidence.photo) used.photo = true; if (t.evidence.video) used.video = true; if (t.evidence.voice) used.voice = true; }
+    }); });
+    return used;
+  }
 
   var svcpChecklists = [
     cklMakeChecklist({
       source: 'admin',
-      serviceId: svcpServices[3].id, // Boiler Repair
-      sections: [cklMakeSection('Boiler Repair', cklSampleTasks())]
+      name: 'Boiler Repair checklist',
+      description: 'Standard callout checklist for a boiler repair visit.',
+      serviceIds: [svcpServices[3].id], // Boiler Repair
+      sections: [cklMakeSection('Boiler', cklSampleTasks())]
     }),
     cklMakeChecklist({
       source: 'admin',
-      serviceId: svcpServices[1].id, // Gas Safety Certificate (CP12)
-      sections: [cklMakeSection('Gas Safety Certificate (CP12)', cklSampleTasks().concat([cklMakeTask('Share working Video', 'done', false)]))]
+      name: 'Gas Safety Certificate (CP12) checklist',
+      description: 'Annual gas safety inspection and certification.',
+      serviceIds: [svcpServices[1].id], // Gas Safety Certificate (CP12)
+      sections: [cklMakeSection('Boiler', cklSampleTasks().concat([cklMakeTask('Share working video', 'done', false)]))]
     })
   ];
 
   var cklWorking = null;       // editable clone of the open checklist (admin's on-page editor)
   var cklActiveId = null;      // id of the checklist currently open; null while creating a new one
   var cklOpenSections = {};    // which section cards are expanded, keyed by section id
-  var cklEditingTaskId = null; // which task is currently showing its expanded edit form, if any
+  var cklOpenSectionMenu = null; // id of the section whose "..." popover is open, if any
+  var cklAdminAttachOpen = {}; // { checklistId: true } — which cards have their inline attach-picker open
+  var cklAdminAttachSearch = {}; // { checklistId: 'search text' }
+  var cklReportPreviewId = null; // checklist id currently shown in the read-only Report popup
+  // cklAdminCtx/pmCklCtx each capture a direct reference to their own *Sections object once, so
+  // resetting between checklists must clear it in place rather than reassigning to a new {} —
+  // reassignment would silently orphan whichever reference the ctx object already captured.
+  function cklResetKeys(obj) { Object.keys(obj).forEach(function (k) { delete obj[k]; }); }
 
   function cklServiceName(sid) {
     var s = svcpServiceById(sid);
     return s ? s.name : 'Any service';
   }
+  function cklServiceNames(c) {
+    return (c.serviceIds || []).map(cklServiceName).filter(Boolean);
+  }
+  /* ---------- Admin card: badges + inline "Attach to Job" picker (list view) ---------- */
   function cklAdminCardHtml(c) {
-    var taskCount = c.sections.reduce(function (n, s) { return n + s.tasks.length; }, 0);
-    var sectionCount = c.sections.length;
-    var title = c.name || (cklServiceName(c.serviceId) + ' checklist');
-    return '<div class="svcp-card" data-ckl-open="' + c.id + '" tabindex="0" role="button">' +
+    var counts = cklChecklistCounts(c);
+    var title = c.name || (cklServiceNames(c)[0] ? cklServiceNames(c)[0] + ' checklist' : 'Untitled checklist');
+    var names = cklServiceNames(c);
+    var attachOpen = !!cklAdminAttachOpen[c.id];
+    return '<div class="svcp-card ckl-admin-card" data-ckl-card="' + c.id + '">' +
       '<div class="svcp-card-head">' +
-        '<div style="min-width:0;flex:1;"><div class="svcp-card-title">' + supjrEscapeHtml(title) + '</div></div>' +
-        '<div class="ckl-card-head-actions">' +
-          '<button type="button" class="svcp-icon-btn" data-ckl-edit="' + c.id + '" data-tooltip="Edit checklist" aria-label="Edit checklist"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>' +
-          '<button type="button" class="svcp-icon-btn danger" data-ckl-del="' + c.id + '" data-tooltip="Delete checklist" aria-label="Delete checklist"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>' +
-          '<button type="button" class="toggle-switch sm' + (c.active ? ' on' : '') + '" data-ckl-active-toggle="' + c.id + '" role="switch" aria-checked="' + (c.active ? 'true' : 'false') + '" aria-label="Active"><span class="thumb"></span></button>' +
-        '</div>' +
+        '<div style="min-width:0;flex:1;"><div class="svcp-card-title">' + supjrEscapeHtml(title) + '</div>' +
+        (c.description ? '<div class="ckl-card-desc">' + supjrEscapeHtml(c.description) + '</div>' : '') + '</div>' +
       '</div>' +
-      '<div class="ckl-card-meta">' + supjrEscapeHtml(cklServiceName(c.serviceId)) + ' \u00b7 ' + sectionCount + ' section' + (sectionCount === 1 ? '' : 's') + ' \u00b7 ' + taskCount + ' task' + (taskCount === 1 ? '' : 's') + '</div>' +
+      '<div class="ckl-badge-row">' +
+        '<span class="ckl-badge">' + CKL_ICON_LAYERS + counts.sections + ' section' + (counts.sections === 1 ? '' : 's') + '</span>' +
+        '<span class="ckl-badge">' + CKL_ICON_CHECKS + counts.checks + ' check' + (counts.checks === 1 ? '' : 's') + '</span>' +
+        '<span class="ckl-badge">' + CKL_ICON_CAMERA + counts.evidence + ' evidence</span>' +
+      '</div>' +
+      '<button type="button" class="ckl-attach-link" data-ckl-attach-toggle="' + c.id + '">' +
+        (names.length ? 'Used on ' + names.length + ' job' + (names.length === 1 ? '' : 's') : 'Attach to jobs') +
+        '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="margin-left:4px;vertical-align:-2px;transition:transform 150ms;' + (attachOpen ? 'transform:rotate(180deg);' : '') + '"><path d="M6 9l6 6 6-6"/></svg>' +
+      '</button>' +
+      (names.length ? '<div class="ckl-attach-chips">' + names.map(function (n) { return '<span class="svcp-chip navy">' + supjrEscapeHtml(n) + '</span>'; }).join('') + '</div>' : '') +
+      (attachOpen ? cklAttachPickerHtml(c) : '') +
+      '<div class="ckl-card-foot">' +
+        '<div class="ckl-card-foot-left">' +
+          '<button type="button" class="btn btn-secondary-light btn-sm" data-ckl-report="' + c.id + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px;"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>Report</button>' +
+          '<button type="button" class="btn btn-secondary-light btn-sm" data-ckl-edit="' + c.id + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px;"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</button>' +
+        '</div>' +
+        '<button type="button" class="svcp-icon-btn danger" data-ckl-del="' + c.id + '" data-tooltip="Delete checklist" aria-label="Delete checklist"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>' +
+      '</div>' +
     '</div>';
   }
+  function cklAttachPickerHtml(c) {
+    var term = (cklAdminAttachSearch[c.id] || '').trim().toLowerCase();
+    var list = svcpServices.filter(function (s) { return !term || s.name.toLowerCase().indexOf(term) !== -1; });
+    return '<div class="ckl-attach-picker">' +
+      '<div class="ckl-attach-search"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>' +
+        '<input type="text" placeholder="Search services\u2026" data-ckl-attach-search="' + c.id + '" value="' + supjrEscapeHtml(cklAdminAttachSearch[c.id] || '') + '"></div>' +
+      '<div class="ckl-attach-list">' +
+        (list.length ? list.map(function (s) {
+          var on = (c.serviceIds || []).indexOf(s.id) !== -1;
+          return '<div class="ckl-attach-row' + (on ? ' on' : '') + '" data-ckl-attach-row="' + c.id + '|' + s.id + '">' +
+            '<span>' + supjrEscapeHtml(s.name) + '</span>' +
+            (on ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>' : '') +
+          '</div>';
+        }).join('') : '<div class="ckl-attach-empty">No services match.</div>') +
+      '</div>' +
+    '</div>';
+  }
+  var CKL_ICON_LAYERS = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l9 5-9 5-9-5 9-5z"/><path d="M3 12l9 5 9-5M3 17l9 5 9-5"/></svg>';
+  var CKL_ICON_CHECKS = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></svg>';
+  var CKL_ICON_CAMERA = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>';
   function cklAdminRenderList() {
     var wrap = document.getElementById('cklAdminCardGrid');
     if (!wrap) return;
     var list = svcpChecklists.filter(function (c) { return c.source === 'admin'; });
     wrap.innerHTML = list.map(cklAdminCardHtml).join('');
   }
-
-  function cklAdminRenderServiceDD() {
-    var wrap = document.getElementById('cklAdminServiceDD');
-    if (!wrap || !cklWorking) return;
-    var current = svcpServiceById(cklWorking.serviceId);
-    wrap.outerHTML = svcpDDShell('data-ddrole="ckl-service" class="pm-custom-dd-btn"', cklWorking.serviceId,
-      current ? current.name : 'Select a service\u2026', !current,
-      svcpDDItem('', 'None selected', !current) +
-      svcpServices.map(function (s) { return svcpDDItem(s.id, s.name, s.id === cklWorking.serviceId); }).join(''))
-      .replace('<div class="svcp-dd">', '<div class="svcp-dd ckl-service-dd" id="cklAdminServiceDD">');
+  function cklRerenderCard(id) {
+    var card = document.querySelector('[data-ckl-card="' + id + '"]');
+    var c = cklChecklistById(id);
+    if (!card || !c) return;
+    var fresh = document.createElement('div');
+    fresh.innerHTML = cklAdminCardHtml(c);
+    card.replaceWith(fresh.firstElementChild);
   }
 
-  // Both chip groups (equipment/task-type, then every room from property inclusions) in one row —
-  // clicking either just adds a new section named after that chip; which group a name came from
-  // isn't tracked afterward, since a section is just a name once created.
-  function cklRenderSectionChipsInto(wrapId, customBtnId, working, customInputOpen) {
+  function cklAdminRenderServiceDD() { /* replaced by the inline multi-select chips below the name field */ }
+
+  /* ---------- "Attach to Job" multi-select, inside the edit view/modal ---------- */
+  function cklAttachChipsHtml(working, wrapId) {
+    var names = cklServiceNames(working);
+    return '<div class="ckl-attach-edit" id="' + wrapId + '">' +
+      '<div class="svcp-dd ckl-service-dd" id="' + wrapId + 'DD"></div>' +
+      (names.length ? '<div class="ckl-attach-edit-chips">' + working.serviceIds.map(function (sid) {
+        return '<span class="cat-selected-chip" data-ckl-svc-chip="' + sid + '">' + supjrEscapeHtml(cklServiceName(sid)) +
+          ' <button type="button" class="csc-remove" data-ckl-svc-remove="' + sid + '" aria-label="Remove">' + CKL_ICON_X_SM + '</button></span>';
+      }).join('') + '</div>' : '') +
+    '</div>';
+  }
+  var CKL_ICON_X_SM = '<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>';
+  function cklRenderAttachEditDD(working, ddId) {
+    var wrap = document.getElementById(ddId);
+    if (!wrap) return;
+    var picked = working.serviceIds || [];
+    var remaining = svcpServices.filter(function (s) { return picked.indexOf(s.id) === -1; });
+    var label = remaining.length ? 'Add a job\u2026' : 'All services attached';
+    wrap.outerHTML = svcpDDShell('data-ddrole="ckl-service" class="pm-custom-dd-btn"', '', label, true,
+      remaining.length ? remaining.map(function (s) { return svcpDDItem(s.id, s.name, false); }).join('') : '<div class="cdd-empty">No more services to attach.</div>')
+      .replace('<div class="svcp-dd">', '<div class="svcp-dd ckl-service-dd" id="' + ddId + '">');
+  }
+
+  /* ---------- Section chips: icon + name + plus/tick, selected = Keylr light-blue ---------- */
+  function cklChipHtml(name, selected) {
+    return '<button type="button" class="ckl-sec-chip' + (selected ? ' on' : '') + '" data-ckl-add-section="' + supjrEscapeHtml(name) + '">' +
+      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + cklSectionIcon(name) + '</svg>' +
+      '<span>' + supjrEscapeHtml(name) + '</span>' +
+      (selected
+        ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>'
+        : '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>') +
+    '</button>';
+  }
+  function cklRenderSectionChipsInto(wrapId, working) {
     var wrap = document.getElementById(wrapId);
     if (!wrap) return;
     var predefinedChips = CKL_TASK_TYPE_SECTIONS.concat(CKL_ROOM_SECTIONS);
-    var existingNames = working ? working.sections.map(function (s) { return s.name; }) : [];
-    var knownCustomNames = (working && working.customSectionNames) ? working.customSectionNames.slice() : [];
-    // Backward-compat: fold in any existing section name that isn't predefined and isn't already
-    // tracked, so checklists created before this tracking existed still show their own custom
-    // sections as chips rather than losing them from view entirely.
-    existingNames.forEach(function (n) {
-      if (predefinedChips.indexOf(n) === -1 && knownCustomNames.indexOf(n) === -1) knownCustomNames.push(n);
-    });
-
-    var predefinedHtml = predefinedChips.map(function (name) {
-      var isSelected = existingNames.indexOf(name) !== -1;
-      return '<button type="button" class="pmsvc-pill sm' + (isSelected ? ' on' : '') + '" data-ckl-add-section="' + supjrEscapeHtml(name) + '">+ ' + supjrEscapeHtml(name) + '</button>';
-    }).join('');
-    var customHtml = knownCustomNames.map(function (name) {
-      var isSelected = existingNames.indexOf(name) !== -1;
-      return '<span class="pmsvc-pill sm ckl-custom-chip' + (isSelected ? ' on' : '') + '" data-ckl-add-section="' + supjrEscapeHtml(name) + '">' + (isSelected ? '' : '+ ') + supjrEscapeHtml(name) +
-        '<button type="button" data-ckl-remove-custom-section="' + supjrEscapeHtml(name) + '" aria-label="Remove ' + supjrEscapeHtml(name) + '">&times;</button></span>';
-    }).join('');
-
-    var customControl = customInputOpen
-      ? '<div class="ckl-custom-section-input-row">' +
-          '<input type="text" class="field-input" placeholder="Section name" id="' + customBtnId + 'Input" data-ckl-custom-input="' + customBtnId + '">' +
-          '<button type="button" class="btn btn-primary" data-ckl-custom-confirm="' + customBtnId + '">Add</button>' +
-          '<button type="button" class="btn btn-secondary-light" data-ckl-custom-cancel="' + customBtnId + '">Cancel</button>' +
-        '</div>'
-      : '<button type="button" class="ckl-add-custom-section-btn" id="' + customBtnId + '">+ Custom Section</button>';
-
-    wrap.innerHTML = '<div class="ckl-add-section-row">' + predefinedHtml + customHtml + '</div>' + customControl;
+    var existingNames = working ? working.sections.filter(function (s) { return !s.isCustom; }).map(function (s) { return s.name; }) : [];
+    var predefinedHtml = predefinedChips.map(function (name) { return cklChipHtml(name, existingNames.indexOf(name) !== -1); }).join('');
+    var customHtml = '<button type="button" class="ckl-sec-chip ckl-sec-chip-custom" data-ckl-add-custom>' +
+      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>' +
+      '<span>Custom</span>' +
+    '</button>';
+    wrap.innerHTML = '<div class="ckl-add-section-row">' + predefinedHtml + customHtml + '</div>';
   }
-  var cklAdminCustomInputOpen = false;
-  function cklAdminRenderSectionChips() { cklRenderSectionChipsInto('cklAdminSectionChips', 'cklAdminCustomSectionBtn', cklWorking, cklAdminCustomInputOpen); }
+  function cklAdminRenderSectionChips() { cklRenderSectionChipsInto('cklAdminSectionChips', cklWorking); }
 
-  function cklTaskRowHtml(section, task, editingTaskId) {
-    var imgCheckbox = '<label class="ckl-task-img-req" title="Image required">' +
-      '<input type="checkbox" data-ckl-task-imgreq="' + section.id + '|' + task.id + '"' + (task.imageRequired ? ' checked' : '') + '> Image' +
-    '</label>';
-    if (task.id === editingTaskId) {
-      return '<div class="ckl-task-row editing" data-ckl-task="' + task.id + '" draggable="true" data-ckl-task-drag="' + section.id + '|' + task.id + '">' +
-        '<div class="ckl-task-row-top">' +
-          '<span class="ckl-task-drag">::</span>' +
-          '<span class="ckl-task-desc">' + (task.description ? supjrEscapeHtml(task.description) : '<span class="ckl-task-placeholder">New task \u2014 click to edit</span>') + '</span>' +
-          imgCheckbox +
-          '<span class="svcp-chip navy">' + cklResponseTypeName(task.responseType) + '</span>' +
-          '<span class="svcp-chip' + (task.required ? '' : ' neutral') + '">' + (task.required ? 'Req' : 'Opt') + '</span>' +
-          '<button type="button" class="ckl-task-x" data-ckl-task-collapse aria-label="Collapse"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg></button>' +
-        '</div>' +
-        '<div class="ckl-task-edit-body">' +
-          '<div class="pmsvc-label">Task description</div>' +
-          '<input type="text" class="field-input" placeholder="e.g. Hoover carpets" value="' + supjrEscapeHtml(task.description) + '" data-ckl-task-desc="' + section.id + '|' + task.id + '">' +
-          '<div class="pmsvc-label mt">Response type</div>' +
-          '<div class="pmsvc-pill-row">' + CKL_RESPONSE_TYPES.map(function (rt) {
-            return '<button type="button" class="pmsvc-pill sm' + (task.responseType === rt.id ? ' on' : '') + '" data-ckl-task-response="' + section.id + '|' + task.id + '|' + rt.id + '">' + rt.name + '</button>';
-          }).join('') + '</div>' +
-          '<div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;">' +
-            '<label style="display:flex;align-items:center;gap:9px;font-size:13px;font-weight:700;color:var(--text-heading);cursor:pointer;">' +
-              '<button type="button" class="toggle-switch sm' + (!task.required ? ' on' : '') + '" data-ckl-task-optional="' + section.id + '|' + task.id + '" role="switch" aria-checked="' + (!task.required ? 'true' : 'false') + '"><span class="thumb"></span></button> Optional' +
-            '</label>' +
-            '<button type="button" style="color:#b91c1c;font-weight:700;font-size:13px;background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;" data-ckl-task-delete="' + section.id + '|' + task.id + '">' +
-              '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg> Delete Task' +
-            '</button>' +
-          '</div>' +
-        '</div>' +
-      '</div>';
-    }
-    return '<div class="ckl-task-row" data-ckl-task-open="' + task.id + '" draggable="true" data-ckl-task-drag="' + section.id + '|' + task.id + '">' +
-      '<span class="ckl-task-drag">::</span>' +
-      '<span class="ckl-task-desc">' + (task.description ? supjrEscapeHtml(task.description) : '<span class="ckl-task-placeholder">New task \u2014 click to edit</span>') + '</span>' +
-      imgCheckbox +
-      '<span class="svcp-chip navy">' + cklResponseTypeName(task.responseType) + '</span>' +
-      '<span class="svcp-chip' + (task.required ? '' : ' neutral') + '">' + (task.required ? 'Req' : 'Opt') + '</span>' +
-      '<button type="button" class="ckl-task-x" data-ckl-task-delete="' + section.id + '|' + task.id + '" aria-label="Delete task"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>' +
+  /* Adding a custom section creates it immediately (no separate "name it first" step) with one
+     starter task, and returns it so the caller can scroll to + focus its title. */
+  function cklAddCustomSection(working, openSectionsRef) {
+    var n = 1, name = 'New Section';
+    var existingNames = working.sections.map(function (s) { return s.name; });
+    while (existingNames.indexOf(name) !== -1) { n++; name = 'New Section ' + n; }
+    var sec = cklMakeSection(name, [cklMakeTask('', 'done', false)], true);
+    working.sections.push(sec);
+    openSectionsRef[sec.id] = true;
+    return sec;
+  }
+  function cklScrollToSection(sectionId) {
+    setTimeout(function () {
+      var el = document.querySelector('[data-ckl-section-card="' + sectionId + '"]');
+      if (!el) return;
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      var titleInput = el.querySelector('[data-ckl-sec-rename]');
+      if (titleInput) { titleInput.focus(); titleInput.select(); }
+    }, 60);
+  }
+  /* ---------- Task row: always-editable, no click-to-expand ----------
+     [drag handle][description input][response dropdown][photo/video/voice toggles][Req][Delete] */
+  var CKL_EVIDENCE_ICONS = {
+    photo: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>',
+    video: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>',
+    voice: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4"/></svg>'
+  };
+  var CKL_EVIDENCE_LABELS = { photo: 'Photo evidence', video: 'Video evidence', voice: 'Voice note (auto-transcribed to text)' };
+  function cklResponseDD(section, task) {
+    var attrs = 'data-ddrole="ckl-task-response" data-sec="' + section.id + '" data-task="' + task.id + '"';
+    return svcpDDShell(attrs, task.responseType, cklResponseTypeName(task.responseType), false,
+      CKL_RESPONSE_TYPES.map(function (rt) { return svcpDDItem(rt.id, rt.name, rt.id === task.responseType); }).join(''))
+      .replace('<div class="svcp-dd">', '<div class="svcp-dd ckl-resp-dd">');
+  }
+  function cklEvidenceBtn(section, task, kind) {
+    var on = !!(task.evidence && task.evidence[kind]);
+    return '<button type="button" class="ckl-ev-btn' + (on ? ' on' : '') + '" data-ckl-task-evidence="' + section.id + '|' + task.id + '|' + kind + '" data-tooltip="' + CKL_EVIDENCE_LABELS[kind] + '" aria-label="' + CKL_EVIDENCE_LABELS[kind] + '" aria-pressed="' + on + '">' + CKL_EVIDENCE_ICONS[kind] + '</button>';
+  }
+  function cklTaskRowHtml(section, task) {
+    return '<div class="ckl-task-row" data-ckl-task="' + task.id + '" draggable="true" data-ckl-task-drag="' + section.id + '|' + task.id + '">' +
+      '<span class="ckl-task-drag" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="8" cy="6" r="1.5"/><circle cx="16" cy="6" r="1.5"/><circle cx="8" cy="12" r="1.5"/><circle cx="16" cy="12" r="1.5"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/></svg></span>' +
+      '<input type="text" class="ckl-task-desc-input" placeholder="What the supplier must do\u2026" value="' + supjrEscapeHtml(task.description) + '" data-ckl-task-desc="' + section.id + '|' + task.id + '">' +
+      '<div class="ckl-task-resp">' + cklResponseDD(section, task) + '</div>' +
+      '<div class="ckl-task-evidence-group">' + cklEvidenceBtn(section, task, 'photo') + cklEvidenceBtn(section, task, 'video') + cklEvidenceBtn(section, task, 'voice') + '</div>' +
+      '<label class="ckl-task-req" data-tooltip="' + (task.required ? 'Required' : 'Optional') + '">' +
+        '<button type="button" class="toggle-switch sm' + (task.required ? ' on' : '') + '" data-ckl-task-required="' + section.id + '|' + task.id + '" role="switch" aria-checked="' + task.required + '" aria-label="Required"><span class="thumb"></span></button>' +
+        '<span>Req</span>' +
+      '</label>' +
+      '<button type="button" class="ckl-task-del" data-ckl-task-delete="' + section.id + '|' + task.id + '" aria-label="Delete task" data-tooltip="Delete task"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>' +
     '</div>';
   }
-  function cklSectionCardHtml(section, idx, total, openSections, editingTaskId) {
+
+  /* ---------- Section-level "..." popover: repetition + evidence-required + require-tap + delete ---------- */
+  function cklIsRoomSection(name) { return CKL_ROOM_SECTIONS.indexOf(name) !== -1; }
+  /* Repetition text only — the actionable toggle chip itself now lives in the section header,
+     always visible on every section, not gated to room-type names and not hidden inside this
+     popover. This block just reflects whatever state that header chip is currently in. */
+  function cklRepetitionBodyHtml(section) {
+    var repIcon = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 01-4 4H3"/></svg>';
+    return '<div class="ckl-pop-label">' + repIcon + 'REPETITION</div>' +
+      '<div class="ckl-pop-text">' + (section.repeats
+        ? '<b>Repeats per ' + supjrEscapeHtml(section.name) + '.</b> \u201c' + supjrEscapeHtml(section.name) + '\u201d runs once for every ' + section.name.toLowerCase() + ' in the property.'
+        : '<b>One-time section.</b> \u201c' + supjrEscapeHtml(section.name) + '\u201d only appears once in a property, so its checklist runs once per job.') + '</div>';
+  }
+  function cklSectionMenuPopoverHtml(section) {
+    var ev = section.evidenceDefaults || { photo: false, video: false, voice: false };
+    function evBtn(kind, label, icon) {
+      return '<button type="button" class="ckl-pop-ev-btn' + (ev[kind] ? ' on' : '') + '" data-ckl-sec-evidence="' + section.id + '|' + kind + '">' + icon + label + '</button>';
+    }
+    return '<div class="ckl-sec-popover" data-ckl-sec-popover="' + section.id + '">' +
+      cklRepetitionBodyHtml(section) +
+      '<div class="ckl-pop-divider"></div>' +
+      '<div class="ckl-pop-label">EVIDENCE REQUIRED BEFORE \u201cCOMPLETE\u201d</div>' +
+      '<div class="ckl-pop-ev-row">' +
+        evBtn('photo', 'Photo', CKL_EVIDENCE_ICONS.photo) + evBtn('video', 'Video', CKL_EVIDENCE_ICONS.video) + evBtn('voice', 'Voice', CKL_EVIDENCE_ICONS.voice) +
+      '</div>' +
+      '<div class="ckl-pop-hint">Applies to every task in this section.</div>' +
+      '<div class="ckl-pop-divider"></div>' +
+      '<label class="ckl-pop-tap-row">' +
+        '<button type="button" class="toggle-switch sm' + (section.requireTapComplete ? ' on' : '') + '" data-ckl-sec-tap-toggle="' + section.id + '" role="switch" aria-checked="' + section.requireTapComplete + '"><span class="thumb"></span></button>' +
+        '<span>Require tasker to tap \u201cMark section complete\u201d</span>' +
+      '</label>' +
+      '<div class="ckl-pop-divider"></div>' +
+      '<button type="button" class="ckl-pop-delete" data-ckl-sec-delete="' + section.id + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg>Delete section</button>' +
+    '</div>';
+  }
+
+  function cklSectionCardHtml(section, idx, total, openSections, openMenuId) {
     var isOpen = !!openSections[section.id];
-    return '<div class="ckl-section-card' + (isOpen ? ' open' : '') + '">' +
+    var menuOpen = openMenuId === section.id;
+    var evCount = 0;
+    if (section.evidenceDefaults) { ['photo', 'video', 'voice'].forEach(function (k) { if (section.evidenceDefaults[k]) evCount += 1; }); }
+    var repeatChip = '<button type="button" class="ckl-repeat-chip sm' + (section.repeats ? ' on' : '') + '" data-ckl-sec-repeat-toggle="' + section.id + '" data-tooltip="' + (section.repeats ? 'Repeats once per ' + supjrEscapeHtml(section.name).toLowerCase() : 'Runs once per job \u2014 click to repeat per ' + supjrEscapeHtml(section.name).toLowerCase()) + '">' +
+      '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 01-4 4H3"/></svg>Repeats per ' + supjrEscapeHtml(section.name) +
+    '</button>';
+    return '<div class="ckl-section-card' + (isOpen ? ' open' : '') + '" data-ckl-section-card="' + section.id + '">' +
       '<div class="ckl-section-head">' +
         '<div class="ckl-section-order">' +
           '<button type="button" class="svcp-order-btn" data-ckl-sec-move="up|' + section.id + '"' + (idx === 0 ? ' disabled' : '') + ' aria-label="Move up"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg></button>' +
           '<button type="button" class="svcp-order-btn" data-ckl-sec-move="down|' + section.id + '"' + (idx === total - 1 ? ' disabled' : '') + ' aria-label="Move down"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>' +
         '</div>' +
-        '<div class="ckl-section-title" data-ckl-sec-toggle="' + section.id + '">' + supjrEscapeHtml(section.name) + '</div>' +
-        '<span class="ckl-section-count">' + section.tasks.length + ' task' + (section.tasks.length === 1 ? '' : 's') + '</span>' +
+        '<svg class="ckl-section-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + cklSectionIcon(section.name) + '</svg>' +
+        (section.isCustom
+          ? '<input type="text" class="ckl-section-title-input" data-ckl-sec-rename="' + section.id + '" value="' + supjrEscapeHtml(section.name) + '" placeholder="Section name">'
+          : '<div class="ckl-section-title" data-ckl-sec-toggle="' + section.id + '">' + supjrEscapeHtml(section.name) + '</div>') +
+        '<span class="ckl-section-count">' + section.tasks.length + '</span>' +
+        repeatChip +
+        (evCount ? '<span class="svcp-chip neutral sm">' + evCount + ' evidence</span>' : '') +
+        '<div class="ckl-sec-menu-wrap">' +
+          '<button type="button" class="svcp-icon-btn" data-ckl-sec-menu-toggle="' + section.id + '" aria-label="Section options"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></button>' +
+          (menuOpen ? cklSectionMenuPopoverHtml(section) : '') +
+        '</div>' +
         '<svg class="ckl-section-chevron" data-ckl-sec-toggle="' + section.id + '" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' +
-        '<button type="button" class="svcp-icon-btn danger" data-ckl-sec-delete="' + section.id + '" aria-label="Delete section"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>' +
       '</div>' +
       (isOpen ? '<div class="ckl-section-body">' +
-        section.tasks.map(function (t) { return cklTaskRowHtml(section, t, editingTaskId); }).join('') +
-        '<button type="button" class="ckl-add-task-btn" data-ckl-task-add="' + section.id + '">+ Add task to ' + supjrEscapeHtml(section.name) + '</button>' +
+        section.tasks.map(function (t) { return cklTaskRowHtml(section, t); }).join('') +
+        '<button type="button" class="ckl-add-task-btn" data-ckl-task-add="' + section.id + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Add task</button>' +
       '</div>' : '') +
     '</div>';
   }
@@ -43206,25 +43584,26 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   function cklAdminRenderSections() {
     var wrap = document.getElementById('cklAdminSectionsList');
     if (!wrap || !cklWorking) return;
-    wrap.innerHTML = cklWorking.sections.map(function (s, i) { return cklSectionCardHtml(s, i, cklWorking.sections.length, cklOpenSections, cklEditingTaskId); }).join('');
+    wrap.innerHTML = cklWorking.sections.map(function (s, i) { return cklSectionCardHtml(s, i, cklWorking.sections.length, cklOpenSections, cklOpenSectionMenu); }).join('');
   }
 
   function cklAdminShowEditView() {
     document.getElementById('cklAdminListView').style.display = 'none';
     document.getElementById('cklAdminEditView').style.display = '';
     document.getElementById('cklAdminNameInput').value = cklWorking.name;
-    cklAdminRenderServiceDD();
+    document.getElementById('cklAdminDescInput').value = cklWorking.description;
+    document.getElementById('cklAdminAttachWrap').innerHTML = cklAttachChipsHtml(cklWorking, 'cklAdminAttachWrapInner');
+    cklRenderAttachEditDD(cklWorking, 'cklAdminAttachWrapInnerDD');
     cklAdminRenderSectionChips();
     cklAdminRenderSections();
   }
   function cklAdminOpenNew() {
     cklActiveId = null;
     cklWorking = cklMakeChecklist({ source: 'admin' });
-    cklOpenSections = {};
-    cklEditingTaskId = null;
-    cklAdminCustomInputOpen = false;
+    cklResetKeys(cklOpenSections);
+    cklOpenSectionMenu = null;
     document.getElementById('cklAdminEditTitle').textContent = 'New Service Checklist';
-    document.getElementById('cklAdminEditSub').textContent = 'Pick a service, then edit its sections and tasks.';
+    document.getElementById('cklAdminEditSub').textContent = 'Name it, attach it to a job, then build out sections and tasks.';
     document.getElementById('cklAdminDeleteWrap').style.display = 'none';
     document.getElementById('cklAdminSaveBtn').textContent = 'Save Checklist';
     cklAdminShowEditView();
@@ -43234,12 +43613,11 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (!c) return;
     cklActiveId = id;
     cklWorking = cklClone(c);
-    if (!cklWorking.name) cklWorking.name = cklServiceName(c.serviceId) + ' checklist';
-    cklOpenSections = {};
-    cklEditingTaskId = null;
-    cklAdminCustomInputOpen = false;
-    document.getElementById('cklAdminEditTitle').textContent = 'Edit Checklist';
-    document.getElementById('cklAdminEditSub').textContent = cklServiceName(c.serviceId);
+    if (!cklWorking.name) cklWorking.name = (cklServiceNames(cklWorking)[0] || 'Untitled') + ' checklist';
+    cklResetKeys(cklOpenSections);
+    cklOpenSectionMenu = null;
+    document.getElementById('cklAdminEditTitle').textContent = 'Edit checklist';
+    document.getElementById('cklAdminEditSub').textContent = 'Give the checklist a name and (optionally) a description. It stands on its own \u2014 attach it to a job whenever you want.';
     document.getElementById('cklAdminDeleteWrap').style.display = '';
     document.getElementById('cklAdminSaveBtn').textContent = 'Save Changes';
     cklAdminShowEditView();
@@ -43251,6 +43629,627 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     document.getElementById('cklAdminListView').style.display = '';
     cklAdminRenderList();
   }
+
+  /* ---------- Report: read-only preview of a checklist (the "Report" button on a card) ---------- */
+  function cklReportBodyHtml(c) {
+    return c.sections.map(function (s) {
+      return '<div class="ckl-report-section"><div class="ckl-report-section-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + cklSectionIcon(s.name) + '</svg>' + supjrEscapeHtml(s.name) +
+        (s.repeats && cklIsRoomSection(s.name) ? '<span class="svcp-chip neutral sm">repeats per ' + supjrEscapeHtml(s.name).toLowerCase() + '</span>' : '') + '</div>' +
+        s.tasks.map(function (t) {
+          return '<div class="ckl-report-row"><span class="ckl-report-row-desc">' + (t.description ? supjrEscapeHtml(t.description) : '<i>Untitled task</i>') + '</span>' +
+            '<span class="svcp-chip navy sm">' + cklResponseTypeName(t.responseType) + '</span>' +
+            (t.required ? '<span class="svcp-chip sm">Required</span>' : '') +
+            (['photo', 'video', 'voice'].filter(function (k) { return t.evidence && t.evidence[k]; }).map(function (k) { return '<span class="svcp-chip neutral sm">' + CKL_EVIDENCE_ICONS[k] + k + '</span>'; }).join('')) +
+          '</div>';
+        }).join('') +
+      '</div>';
+    }).join('');
+  }
+  function cklOpenReportPreview(id) {
+    var c = cklChecklistById(id);
+    if (!c) return;
+    cklReportPreviewId = id;
+    document.getElementById('cklReportTitle').textContent = c.name || 'Checklist report preview';
+    document.getElementById('cklReportSub').textContent = 'What suppliers will see and complete on the job.';
+    document.getElementById('cklReportBody').innerHTML = cklReportBodyHtml(c);
+    document.getElementById('cklReportOverlay').classList.add('open');
+  }
+  function cklCloseReportPreview() {
+    document.getElementById('cklReportOverlay').classList.remove('open');
+    cklReportPreviewId = null;
+  }
+  /* ---------- PM's own checklist picker card (within their template's Checklist section) ---------- */
+  function pmsvcChecklistPickerCardHtml(c, isAttached) {
+    var counts = cklChecklistCounts(c);
+    var title = c.name || ((cklServiceNames(c)[0] || 'Untitled') + ' checklist');
+    var actionLabel = c.source === 'admin' ? 'View' : 'Edit';
+    return '<div class="ckl-picker-card' + (isAttached ? ' on' : '') + '" data-pmsvc-ckl-select="' + c.id + '" role="radio" aria-checked="' + (isAttached ? 'true' : 'false') + '" tabindex="0">' +
+      '<div class="ckl-picker-card-name">' + supjrEscapeHtml(title) + '</div>' +
+      '<div class="ckl-picker-card-badges">' +
+        '<span class="ckl-badge sm">' + CKL_ICON_LAYERS + counts.sections + '</span>' +
+        '<span class="ckl-badge sm">' + CKL_ICON_CHECKS + counts.checks + '</span>' +
+        '<span class="ckl-badge sm">' + CKL_ICON_CAMERA + counts.evidence + '</span>' +
+      '</div>' +
+      '<button type="button" class="ckl-picker-card-view" data-pmsvc-ckl-view="' + c.id + '">' + actionLabel + '</button>' +
+    '</div>';
+  }
+
+  // PM's own modal state - deliberately separate from cklWorking/cklOpenSections/cklOpenSectionMenu
+  // (Admin's on-page editor) so the two can never collide, even though both ultimately render
+  // through the same shared cklSectionCardHtml/cklTaskRowHtml functions.
+  var pmCklWorking = null;
+  var pmCklOpenSections = {};
+  var pmCklOpenSectionMenu = null;
+  var pmCklEditingExistingId = null; // id of the PM's own checklist being edited, or null if new/adapting
+
+  function pmCklRenderModal() {
+    document.getElementById('pmCklNameInput').value = pmCklWorking.name;
+    document.getElementById('pmCklDescInput').value = pmCklWorking.description;
+    cklRenderSectionChipsInto('pmCklSectionChips', pmCklWorking);
+    pmCklRenderSections();
+    pmCklRenderMediaPermissions();
+  }
+  function pmCklRenderSections() {
+    var wrap = document.getElementById('pmCklSectionsList');
+    if (!wrap || !pmCklWorking) return;
+    wrap.innerHTML = pmCklWorking.sections.map(function (s, i) { return cklSectionCardHtml(s, i, pmCklWorking.sections.length, pmCklOpenSections, pmCklOpenSectionMenu); }).join('');
+  }
+  function pmCklOpenModal() {
+    document.getElementById('pmCklModalOverlay').classList.add('open');
+  }
+  function pmCklCloseModal() {
+    document.getElementById('pmCklModalOverlay').classList.remove('open');
+    pmCklWorking = null;
+    pmCklEditingExistingId = null;
+  }
+  // "Start from template": always opens a fresh, independent clone of the admin's checklist -
+  // saving always produces a new PM-owned entry, never edits the shared admin original.
+  function pmCklOpenAdapt(adminChecklistId) {
+    var src = cklChecklistById(adminChecklistId);
+    if (!src) return;
+    var prefillName = src.name || ((cklServiceNames(src)[0] || 'Untitled') + ' checklist');
+    pmCklWorking = cklMakeChecklist({ source: 'pm', name: prefillName, description: src.description, sections: cklClone(src.sections), mediaPermissions: cklClone(src.mediaPermissions) });
+    pmCklEditingExistingId = null;
+    cklResetKeys(pmCklOpenSections);
+    pmCklOpenSectionMenu = null;
+    document.getElementById('pmCklModalTitle').textContent = prefillName;
+    document.getElementById('pmCklModalSub').textContent = 'From Keylr\u2019s ' + prefillName + ' \u2014 edit freely, this becomes your own copy.';
+    document.getElementById('pmCklDeleteWrap').style.display = 'none';
+    document.getElementById('pmCklSaveBtn').textContent = 'Update Checklist';
+    pmCklRenderModal();
+    pmCklOpenModal();
+  }
+  // "Build custom" -> an existing PM checklist card: edit that exact entry in place.
+  function pmCklOpenEditOwn(id) {
+    var src = cklChecklistById(id);
+    if (!src) return;
+    pmCklWorking = cklClone(src);
+    if (!pmCklWorking.name) pmCklWorking.name = (cklServiceNames(pmCklWorking)[0] || 'Untitled') + ' checklist';
+    pmCklEditingExistingId = id;
+    cklResetKeys(pmCklOpenSections);
+    pmCklOpenSectionMenu = null;
+    document.getElementById('pmCklModalTitle').textContent = pmCklWorking.name;
+    document.getElementById('pmCklModalSub').textContent = 'Update this checklist\u2019s sections and tasks.';
+    document.getElementById('pmCklDeleteWrap').style.display = '';
+    document.getElementById('pmCklSaveBtn').textContent = 'Update Checklist';
+    pmCklRenderModal();
+    pmCklOpenModal();
+  }
+  // "Build custom" -> "+ New checklist": a blank one.
+  function pmCklOpenNew() {
+    pmCklWorking = cklMakeChecklist({ source: 'pm' });
+    pmCklEditingExistingId = null;
+    cklResetKeys(pmCklOpenSections);
+    pmCklOpenSectionMenu = null;
+    document.getElementById('pmCklModalTitle').textContent = 'New Checklist';
+    document.getElementById('pmCklModalSub').textContent = 'Build your own checklist for this template.';
+    document.getElementById('pmCklDeleteWrap').style.display = 'none';
+    document.getElementById('pmCklSaveBtn').textContent = 'Save Checklist';
+    pmCklRenderModal();
+    pmCklOpenModal();
+  }
+
+  /* ---------- Job Media Permissions (PM checklist modal only) ----------
+     Master allow/restrict, plus Capture/Record + Upload from Device for each of Photo/Video/
+     Voice Note — but an individual evidence type's row only shows once at least one task in the
+     checklist actually uses that capture icon, per the explicit scoping note. Supplier job flow
+     reads this same object to decide which actions it's allowed to offer. */
+  function cklMediaPermRow(kind, label, icon, mp) {
+    var row = mp[kind];
+    return '<div class="ckl-mp-row">' +
+      '<div class="ckl-mp-row-label">' + icon + '<span>' + label + '</span></div>' +
+      '<label class="ckl-mp-toggle"><button type="button" class="toggle-switch sm' + (row.capture ? ' on' : '') + '" data-ckl-mp-toggle="' + kind + '|capture" role="switch" aria-checked="' + row.capture + '"' + (mp.master ? '' : ' disabled') + '><span class="thumb"></span></button><span>Capture / Record</span></label>' +
+      '<label class="ckl-mp-toggle"><button type="button" class="toggle-switch sm' + (row.upload ? ' on' : '') + '" data-ckl-mp-toggle="' + kind + '|upload" role="switch" aria-checked="' + row.upload + '"' + (mp.master ? '' : ' disabled') + '><span class="thumb"></span></button><span>Upload from Device</span></label>' +
+    '</div>';
+  }
+  function pmCklMediaPermissionsBody() {
+    if (!pmCklWorking) return '';
+    var mp = pmCklWorking.mediaPermissions;
+    var rows = cklMediaPermRow('photo', 'Photo', CKL_EVIDENCE_ICONS.photo, mp) +
+      cklMediaPermRow('video', 'Video', CKL_EVIDENCE_ICONS.video, mp) +
+      cklMediaPermRow('voice', 'Voice Note', CKL_EVIDENCE_ICONS.voice, mp);
+    return '<div class="svcp-panel ckl-mp-panel">' +
+      '<div class="ckl-mp-head">' +
+        '<div><div class="svcp-section-title" style="font-size:13.5px;">Job Media Permissions</div>' +
+        '<p class="svcp-section-sub" style="margin-top:2px;">Allow or restrict what the supplier can capture on this job. The supplier\u2019s job flow only shows the actions you allow here.</p></div>' +
+        '<button type="button" class="toggle-switch' + (mp.master ? ' on' : '') + '" data-ckl-mp-master role="switch" aria-checked="' + mp.master + '" aria-label="Allow media capture"><span class="thumb"></span></button>' +
+      '</div>' +
+      (mp.master ? '<div class="ckl-mp-rows">' + rows + '</div>' : '') +
+    '</div>';
+  }
+  function pmCklRenderMediaPermissions() {
+    var wrap = document.getElementById('pmCklMediaPermissions');
+    if (!wrap) return;
+    wrap.innerHTML = pmCklMediaPermissionsBody();
+  }
+  /* =========================================================
+     Shared editor interaction logic. Admin's on-page editor and PM's
+     modal each wire their own addEventListener (different containers,
+     different working objects/state) but both call straight into
+     these so the two can never drift apart in behaviour.
+  ========================================================== */
+  function cklHandleEditorClick(e, ctx) {
+    var working = ctx.getWorking();
+    if (!working) return false;
+
+    var addSection = e.target.closest('[data-ckl-add-section]');
+    if (addSection) {
+      var secName = addSection.getAttribute('data-ckl-add-section');
+      var existingIdx = working.sections.findIndex(function (s) { return !s.isCustom && s.name === secName; });
+      if (existingIdx !== -1) {
+        working.sections.splice(existingIdx, 1);
+      } else {
+        var sec = cklMakeSection(secName, cklSampleTasks());
+        working.sections.push(sec);
+        ctx.openSections[sec.id] = true;
+      }
+      ctx.renderChips(); ctx.renderSections();
+      return true;
+    }
+    var addCustom = e.target.closest('[data-ckl-add-custom]');
+    if (addCustom) {
+      var newSec = cklAddCustomSection(working, ctx.openSections);
+      ctx.renderChips(); ctx.renderSections();
+      cklScrollToSection(newSec.id);
+      return true;
+    }
+    var menuToggle = e.target.closest('[data-ckl-sec-menu-toggle]');
+    if (menuToggle) {
+      var mtid = menuToggle.getAttribute('data-ckl-sec-menu-toggle');
+      var opening = ctx.getOpenMenu() !== mtid;
+      ctx.setOpenMenu(opening ? mtid : null);
+      ctx.renderSections();
+      if (opening) {
+        var pop = document.querySelector('[data-ckl-sec-popover="' + mtid + '"]');
+        var freshBtn = document.querySelector('[data-ckl-sec-menu-toggle="' + mtid + '"]');
+        if (pop && freshBtn) cklPositionFloating(freshBtn, pop);
+        cklEnsureFloatingCloseListeners();
+      }
+      return true;
+    }
+    var secRepeat = e.target.closest('[data-ckl-sec-repeat-toggle]');
+    if (secRepeat) {
+      var srid = secRepeat.getAttribute('data-ckl-sec-repeat-toggle');
+      var srSec = working.sections.find(function (s) { return s.id === srid; });
+      if (srSec) srSec.repeats = !srSec.repeats;
+      ctx.renderSections();
+      return true;
+    }
+    var secEvidence = e.target.closest('[data-ckl-sec-evidence]');
+    if (secEvidence) {
+      var seParts = secEvidence.getAttribute('data-ckl-sec-evidence').split('|');
+      var seSec = working.sections.find(function (s) { return s.id === seParts[0]; });
+      if (seSec) {
+        var on = !seSec.evidenceDefaults[seParts[1]];
+        seSec.evidenceDefaults[seParts[1]] = on;
+        // Bulk-apply to every existing task in the section, per spec.
+        seSec.tasks.forEach(function (t) { t.evidence[seParts[1]] = on; });
+      }
+      ctx.renderSections();
+      return true;
+    }
+    var secTap = e.target.closest('[data-ckl-sec-tap-toggle]');
+    if (secTap) {
+      var stpid = secTap.getAttribute('data-ckl-sec-tap-toggle');
+      var stpSec = working.sections.find(function (s) { return s.id === stpid; });
+      if (stpSec) stpSec.requireTapComplete = !stpSec.requireTapComplete;
+      ctx.renderSections();
+      return true;
+    }
+    var secToggle = e.target.closest('[data-ckl-sec-toggle]');
+    if (secToggle) {
+      var stid = secToggle.getAttribute('data-ckl-sec-toggle');
+      ctx.openSections[stid] = !ctx.openSections[stid];
+      ctx.renderSections();
+      return true;
+    }
+    var secMove = e.target.closest('[data-ckl-sec-move]');
+    if (secMove) {
+      var smParts = secMove.getAttribute('data-ckl-sec-move').split('|');
+      var arr = working.sections;
+      var idx = arr.findIndex(function (s) { return s.id === smParts[1]; });
+      var target = smParts[0] === 'up' ? idx - 1 : idx + 1;
+      if (target >= 0 && target < arr.length) {
+        var tmp = arr[idx]; arr[idx] = arr[target]; arr[target] = tmp;
+        ctx.renderSections();
+      }
+      return true;
+    }
+    var secDel = e.target.closest('[data-ckl-sec-delete]');
+    if (secDel) {
+      var sdid = secDel.getAttribute('data-ckl-sec-delete');
+      working.sections = working.sections.filter(function (s) { return s.id !== sdid; });
+      if (ctx.getOpenMenu() === sdid) ctx.setOpenMenu(null);
+      ctx.renderChips(); ctx.renderSections();
+      return true;
+    }
+    var taskAdd = e.target.closest('[data-ckl-task-add]');
+    if (taskAdd) {
+      var tsid = taskAdd.getAttribute('data-ckl-task-add');
+      var sec2 = working.sections.find(function (s) { return s.id === tsid; });
+      if (sec2) {
+        var newTask = cklMakeTask('', 'done', false);
+        ['photo', 'video', 'voice'].forEach(function (k) { newTask.evidence[k] = !!sec2.evidenceDefaults[k]; });
+        sec2.tasks.push(newTask);
+        ctx.renderSections();
+        setTimeout(function () {
+          var input = document.querySelector('[data-ckl-task-desc="' + tsid + '|' + newTask.id + '"]');
+          if (input) input.focus();
+        }, 30);
+      }
+      return true;
+    }
+    var taskEvidence = e.target.closest('[data-ckl-task-evidence]');
+    if (taskEvidence) {
+      var teParts = taskEvidence.getAttribute('data-ckl-task-evidence').split('|');
+      var teSec = working.sections.find(function (s) { return s.id === teParts[0]; });
+      var teTask = teSec && teSec.tasks.find(function (t) { return t.id === teParts[1]; });
+      if (teTask) teTask.evidence[teParts[2]] = !teTask.evidence[teParts[2]];
+      ctx.renderSections();
+      return true;
+    }
+    var taskDelete = e.target.closest('[data-ckl-task-delete]');
+    if (taskDelete) {
+      var tdParts = taskDelete.getAttribute('data-ckl-task-delete').split('|');
+      var dsec = working.sections.find(function (s) { return s.id === tdParts[0]; });
+      if (dsec) dsec.tasks = dsec.tasks.filter(function (t) { return t.id !== tdParts[1]; });
+      ctx.renderSections();
+      return true;
+    }
+    var taskRequired = e.target.closest('[data-ckl-task-required]');
+    if (taskRequired) {
+      var trqParts = taskRequired.getAttribute('data-ckl-task-required').split('|');
+      var rqsec = working.sections.find(function (s) { return s.id === trqParts[0]; });
+      var rqtask = rqsec && rqsec.tasks.find(function (t) { return t.id === trqParts[1]; });
+      if (rqtask) rqtask.required = !rqtask.required;
+      ctx.renderSections();
+      return true;
+    }
+    return false;
+  }
+
+  function cklHandleEditorInput(e, ctx) {
+    var working = ctx.getWorking();
+    if (!working) return false;
+    var taskDesc = e.target.closest('[data-ckl-task-desc]');
+    if (taskDesc) {
+      var tdp = taskDesc.getAttribute('data-ckl-task-desc').split('|');
+      var sec3 = working.sections.find(function (s) { return s.id === tdp[0]; });
+      var task3 = sec3 && sec3.tasks.find(function (t) { return t.id === tdp[1]; });
+      if (task3) task3.description = taskDesc.value;
+      return true;
+    }
+    var secRename = e.target.closest('[data-ckl-sec-rename]');
+    if (secRename) {
+      var rnid = secRename.getAttribute('data-ckl-sec-rename');
+      var rnSec = working.sections.find(function (s) { return s.id === rnid; });
+      if (rnSec) rnSec.name = secRename.value;
+      return true;
+    }
+    return false;
+  }
+
+  /* Response-type + Attach-to-Job dropdowns share the app-wide .svcp-dd/.pm-custom-dd-btn shell,
+     already delegated per-container the same way the old single-service dropdown was — this just
+     adds the two new ddroles those containers now also need to recognise. */
+  function cklHandleDropdownSelect(ddRole, ddTrigger, ddValue, ctx) {
+    if (ddRole === 'ckl-task-response') {
+      var working = ctx.getWorking();
+      if (!working) return true;
+      var sec = working.sections.find(function (s) { return s.id === ddTrigger.getAttribute('data-sec'); });
+      var task = sec && sec.tasks.find(function (t) { return t.id === ddTrigger.getAttribute('data-task'); });
+      if (task) task.responseType = ddValue;
+      ctx.renderSections();
+      return true;
+    }
+    if (ddRole === 'ckl-service') {
+      var working2 = ctx.getWorking();
+      if (!working2) return true;
+      if (!working2.serviceIds) working2.serviceIds = [];
+      if (working2.serviceIds.indexOf(ddValue) === -1) working2.serviceIds.push(ddValue);
+      ctx.renderAttach();
+      return true;
+    }
+    return false;
+  }
+
+  /* Clicking anywhere outside an open section "..." popover closes it, standard popover UX. */
+  function cklMaybeCloseSectionMenu(e, ctx) {
+    if (ctx.getOpenMenu() == null) return;
+    if (e.target.closest('.ckl-sec-popover') || e.target.closest('[data-ckl-sec-menu-toggle]')) return;
+    ctx.setOpenMenu(null);
+    ctx.renderSections();
+  }
+
+  /* .pm-custom-dd-menu's app-wide default is position:absolute relative to its trigger, which
+     works everywhere else but gets clipped by this module's own scrolling ancestors (the PM
+     modal's scrollable body, Admin's scrollable page) once a dropdown sits deep inside a long
+     section list. Checklist dropdowns and the section "..." popover both escape this instead by
+     switching to position:fixed with coordinates computed from the trigger's real screen
+     position, which isn't clipped by any ancestor's overflow. Closes on scroll/resize rather than
+     continuously repositioning, since a stale floating menu is a much rarer edge case than one
+     that's silently cropped. */
+  var cklFloatingOpenedAt = 0;
+  function cklPositionFloating(trigger, el) {
+    var rect = trigger.getBoundingClientRect();
+    cklFloatingOpenedAt = Date.now();
+    el.style.position = 'fixed';
+    el.style.margin = '0';
+    el.style.zIndex = '950';
+    el.style.minWidth = Math.max(rect.width, 180) + 'px';
+    el.style.maxWidth = (window.innerWidth - 16) + 'px';
+    // Measured after min/max-width are applied, so this reflects each element's own real
+    // rendered width (the popover's CSS width:300px, or the dropdown's content-based width) -
+    // using the trigger's own (often much smaller) width here was what let the popover overflow
+    // past the right edge of the screen.
+    var elW = el.offsetWidth || Math.max(rect.width, 180);
+    var elH = el.offsetHeight || 200;
+    var left = Math.max(8, Math.min(rect.left, window.innerWidth - elW - 8));
+    var openUp = (window.innerHeight - rect.bottom) < Math.min(elH + 20, 320) && rect.top > (window.innerHeight - rect.bottom);
+    el.style.left = left + 'px';
+    el.style.right = 'auto';
+    if (openUp) { el.style.top = 'auto'; el.style.bottom = (window.innerHeight - rect.top + 6) + 'px'; }
+    else { el.style.bottom = 'auto'; el.style.top = (rect.bottom + 6) + 'px'; }
+    el.classList.toggle('drop-up', openUp);
+  }
+  var cklFloatingCloseBound = false;
+  function cklEnsureFloatingCloseListeners() {
+    if (cklFloatingCloseBound) return;
+    cklFloatingCloseBound = true;
+    var closeAll = function () {
+      // Switching an element to position:fixed shifts layout, which can itself fire a genuine
+      // scroll/resize event a few ms later — without this guard that self-inflicted event closes
+      // the very thing that was just opened. A real user scroll happening this fast is not a
+      // meaningful case to protect against.
+      if (Date.now() - cklFloatingOpenedAt < 200) return;
+      if (typeof closeAllCustomDropdowns === 'function') closeAllCustomDropdowns();
+      if (cklOpenSectionMenu !== null) { cklOpenSectionMenu = null; cklAdminRenderSections(); }
+      if (pmCklOpenSectionMenu !== null) { pmCklOpenSectionMenu = null; pmCklRenderSections(); }
+    };
+    window.addEventListener('scroll', closeAll, true);
+    window.addEventListener('resize', closeAll);
+  }
+  /* ---------- Admin Checklist tab: navigation + dropdown delegate ---------- */
+  var cklAdminCtx = {
+    getWorking: function () { return cklWorking; },
+    openSections: cklOpenSections,
+    getOpenMenu: function () { return cklOpenSectionMenu; },
+    setOpenMenu: function (v) { cklOpenSectionMenu = v; },
+    renderChips: function () { cklAdminRenderSectionChips(); },
+    renderSections: function () { cklAdminRenderSections(); },
+    renderAttach: function () {
+      document.getElementById('cklAdminAttachWrap').innerHTML = cklAttachChipsHtml(cklWorking, 'cklAdminAttachWrapInner');
+      cklRenderAttachEditDD(cklWorking, 'cklAdminAttachWrapInnerDD');
+    }
+  };
+  document.getElementById('adminSvcPanelChecklist').addEventListener('click', function (e) {
+    var ddBtn = e.target.closest('.svcp-dd .pm-custom-dd-btn');
+    if (ddBtn) {
+      e.stopPropagation();
+      var ddMenu = ddBtn.nextElementSibling;
+      var ddWasOpen = ddBtn.classList.contains('open');
+      if (typeof closeAllCustomDropdowns === 'function') closeAllCustomDropdowns();
+      if (!ddWasOpen && ddMenu) {
+        ddBtn.classList.add('open');
+        ddMenu.classList.add('open');
+        cklPositionFloating(ddBtn, ddMenu);
+        cklEnsureFloatingCloseListeners();
+      }
+      return;
+    }
+    var ddItem = e.target.closest('.svcp-dd .cdd-item');
+    if (ddItem) {
+      var ddWrap = ddItem.closest('.svcp-dd');
+      var ddTrigger = ddWrap.querySelector('.pm-custom-dd-btn');
+      var ddValue = ddItem.getAttribute('data-svcp-dd-value');
+      var ddRole = ddTrigger.getAttribute('data-ddrole');
+      if (typeof closeAllCustomDropdowns === 'function') closeAllCustomDropdowns();
+      cklHandleDropdownSelect(ddRole, ddTrigger, ddValue, cklAdminCtx);
+      return;
+    }
+    cklMaybeCloseSectionMenu(e, cklAdminCtx);
+  });
+  document.getElementById('cklAdminNewBtn').addEventListener('click', cklAdminOpenNew);
+  cklWireTaskDrag('cklAdminSectionsList', function () { return cklWorking; }, cklAdminRenderSections);
+  document.getElementById('cklAdminBackBtn').addEventListener('click', cklAdminCloseEditView);
+  document.getElementById('cklAdminCancelBtn').addEventListener('click', cklAdminCloseEditView);
+  document.getElementById('cklAdminNameInput').addEventListener('input', function () { if (cklWorking) cklWorking.name = this.value; });
+  document.getElementById('cklAdminDescInput').addEventListener('input', function () { if (cklWorking) cklWorking.description = this.value; });
+  document.getElementById('cklAdminSaveBtn').addEventListener('click', function () {
+    if (!cklWorking) return;
+    if (cklActiveId) {
+      var idx = svcpChecklists.findIndex(function (c) { return c.id === cklActiveId; });
+      if (idx !== -1) svcpChecklists[idx] = cklClone(cklWorking);
+      showToast('Checklist updated.');
+    } else {
+      svcpChecklists.push(cklClone(cklWorking));
+      showToast('Checklist created.');
+    }
+    cklAdminCloseEditView();
+  });
+  document.getElementById('cklAdminDeleteBtn').addEventListener('click', function () {
+    if (!cklActiveId) return;
+    svcpChecklists = svcpChecklists.filter(function (c) { return c.id !== cklActiveId; });
+    showToast('Checklist deleted.');
+    cklAdminCloseEditView();
+  });
+
+  /* ---------- Admin Checklist tab: list card interactions (report / attach / edit / delete) ---------- */
+  document.getElementById('cklAdminCardGrid').addEventListener('click', function (e) {
+    var del = e.target.closest('[data-ckl-del]');
+    if (del) {
+      e.stopPropagation();
+      svcpChecklists = svcpChecklists.filter(function (c) { return c.id !== del.getAttribute('data-ckl-del'); });
+      cklAdminRenderList();
+      showToast('Checklist deleted.');
+      return;
+    }
+    var report = e.target.closest('[data-ckl-report]');
+    if (report) { e.stopPropagation(); cklOpenReportPreview(report.getAttribute('data-ckl-report')); return; }
+    var attachToggle = e.target.closest('[data-ckl-attach-toggle]');
+    if (attachToggle) {
+      e.stopPropagation();
+      var atid = attachToggle.getAttribute('data-ckl-attach-toggle');
+      cklAdminAttachOpen[atid] = !cklAdminAttachOpen[atid];
+      cklRerenderCard(atid);
+      return;
+    }
+    var attachRow = e.target.closest('[data-ckl-attach-row]');
+    if (attachRow) {
+      e.stopPropagation();
+      var arParts = attachRow.getAttribute('data-ckl-attach-row').split('|');
+      var c = cklChecklistById(arParts[0]);
+      if (c) {
+        if (!c.serviceIds) c.serviceIds = [];
+        var at = c.serviceIds.indexOf(arParts[1]);
+        if (at === -1) c.serviceIds.push(arParts[1]); else c.serviceIds.splice(at, 1);
+        cklAdminAttachOpen[c.id] = true; // stays open so the click registers visually
+        cklRerenderCard(c.id);
+      }
+      return;
+    }
+    var editBtn = e.target.closest('[data-ckl-edit]');
+    if (editBtn) { cklAdminOpenEdit(editBtn.getAttribute('data-ckl-edit')); return; }
+  });
+  document.getElementById('cklAdminCardGrid').addEventListener('input', function (e) {
+    var search = e.target.closest('[data-ckl-attach-search]');
+    if (search) {
+      var sid = search.getAttribute('data-ckl-attach-search');
+      cklAdminAttachSearch[sid] = search.value;
+      var list = document.querySelector('[data-ckl-card="' + sid + '"] .ckl-attach-list');
+      var c = cklChecklistById(sid);
+      if (list && c) {
+        var term = search.value.trim().toLowerCase();
+        var filtered = svcpServices.filter(function (s) { return !term || s.name.toLowerCase().indexOf(term) !== -1; });
+        list.innerHTML = filtered.length ? filtered.map(function (s) {
+          var on = (c.serviceIds || []).indexOf(s.id) !== -1;
+          return '<div class="ckl-attach-row' + (on ? ' on' : '') + '" data-ckl-attach-row="' + c.id + '|' + s.id + '"><span>' + supjrEscapeHtml(s.name) + '</span>' +
+            (on ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>' : '') + '</div>';
+        }).join('') : '<div class="ckl-attach-empty">No services match.</div>';
+      }
+    }
+  });
+
+  /* ---------- Admin Checklist tab: section / task authoring ---------- */
+  document.getElementById('cklAdminEditView').addEventListener('click', function (e) { cklHandleEditorClick(e, cklAdminCtx); });
+  document.getElementById('cklAdminEditView').addEventListener('input', function (e) { cklHandleEditorInput(e, cklAdminCtx); });
+
+  /* ---------- Report preview popup ---------- */
+  document.getElementById('cklReportCloseBtn').addEventListener('click', cklCloseReportPreview);
+  document.getElementById('cklReportOverlay').addEventListener('click', function (e) { if (e.target === this) cklCloseReportPreview(); });
+
+  /* ---------- PM checklist modal: close / save / delete ---------- */
+  var pmCklCtx = {
+    getWorking: function () { return pmCklWorking; },
+    openSections: pmCklOpenSections,
+    getOpenMenu: function () { return pmCklOpenSectionMenu; },
+    setOpenMenu: function (v) { pmCklOpenSectionMenu = v; },
+    renderChips: function () { cklRenderSectionChipsInto('pmCklSectionChips', pmCklWorking); },
+    renderSections: function () { pmCklRenderSections(); pmCklRenderMediaPermissions(); },
+    renderAttach: function () {}
+  };
+  document.getElementById('pmCklModalCloseBtn').addEventListener('click', pmCklCloseModal);
+  cklWireTaskDrag('pmCklSectionsList', function () { return pmCklWorking; }, pmCklRenderSections);
+  document.getElementById('pmCklCancelBtn').addEventListener('click', pmCklCloseModal);
+  document.getElementById('pmCklNameInput').addEventListener('input', function () {
+    if (!pmCklWorking) return;
+    pmCklWorking.name = this.value;
+    document.getElementById('pmCklModalTitle').textContent = this.value || ((cklServiceNames(pmCklWorking)[0] || 'Untitled') + ' checklist');
+  });
+  document.getElementById('pmCklDescInput').addEventListener('input', function () { if (pmCklWorking) pmCklWorking.description = this.value; });
+  document.getElementById('pmCklSaveBtn').addEventListener('click', function () {
+    if (!pmCklWorking || !pmsvcWorking) return;
+    var savedId;
+    if (pmCklEditingExistingId) {
+      var idx = svcpChecklists.findIndex(function (c) { return c.id === pmCklEditingExistingId; });
+      if (idx !== -1) svcpChecklists[idx] = cklClone(pmCklWorking);
+      savedId = pmCklEditingExistingId;
+    } else {
+      var toSave = cklClone(pmCklWorking);
+      svcpChecklists.push(toSave);
+      savedId = toSave.id;
+    }
+    pmsvcWorking.config.checklist.checklistId = savedId;
+    pmCklCloseModal();
+    pmsvcRenderSections();
+    pmsvcUpdateDirty();
+    showToast('Checklist saved.');
+  });
+  document.getElementById('pmCklDeleteBtn').addEventListener('click', function () {
+    if (!pmCklEditingExistingId) return;
+    svcpChecklists = svcpChecklists.filter(function (c) { return c.id !== pmCklEditingExistingId; });
+    if (pmsvcWorking && pmsvcWorking.config.checklist.checklistId === pmCklEditingExistingId) {
+      pmsvcWorking.config.checklist.checklistId = null;
+    }
+    pmCklCloseModal();
+    pmsvcRenderSections();
+    pmsvcUpdateDirty();
+    showToast('Checklist deleted.');
+  });
+
+  /* ---------- PM checklist modal: section / task authoring + dropdown delegate (mirrors Admin's) ---------- */
+  document.getElementById('pmCklModalOverlay').addEventListener('click', function (e) {
+    if (e.target === this) { pmCklCloseModal(); return; }
+
+    var ddBtn = e.target.closest('.svcp-dd .pm-custom-dd-btn');
+    if (ddBtn) {
+      e.stopPropagation();
+      var ddMenu = ddBtn.nextElementSibling;
+      var ddWasOpen = ddBtn.classList.contains('open');
+      if (typeof closeAllCustomDropdowns === 'function') closeAllCustomDropdowns();
+      if (!ddWasOpen && ddMenu) {
+        ddBtn.classList.add('open');
+        ddMenu.classList.add('open');
+        cklPositionFloating(ddBtn, ddMenu);
+        cklEnsureFloatingCloseListeners();
+      }
+      return;
+    }
+    var ddItem = e.target.closest('.svcp-dd .cdd-item');
+    if (ddItem) {
+      var ddWrap = ddItem.closest('.svcp-dd');
+      var ddTrigger = ddWrap.querySelector('.pm-custom-dd-btn');
+      var ddValue = ddItem.getAttribute('data-svcp-dd-value');
+      var ddRole = ddTrigger.getAttribute('data-ddrole');
+      if (typeof closeAllCustomDropdowns === 'function') closeAllCustomDropdowns();
+      cklHandleDropdownSelect(ddRole, ddTrigger, ddValue, pmCklCtx);
+      return;
+    }
+
+    var mpMaster = e.target.closest('[data-ckl-mp-master]');
+    if (mpMaster) { if (pmCklWorking) pmCklWorking.mediaPermissions.master = !pmCklWorking.mediaPermissions.master; pmCklRenderMediaPermissions(); return; }
+    var mpToggle = e.target.closest('[data-ckl-mp-toggle]');
+    if (mpToggle) {
+      var mpParts = mpToggle.getAttribute('data-ckl-mp-toggle').split('|');
+      if (pmCklWorking) pmCklWorking.mediaPermissions[mpParts[0]][mpParts[1]] = !pmCklWorking.mediaPermissions[mpParts[0]][mpParts[1]];
+      pmCklRenderMediaPermissions();
+      return;
+    }
+
+    if (cklHandleEditorClick(e, pmCklCtx)) return;
+    cklMaybeCloseSectionMenu(e, pmCklCtx);
+  });
+  document.getElementById('pmCklModalOverlay').addEventListener('input', function (e) { cklHandleEditorInput(e, pmCklCtx); });
 
   /* ---------- View state ---------- */
   var svcpSearchTerm = '';
@@ -43744,15 +44743,24 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   // Admin's own Access flow panel — same .pmsvc-access-panel shell the PM side uses, but
   // multi-select (any number of methods can apply to this service, same gating pattern as
   // Scheduling variables) and with no address/code/notes fields, since those describe a specific
-  // property, not something meaningful to set at the service level.
+  // property, not something meaningful to set at the service level. Each enabled chip also carries
+  // a star: clicking it (separate from the chip body, which toggles enabled/disabled) marks that
+  // method as the default a PM's own template starts pre-selected with.
+  var CKL_STAR_SVG = '<svg width="12" height="12" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
   function svcpAccessPanelHtml(kind, opts) {
     var selected = (svcpWorking.accessOptions && svcpWorking.accessOptions[kind]) || [];
+    var defaultVal = svcpWorking.accessOptions ? svcpWorking.accessOptions[kind + 'Default'] : '';
     return '<div class="pmsvc-access-panel">' +
       '<div class="pmsvc-access-panel-label">' + PMSVC_KEY_SVG + '<span>' + opts.label + '</span></div>' +
       '<div class="pmsvc-pill-row">' + opts.options.map(function (o) {
         var on = selected.indexOf(o) !== -1;
-        return '<button type="button" class="pmsvc-pill sm' + (on ? ' on' : '') + '" data-svcp-access="' + kind + '" data-value="' + supjrEscapeHtml(o) + '">' + (on ? PMSVC_CHECK_SVG : '') + supjrEscapeHtml(o) + '</button>';
+        var isDefault = on && defaultVal === o;
+        var lbl = kind === 'dropoff' ? (PMSVC_DROPOFF_SHORT_LABELS[o] || o) : o;
+        return '<button type="button" class="pmsvc-pill sm ckl-access-pill' + (on ? ' on' : '') + '" data-svcp-access="' + kind + '" data-value="' + supjrEscapeHtml(o) + '">' + (on ? PMSVC_CHECK_SVG : '') + supjrEscapeHtml(lbl) +
+          (on ? '<span class="ckl-access-star' + (isDefault ? ' on' : '') + '" data-svcp-access-default="' + kind + '|' + supjrEscapeHtml(o) + '" data-tooltip="' + (isDefault ? 'Default method' : 'Set as default') + '">' + CKL_STAR_SVG + '</span>' : '') +
+        '</button>';
       }).join('') + '</div>' +
+      '<div class="pmsvc-help" style="margin-top:8px;">Tick to enable a method for this service. Star one to set the default a PM\u2019s template starts with \u2014 PMs can still change it per template.</div>' +
     '</div>';
   }
   function renderSvcpAccess() {
@@ -44150,8 +45158,21 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   });
 
   document.getElementById('svcpAccessGrid').addEventListener('click', function (e) {
+    if (!svcpWorking) return;
+    var star = e.target.closest('[data-svcp-access-default]');
+    if (star) {
+      e.stopPropagation();
+      var starParts = star.getAttribute('data-svcp-access-default').split('|');
+      if (!svcpWorking.accessOptions) svcpWorking.accessOptions = {};
+      var curDefault = svcpWorking.accessOptions[starParts[0] + 'Default'];
+      // Clicking the current default's star clears it (no forced default); clicking another star
+      // makes that one the default instead.
+      svcpWorking.accessOptions[starParts[0] + 'Default'] = curDefault === starParts[1] ? '' : starParts[1];
+      renderSvcpAccess();
+      return;
+    }
     var pill = e.target.closest('[data-svcp-access]');
-    if (!pill || !svcpWorking) return;
+    if (!pill) return;
     var kind = pill.getAttribute('data-svcp-access');
     var val = pill.getAttribute('data-value');
     var arr = svcpWorking.accessOptions[kind];
@@ -44297,7 +45318,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
     if (role === 'filter-var') { svcpVarFilter = value; svcpRenderFilterDD('var', false); renderSvcpList(); return; }
     if (role === 'add-var') { svcpAddVarType = value; svcpRenderAddVarDD(); return; }
-    if (role === 'ckl-service') { if (cklWorking) { cklWorking.serviceId = value; cklAdminRenderServiceDD(); } return; }
 
     svcpApplyVarSelect(trigger.getAttribute('data-vid'), trigger.getAttribute('data-k'),
       trigger.getAttribute('data-i'), trigger.getAttribute('data-j'), value);
@@ -44348,452 +45368,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   });
 
   /* Back / discard / save */
-  /* ---------- Admin Checklist tab: navigation ---------- */
-  /* Same delegated dropdown-toggle logic already used for the Job Template tab's own custom
-     dropdowns (svcpDDShell/.pm-custom-dd-btn) - that handler is scoped to
-     #adminSvcPanelPricing specifically, a different container from this tab, so this checklist
-     editor's own service picker needs this exact same logic wired to its own container instead. */
-  document.getElementById('adminSvcPanelChecklist').addEventListener('click', function (e) {
-    var ddBtn = e.target.closest('.svcp-dd .pm-custom-dd-btn');
-    if (ddBtn) {
-      e.stopPropagation();
-      var ddMenu = ddBtn.nextElementSibling;
-      var ddWasOpen = ddBtn.classList.contains('open');
-      if (typeof closeAllCustomDropdowns === 'function') closeAllCustomDropdowns();
-      if (!ddWasOpen && ddMenu) {
-        ddBtn.classList.add('open');
-        ddMenu.classList.add('open');
-        var ddSpaceBelow = window.innerHeight - ddBtn.getBoundingClientRect().bottom;
-        ddMenu.classList.toggle('drop-up', ddSpaceBelow < Math.min(ddMenu.scrollHeight + 20, 280));
-      }
-      return;
-    }
-    var ddItem = e.target.closest('.svcp-dd .cdd-item');
-    if (ddItem) {
-      var ddWrap = ddItem.closest('.svcp-dd');
-      var ddTrigger = ddWrap.querySelector('.pm-custom-dd-btn');
-      var ddValue = ddItem.getAttribute('data-svcp-dd-value');
-      var ddRole = ddTrigger.getAttribute('data-ddrole');
-      if (typeof closeAllCustomDropdowns === 'function') closeAllCustomDropdowns();
-      if (ddRole === 'ckl-service' && cklWorking) {
-        cklWorking.serviceId = ddValue;
-        cklAdminRenderServiceDD();
-      }
-    }
-  });
-  document.getElementById('cklAdminNewBtn').addEventListener('click', cklAdminOpenNew);
-  cklWireTaskDrag('cklAdminSectionsList', function () { return cklWorking; }, cklAdminRenderSections);
-  document.getElementById('cklAdminBackBtn').addEventListener('click', cklAdminCloseEditView);
-  document.getElementById('cklAdminCancelBtn').addEventListener('click', cklAdminCloseEditView);
-  document.getElementById('cklAdminNameInput').addEventListener('input', function () {
-    if (cklWorking) cklWorking.name = this.value;
-  });
-  document.getElementById('cklAdminSaveBtn').addEventListener('click', function () {
-    if (!cklWorking) return;
-    if (cklActiveId) {
-      var idx = svcpChecklists.findIndex(function (c) { return c.id === cklActiveId; });
-      if (idx !== -1) svcpChecklists[idx] = cklClone(cklWorking);
-      showToast('Checklist updated.');
-    } else {
-      svcpChecklists.push(cklClone(cklWorking));
-      showToast('Checklist created.');
-    }
-    cklAdminCloseEditView();
-  });
-  document.getElementById('cklAdminDeleteBtn').addEventListener('click', function () {
-    if (!cklActiveId) return;
-    svcpChecklists = svcpChecklists.filter(function (c) { return c.id !== cklActiveId; });
-    showToast('Checklist deleted.');
-    cklAdminCloseEditView();
-  });
-
-  /* ---------- Admin Checklist tab: list card interactions ---------- */
-  document.getElementById('cklAdminCardGrid').addEventListener('click', function (e) {
-    var del = e.target.closest('[data-ckl-del]');
-    if (del) {
-      e.stopPropagation();
-      var did = del.getAttribute('data-ckl-del');
-      svcpChecklists = svcpChecklists.filter(function (c) { return c.id !== did; });
-      cklAdminRenderList();
-      showToast('Checklist deleted.');
-      return;
-    }
-    var activeToggle = e.target.closest('[data-ckl-active-toggle]');
-    if (activeToggle) {
-      var atId = activeToggle.getAttribute('data-ckl-active-toggle');
-      var atChecklist = cklChecklistById(atId);
-      if (atChecklist) atChecklist.active = !atChecklist.active;
-      cklAdminRenderList();
-      return;
-    }
-    var editBtn = e.target.closest('[data-ckl-edit]');
-    var openCard = e.target.closest('[data-ckl-open]');
-    var id = (editBtn && editBtn.getAttribute('data-ckl-edit')) || (openCard && openCard.getAttribute('data-ckl-open'));
-    if (id) cklAdminOpenEdit(id);
-  });
-
-  /* ---------- Admin Checklist tab: section / task authoring ---------- */
-  document.getElementById('cklAdminEditView').addEventListener('click', function (e) {
-    if (!cklWorking) return;
-
-    var removeCustom = e.target.closest('[data-ckl-remove-custom-section]');
-    if (removeCustom) {
-      var rName = removeCustom.getAttribute('data-ckl-remove-custom-section');
-      if (cklWorking.customSectionNames) cklWorking.customSectionNames = cklWorking.customSectionNames.filter(function (n) { return n !== rName; });
-      cklWorking.sections = cklWorking.sections.filter(function (s) { return s.name !== rName; });
-      cklAdminRenderSectionChips();
-      cklAdminRenderSections();
-      return;
-    }
-    var addSection = e.target.closest('[data-ckl-add-section]');
-    if (addSection) {
-      var secName = addSection.getAttribute('data-ckl-add-section');
-      var existingIdx = cklWorking.sections.findIndex(function (s) { return s.name === secName; });
-      if (existingIdx !== -1) {
-        cklWorking.sections.splice(existingIdx, 1);
-      } else {
-        var sec = cklMakeSection(secName, cklSampleTasks());
-        cklWorking.sections.push(sec);
-        cklOpenSections[sec.id] = true;
-      }
-      cklAdminRenderSectionChips();
-      cklAdminRenderSections();
-      return;
-    }
-    var addCustom = e.target.closest('#cklAdminCustomSectionBtn');
-    if (addCustom) {
-      cklAdminCustomInputOpen = true;
-      cklAdminRenderSectionChips();
-      var newInput = document.getElementById('cklAdminCustomSectionBtnInput');
-      if (newInput) newInput.focus();
-      return;
-    }
-    var customCancel = e.target.closest('[data-ckl-custom-cancel="cklAdminCustomSectionBtn"]');
-    if (customCancel) {
-      cklAdminCustomInputOpen = false;
-      cklAdminRenderSectionChips();
-      return;
-    }
-    var customConfirm = e.target.closest('[data-ckl-custom-confirm="cklAdminCustomSectionBtn"]');
-    if (customConfirm) {
-      var cInput = document.getElementById('cklAdminCustomSectionBtnInput');
-      var cName = cInput ? cInput.value.trim() : '';
-      if (cName) {
-        if (!cklWorking.customSectionNames) cklWorking.customSectionNames = [];
-        if (cklWorking.customSectionNames.indexOf(cName) === -1) cklWorking.customSectionNames.push(cName);
-      }
-      cklAdminCustomInputOpen = false;
-      cklAdminRenderSectionChips();
-      return;
-    }
-    var secToggle = e.target.closest('[data-ckl-sec-toggle]');
-    if (secToggle) {
-      var stid = secToggle.getAttribute('data-ckl-sec-toggle');
-      cklOpenSections[stid] = !cklOpenSections[stid];
-      cklAdminRenderSections();
-      return;
-    }
-    var secMove = e.target.closest('[data-ckl-sec-move]');
-    if (secMove) {
-      var smParts = secMove.getAttribute('data-ckl-sec-move').split('|');
-      var arr = cklWorking.sections;
-      var idx = arr.findIndex(function (s) { return s.id === smParts[1]; });
-      var target = smParts[0] === 'up' ? idx - 1 : idx + 1;
-      if (target >= 0 && target < arr.length) {
-        var tmp = arr[idx]; arr[idx] = arr[target]; arr[target] = tmp;
-        cklAdminRenderSections();
-      }
-      return;
-    }
-    var secDel = e.target.closest('[data-ckl-sec-delete]');
-    if (secDel) {
-      var sdid = secDel.getAttribute('data-ckl-sec-delete');
-      cklWorking.sections = cklWorking.sections.filter(function (s) { return s.id !== sdid; });
-      cklAdminRenderSectionChips();
-      cklAdminRenderSections();
-      return;
-    }
-    var taskAdd = e.target.closest('[data-ckl-task-add]');
-    if (taskAdd) {
-      var tsid = taskAdd.getAttribute('data-ckl-task-add');
-      var sec2 = cklWorking.sections.find(function (s) { return s.id === tsid; });
-      if (sec2) {
-        var newTask = cklMakeTask('', 'done', true);
-        sec2.tasks.push(newTask);
-        cklEditingTaskId = newTask.id;
-        cklAdminRenderSections();
-        setTimeout(function () {
-          var input = document.querySelector('[data-ckl-task-desc="' + tsid + '|' + newTask.id + '"]');
-          if (input) input.focus();
-        }, 30);
-      }
-      return;
-    }
-    var imgReq = e.target.closest('[data-ckl-task-imgreq]');
-    if (imgReq) {
-      var irParts = imgReq.getAttribute('data-ckl-task-imgreq').split('|');
-      var irSec = cklWorking.sections.find(function (s) { return s.id === irParts[0]; });
-      var irTask = irSec && irSec.tasks.find(function (t) { return t.id === irParts[1]; });
-      if (irTask) irTask.imageRequired = imgReq.checked;
-      return;
-    }
-    var taskDelete = e.target.closest('[data-ckl-task-delete]');
-    if (taskDelete) {
-      var tdParts = taskDelete.getAttribute('data-ckl-task-delete').split('|');
-      var dsec = cklWorking.sections.find(function (s) { return s.id === tdParts[0]; });
-      if (dsec) dsec.tasks = dsec.tasks.filter(function (t) { return t.id !== tdParts[1]; });
-      if (cklEditingTaskId === tdParts[1]) cklEditingTaskId = null;
-      cklAdminRenderSections();
-      return;
-    }
-    var taskOpen = e.target.closest('[data-ckl-task-open]');
-    if (taskOpen) {
-      cklEditingTaskId = taskOpen.getAttribute('data-ckl-task-open');
-      cklAdminRenderSections();
-      return;
-    }
-    var taskCollapse = e.target.closest('[data-ckl-task-collapse]');
-    if (taskCollapse) {
-      cklEditingTaskId = null;
-      cklAdminRenderSections();
-      return;
-    }
-    var taskResponse = e.target.closest('[data-ckl-task-response]');
-    if (taskResponse) {
-      var trParts = taskResponse.getAttribute('data-ckl-task-response').split('|');
-      var rsec = cklWorking.sections.find(function (s) { return s.id === trParts[0]; });
-      var rtask = rsec && rsec.tasks.find(function (t) { return t.id === trParts[1]; });
-      if (rtask) rtask.responseType = trParts[2];
-      cklAdminRenderSections();
-      return;
-    }
-    var taskOptional = e.target.closest('[data-ckl-task-optional]');
-    if (taskOptional) {
-      var toParts = taskOptional.getAttribute('data-ckl-task-optional').split('|');
-      var osec = cklWorking.sections.find(function (s) { return s.id === toParts[0]; });
-      var otask = osec && osec.tasks.find(function (t) { return t.id === toParts[1]; });
-      if (otask) otask.required = !otask.required;
-      cklAdminRenderSections();
-      return;
-    }
-  });
-  document.getElementById('cklAdminEditView').addEventListener('input', function (e) {
-    var taskDesc = e.target.closest('[data-ckl-task-desc]');
-    if (taskDesc && cklWorking) {
-      var tdp = taskDesc.getAttribute('data-ckl-task-desc').split('|');
-      var sec3 = cklWorking.sections.find(function (s) { return s.id === tdp[0]; });
-      var task3 = sec3 && sec3.tasks.find(function (t) { return t.id === tdp[1]; });
-      if (task3) task3.description = taskDesc.value;
-    }
-  });
-  document.getElementById('cklAdminEditView').addEventListener('keydown', function (e) {
-    if (e.key === 'Enter' && e.target.id === 'cklAdminCustomSectionBtnInput') {
-      e.preventDefault();
-      document.querySelector('[data-ckl-custom-confirm="cklAdminCustomSectionBtn"]').click();
-    }
-  });
-
-  /* ---------- PM checklist modal: close / save / delete ---------- */
-  document.getElementById('pmCklModalCloseBtn').addEventListener('click', pmCklCloseModal);
-  cklWireTaskDrag('pmCklSectionsList', function () { return pmCklWorking; }, pmCklRenderSections);
-  document.getElementById('pmCklCancelBtn').addEventListener('click', pmCklCloseModal);
-  document.getElementById('pmCklNameInput').addEventListener('input', function () {
-    if (!pmCklWorking) return;
-    pmCklWorking.name = this.value;
-    document.getElementById('pmCklModalTitle').textContent = this.value || (pmCklWorking.serviceId ? cklServiceName(pmCklWorking.serviceId) + ' checklist' : 'Untitled checklist');
-  });
-  document.getElementById('pmCklSaveBtn').addEventListener('click', function () {
-    if (!pmCklWorking || !pmsvcWorking) return;
-    var savedId;
-    if (pmCklEditingExistingId) {
-      var idx = svcpChecklists.findIndex(function (c) { return c.id === pmCklEditingExistingId; });
-      if (idx !== -1) svcpChecklists[idx] = cklClone(pmCklWorking);
-      savedId = pmCklEditingExistingId;
-    } else {
-      var toSave = cklClone(pmCklWorking);
-      svcpChecklists.push(toSave);
-      savedId = toSave.id;
-    }
-    pmsvcWorking.config.checklist.checklistId = savedId;
-    pmCklCloseModal();
-    pmsvcRenderSections();
-    pmsvcUpdateDirty();
-    showToast('Checklist saved.');
-  });
-  document.getElementById('pmCklDeleteBtn').addEventListener('click', function () {
-    if (!pmCklEditingExistingId) return;
-    svcpChecklists = svcpChecklists.filter(function (c) { return c.id !== pmCklEditingExistingId; });
-    if (pmsvcWorking && pmsvcWorking.config.checklist.checklistId === pmCklEditingExistingId) {
-      pmsvcWorking.config.checklist.checklistId = null;
-    }
-    pmCklCloseModal();
-    pmsvcRenderSections();
-    pmsvcUpdateDirty();
-    showToast('Checklist deleted.');
-  });
-
-  /* ---------- PM checklist modal: section / task authoring (mirrors Admin's own logic) ---------- */
-  document.getElementById('pmCklModalOverlay').addEventListener('click', function (e) {
-    if (e.target === this) { pmCklCloseModal(); return; }
-    if (!pmCklWorking) return;
-
-    var removeCustom = e.target.closest('[data-ckl-remove-custom-section]');
-    if (removeCustom) {
-      var rName = removeCustom.getAttribute('data-ckl-remove-custom-section');
-      if (pmCklWorking.customSectionNames) pmCklWorking.customSectionNames = pmCklWorking.customSectionNames.filter(function (n) { return n !== rName; });
-      pmCklWorking.sections = pmCklWorking.sections.filter(function (s) { return s.name !== rName; });
-      cklRenderSectionChipsInto('pmCklSectionChips', 'pmCklCustomSectionBtn', pmCklWorking, pmCklCustomInputOpen);
-      pmCklRenderSections();
-      return;
-    }
-    var addSection = e.target.closest('[data-ckl-add-section]');
-    if (addSection) {
-      var secName = addSection.getAttribute('data-ckl-add-section');
-      var existingIdx = pmCklWorking.sections.findIndex(function (s) { return s.name === secName; });
-      if (existingIdx !== -1) {
-        pmCklWorking.sections.splice(existingIdx, 1);
-      } else {
-        var sec = cklMakeSection(secName, cklSampleTasks());
-        pmCklWorking.sections.push(sec);
-        pmCklOpenSections[sec.id] = true;
-      }
-      cklRenderSectionChipsInto('pmCklSectionChips', 'pmCklCustomSectionBtn', pmCklWorking, pmCklCustomInputOpen);
-      pmCklRenderSections();
-      return;
-    }
-    var addCustom = e.target.closest('#pmCklCustomSectionBtn');
-    if (addCustom) {
-      pmCklCustomInputOpen = true;
-      cklRenderSectionChipsInto('pmCklSectionChips', 'pmCklCustomSectionBtn', pmCklWorking, pmCklCustomInputOpen);
-      var newInput = document.getElementById('pmCklCustomSectionBtnInput');
-      if (newInput) newInput.focus();
-      return;
-    }
-    var customCancel = e.target.closest('[data-ckl-custom-cancel="pmCklCustomSectionBtn"]');
-    if (customCancel) {
-      pmCklCustomInputOpen = false;
-      cklRenderSectionChipsInto('pmCklSectionChips', 'pmCklCustomSectionBtn', pmCklWorking, pmCklCustomInputOpen);
-      return;
-    }
-    var customConfirm = e.target.closest('[data-ckl-custom-confirm="pmCklCustomSectionBtn"]');
-    if (customConfirm) {
-      var cInput = document.getElementById('pmCklCustomSectionBtnInput');
-      var cName = cInput ? cInput.value.trim() : '';
-      if (cName) {
-        if (!pmCklWorking.customSectionNames) pmCklWorking.customSectionNames = [];
-        if (pmCklWorking.customSectionNames.indexOf(cName) === -1) pmCklWorking.customSectionNames.push(cName);
-      }
-      pmCklCustomInputOpen = false;
-      cklRenderSectionChipsInto('pmCklSectionChips', 'pmCklCustomSectionBtn', pmCklWorking, pmCklCustomInputOpen);
-      return;
-    }
-    var secToggle = e.target.closest('[data-ckl-sec-toggle]');
-    if (secToggle) {
-      var stid = secToggle.getAttribute('data-ckl-sec-toggle');
-      pmCklOpenSections[stid] = !pmCklOpenSections[stid];
-      pmCklRenderSections();
-      return;
-    }
-    var secMove = e.target.closest('[data-ckl-sec-move]');
-    if (secMove) {
-      var smParts = secMove.getAttribute('data-ckl-sec-move').split('|');
-      var arr = pmCklWorking.sections;
-      var idx = arr.findIndex(function (s) { return s.id === smParts[1]; });
-      var target = smParts[0] === 'up' ? idx - 1 : idx + 1;
-      if (target >= 0 && target < arr.length) {
-        var tmp = arr[idx]; arr[idx] = arr[target]; arr[target] = tmp;
-        pmCklRenderSections();
-      }
-      return;
-    }
-    var secDel = e.target.closest('[data-ckl-sec-delete]');
-    if (secDel) {
-      var sdid = secDel.getAttribute('data-ckl-sec-delete');
-      pmCklWorking.sections = pmCklWorking.sections.filter(function (s) { return s.id !== sdid; });
-      cklRenderSectionChipsInto('pmCklSectionChips', 'pmCklCustomSectionBtn', pmCklWorking, pmCklCustomInputOpen);
-      pmCklRenderSections();
-      return;
-    }
-    var taskAdd = e.target.closest('[data-ckl-task-add]');
-    if (taskAdd) {
-      var tsid = taskAdd.getAttribute('data-ckl-task-add');
-      var sec2 = pmCklWorking.sections.find(function (s) { return s.id === tsid; });
-      if (sec2) {
-        var newTask = cklMakeTask('', 'done', true);
-        sec2.tasks.push(newTask);
-        pmCklEditingTaskId = newTask.id;
-        pmCklRenderSections();
-        setTimeout(function () {
-          var input = document.querySelector('[data-ckl-task-desc="' + tsid + '|' + newTask.id + '"]');
-          if (input) input.focus();
-        }, 30);
-      }
-      return;
-    }
-    var imgReq = e.target.closest('[data-ckl-task-imgreq]');
-    if (imgReq) {
-      var irParts = imgReq.getAttribute('data-ckl-task-imgreq').split('|');
-      var irSec = pmCklWorking.sections.find(function (s) { return s.id === irParts[0]; });
-      var irTask = irSec && irSec.tasks.find(function (t) { return t.id === irParts[1]; });
-      if (irTask) irTask.imageRequired = imgReq.checked;
-      return;
-    }
-    var taskDelete = e.target.closest('[data-ckl-task-delete]');
-    if (taskDelete) {
-      var tdParts = taskDelete.getAttribute('data-ckl-task-delete').split('|');
-      var dsec = pmCklWorking.sections.find(function (s) { return s.id === tdParts[0]; });
-      if (dsec) dsec.tasks = dsec.tasks.filter(function (t) { return t.id !== tdParts[1]; });
-      if (pmCklEditingTaskId === tdParts[1]) pmCklEditingTaskId = null;
-      pmCklRenderSections();
-      return;
-    }
-    var taskOpen = e.target.closest('[data-ckl-task-open]');
-    if (taskOpen) {
-      pmCklEditingTaskId = taskOpen.getAttribute('data-ckl-task-open');
-      pmCklRenderSections();
-      return;
-    }
-    var taskCollapse = e.target.closest('[data-ckl-task-collapse]');
-    if (taskCollapse) {
-      pmCklEditingTaskId = null;
-      pmCklRenderSections();
-      return;
-    }
-    var taskResponse = e.target.closest('[data-ckl-task-response]');
-    if (taskResponse) {
-      var trParts = taskResponse.getAttribute('data-ckl-task-response').split('|');
-      var rsec = pmCklWorking.sections.find(function (s) { return s.id === trParts[0]; });
-      var rtask = rsec && rsec.tasks.find(function (t) { return t.id === trParts[1]; });
-      if (rtask) rtask.responseType = trParts[2];
-      pmCklRenderSections();
-      return;
-    }
-    var taskOptional = e.target.closest('[data-ckl-task-optional]');
-    if (taskOptional) {
-      var toParts = taskOptional.getAttribute('data-ckl-task-optional').split('|');
-      var osec = pmCklWorking.sections.find(function (s) { return s.id === toParts[0]; });
-      var otask = osec && osec.tasks.find(function (t) { return t.id === toParts[1]; });
-      if (otask) otask.required = !otask.required;
-      pmCklRenderSections();
-      return;
-    }
-  });
-  document.getElementById('pmCklModalOverlay').addEventListener('input', function (e) {
-    var taskDesc = e.target.closest('[data-ckl-task-desc]');
-    if (taskDesc && pmCklWorking) {
-      var tdp = taskDesc.getAttribute('data-ckl-task-desc').split('|');
-      var sec3 = pmCklWorking.sections.find(function (s) { return s.id === tdp[0]; });
-      var task3 = sec3 && sec3.tasks.find(function (t) { return t.id === tdp[1]; });
-      if (task3) task3.description = taskDesc.value;
-    }
-  });
-  document.getElementById('pmCklModalOverlay').addEventListener('keydown', function (e) {
-    if (e.key === 'Enter' && e.target.id === 'pmCklCustomSectionBtnInput') {
-      e.preventDefault();
-      document.querySelector('[data-ckl-custom-confirm="pmCklCustomSectionBtn"]').click();
-    }
-  });
-
   document.getElementById('svcpBackBtn').addEventListener('click', closeSvcpDetail);
   document.getElementById('svcpDiscardBtn').addEventListener('click', function () {
     if (this.disabled) return;
@@ -45492,8 +46066,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   }
 
   var teamMembers = [
-    teamMakeMember({ name: 'Amara Osei', email: 'amara.osei@keylr.com', roleId: 'role_owner', lastActive: 0, photo: 'https://i.pravatar.cc/150?img=47' }),
-    teamMakeMember({ name: 'Priya Nair', email: 'priya.nair@keylr.com', roleId: 'role_admin', lastActive: 0, photo: 'https://i.pravatar.cc/150?img=32' }),
+    teamMakeMember({ name: 'Amara Osei', email: 'amara.osei@keylr.com', roleId: 'role_ops', lastActive: 0, photo: 'https://i.pravatar.cc/150?img=47' }),
+    teamMakeMember({ name: 'Priya Nair', email: 'priya.nair@keylr.com', roleId: 'role_compliance', lastActive: 0, photo: 'https://i.pravatar.cc/150?img=32' }),
     teamMakeMember({ name: 'Tom Blake', email: 'tom.blake@keylr.com', roleId: 'role_ops', lastActive: 1 }),
     /* One seeded exception so the override path is visible without hunting for it. */
     teamMakeMember({ name: 'Sofia Marchetti', email: 'sofia.marchetti@keylr.com', roleId: 'role_compliance', lastActive: 2,
@@ -46166,29 +46740,72 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     // already used for these types' own price display elsewhere) is the supplier amount.
     return pmsvcNum(pmsvcHeadlineRate(pmsvcWorking));
   }
+  /* Schedule uplifts broken out per day, each showing only its active windows inline, with one
+     combined total on the right. OOH/Emergency stay as their own simple rows. None of these count
+     toward Supplier Service, Keylr's fee, or VAT — they're extras, added on top of the core job
+     price rather than folded into the amount those percentages are calculated against. */
+  function pmsvcScheduleUpliftBreakdown(u) {
+    var lines = [], total = 0;
+    if (!u || !u.on) return { lines: lines, total: total };
+    PMSVC_UPLIFT_DAYS.forEach(function (d) {
+      var parts = [];
+      PMSVC_UPLIFT_WINDOWS.forEach(function (w) {
+        var cell = u.cells[d.id + '|' + w.id];
+        if (cell && cell.on) {
+          var amt = pmsvcNum(cell.amount);
+          parts.push(w.label + ': ' + pmsvcMoney2(amt));
+          total += amt;
+        }
+      });
+      if (parts.length) lines.push(d.label + ' (' + parts.join(', ') + ')');
+    });
+    return { lines: lines, total: total };
+  }
   function pmsvcLivePricingPreviewInner(v) {
     if (!v) return '';
-    var supplierAmount = pmsvcSupplierServiceAmount(v);
-    if (!supplierAmount || supplierAmount <= 0) return '<div class="pmsvc-price-preview-empty">Enter your quantities and rates above to see the price breakdown.</div>';
-    var supplierVat = supplierAmount * 0.20;
-    var feePercent = pmsvcKeylrFeePercent(supplierAmount);
-    var keylrFee = supplierAmount * (feePercent / 100);
-    var keylrVat = keylrFee * 0.20;
-    var total = supplierAmount + supplierVat + keylrFee + keylrVat;
+    var supplierService = pmsvcSupplierServiceAmount(v);
+    if (!supplierService || supplierService <= 0) return '<div class="pmsvc-price-preview-empty">Enter your quantities and rates above to see the price breakdown.</div>';
 
-    return '<div class="pmsvc-price-preview-head">Price summary</div>' +
-      '<div class="pmsvc-price-preview-row"><span>Supplier service</span><span>' + pmsvcMoney2(supplierAmount) + '</span></div>' +
+    var u = pmsvcWorking.config.pricing.uplifts;
+    var sched = pmsvcScheduleUpliftBreakdown(u);
+    var oohOn = !!(u && u.on && u.ooh && u.ooh.on);
+    var oohAmt = oohOn ? pmsvcNum(u.ooh.amount) : 0;
+    var emergOn = !!(u && u.on && u.emergency && u.emergency.on);
+    var emergAmt = emergOn ? pmsvcNum(u.emergency.amount) : 0;
+    var extrasTotal = sched.total + oohAmt + emergAmt;
+
+    // Fee/VAT apply to Supplier Service only — uplifts are extras added on top, not fee-bearing.
+    var supplierVat = supplierService * 0.20;
+    var feePercent = 15;
+    var keylrFee = supplierService * (feePercent / 100);
+    var keylrVat = keylrFee * 0.20;
+    var total = supplierService + supplierVat + keylrFee + keylrVat + extrasTotal;
+
+    var extrasHtml = '';
+    if (sched.lines.length) {
+      extrasHtml += '<div class="pmsvc-price-preview-sched">' +
+        '<div class="pmsvc-price-preview-sched-head"><span>Schedule uplifts</span><span>' + pmsvcMoney2(sched.total) + '</span></div>' +
+        sched.lines.map(function (l) { return '<div class="pmsvc-price-preview-sched-line">' + pmsvcEsc(l) + '</div>'; }).join('') +
+      '</div>';
+    }
+    if (oohOn) extrasHtml += '<div class="pmsvc-price-preview-row uplift"><span>Out-of-hours uplift</span><span>' + pmsvcMoney2(oohAmt) + '</span></div>';
+    if (emergOn) extrasHtml += '<div class="pmsvc-price-preview-row uplift"><span>Emergency uplift</span><span>' + pmsvcMoney2(emergAmt) + '</span></div>';
+
+    return '<div class="pmsvc-price-preview-head"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M13 2L3 14h7l-1 8 11-14h-7l1-6z"/></svg>Live Price Preview</div>' +
+      '<div class="pmsvc-price-preview-row"><span>Supplier service</span><span>' + pmsvcMoney2(supplierService) + '</span></div>' +
+      extrasHtml +
       '<div class="pmsvc-price-preview-row"><span>Supplier VAT (20%)</span><span>' + pmsvcMoney2(supplierVat) + '</span></div>' +
-      '<div class="pmsvc-price-preview-row"><span>Keylr fee (' + feePercent + '%)</span><span>' + pmsvcMoney2(keylrFee) + '</span></div>' +
+      '<div class="pmsvc-price-preview-row"><span>Keylr fee (' + feePercent + '%)<span class="pmsvc-price-preview-fee-hint">Applied on supplier service</span></span><span>' + pmsvcMoney2(keylrFee) + '</span></div>' +
       '<div class="pmsvc-price-preview-row"><span>VAT on Keylr fee (20%)</span><span>' + pmsvcMoney2(keylrVat) + '</span></div>' +
       '<div class="pmsvc-price-preview-total"><span>Estimated total</span><span>' + pmsvcMoney2(total) + '</span></div>' +
-      '<div class="pmsvc-price-preview-note">VAT is applied based on the supplier\u2019s VAT registration status. Keylr fees are based on the applicable pricing tier.</div>';
+      '<div class="pmsvc-price-preview-note">Supplier VAT reflects their registration from onboarding. Schedule, out-of-hours and emergency uplifts are extras added on top \u2014 Keylr\u2019s fee is calculated on the supplier service amount only.</div>';
   }
   function pmsvcLivePricingPreviewHtml(v) {
     if (!v) return '';
     return '<div class="pmsvc-price-preview" id="pmsvcPricePreview">' + pmsvcLivePricingPreviewInner(v) + '</div>';
   }
   function pmsvcClone(o) { return JSON.parse(JSON.stringify(o)); }
+
 
   /* ---------- Store ---------- */
   var pmsvcUid = 0;
@@ -46215,7 +46832,10 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         varId: '',
         rates: {},     // £ figures *and* the quantities the base covers
         preview: {},
-        uplifts: { on: false, cells: {}, ooh: { on: false, amount: '' }, emergency: { on: false, amount: '' } }
+        uplifts: { on: false, cells: {}, ooh: { on: false, amount: '' }, emergency: { on: false, amount: '' } },
+        // Live Price Preview only includes Supplier VAT once this is explicitly confirmed —
+        // defaults off since a template isn't yet bound to one specific supplier.
+        vatVerified: false
       },
       routing: { channel: 'marketplace', collectionMethod: 'fcfs', quotesToCollect: 3 },
       scheduling: { schedulingTypes: [] },
@@ -46423,17 +47043,28 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var sla = t.config.slaPolicy;
     return 'Free ' + slaHoursOf(sla.freeCancellation) + 'h \u00b7 Partial ' + sla.partialChargePercent + '% \u00b7 Full ' + slaHoursOf(sla.fullCharge) + 'h';
   }
-  // Mirrors the same defensive pattern as pmsvcSelectedSchedTypes: a pickup/drop-off method only
-  // counts as chosen if the linked service still has it enabled today.
+  // PM now chooses from the full canonical method list — no more gating to whichever subset
+  // admin enabled, per explicit instruction. Any stored value is valid as long as it's a real
+  // method from the shared PM Properties list.
   function pmsvcSelectedAccessMethod(t, kind) {
-    var s = pmsvcServiceFor(t);
     var chosen = t.config.access[kind];
-    var enabled = s ? ((s.accessOptions && s.accessOptions[kind]) || []) : [];
-    return enabled.indexOf(chosen) !== -1 ? chosen : null;
+    return PMPROP_ACCESS_METHODS.some(function (m) { return m.value === chosen; }) ? chosen : null;
+  }
+  // Admin still sets one default per kind (their star, on the Job Template tab); a PM's template
+  // shows that default pre-selected until the PM stars a different method for their own template —
+  // this is what the panel and the summary line both display, not the raw (possibly still-empty)
+  // stored choice.
+  function pmsvcEffectiveAccessMethod(t, kind) {
+    var own = pmsvcSelectedAccessMethod(t, kind);
+    if (own) return own;
+    var s = pmsvcServiceFor(t);
+    var adminDefault = s && s.accessOptions ? s.accessOptions[kind + 'Default'] : '';
+    if (adminDefault) return adminDefault;
+    return PMPROP_ACCESS_METHODS[0] ? PMPROP_ACCESS_METHODS[0].value : null;
   }
   function pmsvcAccessSummary(t) {
-    var pickup = pmsvcSelectedAccessMethod(t, 'pickup') || 'Not set';
-    var dropoff = pmsvcSelectedAccessMethod(t, 'dropoff') || 'Not set';
+    var pickup = pmsvcEffectiveAccessMethod(t, 'pickup') || 'Not set';
+    var dropoff = pmsvcEffectiveAccessMethod(t, 'dropoff') || 'Not set';
     return 'Pick up: ' + pickup + ' \u00b7 Drop off: ' + dropoff;
   }
   function pmsvcProofSummary(t) {
@@ -46446,7 +47077,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var c = t.config.checklist;
     if (c.checklistId) {
       var attached = cklChecklistById(c.checklistId);
-      if (attached) return attached.name || (cklServiceName(attached.serviceId) + ' checklist');
+      if (attached) return attached.name || ((cklServiceNames(attached)[0] || 'Untitled') + ' checklist');
     }
     if (c.mode === 'template') return 'Started from a saved template';
     if (c.mode === 'custom') return 'Custom checklist';
@@ -46557,8 +47188,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M13 2L3 14h7l-1 8 11-14h-7l1-6z"/></svg>Book</button>' +
       '<button type="button" class="svcp-icon-btn" data-pmsvc-edit="' + t.id + '" data-tooltip="Configure template" aria-label="Configure template"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>' +
       '<button type="button" class="svcp-icon-btn" data-pmsvc-dup="' + t.id + '" data-tooltip="Duplicate as your own" aria-label="Duplicate template"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>' +
-      '<button type="button" class="svcp-icon-btn danger" data-pmsvc-del="' + t.id + '"' + (locked ? ' disabled' : '') +
-        ' data-tooltip="' + (locked ? 'Keylr templates can\u2019t be deleted' : 'Delete template') + '" aria-label="Delete template"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>';
+      (locked ? '' : '<button type="button" class="svcp-icon-btn danger" data-pmsvc-del="' + t.id + '" data-tooltip="Delete template" aria-label="Delete template"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>');
   }
 
   function pmsvcAddonCardHtml(key, opts) {
@@ -47527,7 +48157,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var customControl = pmsvcCommitmentInputOpen
       ? '<div class="ckl-custom-section-input-row">' +
           '<input type="text" class="field-input" id="pmsvcCommitmentInput" placeholder="Add a commitment">' +
-          '<button type="button" class="btn btn-primary" data-pmsvc-commitment-confirm>Add</button>' +
+          '<button type="button" class="btn btn-keylr-light" data-pmsvc-commitment-confirm>Add</button>' +
           '<button type="button" class="btn btn-secondary-light" data-pmsvc-commitment-cancel>Cancel</button>' +
         '</div>'
       : '<button type="button" class="ckl-add-custom-section-btn" id="pmsvcAddCommitmentBtn">+ Add</button>';
@@ -47588,26 +48218,27 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     }
     return '';
   }
+  // Shortened display labels for "Drop off to" chips only, per explicit instruction — the
+  // underlying value strings are untouched (still 'Agent Provides Access' etc.) since Properties
+  // module and everywhere else key off those exact strings; this is a display-only override.
+  var PMSVC_DROPOFF_SHORT_LABELS = {
+    'Agent Provides Access': 'Agent',
+    'Landlord Provides Access': 'Landlord',
+    'Tenant Provides Access': 'Tenant',
+    'Keys at Agency / Office': 'Agency/Office',
+    'Keys at KeyNest': 'Keynest'
+  };
   function pmsvcAccessPanelHtml(kind, opts) {
-    var a = pmsvcWorking.config.access;
-    var value = a[kind];
-    var svc = pmsvcServiceFor(pmsvcWorking);
-    var enabled = svc ? ((svc.accessOptions && svc.accessOptions[kind]) || []) : [];
-
-    var interactiveHtml;
-    if (!svc) {
-      interactiveHtml = '<div class="pmsvc-fromadmin">' + PMSVC_INFO_SVG +
-        '<div>Link a Keylr service in Pricing above to see which ' + opts.label.toLowerCase() + ' methods it supports.</div></div>';
-    } else if (!enabled.length) {
-      interactiveHtml = '<div class="pmsvc-fromadmin">' + PMSVC_INFO_SVG +
-        '<div>Keylr hasn\u2019t enabled any ' + opts.label.toLowerCase() + ' methods for <b>' + pmsvcEsc(svc.name) + '</b> yet.</div></div>';
-    } else {
-      var chosenMethod = PMPROP_ACCESS_METHODS.find(function (m) { return m.value === value; });
-      interactiveHtml = '<div class="pmsvc-pill-row">' + enabled.map(function (o) {
-        return '<button type="button" class="pmsvc-pill sm' + (value === o ? ' on' : '') + '" data-pmsvc-access="' + kind + '" data-value="' + pmsvcEsc(o) + '">' + pmsvcEsc(o) + '</button>';
-      }).join('') + '</div>' +
-        (chosenMethod ? pmsvcAccessConditionalFieldsHtml(kind, chosenMethod) : '<div class="pmsvc-help" style="margin-top:10px;">Pick a method above to enter its access details.</div>');
-    }
+    var current = pmsvcEffectiveAccessMethod(pmsvcWorking, kind);
+    var interactiveHtml = '<div class="pmsvc-pill-row">' + PMPROP_ACCESS_METHODS.map(function (m) {
+      var o = m.value;
+      var lbl = kind === 'dropoff' ? (PMSVC_DROPOFF_SHORT_LABELS[o] || o) : o;
+      var isCurrent = current === o;
+      return '<button type="button" class="pmsvc-pill sm ckl-access-pill" data-pmsvc-access="' + kind + '" data-value="' + pmsvcEsc(o) + '">' + pmsvcEsc(lbl) +
+        '<span class="ckl-access-star' + (isCurrent ? ' on' : '') + '" data-tooltip="' + (isCurrent ? 'Default method' : 'Make Default') + '">' + CKL_STAR_SVG + '</span>' +
+      '</button>';
+    }).join('') + '</div>' +
+      '<div class="pmsvc-help" style="margin-top:8px;">Star one to set it as your default for this template.</div>';
 
     return '<div class="pmsvc-access-panel">' +
       '<div class="pmsvc-access-panel-label">' + PMSVC_KEY_SVG + '<span>' + opts.label + '</span></div>' +
@@ -47677,16 +48308,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     { id: 'template', name: 'Start from template', desc: 'Pick a saved checklist and adapt it' },
     { id: 'custom', name: 'Build custom', desc: 'Author tasks for this service' }
   ];
-  function pmsvcChecklistPickerCardHtml(c, isAttached) {
-    var taskCount = c.sections.reduce(function (n, s) { return n + s.tasks.length; }, 0);
-    var title = c.name || (cklServiceName(c.serviceId) + ' checklist');
-    var actionLabel = c.source === 'admin' ? 'View' : 'Edit';
-    return '<div class="ckl-picker-card' + (isAttached ? ' on' : '') + '" data-pmsvc-ckl-select="' + c.id + '" role="radio" aria-checked="' + (isAttached ? 'true' : 'false') + '" tabindex="0">' +
-      '<div class="ckl-picker-card-name">' + supjrEscapeHtml(title) + '</div>' +
-      '<div class="ckl-picker-card-meta">' + c.sections.length + ' section' + (c.sections.length === 1 ? '' : 's') + ' \u00b7 ' + taskCount + ' task' + (taskCount === 1 ? '' : 's') + '</div>' +
-      '<button type="button" class="ckl-picker-card-view" data-pmsvc-ckl-view="' + c.id + '">' + actionLabel + '</button>' +
-    '</div>';
-  }
   function pmsvcChecklistBody() {
     var cfg = pmsvcWorking.config.checklist;
     var mode = cfg.mode;
@@ -47719,80 +48340,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     }
 
     return banner + modeCards + pickerHtml;
-  }
-
-  // PM's own modal state - deliberately separate from cklWorking/cklOpenSections/cklEditingTaskId
-  // (Admin's on-page editor) so the two can never collide, even though both ultimately render
-  // through the same shared cklSectionCardHtml/cklTaskRowHtml functions.
-  var pmCklWorking = null;
-  var pmCklOpenSections = {};
-  var pmCklEditingTaskId = null;
-  var pmCklEditingExistingId = null; // id of the PM's own checklist being edited, or null if new/adapting
-  var pmCklCustomInputOpen = false;
-
-  function pmCklRenderModal() {
-    document.getElementById('pmCklNameInput').value = pmCklWorking.name;
-    cklRenderSectionChipsInto('pmCklSectionChips', 'pmCklCustomSectionBtn', pmCklWorking, pmCklCustomInputOpen);
-    pmCklRenderSections();
-  }
-  function pmCklRenderSections() {
-    var wrap = document.getElementById('pmCklSectionsList');
-    if (!wrap || !pmCklWorking) return;
-    wrap.innerHTML = pmCklWorking.sections.map(function (s, i) { return cklSectionCardHtml(s, i, pmCklWorking.sections.length, pmCklOpenSections, pmCklEditingTaskId); }).join('');
-  }
-  function pmCklOpenModal() {
-    document.getElementById('pmCklModalOverlay').classList.add('open');
-  }
-  function pmCklCloseModal() {
-    document.getElementById('pmCklModalOverlay').classList.remove('open');
-    pmCklWorking = null;
-    pmCklEditingExistingId = null;
-  }
-  // "Start from template": always opens a fresh, independent clone of the admin's checklist -
-  // saving always produces a new PM-owned entry, never edits the shared admin original.
-  function pmCklOpenAdapt(adminChecklistId) {
-    var src = cklChecklistById(adminChecklistId);
-    if (!src) return;
-    var prefillName = src.name || (cklServiceName(src.serviceId) + ' checklist');
-    pmCklWorking = cklMakeChecklist({ source: 'pm', name: prefillName, serviceId: src.serviceId, sections: cklClone(src.sections) });
-    pmCklEditingExistingId = null;
-    pmCklOpenSections = {};
-    pmCklEditingTaskId = null;
-    document.getElementById('pmCklModalTitle').textContent = prefillName;
-    document.getElementById('pmCklModalSub').textContent = 'From Keylr\u2019s ' + prefillName + ' \u2014 edit freely, this becomes your own copy.';
-    document.getElementById('pmCklDeleteWrap').style.display = 'none';
-    document.getElementById('pmCklSaveBtn').textContent = 'Update Checklist';
-    pmCklRenderModal();
-    pmCklOpenModal();
-  }
-  // "Build custom" -> an existing PM checklist card: edit that exact entry in place.
-  function pmCklOpenEditOwn(id) {
-    var src = cklChecklistById(id);
-    if (!src) return;
-    pmCklWorking = cklClone(src);
-    if (!pmCklWorking.name) pmCklWorking.name = cklServiceName(src.serviceId) + ' checklist';
-    pmCklEditingExistingId = id;
-    pmCklOpenSections = {};
-    pmCklEditingTaskId = null;
-    document.getElementById('pmCklModalTitle').textContent = pmCklWorking.name;
-    document.getElementById('pmCklModalSub').textContent = 'Update this checklist\u2019s sections and tasks.';
-    document.getElementById('pmCklDeleteWrap').style.display = '';
-    document.getElementById('pmCklSaveBtn').textContent = 'Update Checklist';
-    pmCklRenderModal();
-    pmCklOpenModal();
-  }
-  // "Build custom" -> "+ New checklist": a blank one.
-  function pmCklOpenNew() {
-    pmCklWorking = cklMakeChecklist({ source: 'pm' });
-    pmCklEditingExistingId = null;
-    pmCklOpenSections = {};
-    pmCklEditingTaskId = null;
-    document.getElementById('pmCklModalTitle').textContent = 'New Checklist';
-    document.getElementById('pmCklModalSub').textContent = 'Build your own checklist for this template.';
-    document.getElementById('pmCklDeleteWrap').style.display = 'none';
-    document.getElementById('pmCklSaveBtn').textContent = 'Save Checklist';
-    pmCklRenderModal();
-    pmCklOpenModal();
   }
 
 
