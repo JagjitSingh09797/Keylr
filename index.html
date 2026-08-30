@@ -154,6 +154,12 @@
     --btn-grad-start: #22447f;
     --btn-grad-end: #0d1b3d;
   }
+  /* The Report preview modal (opened from a checklist card, either Admin's or PM's) sits outside
+     both dashboards' DOM for the same reason - same override needed here too. */
+  #cklReportOverlay {
+    --btn-grad-start: #22447f;
+    --btn-grad-end: #0d1b3d;
+  }
   /* Login/Signup modals, the Admin login form, and the OTP popup now share the same gradient as the
      landing page's Sign Up button, for consistency across the platform. */
   #signupOverlay, #loginOverlay, #adminLoginApp, #otpPopupOverlay, #adminForgotApp {
@@ -167,6 +173,10 @@
     --btn-grad-end: #0d1b3d;
   }
   .btn-primary:active { transform: translateY(0); filter: brightness(0.98); }
+  /* Explicit rather than relying purely on the inherited --btn-grad-* cascade (which already
+     resolves correctly here via #adminDashboard's own override) — pins this specific button to
+     Keylr's dashboard navy gradient regardless of any future change further up that cascade. */
+  #svcpAddVarBtn { background: linear-gradient(135deg, #22447f 0%, #0d1b3d 100%); }
   .btn-primary:focus-visible { outline: 2px solid var(--accent-blue); outline-offset: 2px; }
   .btn-primary:disabled { background: #cbd5e1; color: #94a3b8; cursor: not-allowed; box-shadow: none; transform: none; filter: none; }
   .btn-primary:disabled:hover { filter: none; box-shadow: none; transform: none; }
@@ -6695,6 +6705,10 @@
   .svcp-back svg { transition: transform 150ms ease-out; }
 
   .svcp-panel { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 20px 22px; margin-bottom: 16px; }
+  /* Pricing Variables / Quote content shown inside the same Pricing approach card as the mode
+     tiles, rather than as its own separate card below - the top border stands in for the visual
+     break a card boundary would otherwise provide. */
+  .svcp-approach-sub { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-subtle); }
   .svcp-panel-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
   .svcp-detail-title { font-size: 21px; font-weight: 800; color: var(--text-heading); line-height: 1.25; }
   .svcp-detail-desc { font-size: 13px; color: var(--text-body-muted); line-height: 1.55; margin-top: 5px; max-width: 620px; }
@@ -6824,14 +6838,18 @@
   .svcp-sched-desc { font-size: 12px; color: var(--text-body-muted); margin-top: 3px; line-height: 1.45; display: block; }
 
   /* SLA Policy cards — the same horizontal three-column grid on both the admin panel and the PM's
-     own editable copy (.svcp-sla-grid), so the two sides look identical. All three card headings
-     and every selectable pill use Keylr's own accent blue — Partial Charge has no pills of its
-     own (its window is computed from the other two), so only Free Cancellation and Full Charge
-     need a selected-pill color, and both share this same blue. */
+     own editable copy (.svcp-sla-grid), so the two sides look identical. Card background/border
+     are a uniform neutral grey per explicit instruction; the label text itself stays colour-coded
+     (red/amber/green for Full/Partial/Free) so the severity still reads at a glance without the
+     cards themselves competing for attention. */
   .svcp-sla-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
   .svcp-sla-card { border: 1px solid var(--border-subtle); border-radius: 12px; padding: 15px 16px; background: #fff; }
   .svcp-sla-card-label { display: flex; align-items: center; gap: 7px; font-size: 11.5px; font-weight: 800; letter-spacing: 0.02em; margin-bottom: 6px; color: var(--accent-blue); }
   .svcp-sla-card-desc { font-size: 13.5px; font-weight: 700; color: var(--text-heading); line-height: 1.4; }
+  .svcp-sla-card.full, .svcp-sla-card.partial, .svcp-sla-card.free { border-color: #efefef; background: #f9fafb; }
+  .svcp-sla-card.full .svcp-sla-card-label { color: #b91c1c; }
+  .svcp-sla-card.partial .svcp-sla-card-label { color: #92620a; }
+  .svcp-sla-card.free .svcp-sla-card-label { color: #1a7a3e; }
   .svcp-sla-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 13px; }
   .svcp-sla-pill {
     min-width: 44px; padding: 7px 11px; border-radius: 9px; border: 1px solid var(--border-subtle); background: #fff;
@@ -6839,8 +6857,11 @@
     transition: background-color 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out;
   }
   .svcp-sla-pill:hover { border-color: #c9d8ee; }
-  .svcp-sla-card.free .svcp-sla-pill.on, .svcp-sla-card.full .svcp-sla-pill.on { background: var(--accent-blue); border-color: var(--accent-blue); color: #fff; }
+  .svcp-sla-pill.on { background: #000000; border-color: #000000; color: #fff; }
   .svcp-sla-hint { font-size: 11.5px; color: var(--text-body-muted); margin-top: 10px; line-height: 1.4; }
+  /* Highlights the section header itself (icon + collapsed summary) so it reads as "the
+     cancellation policy" at a glance even before it's expanded. */
+  .pmsvc-sec[data-pmsvc-sec="sla"] .pmsvc-sec-icon { background: #fef3c7; border-color: #f6dfa8; color: #92620a; }
   @media (max-width: 900px) {
     .svcp-sla-grid { grid-template-columns: 1fr; }
   }
@@ -7236,6 +7257,9 @@
     cursor: pointer; box-shadow: 0 1px 4px rgba(16,24,40,0.25);
   }
   .pmsvc-slider::-moz-range-track { height: 6px; border-radius: 999px; background: transparent; }
+  /* Partial Charge's slider thumb border matches its amber track fill. */
+  .pmsvc-slider.amber::-webkit-slider-thumb { border-color: #d97706; }
+  .pmsvc-slider.amber::-moz-range-thumb { border-color: #d97706; }
   .pmsvc-slider-ticks { display: flex; justify-content: space-between; margin-top: 9px; font-size: 11px; color: var(--text-body-muted); font-weight: 600; }
 
   /* Supplier scope tiles now carry a small icon before the name (Marketplace/Preferred+fallback/
@@ -7283,6 +7307,10 @@
      card reordering) and .pmsvc-pill (already proven for response-type / required selection)
      rather than introducing parallel components for the same shapes. */
   .ckl-section-card { border: 1px solid var(--border-subtle); border-radius: 12px; background: #fff; margin-bottom: 12px; overflow: visible; }
+  .ckl-section-card.dragging { opacity: 0.4; }
+  .ckl-section-card.drag-over { border-top: 2px solid var(--accent-blue); }
+  .ckl-section-drag-handle { color: #cbd5e1; cursor: grab; flex-shrink: 0; display: flex; }
+  .ckl-section-drag-handle:active { cursor: grabbing; }
   .ckl-section-head { display: flex; align-items: center; gap: 10px; padding: 13px 15px; }
   .ckl-section-order { display: flex; flex-direction: column; gap: 1px; flex-shrink: 0; }
   .ckl-section-title { flex: 1; min-width: 0; font-size: 14px; font-weight: 700; color: var(--text-heading); cursor: pointer; }
@@ -7360,6 +7388,20 @@
      the filters on PM's own Services & Pricing list. */
   .pmsvc-addons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 14px; }
   .pmsvc-addon-card { background: var(--surface-soft); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 12px 14px; }
+  /* Quote mode's "To be quoted" card - reuses .pmsvc-slider/.pmsvc-slider-ticks as-is (already
+     Keylr's own blue), just adding the two-column layout and label row around them. */
+  .pmsvc-quote-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 18px; }
+  .pmsvc-quote-head { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 18px; color: var(--accent-blue); }
+  .pmsvc-quote-head svg { flex-shrink: 0; margin-top: 1px; }
+  .pmsvc-quote-title { font-size: 14.5px; font-weight: 800; color: var(--text-heading); }
+  .pmsvc-quote-desc { font-size: 12px; color: var(--text-body-muted); margin-top: 2px; line-height: 1.45; }
+  .pmsvc-quote-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .pmsvc-quote-slider-label { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
+  .pmsvc-quote-slider-label span:first-child { font-size: 10.5px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-body-muted); }
+  .pmsvc-quote-slider-value { font-size: 15px; font-weight: 800; color: var(--text-heading); }
+  @media (max-width: 640px) {
+    .pmsvc-quote-grid { grid-template-columns: 1fr; gap: 20px; }
+  }
   .pmsvc-addon-head { display: flex; align-items: center; gap: 10px; }
   .pmsvc-addon-headtext { flex: 1; min-width: 0; }
   .pmsvc-addon-title { font-size: 13px; font-weight: 700; color: var(--text-heading); }
@@ -8599,15 +8641,51 @@
   }
   .ckl-add-task-btn:hover, .ckl-add-task-btn:focus, .ckl-add-task-btn:active { text-decoration: underline; background: transparent !important; box-shadow: none; outline: none; }
 
-  /* Report preview */
-  .ckl-report-modal { max-width: 620px; }
-  .ckl-report-section { margin-bottom: 20px; }
-  .ckl-report-section:last-child { margin-bottom: 0; }
-  .ckl-report-section-title { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 800; color: var(--text-heading); margin-bottom: 10px; }
-  .ckl-report-section-title svg { color: var(--accent-blue); }
-  .ckl-report-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 9px 0; border-bottom: 1px solid var(--border-subtle); font-size: 12.5px; }
-  .ckl-report-row:last-child { border-bottom: none; }
-  .ckl-report-row-desc { flex: 1; min-width: 140px; color: var(--text-heading); }
+  /* Report preview - shared by the Report modal (opened from a checklist card) and the
+     Build/Preview tab inside the editor itself, both rendering through the same
+     cklPreviewReportHtml. Deliberately its own visual language (not reusing the editor's card/chip
+     classes) since this needs to read as "what the supplier will actually see completing this job",
+     not as more editable UI - inspired by the reference design's structure, but in Keylr's own
+     colors throughout rather than copied from it. */
+  .ckl-report-modal { max-width: 680px; }
+  .ckl-view-toggle { display: inline-flex; background: var(--surface-soft); border: 1px solid var(--border-subtle); border-radius: 999px; padding: 3px; margin-bottom: 18px; }
+  .ckl-view-toggle-btn { padding: 7px 18px; border-radius: 999px; font-size: 12.5px; font-weight: 700; color: var(--text-body-muted); cursor: pointer; border: none; background: none; font-family: inherit; transition: background-color 150ms ease-out, color 150ms ease-out; }
+  .ckl-view-toggle-btn.on { background: var(--accent-blue); color: #fff; }
+  .ckl-preview-banner {
+    display: flex; align-items: center; gap: 10px; padding: 11px 16px; border-radius: 10px;
+    background: var(--icon-tint-bg); color: var(--accent-blue); font-size: 12.5px; font-weight: 700; margin-bottom: 18px;
+  }
+  .ckl-preview-banner svg { flex-shrink: 0; }
+  .ckl-preview-header { border: 1px solid var(--border-subtle); border-radius: 14px; overflow: hidden; margin-bottom: 18px; background: #fff; }
+  .ckl-preview-header-top { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); padding: 18px 20px; color: #fff; }
+  .ckl-preview-header-eyebrow { font-size: 10.5px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.75; margin-bottom: 4px; }
+  .ckl-preview-header-title { font-size: 18px; font-weight: 800; }
+  .ckl-preview-header-desc { font-size: 12.5px; opacity: 0.85; margin-top: 4px; line-height: 1.5; }
+  .ckl-preview-header-meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding: 14px 20px; }
+  .ckl-preview-header-meta-label { font-size: 10px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: #94a3b8; margin-bottom: 3px; }
+  .ckl-preview-header-meta-value { font-size: 13px; font-weight: 700; color: var(--text-heading); }
+  .ckl-preview-property-row {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 10px; padding: 12px 14px;
+    border: 1px solid var(--border-subtle); border-radius: 12px; background: var(--surface-soft); margin-bottom: 18px;
+  }
+  .ckl-preview-property-label { font-size: 12px; font-weight: 700; color: var(--text-body-muted); flex-shrink: 0; }
+  .ckl-preview-stepper { display: inline-flex; align-items: center; gap: 8px; background: #fff; border: 1px solid var(--border-subtle); border-radius: 999px; padding: 5px 6px 5px 12px; }
+  .ckl-preview-stepper-name { font-size: 12px; font-weight: 700; color: var(--text-heading); }
+  .ckl-preview-stepper-btn { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--border-subtle); background: #fff; color: var(--accent-blue); font-weight: 800; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 15px; line-height: 1; font-family: inherit; }
+  .ckl-preview-stepper-btn:hover { background: var(--icon-tint-bg); }
+  .ckl-preview-stepper-btn:disabled { opacity: 0.35; cursor: default; background: #fff; }
+  .ckl-preview-stepper-count { font-size: 12.5px; font-weight: 800; color: var(--text-heading); min-width: 14px; text-align: center; }
+  .ckl-preview-empty { text-align: center; padding: 30px 20px; color: var(--text-body-muted); font-size: 13px; }
+  .ckl-preview-section { border: 1px solid var(--border-subtle); border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
+  .ckl-preview-section:last-child { margin-bottom: 0; }
+  .ckl-preview-section-title { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 800; color: var(--text-heading); padding: 12px 14px; background: var(--surface-soft); border-bottom: 1px solid var(--border-subtle); }
+  .ckl-preview-section-title svg { color: var(--accent-blue); flex-shrink: 0; }
+  .ckl-preview-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--border-subtle); font-size: 12.5px; }
+  .ckl-preview-row:last-child { border-bottom: none; }
+  .ckl-preview-row-desc { flex: 1; min-width: 140px; color: var(--text-heading); font-weight: 600; }
+  .ckl-preview-row-req { font-size: 10.5px; font-weight: 800; color: var(--accent-blue); background: var(--icon-tint-bg); padding: 2px 7px; border-radius: 999px; flex-shrink: 0; }
+  .ckl-preview-row-evidence { color: #94a3b8; display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+  .ckl-preview-row-resptype { font-size: 11px; font-weight: 700; color: var(--text-body-muted); background: #fff; border: 1px solid var(--border-subtle); padding: 3px 9px; border-radius: 999px; flex-shrink: 0; }
 
   /* PM picker card badges */
   .ckl-picker-card-badges { display: flex; gap: 5px; margin-bottom: 8px; }
@@ -9376,6 +9454,11 @@
         <button type="button" id="pmCklModalCloseBtn" aria-label="Close" style="background:none;border:none;cursor:pointer;color:var(--text-body-muted);padding:4px;flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
       </div>
       <div class="ckl-pm-modal-body">
+        <div class="ckl-view-toggle" id="pmCklViewToggle">
+          <button type="button" class="ckl-view-toggle-btn on" data-ckl-view-tab="build">Build</button>
+          <button type="button" class="ckl-view-toggle-btn" data-ckl-view-tab="preview">Preview report</button>
+        </div>
+        <div id="pmCklBuildTab">
         <div class="pmsvc-field" style="margin-bottom:16px;">
           <label style="display:block;font-size:11.5px;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;color:#94a3b8;margin-bottom:6px;">Checklist name</label>
           <input type="text" class="field-input" id="pmCklNameInput" placeholder="e.g. My kitchen deep-clean checklist">
@@ -9388,6 +9471,8 @@
         <div class="pmsvc-help" id="pmCklSectionsHint" style="margin-top:0;margin-bottom:10px;">Add sections, then edit their tasks.</div>
         <div id="pmCklSectionChips" style="margin-bottom:14px;"></div>
         <div id="pmCklSectionsList"></div>
+        </div>
+        <div id="pmCklPreviewTab" style="display:none;"></div>
       </div>
       <div class="ckl-pm-modal-foot">
         <span class="ckl-pm-delete-wrap" id="pmCklDeleteWrap" style="display:none;">
@@ -16508,32 +16593,45 @@
                   </div>
                 </div>
 
-                <!-- Pricing variables -->
+                <!-- Pricing approach: Quote or Pricing Variables, with whichever is chosen shown
+                     inside this same card rather than as a separate one below it. -->
                 <div class="svcp-panel">
                   <div style="margin-bottom:16px;">
-                    <div class="svcp-section-title">Pricing variables</div>
-                    <p class="svcp-section-sub">A service can carry several pricing variables. You define the structure only &mdash; &pound; values are entered by the supplier, never here.</p>
+                    <div class="svcp-section-title">Pricing approach</div>
+                    <p class="svcp-section-sub">How the supplier prices this service &mdash; a fixed set of structures to choose from, or a simple call-out quote for jobs that can't be priced until someone's seen them.</p>
                   </div>
+                  <div class="pmsvc-tiles two" id="svcpPricingModeTiles"></div>
 
-                  <div id="svcpVarList"></div>
-
-                  <div class="svcp-empty" id="svcpVarEmpty" style="display:none;padding:38px 20px;margin-bottom:14px;">
-                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-                    <div class="svcp-empty-title">No pricing variables yet</div>
-                    <div class="svcp-empty-desc">Add at least one pricing variable below &mdash; a service can't go active without one.</div>
-                  </div>
-
-                  <div class="svcp-add-var" style="margin-top:14px;">
-                    <div class="svcp-field">
-                      <label>Add pricing variable</label>
-                      <div class="svcp-dd" id="svcpAddVarDD"></div>
-                      <div style="font-size:11.5px;color:var(--text-body-muted);margin-top:6px;line-height:1.45;" id="svcpAddVarHint"></div>
+                  <!-- Pricing variables (shown only when the approach above is 'Pricing Variables') -->
+                  <div id="svcpVarPanelWrap" class="svcp-approach-sub">
+                    <div style="margin-bottom:16px;">
+                      <div class="svcp-section-title" style="font-size:13.5px;">Pricing variables</div>
+                      <p class="svcp-section-sub">A service can carry several pricing variables. You define the structure only &mdash; &pound; values are entered by the supplier, never here.</p>
                     </div>
-                    <button type="button" class="btn btn-primary" id="svcpAddVarBtn">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-                      Add to service
-                    </button>
+
+                    <div id="svcpVarList"></div>
+
+                    <div class="svcp-empty" id="svcpVarEmpty" style="display:none;padding:38px 20px;margin-bottom:14px;">
+                      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                      <div class="svcp-empty-title">No pricing variables yet</div>
+                      <div class="svcp-empty-desc">Add at least one pricing variable below &mdash; a service can't go active without one.</div>
+                    </div>
+
+                    <div class="svcp-add-var" style="margin-top:14px;">
+                      <div class="svcp-field">
+                        <label>Add pricing variable</label>
+                        <div class="svcp-dd" id="svcpAddVarDD"></div>
+                        <div style="font-size:11.5px;color:var(--text-body-muted);margin-top:6px;line-height:1.45;" id="svcpAddVarHint"></div>
+                      </div>
+                      <button type="button" class="btn btn-primary" id="svcpAddVarBtn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                        Add to service
+                      </button>
+                    </div>
                   </div>
+
+                  <!-- Quote mode (shown only when the approach above is 'Quote') -->
+                  <div id="svcpQuoteModeWrap" style="display:none;"></div>
                 </div>
 
                 <!-- Scheduling variables: five fixed options, admin multi-selects which apply to
@@ -16629,6 +16727,12 @@
                   </div>
                 </div>
 
+                <div class="ckl-view-toggle" id="cklAdminViewToggle">
+                  <button type="button" class="ckl-view-toggle-btn on" data-ckl-view-tab="build">Build</button>
+                  <button type="button" class="ckl-view-toggle-btn" data-ckl-view-tab="preview">Preview report</button>
+                </div>
+
+                <div id="cklAdminBuildTab">
                 <div class="svcp-panel">
                   <div class="pmsvc-grid" style="margin-bottom:18px;">
                     <div class="pmsvc-field">
@@ -16650,6 +16754,9 @@
 
                   <div id="cklAdminSectionsList"></div>
                 </div>
+                </div>
+
+                <div id="cklAdminPreviewTab" style="display:none;"></div>
 
                 <div class="svcp-sticky-bar" id="cklAdminStickyBar" style="margin-top:20px;">
                   <span id="cklAdminDeleteWrap" style="display:none;">
@@ -42778,15 +42885,19 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     { id: 'baseUnit', name: 'Base + Per Unit', hint: 'A base that includes a set quantity, then an automatic extra above it.' },
     { id: 'baseMulti', name: 'Base + Multiple Units', hint: 'A base built from several units, each generating its own extra.' },
     { id: 'tier', name: 'Tier-Based Pricing', hint: 'Quantity ranges banded into tiers, e.g. Small / Medium / Large.' },
-    { id: 'callout', name: 'Call-out + Hourly Rate', hint: 'A call-out that includes time, then charged per additional block.' },
     { id: 'hourly', name: 'Per Hour', hint: 'Charged purely by the hour, with no call-out or minimum.' },
     { id: 'package', name: 'Package Pricing', hint: 'Named packages, each containing multiple items with their own units.' },
-    { id: 'meet', name: 'Meet & Greet', hint: 'Included people, waiting time and cancellation notice options.' }
+    { id: 'meet', name: 'Meet & Greet', hint: 'Included people and waiting time options.' }
   ];
 
   /* These two carry no admin-side configuration, so their cards don't open. */
-  var SVCP_STATIC_TYPES = ['fixed', 'callout', 'hourly'];
+  var SVCP_STATIC_TYPES = ['fixed', 'hourly'];
   function svcpIsStaticVar(type) { return SVCP_STATIC_TYPES.indexOf(type) !== -1; }
+
+  var SVCP_PRICING_MODES = [
+    { id: 'variables', name: 'Pricing Variables', desc: 'A fixed set of structures for the supplier to price against.' },
+    { id: 'quote', name: 'Quote', desc: 'Call-out fee + hourly rate the supplier sets themselves \u2014 for jobs that need a look before they can be priced.' }
+  ];
 
   /* Scheduling variables: unlike pricing variables (added one at a time, each with its own
      structure to configure), these are fixed and complete as written — admin just picks which
@@ -42866,7 +42977,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         '<div class="svcp-sla-card-desc">' + slaPartialChargeText(sla.freeCancellation, sla.fullCharge, pct) + '</div>' +
         (editable ? '<div class="pmsvc-slider-wrap" style="margin-top:14px;">' +
             '<div class="pmsvc-slider-value" data-' + attrPrefix + '-slapercent-value>' + pct + '%</div>' +
-            '<input type="range" class="pmsvc-slider" min="5" max="100" step="5" value="' + pct + '" data-' + attrPrefix + '-slapercent style="' + pmsvcSliderFillCss(pct, 5, 100) + '">' +
+            '<input type="range" class="pmsvc-slider amber" min="5" max="100" step="5" value="' + pct + '" data-' + attrPrefix + '-slapercent style="' + pmsvcSliderFillCss(pct, 5, 100, '#d97706') + '">' +
             '<div class="pmsvc-slider-ticks"><span>5%</span><span>50%</span><span>100%</span></div>' +
           '</div>' : '') +
       '</div>';
@@ -42998,10 +43109,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (type === 'baseUnit') return { unit: '', base: 1, baseTemplate: '' };
     if (type === 'baseMulti') return { units: [{ unit: '', base: 1 }] };
     if (type === 'tier') return { unit: '', tiers: [{ name: '', from: 1, to: 2 }] };
-    if (type === 'callout') return {};
     if (type === 'hourly') return {};
     if (type === 'package') return { packages: [{ name: '', description: '', items: [{ unit: 'Photo', qty: 1 }] }] };
-    if (type === 'meet') return { people: 1, waiting: [30, 60], cancellation: [24], extraAttendee: false };
+    if (type === 'meet') return { people: 1, waiting: [30, 60], extraAttendee: false };
     return {};
   }
   function svcpMakeVar(type, pmsp) {
@@ -43020,9 +43130,15 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       categories: o.categories || [],
       roles: o.roles || [],
       allowSelect: o.allowSelect !== false, // on unless a service explicitly opts out
+      // 'variables' (the existing structured-pricing system) or 'quote' (a simple call-out fee +
+      // hourly rate the supplier sets themselves, for jobs that can't be priced from a fixed
+      // structure until someone's actually looked at it — e.g. Boiler Repair).
+      pricingMode: o.pricingMode || 'variables',
       /* Published state. A service can't be switched on without a pricing variable, so anything
-         seeded with one starts live and anything without one starts as a draft. */
-      active: o.active !== undefined ? !!o.active : (o.variables || []).length > 0,
+         seeded with one starts live and anything without one starts as a draft. Quote mode is
+         already a complete, self-contained structure on its own, so it doesn't need a variable
+         to count as ready. */
+      active: o.active !== undefined ? !!o.active : (o.pricingMode === 'quote' || (o.variables || []).length > 0),
       variables: o.variables || [],
       // Which of the four fixed scheduling types this service supports — admin multi-select, the
       // PM then picks any of exactly these when they book the service into their own template.
@@ -43091,9 +43207,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       roles: ['Gas Safe Engineer', 'Heating Engineer'],
       allowSelect: true,
       schedulingOptions: ['fixedDateTime', 'dateSlot'],
-      variables: [
-        svcpVar('callout', true)
-      ]
+      pricingMode: 'quote',
+      variables: []
     }),
     svcpMakeService({
       name: 'EICR (Electrical Installation Condition Report)',
@@ -43138,7 +43253,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       allowSelect: true,
       schedulingOptions: ['fixedDateTime', 'dateSlot'],
       variables: [
-        svcpVar('meet', true, { people: 2, waiting: [15, 30, 60], cancellation: [12, 24], extraAttendee: true })
+        svcpVar('meet', true, { people: 2, waiting: [15, 30, 60], extraAttendee: true })
       ]
     }),
     svcpMakeService({
@@ -43215,7 +43330,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     return {
       id: cklNextId('sec'), name: name, tasks: tasks || [],
       isCustom: !!isCustom,               // only custom-origin sections get an inline-editable title
-      repeats: false,                      // room sections only: false = one-time, true = repeats per room count
+      repeats: true,                       // default on for every section, not just rooms - false = runs once per job
       requireTapComplete: false,
       evidenceDefaults: { photo: false, video: false, voice: false } // new tasks in this section inherit these
     };
@@ -43291,9 +43406,12 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   var cklActiveId = null;      // id of the checklist currently open; null while creating a new one
   var cklOpenSections = {};    // which section cards are expanded, keyed by section id
   var cklOpenSectionMenu = null; // id of the section whose "..." popover is open, if any
+  var cklAdminViewTab = 'build'; // 'build' | 'preview', Admin's editor
+  var cklAdminPreviewCounts = {}; // section id -> how many copies to show in the preview
   var cklAdminAttachOpen = {}; // { checklistId: true } — which cards have their inline attach-picker open
   var cklAdminAttachSearch = {}; // { checklistId: 'search text' }
   var cklReportPreviewId = null; // checklist id currently shown in the read-only Report popup
+  var cklReportPreviewCounts = {}; // its own preview-repeat state, independent of the editor's
   var cklPendingDeleteId = null; // checklist id awaiting delete confirmation, from either trigger point
   // cklAdminCtx/pmCklCtx each capture a direct reference to their own *Sections object once, so
   // resetting between checklists must clear it in place rather than reassigning to a new {} —
@@ -43500,11 +43618,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       '</div>' +
       '<div class="ckl-pop-hint">Applies to every task in this section.</div>' +
       '<div class="ckl-pop-divider"></div>' +
-      '<label class="ckl-pop-tap-row">' +
-        '<button type="button" class="toggle-switch sm' + (section.requireTapComplete ? ' on' : '') + '" data-ckl-sec-tap-toggle="' + section.id + '" role="switch" aria-checked="' + section.requireTapComplete + '"><span class="thumb"></span></button>' +
-        '<span>Require tasker to tap \u201cMark section complete\u201d</span>' +
-      '</label>' +
-      '<div class="ckl-pop-divider"></div>' +
       '<button type="button" class="ckl-pop-delete" data-ckl-sec-delete="' + section.id + '"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg>Delete section</button>' +
     '</div>';
   }
@@ -43517,8 +43630,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var repeatChip = '<button type="button" class="ckl-repeat-chip sm' + (section.repeats ? ' on' : '') + '" data-ckl-sec-repeat-toggle="' + section.id + '" data-tooltip="' + (section.repeats ? 'Repeats once per ' + supjrEscapeHtml(section.name).toLowerCase() : 'Runs once per job \u2014 click to repeat per ' + supjrEscapeHtml(section.name).toLowerCase()) + '">' +
       '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 01-4 4H3"/></svg>Repeats per ' + supjrEscapeHtml(section.name) +
     '</button>';
-    return '<div class="ckl-section-card' + (isOpen ? ' open' : '') + '" data-ckl-section-card="' + section.id + '">' +
+    return '<div class="ckl-section-card' + (isOpen ? ' open' : '') + '" data-ckl-section-card="' + section.id + '" draggable="true" data-ckl-section-drag="' + section.id + '">' +
       '<div class="ckl-section-head">' +
+        '<div class="ckl-section-drag-handle" data-ckl-section-drag-handle="' + section.id + '" aria-label="Drag to reorder"><svg width="10" height="16" viewBox="0 0 10 16" fill="currentColor"><circle cx="2" cy="2" r="1.5"/><circle cx="8" cy="2" r="1.5"/><circle cx="2" cy="8" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="2" cy="14" r="1.5"/><circle cx="8" cy="14" r="1.5"/></svg></div>' +
         '<div class="ckl-section-order">' +
           '<button type="button" class="svcp-order-btn" data-ckl-sec-move="up|' + section.id + '"' + (idx === 0 ? ' disabled' : '') + ' aria-label="Move up"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg></button>' +
           '<button type="button" class="svcp-order-btn" data-ckl-sec-move="down|' + section.id + '"' + (idx === total - 1 ? ' disabled' : '') + ' aria-label="Move down"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>' +
@@ -43542,6 +43656,58 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       '</div>' : '') +
     '</div>';
   }
+  // Section-level drag-to-reorder, same pattern as cklWireTaskDrag below but working directly on
+  // working.sections. Unlike a task row, a section card has a lot of other interactive content
+  // (the "..." menu, the repeat chip, a rename input for custom sections) — dragging from
+  // anywhere on the card would make clicking any of those unreliable, so this only starts a drag
+  // when it began on the dedicated handle, cancelling it otherwise.
+  function cklWireSectionDrag(containerId, getWorking, rerender) {
+    var container = document.getElementById(containerId);
+    if (!container) return;
+    var draggedId = null;
+
+    container.addEventListener('dragstart', function (e) {
+      var card = e.target.closest('[data-ckl-section-drag]');
+      if (!card) return;
+      if (!e.target.closest('[data-ckl-section-drag-handle]')) { e.preventDefault(); return; }
+      draggedId = card.getAttribute('data-ckl-section-drag');
+      card.classList.add('dragging');
+      if (e.dataTransfer) e.dataTransfer.effectAllowed = 'move';
+    });
+    container.addEventListener('dragend', function () {
+      container.querySelectorAll('.dragging').forEach(function (el) { el.classList.remove('dragging'); });
+      container.querySelectorAll('.drag-over').forEach(function (el) { el.classList.remove('drag-over'); });
+      draggedId = null;
+    });
+    container.addEventListener('dragover', function (e) {
+      if (!draggedId) return;
+      var card = e.target.closest('[data-ckl-section-drag]');
+      if (!card) return;
+      e.preventDefault();
+      container.querySelectorAll('.drag-over').forEach(function (el) { if (el !== card) el.classList.remove('drag-over'); });
+      card.classList.add('drag-over');
+    });
+    container.addEventListener('drop', function (e) {
+      if (!draggedId) return;
+      var card = e.target.closest('[data-ckl-section-drag]');
+      if (!card) return;
+      e.preventDefault();
+      card.classList.remove('drag-over');
+      var targetId = card.getAttribute('data-ckl-section-drag');
+      if (targetId === draggedId) { draggedId = null; return; }
+      var working = getWorking();
+      if (!working) { draggedId = null; return; }
+      var fromIdx = working.sections.findIndex(function (s) { return s.id === draggedId; });
+      if (fromIdx === -1) { draggedId = null; return; }
+      var section = working.sections[fromIdx];
+      working.sections.splice(fromIdx, 1);
+      var toIdx = working.sections.findIndex(function (s) { return s.id === targetId; });
+      working.sections.splice(toIdx === -1 ? working.sections.length : toIdx, 0, section);
+      draggedId = null;
+      rerender();
+    });
+  }
+
   // Generic drag-to-reorder wiring for task rows, shared by Admin's on-page editor and PM's own
   // modal - each just supplies its own getWorking()/rerender() so the drag logic itself only
   // needs to be written once. Supports both reordering within a section and dropping a task into
@@ -43605,6 +43771,20 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     wrap.innerHTML = cklWorking.sections.map(function (s, i) { return cklSectionCardHtml(s, i, cklWorking.sections.length, cklOpenSections, cklOpenSectionMenu); }).join('');
   }
 
+  function cklAdminRenderViewTab() {
+    var toggle = document.getElementById('cklAdminViewToggle');
+    if (!toggle) return;
+    toggle.querySelectorAll('[data-ckl-view-tab]').forEach(function (btn) {
+      btn.classList.toggle('on', btn.getAttribute('data-ckl-view-tab') === cklAdminViewTab);
+    });
+    document.getElementById('cklAdminBuildTab').style.display = cklAdminViewTab === 'build' ? '' : 'none';
+    var previewEl = document.getElementById('cklAdminPreviewTab');
+    previewEl.style.display = cklAdminViewTab === 'preview' ? '' : 'none';
+    if (cklAdminViewTab === 'preview' && cklWorking) {
+      previewEl.innerHTML = cklPreviewReportHtml(cklWorking, cklAdminPreviewCounts);
+    }
+  }
+
   function cklAdminShowEditView() {
     document.getElementById('cklAdminListView').style.display = 'none';
     document.getElementById('cklAdminEditView').style.display = '';
@@ -43614,6 +43794,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     cklRenderAttachEditDD(cklWorking, 'cklAdminAttachWrapInnerDD');
     cklAdminRenderSectionChips();
     cklAdminRenderSections();
+    cklAdminViewTab = 'build';
+    cklAdminPreviewCounts = cklDefaultRepeatCounts(cklWorking);
+    cklAdminRenderViewTab();
   }
   function cklAdminOpenNew() {
     cklActiveId = null;
@@ -43649,27 +43832,107 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   }
 
   /* ---------- Report: read-only preview of a checklist (the "Report" button on a card) ---------- */
-  function cklReportBodyHtml(c) {
-    return c.sections.map(function (s) {
-      return '<div class="ckl-report-section"><div class="ckl-report-section-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + cklSectionIcon(s.name) + '</svg>' + supjrEscapeHtml(s.name) +
-        (s.repeats && cklIsRoomSection(s.name) ? '<span class="svcp-chip neutral sm">repeats per ' + supjrEscapeHtml(s.name).toLowerCase() + '</span>' : '') + '</div>' +
-        s.tasks.map(function (t) {
-          return '<div class="ckl-report-row"><span class="ckl-report-row-desc">' + (t.description ? supjrEscapeHtml(t.description) : '<i>Untitled task</i>') + '</span>' +
-            '<span class="svcp-chip navy sm">' + cklResponseTypeName(t.responseType) + '</span>' +
-            (t.required ? '<span class="svcp-chip sm">Required</span>' : '') +
-            (['photo', 'video', 'voice'].filter(function (k) { return t.evidence && t.evidence[k]; }).map(function (k) { return '<span class="svcp-chip neutral sm">' + CKL_EVIDENCE_ICONS[k] + k + '</span>'; }).join('')) +
-          '</div>';
-        }).join('') +
-      '</div>';
-    }).join('');
+  /* ---------- Preview report: shows how the checklist looks to a supplier completing the job.
+     Shared by the Report modal (opened from a card in the list) and the Build/Preview tab inside
+     the editor itself - each of the three contexts (Admin's editor, PM's modal, the standalone
+     Report modal) keeps its own repeatCounts state, since they're independent preview sessions
+     that can be open on different checklists at once. ---------- */
+  // Repeating sections default to 2 in the preview (not 1) specifically so the "1 of 2"/"2 of 2"
+  // repeat labelling is visible without the user needing to touch the stepper first - previewing
+  // at 1 wouldn't actually demonstrate what "repeats" looks like.
+  function cklDefaultRepeatCounts(checklist) {
+    var counts = {};
+    checklist.sections.forEach(function (s) { if (s.repeats) counts[s.id] = 2; });
+    return counts;
   }
+  function cklPreviewPropertyRowHtml(checklist, counts) {
+    var repeating = checklist.sections.filter(function (s) { return s.repeats; });
+    if (!repeating.length) return '';
+    return '<div class="ckl-preview-property-row">' +
+      '<span class="ckl-preview-property-label">Preview a property with</span>' +
+      repeating.map(function (s) {
+        var n = (s.id in counts) ? counts[s.id] : 2;
+        return '<span class="ckl-preview-stepper">' +
+          '<span class="ckl-preview-stepper-name">' + supjrEscapeHtml(s.name) + '</span>' +
+          '<button type="button" class="ckl-preview-stepper-btn" data-ckl-preview-step="' + s.id + '|-1"' + (n <= 1 ? ' disabled' : '') + ' aria-label="Fewer ' + supjrEscapeHtml(s.name) + '">\u2212</button>' +
+          '<span class="ckl-preview-stepper-count">' + n + '</span>' +
+          '<button type="button" class="ckl-preview-stepper-btn" data-ckl-preview-step="' + s.id + '|1"' + (n >= 9 ? ' disabled' : '') + ' aria-label="More ' + supjrEscapeHtml(s.name) + '">+</button>' +
+        '</span>';
+      }).join('') +
+    '</div>';
+  }
+  function cklPreviewSectionHtml(section, repeatLabel) {
+    return '<div class="ckl-preview-section">' +
+      '<div class="ckl-preview-section-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + cklSectionIcon(section.name) + '</svg>' + supjrEscapeHtml(section.name) + (repeatLabel ? ' <span style="color:var(--text-body-muted);font-weight:600;">(' + repeatLabel + ')</span>' : '') + '</div>' +
+      (section.tasks.length ? section.tasks.map(function (t) {
+        var evIcons = ['photo', 'video', 'voice'].filter(function (k) { return t.evidence && t.evidence[k]; }).map(function (k) { return CKL_EVIDENCE_ICONS[k]; }).join('');
+        return '<div class="ckl-preview-row">' +
+          '<span class="ckl-preview-row-desc">' + (t.description ? supjrEscapeHtml(t.description) : '<i>Untitled task</i>') + '</span>' +
+          (t.required ? '<span class="ckl-preview-row-req">Required</span>' : '') +
+          (evIcons ? '<span class="ckl-preview-row-evidence">' + evIcons + '</span>' : '') +
+          '<span class="ckl-preview-row-resptype">' + cklResponseTypeName(t.responseType) + '</span>' +
+        '</div>';
+      }).join('') : '<div class="ckl-preview-row"><i style="color:var(--text-body-muted);">No tasks in this section yet</i></div>') +
+    '</div>';
+  }
+  function cklPreviewReportHtml(checklist, counts) {
+    counts = counts || {};
+    var sectionsHtml = checklist.sections.length ? checklist.sections.map(function (s) {
+      if (!s.repeats) return cklPreviewSectionHtml(s, '');
+      var n = (s.id in counts) ? counts[s.id] : 2;
+      var out = '';
+      for (var i = 1; i <= n; i++) out += cklPreviewSectionHtml(s, i + ' of ' + n);
+      return out;
+    }).join('') : '<div class="ckl-preview-empty">No sections added yet \u2014 switch to Build to add some.</div>';
+
+    return '<div class="ckl-preview-banner"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Preview only \u2014 this shows how the checklist will look and be completed by the supplier, not real job data.</div>' +
+      cklPreviewPropertyRowHtml(checklist, counts) +
+      '<div class="ckl-preview-header">' +
+        '<div class="ckl-preview-header-top">' +
+          '<div class="ckl-preview-header-eyebrow">Checklist</div>' +
+          '<div class="ckl-preview-header-title">' + (checklist.name ? supjrEscapeHtml(checklist.name) : '<i>Untitled checklist</i>') + '</div>' +
+          (checklist.description ? '<div class="ckl-preview-header-desc">' + supjrEscapeHtml(checklist.description) + '</div>' : '') +
+        '</div>' +
+        '<div class="ckl-preview-header-meta">' +
+          '<div><div class="ckl-preview-header-meta-label">Property</div><div class="ckl-preview-header-meta-value">Set when the job is booked</div></div>' +
+          '<div><div class="ckl-preview-header-meta-label">Supplier</div><div class="ckl-preview-header-meta-value">Assigned on booking</div></div>' +
+          '<div><div class="ckl-preview-header-meta-label">Completed</div><div class="ckl-preview-header-meta-value">\u2014</div></div>' +
+        '</div>' +
+      '</div>' +
+      sectionsHtml;
+  }
+  // Generic stepper wiring, same getWorking()/getCounts()/rerender() callback pattern as
+  // cklWireSectionDrag - one binding per container, reused by Admin's editor, PM's modal, and the
+  // standalone Report modal, each supplying their own checklist + counts state.
+  function cklWirePreviewSteppers(containerId, getChecklist, getCounts, rerender) {
+    var container = document.getElementById(containerId);
+    if (!container) return;
+    container.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-ckl-preview-step]');
+      if (!btn) return;
+      var parts = btn.getAttribute('data-ckl-preview-step').split('|');
+      var sectionId = parts[0], delta = parseInt(parts[1], 10);
+      var counts = getCounts();
+      var checklist = getChecklist();
+      if (!counts || !checklist) return;
+      // Same "default to 2 when unset" baseline the render functions actually display -
+      // otherwise incrementing from an unset section reads a stale default of 1 and lands back on
+      // the same number that was already showing, which looks like the click did nothing.
+      var current = (sectionId in counts) ? counts[sectionId] : 2;
+      counts[sectionId] = Math.max(1, Math.min(9, current + delta));
+      rerender();
+    });
+  }
+
+
   function cklOpenReportPreview(id) {
     var c = cklChecklistById(id);
     if (!c) return;
     cklReportPreviewId = id;
+    cklReportPreviewCounts = cklDefaultRepeatCounts(c);
     document.getElementById('cklReportTitle').textContent = c.name || 'Checklist report preview';
     document.getElementById('cklReportSub').textContent = 'What suppliers will see and complete on the job.';
-    document.getElementById('cklReportBody').innerHTML = cklReportBodyHtml(c);
+    document.getElementById('cklReportBody').innerHTML = cklPreviewReportHtml(c, cklReportPreviewCounts);
     document.getElementById('cklReportOverlay').classList.add('open');
   }
   function cklCloseReportPreview() {
@@ -43699,6 +43962,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   var pmCklOpenSections = {};
   var pmCklOpenSectionMenu = null;
   var pmCklEditingExistingId = null; // id of the PM's own checklist being edited, or null if new/adapting
+  var pmCklViewTab = 'build'; // 'build' | 'preview'
+  var pmCklPreviewCounts = {}; // section id -> how many copies to show in the preview
 
   function pmCklRenderModal() {
     document.getElementById('pmCklNameInput').value = pmCklWorking.name;
@@ -43706,6 +43971,22 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     cklRenderSectionChipsInto('pmCklSectionChips', pmCklWorking);
     pmCklRenderSections();
     pmCklRenderMediaPermissions();
+    pmCklViewTab = 'build';
+    pmCklPreviewCounts = cklDefaultRepeatCounts(pmCklWorking);
+    pmCklRenderViewTab();
+  }
+  function pmCklRenderViewTab() {
+    var toggle = document.getElementById('pmCklViewToggle');
+    if (!toggle) return;
+    toggle.querySelectorAll('[data-ckl-view-tab]').forEach(function (btn) {
+      btn.classList.toggle('on', btn.getAttribute('data-ckl-view-tab') === pmCklViewTab);
+    });
+    document.getElementById('pmCklBuildTab').style.display = pmCklViewTab === 'build' ? '' : 'none';
+    var previewEl = document.getElementById('pmCklPreviewTab');
+    previewEl.style.display = pmCklViewTab === 'preview' ? '' : 'none';
+    if (pmCklViewTab === 'preview' && pmCklWorking) {
+      previewEl.innerHTML = cklPreviewReportHtml(pmCklWorking, pmCklPreviewCounts);
+    }
   }
   function pmCklRenderSections() {
     var wrap = document.getElementById('pmCklSectionsList');
@@ -44114,6 +44395,14 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   });
   document.getElementById('cklAdminNewBtn').addEventListener('click', cklAdminOpenNew);
   cklWireTaskDrag('cklAdminSectionsList', function () { return cklWorking; }, cklAdminRenderSections);
+  cklWireSectionDrag('cklAdminSectionsList', function () { return cklWorking; }, cklAdminRenderSections);
+  document.getElementById('cklAdminViewToggle').addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-ckl-view-tab]');
+    if (!btn) return;
+    cklAdminViewTab = btn.getAttribute('data-ckl-view-tab');
+    cklAdminRenderViewTab();
+  });
+  cklWirePreviewSteppers('cklAdminPreviewTab', function () { return cklWorking; }, function () { return cklAdminPreviewCounts; }, cklAdminRenderViewTab);
   document.getElementById('cklAdminBackBtn').addEventListener('click', cklAdminCloseEditView);
   document.getElementById('cklAdminCancelBtn').addEventListener('click', cklAdminCloseEditView);
   document.getElementById('cklAdminNameInput').addEventListener('input', function () { if (cklWorking) cklWorking.name = this.value; });
@@ -44233,6 +44522,18 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   };
   document.getElementById('pmCklModalCloseBtn').addEventListener('click', pmCklCloseModal);
   cklWireTaskDrag('pmCklSectionsList', function () { return pmCklWorking; }, pmCklRenderSections);
+  cklWireSectionDrag('pmCklSectionsList', function () { return pmCklWorking; }, pmCklRenderSections);
+  document.getElementById('pmCklViewToggle').addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-ckl-view-tab]');
+    if (!btn) return;
+    pmCklViewTab = btn.getAttribute('data-ckl-view-tab');
+    pmCklRenderViewTab();
+  });
+  cklWirePreviewSteppers('pmCklPreviewTab', function () { return pmCklWorking; }, function () { return pmCklPreviewCounts; }, pmCklRenderViewTab);
+  cklWirePreviewSteppers('cklReportBody', function () { return cklChecklistById(cklReportPreviewId); }, function () { return cklReportPreviewCounts; }, function () {
+    var c = cklChecklistById(cklReportPreviewId);
+    if (c) document.getElementById('cklReportBody').innerHTML = cklPreviewReportHtml(c, cklReportPreviewCounts);
+  });
   document.getElementById('pmCklCancelBtn').addEventListener('click', pmCklCloseModal);
   document.getElementById('pmCklNameInput').addEventListener('input', function () {
     if (!pmCklWorking) return;
@@ -44369,7 +44670,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       return tiers.length + (tiers.length === 1 ? ' tier' : ' tiers') + ' by ' + c.unit + ' \u00b7 ' +
         tiers.map(function (t) { return (t.name ? t.name + ' ' : '') + t.from + '\u2013' + t.to; }).join(', ');
     }
-    if (v.type === 'callout') return 'A call-out charge plus an hourly rate, both priced by the supplier.';
     if (v.type === 'hourly') return 'This pricing model allows the PM/Supplier to set their own hourly rate for this service.';
     if (v.type === 'package') {
       var pkgs = (c.packages || []).filter(function (p) { return p.name; });
@@ -44498,9 +44798,12 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
     grid.innerHTML = list.map(function (s) {
       var active = !!s.active;
-      var varChips = s.variables.length
-        ? s.variables.map(function (v) { return '<span class="svcp-chip" data-chip-fit>' + supjrEscapeHtml(svcpVarType(v.type).name) + '</span>'; }).join('')
-        : '<span class="svcp-chip neutral" data-chip-fit>None added yet</span>';
+      var isQuote = s.pricingMode === 'quote';
+      var varChips = isQuote
+        ? '<span class="svcp-chip navy" data-chip-fit>Quote \u2014 call-out fee + hourly rate</span>'
+        : (s.variables.length
+          ? s.variables.map(function (v) { return '<span class="svcp-chip" data-chip-fit>' + supjrEscapeHtml(svcpVarType(v.type).name) + '</span>'; }).join('')
+          : '<span class="svcp-chip neutral" data-chip-fit>None added yet</span>');
       return '' +
         '<div class="svcp-card" data-svcp-open="' + s.id + '" tabindex="0" role="button">' +
           '<div class="svcp-card-head">' +
@@ -44527,14 +44830,14 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
           '</div>' +
 
           '<div class="svcp-card-block svcp-card-block-end">' +
-            '<div class="svcp-meta-label">Pricing variables</div>' +
+            '<div class="svcp-meta-label">' + (isQuote ? 'Pricing approach' : 'Pricing variables') + '</div>' +
             '<div class="svcp-chip-row svcp-chip-row-fit" data-chip-row>' + varChips + '</div>' +
           '</div>' +
 
           '<div class="svcp-card-foot">' +
             '<span class="svcp-card-foot-count">' +
               '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 008 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H2a2 2 0 110-4h.09A1.65 1.65 0 004.6 8a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V2a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H22a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>' +
-              s.variables.length + (s.variables.length === 1 ? ' variable' : ' variables') +
+              (isQuote ? 'Quote' : s.variables.length + (s.variables.length === 1 ? ' variable' : ' variables')) +
             '</span>' +
             '<div class="svcp-card-actions">' +
               '<button type="button" class="svcp-icon-btn" data-svcp-edit="' + s.id + '" data-tooltip="Edit service" aria-label="Edit service"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>' +
@@ -44712,6 +45015,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
     svcpRenderAddVarDD();
 
+    renderSvcpPricingMode();
     renderSvcpVars();
     renderSvcpSchedGrid();
     renderSvcpSla();
@@ -44828,6 +45132,18 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     wrap.innerHTML = svcpAccessPanelHtml('pickup', { label: 'Pick up from', options: methodValues }) +
       svcpAccessPanelHtml('dropoff', { label: 'Drop off to', options: methodValues });
     svcpUpdateDirty();
+  }
+
+  function renderSvcpPricingMode() {
+    var tiles = document.getElementById('svcpPricingModeTiles');
+    if (!tiles || !svcpWorking) return;
+    var mode = svcpWorking.pricingMode || 'variables';
+    tiles.innerHTML = SVCP_PRICING_MODES.map(function (m) {
+      return '<button type="button" class="pmsvc-tile' + (mode === m.id ? ' on' : '') + '" data-svcp-pricing-mode="' + m.id + '">' +
+        '<div class="pmsvc-tile-name">' + m.name + '</div><div class="pmsvc-tile-desc">' + m.desc + '</div></button>';
+    }).join('');
+    document.getElementById('svcpVarPanelWrap').style.display = mode === 'variables' ? '' : 'none';
+    document.getElementById('svcpQuoteModeWrap').style.display = mode === 'quote' ? '' : 'none';
   }
 
   function svcpRerenderVarBody(vid) {
@@ -44980,14 +45296,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         }).join('') + '</div>' +
       '</div>' +
 
-      '<div style="margin-top:18px;">' +
-        '<div class="svcp-meta-label">Cancellation notice options</div>' +
-        '<div class="svcp-opt-chips">' + SVCP_CANCELLATION_OPTIONS.map(function (h) {
-          var on = (c.cancellation || []).indexOf(h) !== -1;
-          return '<button type="button" class="svcp-opt-chip' + (on ? ' on' : '') + '" data-vopt="cancellation" data-vid="' + v.id + '" data-val="' + h + '">' + h + ' hours</button>';
-        }).join('') + '</div>' +
-      '</div>' +
-
       '<div class="svcp-cap-item' + (c.extraAttendee ? ' on' : '') + '" style="margin-top:18px;">' +
         '<div class="svcp-toggle-text">' +
           '<div class="svcp-toggle-title">Allow extra attendee pricing</div>' +
@@ -45062,7 +45370,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       if (v.type === 'meet') {
         if (!(svcpNum(c.people, 0) > 0)) push(v.id, 'Included people must be greater than 0.');
         if (!(c.waiting || []).length) push(v.id, 'Pick at least one waiting time option.');
-        if (!(c.cancellation || []).length) push(v.id, 'Pick at least one cancellation notice option.');
       }
     });
     return errs;
@@ -45211,7 +45518,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (valEl) valEl.textContent = val + '%';
     var descEl = slider.closest('.svcp-sla-card').querySelector('.svcp-sla-card-desc');
     if (descEl) descEl.textContent = slaPartialChargeText(svcpWorking.slaPolicy.freeCancellation, svcpWorking.slaPolicy.fullCharge, val);
-    slider.setAttribute('style', pmsvcSliderFillCss(val, 5, 100));
+    slider.setAttribute('style', pmsvcSliderFillCss(val, 5, 100, '#d97706'));
     svcpUpdateDirty();
   });
 
@@ -45372,11 +45679,12 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       trigger.getAttribute('data-i'), trigger.getAttribute('data-j'), value);
   });
 
-  /* Publish / unpublish the service. Switching it on requires a pricing variable, since a PM
-     would otherwise get a template with no structure to price against. */
+  /* Publish / unpublish the service. Switching it on requires a pricing variable (unless the
+     service is in Quote mode, which is already a complete structure on its own), since a PM would
+     otherwise get a template with no structure to price against. */
   document.getElementById('svcpActiveToggle').addEventListener('click', function () {
     if (!svcpWorking) return;
-    if (!svcpWorking.active && !svcpWorking.variables.length) {
+    if (!svcpWorking.active && svcpWorking.pricingMode !== 'quote' && !svcpWorking.variables.length) {
       showToast('Add at least one pricing variable before making this service active.');
       return;
     }
@@ -45390,6 +45698,17 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (!svcpWorking) return;
     svcpWorking.allowSelect = !svcpWorking.allowSelect;
     renderSvcpDetail();
+  });
+
+  document.getElementById('svcpPricingModeTiles').addEventListener('click', function (e) {
+    var tile = e.target.closest('[data-svcp-pricing-mode]');
+    if (!tile || !svcpWorking) return;
+    svcpWorking.pricingMode = tile.getAttribute('data-svcp-pricing-mode');
+    renderSvcpPricingMode();
+    document.getElementById('svcpDetailVarCountChip').textContent = svcpWorking.pricingMode === 'quote'
+      ? 'Quote'
+      : svcpWorking.variables.length + (svcpWorking.variables.length === 1 ? ' pricing variable' : ' pricing variables');
+    svcpUpdateDirty();
   });
 
   /* Add a pricing variable */
@@ -45441,7 +45760,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
-    if (svcpWorking.active && !svcpWorking.variables.length) {
+    if (svcpWorking.active && svcpWorking.pricingMode !== 'quote' && !svcpWorking.variables.length) {
       svcpWorking.active = false;
     }
     var idx = svcpServices.findIndex(function (x) { return x.id === svcpActiveId; });
@@ -47022,12 +47341,16 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   /* The headline £ is whatever a PM would recognise as "the price" for that shape — the
      fixed price, the base, the hourly rate. It's what the list and the collapsed card show. */
   function pmsvcHeadlineRate(t) {
+    var svcQ = pmsvcServiceFor(t);
+    if (svcQ && svcQ.pricingMode === 'quote') {
+      var q = t.config.pricing.quote;
+      return (q && pmsvcNum(q.targetPrice) > 0) ? q.targetPrice : null;
+    }
     var v = pmsvcVarOf(t);
     if (!v) return null;
     var r = t.config.pricing.rates || {};
     if (v.type === 'fixed') return r.price;
     if (v.type === 'hourly') return r.hour;
-    if (v.type === 'callout') return r.callout;
     if (v.type === 'baseUnit' || v.type === 'baseMulti' || v.type === 'meet') return r.base;
     if (v.type === 'tier') return r['tier:0'];
     if (v.type === 'package') {
@@ -47054,8 +47377,17 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   }
 
   function pmsvcPricingSummary(t) {
+    var svcS = pmsvcServiceFor(t);
+    if (svcS && svcS.pricingMode === 'quote') {
+      var q = t.config.pricing.quote;
+      var n2 = pmsvcUpliftCount(t);
+      var quotesN = (q && q.quotesWanted) || 3;
+      var targetTxt = (q && pmsvcNum(q.targetPrice) > 0) ? pmsvcHeadlineLabel(t) + ' target' : 'No target price';
+      return 'Quote \u00b7 ' + targetTxt + ' \u00b7 ' + quotesN + ' quote' + (quotesN === 1 ? '' : 's') + ' wanted' +
+        (n2 ? ' \u00b7 ' + n2 + ' uplift' + (n2 === 1 ? '' : 's') : '');
+    }
     var v = pmsvcVarOf(t);
-    if (!v) return pmsvcServiceFor(t) ? 'No pricing structure chosen yet' : 'Not linked to a Keylr service yet';
+    if (!v) return svcS ? 'No pricing structure chosen yet' : 'Not linked to a Keylr service yet';
     var n = pmsvcUpliftCount(t);
     return svcpVarType(v.type).name + ' \u00b7 ' + pmsvcHeadlineLabel(t) +
       (n ? ' \u00b7 ' + n + ' uplift' + (n === 1 ? '' : 's') : '');
@@ -47494,9 +47826,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   // thumb blue so the filled/unfilled split is visible at a glance, same idea as every other
   // progress-style control in the app. Shared by the initial render and the live drag handler so
   // the two can never compute the fill differently.
-  function pmsvcSliderFillCss(value, min, max) {
+  function pmsvcSliderFillCss(value, min, max, color) {
     var pct = Math.round(((value - min) / (max - min)) * 100);
-    return 'background:linear-gradient(to right, var(--accent-blue) ' + pct + '%, var(--border-subtle) ' + pct + '%);';
+    return 'background:linear-gradient(to right, ' + (color || 'var(--accent-blue)') + ' ' + pct + '%, var(--border-subtle) ' + pct + '%);';
   }
 
   /* =========================================================
@@ -47701,12 +48033,44 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var p = pmsvcWorking.config.pricing;
     if (!p.meet) {
       var c = v.config || {};
-      p.meet = {
-        waiting: (c.waiting || []).slice().sort(function (a, b) { return a - b; }),
-        cancellation: (c.cancellation || []).slice().sort(function (a, b) { return a - b; })
-      };
+      p.meet = { waiting: (c.waiting || []).slice().sort(function (a, b) { return a - b; }) };
     }
     return p.meet;
+  }
+
+  /* Quote mode (svc.pricingMode === 'quote') replaces the whole structure-tile/rate-fields flow.
+     PM sets a target price + how many quotes they want back — the actual call-out fee, hourly
+     rate and included time are the supplier's own to set once they're pricing a real job (see
+     supsvcServiceSubBlock), not something the PM configures up front. */
+  function pmsvcSyncQuote() {
+    var p = pmsvcWorking.config.pricing;
+    if (!p.quote) p.quote = { targetPrice: '', quotesWanted: 3 };
+    return p.quote;
+  }
+  function pmsvcQuoteBody() {
+    var q = pmsvcSyncQuote();
+    var targetVal = pmsvcNum(q.targetPrice);
+    var quotesVal = q.quotesWanted || 3;
+    return '<div class="pmsvc-quote-card">' +
+      '<div class="pmsvc-quote-head">' +
+        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>' +
+        '<div><div class="pmsvc-quote-title">To be quoted</div><div class="pmsvc-quote-desc">Custom job \u2014 drag to set a target price and how many quotes you want back</div></div>' +
+      '</div>' +
+      '<div class="pmsvc-quote-grid">' +
+        '<div class="pmsvc-quote-slider-block">' +
+          '<div class="pmsvc-quote-slider-label"><span>Target price</span><span class="pmsvc-quote-slider-value">' + (targetVal > 0 ? pmsvcMoney(targetVal) : 'No target') + '</span></div>' +
+          '<input type="range" class="pmsvc-slider" min="0" max="2000" step="50" value="' + targetVal + '" data-pmsvc-quote-target style="' + pmsvcSliderFillCss(targetVal, 0, 2000) + '">' +
+          '<div class="pmsvc-slider-ticks"><span>\u00a30</span><span>\u00a3500</span><span>\u00a31k</span><span>\u00a31.5k</span><span>\u00a32k</span></div>' +
+          '<div class="pmsvc-help" style="margin-top:10px;">Optional guide for suppliers.</div>' +
+        '</div>' +
+        '<div class="pmsvc-quote-slider-block">' +
+          '<div class="pmsvc-quote-slider-label"><span>Quotes wanted</span><span class="pmsvc-quote-slider-value">' + quotesVal + ' quote' + (quotesVal === 1 ? '' : 's') + '</span></div>' +
+          '<input type="range" class="pmsvc-slider" min="1" max="10" step="1" value="' + quotesVal + '" data-pmsvc-quote-quotes style="' + pmsvcSliderFillCss(quotesVal, 1, 10) + '">' +
+          '<div class="pmsvc-slider-ticks"><span>1</span><span>10</span></div>' +
+          '<div class="pmsvc-help" style="margin-top:10px;">Marketplace: up to 10 quotes typically returned within 24h.</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>' + pmsvcRenderUplifts();
   }
 
   /* ---- Tier ranges are the PM's to set too ----
@@ -47792,9 +48156,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       rows = pmsvcRateRow('price', 'Price per job', 'Charged whatever the property size or how long it takes.');
     } else if (v.type === 'hourly') {
       rows = pmsvcRateRow('hour', 'Rate per hour', 'No call-out and no minimum \u2014 time only.');
-    } else if (v.type === 'callout') {
-      rows = pmsvcRateRow('callout', 'Call-out charge', 'Covers attendance and the first hour on site.') +
-        pmsvcRateRow('hour', 'Each additional hour', 'Charged per hour after the call-out.');
     } else if (v.type === 'baseUnit') {
       if (!c.unit) return '<div class="pmsvc-pick-empty">Keylr hasn\u2019t finished this structure yet \u2014 no unit has been set.</div>';
       if (c.unit === 'Property Template') {
@@ -47833,19 +48194,14 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     } else if (v.type === 'meet') {
       var mu = { unit: 'Attendee', key: 'people', base: c.people, extraKey: 'attendee' };
       var meet = pmsvcSyncMeet(v);
-      /* Waiting and cancellation windows aren't billed — they're the terms of the visit.
-         So they render as the same option chips the admin picks from, not as rate rows. */
+      /* Waiting time isn't billed — it's a term of the visit, so it renders as the same option
+         chips the admin picks from, not as a rate row. */
       rows = pmsvcBaseBlock(pmsvcQtyField(mu), 'Covers the attendees set below.') +
         (c.extraAttendee ? pmsvcExtraRow(mu) : '') +
         '<div class="pmsvc-opt-group">' +
           '<div class="pmsvc-base-qty-label">Waiting time options</div>' +
           pmsvcChips('wait', SVCP_WAITING_OPTIONS.map(function (m) { return { value: m, label: m + ' min' }; }), meet.waiting, true) +
           '<div class="pmsvc-help">How long the supplier waits if the tenant is late. Not charged \u2014 it only sets what the supplier agrees to.</div>' +
-        '</div>' +
-        '<div class="pmsvc-opt-group">' +
-          '<div class="pmsvc-base-qty-label">Cancellation notice options</div>' +
-          pmsvcChips('cancel', SVCP_CANCELLATION_OPTIONS.map(function (h) { return { value: h, label: h + ' hours' }; }), meet.cancellation, true) +
-          '<div class="pmsvc-help">Notice you need to give to call the visit off without a charge.</div>' +
         '</div>';
     }
 
@@ -48060,6 +48416,10 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         '<div>Link a Keylr service above to load its pricing structure.</div></div>' +
         (t.source === 'own' ? '</div>' : '');
       return html + pmsvcRenderUplifts();
+    }
+
+    if (svc.pricingMode === 'quote') {
+      return html + pmsvcQuoteBody();
     }
 
     var options = pmsvcSelectableVars(t);
@@ -49056,7 +49416,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         if (slaValEl) slaValEl.textContent = slaVal + '%';
         var slaDescEl = slaSlider.closest('.svcp-sla-card').querySelector('.svcp-sla-card-desc');
         if (slaDescEl) slaDescEl.textContent = slaPartialChargeText(t.config.slaPolicy.freeCancellation, t.config.slaPolicy.fullCharge, slaVal);
-        slaSlider.setAttribute('style', pmsvcSliderFillCss(slaVal, 5, 100));
+        slaSlider.setAttribute('style', pmsvcSliderFillCss(slaVal, 5, 100, '#d97706'));
         pmsvcSoftRefresh();
         return;
       }
@@ -49121,6 +49481,28 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
           if (!t.config.pricing.uplifts.cells[k]) t.config.pricing.uplifts.cells[k] = { on: true, amount: '' };
           t.config.pricing.uplifts.cells[k].amount = money.value;
         } else if (kind === 'uplift-special') t.config.pricing.uplifts[k].amount = money.value;
+        pmsvcSoftRefresh();
+        return;
+      }
+
+      var quoteTarget = e.target.closest('[data-pmsvc-quote-target]');
+      if (quoteTarget) {
+        pmsvcSyncQuote().targetPrice = quoteTarget.value;
+        quoteTarget.setAttribute('style', pmsvcSliderFillCss(parseInt(quoteTarget.value, 10), 0, 2000));
+        var targetValEl = quoteTarget.closest('.pmsvc-quote-slider-block').querySelector('.pmsvc-quote-slider-value');
+        var targetNum = parseInt(quoteTarget.value, 10);
+        if (targetValEl) targetValEl.textContent = targetNum > 0 ? pmsvcMoney(targetNum) : 'No target';
+        pmsvcSoftRefresh();
+        return;
+      }
+
+      var quoteQuotes = e.target.closest('[data-pmsvc-quote-quotes]');
+      if (quoteQuotes) {
+        var quotesNum = parseInt(quoteQuotes.value, 10);
+        pmsvcSyncQuote().quotesWanted = quotesNum;
+        quoteQuotes.setAttribute('style', pmsvcSliderFillCss(quotesNum, 1, 10));
+        var quotesValEl = quoteQuotes.closest('.pmsvc-quote-slider-block').querySelector('.pmsvc-quote-slider-value');
+        if (quotesValEl) quotesValEl.textContent = quotesNum + ' quote' + (quotesNum === 1 ? '' : 's');
         pmsvcSoftRefresh();
         return;
       }
@@ -49407,12 +49789,15 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     return null;
   }
   function supsvcHeadlineRate(svc) {
+    if (svc.pricingMode === 'quote') {
+      var q = supsvcPricingFor(svc).quote;
+      return (q && q.on) ? q.calloutFee : null;
+    }
     var v = supsvcVarOf(svc);
     if (!v) return null;
     var r = supsvcPricingFor(svc).rates || {};
     if (v.type === 'fixed') return r.price;
     if (v.type === 'hourly') return r.hour;
-    if (v.type === 'callout') return r.callout;
     if (v.type === 'baseUnit' || v.type === 'baseMulti' || v.type === 'meet') return r.base;
     if (v.type === 'tier') return r['tier:0'];
     if (v.type === 'package') { var pk = supsvcPricingFor(svc).packages; return (pk && pk.length) ? pk[0].price : null; }
@@ -49423,6 +49808,11 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     return raw !== undefined && raw !== null && raw !== '' && pmsvcNum(raw) > 0;
   }
   function supsvcPricingSummary(svc) {
+    if (svc.pricingMode === 'quote') {
+      var q2 = supsvcPricingFor(svc).quote;
+      if (!q2 || !q2.on) return 'Quote \u2014 no call-out fee set';
+      return 'Quote \u00b7 ' + pmsvcMoney(q2.calloutFee) + ' call-out';
+    }
     var v = supsvcVarOf(svc);
     if (!v) return 'No pricing structure chosen yet';
     var raw = supsvcHeadlineRate(svc);
@@ -49584,9 +49974,18 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   }
 
   function supsvcServiceSubBlock(svc, showName) {
+    var html = showName ? '<div class="svcp-section-title" style="font-size:13px;margin-bottom:12px;">' + pmsvcEsc(svc.name) + '</div>' : '';
+
+    if (svc.pricingMode === 'quote') {
+      html += supsvcQuoteBody(svc) + supsvcRenderUplifts(svc);
+      html += '<div class="svcp-section-title" style="font-size:13px;margin:22px 0 2px;">Cancellation Policy</div>' +
+        '<div class="pmsvc-help" style="margin-top:0;margin-bottom:14px;">Keylr\u2019s policy for this service is shown as the limit \u2014 you can only be equal to it or friendlier to the PM.</div>' +
+        supsvcSlaBody(svc);
+      return html;
+    }
+
     var chosen = supsvcVarOf(svc);
     var options = supsvcSelectableVars(svc);
-    var html = showName ? '<div class="svcp-section-title" style="font-size:13px;margin-bottom:12px;">' + pmsvcEsc(svc.name) + '</div>' : '';
 
     if (!options.length) {
       return html + '<div class="pmsvc-fromadmin">' + PMSVC_INFO_SVG + '<div>Keylr hasn\u2019t published a pricing structure for <b>' + pmsvcEsc(svc.name) + '</b> yet.</div></div>';
@@ -49805,6 +50204,48 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     return p.meet;
   }
 
+  /* Quote mode (svc.pricingMode === 'quote') - the supplier's own call-out fee, hourly rate and
+     included time, moved here from PM's side since it's the supplier pricing the actual visit,
+     not the PM setting a structure up front (PM only sets a target price + quotes wanted guide,
+     see pmsvcQuoteBody). */
+  var SUPSVC_TIME_INCLUDED_OPTIONS = [
+    { id: 'none', label: 'None' },
+    { id: '30', label: '30 min' },
+    { id: '60', label: '60 min' },
+    { id: '90', label: '90 min' }
+  ];
+  function supsvcSyncQuote(svc) {
+    var p = supsvcPricingFor(svc);
+    if (!p.quote) p.quote = { on: false, calloutFee: '', extraHour: '', timeIncluded: '60' };
+    return p.quote;
+  }
+  function supsvcQuoteBody(svc) {
+    var q = supsvcSyncQuote(svc);
+    var fieldsHtml = !q.on ? '' :
+      '<div class="pmsvc-grid" style="margin-top:14px;">' +
+        '<div class="pmsvc-field"><label>Call-out fee per visit</label>' + pmsvcMoneyInput('supsvc-quote-calloutfee', q.calloutFee, 'data-svc="' + svc.id + '"') + '</div>' +
+        '<div class="pmsvc-field"><label>Per extra hour after included time</label>' + pmsvcMoneyInput('supsvc-quote-extrahour', q.extraHour, 'data-svc="' + svc.id + '"') + '</div>' +
+      '</div>' +
+      '<div class="pmsvc-opt-group">' +
+        '<div class="pmsvc-base-qty-label">Time on site included in the call-out fee</div>' +
+        '<div class="pmsvc-pill-row">' + SUPSVC_TIME_INCLUDED_OPTIONS.map(function (o) {
+          return '<button type="button" class="pmsvc-pill' + (q.timeIncluded === o.id ? ' on' : '') + '" data-supsvc-quote-time="' + svc.id + '|' + o.id + '">' + o.label + '</button>';
+        }).join('') + '</div>' +
+        '<div class="pmsvc-help">After this, each additional hour is charged at the rate above.</div>' +
+      '</div>';
+
+    return '<div class="pmsvc-addon-card">' +
+      '<div class="pmsvc-addon-head">' +
+        '<div class="pmsvc-addon-headtext">' +
+          '<div class="pmsvc-addon-title">Call-out fee</div>' +
+          '<div class="pmsvc-addon-desc">Flat fee charged per visit for showing up on site. Optional \u2014 only turn on if you charge one.</div>' +
+        '</div>' +
+        '<button type="button" class="toggle-switch' + (q.on ? ' on' : '') + '" data-supsvc-quote-toggle="' + svc.id + '" role="switch" aria-checked="' + q.on + '" aria-label="Call-out fee"><span class="thumb"></span></button>' +
+      '</div>' +
+      fieldsHtml +
+    '</div>';
+  }
+
   function supsvcRateFields(svc, v) {
     var c = v.config || {};
     var rows = '';
@@ -49812,9 +50253,6 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       rows = supsvcRateRow(svc, 'price', 'Price per job', 'Charged whatever the property size or how long it takes.');
     } else if (v.type === 'hourly') {
       rows = supsvcRateRow(svc, 'hour', 'Rate per hour', 'No call-out and no minimum \u2014 time only.');
-    } else if (v.type === 'callout') {
-      rows = supsvcRateRow(svc, 'callout', 'Call-out charge', 'Covers attendance and the first hour on site.') +
-        supsvcRateRow(svc, 'hour', 'Each additional hour', 'Charged per hour after the call-out.');
     } else if (v.type === 'baseUnit') {
       if (!c.unit) return '<div class="pmsvc-pick-empty">Keylr hasn\u2019t finished this structure yet \u2014 no unit has been set.</div>';
       if (c.unit === 'Property Template') {
@@ -50147,6 +50585,21 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
 
       var upliftMaster = e.target.closest('[data-supsvc-uplift-master]');
       if (upliftMaster) { var s2 = svcpServiceById(upliftMaster.getAttribute('data-supsvc-uplift-master')); supsvcPricingFor(s2).uplifts.on = !supsvcPricingFor(s2).uplifts.on; supsvcRerenderRoleCards(); return; }
+
+      var quoteToggle = e.target.closest('[data-supsvc-quote-toggle]');
+      if (quoteToggle) {
+        var svcQt = svcpServiceById(quoteToggle.getAttribute('data-supsvc-quote-toggle'));
+        supsvcSyncQuote(svcQt).on = !supsvcSyncQuote(svcQt).on;
+        supsvcRerenderRoleCards();
+        return;
+      }
+      var quoteTime = e.target.closest('[data-supsvc-quote-time]');
+      if (quoteTime) {
+        var qtParts = quoteTime.getAttribute('data-supsvc-quote-time').split('|');
+        supsvcSyncQuote(svcpServiceById(qtParts[0])).timeIncluded = qtParts[1];
+        supsvcRerenderRoleCards();
+        return;
+      }
       var upliftCell = e.target.closest('[data-supsvc-uplift-cell]');
       if (upliftCell) {
         var parts2 = upliftCell.getAttribute('data-supsvc-uplift-cell').split('|');
@@ -50248,6 +50701,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
           if (pk11) { pk11.price = money.value; supsvcRefreshAfterRateChange(s11); }
           return;
         }
+        if (mrole === 'supsvc-quote-calloutfee') { supsvcSyncQuote(svcpServiceById(svcId)).calloutFee = money.value; return; }
+        if (mrole === 'supsvc-quote-extrahour') { supsvcSyncQuote(svcpServiceById(svcId)).extraHour = money.value; return; }
         return;
       }
       var qty = e.target.closest('[data-supsvc-qty]');
