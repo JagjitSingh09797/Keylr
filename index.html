@@ -3675,6 +3675,10 @@
   /* Matches .field-input's own padding/font-size exactly, so this dropdown trigger and the
      Checklist name text input beside it in the same grid row read as the same height. */
   .ckl-service-dd .pm-custom-dd-btn { padding: 12px 14px; border-radius: 11px; font-size: 14.5px; }
+  /* Furnished / Free Parking Available dropdowns only \u2014 matched by their unique
+     data-pmprop-select key rather than a shared class, so no other .pm-custom-dd-btn anywhere
+     else in the app is affected. */
+  .pm-custom-dd-btn[data-pmprop-select="furnished"], .pm-custom-dd-btn[data-pmprop-select="parking"] { padding: 12px 14px; }
   .pm-custom-dd-btn.open .cdd-chevron { transform: rotate(180deg); }
   .pm-custom-dd-menu {
     position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 25;
