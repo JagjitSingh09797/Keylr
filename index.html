@@ -3675,10 +3675,6 @@
   /* Matches .field-input's own padding/font-size exactly, so this dropdown trigger and the
      Checklist name text input beside it in the same grid row read as the same height. */
   .ckl-service-dd .pm-custom-dd-btn { padding: 12px 14px; border-radius: 11px; font-size: 14.5px; }
-  /* Furnished / Free Parking Available dropdowns only \u2014 matched by their unique
-     data-pmprop-select key rather than a shared class, so no other .pm-custom-dd-btn anywhere
-     else in the app is affected. */
-  .pm-custom-dd-btn[data-pmprop-select="furnished"], .pm-custom-dd-btn[data-pmprop-select="parking"] { padding: 12px 14px; }
   .pm-custom-dd-btn.open .cdd-chevron { transform: rotate(180deg); }
   .pm-custom-dd-menu {
     position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 25;
@@ -5761,7 +5757,7 @@
   .pmprop-occ-badge.expired .dot { background: var(--accent-blue); }
   .pmprop-occ-badge.valid { background: #d8f8e0; color: #1a7a3e; cursor: default; }
   .pmprop-occ-badge.valid .dot { background: #1a7a3e; }
-  .pmprop-table-row { cursor: pointer; }
+  .pmprop-table-row { cursor: pointer; transition: background-color 120ms ease-out; }
   .pmprop-table-row:hover { background: var(--surface-soft); }
   .pmprop-row-menu-btn { width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--border-subtle); background: #fff; display: flex; align-items: center; justify-content: center; color: var(--text-body-muted); cursor: pointer; }
   .pmprop-row-menu-btn:hover { background: var(--surface-soft); }
@@ -5771,7 +5767,7 @@
      result, is often just 1\u20133 rows. Same scoped fix already applied elsewhere in the app for the
      same reason (#pmsvcTableWrap, #supInvitesTableWrap, .team-table-wrap). */
   .pmprop-table-wrap { min-height: 0; max-height: none; }
-  .pmprop-table-wrap .pm-table-scroll { overflow: visible; max-height: none; min-height: 0; }
+  .pmprop-table-wrap .pm-table-scroll { overflow: visible; max-height: none; min-height: 0; scroll-behavior: smooth; }
 
   /* Density pass, scoped to Properties specifically (two-class selector, not a change to the
      shared .admin-table base rules other modules also use) \u2014 professional-SaaS-dense rather than
@@ -5898,7 +5894,14 @@
   .pmprop-field-row.two-col { grid-template-columns: repeat(2, 1fr); margin-top: 0; }
   @media (max-width: 800px) { .pmprop-field-row.two-col { grid-template-columns: 1fr; } }
   .pmprop-field-hint { font-size: 11.5px; color: var(--text-body-muted); text-align: right; margin-bottom: 6px; }
-  #pmpropIdentityCard .pmprop-select-field .pm-custom-dd-btn { padding: 12px 14px; border-radius: 11px; font-size: 14.5px; }
+  /* One consistent, compact size for every dropdown and text field across the property form
+     (Identity, Details, Contacts, Access Details) \u2014 smaller than the app-wide .field-input
+     default, which reads oversized once several rows of these sit stacked together on one page. */
+  #pmpropIdentityCard .pm-custom-dd-btn, #pmpropDetailsContent .pm-custom-dd-btn,
+  #pmpropIdentityCard .field-input, #pmpropDetailsContent .field-input, #pmpropContactsList .field-input,
+  #pmpropAccessDetailsContent .field-input {
+    padding: 9px 12px; border-radius: 9px; font-size: 13px;
+  }
   #pmpropIdentityCard .pmprop-select-field .cdd-value { color: var(--text-heading); }
   #pmpropComplianceDocsList .pmprop-select-field .pm-custom-dd-btn { padding: 11px 13px; border-radius: 10px; font-size: 13px; }
   #pmpropComplianceDocsList .pmprop-select-field .cdd-value { color: var(--text-heading); }
@@ -5934,23 +5937,52 @@
   .pmprop-am-item.selected .pmprop-am-check { opacity: 1; }
 
   /* Conditional access-method fields */
-  .pmprop-access-fields { background: var(--surface-soft); border-radius: 14px; padding: 8px 10px; border: 1px solid var(--border-subtle); }
+  .pmprop-access-fields { margin-top: 14px; }
+  /* Quick Add's conditional fields sit directly beside the Access Method dropdown in the grid's
+     right column now (see .pmprop-quickadd-access-grid), not below a heading like the full form's
+     Access Details panel \u2014 the top margin that separates it from a heading there just misaligns
+     the two columns' starting point here. */
+  #pmpropQuickAddAccessFields .pmprop-access-fields { margin-top: 0; }
+  /* The Access Details panel is only half the page width on desktop (it sits beside Contacts) \u2014
+     its own fields need fewer columns than they'd use inline in the full-width Identity card,
+     regardless of viewport size, since a 3-column grid at half-page-width is too tight to be
+     usable. Fixed here rather than left to the existing viewport media queries, which respond to
+     the browser window's width, not this panel's actual (narrower) rendered width. */
+  #pmpropAccessDetailsContent .pmprop-field-row { grid-template-columns: repeat(2, 1fr); }
+  #pmpropAccessDetailsContent .pmprop-keynest-grid { grid-template-columns: repeat(2, 1fr); }
   .pmprop-access-fields .pmprop-field-row { margin-bottom: 0; }
   .pmprop-code-row { position: relative; background: #fff; border: 1px solid var(--border-subtle); border-radius: 11px; padding: 14px; display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px; }
   .pmprop-code-row:last-of-type { margin-bottom: 0; }
   /* Properties module only \u2014 no card background/border, laid out as a 3-column grid (Code,
-     Instructions, Remove) instead of stacked. Scoped to #pmpropIdentityCard specifically since
-     .pmprop-code-row's base rule above is shared with the Supplier module's own access-method
-     configuration and must keep its card treatment there. */
-  #pmpropIdentityCard .pmprop-code-row {
+     Instructions, Remove) instead of stacked. Scoped to the two containers these fields actually
+     render in (Quick Add keeps them inline in Identity; the full form renders them in the
+     separate Access Details panel) since .pmprop-code-row's base rule above is shared with the
+     Supplier module's own access-method configuration and must keep its card treatment there. */
+  #pmpropIdentityCard .pmprop-code-row, #pmpropAccessDetailsContent .pmprop-code-row {
     background: none; border: none; border-radius: 0; padding: 0; margin-bottom: 14px;
     display: grid; grid-template-columns: 1fr 1fr auto; gap: 14px; align-items: end;
   }
-  #pmpropIdentityCard .pmprop-code-row:last-of-type { margin-bottom: 0; }
-  #pmpropIdentityCard .pmprop-code-remove-btn { position: static; }
-  @media (max-width: 800px) { #pmpropIdentityCard .pmprop-code-row { grid-template-columns: 1fr; } }
+  #pmpropIdentityCard .pmprop-code-row:last-of-type, #pmpropAccessDetailsContent .pmprop-code-row:last-of-type { margin-bottom: 0; }
+  #pmpropIdentityCard .pmprop-code-remove-btn, #pmpropAccessDetailsContent .pmprop-code-remove-btn { position: static; }
+  @media (max-width: 800px) {
+    #pmpropIdentityCard .pmprop-code-row, #pmpropAccessDetailsContent .pmprop-code-row { grid-template-columns: 1fr; }
+  }
   .pmprop-code-remove-btn { position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; border-radius: 8px; border: 1px solid var(--border-subtle); background: #fff; display: flex; align-items: center; justify-content: center; color: #dc2626; cursor: pointer; flex-shrink: 0; }
   .pmprop-code-remove-btn:hover { background: #fef2f2; border-color: #fecaca; }
+  /* Keys at Agency/Office and Keys at KeyNest: Pickup Address is always the first cell, Collection
+     Codes fill in after it and wrap onto new rows on their own \u2014 a couple of codes end up sharing
+     the same line as Pickup, six or seven wrap into full rows below it, purely from the grid
+     itself rather than any per-count branching. */
+  .pmprop-keynest-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px 14px; }
+  @media (max-width: 900px) { .pmprop-keynest-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .pmprop-keynest-grid { grid-template-columns: 1fr; } }
+  .pmprop-code-cell { position: relative; }
+  .pmprop-code-cell-remove {
+    position: absolute; top: -3px; right: 0; width: 18px; height: 18px; border-radius: 50%; border: none;
+    background: none; color: #94a3b8; display: flex; align-items: center; justify-content: center; cursor: pointer;
+  }
+  .pmprop-code-cell-remove:hover:not(:disabled) { color: #dc2626; }
+  .pmprop-code-cell-remove:disabled { opacity: 0.35; cursor: not-allowed; }
   .pmprop-add-code-btn { display: inline-flex; align-items: center; gap: 6px; background: none; border: none; padding: 0; font-size: 12.5px; font-weight: 700; color: var(--accent-blue); cursor: pointer; font-family: inherit; margin-top: 6px; }
   .pmprop-add-code-btn:hover { text-decoration: underline; }
   .pmprop-same-pickup-row { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; color: var(--text-heading); cursor: pointer; user-select: none; }
@@ -5967,6 +5999,7 @@
   .pmprop-inclusions-summary-empty { font-size: 12.5px; color: var(--text-body-muted); text-align: center; padding: 8px 0; }
   .pmprop-inclusions-icon-btn:hover { background: var(--surface-soft); }
   .pmprop-inclusions-box { background: var(--surface-soft); border-radius: 14px; padding: 8px 20px; margin-top: 14px; }
+  .pmprop-inclusions-box:not(.open) { padding: 0; margin-top: 0; }
   .pmprop-inclusions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 32px; }
   @media (max-width: 700px) { .pmprop-inclusions-grid { grid-template-columns: 1fr; } }
   .pmprop-inclusion-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #e8ecf0; gap: 10px; }
@@ -5980,6 +6013,19 @@
 
   .pmprop-desc-count { font-size: 11.5px; color: #94a3b8; text-align: right; margin-top: 4px; }
 
+  /* Contacts (left) and Access Details (right) share the row's width on desktop instead of each
+     stacking full-width down the page \u2014 both are "supplementary detail" sections that follow the
+     core identity fields, and this reclaims the spare horizontal space a single-column form
+     otherwise leaves unused next to a short section. */
+  .pmprop-contacts-access-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+  @media (max-width: 900px) { .pmprop-contacts-access-grid { grid-template-columns: 1fr; gap: 24px; } }
+  /* Quick Add has no Contacts section to pair Access Details with, so the access method dropdown
+     itself takes the left column instead \u2014 same reclaimed-horizontal-space reasoning, and keeps
+     Quick Add's use of the row visually consistent with the full form's. The conditional fields on
+     the right already lay out in their own 3-column grid internally (see
+     pmpropAccessConditionalFieldsHtml) regardless of which method is selected. */
+  .pmprop-quickadd-access-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 28px; align-items: start; margin-bottom: 16px; }
+  @media (max-width: 900px) { .pmprop-quickadd-access-grid { grid-template-columns: 1fr; gap: 20px; } }
   .pmprop-toggle-section-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 4px; }
   .pmprop-toggle-section-title { font-size: 14.5px; font-weight: 700; color: var(--text-heading); }
   .pmprop-toggle-section-desc { font-size: 12.5px; color: var(--text-body-muted); margin-top: 4px; line-height: 1.55; max-width: 720px; }
@@ -5997,20 +6043,22 @@
   .pmprop-section-chevron-btn.on .pmprop-section-chevron { transform: rotate(180deg); }
 
 
-  .pmprop-dropzone { border: 1.5px dashed var(--border-subtle); border-radius: 14px; padding: 40px 20px; text-align: center; background: var(--surface-soft); cursor: pointer; }
+  .pmprop-dropzone { border: 1.5px dashed var(--border-subtle); border-radius: 14px; padding: 22px 20px; text-align: center; background: var(--surface-soft); cursor: pointer; }
   .pmprop-dropzone:hover, .pmprop-dropzone.drag-over { border-color: #90a8c8; }
   .pmprop-dropzone.drag-over { border-color: var(--accent-blue); background: var(--icon-tint-bg); }
-  .pmprop-dropzone-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--icon-tint-bg); color: var(--accent-blue); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; }
+  .pmprop-dropzone-icon { width: 34px; height: 34px; border-radius: 9px; background: var(--icon-tint-bg); color: var(--accent-blue); display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; }
   .pmprop-dropzone-title { font-size: 13.5px; font-weight: 700; color: var(--text-heading); }
   .pmprop-dropzone-title a { color: var(--accent-blue); text-decoration: underline; }
   .pmprop-dropzone-sub { font-size: 12px; color: var(--text-body-muted); margin-top: 5px; }
 
-  .pmprop-comp-docs-list { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
-  .pmprop-comp-doc-row { display: flex; align-items: center; gap: 12px; border: 1px solid var(--border-subtle); border-radius: 10px; background: #fff; padding: 10px 12px; }
-  .pmprop-comp-doc-main { flex: 1; min-width: 0; }
-  .pmprop-comp-doc-name { font-size: 13px; font-weight: 700; color: var(--text-heading); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-  .pmprop-comp-doc-fromjob { font-size: 10.5px; font-weight: 700; color: #15803d; background: #eafaf0; border: 1px solid #bfe3cc; padding: 2px 8px; border-radius: 999px; }
-  .pmprop-comp-doc-dates { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 4px; }
+  .pmprop-comp-docs-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
+  @media (max-width: 900px) { .pmprop-comp-docs-list { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .pmprop-comp-docs-list { grid-template-columns: 1fr; } }
+  .pmprop-comp-doc-card { border: 1px solid var(--border-subtle); border-radius: 12px; background: #fff; padding: 12px 14px; }
+  .pmprop-comp-doc-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+  .pmprop-comp-doc-name { font-size: 13px; font-weight: 700; color: var(--text-heading); }
+  .pmprop-comp-doc-fromjob { font-size: 10.5px; font-weight: 700; color: #15803d; background: #eafaf0; border: 1px solid #bfe3cc; padding: 2px 8px; border-radius: 999px; display: inline-block; margin-top: 8px; }
+  .pmprop-comp-doc-dates { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 10px; }
   .pmprop-comp-doc-date-field { font-size: 12px; color: var(--text-body-muted); cursor: pointer; }
   .pmprop-comp-doc-date-field b { color: var(--text-heading); font-weight: 600; }
   .pmprop-comp-doc-date-field:hover b { color: var(--accent-blue); text-decoration: underline dotted; }
@@ -6018,7 +6066,7 @@
     font-family: inherit; font-size: 12px; font-weight: 600; color: var(--text-heading); width: 100px;
     padding: 3px 6px; border: 1.5px solid var(--accent-blue); border-radius: 5px; background: #fff;
   }
-  .pmprop-comp-doc-row.pmprop-ai-highlight { animation: pmpropAiHighlight 1600ms ease-out; }
+  .pmprop-comp-doc-card.pmprop-ai-highlight { animation: pmpropAiHighlight 1600ms ease-out; }
   .pmprop-comp-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 4px; }
   .pmprop-comp-title-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .pmprop-comp-title { font-size: 14px; font-weight: 800; color: var(--text-heading); }
@@ -6075,19 +6123,6 @@
   .pmprop-comp-needsreview-badge svg { flex-shrink: 0; }
 
   .pmprop-ai-upload-box { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px dashed var(--border-subtle); }
-  .pmprop-ai-upload-result { margin-top: 14px; padding: 14px; border-radius: 12px; background: var(--surface-soft); border: 1px solid var(--border-subtle); font-size: 12.5px; }
-  .pmprop-ai-upload-result.processing { display: flex; align-items: center; gap: 10px; color: var(--text-body-muted); }
-  .pmprop-ai-upload-result.success { border-color: #bfe3cc; background: #f4fbf7; }
-  .pmprop-ai-upload-result.review { border-color: #f0dba0; background: #fffaf0; }
-  .pmprop-ai-upload-result-title { font-weight: 700; color: var(--text-heading); display: flex; align-items: center; gap: 7px; margin-bottom: 6px; }
-  .pmprop-ai-upload-result-title svg { flex-shrink: 0; }
-  .pmprop-ai-upload-result.success .pmprop-ai-upload-result-title { color: #15803d; }
-  .pmprop-ai-upload-result.review .pmprop-ai-upload-result-title { color: #92720c; }
-  .pmprop-ai-upload-result-fields { color: var(--text-body-muted); line-height: 1.7; }
-  .pmprop-ai-upload-result-fields b { color: var(--text-heading); font-weight: 600; }
-  .pmprop-ai-spinner { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--border-subtle); border-top-color: var(--accent-blue); flex-shrink: 0; animation: pmpropAiSpin 700ms linear infinite; }
-  @keyframes pmpropAiSpin { to { transform: rotate(360deg); } }
-  .pmprop-ai-category-picker { margin-top: 10px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
   @keyframes pmpropAiHighlight { 0% { box-shadow: 0 0 0 3px var(--accent-blue); } 100% { box-shadow: none; } }
   .pmprop-compsettings-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 13px 0; border-bottom: 1px solid var(--border-subtle); }
   .pmprop-compsettings-fixed-divider { font-size: 10.5px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; color: var(--text-body-muted); padding-top: 24px; padding-bottom: 10px; margin-top: 4px; }
@@ -6109,8 +6144,28 @@
      currently-primary one gets a highlighted border/tint on the whole row \u2014 a stronger, single
      visual cue rather than a badge that would just repeat the "Primary" text already in the label
      right next to it. */
-  .pmprop-contact-row { background: var(--surface-soft); border: 1.5px solid var(--border-subtle); border-radius: 11px; padding: 11px 13px; margin-bottom: 8px; transition: border-color 150ms ease-out, background 150ms ease-out; }
+  .pmprop-contact-row { background: var(--surface-soft); border: 1.5px solid var(--border-subtle); border-radius: 10px; padding: 9px 12px; margin-bottom: 6px; transition: border-color 150ms ease-out, background 150ms ease-out; }
   .pmprop-contact-row.is-primary { border-color: var(--accent-blue); background: var(--icon-tint-bg); }
+  .pmprop-contact-row.expanded { padding: 11px 13px; }
+  /* Collapsed by default \u2014 role, name, and status badges on one compact line \u2014 so several
+     contacts on one property don't stack several full edit forms down the page at once. Clicking
+     Edit swaps this for the full form (pmprop-contact-row-top below); Done swaps it back. */
+  .pmprop-contact-summary { display: flex; align-items: center; gap: 10px; }
+  .pmprop-contact-summary-main { display: flex; align-items: center; gap: 9px; flex: 1; min-width: 0; flex-wrap: wrap; }
+  .pmprop-contact-summary-role { font-size: 11.5px; font-weight: 700; color: var(--text-body-muted); flex-shrink: 0; }
+  .pmprop-contact-summary-name { font-size: 13px; font-weight: 700; color: var(--text-heading); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pmprop-contact-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; flex-shrink: 0; }
+  .pmprop-contact-badge.poc { background: #eafaf0; color: #15803d; }
+  .pmprop-contact-done-btn {
+    width: 28px; height: 28px; border-radius: 8px; border: none; color: #fff; background: var(--accent-blue);
+    display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;
+  }
+  .pmprop-contact-done-btn:hover { opacity: 0.9; }
+  .pmprop-contact-edit-btn {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 700; color: var(--accent-blue);
+    background: none; border: none; padding: 0; cursor: pointer; font-family: inherit; white-space: nowrap;
+  }
+  .pmprop-contact-edit-btn:hover { text-decoration: underline; }
   .pmprop-contact-row-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
   /* Role and existing-account pickers are the same Keylr custom dropdown component
      (.pm-custom-dd-btn) at the same fixed width/height, sitting side by side on one line \u2014
@@ -6120,16 +6175,20 @@
   .pmprop-contact-role-dd .cdd-value { color: var(--text-heading); }
   .pmprop-contact-acct-dd .cdd-value { font-weight: 600; }
   .pmprop-contact-dd .cdd-chevron { margin-left: 4px; }
-  .pmprop-contact-linked-hint { font-size: 11px; color: var(--text-body-muted); font-style: italic; }
-  /* Point-of-contact checkbox + Delete move together as one right-aligned group \u2014 a single
-     margin-left:auto on this wrapper, not one on each child, so they can never drift apart if a
-     future edit adds something between them (see the topbar Delete/bell fix for the same pattern). */
-  .pmprop-contact-row-actions { margin-left: auto; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-  .pmprop-contact-primary-label { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--text-body-muted); cursor: pointer; white-space: nowrap; }
-  .pmprop-contact-primary-label input { accent-color: var(--accent-blue); width: 15px; height: 15px; cursor: pointer; border-radius: 3px; }
-  .pmprop-contact-primary-label:has(input:checked) { color: var(--accent-blue); font-weight: 700; }
+  /* Done + Delete move together as one right-aligned group \u2014 a single margin-left:auto on this
+     wrapper, not one on each child, so they can never drift apart if a future edit adds something
+     between them (see the topbar Delete/bell fix for the same pattern). */
+  .pmprop-contact-row-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  /* Point-of-contact sits on its own line below the dropdowns (see pmpropContactEditHtml) with its
+     label spelled out in full now that it has the whole row's width to itself. */
+  .pmprop-contact-poc-label { display: flex; align-items: center; gap: 7px; cursor: pointer; margin-top: 10px; font-size: 12px; font-weight: 600; color: var(--text-body-muted); }
+  .pmprop-contact-poc-label input { accent-color: var(--accent-blue); width: 16px; height: 16px; cursor: pointer; border-radius: 4px; flex-shrink: 0; }
+  .pmprop-contact-poc-label:has(input:checked) { color: var(--accent-blue); }
   .pmprop-contact-remove-btn { width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--border-subtle); background: #fff; color: var(--text-body-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
   .pmprop-contact-remove-btn:hover { background: #fdecea; color: #c0392b; border-color: #fbc7c0; }
+  /* Linked contact: plain readable text instead of fields that only look editable \u2014 the real data
+     lives on the Team/account record, not here. */
+  .pmprop-contact-linked-details { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 10px; font-size: 12.5px; color: var(--text-heading); }
   .pmprop-field-locked { background: var(--surface-soft) !important; color: var(--text-body-muted); cursor: not-allowed; }
   .pmprop-add-branch-link { margin-bottom: 14px; }
   .pmprop-comp-sub-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
@@ -6193,23 +6252,91 @@
   .pmprop-media-link-row input.field-input:focus { box-shadow: none; }
   .pmprop-media-link-row input.field-input.error { color: var(--required-red); }
   .pmprop-media-link-row .pmprop-comp-settings-link { flex-shrink: 0; }
-  .pmprop-media-gallery { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
-  .pmprop-media-row { display: flex; align-items: center; gap: 12px; border: 1px solid var(--border-subtle); border-radius: 10px; background: #fff; padding: 8px 10px; }
-  .pmprop-media-row-thumb { width: 40px; height: 40px; border-radius: 8px; background-color: var(--surface-soft); background-size: cover; background-position: center; flex-shrink: 0; }
-  .pmprop-media-row-thumb-icon { display: flex; align-items: center; justify-content: center; color: var(--accent-blue); }
-  .pmprop-media-row-main { flex: 1; min-width: 0; }
-  .pmprop-media-row-name { font-size: 12.5px; font-weight: 600; color: var(--text-heading); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
-  .pmprop-media-row-name:hover { color: var(--accent-blue); text-decoration: underline dotted; }
-  .pmprop-media-row-type { font-size: 11px; color: var(--text-body-muted); margin-top: 1px; }
+  .pmprop-media-gallery { display: flex; flex-direction: column; gap: 14px; margin-top: 16px; }
+  .pmprop-media-links-full { display: flex; flex-direction: column; gap: 6px; }
+  /* Documents and photos render as one single, left-aligned chips row (see
+     pmpropRenderMediaChipsRow) rather than two separate side-by-side columns \u2014 both use the exact
+     same .pmprop-media-link-chip styling below, so a document chip and a photo chip are never
+     visibly different sizes from one another. */
+  .pmprop-media-chips-row { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+  .pmprop-media-doc-row { display: flex; align-items: center; gap: 8px; border: 1px solid var(--border-subtle); border-radius: 9px; background: #fff; padding: 6px 8px; }
+  .pmprop-media-doc-icon { color: var(--accent-blue); flex-shrink: 0; display: flex; }
+  .pmprop-media-doc-name { font-size: 12px; font-weight: 600; color: var(--text-heading); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+  .pmprop-media-doc-name:hover { color: var(--accent-blue); text-decoration: underline dotted; }
+  .pmprop-media-doc-remove { width: 20px; height: 20px; border-radius: 50%; border: none; background: none; color: var(--text-body-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+  .pmprop-media-doc-remove:hover { background: #fef2f2; color: #dc2626; }
+  /* Shared document-item component: icon, name (click to rename), a view action, and remove \u2014
+     identical whether the document was directly uploaded or came from a link's "fetched" content,
+     shown in a wrapping horizontal row rather than one long vertical list. */
+  .pmprop-doc-item-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pmprop-doc-item {
+    display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--border-subtle); border-radius: 9px;
+    background: #fff; padding: 6px 6px 6px 10px; max-width: 220px;
+  }
+  .pmprop-doc-item-icon { color: var(--accent-blue); flex-shrink: 0; display: flex; }
+  .pmprop-doc-item-name { font-size: 12px; font-weight: 600; color: var(--text-heading); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+  .pmprop-doc-item-name:hover { color: var(--accent-blue); text-decoration: underline dotted; }
+  .pmprop-doc-item-name.detecting { animation: pmpropBadgePulse 1100ms ease-in-out infinite; }
+  .pmprop-doc-item-view, .pmprop-doc-item-remove {
+    width: 20px; height: 20px; border-radius: 50%; border: none; background: none; color: var(--text-body-muted);
+    display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;
+  }
+  .pmprop-doc-item-view:hover { background: var(--icon-tint-bg); color: var(--accent-blue); }
+  .pmprop-doc-item-remove:hover { background: #fef2f2; color: #dc2626; }
+  /* A link's content-breakdown chips replace the single type badge \u2014 "fetched" (simulated) results
+     for what's inside, since a link can point to a whole folder/album rather than one file. Uses
+     its own .pmprop-media-link-card class (not .pmprop-media-link-row, which is the pre-existing
+     "Or paste a link instead" input row above \u2014 reusing that name here previously collided with
+     and broke its layout). flex-direction stays unset (row) with items centred, matching every
+     other .pmprop-media-doc-row; the expanded content below wraps onto its own line via
+     flex-basis:100% rather than needing the whole row to switch to column. */
+  .pmprop-media-link-card { flex-direction: unset; align-items: center; flex-wrap: wrap; }
+  .pmprop-media-link-top { display: flex; align-items: center; gap: 8px; flex: 1 1 100%; }
+  .pmprop-media-link-top .pmprop-media-doc-name { flex-shrink: 0; width: 40%; max-width: 40%; }
+  /* The rename input replaces the name div in place \u2014 without matching its width, the chips
+     beside it would jump/reflow the instant renaming started. */
+  .pmprop-media-link-top .pmprop-media-item-rename-input { flex-shrink: 0; width: 40%; max-width: 40%; }
+  .pmprop-media-link-chips { display: flex; gap: 5px; flex-wrap: wrap; }
+  .pmprop-media-link-top .pmprop-media-link-chips { flex: 1; justify-content: flex-end; min-width: 0; }
+  .pmprop-media-link-chip {
+    display: inline-flex; align-items: center; gap: 4px; padding: 5px 11px; border-radius: 999px; border: 1.5px solid var(--border-subtle);
+    background: #fff; color: var(--text-body-muted); font-size: 11.5px; font-weight: 700; cursor: pointer; font-family: inherit;
+    flex-shrink: 0; min-width: fit-content; white-space: nowrap; transition: background-color 120ms ease-out, border-color 120ms ease-out, color 120ms ease-out;
+  }
+  .pmprop-media-link-chip:hover:not(.selected) { border-color: #90a8c8; color: var(--text-heading); }
+  .pmprop-media-link-chip.selected { border-color: var(--accent-blue); background: var(--icon-tint-bg); color: var(--accent-blue); }
+  .pmprop-media-link-chip.detecting { animation: pmpropBadgePulse 1100ms ease-in-out infinite; cursor: default; }
+  .pmprop-media-link-expanded { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border-subtle); flex: 1 1 100%; }
+  .pmprop-media-link-expanded-item { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-heading); background: var(--surface-soft); border-radius: 6px; padding: 3px 5px 3px 7px; height: fit-content; }
+  .pmprop-media-link-expanded-item > span { cursor: pointer; }
+  .pmprop-media-link-expanded-item > span:hover { color: var(--accent-blue); text-decoration: underline dotted; }
+  .pmprop-media-link-sub-view, .pmprop-media-link-sub-remove {
+    width: 16px; height: 16px; border-radius: 50%; border: none; background: none; color: var(--text-body-muted);
+    display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;
+  }
+  .pmprop-media-link-sub-view:hover { background: var(--icon-tint-bg); color: var(--accent-blue); }
+  .pmprop-media-link-sub-remove:hover { background: #fef2f2; color: #dc2626; }
+  .pmprop-media-link-photo { width: 64px; }
+  .pmprop-media-link-photo .pmprop-media-photo-thumb { width: 64px; height: 64px; cursor: default; display: flex; align-items: center; justify-content: center; color: var(--accent-blue); background-color: var(--icon-tint-bg); }
+  .pmprop-media-link-photo-badge { display: block; font-size: 9px; font-weight: 700; color: var(--accent-blue); text-align: center; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* Photos' expanded tiles \u2014 the type chip itself (shared .pmprop-media-link-chip above) already
+     carries the badge/label entirely outside any image, never overlaid on a thumbnail. */
+  .pmprop-media-photo-group { display: flex; flex-wrap: wrap; gap: 10px; }
+  .pmprop-media-photo { position: relative; width: 68px; }
+  .pmprop-media-photo-thumb { width: 68px; height: 68px; border-radius: 8px; background-color: var(--surface-soft); background-size: cover; background-position: center; cursor: pointer; }
+  .pmprop-media-photo-remove {
+    position: absolute; top: -5px; right: -5px; width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid #fff;
+    background: rgba(15,23,42,0.75); color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer;
+    opacity: 0; transition: opacity 120ms ease-out;
+  }
+  .pmprop-media-photo:hover .pmprop-media-photo-remove { opacity: 1; }
+  .pmprop-media-photo-name { font-size: 10px; color: var(--text-body-muted); text-align: center; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+  .pmprop-media-photo-name:hover { color: var(--accent-blue); }
+  @keyframes pmpropBadgePulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }
   .pmprop-media-item-rename-input {
-    display: block; width: 100%; font-family: inherit; font-size: 12.5px; font-weight: 600;
-    color: var(--text-heading); padding: 3px 6px; border: 1.5px solid var(--accent-blue); border-radius: 5px; background: #fff;
+    display: block; width: 100%; font-family: inherit; font-size: 12px; font-weight: 600;
+    color: var(--text-heading); padding: 2px 5px; border: 1.5px solid var(--accent-blue); border-radius: 5px; background: #fff;
   }
-  .pmprop-media-item-remove {
-    width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--border-subtle); flex-shrink: 0;
-    background: #fff; color: var(--text-body-muted); display: flex; align-items: center; justify-content: center; cursor: pointer;
-  }
-  .pmprop-media-item-remove:hover { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
 
   /* Property Jobs page: the table sits inside the same .pmprop-card shell every other property
      sub-section uses, so it only needs its own table-wrap/empty-state rules, not a whole card
@@ -6224,11 +6351,21 @@
 
 
   .pmprop-form-shell { display: flex; flex-direction: column; margin-top: 60px; }
-  .pmprop-form-scroll { flex: 1; overflow-y: auto; min-height: 0; }
+  .pmprop-form-scroll { flex: 1; overflow-y: auto; min-height: 0; scroll-behavior: smooth; }
   .pmprop-form-footer { flex-shrink: 0; z-index: 4; display: flex; align-items: center; justify-content: space-between; background: #fff; border-top: 1px solid var(--border-subtle); padding: 16px 0; box-shadow: 0 -6px 16px rgba(16,24,40,0.05); }
   .pmprop-form-footer-fixed { position: fixed; bottom: 0; z-index: 45; padding-left: 16px; padding-right: 16px; }
   .pmprop-cancel-btn { background: #fff; border: 1.5px solid var(--border-subtle); border-radius: 10px; padding: 11px 22px; font-size: 13.5px; font-weight: 700; color: var(--text-heading); cursor: pointer; font-family: inherit; }
   .pmprop-cancel-btn:hover { background: var(--surface-soft); }
+  /* A consistent, subtle "press" on click for every button across the Properties module (list,
+     property form, and jobs page) \u2014 one rule covering all of them rather than adding the same
+     transition to dozens of individual button classes by hand. Scoped to these three view
+     containers specifically so it never touches Admin/Supplier/Marketing buttons elsewhere. */
+  #pmPropertiesView button, #pmPropertyFormView button, #pmPropertyJobsView button {
+    transition: transform 100ms ease-out, background-color 120ms ease-out, border-color 120ms ease-out, color 120ms ease-out, box-shadow 120ms ease-out;
+  }
+  #pmPropertiesView button:active, #pmPropertyFormView button:active, #pmPropertyJobsView button:active {
+    transform: scale(0.96);
+  }
   .pmprop-submit-btn { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); color: #fff; border: none; border-radius: 10px; padding: 11px 24px; font-size: 13.5px; font-weight: 700; cursor: pointer; font-family: inherit; margin-left: auto; }
   .pmprop-submit-btn:hover { opacity: 0.9; }
 
@@ -6244,6 +6381,26 @@
   .pmprop-del-cancel:hover { background: var(--surface-soft); }
   .pmprop-del-confirm { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); border: none; color: #fff; }
   .pmprop-del-confirm:disabled { opacity: 0.45; cursor: not-allowed; }
+  .pmprop-lightbox-card {
+    position: relative; width: 100%; max-width: 560px; background: #fff; border-radius: 16px; padding: 16px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.35); transform: translateY(18px) scale(0.98); opacity: 0;
+    transition: transform 300ms cubic-bezier(0.16,1,0.3,1), opacity 300ms ease-out;
+  }
+  .modal-overlay.open .pmprop-lightbox-card { transform: none; opacity: 1; }
+  .pmprop-lightbox-close {
+    position: absolute; top: 12px; right: 12px; width: 30px; height: 30px; border-radius: 50%; border: none;
+    background: rgba(15,23,42,0.55); color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1;
+  }
+  .pmprop-lightbox-close:hover { background: rgba(15,23,42,0.8); }
+  .pmprop-lightbox-image {
+    width: 100%; aspect-ratio: 4 / 3; border-radius: 10px; background-color: var(--surface-soft);
+    background-size: contain; background-position: center; background-repeat: no-repeat;
+  }
+  .pmprop-lightbox-image.placeholder {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    color: var(--text-body-muted); font-size: 12.5px; text-align: center; padding: 20px;
+  }
+  .pmprop-lightbox-name { text-align: center; font-size: 13px; font-weight: 700; color: var(--text-heading); margin-top: 12px; }
   .pmprop-massupload-bar { height: 6px; border-radius: 999px; background: var(--surface-soft); overflow: hidden; margin-top: 10px; }
   .pmprop-massupload-bar-fill { height: 100%; width: 0%; border-radius: 999px; background: var(--accent-blue); transition: width 220ms ease-out; }
   .pmprop-massupload-file-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--border-subtle); border-radius: 10px; background: var(--surface-soft); font-size: 12.5px; color: var(--text-heading); }
@@ -13017,17 +13174,17 @@
               <div class="pmprop-card">
                 <div id="pmpropIdentityCard"></div>
 
-              <div id="pmpropContactsCard" style="display:none;border-top:1px solid var(--border-subtle);margin-top:24px;padding-top:24px;">
-                <div class="pmprop-toggle-section-head">
-                  <div>
-                    <div class="pmprop-toggle-section-title">Contacts</div>
-                  </div>
-                  <button type="button" class="pmprop-section-chevron-btn on" id="pmpropContactsToggle" aria-expanded="true" aria-label="Collapse Contacts"><svg class="pmprop-section-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
-                </div>
-                <div class="field-collapsible open" id="pmpropContactsField">
+              <div id="pmpropContactsAccessGrid" style="display:none;border-top:1px solid var(--border-subtle);margin-top:24px;padding-top:24px;" class="pmprop-contacts-access-grid">
+                <div id="pmpropContactsCard">
+                  <div class="pmprop-toggle-section-title" style="margin-bottom:4px;">Contacts</div>
                   <div class="pmprop-toggle-section-desc" style="margin-bottom:14px;">Add whoever should be contacted about this property.</div>
                   <div id="pmpropContactsList"></div>
                   <button type="button" class="pmprop-comp-settings-link" id="pmpropAddContactBtn" style="margin-top:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Add contact</button>
+                </div>
+                <div id="pmpropAccessDetailsCard">
+                  <div class="pmprop-toggle-section-title" style="margin-bottom:4px;">Access Details</div>
+                  <div class="pmprop-toggle-section-desc" style="margin-bottom:14px;">How suppliers get in, based on the access method chosen above.</div>
+                  <div id="pmpropAccessDetailsContent"></div>
                 </div>
               </div>
 
@@ -13049,7 +13206,7 @@
                     <div class="pmprop-dropzone-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M6 10l6-6 6 6"/><path d="M4 20h16"/></svg></div>
                     <div class="pmprop-dropzone-title">Drag &amp; drop, or <a href="javascript:void(0)">browse files</a></div>
                     <div class="pmprop-dropzone-sub" id="pmpropMediaUploadingTo">Photos, floor plans, guides, PDFs &middot; 10 MB max per file</div>
-                    <input type="file" id="pmpropMediaFileInput" style="display:none;" accept="image/*,.pdf">
+                    <input type="file" id="pmpropMediaFileInput" style="display:none;" accept="image/*,.pdf" multiple>
                   </div>
                   <div class="pmprop-media-link-row" id="pmpropMediaLinkRow">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
@@ -13081,7 +13238,6 @@
                       <input type="url" class="field-input" id="pmpropAiUploadLinkInput" placeholder="Or paste a link instead &mdash; https://&hellip;">
                       <button type="button" class="pmprop-comp-settings-link" id="pmpropAiUploadLinkAddBtn">Add link</button>
                     </div>
-                    <div id="pmpropAiUploadResult" style="display:none;"></div>
                   </div>
                   <div class="pmprop-comp-docs-list" id="pmpropComplianceDocsList"></div>
                 </div>
@@ -13275,6 +13431,14 @@
                 <button type="button" class="pmprop-del-cancel" id="pmpropDelCancelBtn">Cancel</button>
                 <button type="button" class="pmprop-del-confirm" id="pmpropDelConfirmBtn">Delete</button>
               </div>
+            </div>
+          </div>
+
+          <div class="modal-overlay" id="pmpropLightboxOverlay">
+            <div class="pmprop-lightbox-card">
+              <button type="button" class="pmprop-lightbox-close" id="pmpropLightboxCloseBtn" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+              <div class="pmprop-lightbox-image" id="pmpropLightboxImage"></div>
+              <div class="pmprop-lightbox-name" id="pmpropLightboxName"></div>
             </div>
           </div>
 
@@ -23481,7 +23645,7 @@
     { id: 'prop-1', name: 'travelodge hotel', addr: 'Travelodge Hotels Ltd, 3 Smythe Close, London, London, N9 0TW \u00b7 London', type: 'Residential', occupancy: null, lastUpdated: '1 weeks ago', postcode: 'N9 0TW', street: 'Travelodge Hotels Ltd, 3 Smythe Close, London, London, N9 0TW', city: 'London', region: 'London', unit: '', bedroom: 'Studio', inclusions: pmpropDefaultInclusions(), description: '', accessMethod: 'Reception Desk', branch: 'Main Branch' },
     { id: 'prop-2', name: 'Homeland 2', addr: 'Q & Q Recovery, West Road, Barnsley, South Yorkshire, S75 2DH \u00b7 Barnsley', type: 'Residential', occupancy: 'occupied', lastUpdated: '1 weeks ago', postcode: 'S75 2DH', street: 'Q & Q Recovery, West Road', city: 'Barnsley', region: 'South Yorkshire', unit: '', bedroom: '2 Bed', inclusions: pmpropDefaultInclusions(), description: '', accessMethod: 'Key Safe', branch: 'Manchester Office',
       compliance: { cp12: { hasDoc: true, expiry: '2026-03-31', source: 'manual' } },
-      contacts: [{ id: 'seed-c1', role: 'Managing Agent', name: 'Priya Shah', email: 'priya@qandqrecovery.co.uk', phone: '0113 555 0142', primary: true, source: 'manual' }] },
+      contacts: [{ id: 'seed-c1', role: 'Managing Agent', name: 'Priya Shah', email: 'priya@qandqrecovery.co.uk', phone: '0113 555 0142', primary: true, pointOfContact: true, source: 'manual' }] },
     { id: 'prop-3', name: 'Homeland Heights', addr: 'Carrington, PO Box 81490, London, London, SW18 9WR \u00b7 London', type: 'Residential', occupancy: 'occupied', lastUpdated: '1 weeks ago', postcode: 'SW18 9WR', street: 'Carrington, PO Box 81490', city: 'London', region: 'London', unit: '', bedroom: '2 Bed', inclusions: pmpropDefaultInclusions(), description: '', accessMethod: 'Smart Lock', branch: 'Main Branch',
       // eicr is a manual upload nearing its deadline; epc was populated automatically because the
       // EPC assessment was completed as a service job \u2014 source:'service' is what tells the
@@ -23547,12 +23711,12 @@
   // override are visible immediately rather than only after the PM configures them by hand.
   (function pmpropSeedContactExtras() {
     var p2 = PMPROP_PROPERTIES.find(function (p) { return p.id === 'prop-2'; });
-    if (p2) p2.contacts.push({ id: 'seed-c2', role: 'Landlord / Owner', name: 'Grace Whitfield', email: 'grace.whitfield@gmail.com', phone: '07700 900312', primary: false, source: 'manual' });
+    if (p2) p2.contacts.push({ id: 'seed-c2', role: 'Landlord / Owner', name: 'Grace Whitfield', email: 'grace.whitfield@gmail.com', phone: '07700 900312', primary: false, pointOfContact: false, source: 'manual' });
     var p3 = PMPROP_PROPERTIES.find(function (p) { return p.id === 'prop-3'; });
     if (p3) {
       p3.contacts = [
-        { id: 'seed-c3', role: 'Property Manager', name: 'John Smith', email: 'john.smith@thameshouse.co.uk', phone: '020 7946 0123', primary: true, source: 'manual' },
-        { id: 'seed-c3b', role: 'Other', name: 'Customer Support', email: 'support@thameshouse.co.uk', phone: '020 7946 0000', primary: false, source: 'manual' }
+        { id: 'seed-c3', role: 'Property Manager', name: 'John Smith', email: 'john.smith@thameshouse.co.uk', phone: '020 7946 0123', primary: true, pointOfContact: true, source: 'manual' },
+        { id: 'seed-c3b', role: 'Other', name: 'Customer Support', email: 'support@thameshouse.co.uk', phone: '020 7946 0000', primary: false, pointOfContact: true, source: 'manual' }
       ];
     }
   })();
@@ -23579,10 +23743,10 @@
   var pmpropBranch = null;
   var pmpropAccessCodes = [{ code: '', instructions: '' }];
   var pmpropAccessContact = { name: '', email: '', phone: '' };
-  // Collection points for Keys at Agency/Office and Keys at KeyNest \u2014 each one pairs its own
-  // pickup address with its own code, since a property collecting from two different stores needs
-  // both kept together, not one shared address with a list of otherwise-unattached codes.
-  var pmpropCollectionCodes = [{ pickup: '', code: '' }];
+  var pmpropAccessAddress = { pickup: '' };
+  // Collection codes for Keys at Agency/Office and Keys at KeyNest \u2014 one shared pickup address
+  // (above), with any number of codes issued against it (e.g. a fresh one-time code per visit).
+  var pmpropCollectionCodes = [{ code: '' }];
   var pmpropFreeParking = 'No';
   var pmpropParkingInstructions = '';
   var pmpropInclusionsSummaryOpen = false;
@@ -23636,14 +23800,14 @@
     return (p && p.branch) || 'Main Branch';
   }
 
-  // The "Property Manager" column shows whichever contact is marked Primary \u2014 the same person
-  // Job Responses would show as the point of contact when a job goes out \u2014 regardless of their
+  // The "Property Manager" column shows whichever contact is marked as the point of contact for
+  // jobs \u2014 the same person Job Responses would show when a job goes out \u2014 regardless of their
   // specific role label (Property Manager / Managing Agent / etc.), since that's the person this
   // column is actually standing in for operationally. Falls back to the first contact on file if
-  // none is explicitly marked primary yet.
+  // none is explicitly marked yet.
   function pmpropPrimaryContactName(p) {
     if (!p || !p.contacts || !p.contacts.length) return null;
-    var primary = p.contacts.find(function (c) { return c.primary; }) || p.contacts[0];
+    var primary = p.contacts.find(function (c) { return c.pointOfContact; }) || p.contacts[0];
     return (primary && primary.name && primary.name.trim()) ? primary.name.trim() : null;
   }
   function pmpropPropertyManagerLabel(p) {
@@ -24176,7 +24340,7 @@
         return '<div class="pmprop-code-row" data-code-idx="' + i + '">' +
           '<div class="field-group" style="margin-bottom:0;"><label>Code' + (i === 0 ? '' : ' ' + (i + 1)) + '</label><input type="text" class="field-input pmprop-code-input" placeholder="e.g. 4471" value="' + pmpropEscapeHtml(row.code) + '"></div>' +
           '<div class="field-group" style="margin-bottom:0;"><label>Instructions</label><input type="text" class="field-input pmprop-code-instructions-input" placeholder="e.g. Safe is behind the meter box" value="' + pmpropEscapeHtml(row.instructions) + '"></div>' +
-          '<button type="button" class="pmprop-code-remove-btn" data-remove-code="' + i + '"' + (pmpropAccessCodes.length <= 1 ? ' disabled' : '') + ' aria-label="Remove code"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>' +
+          (pmpropAccessCodes.length > 1 ? '<button type="button" class="pmprop-code-remove-btn" data-remove-code="' + i + '" aria-label="Remove code"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>' : '') +
           '</div>';
       }).join('');
       return '<div class="pmprop-access-fields">' + rows + '<button type="button" class="pmprop-add-code-btn" id="pmpropAddCodeBtn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Add another code</button></div>';
@@ -24189,18 +24353,25 @@
         '</div></div>';
     }
     if (method.fields === 'address-codes') {
-      // Each collection point has its own pickup address AND its own code \u2014 a property collecting
-      // from two different KeyNest stores, say, needs both pairs kept separately rather than one
-      // shared address with a list of otherwise-unattached codes.
-      var codeRows = pmpropCollectionCodes.map(function (row, i) {
-        var n = i === 0 ? '' : ' ' + (i + 1);
-        return '<div class="pmprop-code-row" data-collection-code-idx="' + i + '">' +
-          '<div class="field-group" style="margin-bottom:0;"><label>Pickup address' + n + ' <span class="req">*</span></label><input type="text" class="field-input pmprop-collection-pickup-input" placeholder="100 Camden High St, NW1 7JN" value="' + pmpropEscapeHtml(row.pickup) + '"></div>' +
-          '<div class="field-group" style="margin-bottom:0;"><label>Collection Code' + n + ' <span class="req">*</span></label><input type="text" class="field-input pmprop-collection-code-input" placeholder="e.g. 8823" value="' + pmpropEscapeHtml(row.code) + '"></div>' +
-          '<button type="button" class="pmprop-code-remove-btn" data-remove-collection-code="' + i + '"' + (pmpropCollectionCodes.length <= 1 ? ' disabled' : '') + ' aria-label="Remove pickup point"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>' +
+      // One shared pickup address plus as many codes as needed against it, all flowing through the
+      // same 3-column grid \u2014 Pickup fills the first cell, codes fill in after it and wrap onto new
+      // rows on their own once there are more than fit on one line. A couple of codes sit right
+      // alongside Pickup; six or seven wrap below it in full rows \u2014 that's just how a 3-column grid
+      // naturally lays out a flowing list, no special-casing needed for either case.
+      var codeCells = pmpropCollectionCodes.map(function (row, i) {
+        return '<div class="field-group pmprop-code-cell" style="margin-bottom:0;" data-collection-code-idx="' + i + '">' +
+          '<label>Collection Code' + (i === 0 ? '' : ' ' + (i + 1)) + ' <span class="req">*</span></label>' +
+          '<input type="text" class="field-input pmprop-collection-code-input" placeholder="e.g. 8823" value="' + pmpropEscapeHtml(row.code) + '">' +
+          (pmpropCollectionCodes.length > 1 ? '<button type="button" class="pmprop-code-cell-remove" data-remove-collection-code="' + i + '" aria-label="Remove code"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>' : '') +
           '</div>';
       }).join('');
-      return '<div class="pmprop-access-fields">' + codeRows + '<button type="button" class="pmprop-add-code-btn" id="pmpropAddCollectionCodeBtn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Add another code</button></div>';
+      return '<div class="pmprop-access-fields">' +
+        '<div class="pmprop-keynest-grid">' +
+        '<div class="field-group" style="margin-bottom:0;"><label>Pickup address <span class="req">*</span></label><input type="text" class="field-input" id="pmpropAccessPickup" placeholder="100 Camden High St, NW1 7JN" value="' + pmpropEscapeHtml(pmpropAccessAddress.pickup) + '"></div>' +
+        codeCells +
+        '</div>' +
+        '<button type="button" class="pmprop-add-code-btn" id="pmpropAddCollectionCodeBtn" style="margin-top:12px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Add another code</button>' +
+        '</div>';
     }
     return '';
   }
@@ -24213,15 +24384,14 @@
         return { code: input.value, instructions: instrInputs[i] ? instrInputs[i].value : '' };
       });
     }
-    var collectionPickupInputs = document.querySelectorAll('.pmprop-collection-pickup-input');
     var collectionCodeInputs = document.querySelectorAll('.pmprop-collection-code-input');
     if (collectionCodeInputs.length) {
-      pmpropCollectionCodes = Array.prototype.map.call(collectionCodeInputs, function (input, i) {
-        return { pickup: collectionPickupInputs[i] ? collectionPickupInputs[i].value : '', code: input.value };
-      });
+      pmpropCollectionCodes = Array.prototype.map.call(collectionCodeInputs, function (input) { return { code: input.value }; });
     }
     var nameEl = document.getElementById('pmpropAccessName'), emailEl = document.getElementById('pmpropAccessEmail'), phoneEl = document.getElementById('pmpropAccessPhone');
     if (nameEl) pmpropAccessContact = { name: nameEl.value, email: emailEl ? emailEl.value : '', phone: phoneEl ? phoneEl.value : '' };
+    var pickupEl = document.getElementById('pmpropAccessPickup');
+    if (pickupEl) pmpropAccessAddress.pickup = pickupEl.value;
     var parkingInstrEl = document.getElementById('pmpropParkingInstructionsInput');
     if (parkingInstrEl) pmpropParkingInstructions = parkingInstrEl.value;
     // Basic identity fields \u2014 captured the same defensive way (only overwrite the draft if the
@@ -24259,6 +24429,7 @@
         pmpropSyncAccessFieldsFromDOM();
         pmpropAccessMethod = item.getAttribute('data-value');
         pmpropRenderIdentityCard();
+        pmpropRenderAccessDetailsCard();
       });
     });
   }
@@ -24270,6 +24441,7 @@
         var idx = parseInt(btn.getAttribute('data-remove-code'), 10);
         if (pmpropAccessCodes.length > 1) pmpropAccessCodes.splice(idx, 1);
         pmpropRenderIdentityCard();
+        pmpropRenderAccessDetailsCard();
       });
     });
     var addBtn = document.getElementById('pmpropAddCodeBtn');
@@ -24277,6 +24449,7 @@
       pmpropSyncAccessFieldsFromDOM();
       pmpropAccessCodes.push({ code: '', instructions: '' });
       pmpropRenderIdentityCard();
+      pmpropRenderAccessDetailsCard();
     });
     document.querySelectorAll('[data-remove-collection-code]').forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -24284,13 +24457,15 @@
         var idx = parseInt(btn.getAttribute('data-remove-collection-code'), 10);
         if (pmpropCollectionCodes.length > 1) pmpropCollectionCodes.splice(idx, 1);
         pmpropRenderIdentityCard();
+        pmpropRenderAccessDetailsCard();
       });
     });
     var addCollectionBtn = document.getElementById('pmpropAddCollectionCodeBtn');
     if (addCollectionBtn) addCollectionBtn.addEventListener('click', function () {
       pmpropSyncAccessFieldsFromDOM();
-      pmpropCollectionCodes.push({ pickup: '', code: '' });
+      pmpropCollectionCodes.push({ code: '' });
       pmpropRenderIdentityCard();
+      pmpropRenderAccessDetailsCard();
     });
   }
 
@@ -24303,6 +24478,7 @@
       html += '<div class="pmprop-quickadd-toggle-wrap"><span>Quick Add</span><button type="button" class="toggle-switch' + (pmpropQuickAdd ? ' on' : '') + '" id="pmpropQuickAddToggle" role="switch" aria-checked="' + (pmpropQuickAdd ? 'true' : 'false') + '"><span class="thumb"></span></button></div>';
     }
     html += '</div>';
+    if (quickAdd) html += '<div class="pmprop-callout"><b>Turn Quick add off</b> to open the full form with contacts, compliance and media.</div>';
 
     html += '<div class="pmprop-field-row">' +
       '<div class="field-group"><label>Property name' + (p ? '' : '') + '</label><input type="text" class="field-input" id="pmpropFieldName" placeholder="e.g. Acacia Court Flat 4B" value="' + pmpropEscapeHtml(pmpropIdentityDraft.name) + '"></div>' +
@@ -24317,20 +24493,41 @@
       '</div>';
 
     if (quickAdd) {
-      html += '<div class="pmprop-field-row two-col">' +
+      html += '<div class="pmprop-quickadd-access-grid">' +
         '<div class="field-group"><label>Access method <span class="req">*</span></label>' + pmpropAccessMethodDropdownHtml() + '</div>' +
+        '<div id="pmpropQuickAddAccessFields">' + pmpropAccessDetailsHtml() + '</div>' +
         '</div>';
-      html += pmpropAccessConditionalFieldsHtml();
-      html += '<div class="pmprop-callout"><b>Turn Quick add off</b> to open the full form with contacts, compliance and media.</div>';
     } else {
       html += '<div class="pmprop-field-row">' +
         '<div class="field-group"><label>Occupancy</label>' + pmpropCustomSelectHtml('occupancy', 'Select occupancy', ['Occupied', 'Void / Vacant'], p && p.occupancy === 'occupied' ? 'Occupied' : (p && p.occupancy === 'void' ? 'Void / Vacant' : null)) + '</div>' +
         '<div class="field-group"><label>Access method <span class="req">*</span></label>' + pmpropAccessMethodDropdownHtml() + '</div>' +
         (pmpropIsMultiBranch() ? '<div class="field-group"><label>Branch</label>' + pmpropCustomSelectHtml('branch', 'Main Branch', pmpropBranchOptions(), pmpropBranch || pmpropBranchLabel(p)) + '</div>' : '') +
         '</div>';
-      html += pmpropAccessConditionalFieldsHtml();
     }
     return html;
+  }
+
+  // The access method's own conditional fields (Key Safe codes, a contact person, a KeyNest pickup
+  // address, etc) live in their own panel beside Contacts rather than inline in Identity \u2014 both
+  // are "supplementary detail" sections that follow the core identity fields, and side by side on
+  // desktop uses the row's spare horizontal width instead of stacking two potentially-tall
+  // sections down the page. Quick Add keeps its own inline copy (pmpropIdentityHtml above) since
+  // there's no Contacts panel to pair it with there.
+  function pmpropAccessDetailsHtml() {
+    var current = PMPROP_ACCESS_METHODS.find(function (m) { return m.value === pmpropAccessMethod; });
+    if (!current) return '<div class="pmprop-comp-info" style="margin-top:0;">Select an access method above to configure its details.</div>';
+    return pmpropAccessConditionalFieldsHtml();
+  }
+  function pmpropRenderAccessDetailsCard() {
+    var content = document.getElementById('pmpropAccessDetailsContent');
+    if (!content) return;
+    // Quick Add renders these same conditional fields inline in Identity instead (see
+    // pmpropIdentityHtml) \u2014 populating this panel too, even while hidden, left two live copies of
+    // the same inputs in the DOM at once, which is exactly what made pmpropSyncAccessFieldsFromDOM
+    // read duplicated values.
+    if (pmpropQuickAdd && !pmpropEditingId) { content.innerHTML = ''; return; }
+    content.innerHTML = pmpropAccessDetailsHtml();
+    pmpropWireAccessConditionalFields();
   }
 
   // Furnished / Free Parking (+ Parking instructions) / Bedroom layout / Property inclusions /
@@ -24413,14 +24610,21 @@
         pmpropRenderIdentityCard();
         pmpropRenderDetailsCard();
         var showFull = !pmpropQuickAdd;
-        document.getElementById('pmpropContactsCard').style.display = showFull ? '' : 'none';
+        document.getElementById('pmpropContactsAccessGrid').style.display = showFull ? '' : 'none';
         document.getElementById('pmpropMediaCard').style.display = showFull ? '' : 'none';
         document.getElementById('pmpropComplianceCard').style.display = showFull ? '' : 'none';
       });
     }
     pmpropWireCustomSelects(card);
     pmpropWireAccessMethodDropdown();
-    pmpropWireAccessConditionalFields();
+    // Conditional-field buttons (Add another code, etc.) only actually live inside this card in
+    // Quick Add mode \u2014 in the full form they're rendered into the separate Access Details panel
+    // instead (see pmpropRenderAccessDetailsCard), which this render never touches. Wiring them
+    // from here unconditionally used to re-attach a listener to that same persistent button on
+    // every single Identity re-render, with nothing ever removing the previous one \u2014 clicking Add
+    // another code would fire every accumulated listener at once and spiral into a dozen-plus rows
+    // from a single click.
+    if (pmpropQuickAdd && !pmpropEditingId) pmpropWireAccessConditionalFields();
     var branchMenu = card.querySelector('[data-pmprop-select-menu="branch"]');
     if (branchMenu) branchMenu.querySelectorAll('.cdd-item').forEach(function (item) {
       item.addEventListener('click', function () { pmpropBranch = item.getAttribute('data-value'); });
@@ -24542,18 +24746,18 @@
     });
   }
 
-  // Contacts / Media & Documents / Compliance all open by default now (chevron, not an on/off
-  // toggle) \u2014 called on every form open so a previous property's manually-collapsed section never
-  // carries over into the next one.
+  // Media & Documents / Compliance open by default now (chevron, not an on/off toggle) \u2014 called
+  // on every form open so a previous property's manually-collapsed section never carries over into
+  // the next one. Contacts is no longer collapsible at all (see pmpropContactsCard), so there's
+  // nothing to reset for it here any more.
   function pmpropResetMediaComplianceToggles() {
-    ['pmpropMediaToggle', 'pmpropComplianceToggle', 'pmpropContactsToggle'].forEach(function (toggleId) {
+    ['pmpropMediaToggle', 'pmpropComplianceToggle'].forEach(function (toggleId) {
       var t = document.getElementById(toggleId);
       if (t) { t.classList.add('on'); t.setAttribute('aria-expanded', 'true'); }
     });
     var mediaField = document.getElementById('pmpropMediaField');
     var complianceField = document.getElementById('pmpropComplianceField');
-    var contactsField = document.getElementById('pmpropContactsField');
-    [mediaField, complianceField, contactsField].forEach(function (field) {
+    [mediaField, complianceField].forEach(function (field) {
       if (field) { field.classList.add('open'); field.style.maxHeight = ''; }
     });
     pmpropRenderComplianceComputedFields();
@@ -24572,7 +24776,11 @@
       btn.setAttribute('aria-label', (isOpen ? 'Collapse ' : 'Expand ') + btn.closest('.pmprop-toggle-section-head').querySelector('.pmprop-toggle-section-title').textContent);
       if (field) {
         setCollapsibleOpen(field, isOpen);
-        if (isOpen) setTimeout(function () { refreshCollapsibleHeight(field); }, 340);
+        // requestAnimationFrame (twice, to guarantee a full painted frame has actually happened)
+        // instead of a fixed-delay setTimeout \u2014 a guessed duration is exactly the kind of timing
+        // assumption that can glitch under different conditions (a slower device, a transition
+        // that overran slightly), where waiting for the browser's own next paint can't be early.
+        if (isOpen) requestAnimationFrame(function () { requestAnimationFrame(function () { refreshCollapsibleHeight(field); }); });
       }
     });
   }
@@ -24799,12 +25007,18 @@
   }
   function pmpropSimulateAiExtraction(filename) {
     var category = pmpropAiGuessCategory(filename);
-    if (!category) return { category: null, needsReview: true };
+    var categoryUncertain = !category;
+    if (!category) {
+      // No confident filename match \u2014 rather than blocking on a manual pick, file it under
+      // whichever certificate type isn't already on record (so it doesn't silently overwrite a
+      // real upload), flagged as uncertain so the category is easy to spot and correct on its card.
+      category = PMPROP_COMP_ALL_KEYS.find(function (k) { return !pmpropComplianceDocs.some(function (d) { return d.key === k; }); }) || PMPROP_COMP_ALL_KEYS[0];
+    }
     // A plausible recent issue date (5\u201360 days ago) \u2014 there's no real document to read a date
     // from, so this fabricates something realistic rather than leaving it blank.
     var issueDate = pmpropAddDays(new Date(), -(Math.floor(Math.random() * 55) + 5));
-    var result = { category: category, issueDate: issueDate, needsReview: false };
-    if (PMPROP_COMP_FIXED_KEYS.indexOf(category) !== -1) {
+    var result = { category: category, issueDate: issueDate, categoryUncertain: categoryUncertain };
+    if (PMPROP_COMP_FIXED_KEYS.indexOf(category) !== -1 && !categoryUncertain) {
       result.expiryDate = pmpropAddYears(issueDate, PMPROP_AI_TYPICAL_VALIDITY_YEARS[category] || 1);
     }
     return result;
@@ -24835,15 +25049,11 @@
     var doc = existing || { key: key, source: 'manual' };
     doc.categoryLabel = PMPROP_NOTIFY_TYPE_LABELS[key] || key;
     doc.isFixed = isFixed;
-    doc.needsReview = !!extraction.needsReview || (isFixed && !extraction.expiryDate);
+    doc.categoryUncertain = !!extraction.categoryUncertain;
     if (extraction.issueDate) doc.issueDate = extraction.issueDate;
     if (isFixed && extraction.expiryDate) doc.expiryDate = extraction.expiryDate;
     if (!existing) pmpropComplianceDocs.push(doc);
     pmpropRenderComplianceDocsList(doc.key);
-  }
-  function pmpropComplianceDocStatusHtml(doc) {
-    if (doc.needsReview) return '<span class="pmprop-occ-badge expiring"><span class="dot"></span>Needs review</span>';
-    return '<span class="pmprop-occ-badge valid"><span class="dot"></span>On file</span>';
   }
   // One row per document on file \u2014 category, an editable Issue Date, and (fixed-expiry types only)
   // an editable Expiry Date, click-to-edit exactly like the Media list's name field above. Dates
@@ -24855,19 +25065,19 @@
     wrap.innerHTML = pmpropComplianceDocs.length
       ? pmpropComplianceDocs.map(function (doc) {
         var fromJob = doc.source === 'service';
-        return '<div class="pmprop-comp-doc-row' + (doc.key === justAddedKey ? ' pmprop-ai-highlight' : '') + '" data-doc-key="' + doc.key + '">' +
-          '<div class="pmprop-comp-doc-main">' +
-            '<div class="pmprop-comp-doc-name">' + pmpropEscapeHtml(doc.categoryLabel) + (fromJob ? '<span class="pmprop-comp-doc-fromjob">From job' + (doc.sourceJobId ? ' #' + pmpropEscapeHtml(doc.sourceJobId.replace('JOB-', '')) : '') + '</span>' : '') + '</div>' +
-            '<div class="pmprop-comp-doc-dates">' +
-              '<span class="pmprop-comp-doc-date-field" data-doc-date="issueDate" data-doc-key="' + doc.key + '">Issue: <b>' + (pmpropFormatDateInput(doc.issueDate) || 'Set date') + '</b></span>' +
-              (doc.isFixed ? '<span class="pmprop-comp-doc-date-field" data-doc-date="expiryDate" data-doc-key="' + doc.key + '">Expiry: <b>' + (pmpropFormatDateInput(doc.expiryDate) || 'Needs review') + '</b></span>' : '') +
-            '</div>' +
+        return '<div class="pmprop-comp-doc-card' + (doc.key === justAddedKey ? ' pmprop-ai-highlight' : '') + '" data-doc-key="' + doc.key + '">' +
+          '<div class="pmprop-comp-doc-card-top">' +
+            '<div class="pmprop-comp-doc-name">' + pmpropEscapeHtml(doc.categoryLabel) + '</div>' +
+            '<button type="button" class="pmprop-media-item-remove" data-doc-remove="' + doc.key + '" aria-label="Remove ' + pmpropEscapeHtml(doc.categoryLabel) + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>' +
           '</div>' +
-          pmpropComplianceDocStatusHtml(doc) +
-          '<button type="button" class="pmprop-media-item-remove" data-doc-remove="' + doc.key + '" aria-label="Remove ' + pmpropEscapeHtml(doc.categoryLabel) + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>' +
+          (fromJob ? '<div class="pmprop-comp-doc-fromjob">From job' + (doc.sourceJobId ? ' #' + pmpropEscapeHtml(doc.sourceJobId.replace('JOB-', '')) : '') + '</div>' : '') +
+          '<div class="pmprop-comp-doc-dates">' +
+            '<span class="pmprop-comp-doc-date-field" data-doc-date="issueDate" data-doc-key="' + doc.key + '">Issue: <b>' + (pmpropFormatDateInput(doc.issueDate) || 'Set date') + '</b></span>' +
+            (doc.isFixed ? '<span class="pmprop-comp-doc-date-field" data-doc-date="expiryDate" data-doc-key="' + doc.key + '">Expiry: <b>' + (pmpropFormatDateInput(doc.expiryDate) || 'Needs review') + '</b></span>' : '') +
+          '</div>' +
         '</div>';
       }).join('')
-      : '<div class="pmprop-comp-info" style="margin-top:0;">No compliance documents on file yet \u2014 upload one above.</div>';
+      : '';
 
     wrap.querySelectorAll('[data-doc-remove]').forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -24890,9 +25100,7 @@
         input.focus();
         input.select();
         var commit = function () {
-          var parsed = pmpropParseDateInput(input.value);
-          doc[dateField] = parsed;
-          if (dateField === 'expiryDate') doc.needsReview = !parsed;
+          doc[dateField] = pmpropParseDateInput(input.value);
           pmpropRenderComplianceDocsList();
         };
         input.addEventListener('blur', commit);
@@ -24923,15 +25131,13 @@
         key: key, categoryLabel: PMPROP_NOTIFY_TYPE_LABELS[key] || key, isFixed: isFixed,
         issueDate: rec.issueDate ? new Date(rec.issueDate + 'T00:00:00') : null,
         expiryDate: rec.expiry ? new Date(rec.expiry + 'T00:00:00') : null,
-        needsReview: isFixed && !rec.expiry,
+        categoryUncertain: false,
         source: rec.source || 'manual', sourceJobId: rec.sourceJobId,
         // Anything this UI doesn't have its own field for (e.g. EPC's A\u2013F energy rating) rides
         // along unchanged rather than being silently dropped when the form is saved.
         extra: rec
       });
     });
-    var aiResult = document.getElementById('pmpropAiUploadResult');
-    if (aiResult) { aiResult.style.display = 'none'; aiResult.innerHTML = ''; }
     pmpropRenderComplianceDocsList();
   }
   // Writes the working list back into p.compliance in the same {cp12: {...}, eicr: {...}} shape it
@@ -25173,39 +25379,260 @@
     });
     return found || (isImage ? 'Property Image' : 'Document');
   }
+  // Genuine pixel-level analysis of an uploaded image, using Canvas to actually read its data
+  // rather than only ever guessing from the filename. Downsamples to a small grid (fast, no
+  // visible lag) and measures real signal: average brightness, contrast (standard deviation of
+  // brightness), and colour variety. This is real image analysis, not another layer of
+  // simulation \u2014 what stays simulated is the classification RULE itself (a hand-written heuristic,
+  // not a trained model), which is the honest limit of what a static front-end prototype can do
+  // client-side; genuine ML-based recognition needs a real backend, which isn't something to fake
+  // with a hardcoded API key sitting in client-side code.
+  function pmpropAnalyzeImagePixels(dataUrl, callback) {
+    var img = new Image();
+    img.onload = function () {
+      try {
+        var w = 24, h = 24;
+        var canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        var data = ctx.getImageData(0, 0, w, h).data;
+        var n = w * h, sumBright = 0, sumR = 0, sumG = 0, sumB = 0, brightnesses = [];
+        for (var i = 0; i < data.length; i += 4) {
+          var r = data[i], g = data[i + 1], b = data[i + 2];
+          var bright = (r + g + b) / 3;
+          brightnesses.push(bright);
+          sumBright += bright; sumR += r; sumG += g; sumB += b;
+        }
+        var avgBrightness = sumBright / n;
+        var variance = brightnesses.reduce(function (acc, v) { return acc + (v - avgBrightness) * (v - avgBrightness); }, 0) / n;
+        callback({
+          aspectRatio: img.naturalWidth / (img.naturalHeight || 1),
+          avgBrightness: avgBrightness,
+          contrast: Math.sqrt(variance),
+          colourVariety: (Math.max(sumR, sumG, sumB) - Math.min(sumR, sumG, sumB)) / n
+        });
+      } catch (e) {
+        callback(null); // canvas can throw on tainted/cross-origin data \u2014 fail closed to the filename guess
+      }
+    };
+    img.onerror = function () { callback(null); };
+    img.src = dataUrl;
+  }
+  // Floor plans and other line-drawing documents have a real, measurable signature: mostly
+  // white/light background (high average brightness), low contrast, and little colour variety.
+  // Actual photographs read very differently \u2014 far more tonal and colour range. Returns null
+  // (inconclusive) rather than guessing when the image doesn't clearly fit either pattern.
+  function pmpropClassifyFromPixels(px) {
+    if (px.avgBrightness > 195 && px.contrast < 48 && px.colourVariety < 32) return 'Floor Plan';
+    if (px.contrast > 40 || px.colourVariety > 28) return 'Property Image';
+    return null;
+  }
   function pmpropMediaLooksLikeImageUrl(url) {
     return /\.(png|jpe?g|gif|webp|svg)(\?|#|$)/i.test(url || '');
   }
-  // One gallery row: a real thumbnail for an uploaded photo or an image link, a plain file/link
-  // icon for anything else \u2014 the point being a photo never looks like a generic attachment. Laid
-  // out as a row (name + detected type + remove), not a grid tile, since a mixed list of photos and
-  // documents reads better as a scannable list than a thumbnail wall.
-  function pmpropMediaItemHtml(item) {
-    var thumbSrc = item.type === 'file' ? item.previewUrl : (pmpropMediaLooksLikeImageUrl(item.url) ? item.url : null);
-    var thumb;
-    if (thumbSrc) {
-      thumb = '<div class="pmprop-media-row-thumb" style="background-image:url(\'' + thumbSrc.replace(/'/g, '%27') + '\');"></div>';
-    } else {
-      thumb = '<div class="pmprop-media-row-thumb pmprop-media-row-thumb-icon">' +
-        (item.type === 'link'
-          ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>'
-          : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>') +
-        '</div>';
-    }
-    return '<div class="pmprop-media-row" data-media-id="' + item.id + '">' + thumb +
-      '<div class="pmprop-media-row-main">' +
-        '<div class="pmprop-media-row-name" data-media-rename="' + item.id + '" title="Click to rename \u2014 ' + pmpropEscapeHtml(item.name) + '">' + pmpropEscapeHtml(item.name) + '</div>' +
-        '<div class="pmprop-media-row-type">' + pmpropEscapeHtml(item.detectedType || 'Document') + '</div>' +
-      '</div>' +
-      '<button type="button" class="pmprop-media-item-remove" data-media-remove="' + item.id + '" aria-label="Remove ' + pmpropEscapeHtml(item.name) + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>' +
+  function pmpropMediaIsImage(item) {
+    return item.type === 'file' ? !!item.isImageFile : pmpropMediaLooksLikeImageUrl(item.url);
+  }
+  // A link to a page/folder/album (not a direct image file) is simulated as "fetched" for a
+  // content breakdown \u2014 deterministic per URL (a hash, not Math.random) so reopening the same
+  // property always shows the same simulated contents rather than reshuffling on every render.
+  // Type names read the way an AI classifier would actually label them (matching the same
+  // vocabulary real uploads get \u2014 see PMPROP_MEDIA_TYPE_KEYWORDS) rather than a generic "Images".
+  var PMPROP_LINK_CONTENT_ICONS = {
+    'Photos': '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>',
+    'Documents': '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>',
+    'PDFs': '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>',
+    'Floor Plans': '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h6"/></svg>',
+    'Guides': '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>'
+  };
+  // The real-upload classifier (PMPROP_MEDIA_TYPE_KEYWORDS) uses its own, slightly different type
+  // names (singular, a couple of different words) \u2014 aliased here to the same icon set above so a
+  // plain uploaded document's chip gets a proper icon rather than falling back to the generic one.
+  PMPROP_LINK_CONTENT_ICONS['Floor Plan'] = PMPROP_LINK_CONTENT_ICONS['Floor Plans'];
+  PMPROP_LINK_CONTENT_ICONS['House Guide'] = PMPROP_LINK_CONTENT_ICONS['Guides'];
+  PMPROP_LINK_CONTENT_ICONS['Site Layout'] = PMPROP_LINK_CONTENT_ICONS['Floor Plans'];
+  PMPROP_LINK_CONTENT_ICONS['Document'] = PMPROP_LINK_CONTENT_ICONS['Documents'];
+  // Simulated per-photo classification \u2014 no real file data exists to actually analyse, so this
+  // cycles through plausible types rather than labelling every one identically.
+  var PMPROP_SIMULATED_IMAGE_BADGES = ['Property Image', 'Property Image', 'Floor Plan', 'Property Image'];
+  // Generates real, individually-trackable sub-items (not just a type+count) so each one can be
+  // renamed or removed and have that stick across re-renders, the same as any real uploaded file.
+  function pmpropSimulateLinkContents(url, linkId) {
+    var hash = 0;
+    for (var i = 0; i < url.length; i++) hash = (hash * 31 + url.charCodeAt(i)) >>> 0;
+    var items = [];
+    var photoCount = (hash % 4) + 1; // every link has at least one photo
+    for (var p = 1; p <= photoCount; p++) items.push({ id: linkId + '-photo-' + p, type: 'Photos', name: 'Photo ' + p, badge: PMPROP_SIMULATED_IMAGE_BADGES[(p - 1) % PMPROP_SIMULATED_IMAGE_BADGES.length] });
+    if (Math.floor(hash / 4) % 3 === 0) items.push({ id: linkId + '-doc-1', type: 'Documents', name: 'Document 1' });
+    if (Math.floor(hash / 16) % 4 === 0) items.push({ id: linkId + '-pdf-1', type: 'PDFs', name: 'PDF 1' });
+    if (Math.floor(hash / 64) % 5 === 0) items.push({ id: linkId + '-fp-1', type: 'Floor Plans', name: 'Floor Plan 1' });
+    if (Math.floor(hash / 256) % 4 === 0) items.push({ id: linkId + '-guide-1', type: 'Guides', name: 'Guide 1' });
+    return items;
+  }
+  // Which "link id | content type" combination is currently expanded \u2014 at most one at a time,
+  // mirroring the photo-stack chips above.
+  var pmpropExpandedLinkChip = null;
+  // Documents & links: a compact, name-forward list \u2014 these are typically few, and the name is
+  // the thing worth scanning for, so it gets full visible text rather than being squeezed under a
+  // thumbnail. A link (as opposed to an uploaded file) shows its simulated content breakdown as
+  // chips instead of a single type badge, since a link can point to a whole folder/album rather
+  // than one specific document.
+  // Shared "document item" component \u2014 used identically whether the document was directly
+  // uploaded or is a link-extracted sub-item (Documents/PDFs/Floor Plans/Guides), so both cases
+  // look and behave exactly the same rather than maintaining two parallel bits of markup. Every
+  // key is either a plain pmpropMedia id, or a "linkId|subId" compound key \u2014 resolved by
+  // pmpropResolveDocKey below regardless of which one it turns out to be.
+  function pmpropDocItemHtml(key, name, iconType, isDetecting) {
+    return '<div class="pmprop-doc-item">' +
+      '<span class="pmprop-doc-item-icon">' + (PMPROP_LINK_CONTENT_ICONS[iconType] || PMPROP_LINK_CONTENT_ICONS['Documents']) + '</span>' +
+      '<span class="pmprop-doc-item-name' + (isDetecting ? ' detecting' : '') + '" data-doc-rename="' + key + '" title="Click to rename \u2014 ' + pmpropEscapeHtml(name) + '">' + pmpropEscapeHtml(name) + '</span>' +
+      '<button type="button" class="pmprop-doc-item-view" data-doc-view="' + key + '" aria-label="View ' + pmpropEscapeHtml(name) + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg></button>' +
+      '<button type="button" class="pmprop-doc-item-remove" data-doc-remove="' + key + '" aria-label="Remove ' + pmpropEscapeHtml(name) + '"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>' +
     '</div>';
+  }
+  // Finds a link-extracted sub-item (simulated "fetched" contents) by its "linkId|subId" compound
+  // key \u2014 looks up the parent link first, then the specific sub-item within its linkContents,
+  // since sub-items aren't part of the top-level pmpropMedia list.
+  function pmpropFindLinkSub(compoundKey) {
+    var parts = compoundKey.split('|');
+    var link = pmpropMedia.find(function (it) { return it.id === parts[0]; });
+    var sub = link && Array.isArray(link.linkContents) ? link.linkContents.find(function (s) { return s.id === parts[1]; }) : null;
+    return sub ? { link: link, sub: sub } : null;
+  }
+  // Resolves either kind of key a document action can carry \u2014 a plain pmpropMedia id, or a
+  // "linkId|subId" compound key for a link-extracted sub-item \u2014 to the same shape either way, so
+  // rename/view/remove wiring never needs to know which case it's handling.
+  function pmpropResolveDocKey(key) {
+    if (key.indexOf('|') === -1) {
+      var item = pmpropMedia.find(function (it) { return it.id === key; });
+      return item ? { obj: item, isLink: false } : null;
+    }
+    var found = pmpropFindLinkSub(key);
+    return found ? { obj: found.sub, isLink: true, link: found.link } : null;
+  }
+  function pmpropMediaDocRowHtml(item) {
+    if (item.type === 'link') {
+      var isFetching = item.linkContents === 'fetching';
+      var byType = {}, typeOrder = [];
+      if (!isFetching) (item.linkContents || []).forEach(function (sub) {
+        if (!byType[sub.type]) { byType[sub.type] = []; typeOrder.push(sub.type); }
+        byType[sub.type].push(sub);
+      });
+      var chipsHtml = isFetching
+        ? '<span class="pmprop-media-link-chip detecting">Fetching\u2026</span>'
+        : typeOrder.map(function (type) {
+          var chipKey = item.id + '|' + type;
+          return '<button type="button" class="pmprop-media-link-chip' + (pmpropExpandedLinkChip === chipKey ? ' selected' : '') + '" data-link-chip="' + chipKey + '">' + (PMPROP_LINK_CONTENT_ICONS[type] || '') + '<span>' + type + ' (' + byType[type].length + ')</span></button>';
+        }).join('');
+      var expandedContent = '';
+      if (pmpropExpandedLinkChip && pmpropExpandedLinkChip.indexOf(item.id + '|') === 0) {
+        var activeType = pmpropExpandedLinkChip.split('|')[1];
+        var activeItems = byType[activeType] || [];
+        if (activeType === 'Photos') {
+          // Real small square tiles (icon-based placeholders \u2014 there's no actual file behind a
+          // simulated extraction) with a name and a simulated AI badge under each, matching the
+          // same visual language as the real uploaded-photo stack. Name renames inline; clicking
+          // the tile itself opens the lightbox (a placeholder preview, since there's no real image).
+          expandedContent = '<div class="pmprop-media-link-expanded">' + activeItems.map(function (sub) {
+            return '<div class="pmprop-media-photo pmprop-media-link-photo" data-media-id="' + sub.id + '">' +
+              '<div class="pmprop-media-photo-thumb" data-link-sub-view="' + item.id + '|' + sub.id + '" title="Click to view larger"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>' +
+              '<div class="pmprop-media-photo-name" data-link-sub-rename="' + item.id + '|' + sub.id + '" title="Click to rename \u2014 ' + pmpropEscapeHtml(sub.name) + '">' + pmpropEscapeHtml(sub.name) + '</div>' +
+              '<span class="pmprop-media-link-photo-badge">' + pmpropEscapeHtml(sub.badge || 'Property Image') + '</span>' +
+              '<button type="button" class="pmprop-media-photo-remove" data-link-sub-remove="' + item.id + '|' + sub.id + '" aria-label="Remove ' + pmpropEscapeHtml(sub.name) + '"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>' +
+            '</div>';
+          }).join('') + '</div>';
+        } else {
+          // Non-photo content: the exact same shared document-item component real uploaded
+          // documents use \u2014 same icon/name/view/remove treatment either way.
+          expandedContent = '<div class="pmprop-media-link-expanded pmprop-doc-item-list">' + activeItems.map(function (sub) {
+            return pmpropDocItemHtml(item.id + '|' + sub.id, sub.name, activeType, false);
+          }).join('') + '</div>';
+        }
+      }
+      return '<div class="pmprop-media-doc-row pmprop-media-link-card" data-media-id="' + item.id + '">' +
+        '<div class="pmprop-media-link-top">' +
+          '<div class="pmprop-media-doc-name" data-media-rename="' + item.id + '" title="Click to rename \u2014 ' + pmpropEscapeHtml(item.name) + '">' + pmpropEscapeHtml(item.name) + '</div>' +
+          '<div class="pmprop-media-link-chips">' + chipsHtml + '</div>' +
+          '<button type="button" class="pmprop-media-doc-remove" data-media-remove="' + item.id + '" aria-label="Remove ' + pmpropEscapeHtml(item.name) + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>' +
+        '</div>' +
+        expandedContent +
+      '</div>';
+    }
+  }
+  // Which media-type group (if any) is currently expanded \u2014 shared between documents and
+  // photos now that they render as one combined chip row, so only one group opens at a time
+  // regardless of whether it's a document type or a photo type.
+  var pmpropExpandedMediaType = null;
+  function pmpropMediaPhotoThumbHtml(item) {
+    var thumbSrc = item.type === 'file' ? item.previewUrl : item.url;
+    return '<div class="pmprop-media-photo" data-media-id="' + item.id + '">' +
+      '<div class="pmprop-media-photo-thumb" data-media-view="' + item.id + '" style="background-image:url(\'' + thumbSrc.replace(/'/g, '%27') + '\');" title="Click to view larger"></div>' +
+      '<div class="pmprop-media-photo-name" data-media-rename="' + item.id + '" title="Click to rename \u2014 ' + pmpropEscapeHtml(item.name) + '">' + pmpropEscapeHtml(item.name) + '</div>' +
+      '<button type="button" class="pmprop-media-photo-remove" data-media-remove="' + item.id + '" aria-label="Remove ' + pmpropEscapeHtml(item.name) + '"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>' +
+    '</div>';
+  }
+  // Documents and photos group by detected type into one combined, left-aligned row of chips \u2014
+  // same size and style for every chip regardless of which kind it represents. The badge/type
+  // label lives on the chip itself, entirely outside any image, rather than overlaid on a
+  // thumbnail. Clicking a chip reveals that type's actual items below the chip row (square tiles
+  // for photo types, the shared document-item component for document types); a property with 100
+  // photos or documents stays a short row of chips until a specific group is actually opened.
+  function pmpropRenderMediaChipsRow(docs, photos) {
+    var groups = {}, order = [], photoTypes = {};
+    photos.forEach(function (p) {
+      var key = p.detectedType || 'Photo';
+      photoTypes[key] = true;
+      if (!groups[key]) { groups[key] = []; order.push(key); }
+      groups[key].push(p);
+    });
+    docs.forEach(function (d) {
+      var key = d.detectedType || 'Document';
+      if (!groups[key]) { groups[key] = []; order.push(key); }
+      groups[key].push(d);
+    });
+    if (pmpropExpandedMediaType && !groups[pmpropExpandedMediaType]) pmpropExpandedMediaType = null;
+    var chipsHtml = order.map(function (type) {
+      var isDetecting = type === 'Detecting\u2026';
+      var icon = photoTypes[type] ? '' : (PMPROP_LINK_CONTENT_ICONS[type] || PMPROP_LINK_CONTENT_ICONS['Documents']);
+      return '<button type="button" class="pmprop-media-link-chip' + (pmpropExpandedMediaType === type ? ' selected' : '') + (isDetecting ? ' detecting' : '') + '" data-media-type-chip="' + pmpropEscapeHtml(type) + '">' + icon + '<span>' + pmpropEscapeHtml(type) + ' (' + groups[type].length + ')</span></button>';
+    }).join('');
+    var groupHtml = '';
+    if (pmpropExpandedMediaType) {
+      var activeItems = groups[pmpropExpandedMediaType];
+      groupHtml = photoTypes[pmpropExpandedMediaType]
+        ? '<div class="pmprop-media-photo-group">' + activeItems.map(pmpropMediaPhotoThumbHtml).join('') + '</div>'
+        : '<div class="pmprop-doc-item-list">' + activeItems.map(function (d) { return pmpropDocItemHtml(d.id, d.name, pmpropExpandedMediaType, false); }).join('') + '</div>';
+    }
+    return '<div class="pmprop-media-chips-row"><div class="pmprop-media-link-chips">' + chipsHtml + '</div>' + groupHtml + '</div>';
   }
   function pmpropRenderMediaGallery() {
     var wrap = document.getElementById('pmpropMediaGallery');
     if (!wrap) return;
-    wrap.innerHTML = pmpropMedia.length
-      ? pmpropMedia.map(pmpropMediaItemHtml).join('')
-      : '<div class="pmprop-comp-info" style="margin-top:0;">No photos or documents yet \u2014 upload a file or add a link above.</div>';
+    var nonImages = pmpropMedia.filter(function (it) { return !pmpropMediaIsImage(it); });
+    var links = nonImages.filter(function (it) { return it.type === 'link'; });
+    var plainDocs = nonImages.filter(function (it) { return it.type !== 'link'; });
+    var photos = pmpropMedia.filter(pmpropMediaIsImage);
+    var html = '';
+    // Links get their own full-width row each \u2014 a link's content-breakdown chips need more room
+    // than a single combined chips row comfortably gives them.
+    if (links.length) html += '<div class="pmprop-media-links-full">' + links.map(pmpropMediaDocRowHtml).join('') + '</div>';
+    if (plainDocs.length || photos.length) html += pmpropRenderMediaChipsRow(plainDocs, photos);
+    wrap.innerHTML = html;
+    wrap.querySelectorAll('[data-media-type-chip]').forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        var type = chip.getAttribute('data-media-type-chip');
+        pmpropExpandedMediaType = (pmpropExpandedMediaType === type) ? null : type;
+        pmpropRenderMediaGallery();
+      });
+    });
+    wrap.querySelectorAll('[data-link-chip]').forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        var key = chip.getAttribute('data-link-chip');
+        pmpropExpandedLinkChip = (pmpropExpandedLinkChip === key) ? null : key;
+        pmpropRenderMediaGallery();
+      });
+    });
     wrap.querySelectorAll('[data-media-remove]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var id = btn.getAttribute('data-media-remove');
@@ -25237,6 +25664,123 @@
           if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
           if (e.key === 'Escape') { e.preventDefault(); pmpropRenderMediaGallery(); }
         });
+      });
+    });
+    // Clicking a real uploaded/linked photo's thumbnail views it larger \u2014 separate from clicking
+    // its name, which renames instead.
+    wrap.querySelectorAll('[data-media-view]').forEach(function (thumb) {
+      thumb.addEventListener('click', function () {
+        var id = thumb.getAttribute('data-media-view');
+        var item = pmpropMedia.find(function (it) { return it.id === id; });
+        if (!item) return;
+        pmpropOpenImageLightbox(item.type === 'file' ? item.previewUrl : item.url, item.name, false);
+      });
+    });
+    // Link-extracted sub-items (simulated "fetched" contents) get the same rename/view/remove
+    // trio as real items, resolved by finding the parent link first, then the specific sub-item
+    // within its linkContents \u2014 they're not part of the top-level pmpropMedia list.
+    wrap.querySelectorAll('[data-link-sub-rename]').forEach(function (nameEl) {
+      nameEl.addEventListener('click', function () {
+        var found = pmpropFindLinkSub(nameEl.getAttribute('data-link-sub-rename'));
+        if (!found) return;
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'pmprop-media-item-rename-input';
+        input.value = found.sub.name;
+        nameEl.replaceWith(input);
+        input.focus();
+        input.select();
+        var commit = function () {
+          var val = input.value.trim();
+          if (val) found.sub.name = val;
+          pmpropRenderMediaGallery();
+        };
+        input.addEventListener('blur', commit);
+        input.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
+          if (e.key === 'Escape') { e.preventDefault(); pmpropRenderMediaGallery(); }
+        });
+      });
+    });
+    wrap.querySelectorAll('[data-link-sub-view]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var found = pmpropFindLinkSub(btn.getAttribute('data-link-sub-view'));
+        if (!found) return;
+        // Always a placeholder \u2014 these are simulated extractions, there's no real file behind any
+        // of them to actually display.
+        pmpropOpenImageLightbox(null, found.sub.name, true);
+      });
+    });
+    wrap.querySelectorAll('[data-link-sub-remove]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var parts = btn.getAttribute('data-link-sub-remove').split('|');
+        var link = pmpropMedia.find(function (it) { return it.id === parts[0]; });
+        if (!link || !Array.isArray(link.linkContents)) return;
+        link.linkContents = link.linkContents.filter(function (s) { return s.id !== parts[1]; });
+        // The chip being expanded may now be empty (last item of that type just removed) \u2014 close
+        // it rather than show an empty expanded panel.
+        if (!link.linkContents.some(function (s) { return pmpropExpandedLinkChip === link.id + '|' + s.type; })) pmpropExpandedLinkChip = null;
+        pmpropRenderMediaGallery();
+      });
+    });
+    // The shared document-item component's own actions \u2014 covers both plain uploaded documents
+    // and link-extracted document-type sub-items identically, resolving whichever kind of key
+    // pmpropResolveDocKey finds rather than needing separate wiring for each case.
+    wrap.querySelectorAll('[data-doc-rename]').forEach(function (nameEl) {
+      nameEl.addEventListener('click', function () {
+        var resolved = pmpropResolveDocKey(nameEl.getAttribute('data-doc-rename'));
+        if (!resolved) return;
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'pmprop-media-item-rename-input';
+        input.value = resolved.obj.name;
+        nameEl.replaceWith(input);
+        input.focus();
+        input.select();
+        var commit = function () {
+          var val = input.value.trim();
+          if (val) resolved.obj.name = val;
+          pmpropRenderMediaGallery();
+        };
+        input.addEventListener('blur', commit);
+        input.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
+          if (e.key === 'Escape') { e.preventDefault(); pmpropRenderMediaGallery(); }
+        });
+      });
+    });
+    wrap.querySelectorAll('[data-doc-view]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var resolved = pmpropResolveDocKey(btn.getAttribute('data-doc-view'));
+        if (!resolved) return;
+        if (resolved.isLink) {
+          // Simulated extraction \u2014 honestly show the placeholder rather than pretending there's a
+          // real file behind it.
+          pmpropOpenImageLightbox(null, resolved.obj.name, true);
+        } else if (resolved.obj.previewUrl) {
+          // A real uploaded document \u2014 its actual data URL, which the browser renders natively
+          // (PDFs open in the browser's own viewer).
+          window.open(resolved.obj.previewUrl, '_blank');
+        } else {
+          showToast('No preview available for this file.');
+        }
+      });
+    });
+    wrap.querySelectorAll('[data-doc-remove]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var key = btn.getAttribute('data-doc-remove');
+        if (key.indexOf('|') === -1) {
+          pmpropMedia = pmpropMedia.filter(function (it) { return it.id !== key; });
+        } else {
+          var resolved = pmpropResolveDocKey(key);
+          if (resolved && resolved.link) {
+            resolved.link.linkContents = resolved.link.linkContents.filter(function (s) { return s.id !== resolved.obj.id; });
+            if (!resolved.link.linkContents.some(function (s) { return pmpropExpandedLinkChip === resolved.link.id + '|' + s.type; })) pmpropExpandedLinkChip = null;
+          }
+        }
+        pmpropRenderMediaGallery();
       });
     });
     // Adding/removing an item (or switching tabs) changes how tall this section is \u2014 without
@@ -25298,38 +25842,91 @@
     var fromTeam = PMPROP_TEAM_ELIGIBLE_ROLES.indexOf(role) !== -1 ? pmpropTeamAsContactAccounts() : [];
     return fromExisting.concat(fromTeam);
   }
+  // Property Manager / Managing Agent / Letting Agent are always sourced from the real roster
+  // (Team members and known accounts) \u2014 no manual-entry fallback, since these are internal/known
+  // roles rather than an arbitrary external person. Everything else (including a role with no
+  // candidates at all, e.g. a fresh org with nobody tagged that role yet) keeps manual entry as an
+  // option so the PM is never stuck with an empty, unusable list.
   function pmpropAccountOptionsForRole(role) {
-    return [PMPROP_CONTACT_MANUAL_LABEL].concat(pmpropCandidateAccountsForRole(role).map(pmpropAccountOptionLabel));
+    var candidates = pmpropCandidateAccountsForRole(role);
+    var labels = candidates.map(pmpropAccountOptionLabel);
+    return PMPROP_TEAM_ELIGIBLE_ROLES.indexOf(role) !== -1 ? labels : [PMPROP_CONTACT_MANUAL_LABEL].concat(labels);
   }
 
-  function pmpropContactRowHtml(c) {
-    var isLinked = !!c.accountId;
-    var linkedAccount = isLinked ? pmpropAllPickableAccounts().find(function (a) { return a.id === c.accountId; }) : null;
-    var acctCurrent = linkedAccount ? pmpropAccountOptionLabel(linkedAccount) : PMPROP_CONTACT_MANUAL_LABEL;
-    var lockAttr = isLinked ? ' readonly' : '';
-    return '<div class="pmprop-contact-row' + (c.primary ? ' is-primary' : '') + '" data-contact-id="' + c.id + '">' +
-      '<div class="pmprop-contact-row-top">' +
-        '<div class="pmprop-contact-dd pmprop-contact-role-dd">' + pmpropCustomSelectHtml('contactRole-' + c.id, PMPROP_CONTACT_ROLES[0], PMPROP_CONTACT_ROLES, c.role) + '</div>' +
-        '<div class="pmprop-contact-dd pmprop-contact-acct-dd">' + pmpropCustomSelectHtml('contactAcct-' + c.id, PMPROP_CONTACT_MANUAL_LABEL, pmpropAccountOptionsForRole(c.role), acctCurrent) + '</div>' +
-        (isLinked ? '<span class="pmprop-contact-linked-hint">Linked &mdash; fields locked</span>' : '') +
-        '<div class="pmprop-contact-row-actions">' +
-          '<label class="pmprop-contact-primary-label"><input type="checkbox" data-contact-field="primary"' + (c.primary ? ' checked' : '') + '>Point of contact for job</label>' +
-          '<button type="button" class="pmprop-contact-remove-btn" data-contact-remove aria-label="Remove contact"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>' +
-        '</div>' +
+  // Which contact (if any) is currently expanded into its full editable form \u2014 every other
+  // contact shows just its compact one-line summary. Keeps a property with several contacts from
+  // stacking several full name/email/phone/role forms down the page at once when only one is
+  // actually being edited at a time.
+  var pmpropExpandedContactId = null;
+
+  function pmpropContactSummaryHtml(c) {
+    var name = c.name && c.name.trim() ? c.name : 'Unnamed contact';
+    var badge = c.pointOfContact ? '<span class="pmprop-contact-badge poc">Point of contact for job</span>' : '';
+    return '<div class="pmprop-contact-summary" data-contact-id="' + c.id + '">' +
+      '<div class="pmprop-contact-summary-main">' +
+        '<span class="pmprop-contact-summary-role">' + pmpropEscapeHtml(c.role) + '</span>' +
+        '<span class="pmprop-contact-summary-name">' + pmpropEscapeHtml(name) + '</span>' +
+        badge +
       '</div>' +
-      '<div class="pmprop-field-row" style="margin-top:10px;">' +
-        '<div class="field-group" style="margin-bottom:0;"><label>Name</label><input type="text" class="field-input' + (isLinked ? ' pmprop-field-locked' : '') + '" data-contact-field="name" placeholder="Full name" value="' + pmpropEscapeHtml(c.name) + '"' + lockAttr + '></div>' +
-        '<div class="field-group" style="margin-bottom:0;"><label>Email</label><input type="email" class="field-input' + (isLinked ? ' pmprop-field-locked' : '') + '" data-contact-field="email" placeholder="name@company.com" value="' + pmpropEscapeHtml(c.email) + '"' + lockAttr + '></div>' +
-        '<div class="field-group" style="margin-bottom:0;"><label>Phone <span class="req">*</span></label><input type="text" class="field-input' + (isLinked ? ' pmprop-field-locked' : '') + '" data-contact-field="phone" placeholder="07123 456789" value="' + pmpropEscapeHtml(c.phone) + '"' + lockAttr + '></div>' +
+      '<div class="pmprop-contact-row-actions">' +
+        '<button type="button" class="pmprop-contact-edit-btn" data-contact-expand aria-label="Edit contact"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Edit</button>' +
+        '<button type="button" class="pmprop-contact-remove-btn" data-contact-remove aria-label="Remove contact"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>' +
       '</div>' +
     '</div>';
   }
 
-  // Field edits and the primary radio mutate pmpropContacts directly with no re-render \u2014
-  // re-rendering on every keystroke would blow away focus and cursor position mid-type. Add,
-  // Remove, and switching a row between an existing account and manual entry are structural
-  // enough (they change which fields are locked/visible) to warrant calling
-  // pmpropRenderContacts() and accept losing focus.
+  function pmpropContactEditHtml(c) {
+    // Property Manager / Managing Agent / Letting Agent are always picked from the real roster (no
+    // manual entry \u2014 see pmpropAccountOptionsForRole); Landlord / Owner and Other are always
+    // hand-typed (never linkable \u2014 see pmpropCandidateAccountsForRole), so neither needs an account
+    // picker showing a dropdown with nothing real to pick.
+    var showAccountPicker = PMPROP_TEAM_ELIGIBLE_ROLES.indexOf(c.role) !== -1;
+    var isLinked = !!c.accountId;
+    var linkedAccount = isLinked ? pmpropAllPickableAccounts().find(function (a) { return a.id === c.accountId; }) : null;
+    var acctCurrent = linkedAccount ? pmpropAccountOptionLabel(linkedAccount) : null;
+    var detailsHtml;
+    if (!showAccountPicker) {
+      // Always manual entry \u2014 the fields themselves ARE the only way to enter this contact.
+      detailsHtml = '<div class="pmprop-field-row" style="margin-top:10px;">' +
+        '<div class="field-group" style="margin-bottom:0;"><label>Name</label><input type="text" class="field-input" data-contact-field="name" placeholder="Full name" value="' + pmpropEscapeHtml(c.name) + '"></div>' +
+        '<div class="field-group" style="margin-bottom:0;"><label>Email</label><input type="email" class="field-input" data-contact-field="email" placeholder="name@company.com" value="' + pmpropEscapeHtml(c.email) + '"></div>' +
+        '<div class="field-group" style="margin-bottom:0;"><label>Phone <span class="req">*</span></label><input type="text" class="field-input" data-contact-field="phone" placeholder="07123 456789" value="' + pmpropEscapeHtml(c.phone) + '"></div>' +
+      '</div>';
+    } else if (isLinked) {
+      // Someone's been picked \u2014 their details come from Teams/the org's own records, shown as
+      // plain readable text rather than input fields that only look editable.
+      detailsHtml = '<div class="pmprop-contact-linked-details">' +
+        '<span>' + pmpropEscapeHtml(c.name || '\u2014') + '</span>' +
+        '<span>' + pmpropEscapeHtml(c.email || '\u2014') + '</span>' +
+        '<span>' + pmpropEscapeHtml(c.phone || '\u2014') + '</span>' +
+      '</div>';
+    } else {
+      // Nothing picked yet \u2014 no fields shown at all until the PM actually selects someone above.
+      detailsHtml = '';
+    }
+    return '<div class="pmprop-contact-row-top">' +
+        '<div class="pmprop-contact-dd pmprop-contact-role-dd">' + pmpropCustomSelectHtml('contactRole-' + c.id, PMPROP_CONTACT_ROLES[0], PMPROP_CONTACT_ROLES, c.role) + '</div>' +
+        (showAccountPicker ? '<div class="pmprop-contact-dd pmprop-contact-acct-dd">' + pmpropCustomSelectHtml('contactAcct-' + c.id, 'Select a person', pmpropAccountOptionsForRole(c.role), acctCurrent) + '</div>' : '') +
+        '<div class="pmprop-contact-row-actions">' +
+          '<button type="button" class="pmprop-contact-done-btn" data-contact-collapse aria-label="Done editing"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></button>' +
+          '<button type="button" class="pmprop-contact-remove-btn" data-contact-remove aria-label="Remove contact"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>' +
+        '</div>' +
+      '</div>' +
+      '<label class="pmprop-contact-poc-label" title="Only one ' + pmpropEscapeHtml(c.role) + ' can be the point of contact at a time"><input type="checkbox" data-contact-field="pointOfContact"' + (c.pointOfContact ? ' checked' : '') + '>Point of contact for job</label>' +
+      detailsHtml;
+  }
+
+  function pmpropContactRowHtml(c) {
+    var expanded = c.id === pmpropExpandedContactId;
+    return '<div class="pmprop-contact-row' + (c.pointOfContact ? ' is-primary' : '') + (expanded ? ' expanded' : '') + '" data-contact-id="' + c.id + '">' +
+      (expanded ? pmpropContactEditHtml(c) : pmpropContactSummaryHtml(c)) +
+    '</div>';
+  }
+
+  // Field edits mutate pmpropContacts directly with no re-render \u2014 re-rendering on every
+  // keystroke would blow away focus and cursor position mid-type. Add, Remove, and switching a
+  // row between an existing account and manual entry are structural enough (they change which
+  // fields are locked/visible) to warrant calling pmpropRenderContacts() and accept losing focus.
   function pmpropWireContactRows() {
     var wrap = document.getElementById('pmpropContactsList');
     if (!wrap) return;
@@ -25338,19 +25935,30 @@
       var id = row.getAttribute('data-contact-id');
       var contact = pmpropContacts.find(function (c) { return c.id === id; });
       if (!contact) return;
+      var expandBtn = row.querySelector('[data-contact-expand]');
+      if (expandBtn) expandBtn.addEventListener('click', function () { pmpropExpandedContactId = id; pmpropRenderContacts(); });
+      var collapseBtn = row.querySelector('[data-contact-collapse]');
+      if (collapseBtn) collapseBtn.addEventListener('click', function () { pmpropExpandedContactId = null; pmpropRenderContacts(); });
+      var removeBtn = row.querySelector('[data-contact-remove]');
+      if (removeBtn) removeBtn.addEventListener('click', function () {
+        pmpropContacts = pmpropContacts.filter(function (c) { return c.id !== id; });
+        if (pmpropExpandedContactId === id) pmpropExpandedContactId = null;
+        pmpropRenderContacts();
+      });
       row.querySelectorAll('[data-contact-field]').forEach(function (field) {
         var key = field.getAttribute('data-contact-field');
-        var evtName = (field.tagName === 'SELECT' || field.type === 'checkbox') ? 'change' : 'input';
+        var evtName = (field.tagName === 'SELECT' || field.type === 'radio' || field.type === 'checkbox') ? 'change' : 'input';
         field.addEventListener(evtName, function () {
-          if (key === 'primary') {
-            // A real checkbox (not a radio group) can be unchecked directly \u2014 only act when it was
-            // just CHECKED; clicking the box that's already the point of contact just re-renders,
-            // which restores its checked state from contact.primary since nothing changed. That
-            // keeps "always exactly one point of contact, if any exist" true without extra
-            // bookkeeping, the same invariant the old radio version had for free.
+          if (key === 'pointOfContact') {
+            // Only one point of contact per ROLE \u2014 checking this one unchecks any other contact
+            // that shares the same role (e.g. only one Managing Agent can be the point of contact
+            // at a time), but leaves every other role's point of contact untouched, so a Property
+            // Manager and a Managing Agent can both be points of contact simultaneously.
             if (field.checked) {
-              pmpropContacts.forEach(function (c) { c.primary = false; });
-              contact.primary = true;
+              pmpropContacts.forEach(function (c) { if (c.role === contact.role) c.pointOfContact = false; });
+              contact.pointOfContact = true;
+            } else {
+              contact.pointOfContact = false;
             }
             pmpropRenderContacts();
           } else if (!contact.accountId) {
@@ -25374,6 +25982,12 @@
           if (contact.accountId) {
             var stillValid = pmpropCandidateAccountsForRole(contact.role).some(function (a) { return a.id === contact.accountId; });
             if (!stillValid) contact.accountId = null;
+          }
+          // A contact carrying "point of contact" into a role that already has one takes over that
+          // role's slot \u2014 keeps the one-per-role rule true no matter which side (checkbox or role
+          // change) caused the collision.
+          if (contact.pointOfContact) {
+            pmpropContacts.forEach(function (c) { if (c !== contact && c.role === contact.role) c.pointOfContact = false; });
           }
           pmpropRenderContacts();
         });
@@ -25403,30 +26017,21 @@
           pmpropRenderContacts();
         });
       });
-      row.querySelector('[data-contact-remove]').addEventListener('click', function () {
-        var wasPrimary = contact.primary;
-        pmpropContacts = pmpropContacts.filter(function (c) { return c.id !== id; });
-        if (wasPrimary && pmpropContacts.length) pmpropContacts[0].primary = true; // always exactly one primary if any remain
-        pmpropRenderContacts();
-      });
     });
   }
 
   function pmpropRenderContacts() {
     var wrap = document.getElementById('pmpropContactsList');
     if (!wrap) return;
-    wrap.innerHTML = pmpropContacts.length
-      ? pmpropContacts.map(pmpropContactRowHtml).join('')
-      : '<div class="pmprop-comp-info" style="margin-top:0;">No contacts added yet \u2014 they\u2019re optional, add one if this property has a managing agent, letting agent or landlord to keep on file.</div>';
+    wrap.innerHTML = pmpropContacts.map(pmpropContactRowHtml).join('');
     pmpropWireContactRows();
-    // Adding or removing a contact changes how tall this section is \u2014 without this, the
-    // collapsible stays frozen at whatever height it had when the toggle was switched on, and
-    // Media & Documents (the next section down) renders right on top of the new contact's fields.
-    refreshCollapsibleHeight(document.getElementById('pmpropContactsField'));
   }
 
   document.getElementById('pmpropAddContactBtn').addEventListener('click', function () {
-    pmpropContacts.push({ id: 'contact-' + (++pmpropContactIdSeq), role: 'Property Manager', name: '', email: '', phone: '', primary: pmpropContacts.length === 0, accountId: null });
+    var isFirst = pmpropContacts.length === 0;
+    var newId = 'contact-' + (++pmpropContactIdSeq);
+    pmpropContacts.push({ id: newId, role: 'Property Manager', name: '', email: '', phone: '', pointOfContact: isFirst, accountId: null });
+    pmpropExpandedContactId = newId;
     pmpropRenderContacts();
   });
 
@@ -25572,6 +26177,7 @@
     pmpropInclusionsValues = pmpropRoomDefaultsForBedroom(pmpropBedroomValue);
     pmpropFurnished = 'Unfurnished';
     pmpropContacts = [];
+    pmpropExpandedContactId = null;
     pmpropMedia = pmpropEmptyMedia();
     pmpropAccessMethod = null; // otherwise a previously-edited property's method would carry over
     pmpropBranch = 'Main Branch';
@@ -25592,9 +26198,10 @@
     var showFull = !quickAdd;
     document.getElementById('pmpropMediaCard').style.display = showFull ? '' : 'none';
     document.getElementById('pmpropComplianceCard').style.display = showFull ? '' : 'none';
-    document.getElementById('pmpropContactsCard').style.display = showFull ? '' : 'none';
+    document.getElementById('pmpropContactsAccessGrid').style.display = showFull ? '' : 'none';
     pmpropResetMediaComplianceToggles();
     pmpropRenderContacts();
+    pmpropRenderAccessDetailsCard();
     pmpropRenderMediaGallery();
     pmpropPopulateComplianceForm(null);
   }
@@ -25611,6 +26218,7 @@
     // Existing contacts load in for editing; a fresh copy each open so cancelling doesn't leave
     // stray edits sitting in memory for next time.
     pmpropContacts = (p.contacts || []).map(function (c) { return Object.assign({}, c); });
+    pmpropExpandedContactId = null;
     pmpropMedia = pmpropCloneMedia(p.media);
     // Matches exactly what the Properties list already shows for this property, rather than the
     // dropdown always starting on "Select..." regardless of what's actually on file.
@@ -25628,9 +26236,10 @@
     pmpropRenderDetailsCard();
     document.getElementById('pmpropMediaCard').style.display = '';
     document.getElementById('pmpropComplianceCard').style.display = '';
-    document.getElementById('pmpropContactsCard').style.display = '';
+    document.getElementById('pmpropContactsAccessGrid').style.display = '';
     pmpropResetMediaComplianceToggles();
     pmpropRenderContacts();
+    pmpropRenderAccessDetailsCard();
     pmpropRenderMediaGallery();
     pmpropPopulateComplianceForm(p);
   }
@@ -25645,6 +26254,27 @@
   function pmpropCloseDeleteModal() {
     document.getElementById('pmpropDeleteOverlay').classList.remove('open');
     pmpropDeleteTargetId = null;
+  }
+
+  // Shows a photo larger \u2014 works for both a real uploaded image (src is an actual data URL) and a
+  // simulated link-extracted one (no real file exists, so isPlaceholder shows a generic large icon
+  // instead of pretending there's a real photo behind it).
+  function pmpropOpenImageLightbox(src, name, isPlaceholder) {
+    var imageEl = document.getElementById('pmpropLightboxImage');
+    if (isPlaceholder) {
+      imageEl.style.backgroundImage = '';
+      imageEl.classList.add('placeholder');
+      imageEl.innerHTML = '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>Preview not available for this fetched item</span>';
+    } else {
+      imageEl.classList.remove('placeholder');
+      imageEl.innerHTML = '';
+      imageEl.style.backgroundImage = 'url(\'' + src.replace(/'/g, '%27') + '\')';
+    }
+    document.getElementById('pmpropLightboxName').textContent = name || '';
+    document.getElementById('pmpropLightboxOverlay').classList.add('open');
+  }
+  function pmpropCloseImageLightbox() {
+    document.getElementById('pmpropLightboxOverlay').classList.remove('open');
   }
 
   // The Actions column's Jobs button \u2014 takes the property's own internal ID, resolves it to a
@@ -26067,17 +26697,15 @@
   }
 
   // Phone is mandatory for every contact (Section 10) \u2014 checked here rather than per-keystroke so
-  // an in-progress contact isn't flagged red the moment its row appears. Opens/expands the Contacts
-  // section if it was collapsed so the error is actually visible, not hidden behind a closed toggle.
+  // an in-progress contact isn't flagged red the moment its row appears. Expands the contact's row
+  // first if it's currently collapsed to its summary \u2014 otherwise there's no phone input in the DOM
+  // yet to focus or flag at all.
   function pmpropValidateContactPhones() {
     var invalid = pmpropContacts.filter(function (c) { return !c.phone || !c.phone.trim(); })[0];
     if (!invalid) return true;
-    var toggle = document.getElementById('pmpropContactsToggle');
-    var field = document.getElementById('pmpropContactsField');
-    if (toggle && !toggle.classList.contains('on')) {
-      toggle.classList.add('on');
-      toggle.setAttribute('aria-expanded', 'true');
-      setCollapsibleOpen(field, true);
+    if (pmpropExpandedContactId !== invalid.id) {
+      pmpropExpandedContactId = invalid.id;
+      pmpropRenderContacts();
     }
     var row = document.querySelector('.pmprop-contact-row[data-contact-id="' + invalid.id + '"]');
     var input = row ? row.querySelector('[data-contact-field="phone"]') : null;
@@ -26178,38 +26806,61 @@
     document.getElementById('pmpropMediaDropzone').addEventListener('click', function () {
       document.getElementById('pmpropMediaFileInput').click();
     });
-    // Auto-detects the item's type from its filename (same simulated-classification spirit as the
-    // Compliance uploader) rather than asking the PM to pick a tab first \u2014 a brief "Detecting..."
-    // label shows on the row until the (simulated) classification resolves.
+    // Auto-detects the item's type: filename keywords first, and for images where that isn't
+    // conclusive, a second real pass over the actual pixel data (see pmpropAnalyzeImagePixels)
+    // rather than settling for the generic "Property Image" default every time. A non-image link
+    // gets its contents "fetched" (simulated) instead of a single type guess, since a link can
+    // point to a whole folder/album rather than one specific file.
     function pmpropAddMediaItem(item, isImage) {
-      item.detectedType = 'Detecting\u2026';
+      var isLinkToFetch = item.type === 'link' && !isImage;
+      if (isLinkToFetch) item.linkContents = 'fetching';
+      else item.detectedType = 'Detecting\u2026';
       pmpropMedia.push(item);
       pmpropRenderMediaGallery();
-      setTimeout(function () {
-        item.detectedType = pmpropGuessMediaType(item.name, isImage);
-        pmpropRenderMediaGallery();
-      }, 600);
+      if (isLinkToFetch) {
+        setTimeout(function () {
+          item.linkContents = pmpropSimulateLinkContents(item.url, item.id);
+          pmpropRenderMediaGallery();
+        }, 900);
+        return;
+      }
+      var filenameGuess = pmpropGuessMediaType(item.name, isImage);
+      var filenameWasConfident = filenameGuess !== (isImage ? 'Property Image' : 'Document');
+      if (isImage && item.previewUrl && !filenameWasConfident) {
+        pmpropAnalyzeImagePixels(item.previewUrl, function (px) {
+          item.detectedType = (px && pmpropClassifyFromPixels(px)) || filenameGuess;
+          pmpropRenderMediaGallery();
+        });
+      } else {
+        setTimeout(function () {
+          item.detectedType = filenameGuess;
+          pmpropRenderMediaGallery();
+        }, 600);
+      }
     }
     document.getElementById('pmpropMediaFileInput').addEventListener('change', function (e) {
-      var file = e.target.files && e.target.files[0];
-      if (!file) return;
-      var isImage = !!(file.type && file.type.indexOf('image/') === 0);
-      var item = { id: 'media-' + (++pmpropMediaItemIdSeq), type: 'file', name: file.name };
-      var addItem = function () {
-        pmpropAddMediaItem(item, isImage);
-        showToast('Uploaded ' + file.name + '.');
-      };
-      // Real thumbnail for an actual image file, straight from the browser \u2014 no fake placeholder
-      // needed. Non-images (PDFs, etc.) skip straight to the plain file-icon card.
-      if (isImage && typeof FileReader === 'function') {
-        var reader = new FileReader();
-        reader.onload = function (ev) { item.previewUrl = ev.target.result; addItem(); };
-        reader.onerror = addItem; // still add the item as a plain file card if the preview read fails
-        reader.readAsDataURL(file);
-      } else {
-        addItem();
-      }
-      e.target.value = ''; // lets the exact same file be re-picked later without a browser no-op
+      var files = e.target.files;
+      if (!files || !files.length) return;
+      Array.prototype.forEach.call(files, function (file) {
+        var isImage = !!(file.type && file.type.indexOf('image/') === 0);
+        var item = { id: 'media-' + (++pmpropMediaItemIdSeq), type: 'file', name: file.name, isImageFile: isImage };
+        var addItem = function () {
+          pmpropAddMediaItem(item, isImage);
+          showToast('Uploaded ' + file.name + '.');
+        };
+        // Real preview straight from the browser for both images and documents (a PDF's data URL
+        // opens natively in a new tab, which is what the View action uses) \u2014 no fake placeholder
+        // needed for anything actually uploaded from disk.
+        if (typeof FileReader === 'function') {
+          var reader = new FileReader();
+          reader.onload = function (ev) { item.previewUrl = ev.target.result; addItem(); };
+          reader.onerror = addItem; // still add the item as a plain file card if the preview read fails
+          reader.readAsDataURL(file);
+        } else {
+          addItem();
+        }
+      });
+      e.target.value = ''; // lets the exact same file(s) be re-picked later without a browser no-op
     });
     document.getElementById('pmpropMediaLinkAddBtn').addEventListener('click', function () {
       var input = document.getElementById('pmpropMediaLinkInput');
@@ -26242,48 +26893,15 @@
       var fileInput = document.getElementById('pmpropAiUploadFileInput');
       var linkInput = document.getElementById('pmpropAiUploadLinkInput');
       var linkBtn = document.getElementById('pmpropAiUploadLinkAddBtn');
-      var resultEl = document.getElementById('pmpropAiUploadResult');
       if (!dropzone) return;
 
-      function renderProcessing(name) {
-        resultEl.style.display = '';
-        resultEl.className = 'pmprop-ai-upload-result processing';
-        resultEl.innerHTML = '<div class="pmprop-ai-spinner"></div><span>Analysing ' + pmpropEscapeHtml(name) + '\u2026</span>';
-      }
-      function renderSuccess(name, extraction) {
-        var label = PMPROP_NOTIFY_TYPE_LABELS[extraction.category] || extraction.category;
-        var isFixed = PMPROP_COMP_FIXED_KEYS.indexOf(extraction.category) !== -1;
-        var fieldsHtml = '<b>Category:</b> ' + pmpropEscapeHtml(label) + '<br><b>Issue Date:</b> ' + calFormatDMY(extraction.issueDate);
-        if (isFixed) fieldsHtml += '<br><b>Expiry Date:</b> ' + (extraction.expiryDate ? calFormatDMY(extraction.expiryDate) : 'Needs review');
-        resultEl.className = 'pmprop-ai-upload-result success';
-        resultEl.innerHTML = '<div class="pmprop-ai-upload-result-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>AI extracted from ' + pmpropEscapeHtml(name) + '</div><div class="pmprop-ai-upload-result-fields">' + fieldsHtml + '</div>';
-        pmpropAddOrUpdateComplianceDoc(extraction);
-      }
-      function renderNeedsReview(name) {
-        resultEl.className = 'pmprop-ai-upload-result review';
-        resultEl.innerHTML = '<div class="pmprop-ai-upload-result-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/></svg>Needs review</div><div class="pmprop-ai-upload-result-fields">Couldn\u2019t confidently match <b>' + pmpropEscapeHtml(name) + '</b> to a certificate type \u2014 pick one below and we\u2019ll file the issue date against it.</div>' +
-          '<div class="pmprop-ai-category-picker">' + pmpropCustomSelectHtml('aiReviewCategory', 'Choose certificate type', PMPROP_COMP_ALL_KEYS.map(function (k) { return PMPROP_NOTIFY_TYPE_LABELS[k]; }), null) + '</div>';
-        pmpropWireCustomSelects(resultEl);
-        var menu = resultEl.querySelector('[data-pmprop-select-menu="aiReviewCategory"]');
-        if (menu) menu.querySelectorAll('.cdd-item').forEach(function (item) {
-          item.addEventListener('click', function () {
-            var chosenLabel = item.getAttribute('data-value');
-            var chosenKey = Object.keys(PMPROP_NOTIFY_TYPE_LABELS).find(function (k) { return PMPROP_NOTIFY_TYPE_LABELS[k] === chosenLabel; });
-            if (!chosenKey) return;
-            var extraction = { category: chosenKey, issueDate: pmpropAddDays(new Date(), -(Math.floor(Math.random() * 20) + 3)), needsReview: true };
-            // A manually-resolved category still couldn't have its expiry read automatically \u2014
-            // that field is deliberately left for the PM to fill in themselves (see the
-            // corresponding date field's own "dd/mm/yyyy" placeholder for fixed-expiry types).
-            renderSuccess(name, extraction);
-            showToast('Filed as ' + chosenLabel + ' \u2014 double-check the expiry date.');
-          });
-        });
-      }
       function processFile(name) {
-        renderProcessing(name);
+        showToast('Analysing ' + name + '\u2026');
         setTimeout(function () {
           var extraction = pmpropSimulateAiExtraction(name);
-          if (extraction.needsReview) renderNeedsReview(name); else renderSuccess(name, extraction);
+          pmpropAddOrUpdateComplianceDoc(extraction);
+          var label = PMPROP_NOTIFY_TYPE_LABELS[extraction.category] || extraction.category;
+          showToast((extraction.categoryUncertain ? 'Filed as ' + label + ' \u2014 check the card below.' : 'Added ' + label + '.'));
         }, 1100);
       }
 
@@ -26311,10 +26929,11 @@
 
     pmpropInitChevronSection('pmpropMediaToggle', 'pmpropMediaField');
     pmpropInitChevronSection('pmpropComplianceToggle', 'pmpropComplianceField');
-    pmpropInitChevronSection('pmpropContactsToggle', 'pmpropContactsField');
 
     document.getElementById('pmpropDelCancelBtn').addEventListener('click', pmpropCloseDeleteModal);
     document.getElementById('pmpropDeleteOverlay').addEventListener('click', function (e) { if (e.target === this) pmpropCloseDeleteModal(); });
+    document.getElementById('pmpropLightboxOverlay').addEventListener('click', function (e) { if (e.target === this) pmpropCloseImageLightbox(); });
+    document.getElementById('pmpropLightboxCloseBtn').addEventListener('click', pmpropCloseImageLightbox);
     document.getElementById('pmpropDelConfirmBtn').addEventListener('click', function () {
       if (!pmpropDeleteTargetId) return;
       PMPROP_PROPERTIES = PMPROP_PROPERTIES.filter(function (p) { return p.id !== pmpropDeleteTargetId; });
