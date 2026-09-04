@@ -5893,21 +5893,25 @@
   @media (max-width: 800px) { .pmprop-field-row { grid-template-columns: 1fr; gap: 14px; } }
   .pmprop-field-row.two-col { grid-template-columns: repeat(2, 1fr); margin-top: 0; }
   @media (max-width: 800px) { .pmprop-field-row.two-col { grid-template-columns: 1fr; } }
-  .pmprop-field-hint { font-size: 11.5px; color: var(--text-body-muted); text-align: right; margin-bottom: 6px; }
+  /* Quick Add: the access method dropdown takes the left column, its conditional fields (once a
+     method is picked) take the right \u2014 nested inside Identity's own single render rather than a
+     separate sibling panel, so there's only ever one copy of these inputs in the DOM regardless of
+     how this renders. */
+  .pmprop-quickadd-access-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; align-items: start; }
+  @media (max-width: 900px) { .pmprop-quickadd-access-grid { grid-template-columns: 1fr; gap: 20px; } }
+  .pmprop-access-method-group { margin-bottom: 0; }
   /* One consistent, compact size for every dropdown and text field across the property form
-     (Identity, Details, Contacts, Access Details) \u2014 smaller than the app-wide .field-input
-     default, which reads oversized once several rows of these sit stacked together on one page. */
+     (Identity, Details, Contacts) \u2014 smaller than the app-wide .field-input default, which reads
+     oversized once several rows of these sit stacked together on one page. */
   #pmpropIdentityCard .pm-custom-dd-btn, #pmpropDetailsContent .pm-custom-dd-btn,
-  #pmpropIdentityCard .field-input, #pmpropDetailsContent .field-input, #pmpropContactsList .field-input,
-  #pmpropAccessDetailsContent .field-input {
+  #pmpropIdentityCard .field-input, #pmpropDetailsContent .field-input, #pmpropContactsList .field-input {
     padding: 9px 12px; border-radius: 9px; font-size: 13px;
   }
   #pmpropIdentityCard .pmprop-select-field .cdd-value { color: var(--text-heading); }
   #pmpropComplianceDocsList .pmprop-select-field .pm-custom-dd-btn { padding: 11px 13px; border-radius: 10px; font-size: 13px; }
   #pmpropComplianceDocsList .pmprop-select-field .cdd-value { color: var(--text-heading); }
-  .pmprop-field-hint.left { text-align: left; margin-top: 6px; }
 
-  .pmprop-callout { background: var(--icon-tint-bg); border-radius: 10px; padding: 13px 16px; font-size: 12.5px; color: var(--accent-blue); line-height: 1.5; margin-top: 6px; }
+  .pmprop-callout { background: var(--icon-tint-bg); border-radius: 10px; padding: 13px 16px; font-size: 12.5px; color: var(--accent-blue); line-height: 1.5; margin-bottom: 16px; }
   .pmprop-callout b { font-weight: 700; }
 
   .pmprop-bedroom-pills { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -5938,44 +5942,53 @@
 
   /* Conditional access-method fields */
   .pmprop-access-fields { margin-top: 14px; }
-  /* Quick Add's conditional fields sit directly beside the Access Method dropdown in the grid's
-     right column now (see .pmprop-quickadd-access-grid), not below a heading like the full form's
-     Access Details panel \u2014 the top margin that separates it from a heading there just misaligns
-     the two columns' starting point here. */
+  /* Quick Add's fields sit in the grid's right column, directly beside the dropdown rather than
+     below a full-width row \u2014 the top margin meant for that below-row spacing just pushes them out
+     of alignment with the dropdown here. */
   #pmpropQuickAddAccessFields .pmprop-access-fields { margin-top: 0; }
-  /* The Access Details panel is only half the page width on desktop (it sits beside Contacts) \u2014
-     its own fields need fewer columns than they'd use inline in the full-width Identity card,
-     regardless of viewport size, since a 3-column grid at half-page-width is too tight to be
-     usable. Fixed here rather than left to the existing viewport media queries, which respond to
-     the browser window's width, not this panel's actual (narrower) rendered width. */
-  #pmpropAccessDetailsContent .pmprop-field-row { grid-template-columns: repeat(2, 1fr); }
-  #pmpropAccessDetailsContent .pmprop-keynest-grid { grid-template-columns: repeat(2, 1fr); }
   .pmprop-access-fields .pmprop-field-row { margin-bottom: 0; }
   .pmprop-code-row { position: relative; background: #fff; border: 1px solid var(--border-subtle); border-radius: 11px; padding: 14px; display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px; }
   .pmprop-code-row:last-of-type { margin-bottom: 0; }
   /* Properties module only \u2014 no card background/border, laid out as a 3-column grid (Code,
-     Instructions, Remove) instead of stacked. Scoped to the two containers these fields actually
-     render in (Quick Add keeps them inline in Identity; the full form renders them in the
-     separate Access Details panel) since .pmprop-code-row's base rule above is shared with the
-     Supplier module's own access-method configuration and must keep its card treatment there. */
-  #pmpropIdentityCard .pmprop-code-row, #pmpropAccessDetailsContent .pmprop-code-row {
+     Instructions, Remove) instead of stacked. Scoped to #pmpropIdentityCard specifically since
+     .pmprop-code-row's base rule above is shared with the Supplier module's own access-method
+     configuration and must keep its card treatment there. */
+  #pmpropIdentityCard .pmprop-code-row {
     background: none; border: none; border-radius: 0; padding: 0; margin-bottom: 14px;
-    display: grid; grid-template-columns: 1fr 1fr auto; gap: 14px; align-items: end;
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; align-items: end;
   }
-  #pmpropIdentityCard .pmprop-code-row:last-of-type, #pmpropAccessDetailsContent .pmprop-code-row:last-of-type { margin-bottom: 0; }
-  #pmpropIdentityCard .pmprop-code-remove-btn, #pmpropAccessDetailsContent .pmprop-code-remove-btn { position: static; }
+  #pmpropIdentityCard .pmprop-code-row:last-of-type { margin-bottom: 0; }
+  #pmpropIdentityCard .pmprop-code-remove-btn { position: static; }
+  /* Quick Add specifically starts at 2 columns (no reserved third slot for the remove button,
+     which genuinely isn't needed yet with a single code) \u2014 pmpropAccessConditionalFieldsHtml adds
+     .multi once a second code row exists via "Add another code", switching this to 3 columns to
+     match the full form's constant 3-column layout from that point on. */
+  #pmpropQuickAddAccessFields .pmprop-code-row { grid-template-columns: 1fr 1fr; }
+  #pmpropQuickAddAccessFields .pmprop-code-row.multi { grid-template-columns: 1fr 1fr auto; }
+  #pmpropQuickAddAccessFields .pmprop-code-row:not(.multi) .pmprop-code-remove-btn { display: none; }
   @media (max-width: 800px) {
-    #pmpropIdentityCard .pmprop-code-row, #pmpropAccessDetailsContent .pmprop-code-row { grid-template-columns: 1fr; }
+    #pmpropIdentityCard .pmprop-code-row { grid-template-columns: 1fr; }
   }
   .pmprop-code-remove-btn { position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; border-radius: 8px; border: 1px solid var(--border-subtle); background: #fff; display: flex; align-items: center; justify-content: center; color: #dc2626; cursor: pointer; flex-shrink: 0; }
   .pmprop-code-remove-btn:hover { background: #fef2f2; border-color: #fecaca; }
+  /* Kept in the DOM (not removed) specifically so the 3-column grid's third track always has
+     something to size against \u2014 omitting the button entirely when there's only one code collapsed
+     that column to near-zero width, which visually looked like a 2-column layout even though the
+     grid technically still defined three. visibility:hidden keeps the reserved space while still
+     genuinely showing nothing. */
+  .pmprop-code-remove-btn-hidden { visibility: hidden; cursor: default; }
   /* Keys at Agency/Office and Keys at KeyNest: Pickup Address is always the first cell, Collection
      Codes fill in after it and wrap onto new rows on their own \u2014 a couple of codes end up sharing
      the same line as Pickup, six or seven wrap into full rows below it, purely from the grid
-     itself rather than any per-count branching. */
+     itself rather than any per-count branching. Constant 3 columns on the property edit side (full
+     form); Quick Add overrides this below with its own count-based 2-vs-3 toggle instead. */
   .pmprop-keynest-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px 14px; }
-  @media (max-width: 900px) { .pmprop-keynest-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 560px) { .pmprop-keynest-grid { grid-template-columns: 1fr; } }
+  /* Quick Add specifically starts at 2 columns (Pickup + first code share the row) until a second
+     collection code is added, at which point .multi (added in pmpropAccessConditionalFieldsHtml)
+     switches it to the same 3-column layout the full form always uses. */
+  #pmpropQuickAddAccessFields .pmprop-keynest-grid { grid-template-columns: repeat(2, 1fr); }
+  #pmpropQuickAddAccessFields .pmprop-keynest-grid.multi { grid-template-columns: repeat(3, 1fr); }
   .pmprop-code-cell { position: relative; }
   .pmprop-code-cell-remove {
     position: absolute; top: -3px; right: 0; width: 18px; height: 18px; border-radius: 50%; border: none;
@@ -6013,19 +6026,6 @@
 
   .pmprop-desc-count { font-size: 11.5px; color: #94a3b8; text-align: right; margin-top: 4px; }
 
-  /* Contacts (left) and Access Details (right) share the row's width on desktop instead of each
-     stacking full-width down the page \u2014 both are "supplementary detail" sections that follow the
-     core identity fields, and this reclaims the spare horizontal space a single-column form
-     otherwise leaves unused next to a short section. */
-  .pmprop-contacts-access-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
-  @media (max-width: 900px) { .pmprop-contacts-access-grid { grid-template-columns: 1fr; gap: 24px; } }
-  /* Quick Add has no Contacts section to pair Access Details with, so the access method dropdown
-     itself takes the left column instead \u2014 same reclaimed-horizontal-space reasoning, and keeps
-     Quick Add's use of the row visually consistent with the full form's. The conditional fields on
-     the right already lay out in their own 3-column grid internally (see
-     pmpropAccessConditionalFieldsHtml) regardless of which method is selected. */
-  .pmprop-quickadd-access-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 28px; align-items: start; margin-bottom: 16px; }
-  @media (max-width: 900px) { .pmprop-quickadd-access-grid { grid-template-columns: 1fr; gap: 20px; } }
   .pmprop-toggle-section-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 4px; }
   .pmprop-toggle-section-title { font-size: 14.5px; font-weight: 700; color: var(--text-heading); }
   .pmprop-toggle-section-desc { font-size: 12.5px; color: var(--text-body-muted); margin-top: 4px; line-height: 1.55; max-width: 720px; }
@@ -6057,15 +6057,35 @@
   .pmprop-comp-doc-card { border: 1px solid var(--border-subtle); border-radius: 12px; background: #fff; padding: 12px 14px; }
   .pmprop-comp-doc-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
   .pmprop-comp-doc-name { font-size: 13px; font-weight: 700; color: var(--text-heading); }
-  .pmprop-comp-doc-fromjob { font-size: 10.5px; font-weight: 700; color: #15803d; background: #eafaf0; border: 1px solid #bfe3cc; padding: 2px 8px; border-radius: 999px; display: inline-block; margin-top: 8px; }
-  .pmprop-comp-doc-dates { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 10px; }
-  .pmprop-comp-doc-date-field { font-size: 12px; color: var(--text-body-muted); cursor: pointer; }
-  .pmprop-comp-doc-date-field b { color: var(--text-heading); font-weight: 600; }
-  .pmprop-comp-doc-date-field:hover b { color: var(--accent-blue); text-decoration: underline dotted; }
-  .pmprop-comp-doc-date-input {
-    font-family: inherit; font-size: 12px; font-weight: 600; color: var(--text-heading); width: 100px;
-    padding: 3px 6px; border: 1.5px solid var(--accent-blue); border-radius: 5px; background: #fff;
+  .pmprop-comp-doc-actions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+  .pmprop-comp-doc-view-btn {
+    display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; color: var(--text-body-muted);
+    background: none; border: 1px solid var(--border-subtle); border-radius: 7px; padding: 4px 10px 4px 8px; cursor: pointer; font-family: inherit; white-space: nowrap;
   }
+  .pmprop-comp-doc-view-btn:hover { border-color: #90a8c8; color: var(--text-heading); background: var(--surface-soft); }
+  .pmprop-comp-doc-edit-btn {
+    font-size: 11px; font-weight: 700; color: var(--accent-blue); background: none; border: 1px solid var(--border-subtle);
+    border-radius: 7px; padding: 4px 10px; cursor: pointer; font-family: inherit; white-space: nowrap;
+  }
+  .pmprop-comp-doc-edit-btn:hover { border-color: #90a8c8; background: var(--icon-tint-bg); }
+  .pmprop-comp-doc-fromjob { font-size: 10.5px; font-weight: 700; color: #15803d; background: #eafaf0; border: 1px solid #bfe3cc; padding: 2px 8px; border-radius: 999px; display: inline-block; margin-top: 8px; }
+  .pmprop-comp-doc-dates { margin-top: 10px; }
+  .pmprop-comp-doc-date-static { font-size: 12px; color: var(--text-body-muted); }
+  .pmprop-comp-doc-date-static b { color: var(--text-heading); font-weight: 600; }
+  /* Edit mode swaps the static date line for the real Keylr date picker (same calendar component
+     used everywhere else in the app \u2014 see PMPROP_COMP_CAL_KEYS and pmpropWireComplianceCalendar),
+     and adds an editable certificate name plus an upload/replace control for the actual document. */
+  .pmprop-comp-doc-edit-fields { margin-top: 10px; display: flex; flex-direction: column; gap: 12px; }
+  .pmprop-comp-doc-date-label, .pmprop-comp-doc-name-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.03em; color: #94a3b8; text-transform: uppercase; margin-bottom: 5px; }
+  .pmprop-comp-doc-name-input { width: 100%; height: 34px; font-size: 12.5px; padding: 0 10px; }
+  .pmprop-comp-doc-edit-fields .pm-cal-trigger-btn { height: 34px; font-size: 12.5px; padding: 0 10px; }
+  .pmprop-comp-doc-upload-row { display: flex; align-items: center; gap: 10px; padding-top: 10px; border-top: 1px dashed var(--border-subtle); flex-wrap: wrap; }
+  .pmprop-comp-doc-upload-btn {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 700; color: var(--accent-blue);
+    background: var(--icon-tint-bg); border: 1px solid var(--border-subtle); border-radius: 7px; padding: 6px 11px; cursor: pointer; white-space: nowrap;
+  }
+  .pmprop-comp-doc-upload-btn:hover { border-color: #90a8c8; }
+  .pmprop-comp-doc-upload-filename { font-size: 11.5px; color: var(--text-body-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .pmprop-comp-doc-card.pmprop-ai-highlight { animation: pmpropAiHighlight 1600ms ease-out; }
   .pmprop-comp-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 4px; }
   .pmprop-comp-title-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -6157,8 +6177,8 @@
   .pmprop-contact-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; flex-shrink: 0; }
   .pmprop-contact-badge.poc { background: #eafaf0; color: #15803d; }
   .pmprop-contact-done-btn {
-    width: 28px; height: 28px; border-radius: 8px; border: none; color: #fff; background: var(--accent-blue);
-    display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;
+    font-size: 11.5px; font-weight: 700; color: #fff; background: var(--accent-blue); border: none; border-radius: 7px;
+    padding: 6px 12px; cursor: pointer; font-family: inherit; white-space: nowrap; flex-shrink: 0;
   }
   .pmprop-contact-done-btn:hover { opacity: 0.9; }
   .pmprop-contact-edit-btn {
@@ -6175,24 +6195,32 @@
   .pmprop-contact-role-dd .cdd-value { color: var(--text-heading); }
   .pmprop-contact-acct-dd .cdd-value { font-weight: 600; }
   .pmprop-contact-dd .cdd-chevron { margin-left: 4px; }
-  /* Done + Delete move together as one right-aligned group \u2014 a single margin-left:auto on this
-     wrapper, not one on each child, so they can never drift apart if a future edit adds something
-     between them (see the topbar Delete/bell fix for the same pattern). */
-  .pmprop-contact-row-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-  /* Point-of-contact sits on its own line below the dropdowns (see pmpropContactEditHtml) with its
-     label spelled out in full now that it has the whole row's width to itself. */
-  .pmprop-contact-poc-label { display: flex; align-items: center; gap: 7px; cursor: pointer; margin-top: 10px; font-size: 12px; font-weight: 600; color: var(--text-body-muted); }
+  /* Done + Delete + the point-of-contact checkbox move together as one right-aligned group \u2014 a
+     single margin-left:auto on this wrapper, not one on each child, so they can never drift apart
+     if a future edit adds something between them (see the topbar Delete/bell fix for the same
+     pattern). */
+  .pmprop-contact-row-actions { margin-left: auto; display: flex; align-items: center; gap: 14px; flex-shrink: 0; flex-wrap: wrap; }
+  .pmprop-contact-poc-label { display: flex; align-items: center; gap: 7px; cursor: pointer; font-size: 12px; font-weight: 600; color: var(--text-body-muted); white-space: nowrap; }
   .pmprop-contact-poc-label input { accent-color: var(--accent-blue); width: 16px; height: 16px; cursor: pointer; border-radius: 4px; flex-shrink: 0; }
   .pmprop-contact-poc-label:has(input:checked) { color: var(--accent-blue); }
   .pmprop-contact-remove-btn { width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--border-subtle); background: #fff; color: var(--text-body-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
   .pmprop-contact-remove-btn:hover { background: #fdecea; color: #c0392b; border-color: #fbc7c0; }
-  /* Linked contact: plain readable text instead of fields that only look editable \u2014 the real data
-     lives on the Team/account record, not here. */
-  .pmprop-contact-linked-details { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 10px; font-size: 12.5px; color: var(--text-heading); }
   .pmprop-field-locked { background: var(--surface-soft) !important; color: var(--text-body-muted); cursor: not-allowed; }
   .pmprop-add-branch-link { margin-bottom: 14px; }
   .pmprop-comp-sub-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
   .pmprop-comp-sub-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; color: #94a3b8; text-transform: uppercase; margin-bottom: 5px; }
+
+  /* Sortable column header (currently just Live Jobs) \u2014 a plain button styled to look exactly
+     like the surrounding <th> text so it doesn't stand out as an unusual control, with a small
+     direction indicator that stays neutral until a sort is actually active. */
+  .pmprop-th-sort-btn {
+    display: inline-flex; align-items: center; gap: 4px; background: none; border: none; padding: 0;
+    font: inherit; font-weight: inherit; color: inherit; cursor: pointer;
+  }
+  .pmprop-th-sort-arrow { display: inline-flex; color: #b8c2d4; transition: color 120ms ease-out; }
+  .pmprop-th-sort-btn:hover .pmprop-th-sort-arrow { color: var(--text-body-muted); }
+  .pmprop-th-sort-btn.active { color: var(--accent-blue); }
+  .pmprop-th-sort-btn.active .pmprop-th-sort-arrow { color: var(--accent-blue); }
 
   /* ---------- Properties table/card Actions \u2014 Edit | Jobs | Delete icon buttons ---------- */
   .pmprop-actions-th, .pmprop-actions-cell { text-align: left; }
@@ -6252,13 +6280,17 @@
   .pmprop-media-link-row input.field-input:focus { box-shadow: none; }
   .pmprop-media-link-row input.field-input.error { color: var(--required-red); }
   .pmprop-media-link-row .pmprop-comp-settings-link { flex-shrink: 0; }
-  .pmprop-media-gallery { display: flex; flex-direction: column; gap: 14px; margin-top: 16px; }
-  .pmprop-media-links-full { display: flex; flex-direction: column; gap: 6px; }
-  /* Documents and photos render as one single, left-aligned chips row (see
-     pmpropRenderMediaChipsRow) rather than two separate side-by-side columns \u2014 both use the exact
-     same .pmprop-media-link-chip styling below, so a document chip and a photo chip are never
-     visibly different sizes from one another. */
-  .pmprop-media-chips-row { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+  .pmprop-media-gallery { display: flex; flex-direction: column; gap: 18px; margin-top: 16px; }
+  .pmprop-media-links-full { display: flex; flex-direction: column; gap: 8px; }
+  /* Documents, photos, and links all render as one single, left-aligned chips row (see
+     pmpropRenderMediaChipsRow) rather than being split into separate sections \u2014 all use the exact
+     same .pmprop-media-link-chip styling below, so a document chip, a photo chip, and the links
+     chip are never visibly different sizes from one another. */
+  .pmprop-media-chips-row { display: flex; flex-direction: column; gap: 10px; }
+  /* A short fade + slide-down for whatever a chip click reveals below it, rather than the content
+     just instantly appearing. */
+  .pmprop-media-chip-reveal { animation: pmpropChipReveal 220ms cubic-bezier(0.16,1,0.3,1); }
+  @keyframes pmpropChipReveal { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
   .pmprop-media-doc-row { display: flex; align-items: center; gap: 8px; border: 1px solid var(--border-subtle); border-radius: 9px; background: #fff; padding: 6px 8px; }
   .pmprop-media-doc-icon { color: var(--accent-blue); flex-shrink: 0; display: flex; }
   .pmprop-media-doc-name { font-size: 12px; font-weight: 600; color: var(--text-heading); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
@@ -6287,16 +6319,19 @@
      for what's inside, since a link can point to a whole folder/album rather than one file. Uses
      its own .pmprop-media-link-card class (not .pmprop-media-link-row, which is the pre-existing
      "Or paste a link instead" input row above \u2014 reusing that name here previously collided with
-     and broke its layout). flex-direction stays unset (row) with items centred, matching every
-     other .pmprop-media-doc-row; the expanded content below wraps onto its own line via
-     flex-basis:100% rather than needing the whole row to switch to column. */
+     and broke its layout). Name and chips share one row (flex-wrap, not a divided second row) \u2014
+     chips right-align via the chips container's own flex:1, with the remove button anchoring the
+     end of the row. */
   .pmprop-media-link-card { flex-direction: unset; align-items: center; flex-wrap: wrap; }
   .pmprop-media-link-top { display: flex; align-items: center; gap: 8px; flex: 1 1 100%; }
   .pmprop-media-link-top .pmprop-media-doc-name { flex-shrink: 0; width: 40%; max-width: 40%; }
   /* The rename input replaces the name div in place \u2014 without matching its width, the chips
      beside it would jump/reflow the instant renaming started. */
   .pmprop-media-link-top .pmprop-media-item-rename-input { flex-shrink: 0; width: 40%; max-width: 40%; }
-  .pmprop-media-link-chips { display: flex; gap: 5px; flex-wrap: wrap; }
+  .pmprop-media-link-chips { display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-start; }
+  /* Only the link card's own internal content-breakdown chips right-align to share the row with
+     the name above \u2014 the main Photos/Documents/Links chips row above stays left-aligned (the
+     base rule), since it isn't sharing its row with anything else. */
   .pmprop-media-link-top .pmprop-media-link-chips { flex: 1; justify-content: flex-end; min-width: 0; }
   .pmprop-media-link-chip {
     display: inline-flex; align-items: center; gap: 4px; padding: 5px 11px; border-radius: 999px; border: 1.5px solid var(--border-subtle);
@@ -6306,7 +6341,7 @@
   .pmprop-media-link-chip:hover:not(.selected) { border-color: #90a8c8; color: var(--text-heading); }
   .pmprop-media-link-chip.selected { border-color: var(--accent-blue); background: var(--icon-tint-bg); color: var(--accent-blue); }
   .pmprop-media-link-chip.detecting { animation: pmpropBadgePulse 1100ms ease-in-out infinite; cursor: default; }
-  .pmprop-media-link-expanded { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border-subtle); flex: 1 1 100%; }
+  .pmprop-media-link-expanded { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border-subtle); flex: 1 1 100%; animation: pmpropChipReveal 220ms cubic-bezier(0.16,1,0.3,1); }
   .pmprop-media-link-expanded-item { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-heading); background: var(--surface-soft); border-radius: 6px; padding: 3px 5px 3px 7px; height: fit-content; }
   .pmprop-media-link-expanded-item > span { cursor: pointer; }
   .pmprop-media-link-expanded-item > span:hover { color: var(--accent-blue); text-decoration: underline dotted; }
@@ -13174,18 +13209,11 @@
               <div class="pmprop-card">
                 <div id="pmpropIdentityCard"></div>
 
-              <div id="pmpropContactsAccessGrid" style="display:none;border-top:1px solid var(--border-subtle);margin-top:24px;padding-top:24px;" class="pmprop-contacts-access-grid">
-                <div id="pmpropContactsCard">
-                  <div class="pmprop-toggle-section-title" style="margin-bottom:4px;">Contacts</div>
-                  <div class="pmprop-toggle-section-desc" style="margin-bottom:14px;">Add whoever should be contacted about this property.</div>
-                  <div id="pmpropContactsList"></div>
-                  <button type="button" class="pmprop-comp-settings-link" id="pmpropAddContactBtn" style="margin-top:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Add contact</button>
-                </div>
-                <div id="pmpropAccessDetailsCard">
-                  <div class="pmprop-toggle-section-title" style="margin-bottom:4px;">Access Details</div>
-                  <div class="pmprop-toggle-section-desc" style="margin-bottom:14px;">How suppliers get in, based on the access method chosen above.</div>
-                  <div id="pmpropAccessDetailsContent"></div>
-                </div>
+              <div id="pmpropContactsCard" style="display:none;border-top:1px solid var(--border-subtle);margin-top:24px;padding-top:24px;">
+                <div class="pmprop-toggle-section-title" style="margin-bottom:4px;">Contacts</div>
+                <div class="pmprop-toggle-section-desc" style="margin-bottom:14px;">Add whoever should be contacted about this property.</div>
+                <div id="pmpropContactsList"></div>
+                <button type="button" class="pmprop-comp-settings-link" id="pmpropAddContactBtn" style="margin-top:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Add contact</button>
               </div>
 
               <div id="pmpropDetailsCard" style="border-top:1px solid var(--border-subtle);margin-top:24px;padding-top:24px;">
@@ -23726,6 +23754,9 @@
   var pmpropSearchQuery = '';
   var pmpropInitialized = false;
   var pmpropQuickAdd = true;
+  // Live Jobs column header sort \u2014 null (default insertion order), 'desc' (busiest properties
+  // first), or 'asc'. Cycles null \u2192 desc \u2192 asc \u2192 null on each header click.
+  var pmpropJobsSortDir = null;
   var pmpropEditingId = null;
   var pmpropBedroomValue = 'Studio';
   var pmpropInclusionsCollapsed = false;
@@ -23766,8 +23797,14 @@
 
   function pmpropFilteredList() {
     var q = pmpropSearchQuery.trim().toLowerCase();
-    if (!q) return PMPROP_PROPERTIES;
-    return PMPROP_PROPERTIES.filter(function (p) { return p.name.toLowerCase().indexOf(q) >= 0 || p.addr.toLowerCase().indexOf(q) >= 0 || p.postcode.toLowerCase().indexOf(q) >= 0; });
+    var list = !q ? PMPROP_PROPERTIES.slice() : PMPROP_PROPERTIES.filter(function (p) { return p.name.toLowerCase().indexOf(q) >= 0 || p.addr.toLowerCase().indexOf(q) >= 0 || p.postcode.toLowerCase().indexOf(q) >= 0; });
+    if (pmpropJobsSortDir) {
+      list.sort(function (a, b) {
+        var diff = pmpropLiveJobsCount(a) - pmpropLiveJobsCount(b);
+        return pmpropJobsSortDir === 'asc' ? diff : -diff;
+      });
+    }
+    return list;
   }
 
   function pmpropOccBadgeHtml(occupancy) {
@@ -23961,7 +23998,7 @@
     if (pmpropIsMultiBranch()) cols.push({ key: 'branch', label: 'Branch' });
     if (pmpropShowPMColumn()) cols.push({ key: 'pm', label: 'Property Manager', nowrap: true });
     if (pmpropShowComplianceColumn()) cols.push({ key: 'compliance', label: 'Compliance' });
-    cols.push({ key: 'jobs', label: 'Live Jobs', center: true });
+    cols.push({ key: 'jobs', label: 'Live Jobs', center: true, sortable: true });
     return cols;
   }
   function pmpropRenderTableHead() {
@@ -23972,8 +24009,23 @@
     var totalWeight = cols.reduce(function (sum, c) { return sum + PMPROP_TABLE_COL_WEIGHTS[c.key]; }, 0);
     colgroup.innerHTML = cols.map(function (c) { return '<col style="width:' + Math.round((PMPROP_TABLE_COL_WEIGHTS[c.key] / totalWeight) * 100) + '%;">'; }).join('') + '<col style="width:132px;">';
     thead.innerHTML = '<tr>' + cols.map(function (c) {
-      return '<th' + (c.center ? ' style="text-align:center;"' : (c.nowrap ? ' style="white-space:nowrap;"' : '')) + '>' + c.label + '</th>';
+      if (!c.sortable) return '<th' + (c.center ? ' style="text-align:center;"' : (c.nowrap ? ' style="white-space:nowrap;"' : '')) + '>' + c.label + '</th>';
+      var dir = pmpropJobsSortDir;
+      var arrow = dir === 'asc'
+        ? '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>'
+        : dir === 'desc'
+          ? '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>'
+          : '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9l4-4 4 4M8 15l4 4 4-4"/></svg>';
+      return '<th style="text-align:center;"><button type="button" class="pmprop-th-sort-btn' + (dir ? ' active' : '') + '" data-sort-col="' + c.key + '">' + c.label + '<span class="pmprop-th-sort-arrow">' + arrow + '</span></button></th>';
     }).join('') + '<th class="pmprop-actions-th">Actions</th></tr>';
+    thead.querySelectorAll('[data-sort-col]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        // Cycles unsorted \u2192 busiest-first \u2192 quietest-first \u2192 back to unsorted.
+        pmpropJobsSortDir = pmpropJobsSortDir === null ? 'desc' : (pmpropJobsSortDir === 'desc' ? 'asc' : null);
+        pmpropCurrentPage = 1;
+        pmpropRenderList();
+      });
+    });
   }
 
   // No avatar and no hover tooltip on the name cell any more \u2014 the full name and full address
@@ -24317,7 +24369,6 @@
   }
 
   function pmpropAccessMethodDropdownHtml() {
-    var current = PMPROP_ACCESS_METHODS.find(function (m) { return m.value === pmpropAccessMethod; });
     return '<div class="pm-filter-field pmprop-select-field">' +
       '<button type="button" class="pm-custom-dd-btn" id="pmpropAccessMethodBtn"><span class="cdd-value">' + pmpropEscapeHtml(pmpropAccessMethod || 'Select...') + '</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>' +
       '<div class="pm-custom-dd-menu pmprop-am-menu" id="pmpropAccessMethodMenu">' +
@@ -24328,8 +24379,7 @@
           '<svg class="pmprop-am-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>' +
           '</div>';
       }).join('') +
-      '</div></div>' +
-      (current ? '<div class="pmprop-field-hint left">' + pmpropEscapeHtml(current.desc) + '</div>' : '<div class="pmprop-field-hint left">Pick how suppliers will get into the property on the day.</div>');
+      '</div></div>';
   }
 
   function pmpropAccessConditionalFieldsHtml() {
@@ -24337,10 +24387,10 @@
     if (!method) return '';
     if (method.fields === 'codes') {
       var rows = pmpropAccessCodes.map(function (row, i) {
-        return '<div class="pmprop-code-row" data-code-idx="' + i + '">' +
+        return '<div class="pmprop-code-row' + (pmpropAccessCodes.length > 1 ? ' multi' : '') + '" data-code-idx="' + i + '">' +
           '<div class="field-group" style="margin-bottom:0;"><label>Code' + (i === 0 ? '' : ' ' + (i + 1)) + '</label><input type="text" class="field-input pmprop-code-input" placeholder="e.g. 4471" value="' + pmpropEscapeHtml(row.code) + '"></div>' +
           '<div class="field-group" style="margin-bottom:0;"><label>Instructions</label><input type="text" class="field-input pmprop-code-instructions-input" placeholder="e.g. Safe is behind the meter box" value="' + pmpropEscapeHtml(row.instructions) + '"></div>' +
-          (pmpropAccessCodes.length > 1 ? '<button type="button" class="pmprop-code-remove-btn" data-remove-code="' + i + '" aria-label="Remove code"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>' : '') +
+          '<button type="button" class="pmprop-code-remove-btn' + (pmpropAccessCodes.length <= 1 ? ' pmprop-code-remove-btn-hidden' : '') + '" data-remove-code="' + i + '"' + (pmpropAccessCodes.length <= 1 ? ' disabled' : '') + ' aria-label="Remove code"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>' +
           '</div>';
       }).join('');
       return '<div class="pmprop-access-fields">' + rows + '<button type="button" class="pmprop-add-code-btn" id="pmpropAddCodeBtn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Add another code</button></div>';
@@ -24366,7 +24416,7 @@
           '</div>';
       }).join('');
       return '<div class="pmprop-access-fields">' +
-        '<div class="pmprop-keynest-grid">' +
+        '<div class="pmprop-keynest-grid' + (pmpropCollectionCodes.length > 1 ? ' multi' : '') + '">' +
         '<div class="field-group" style="margin-bottom:0;"><label>Pickup address <span class="req">*</span></label><input type="text" class="field-input" id="pmpropAccessPickup" placeholder="100 Camden High St, NW1 7JN" value="' + pmpropEscapeHtml(pmpropAccessAddress.pickup) + '"></div>' +
         codeCells +
         '</div>' +
@@ -24429,7 +24479,6 @@
         pmpropSyncAccessFieldsFromDOM();
         pmpropAccessMethod = item.getAttribute('data-value');
         pmpropRenderIdentityCard();
-        pmpropRenderAccessDetailsCard();
       });
     });
   }
@@ -24441,7 +24490,6 @@
         var idx = parseInt(btn.getAttribute('data-remove-code'), 10);
         if (pmpropAccessCodes.length > 1) pmpropAccessCodes.splice(idx, 1);
         pmpropRenderIdentityCard();
-        pmpropRenderAccessDetailsCard();
       });
     });
     var addBtn = document.getElementById('pmpropAddCodeBtn');
@@ -24449,7 +24497,6 @@
       pmpropSyncAccessFieldsFromDOM();
       pmpropAccessCodes.push({ code: '', instructions: '' });
       pmpropRenderIdentityCard();
-      pmpropRenderAccessDetailsCard();
     });
     document.querySelectorAll('[data-remove-collection-code]').forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -24457,7 +24504,6 @@
         var idx = parseInt(btn.getAttribute('data-remove-collection-code'), 10);
         if (pmpropCollectionCodes.length > 1) pmpropCollectionCodes.splice(idx, 1);
         pmpropRenderIdentityCard();
-        pmpropRenderAccessDetailsCard();
       });
     });
     var addCollectionBtn = document.getElementById('pmpropAddCollectionCodeBtn');
@@ -24465,7 +24511,6 @@
       pmpropSyncAccessFieldsFromDOM();
       pmpropCollectionCodes.push({ code: '' });
       pmpropRenderIdentityCard();
-      pmpropRenderAccessDetailsCard();
     });
   }
 
@@ -24482,7 +24527,7 @@
 
     html += '<div class="pmprop-field-row">' +
       '<div class="field-group"><label>Property name' + (p ? '' : '') + '</label><input type="text" class="field-input" id="pmpropFieldName" placeholder="e.g. Acacia Court Flat 4B" value="' + pmpropEscapeHtml(pmpropIdentityDraft.name) + '"></div>' +
-      '<div class="field-group"><label>Postcode <span class="req">*</span></label><input type="text" class="field-input" id="pmpropFieldPostcode" placeholder="E1 7AA" value="' + pmpropEscapeHtml(pmpropIdentityDraft.postcode) + '"><div class="pmprop-field-hint left">Search a postcode, then pick an address to auto-fill below</div></div>' +
+      '<div class="field-group"><label>Postcode <span class="req">*</span></label><input type="text" class="field-input" id="pmpropFieldPostcode" placeholder="Search a postcode, then pick an address to auto-fill below" value="' + pmpropEscapeHtml(pmpropIdentityDraft.postcode) + '"></div>' +
       '<div class="field-group"><label>Street address' + (quickAdd ? '' : ' <span class="req">*</span>') + '</label><input type="text" class="field-input" id="pmpropFieldStreet" placeholder="12 Acacia Avenue" value="' + pmpropEscapeHtml(pmpropIdentityDraft.street) + '"></div>' +
       '</div>';
 
@@ -24494,40 +24539,18 @@
 
     if (quickAdd) {
       html += '<div class="pmprop-quickadd-access-grid">' +
-        '<div class="field-group"><label>Access method <span class="req">*</span></label>' + pmpropAccessMethodDropdownHtml() + '</div>' +
-        '<div id="pmpropQuickAddAccessFields">' + pmpropAccessDetailsHtml() + '</div>' +
+        '<div class="field-group pmprop-access-method-group"><label>Access method <span class="req">*</span></label>' + pmpropAccessMethodDropdownHtml() + '</div>' +
+        '<div id="pmpropQuickAddAccessFields">' + pmpropAccessConditionalFieldsHtml() + '</div>' +
         '</div>';
     } else {
       html += '<div class="pmprop-field-row">' +
         '<div class="field-group"><label>Occupancy</label>' + pmpropCustomSelectHtml('occupancy', 'Select occupancy', ['Occupied', 'Void / Vacant'], p && p.occupancy === 'occupied' ? 'Occupied' : (p && p.occupancy === 'void' ? 'Void / Vacant' : null)) + '</div>' +
-        '<div class="field-group"><label>Access method <span class="req">*</span></label>' + pmpropAccessMethodDropdownHtml() + '</div>' +
         (pmpropIsMultiBranch() ? '<div class="field-group"><label>Branch</label>' + pmpropCustomSelectHtml('branch', 'Main Branch', pmpropBranchOptions(), pmpropBranch || pmpropBranchLabel(p)) + '</div>' : '') +
+        '<div class="field-group pmprop-access-method-group"><label>Access method <span class="req">*</span></label>' + pmpropAccessMethodDropdownHtml() + '</div>' +
         '</div>';
+      html += pmpropAccessConditionalFieldsHtml();
     }
     return html;
-  }
-
-  // The access method's own conditional fields (Key Safe codes, a contact person, a KeyNest pickup
-  // address, etc) live in their own panel beside Contacts rather than inline in Identity \u2014 both
-  // are "supplementary detail" sections that follow the core identity fields, and side by side on
-  // desktop uses the row's spare horizontal width instead of stacking two potentially-tall
-  // sections down the page. Quick Add keeps its own inline copy (pmpropIdentityHtml above) since
-  // there's no Contacts panel to pair it with there.
-  function pmpropAccessDetailsHtml() {
-    var current = PMPROP_ACCESS_METHODS.find(function (m) { return m.value === pmpropAccessMethod; });
-    if (!current) return '<div class="pmprop-comp-info" style="margin-top:0;">Select an access method above to configure its details.</div>';
-    return pmpropAccessConditionalFieldsHtml();
-  }
-  function pmpropRenderAccessDetailsCard() {
-    var content = document.getElementById('pmpropAccessDetailsContent');
-    if (!content) return;
-    // Quick Add renders these same conditional fields inline in Identity instead (see
-    // pmpropIdentityHtml) \u2014 populating this panel too, even while hidden, left two live copies of
-    // the same inputs in the DOM at once, which is exactly what made pmpropSyncAccessFieldsFromDOM
-    // read duplicated values.
-    if (pmpropQuickAdd && !pmpropEditingId) { content.innerHTML = ''; return; }
-    content.innerHTML = pmpropAccessDetailsHtml();
-    pmpropWireAccessConditionalFields();
   }
 
   // Furnished / Free Parking (+ Parking instructions) / Bedroom layout / Property inclusions /
@@ -24610,21 +24633,14 @@
         pmpropRenderIdentityCard();
         pmpropRenderDetailsCard();
         var showFull = !pmpropQuickAdd;
-        document.getElementById('pmpropContactsAccessGrid').style.display = showFull ? '' : 'none';
+        document.getElementById('pmpropContactsCard').style.display = showFull ? '' : 'none';
         document.getElementById('pmpropMediaCard').style.display = showFull ? '' : 'none';
         document.getElementById('pmpropComplianceCard').style.display = showFull ? '' : 'none';
       });
     }
     pmpropWireCustomSelects(card);
     pmpropWireAccessMethodDropdown();
-    // Conditional-field buttons (Add another code, etc.) only actually live inside this card in
-    // Quick Add mode \u2014 in the full form they're rendered into the separate Access Details panel
-    // instead (see pmpropRenderAccessDetailsCard), which this render never touches. Wiring them
-    // from here unconditionally used to re-attach a listener to that same persistent button on
-    // every single Identity re-render, with nothing ever removing the previous one \u2014 clicking Add
-    // another code would fire every accumulated listener at once and spiral into a dozen-plus rows
-    // from a single click.
-    if (pmpropQuickAdd && !pmpropEditingId) pmpropWireAccessConditionalFields();
+    pmpropWireAccessConditionalFields();
     var branchMenu = card.querySelector('[data-pmprop-select-menu="branch"]');
     if (branchMenu) branchMenu.querySelectorAll('.cdd-item').forEach(function (item) {
       item.addEventListener('click', function () { pmpropBranch = item.getAttribute('data-value'); });
@@ -25052,6 +25068,10 @@
     doc.categoryUncertain = !!extraction.categoryUncertain;
     if (extraction.issueDate) doc.issueDate = extraction.issueDate;
     if (isFixed && extraction.expiryDate) doc.expiryDate = extraction.expiryDate;
+    // The actual uploaded file's data, when this extraction came from a real file (not a pasted
+    // link) \u2014 without this, View had nothing genuine to open until the PM separately used the
+    // edit-mode upload control, even though they'd already uploaded a real document right here.
+    if (extraction.previewUrl) { doc.previewUrl = extraction.previewUrl; doc.fileName = extraction.fileName; }
     if (!existing) pmpropComplianceDocs.push(doc);
     pmpropRenderComplianceDocsList(doc.key);
   }
@@ -25059,22 +25079,154 @@
   // an editable Expiry Date, click-to-edit exactly like the Media list's name field above. Dates
   // stay plain, validated text fields rather than the full calendar-popup widget, which is built
   // around a fixed set of known keys and can't cleanly attach to a list whose rows come and go.
+  // Maps a compliance doc's key to the pre-existing, already-registered Keylr calendar field for
+  // its one relevant date \u2014 these six keys already exist in calState/calHiddenInputIds (see the
+  // calendar system near the bottom of the file), just not previously wired to any live HTML. A
+  // property only ever has one active document per type, so reusing this shared global state is
+  // safe as long as it's synced from the actual doc data every time a card enters edit mode.
+  var PMPROP_COMP_CAL_KEYS = { cp12: 'cp12Expiry', eicr: 'eicrExpiry', epc: 'epcExpiry', fra: 'fraIssueDate', legionella: 'legionellaIssueDate', asbestos: 'asbestosIssueDate' };
+  // Which compliance card (if any) is currently in edit mode \u2014 only one at a time.
+  var pmpropEditingComplianceDoc = null;
+  function pmpropComplianceCalTriggerHtml(calKey, label, dateValue) {
+    return '<div class="pmprop-comp-doc-date-label">' + label + '</div>' +
+      '<div class="pm-filter-field" style="width:100%;">' +
+        '<button type="button" class="pm-custom-dd-btn pm-cal-trigger-btn" data-cal="' + calKey + '" style="width:100%;">' +
+          '<span class="cdd-value cal-value' + (dateValue ? '' : ' placeholder cdd-placeholder') + '" data-cal-text="' + calKey + '">' + (dateValue ? calFormatDMY(dateValue) : 'dd/mm/yyyy') + '</span>' +
+          '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>' +
+        '</button>' +
+        '<div class="pm-cal-popup" data-cal-popup="' + calKey + '">' +
+          '<div class="pm-cal-head">' +
+            '<button type="button" class="pm-cal-month-label" data-cal-monthlabel="' + calKey + '"><span data-cal-monthtext="' + calKey + '"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>' +
+            '<div class="pm-cal-nav">' +
+              '<button type="button" class="pm-cal-nav-btn" data-cal-prev="' + calKey + '" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>' +
+              '<button type="button" class="pm-cal-nav-btn" data-cal-next="' + calKey + '" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="pm-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>' +
+          '<div class="pm-cal-grid" data-cal-grid="' + calKey + '"></div>' +
+          '<div class="pm-cal-foot">' +
+            '<button type="button" class="pm-cal-link" data-cal-clear="' + calKey + '">Clear</button>' +
+            '<button type="button" class="pm-cal-link" data-cal-today="' + calKey + '">Today</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+  }
+  // Scoped equivalent of the page's global calendar wiring (see near the bottom of the file) \u2014
+  // that one runs once at load over the whole document, which never reaches a popup rendered later
+  // by re-rendering this list. Reuses every one of the same underlying helpers (calState,
+  // renderCalendarGrid, updateCalFieldDisplay, closeAllCalendarPopups) so behaviour is identical,
+  // just wired to this card's freshly-inserted elements specifically.
+  function pmpropWireComplianceCalendar(container, calKey) {
+    var trigger = container.querySelector('.pm-cal-trigger-btn[data-cal="' + calKey + '"]');
+    if (trigger) trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var wasOpen = trigger.classList.contains('open');
+      closeAllCalendarPopups();
+      closeAllCustomDropdowns();
+      if (wasOpen) return;
+      var st = calState[calKey];
+      var base = st.selected || new Date();
+      st.viewYear = base.getFullYear();
+      st.viewMonth = base.getMonth();
+      renderCalendarGrid(calKey);
+      trigger.classList.add('open');
+      var popup = container.querySelector('.pm-cal-popup[data-cal-popup="' + calKey + '"]');
+      if (popup) popup.classList.add('open');
+    });
+    var prevBtn = container.querySelector('[data-cal-prev="' + calKey + '"]');
+    if (prevBtn) prevBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var st = calState[calKey];
+      st.viewMonth -= 1;
+      if (st.viewMonth < 0) { st.viewMonth = 11; st.viewYear -= 1; }
+      renderCalendarGrid(calKey);
+    });
+    var nextBtn = container.querySelector('[data-cal-next="' + calKey + '"]');
+    if (nextBtn) nextBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var st = calState[calKey];
+      st.viewMonth += 1;
+      if (st.viewMonth > 11) { st.viewMonth = 0; st.viewYear += 1; }
+      renderCalendarGrid(calKey);
+    });
+    var monthLabel = container.querySelector('.pm-cal-month-label[data-cal-monthlabel="' + calKey + '"]');
+    if (monthLabel) monthLabel.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var today = new Date();
+      calState[calKey].viewYear = today.getFullYear();
+      calState[calKey].viewMonth = today.getMonth();
+      renderCalendarGrid(calKey);
+    });
+    var grid = container.querySelector('.pm-cal-grid[data-cal-grid="' + calKey + '"]');
+    if (grid) grid.addEventListener('click', function (e) {
+      var dayBtn = e.target.closest('.pm-cal-day');
+      if (!dayBtn) return;
+      e.stopPropagation();
+      var parts = dayBtn.getAttribute('data-cal-daynum').split('-');
+      calState[calKey].selected = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10), parseInt(parts[2], 10));
+      updateCalFieldDisplay(calKey);
+      closeAllCalendarPopups();
+    });
+    var clearBtn = container.querySelector('[data-cal-clear="' + calKey + '"]');
+    if (clearBtn) clearBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      calState[calKey].selected = null;
+      updateCalFieldDisplay(calKey);
+      closeAllCalendarPopups();
+    });
+    var todayBtn = container.querySelector('[data-cal-today="' + calKey + '"]');
+    if (todayBtn) todayBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      calState[calKey].selected = new Date();
+      updateCalFieldDisplay(calKey);
+      closeAllCalendarPopups();
+    });
+  }
   function pmpropRenderComplianceDocsList(justAddedKey) {
     var wrap = document.getElementById('pmpropComplianceDocsList');
     if (!wrap) return;
     wrap.innerHTML = pmpropComplianceDocs.length
       ? pmpropComplianceDocs.map(function (doc) {
         var fromJob = doc.source === 'service';
+        var isEditing = pmpropEditingComplianceDoc === doc.key;
+        var calKey = PMPROP_COMP_CAL_KEYS[doc.key];
+        var dateLabel = doc.isFixed ? 'Expiry date' : 'Issue date';
+        var dateValue = doc.isFixed ? doc.expiryDate : doc.issueDate;
+        var displayName = doc.customName || doc.categoryLabel;
+        var uploadHtml = '<div class="pmprop-comp-doc-upload-row">' +
+          '<label class="pmprop-comp-doc-upload-btn">' +
+            '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>' +
+            '<span>' + (doc.fileName ? 'Replace document' : 'Upload document') + '</span>' +
+            '<input type="file" data-comp-doc-file="' + doc.key + '" style="display:none;" accept="image/*,.pdf">' +
+          '</label>' +
+          (doc.fileName ? '<span class="pmprop-comp-doc-upload-filename">' + pmpropEscapeHtml(doc.fileName) + '</span>' : '') +
+        '</div>';
+        var bodyHtml;
+        if (isEditing && calKey) {
+          bodyHtml = '<div class="pmprop-comp-doc-edit-fields">' +
+            '<div class="pmprop-comp-doc-name-label">Certificate name</div>' +
+            '<input type="text" class="field-input pmprop-comp-doc-name-input" data-comp-doc-name="' + doc.key + '" value="' + pmpropEscapeHtml(displayName) + '">' +
+            pmpropComplianceCalTriggerHtml(calKey, dateLabel, dateValue) +
+            uploadHtml +
+          '</div>';
+        } else {
+          bodyHtml = '<div class="pmprop-comp-doc-dates">' +
+            '<span class="pmprop-comp-doc-date-static">' + dateLabel + ': <b>' + (pmpropFormatDateInput(dateValue) || 'Not set') + '</b></span>' +
+          '</div>';
+        }
         return '<div class="pmprop-comp-doc-card' + (doc.key === justAddedKey ? ' pmprop-ai-highlight' : '') + '" data-doc-key="' + doc.key + '">' +
           '<div class="pmprop-comp-doc-card-top">' +
-            '<div class="pmprop-comp-doc-name">' + pmpropEscapeHtml(doc.categoryLabel) + '</div>' +
-            '<button type="button" class="pmprop-media-item-remove" data-doc-remove="' + doc.key + '" aria-label="Remove ' + pmpropEscapeHtml(doc.categoryLabel) + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>' +
+            '<div class="pmprop-comp-doc-name">' + pmpropEscapeHtml(displayName) + '</div>' +
+            '<div class="pmprop-comp-doc-actions">' +
+              '<button type="button" class="pmprop-comp-doc-view-btn" data-comp-doc-view="' + doc.key + '" aria-label="View ' + pmpropEscapeHtml(displayName) + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>View</button>' +
+              (isEditing
+                ? '<button type="button" class="pmprop-comp-doc-edit-btn" data-comp-doc-done="' + doc.key + '">Done</button>'
+                : '<button type="button" class="pmprop-comp-doc-edit-btn" data-comp-doc-edit="' + doc.key + '">Edit</button>') +
+              '<button type="button" class="pmprop-media-item-remove" data-doc-remove="' + doc.key + '" aria-label="Remove ' + pmpropEscapeHtml(displayName) + '"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>' +
+            '</div>' +
           '</div>' +
           (fromJob ? '<div class="pmprop-comp-doc-fromjob">From job' + (doc.sourceJobId ? ' #' + pmpropEscapeHtml(doc.sourceJobId.replace('JOB-', '')) : '') + '</div>' : '') +
-          '<div class="pmprop-comp-doc-dates">' +
-            '<span class="pmprop-comp-doc-date-field" data-doc-date="issueDate" data-doc-key="' + doc.key + '">Issue: <b>' + (pmpropFormatDateInput(doc.issueDate) || 'Set date') + '</b></span>' +
-            (doc.isFixed ? '<span class="pmprop-comp-doc-date-field" data-doc-date="expiryDate" data-doc-key="' + doc.key + '">Expiry: <b>' + (pmpropFormatDateInput(doc.expiryDate) || 'Needs review') + '</b></span>' : '') +
-          '</div>' +
+          bodyHtml +
         '</div>';
       }).join('')
       : '';
@@ -25085,31 +25237,84 @@
         pmpropRenderComplianceDocsList();
       });
     });
-    wrap.querySelectorAll('[data-doc-date]').forEach(function (field) {
-      field.addEventListener('click', function () {
-        var key = field.getAttribute('data-doc-key');
-        var dateField = field.getAttribute('data-doc-date');
-        var doc = pmpropComplianceDocs.find(function (d) { return d.key === key; });
+    wrap.querySelectorAll('[data-comp-doc-view]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var doc = pmpropComplianceDocs.find(function (d) { return d.key === btn.getAttribute('data-comp-doc-view'); });
         if (!doc) return;
-        var input = document.createElement('input');
-        input.type = 'text';
-        input.placeholder = 'dd/mm/yyyy';
-        input.className = 'pmprop-comp-doc-date-input';
-        input.value = pmpropFormatDateInput(doc[dateField]);
-        field.replaceWith(input);
-        input.focus();
-        input.select();
-        var commit = function () {
-          doc[dateField] = pmpropParseDateInput(input.value);
-          pmpropRenderComplianceDocsList();
-        };
-        input.addEventListener('blur', commit);
-        input.addEventListener('keydown', function (e) {
-          if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
-          if (e.key === 'Escape') { e.preventDefault(); pmpropRenderComplianceDocsList(); }
-        });
+        if (doc.previewUrl) {
+          // A real uploaded document \u2014 its actual data URL, which the browser renders natively.
+          window.open(doc.previewUrl, '_blank');
+        } else {
+          // No real file behind this record (e.g. still the AI-extracted placeholder) \u2014 the
+          // lightbox honestly shows its placeholder state rather than pretending otherwise.
+          pmpropOpenImageLightbox(null, doc.customName || doc.categoryLabel, true);
+        }
       });
     });
+    wrap.querySelectorAll('[data-comp-doc-name]').forEach(function (input) {
+      input.addEventListener('input', function () {
+        var doc = pmpropComplianceDocs.find(function (d) { return d.key === input.getAttribute('data-comp-doc-name'); });
+        if (!doc) return;
+        doc.customName = input.value;
+        // Keep the card's own header in sync live, without a full re-render that would steal
+        // focus from the input mid-type.
+        var card = input.closest('.pmprop-comp-doc-card');
+        var header = card ? card.querySelector('.pmprop-comp-doc-name') : null;
+        if (header) header.textContent = input.value.trim() || doc.categoryLabel;
+      });
+    });
+    wrap.querySelectorAll('[data-comp-doc-file]').forEach(function (input) {
+      input.addEventListener('change', function (e) {
+        var file = e.target.files && e.target.files[0];
+        if (!file) return;
+        var doc = pmpropComplianceDocs.find(function (d) { return d.key === input.getAttribute('data-comp-doc-file'); });
+        if (!doc) return;
+        if (typeof FileReader === 'function') {
+          var reader = new FileReader();
+          reader.onload = function (ev) {
+            doc.previewUrl = ev.target.result;
+            doc.fileName = file.name;
+            showToast((doc.fileName ? 'Replaced' : 'Uploaded') + ' document for ' + (doc.customName || doc.categoryLabel) + '.');
+            pmpropRenderComplianceDocsList();
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    });
+    wrap.querySelectorAll('[data-comp-doc-edit]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var key = btn.getAttribute('data-comp-doc-edit');
+        var doc = pmpropComplianceDocs.find(function (d) { return d.key === key; });
+        var calKey = PMPROP_COMP_CAL_KEYS[key];
+        if (doc && calKey) {
+          // Sync the shared calendar state from this doc's actual saved value right before
+          // showing it \u2014 calState is global, so without this it could still be showing whatever
+          // date a previously-edited property last left behind.
+          calState[calKey].selected = (doc.isFixed ? doc.expiryDate : doc.issueDate) || null;
+        }
+        pmpropEditingComplianceDoc = key;
+        pmpropRenderComplianceDocsList();
+      });
+    });
+    wrap.querySelectorAll('[data-comp-doc-done]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var key = btn.getAttribute('data-comp-doc-done');
+        var doc = pmpropComplianceDocs.find(function (d) { return d.key === key; });
+        var calKey = PMPROP_COMP_CAL_KEYS[key];
+        if (doc && calKey) {
+          if (doc.isFixed) doc.expiryDate = calState[calKey].selected; else doc.issueDate = calState[calKey].selected;
+        }
+        pmpropEditingComplianceDoc = null;
+        pmpropRenderComplianceDocsList();
+      });
+    });
+    // Wire the real calendar for whichever card is currently in edit mode \u2014 at most one exists in
+    // the DOM at a time, so no risk of wiring the same calKey's popup twice.
+    if (pmpropEditingComplianceDoc) {
+      var editingCard = wrap.querySelector('[data-doc-key="' + pmpropEditingComplianceDoc + '"]');
+      var editingCalKey = PMPROP_COMP_CAL_KEYS[pmpropEditingComplianceDoc];
+      if (editingCard && editingCalKey) pmpropWireComplianceCalendar(editingCard, editingCalKey);
+    }
     if (justAddedKey) {
       var row = wrap.querySelector('[data-doc-key="' + justAddedKey + '"]');
       if (row) row.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -25132,6 +25337,7 @@
         issueDate: rec.issueDate ? new Date(rec.issueDate + 'T00:00:00') : null,
         expiryDate: rec.expiry ? new Date(rec.expiry + 'T00:00:00') : null,
         categoryUncertain: false,
+        customName: rec.customName || null, fileName: rec.fileName || null, previewUrl: rec.previewUrl || null,
         source: rec.source || 'manual', sourceJobId: rec.sourceJobId,
         // Anything this UI doesn't have its own field for (e.g. EPC's A\u2013F energy rating) rides
         // along unchanged rather than being silently dropped when the form is saved.
@@ -25151,6 +25357,9 @@
       if (doc.sourceJobId) rec.sourceJobId = doc.sourceJobId;
       if (doc.isFixed) { rec.expiry = doc.expiryDate ? calFormatISO(doc.expiryDate) : undefined; }
       else { rec.issueDate = doc.issueDate ? calFormatISO(doc.issueDate) : undefined; }
+      if (doc.customName) rec.customName = doc.customName; else delete rec.customName;
+      if (doc.fileName) rec.fileName = doc.fileName; else delete rec.fileName;
+      if (doc.previewUrl) rec.previewUrl = doc.previewUrl; else delete rec.previewUrl;
       if (rec.expiry || rec.issueDate) compliance[doc.key] = rec;
     });
     p.compliance = Object.keys(compliance).length ? compliance : undefined;
@@ -25453,6 +25662,28 @@
   PMPROP_LINK_CONTENT_ICONS['House Guide'] = PMPROP_LINK_CONTENT_ICONS['Guides'];
   PMPROP_LINK_CONTENT_ICONS['Site Layout'] = PMPROP_LINK_CONTENT_ICONS['Floor Plans'];
   PMPROP_LINK_CONTENT_ICONS['Document'] = PMPROP_LINK_CONTENT_ICONS['Documents'];
+  // [singular, plural] pair for every type name a chip can show \u2014 covers both vocabularies as
+  // they're actually stored (the main upload types singular, the link-content types plural) so a
+  // chip reading "Property Image (1)" correctly becomes "Property Images (3)" once there's more
+  // than one, and the reverse for the already-plural-stored link-content types.
+  var PMPROP_TYPE_FORMS = {
+    'Property Image': ['Property Image', 'Property Images'],
+    'Floor Plan': ['Floor Plan', 'Floor Plans'],
+    'House Guide': ['House Guide', 'House Guides'],
+    'Document': ['Document', 'Documents'],
+    'Site Layout': ['Site Layout', 'Site Layouts'],
+    'Photos': ['Photo', 'Photos'],
+    'Documents': ['Document', 'Documents'],
+    'PDFs': ['PDF', 'PDFs'],
+    'Floor Plans': ['Floor Plan', 'Floor Plans'],
+    'Guides': ['Guide', 'Guides'],
+    'Link': ['Link', 'Links']
+  };
+  function pmpropPluralizeType(storedType, count) {
+    var forms = PMPROP_TYPE_FORMS[storedType];
+    if (!forms) return storedType;
+    return count === 1 ? forms[0] : forms[1];
+  }
   // Simulated per-photo classification \u2014 no real file data exists to actually analyse, so this
   // cycles through plausible types rather than labelling every one identically.
   var PMPROP_SIMULATED_IMAGE_BADGES = ['Property Image', 'Property Image', 'Floor Plan', 'Property Image'];
@@ -25523,7 +25754,7 @@
         ? '<span class="pmprop-media-link-chip detecting">Fetching\u2026</span>'
         : typeOrder.map(function (type) {
           var chipKey = item.id + '|' + type;
-          return '<button type="button" class="pmprop-media-link-chip' + (pmpropExpandedLinkChip === chipKey ? ' selected' : '') + '" data-link-chip="' + chipKey + '">' + (PMPROP_LINK_CONTENT_ICONS[type] || '') + '<span>' + type + ' (' + byType[type].length + ')</span></button>';
+          return '<button type="button" class="pmprop-media-link-chip' + (pmpropExpandedLinkChip === chipKey ? ' selected' : '') + '" data-link-chip="' + chipKey + '">' + (PMPROP_LINK_CONTENT_ICONS[type] || '') + '<span>' + pmpropPluralizeType(type, byType[type].length) + ' (' + byType[type].length + ')</span></button>';
         }).join('');
       var expandedContent = '';
       if (pmpropExpandedLinkChip && pmpropExpandedLinkChip.indexOf(item.id + '|') === 0) {
@@ -25552,6 +25783,7 @@
       }
       return '<div class="pmprop-media-doc-row pmprop-media-link-card" data-media-id="' + item.id + '">' +
         '<div class="pmprop-media-link-top">' +
+          '<span class="pmprop-media-doc-icon pmprop-media-link-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></span>' +
           '<div class="pmprop-media-doc-name" data-media-rename="' + item.id + '" title="Click to rename \u2014 ' + pmpropEscapeHtml(item.name) + '">' + pmpropEscapeHtml(item.name) + '</div>' +
           '<div class="pmprop-media-link-chips">' + chipsHtml + '</div>' +
           '<button type="button" class="pmprop-media-doc-remove" data-media-remove="' + item.id + '" aria-label="Remove ' + pmpropEscapeHtml(item.name) + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>' +
@@ -25560,9 +25792,9 @@
       '</div>';
     }
   }
-  // Which media-type group (if any) is currently expanded \u2014 shared between documents and
-  // photos now that they render as one combined chip row, so only one group opens at a time
-  // regardless of whether it's a document type or a photo type.
+  // Which media-type group (if any) is currently expanded \u2014 shared between documents, photos,
+  // and links now that they all render as one combined chip row, so only one group opens at a
+  // time regardless of which kind it represents.
   var pmpropExpandedMediaType = null;
   function pmpropMediaPhotoThumbHtml(item) {
     var thumbSrc = item.type === 'file' ? item.previewUrl : item.url;
@@ -25572,13 +25804,16 @@
       '<button type="button" class="pmprop-media-photo-remove" data-media-remove="' + item.id + '" aria-label="Remove ' + pmpropEscapeHtml(item.name) + '"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>' +
     '</div>';
   }
-  // Documents and photos group by detected type into one combined, left-aligned row of chips \u2014
-  // same size and style for every chip regardless of which kind it represents. The badge/type
-  // label lives on the chip itself, entirely outside any image, rather than overlaid on a
-  // thumbnail. Clicking a chip reveals that type's actual items below the chip row (square tiles
-  // for photo types, the shared document-item component for document types); a property with 100
-  // photos or documents stays a short row of chips until a specific group is actually opened.
-  function pmpropRenderMediaChipsRow(docs, photos) {
+  // Documents, photos, and links all group into one combined, left-aligned row of chips \u2014 same
+  // size and style for every chip regardless of which kind it represents, links included (labelled
+  // "Link"/"Links" depending on count, rather than splitting into a separate section). The
+  // badge/type label lives on the chip itself, entirely outside any image, rather than overlaid on
+  // a thumbnail. Clicking a chip reveals that group's actual items below the chip row (square
+  // tiles for photo types, the shared document-item component for document types, full link cards
+  // for links); a property with 100 photos or documents stays a short row of chips until a
+  // specific group is actually opened.
+  var PMPROP_LINKS_GROUP_KEY = '__links__';
+  function pmpropRenderMediaChipsRow(docs, photos, links) {
     var groups = {}, order = [], photoTypes = {};
     photos.forEach(function (p) {
       var key = p.detectedType || 'Photo';
@@ -25591,18 +25826,27 @@
       if (!groups[key]) { groups[key] = []; order.push(key); }
       groups[key].push(d);
     });
+    if (links.length) { groups[PMPROP_LINKS_GROUP_KEY] = links; order.push(PMPROP_LINKS_GROUP_KEY); }
     if (pmpropExpandedMediaType && !groups[pmpropExpandedMediaType]) pmpropExpandedMediaType = null;
     var chipsHtml = order.map(function (type) {
       var isDetecting = type === 'Detecting\u2026';
-      var icon = photoTypes[type] ? '' : (PMPROP_LINK_CONTENT_ICONS[type] || PMPROP_LINK_CONTENT_ICONS['Documents']);
-      return '<button type="button" class="pmprop-media-link-chip' + (pmpropExpandedMediaType === type ? ' selected' : '') + (isDetecting ? ' detecting' : '') + '" data-media-type-chip="' + pmpropEscapeHtml(type) + '">' + icon + '<span>' + pmpropEscapeHtml(type) + ' (' + groups[type].length + ')</span></button>';
+      var isLinks = type === PMPROP_LINKS_GROUP_KEY;
+      var icon = isLinks
+        ? '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>'
+        : (photoTypes[type] ? '' : (PMPROP_LINK_CONTENT_ICONS[type] || PMPROP_LINK_CONTENT_ICONS['Documents']));
+      var label = isLinks ? pmpropPluralizeType('Link', groups[type].length) : pmpropEscapeHtml(pmpropPluralizeType(type, groups[type].length));
+      return '<button type="button" class="pmprop-media-link-chip' + (pmpropExpandedMediaType === type ? ' selected' : '') + (isDetecting ? ' detecting' : '') + '" data-media-type-chip="' + pmpropEscapeHtml(type) + '">' + icon + '<span>' + label + ' (' + groups[type].length + ')</span></button>';
     }).join('');
     var groupHtml = '';
     if (pmpropExpandedMediaType) {
       var activeItems = groups[pmpropExpandedMediaType];
-      groupHtml = photoTypes[pmpropExpandedMediaType]
-        ? '<div class="pmprop-media-photo-group">' + activeItems.map(pmpropMediaPhotoThumbHtml).join('') + '</div>'
-        : '<div class="pmprop-doc-item-list">' + activeItems.map(function (d) { return pmpropDocItemHtml(d.id, d.name, pmpropExpandedMediaType, false); }).join('') + '</div>';
+      if (pmpropExpandedMediaType === PMPROP_LINKS_GROUP_KEY) {
+        groupHtml = '<div class="pmprop-media-chip-reveal pmprop-media-links-full">' + activeItems.map(pmpropMediaDocRowHtml).join('') + '</div>';
+      } else {
+        groupHtml = photoTypes[pmpropExpandedMediaType]
+          ? '<div class="pmprop-media-chip-reveal pmprop-media-photo-group">' + activeItems.map(pmpropMediaPhotoThumbHtml).join('') + '</div>'
+          : '<div class="pmprop-media-chip-reveal pmprop-doc-item-list">' + activeItems.map(function (d) { return pmpropDocItemHtml(d.id, d.name, pmpropExpandedMediaType, false); }).join('') + '</div>';
+      }
     }
     return '<div class="pmprop-media-chips-row"><div class="pmprop-media-link-chips">' + chipsHtml + '</div>' + groupHtml + '</div>';
   }
@@ -25613,11 +25857,7 @@
     var links = nonImages.filter(function (it) { return it.type === 'link'; });
     var plainDocs = nonImages.filter(function (it) { return it.type !== 'link'; });
     var photos = pmpropMedia.filter(pmpropMediaIsImage);
-    var html = '';
-    // Links get their own full-width row each \u2014 a link's content-breakdown chips need more room
-    // than a single combined chips row comfortably gives them.
-    if (links.length) html += '<div class="pmprop-media-links-full">' + links.map(pmpropMediaDocRowHtml).join('') + '</div>';
-    if (plainDocs.length || photos.length) html += pmpropRenderMediaChipsRow(plainDocs, photos);
+    var html = (plainDocs.length || photos.length || links.length) ? pmpropRenderMediaChipsRow(plainDocs, photos, links) : '';
     wrap.innerHTML = html;
     wrap.querySelectorAll('[data-media-type-chip]').forEach(function (chip) {
       chip.addEventListener('click', function () {
@@ -25884,35 +26124,22 @@
     var isLinked = !!c.accountId;
     var linkedAccount = isLinked ? pmpropAllPickableAccounts().find(function (a) { return a.id === c.accountId; }) : null;
     var acctCurrent = linkedAccount ? pmpropAccountOptionLabel(linkedAccount) : null;
-    var detailsHtml;
-    if (!showAccountPicker) {
-      // Always manual entry \u2014 the fields themselves ARE the only way to enter this contact.
-      detailsHtml = '<div class="pmprop-field-row" style="margin-top:10px;">' +
-        '<div class="field-group" style="margin-bottom:0;"><label>Name</label><input type="text" class="field-input" data-contact-field="name" placeholder="Full name" value="' + pmpropEscapeHtml(c.name) + '"></div>' +
-        '<div class="field-group" style="margin-bottom:0;"><label>Email</label><input type="email" class="field-input" data-contact-field="email" placeholder="name@company.com" value="' + pmpropEscapeHtml(c.email) + '"></div>' +
-        '<div class="field-group" style="margin-bottom:0;"><label>Phone <span class="req">*</span></label><input type="text" class="field-input" data-contact-field="phone" placeholder="07123 456789" value="' + pmpropEscapeHtml(c.phone) + '"></div>' +
-      '</div>';
-    } else if (isLinked) {
-      // Someone's been picked \u2014 their details come from Teams/the org's own records, shown as
-      // plain readable text rather than input fields that only look editable.
-      detailsHtml = '<div class="pmprop-contact-linked-details">' +
-        '<span>' + pmpropEscapeHtml(c.name || '\u2014') + '</span>' +
-        '<span>' + pmpropEscapeHtml(c.email || '\u2014') + '</span>' +
-        '<span>' + pmpropEscapeHtml(c.phone || '\u2014') + '</span>' +
-      '</div>';
-    } else {
-      // Nothing picked yet \u2014 no fields shown at all until the PM actually selects someone above.
-      detailsHtml = '';
-    }
+    // Always real, editable fields \u2014 picking a person from the account picker pre-fills them, but
+    // the PM can still see and change every value afterward rather than it becoming read-only text.
+    var detailsHtml = '<div class="pmprop-field-row" style="margin-top:10px;">' +
+      '<div class="field-group" style="margin-bottom:0;"><label>Name</label><input type="text" class="field-input" data-contact-field="name" placeholder="Full name" value="' + pmpropEscapeHtml(c.name) + '"></div>' +
+      '<div class="field-group" style="margin-bottom:0;"><label>Email</label><input type="email" class="field-input" data-contact-field="email" placeholder="name@company.com" value="' + pmpropEscapeHtml(c.email) + '"></div>' +
+      '<div class="field-group" style="margin-bottom:0;"><label>Phone <span class="req">*</span></label><input type="text" class="field-input" data-contact-field="phone" placeholder="07123 456789" value="' + pmpropEscapeHtml(c.phone) + '"></div>' +
+    '</div>';
     return '<div class="pmprop-contact-row-top">' +
         '<div class="pmprop-contact-dd pmprop-contact-role-dd">' + pmpropCustomSelectHtml('contactRole-' + c.id, PMPROP_CONTACT_ROLES[0], PMPROP_CONTACT_ROLES, c.role) + '</div>' +
-        (showAccountPicker ? '<div class="pmprop-contact-dd pmprop-contact-acct-dd">' + pmpropCustomSelectHtml('contactAcct-' + c.id, 'Select a person', pmpropAccountOptionsForRole(c.role), acctCurrent) + '</div>' : '') +
+        (showAccountPicker ? '<div class="pmprop-contact-dd pmprop-contact-acct-dd">' + pmpropCustomSelectHtml('contactAcct-' + c.id, 'Select a member', pmpropAccountOptionsForRole(c.role), acctCurrent) + '</div>' : '') +
         '<div class="pmprop-contact-row-actions">' +
-          '<button type="button" class="pmprop-contact-done-btn" data-contact-collapse aria-label="Done editing"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></button>' +
+          '<label class="pmprop-contact-poc-label" title="Only one ' + pmpropEscapeHtml(c.role) + ' can be the point of contact at a time"><input type="checkbox" data-contact-field="pointOfContact"' + (c.pointOfContact ? ' checked' : '') + '>Point of contact for job</label>' +
+          '<button type="button" class="pmprop-contact-done-btn" data-contact-collapse aria-label="Done editing">Done</button>' +
           '<button type="button" class="pmprop-contact-remove-btn" data-contact-remove aria-label="Remove contact"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>' +
         '</div>' +
       '</div>' +
-      '<label class="pmprop-contact-poc-label" title="Only one ' + pmpropEscapeHtml(c.role) + ' can be the point of contact at a time"><input type="checkbox" data-contact-field="pointOfContact"' + (c.pointOfContact ? ' checked' : '') + '>Point of contact for job</label>' +
       detailsHtml;
   }
 
@@ -25961,8 +26188,7 @@
               contact.pointOfContact = false;
             }
             pmpropRenderContacts();
-          } else if (!contact.accountId) {
-            // Locked (linked) fields are read-only, so this branch only ever fires for manual entry.
+          } else {
             contact[key] = field.value;
             if (key === 'phone') field.classList.remove('error');
           }
@@ -26198,10 +26424,9 @@
     var showFull = !quickAdd;
     document.getElementById('pmpropMediaCard').style.display = showFull ? '' : 'none';
     document.getElementById('pmpropComplianceCard').style.display = showFull ? '' : 'none';
-    document.getElementById('pmpropContactsAccessGrid').style.display = showFull ? '' : 'none';
+    document.getElementById('pmpropContactsCard').style.display = showFull ? '' : 'none';
     pmpropResetMediaComplianceToggles();
     pmpropRenderContacts();
-    pmpropRenderAccessDetailsCard();
     pmpropRenderMediaGallery();
     pmpropPopulateComplianceForm(null);
   }
@@ -26236,10 +26461,9 @@
     pmpropRenderDetailsCard();
     document.getElementById('pmpropMediaCard').style.display = '';
     document.getElementById('pmpropComplianceCard').style.display = '';
-    document.getElementById('pmpropContactsAccessGrid').style.display = '';
+    document.getElementById('pmpropContactsCard').style.display = '';
     pmpropResetMediaComplianceToggles();
     pmpropRenderContacts();
-    pmpropRenderAccessDetailsCard();
     pmpropRenderMediaGallery();
     pmpropPopulateComplianceForm(p);
   }
@@ -26895,27 +27119,44 @@
       var linkBtn = document.getElementById('pmpropAiUploadLinkAddBtn');
       if (!dropzone) return;
 
-      function processFile(name) {
+      function processFile(fileOrName) {
+        var isRealFile = fileOrName && typeof fileOrName === 'object' && typeof fileOrName.name === 'string';
+        var name = isRealFile ? fileOrName.name : fileOrName;
         showToast('Analysing ' + name + '\u2026');
-        setTimeout(function () {
+        // Start reading the real file's data (when there is one) in parallel with the simulated
+        // "analysing" delay below, rather than sequentially after it \u2014 whichever finishes last
+        // gates when the card actually appears, so a real upload never waits longer than a link
+        // paste would.
+        var readPromise = (isRealFile && typeof FileReader === 'function')
+          ? new Promise(function (resolve) {
+              var reader = new FileReader();
+              reader.onload = function (ev) { resolve(ev.target.result); };
+              reader.onerror = function () { resolve(null); };
+              reader.readAsDataURL(fileOrName);
+            })
+          : Promise.resolve(null);
+        var delayPromise = new Promise(function (resolve) { setTimeout(resolve, 1100); });
+        Promise.all([readPromise, delayPromise]).then(function (results) {
+          var previewUrl = results[0];
           var extraction = pmpropSimulateAiExtraction(name);
+          if (previewUrl) { extraction.previewUrl = previewUrl; extraction.fileName = name; }
           pmpropAddOrUpdateComplianceDoc(extraction);
           var label = PMPROP_NOTIFY_TYPE_LABELS[extraction.category] || extraction.category;
           showToast((extraction.categoryUncertain ? 'Filed as ' + label + ' \u2014 check the card below.' : 'Added ' + label + '.'));
-        }, 1100);
+        });
       }
 
       dropzone.addEventListener('click', function () { fileInput.click(); });
       fileInput.addEventListener('change', function (e) {
         var file = e.target.files && e.target.files[0];
-        if (file) processFile(file.name);
+        if (file) processFile(file);
         e.target.value = '';
       });
       ['dragover', 'dragenter'].forEach(function (evt) { dropzone.addEventListener(evt, function (e) { e.preventDefault(); dropzone.classList.add('drag-over'); }); });
       ['dragleave', 'drop'].forEach(function (evt) { dropzone.addEventListener(evt, function (e) { e.preventDefault(); dropzone.classList.remove('drag-over'); }); });
       dropzone.addEventListener('drop', function (e) {
         var file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
-        if (file) processFile(file.name);
+        if (file) processFile(file);
       });
       linkBtn.addEventListener('click', function () {
         var url = linkInput.value.trim();
