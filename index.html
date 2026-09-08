@@ -8789,9 +8789,15 @@
   .team-modal-card { max-width: 480px; text-align: left; }
   /* New Role/Edit Role and the member Permission modal both hold a full module matrix and need
      more room than a plain form does — widened to 680px. Invite stays at the base 480px, since
-     it's just an email field and a role picker. */
+     it's just an email field and a role picker. Listed per-role since PM's and Supplier's Teams
+     modules duplicate this same modal pair under their own renamed overlay IDs. */
   #teamRoleOverlay .team-modal-card,
-  #teamMemberPermOverlay .team-modal-card { max-width: 680px; }
+  #teamMemberPermOverlay .team-modal-card,
+  #pmTeamRoleOverlay .team-modal-card,
+  #pmTeamMemberPermOverlay .team-modal-card,
+  #supTeamRoleOverlay .team-modal-card,
+  #supTeamMemberPermOverlay .team-modal-card,
+  #supTeamJobAccessOverlay .team-modal-card { max-width: 680px; }
   .team-modal-title { font-size: 17px; font-weight: 800; color: var(--text-heading); margin-bottom: 6px; }
   .team-modal-desc { font-size: 13px; color: var(--text-body-muted); line-height: 1.55; margin-bottom: 18px; }
   .team-field { margin-bottom: 16px; }
@@ -8889,6 +8895,65 @@
   .team-mx-opt.on { background: var(--icon-tint-bg); color: var(--accent-blue); }
   .team-mx-opt.on.lvl-none { background: var(--surface-soft); color: #64748b; }
   .team-mx-opt.on.lvl-both { background: #22447f; color: #fff; }
+
+  /* ---------- Job Access ---------- */
+  .team-ja-modes {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px;
+  }
+  .team-ja-mode-card {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 4px; text-align: left;
+    border: 1.5px solid var(--border-subtle); border-radius: 12px; background: #fff;
+    padding: 12px 13px; cursor: pointer; font-family: inherit;
+    transition: border-color 150ms ease-out, background-color 150ms ease-out;
+  }
+  .team-ja-mode-card:hover { border-color: #b9cde9; }
+  .team-ja-mode-card.active { border-color: var(--accent-blue); background: var(--icon-tint-bg); }
+  .team-ja-mode-icon { font-size: 17px; line-height: 1; }
+  .team-ja-mode-title { font-size: 12.5px; font-weight: 700; color: var(--text-heading); }
+  .team-ja-mode-desc { font-size: 11px; color: var(--text-body-muted); line-height: 1.4; }
+
+  .team-ja-all-note {
+    display: flex; align-items: flex-start; gap: 12px; border: 1px solid var(--border-subtle);
+    border-radius: 12px; background: var(--surface-soft); padding: 16px; font-size: 13px; color: var(--text-heading);
+  }
+  .team-ja-all-sub { font-size: 12px; font-weight: 400; color: var(--text-body-muted); margin-top: 3px; }
+
+  .team-ja-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+    max-height: 320px; overflow-y: auto; padding: 2px;
+  }
+  .team-ja-check-card {
+    display: flex; flex-direction: column; gap: 6px; border: 1.5px solid var(--border-subtle);
+    border-radius: 11px; background: #fff; padding: 11px 12px; cursor: pointer;
+    transition: border-color 150ms ease-out, background-color 150ms ease-out;
+  }
+  .team-ja-check-card:hover { border-color: #b9cde9; }
+  .team-ja-check-card.checked { border-color: var(--accent-blue); background: var(--icon-tint-bg); }
+  .team-ja-check-card input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .team-ja-check-icon svg { width: 18px; height: 18px; color: var(--accent-blue); }
+  .team-ja-check-label { font-size: 12.5px; font-weight: 700; color: var(--text-heading); }
+  .team-ja-check-count { font-size: 11px; color: var(--text-body-muted); }
+
+  .team-ja-job-list {
+    border: 1px solid var(--border-subtle); border-radius: 12px; background: #fff;
+    max-height: 300px; overflow-y: auto;
+  }
+  .team-ja-job-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; cursor: pointer; }
+  .team-ja-job-row + .team-ja-job-row { border-top: 1px solid var(--border-subtle); }
+  .team-ja-job-row:hover { background: var(--surface-soft); }
+  .team-ja-job-row.checked { background: var(--icon-tint-bg); }
+  .team-ja-job-row input { flex-shrink: 0; width: 16px; height: 16px; accent-color: var(--accent-blue); cursor: pointer; }
+  .team-ja-job-main { min-width: 0; }
+  .team-ja-job-title { display: block; font-size: 13px; font-weight: 600; color: var(--text-heading); }
+  .team-ja-job-meta { display: block; font-size: 11.5px; color: var(--text-body-muted); margin-top: 1px; }
+  .team-ja-job-empty { padding: 24px 14px; text-align: center; font-size: 12.5px; color: var(--text-body-muted); }
+
+  .team-ja-footer { align-items: center; }
+
+  @media (max-width: 560px) {
+    .team-ja-modes { grid-template-columns: repeat(2, 1fr); }
+    .team-ja-grid { grid-template-columns: repeat(2, 1fr); }
+  }
 
   @media (max-width: 560px) {
     .team-mx-row { flex-direction: column; align-items: stretch; gap: 8px; }
@@ -14454,6 +14519,171 @@
                 <button type="button" class="pmex-lightbox-nav pmex-lightbox-next" id="pmexLightboxNextBtn" aria-label="Next photo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
               </div>
           </div>
+
+          <!-- ============ PM TEAMS MODULE (mirrors Admin's Teams module exactly) ============ -->
+          <div id="pmTeamsView" style="display:none;">
+            <div class="dash-header" style="align-items:flex-start;margin-bottom:16px;">
+              <div>
+                <h1 style="font-size:22px;font-weight:800;color:var(--text-heading);margin-bottom:4px;">Teams</h1>
+                <p style="font-size:13.5px;color:var(--text-body-muted);">Who works in the Keylr console, what they can reach, and what they&rsquo;re allowed to do there.</p>
+              </div>
+              <div class="team-header-actions">
+                <button type="button" class="btn btn-secondary-light" id="pmTeamAddRoleBtn">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M12 5v14M5 12h14"/></svg>
+                  New role
+                </button>
+                <button type="button" class="btn btn-primary" id="pmTeamInviteBtn">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>
+                  Invite member
+                </button>
+              </div>
+            </div>
+
+            <div class="team-stats" id="pmTeamStats"></div>
+
+            <div class="pm-filter-card">
+              <div class="pm-search-row" style="margin-bottom:0;">
+                <div class="pm-search-input-wrap" style="max-width:280px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                  <input type="text" id="pmTeamSearch" placeholder="Search people or roles">
+                </div>
+                <div class="pm-tab-pills" id="pmTeamTabs">
+                  <div class="pm-tab-pill active" data-team-tab="members">Members</div>
+                  <div class="pm-tab-pill" data-team-tab="roles">Roles &amp; permissions</div>
+                </div>
+                <div class="pm-count-actions">
+                  <span class="pm-count-text" id="pmTeamCount">0</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Members -->
+            <div id="pmTeamMembersPanel">
+              <div class="pm-table-wrap team-table-wrap">
+                <div class="pm-table-scroll">
+                  <table class="admin-table">
+                    <thead><tr><th>Member</th><th>Role</th><th>Access</th><th>Last active</th><th>Status</th><th style="text-align:right;">Actions</th></tr></thead>
+                    <tbody id="pmTeamMembersBody"></tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="svcp-empty" id="pmTeamMembersEmpty" style="display:none;">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/></svg>
+                <div class="svcp-empty-title" id="pmTeamMembersEmptyTitle">No members match</div>
+                <div class="svcp-empty-desc">Try a different search term.</div>
+              </div>
+            </div>
+
+            <!-- Roles -->
+            <div id="pmTeamRolesPanel" style="display:none;">
+              <div class="pm-table-wrap team-table-wrap">
+                <div class="pm-table-scroll">
+                  <table class="admin-table">
+                    <thead><tr><th>Role</th><th>Permissions</th><th>Members</th><th>Status</th><th style="text-align:right;">Actions</th></tr></thead>
+                    <tbody id="pmTeamRolesBody"></tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="svcp-empty" id="pmTeamRolesEmpty" style="display:none;">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                <div class="svcp-empty-title" id="pmTeamRolesEmptyTitle">No roles match</div>
+                <div class="svcp-empty-desc">Try a different search term.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Invite member -->
+          <div class="modal-overlay" id="pmTeamInviteOverlay">
+            <div class="confirm-modal-card team-modal-card">
+              <button type="button" class="modal-close-x" data-team-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+              <div class="team-modal-title">Invite a pmTeam member</div>
+              <div class="team-modal-desc">They&rsquo;ll get an email with a link to set up their console login. The role you pick decides what they can reach and what they can change.</div>
+
+              <div class="team-field">
+                <label for="pmTeamInviteEmail">Email address</label>
+                <input type="email" id="pmTeamInviteEmail" placeholder="name@keylr.com" autocomplete="off">
+                <div class="team-field-error" id="pmTeamInviteEmailError">Enter a valid email address.</div>
+              </div>
+
+              <div class="team-field">
+                <label>Role</label>
+                <div class="team-dd" id="pmTeamInviteRoleDD"></div>
+                <div class="team-field-hint" id="pmTeamInviteRoleHint"></div>
+              </div>
+
+              <div class="confirm-modal-btns">
+                <button type="button" class="pmprop-del-cancel" id="pmTeamInviteCancel">Cancel</button>
+                <button type="button" class="confirm-modal-confirm" id="pmTeamInviteSend">Send invite</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Create / edit role -->
+          <div class="modal-overlay" id="pmTeamRoleOverlay">
+            <div class="confirm-modal-card team-modal-card">
+              <button type="button" class="modal-close-x" data-team-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+              <div class="team-modal-title" id="pmTeamRoleModalTitle">New role</div>
+              <div class="team-modal-desc">Pick which modules this role covers and what it can do in each. Everyone holding the role inherits this, apart from anyone you&rsquo;ve given a personal exception.</div>
+
+              <div class="team-field">
+                <label for="pmTeamRoleName">Role name</label>
+                <input type="text" id="pmTeamRoleName" placeholder="e.g. Compliance Reviewer" autocomplete="off">
+                <div class="team-field-error" id="pmTeamRoleNameError">Give the role a name.</div>
+              </div>
+
+              <div class="team-field">
+                <label for="pmTeamRoleDesc">What is this role for?</label>
+                <input type="text" id="pmTeamRoleDesc" placeholder="Optional — helps whoever assigns it later" autocomplete="off">
+              </div>
+
+              <div class="team-field">
+                <div class="team-mx-head">
+                  <label style="margin-bottom:0;">Modules &amp; permissions</label>
+                  <span class="team-mx-count" id="pmTeamRoleMatrixCount"></span>
+                </div>
+                <div class="team-matrix" id="pmTeamRoleMatrix"></div>
+              </div>
+
+              <div class="confirm-modal-btns">
+                <button type="button" class="pmprop-del-cancel" id="pmTeamRoleCancel">Cancel</button>
+                <button type="button" class="confirm-modal-confirm" id="pmTeamRoleSave">Create role</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Member permission overrides -->
+          <div class="modal-overlay" id="pmTeamMemberPermOverlay">
+            <div class="confirm-modal-card team-modal-card team-modal-wide">
+              <button type="button" class="modal-close-x" data-team-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+              <div class="team-modal-title" id="pmTeamMemberPermTitle">Access</div>
+              <div class="team-modal-desc" id="pmTeamMemberPermSub"></div>
+
+              <div class="team-mx-head">
+                <span class="team-mx-count" id="pmTeamMemberPermCount"></span>
+                <button type="button" class="team-reset-btn" id="pmTeamMemberPermReset">Reset all to role</button>
+              </div>
+              <div class="team-matrix" id="pmTeamMemberPermMatrix"></div>
+
+              <div class="confirm-modal-btns">
+                <button type="button" class="confirm-modal-confirm" id="pmTeamMemberPermClose">Done</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Remove confirmation -->
+          <div class="modal-overlay" id="pmTeamRemoveOverlay">
+            <div class="confirm-modal-card">
+              <button type="button" class="modal-close-x" data-team-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+              <div class="confirm-modal-icon" style="background:#fef2f2;color:#b91c1c;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></div>
+              <div class="confirm-modal-title" id="pmTeamRemoveTitle">Remove?</div>
+              <div class="confirm-modal-desc" id="pmTeamRemoveDesc"></div>
+              <div class="confirm-modal-btns">
+                <button type="button" class="pmprop-del-cancel" id="pmTeamRemoveCancel">Cancel</button>
+                <button type="button" class="confirm-modal-confirm" id="pmTeamRemoveConfirm" style="background:#b91c1c;">Remove</button>
+              </div>
+            </div>
+          </div>
+
           <div id="pmTicketsView" style="display:none;">
             <div class="dash-section">
               <div class="dash-header">
@@ -15238,7 +15468,11 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
             <span class="nav-label">Disputes</span>
           </div>
-          <div class="dash-nav-item" data-nav="teams" id="supTeamsNavItem" style="display:none;">
+        </div>
+
+        <div class="dash-nav-group">
+          <div class="dash-nav-group-label">System</div>
+          <div class="dash-nav-item" data-nav="teams" id="supTeamsNavItem">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
             <span class="nav-label">Teams</span>
           </div>
@@ -16074,6 +16308,190 @@
               <div class="modal-card-foot">
                 <button type="button" class="btn btn-secondary-light" id="supcalDdCancelBtn">Cancel</button>
                 <button type="button" class="btn btn-primary" id="supcalDdSaveBtn">Mark as time off</button>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- ============ SUPPLIER TEAMS MODULE (mirrors Admin's Teams module exactly) ============ -->
+          <div id="supTeamsView" style="display:none;">
+            <div class="dash-header" style="align-items:flex-start;margin-bottom:16px;">
+              <div>
+                <h1 style="font-size:22px;font-weight:800;color:var(--text-heading);margin-bottom:4px;">Teams</h1>
+                <p style="font-size:13.5px;color:var(--text-body-muted);">Who works in the Keylr console, what they can reach, and what they&rsquo;re allowed to do there.</p>
+              </div>
+              <div class="team-header-actions">
+                <button type="button" class="btn btn-secondary-light" id="supTeamAddRoleBtn">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M12 5v14M5 12h14"/></svg>
+                  New role
+                </button>
+                <button type="button" class="btn btn-primary" id="supTeamInviteBtn">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>
+                  Invite member
+                </button>
+              </div>
+            </div>
+
+            <div class="team-stats" id="supTeamStats"></div>
+
+            <div class="pm-filter-card">
+              <div class="pm-search-row" style="margin-bottom:0;">
+                <div class="pm-search-input-wrap" style="max-width:280px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                  <input type="text" id="supTeamSearch" placeholder="Search people or roles">
+                </div>
+                <div class="pm-tab-pills" id="supTeamTabs">
+                  <div class="pm-tab-pill active" data-team-tab="members">Members</div>
+                  <div class="pm-tab-pill" data-team-tab="roles">Roles &amp; permissions</div>
+                </div>
+                <div class="pm-count-actions">
+                  <span class="pm-count-text" id="supTeamCount">0</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Members -->
+            <div id="supTeamMembersPanel">
+              <div class="pm-table-wrap team-table-wrap">
+                <div class="pm-table-scroll">
+                  <table class="admin-table">
+                    <thead><tr><th>Member</th><th>Role</th><th>Access</th><th>Job Access</th><th>Last active</th><th>Status</th><th style="text-align:right;">Actions</th></tr></thead>
+                    <tbody id="supTeamMembersBody"></tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="svcp-empty" id="supTeamMembersEmpty" style="display:none;">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/></svg>
+                <div class="svcp-empty-title" id="supTeamMembersEmptyTitle">No members match</div>
+                <div class="svcp-empty-desc">Try a different search term.</div>
+              </div>
+            </div>
+
+            <!-- Roles -->
+            <div id="supTeamRolesPanel" style="display:none;">
+              <div class="pm-table-wrap team-table-wrap">
+                <div class="pm-table-scroll">
+                  <table class="admin-table">
+                    <thead><tr><th>Role</th><th>Permissions</th><th>Members</th><th>Status</th><th style="text-align:right;">Actions</th></tr></thead>
+                    <tbody id="supTeamRolesBody"></tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="svcp-empty" id="supTeamRolesEmpty" style="display:none;">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                <div class="svcp-empty-title" id="supTeamRolesEmptyTitle">No roles match</div>
+                <div class="svcp-empty-desc">Try a different search term.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Invite member -->
+          <div class="modal-overlay" id="supTeamInviteOverlay">
+            <div class="confirm-modal-card team-modal-card">
+              <button type="button" class="modal-close-x" data-team-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+              <div class="team-modal-title">Invite a supTeam member</div>
+              <div class="team-modal-desc">They&rsquo;ll get an email with a link to set up their console login. The role you pick decides what they can reach and what they can change.</div>
+
+              <div class="team-field">
+                <label for="supTeamInviteEmail">Email address</label>
+                <input type="email" id="supTeamInviteEmail" placeholder="name@keylr.com" autocomplete="off">
+                <div class="team-field-error" id="supTeamInviteEmailError">Enter a valid email address.</div>
+              </div>
+
+              <div class="team-field">
+                <label>Role</label>
+                <div class="team-dd" id="supTeamInviteRoleDD"></div>
+                <div class="team-field-hint" id="supTeamInviteRoleHint"></div>
+              </div>
+
+              <div class="confirm-modal-btns">
+                <button type="button" class="pmprop-del-cancel" id="supTeamInviteCancel">Cancel</button>
+                <button type="button" class="confirm-modal-confirm" id="supTeamInviteSend">Send invite</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Create / edit role -->
+          <div class="modal-overlay" id="supTeamRoleOverlay">
+            <div class="confirm-modal-card team-modal-card">
+              <button type="button" class="modal-close-x" data-team-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+              <div class="team-modal-title" id="supTeamRoleModalTitle">New role</div>
+              <div class="team-modal-desc">Pick which modules this role covers and what it can do in each. Everyone holding the role inherits this, apart from anyone you&rsquo;ve given a personal exception.</div>
+
+              <div class="team-field">
+                <label for="supTeamRoleName">Role name</label>
+                <input type="text" id="supTeamRoleName" placeholder="e.g. Compliance Reviewer" autocomplete="off">
+                <div class="team-field-error" id="supTeamRoleNameError">Give the role a name.</div>
+              </div>
+
+              <div class="team-field">
+                <label for="supTeamRoleDesc">What is this role for?</label>
+                <input type="text" id="supTeamRoleDesc" placeholder="Optional — helps whoever assigns it later" autocomplete="off">
+              </div>
+
+              <div class="team-field">
+                <div class="team-mx-head">
+                  <label style="margin-bottom:0;">Modules &amp; permissions</label>
+                  <span class="team-mx-count" id="supTeamRoleMatrixCount"></span>
+                </div>
+                <div class="team-matrix" id="supTeamRoleMatrix"></div>
+              </div>
+
+              <div class="confirm-modal-btns">
+                <button type="button" class="pmprop-del-cancel" id="supTeamRoleCancel">Cancel</button>
+                <button type="button" class="confirm-modal-confirm" id="supTeamRoleSave">Create role</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Member permission overrides -->
+          <div class="modal-overlay" id="supTeamMemberPermOverlay">
+            <div class="confirm-modal-card team-modal-card team-modal-wide">
+              <button type="button" class="modal-close-x" data-team-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+              <div class="team-modal-title" id="supTeamMemberPermTitle">Access</div>
+              <div class="team-modal-desc" id="supTeamMemberPermSub"></div>
+
+              <div class="team-mx-head">
+                <span class="team-mx-count" id="supTeamMemberPermCount"></span>
+                <button type="button" class="team-reset-btn" id="supTeamMemberPermReset">Reset all to role</button>
+              </div>
+              <div class="team-matrix" id="supTeamMemberPermMatrix"></div>
+
+              <div class="confirm-modal-btns">
+                <button type="button" class="confirm-modal-confirm" id="supTeamMemberPermClose">Done</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Job Access: which jobs this member can see, separate from their module-level Access -->
+          <div class="modal-overlay" id="supTeamJobAccessOverlay">
+            <div class="confirm-modal-card team-modal-card team-modal-wide">
+              <button type="button" class="modal-close-x" data-team-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+              <div class="team-modal-title">Job access</div>
+              <div class="team-modal-desc" id="supTeamJobAccessSub"></div>
+
+              <div class="team-ja-modes" id="supTeamJobAccessModes"></div>
+              <div id="supTeamJobAccessPanel"></div>
+
+              <div class="confirm-modal-btns team-ja-footer">
+                <span class="team-mx-count" id="supTeamJobAccessCount"></span>
+                <span style="flex:1;"></span>
+                <button type="button" class="pmprop-del-cancel" id="supTeamJobAccessCancel">Cancel</button>
+                <button type="button" class="confirm-modal-confirm" id="supTeamJobAccessSave">Save</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Remove confirmation -->
+          <div class="modal-overlay" id="supTeamRemoveOverlay">
+            <div class="confirm-modal-card">
+              <button type="button" class="modal-close-x" data-team-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+              <div class="confirm-modal-icon" style="background:#fef2f2;color:#b91c1c;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></div>
+              <div class="confirm-modal-title" id="supTeamRemoveTitle">Remove?</div>
+              <div class="confirm-modal-desc" id="supTeamRemoveDesc"></div>
+              <div class="confirm-modal-btns">
+                <button type="button" class="pmprop-del-cancel" id="supTeamRemoveCancel">Cancel</button>
+                <button type="button" class="confirm-modal-confirm" id="supTeamRemoveConfirm" style="background:#b91c1c;">Remove</button>
               </div>
             </div>
           </div>
@@ -25437,6 +25855,720 @@
   }
 
   /* =========================================================
+     PM TEAMS MODULE (mirrors Admin's Teams module exactly, adapted to PM's own
+     sidebar modules and roles)
+  ========================================================== */
+  var PMTEAM_LEVELS = [
+    { id: 'none',  name: 'None',  short: 'None' },
+    { id: 'read',  name: 'Read only',  short: 'Read' },
+    { id: 'write', name: 'Write only', short: 'Write' },
+    { id: 'both',  name: 'Both', short: 'Both' }
+  ];
+  function pmTeamLevel(id) {
+    for (var i = 0; i < PMTEAM_LEVELS.length; i++) { if (PMTEAM_LEVELS[i].id === id) return PMTEAM_LEVELS[i]; }
+    return PMTEAM_LEVELS[0];
+  }
+
+  // Mirrors this PM console's own sidebar exactly (Home/Inbox, Jobs/Supplier quotes/Properties,
+  // Services & pricing/Preferred suppliers/Explore suppliers, Billing/Disputes/Teams) rather than
+  // Admin's module list, since this is what a PM's own team members actually need scoped access to.
+  var PMTEAM_MODULE_GROUPS = [
+    { id: 'overview', name: 'Overview', modules: [
+      { id: 'home', name: 'Home' },
+      { id: 'inbox', name: 'Inbox' }
+    ] },
+    { id: 'work', name: 'Work', modules: [
+      { id: 'responses', name: 'Jobs' },
+      { id: 'quotes', name: 'Supplier quotes' },
+      { id: 'properties', name: 'Properties' }
+    ] },
+    { id: 'suppliers', name: 'Suppliers', modules: [
+      { id: 'servicespricing', name: 'Services & pricing' },
+      { id: 'preferredsuppliers', name: 'Preferred suppliers' },
+      { id: 'explore', name: 'Explore suppliers' }
+    ] },
+    { id: 'financepeople', name: 'Finance & People', modules: [
+      { id: 'invoices', name: 'Billing & payments' },
+      { id: 'disputes', name: 'Disputes' },
+      { id: 'teams', name: 'Teams' }
+    ] }
+  ];
+  var PMTEAM_ALL_MODULES = [];
+  PMTEAM_MODULE_GROUPS.forEach(function (g) { g.modules.forEach(function (m) { PMTEAM_ALL_MODULES.push(m); }); });
+  var PMTEAM_MODULE_COUNT = PMTEAM_ALL_MODULES.length;
+  function pmTeamModuleName(id) {
+    for (var i = 0; i < PMTEAM_ALL_MODULES.length; i++) { if (PMTEAM_ALL_MODULES[i].id === id) return PMTEAM_ALL_MODULES[i].name; }
+    return id;
+  }
+  function pmTeamEveryModule(level) {
+    var m = {};
+    PMTEAM_ALL_MODULES.forEach(function (mod) { m[mod.id] = level; });
+    return m;
+  }
+
+  var pmTeamUid = 0;
+  function pmTeamNextId(p) { pmTeamUid += 1; return p + '_' + pmTeamUid; }
+
+  var pmTeamRoles = [
+    { id: 'role_manager', name: 'Property Manager', description: 'Runs day to day operations across properties and jobs.', active: true, system: true, modules: pmTeamEveryModule('both') },
+    { id: 'role_maintenance', name: 'Maintenance Coordinator', description: 'Handles jobs, supplier quotes and property compliance.', active: true, system: false,
+      modules: { home: 'read', properties: 'both', responses: 'both', quotes: 'both', explore: 'read', inbox: 'both' } },
+    { id: 'role_supplier_liaison', name: 'Supplier Liaison', description: 'Sources and manages the preferred supplier list.', active: true, system: false,
+      modules: { home: 'read', preferredsuppliers: 'both', explore: 'both', servicespricing: 'read', inbox: 'write' } },
+    { id: 'role_finance', name: 'Finance', description: 'Billing, payments and dispute resolution.', active: true, system: false,
+      modules: { home: 'read', invoices: 'both', disputes: 'both', responses: 'read' } },
+    { id: 'role_frontdesk', name: 'Front Desk', description: 'Answers inbox messages and logs new jobs.', active: false, system: false,
+      modules: { home: 'read', inbox: 'both', responses: 'write' } }
+  ];
+
+  function pmTeamRoleById(id) {
+    for (var i = 0; i < pmTeamRoles.length; i++) { if (pmTeamRoles[i].id === id) return pmTeamRoles[i]; }
+    return null;
+  }
+  function pmTeamRoleLevel(role, modId) { return (role && role.modules && role.modules[modId]) || 'none'; }
+  function pmTeamMemberLevel(m, modId) {
+    if (m.overrides && m.overrides[modId]) return m.overrides[modId];
+    return pmTeamRoleLevel(pmTeamRoleById(m.roleId), modId);
+  }
+  function pmTeamOverrideCount(m) { return m.overrides ? Object.keys(m.overrides).length : 0; }
+  function pmTeamGrantedCount(getLevel) {
+    var n = 0;
+    PMTEAM_ALL_MODULES.forEach(function (mod) { if (getLevel(mod.id) !== 'none') n += 1; });
+    return n;
+  }
+  function pmTeamLevelTally(getLevel) {
+    var t = { read: 0, write: 0, both: 0 };
+    PMTEAM_ALL_MODULES.forEach(function (mod) {
+      var l = getLevel(mod.id);
+      if (t[l] !== undefined) t[l] += 1;
+    });
+    return t;
+  }
+
+  function pmTeamAvatarHtml(m) {
+    if (m.photo) {
+      return '<span class="team-avatar has-photo"><img src="' + supjrEscapeHtml(m.photo) + '" alt="" loading="lazy"></span>';
+    }
+    return '<span class="team-avatar">' + supjrEscapeHtml(pmTeamInitials(pmTeamDisplayName(m))) + '</span>';
+  }
+  function pmTeamInitials(name) {
+    var parts = String(name || '').trim().split(/\s+/);
+    if (!parts[0]) return '?';
+    return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
+  }
+  function pmTeamNameFromEmail(email) {
+    var local = String(email).split('@')[0].replace(/[._-]+/g, ' ');
+    return local.replace(/\b\w/g, function (m) { return m.toUpperCase(); });
+  }
+  function pmTeamDisplayName(m) { return m.name || pmTeamNameFromEmail(m.email); }
+
+  function pmTeamMakeMember(o) {
+    return {
+      id: pmTeamNextId('mem'),
+      name: o.name || '',
+      email: o.email,
+      roleId: o.roleId,
+      overrides: o.overrides || {},
+      photo: o.photo || '',
+      status: o.status || 'active',
+      lastActive: o.lastActive === undefined ? null : o.lastActive
+    };
+  }
+
+  var pmTeamMembers = [
+    pmTeamMakeMember({ name: 'Jordan Blake', email: 'jordan@thameshouse.co.uk', roleId: 'role_manager', lastActive: 0, photo: 'https://i.pravatar.cc/150?img=47' }),
+    pmTeamMakeMember({ name: 'Priya Shah', email: 'priya.shah@thameshouse.co.uk', roleId: 'role_maintenance', lastActive: 0, photo: 'https://i.pravatar.cc/150?img=32' }),
+    pmTeamMakeMember({ name: 'Tom Blake', email: 'tom.blake@thameshouse.co.uk', roleId: 'role_maintenance', lastActive: 1 }),
+    /* One seeded exception so the override path is visible without hunting for it. */
+    pmTeamMakeMember({ name: 'Sofia Marchetti', email: 'sofia.marchetti@thameshouse.co.uk', roleId: 'role_supplier_liaison', lastActive: 2,
+      overrides: { disputes: 'read' } }),
+    pmTeamMakeMember({ name: 'Daniel Whitfield', email: 'daniel.whitfield@thameshouse.co.uk', roleId: 'role_finance', lastActive: 6, photo: 'https://i.pravatar.cc/150?img=12' }),
+    pmTeamMakeMember({ name: 'Hannah Cole', email: 'hannah.cole@thameshouse.co.uk', roleId: 'role_frontdesk', status: 'inactive', lastActive: 34 }),
+    pmTeamMakeMember({ email: 'ravi.shah@thameshouse.co.uk', roleId: 'role_maintenance', status: 'invited', lastActive: null })
+  ];
+
+  var pmTeamTab = 'members';
+  var pmTeamSearch = '';
+  var pmTeamPendingRemove = null;
+  var pmTeamEditingRoleId = null;
+  var pmTeamInviteRoleId = 'role_maintenance';
+  var pmTeamRoleDraft = null;     // { name, description, modules } while the role modal is open
+  var pmTeamPermMemberId = null;  // member whose overrides are open
+
+  function pmTeamLastActiveText(m) {
+    if (m.status === 'invited') return 'Invite pending';
+    if (m.lastActive === null) return 'Never';
+    if (m.lastActive === 0) return 'Today';
+    if (m.lastActive === 1) return 'Yesterday';
+    if (m.lastActive < 30) return m.lastActive + ' days ago';
+    return Math.floor(m.lastActive / 30) + ' month' + (m.lastActive < 60 ? '' : 's') + ' ago';
+  }
+  function pmTeamMembersOfRole(roleId) { return pmTeamMembers.filter(function (m) { return m.roleId === roleId; }); }
+
+  /* Signing in needs both: the person switched on, and their role live. Suspending a role
+     suspends everyone holding it — there is no per-member exception. */
+  function pmTeamRoleBlocked(m) {
+    var role = pmTeamRoleById(m.roleId);
+    return !!(role && !role.active);
+  }
+  function pmTeamStatusLabel(m) {
+    if (m.status === 'invited') return { key: 'invited', text: 'Invited' };
+    if (m.status !== 'active') return { key: 'inactive', text: 'Inactive' };
+    if (pmTeamRoleBlocked(m)) return { key: 'blocked', text: 'Blocked by role' };
+    return { key: 'active', text: 'Active' };
+  }
+
+  function pmTeamFilteredMembers() {
+    var t = pmTeamSearch.trim().toLowerCase();
+    if (!t) return pmTeamMembers;
+    return pmTeamMembers.filter(function (m) {
+      var role = pmTeamRoleById(m.roleId);
+      return (m.name + ' ' + m.email + ' ' + (role ? role.name : '')).toLowerCase().indexOf(t) !== -1;
+    });
+  }
+  function pmTeamFilteredRoles() {
+    // Owner and Administrator always carry full access to everything and can't be edited,
+    // deactivated, or deleted — there's nothing to manage about them, so they're left out of
+    // this list entirely rather than shown as two permanently-locked, non-interactive rows.
+    // They still fully exist as real roles: pmTeamRoleById, the Members table, and the role picker
+    // all still resolve and assign them normally — this only affects what's listed here.
+    var manageable = pmTeamRoles.filter(function (r) { return !r.system; });
+    var t = pmTeamSearch.trim().toLowerCase();
+    if (!t) return manageable;
+    return manageable.filter(function (r) {
+      return (r.name + ' ' + r.description).toLowerCase().indexOf(t) !== -1;
+    });
+  }
+
+  /* ---------- Permission matrix (shared by the role editor and member overrides) ---------- */
+  function pmTeamMatrixHtml(getLevel, opts) {
+    opts = opts || {};
+    return PMTEAM_MODULE_GROUPS.map(function (g) {
+      return '<div class="team-mx-group">' +
+        '<div class="team-mx-group-head">' +
+          '<span class="team-mx-group-name">' + g.name + '</span>' +
+          (opts.quickActions
+            ? '<span class="team-mx-quick">' +
+                '<button type="button" data-mx-group="' + g.id + '" data-mx-level="both">All</button>' +
+                '<button type="button" data-mx-group="' + g.id + '" data-mx-level="none">None</button>' +
+              '</span>'
+            : '') +
+        '</div>' +
+        g.modules.map(function (mod) {
+          var level = getLevel(mod.id);
+          var badge = opts.badgeFor ? opts.badgeFor(mod.id) : '';
+          return '<div class="team-mx-row" data-mx-row="' + mod.id + '">' +
+            '<span class="team-mx-name">' + mod.name + badge + '</span>' +
+            '<span class="team-mx-seg">' + PMTEAM_LEVELS.map(function (l) {
+              return '<button type="button" class="team-mx-opt' + (l.id === level ? ' on' : '') +
+                ' lvl-' + l.id + '" data-mx-set="' + mod.id + '" data-mx-value="' + l.id + '">' + l.short + '</button>';
+            }).join('') + '</span>' +
+          '</div>';
+        }).join('') +
+      '</div>';
+    }).join('');
+  }
+
+  /* ---------- Render ---------- */
+  var PMTEAM_TRASH = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg>';
+  var PMTEAM_LOCK = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>';
+
+  function pmTeamLevelChips(tally) {
+    return PMTEAM_LEVELS.filter(function (l) { return l.id !== 'none' && tally[l.id]; })
+      .map(function (l) { return '<span class="team-lvl-chip lvl-' + l.id + '">' + tally[l.id] + ' ' + l.short.toLowerCase() + '</span>'; })
+      .join('');
+  }
+
+  function renderPmTeamStats() {
+    var box = document.getElementById('pmTeamStats');
+    if (!box) return;
+    var active = pmTeamMembers.filter(function (m) { return m.status === 'active'; }).length;
+    var invited = pmTeamMembers.filter(function (m) { return m.status === 'invited'; }).length;
+    var custom = pmTeamMembers.filter(function (m) { return pmTeamOverrideCount(m) > 0; }).length;
+    // Matches pmTeamFilteredRoles: Owner/Administrator aren't shown as manageable rows, so they're
+    // not counted here either — otherwise this number wouldn't match what's actually in the table.
+    var activeRoles = pmTeamRoles.filter(function (r) { return r.active && !r.system; }).length;
+    box.innerHTML = [
+      { n: active, label: 'Active members' },
+      { n: invited, label: 'Invites pending', tint: invited > 0 },
+      { n: activeRoles, label: 'Active roles' },
+      { n: custom, label: 'With custom access', tint: custom > 0 }
+    ].map(function (s) {
+      return '<div class="team-stat' + (s.tint ? ' tint' : '') + '"><div class="ts-num">' + s.n + '</div><div class="ts-label">' + s.label + '</div></div>';
+    }).join('');
+  }
+
+  function renderPmTeamMembers() {
+    var body = document.getElementById('pmTeamMembersBody');
+    if (!body) return;
+    var list = pmTeamFilteredMembers();
+    document.querySelector('#pmTeamMembersPanel .team-table-wrap').style.display = list.length ? '' : 'none';
+    document.getElementById('pmTeamMembersEmpty').style.display = list.length ? 'none' : '';
+
+    body.innerHTML = list.map(function (m) {
+      var role = pmTeamRoleById(m.roleId);
+      var roleInactive = role && !role.active;
+      var overrides = pmTeamOverrideCount(m);
+      var granted = pmTeamGrantedCount(function (id) { return pmTeamMemberLevel(m, id); });
+      return '<tr>' +
+        '<td><div class="team-person">' +
+          pmTeamAvatarHtml(m) +
+          '<span class="team-person-main">' +
+            '<span class="team-person-name">' + supjrEscapeHtml(pmTeamDisplayName(m)) + '</span>' +
+            '<span class="team-person-email">' + supjrEscapeHtml(m.email) + '</span>' +
+          '</span>' +
+        '</div></td>' +
+        '<td><div class="team-role-cell">' + pmTeamRoleDDHtml(role, 'data-member="' + m.id + '"') +
+          (roleInactive
+            ? '<div class="team-role-warn">Role is switched off \u2014 they can\u2019t sign in until it\u2019s back on.</div>'
+            : '') +
+        '</div></td>' +
+        /* Access is a button, not a label: it's the way in to this person's exceptions. */
+        '<td><button type="button" class="team-access-btn" data-team-member-perms="' + m.id + '">' +
+          '<span class="team-perm-chip ' + (overrides ? 'custom' : 'inherited') + '">' +
+            (overrides ? 'Custom \u00b7 ' + overrides + ' changed' : 'Role default') + '</span>' +
+          '<span class="team-access-sub">' + granted + ' of ' + PMTEAM_MODULE_COUNT + ' modules</span>' +
+        '</button></td>' +
+        '<td class="team-lastactive">' + supjrEscapeHtml(pmTeamLastActiveText(m)) + '</td>' +
+        '<td><span class="team-status-chip st-' + pmTeamStatusLabel(m).key + '">' + pmTeamStatusLabel(m).text + '</span></td>' +
+        '<td><div class="team-actions">' +
+          (m.status === 'invited'
+            ? '<button type="button" class="btn btn-secondary-light team-mini-btn" data-team-resend="' + m.id + '">Resend</button>'
+            : '<span class="team-toggle-wrap">' +
+                '<button type="button" class="toggle-switch sm' + (m.status === 'active' ? ' on' : '') + '" data-team-member-toggle="' + m.id + '" role="switch" aria-checked="' + (m.status === 'active' ? 'true' : 'false') + '" aria-label="Member active"><span class="thumb"></span></button>' +
+              '</span>') +
+          '<button type="button" class="svcp-icon-btn danger" data-team-member-remove="' + m.id + '"' +
+            (role && role.id === 'role_manager' ? ' disabled data-tooltip="The Property Manager can\u2019t be removed"' : ' data-tooltip="Remove member"') +
+            ' aria-label="Remove member">' + PMTEAM_TRASH + '</button>' +
+        '</div></td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function renderPmTeamRoles() {
+    var body = document.getElementById('pmTeamRolesBody');
+    if (!body) return;
+    var list = pmTeamFilteredRoles();
+    document.querySelector('#pmTeamRolesPanel .team-table-wrap').style.display = list.length ? '' : 'none';
+    document.getElementById('pmTeamRolesEmpty').style.display = list.length ? 'none' : '';
+
+    body.innerHTML = list.map(function (r) {
+      var count = pmTeamMembersOfRole(r.id).length;
+      var getLevel = function (id) { return pmTeamRoleLevel(r, id); };
+      var granted = pmTeamGrantedCount(getLevel);
+      var tally = pmTeamLevelTally(getLevel);
+      var summary = granted === 0 ? 'No modules'
+        : granted === PMTEAM_MODULE_COUNT && tally.both === PMTEAM_MODULE_COUNT ? 'Every module \u00b7 full access'
+        : granted + ' of ' + PMTEAM_MODULE_COUNT + ' modules';
+      return '<tr>' +
+        '<td><div class="team-role-main">' +
+          '<span class="team-role-name">' + supjrEscapeHtml(r.name) +
+            (r.system ? '<span class="team-sys-chip">' + PMTEAM_LOCK + 'Built in</span>' : '') + '</span>' +
+          (r.description ? '<span class="team-role-desc">' + supjrEscapeHtml(r.description) + '</span>' : '') +
+        '</div></td>' +
+        '<td><button type="button" class="team-access-btn" data-team-role-edit="' + r.id + '">' +
+          '<span class="team-access-summary">' + summary + '</span>' +
+          '<span class="team-lvl-chips">' + pmTeamLevelChips(tally) + '</span>' +
+        '</button></td>' +
+        '<td><span class="team-count-chip">' + count + '</span></td>' +
+        '<td><span class="team-toggle-wrap">' +
+          '<button type="button" class="toggle-switch sm' + (r.active ? ' on' : '') + '" data-team-role-toggle="' + r.id + '"' +
+            (r.system ? ' disabled data-tooltip="Built-in roles stay active"' : '') +
+            ' role="switch" aria-checked="' + (r.active ? 'true' : 'false') + '" aria-label="Role active"><span class="thumb"></span></button>' +
+          '<span class="team-toggle-label' + (r.active ? ' on' : '') + '">' + (r.active ? 'Active' : 'Inactive') + '</span>' +
+        '</span></td>' +
+        '<td><div class="team-actions">' +
+          '<button type="button" class="svcp-icon-btn" data-team-role-edit="' + r.id + '" data-tooltip="Edit role &amp; permissions" aria-label="Edit role"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>' +
+          '<button type="button" class="svcp-icon-btn danger" data-team-role-remove="' + r.id + '"' +
+            (r.system ? ' disabled data-tooltip="Built-in roles can\u2019t be deleted"' : count ? ' disabled data-tooltip="Reassign its ' + count + ' member' + (count === 1 ? '' : 's') + ' first"' : ' data-tooltip="Delete role"') +
+            ' aria-label="Delete role">' + PMTEAM_TRASH + '</button>' +
+        '</div></td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  /* The role picker lists names only — a member's access is spelled out in its own column,
+     so repeating a level here was both redundant and, once permissions went per-module,
+     wrong. */
+  function pmTeamRoleDDHtml(role, extraAttrs) {
+    // Owner/Administrator are excluded here the same way they're excluded from the Roles table
+    // (see pmTeamFilteredRoles) — promoting someone to full, unrestricted access isn't meant to be
+    // as casual as picking it from this list. A member who already holds one of these still shows
+    // it correctly as their current role (the `role` param, independent of `options` below) —
+    // this only affects what's offered as something to switch *to*.
+    var options = pmTeamRoles.filter(function (r) { return r.active && !r.system; });
+    return svcpDDShell('data-ddrole="team-role" ' + (extraAttrs || '') + ' class="pm-custom-dd-btn"',
+      role ? role.id : '', role ? role.name : 'Select a role\u2026', !role,
+      options.map(function (r) { return svcpDDItem(r.id, r.name, role && r.id === role.id); }).join('')
+    ).replace('<div class="svcp-dd">', '<div class="team-dd-inner">');
+  }
+
+  function renderPmTeams() {
+    renderPmTeamStats();
+    var membersOn = pmTeamTab === 'members';
+    document.getElementById('pmTeamMembersPanel').style.display = membersOn ? '' : 'none';
+    document.getElementById('pmTeamRolesPanel').style.display = membersOn ? 'none' : '';
+    if (membersOn) renderPmTeamMembers(); else renderPmTeamRoles();
+    var n = membersOn ? pmTeamFilteredMembers().length : pmTeamFilteredRoles().length;
+    document.getElementById('pmTeamCount').textContent = n + (membersOn ? ' member' : ' role') + (n === 1 ? '' : 's');
+  }
+
+  /* ---------- Invite ---------- */
+  function pmTeamRenderInviteRoleDD() {
+    var wrap = document.getElementById('pmTeamInviteRoleDD');
+    var role = pmTeamRoleById(pmTeamInviteRoleId);
+    if (!role || !role.active || role.system) {
+      var firstActive = pmTeamRoles.filter(function (r) { return r.active && !r.system; })[0];
+      role = firstActive || null;
+      pmTeamInviteRoleId = role ? role.id : '';
+    }
+    wrap.innerHTML = pmTeamRoleDDHtml(role, 'data-invite="1"');
+    var hint = document.getElementById('pmTeamInviteRoleHint');
+    if (!role) { hint.textContent = 'No active roles available. Switch one on first.'; return; }
+    var getLevel = function (id) { return pmTeamRoleLevel(role, id); };
+    var granted = pmTeamGrantedCount(getLevel);
+    hint.innerHTML = 'Gives access to <b>' + granted + ' of ' + PMTEAM_MODULE_COUNT + ' modules</b>. ' +
+      'You can fine-tune it for this person once they\u2019ve accepted.';
+  }
+  function pmTeamOpenInvite() {
+    document.getElementById('pmTeamInviteEmail').value = '';
+    document.getElementById('pmTeamInviteEmailError').style.display = 'none';
+    pmTeamRenderInviteRoleDD();
+    document.getElementById('pmTeamInviteOverlay').classList.add('open');
+    setTimeout(function () { document.getElementById('pmTeamInviteEmail').focus(); }, 50);
+  }
+
+  /* ---------- Role editor ---------- */
+  function pmTeamRenderRoleMatrix() {
+    document.getElementById('pmTeamRoleMatrix').innerHTML =
+      pmTeamMatrixHtml(function (id) { return pmTeamRoleDraft.modules[id] || 'none'; }, { quickActions: true });
+    var granted = pmTeamGrantedCount(function (id) { return pmTeamRoleDraft.modules[id] || 'none'; });
+    document.getElementById('pmTeamRoleMatrixCount').textContent = granted + ' of ' + PMTEAM_MODULE_COUNT + ' modules';
+  }
+  function pmTeamOpenRoleModal(roleId) {
+    pmTeamEditingRoleId = roleId || null;
+    var role = roleId ? pmTeamRoleById(roleId) : null;
+    pmTeamRoleDraft = {
+      name: role ? role.name : '',
+      description: role ? role.description : '',
+      modules: role ? JSON.parse(JSON.stringify(role.modules)) : {}
+    };
+    document.getElementById('pmTeamRoleModalTitle').textContent = role ? 'Edit role' : 'New role';
+    document.getElementById('pmTeamRoleSave').textContent = role ? 'Save role' : 'Create role';
+    document.getElementById('pmTeamRoleName').value = pmTeamRoleDraft.name;
+    document.getElementById('pmTeamRoleName').disabled = !!(role && role.system);
+    document.getElementById('pmTeamRoleDesc').value = pmTeamRoleDraft.description;
+    document.getElementById('pmTeamRoleNameError').style.display = 'none';
+    pmTeamRenderRoleMatrix();
+    document.getElementById('pmTeamRoleOverlay').classList.add('open');
+  }
+
+  /* ---------- Member overrides ---------- */
+  function pmTeamRenderMemberPerms() {
+    var m = pmTeamMembers.filter(function (x) { return x.id === pmTeamPermMemberId; })[0];
+    if (!m) return;
+    var role = pmTeamRoleById(m.roleId);
+    document.getElementById('pmTeamMemberPermTitle').textContent = pmTeamDisplayName(m) + '\u2019s access';
+    document.getElementById('pmTeamMemberPermSub').innerHTML =
+      'Inheriting from <b>' + supjrEscapeHtml(role ? role.name : 'no role') + '</b>. ' +
+      'Change a row to make an exception for this person only \u2014 the role itself stays as it is.';
+
+    var overrides = pmTeamOverrideCount(m);
+    var resetBtn = document.getElementById('pmTeamMemberPermReset');
+    resetBtn.style.display = overrides ? '' : 'none';
+    resetBtn.textContent = 'Reset all to ' + (role ? role.name : 'role');
+
+    document.getElementById('pmTeamMemberPermMatrix').innerHTML = pmTeamMatrixHtml(
+      function (id) { return pmTeamMemberLevel(m, id); },
+      { badgeFor: function (id) {
+          return (m.overrides && m.overrides[id])
+            ? '<span class="team-mx-badge">Changed \u00b7 role says ' + pmTeamLevel(pmTeamRoleLevel(role, id)).short.toLowerCase() + '</span>'
+            : '';
+        } }
+    );
+    document.getElementById('pmTeamMemberPermCount').textContent = overrides
+      ? overrides + ' exception' + (overrides === 1 ? '' : 's') + ' to the role'
+      : 'No exceptions \u2014 matches the role exactly';
+  }
+  function pmTeamOpenMemberPerms(id) {
+    pmTeamPermMemberId = id;
+    pmTeamRenderMemberPerms();
+    document.getElementById('pmTeamMemberPermOverlay').classList.add('open');
+  }
+
+  /* ---------- Wiring ---------- */
+  function initPmTeamsOnce() {
+    if (initPmTeamsOnce.done) return;
+    initPmTeamsOnce.done = true;
+
+    document.getElementById('pmTeamSearch').addEventListener('input', function () {
+      pmTeamSearch = this.value;
+      renderPmTeams();
+    });
+    document.getElementById('pmTeamTabs').addEventListener('click', function (e) {
+      var pill = e.target.closest('[data-team-tab]');
+      if (!pill) return;
+      pmTeamTab = pill.getAttribute('data-team-tab');
+      this.querySelectorAll('.pm-tab-pill').forEach(function (p) { p.classList.toggle('active', p === pill); });
+      renderPmTeams();
+    });
+
+    document.getElementById('pmTeamInviteBtn').addEventListener('click', pmTeamOpenInvite);
+    document.getElementById('pmTeamAddRoleBtn').addEventListener('click', function () { pmTeamOpenRoleModal(null); });
+
+    /* ---- invite ---- */
+    var inviteOverlay = document.getElementById('pmTeamInviteOverlay');
+    document.getElementById('pmTeamInviteCancel').addEventListener('click', function () { inviteOverlay.classList.remove('open'); });
+    inviteOverlay.addEventListener('click', function (e) { if (e.target === inviteOverlay) inviteOverlay.classList.remove('open'); });
+    document.getElementById('pmTeamInviteSend').addEventListener('click', function () {
+      var input = document.getElementById('pmTeamInviteEmail');
+      var err = document.getElementById('pmTeamInviteEmailError');
+      var email = input.value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        err.textContent = 'Enter a valid email address.';
+        err.style.display = ''; input.focus(); return;
+      }
+      if (pmTeamMembers.filter(function (m) { return m.email.toLowerCase() === email.toLowerCase(); })[0]) {
+        err.textContent = 'That address is already on the pmTeam.';
+        err.style.display = ''; input.focus(); return;
+      }
+      if (!pmTeamInviteRoleId) { showToast('Switch a role on before inviting anyone to it.'); return; }
+      pmTeamMembers.push(pmTeamMakeMember({ email: email, roleId: pmTeamInviteRoleId, status: 'invited', lastActive: null }));
+      inviteOverlay.classList.remove('open');
+      pmTeamTab = 'members';
+      document.querySelectorAll('#pmTeamTabs .pm-tab-pill').forEach(function (p) {
+        p.classList.toggle('active', p.getAttribute('data-team-tab') === 'members');
+      });
+      renderPmTeams();
+      showToast('Invite sent to ' + email + ' as ' + pmTeamRoleById(pmTeamInviteRoleId).name + '.');
+    });
+
+    /* ---- role editor ---- */
+    var roleOverlay = document.getElementById('pmTeamRoleOverlay');
+    document.getElementById('pmTeamRoleCancel').addEventListener('click', function () { roleOverlay.classList.remove('open'); });
+    roleOverlay.addEventListener('click', function (e) { if (e.target === roleOverlay) roleOverlay.classList.remove('open'); });
+
+    document.getElementById('pmTeamRoleMatrix').addEventListener('click', function (e) {
+      var set = e.target.closest('[data-mx-set]');
+      if (set) {
+        var mid = set.getAttribute('data-mx-set');
+        var val = set.getAttribute('data-mx-value');
+        if (val === 'none') delete pmTeamRoleDraft.modules[mid]; else pmTeamRoleDraft.modules[mid] = val;
+        pmTeamRenderRoleMatrix();
+        return;
+      }
+      var grp = e.target.closest('[data-mx-group]');
+      if (grp) {
+        var gid = grp.getAttribute('data-mx-group');
+        var lvl = grp.getAttribute('data-mx-level');
+        var group = PMTEAM_MODULE_GROUPS.filter(function (g) { return g.id === gid; })[0];
+        group.modules.forEach(function (mod) {
+          if (lvl === 'none') delete pmTeamRoleDraft.modules[mod.id]; else pmTeamRoleDraft.modules[mod.id] = lvl;
+        });
+        pmTeamRenderRoleMatrix();
+      }
+    });
+
+    document.getElementById('pmTeamRoleSave').addEventListener('click', function () {
+      var nameEl = document.getElementById('pmTeamRoleName');
+      var name = nameEl.disabled ? pmTeamRoleDraft.name : nameEl.value.trim();
+      var err = document.getElementById('pmTeamRoleNameError');
+      if (!name) { err.style.display = ''; nameEl.focus(); return; }
+      var desc = document.getElementById('pmTeamRoleDesc').value.trim();
+      if (pmTeamEditingRoleId) {
+        var role = pmTeamRoleById(pmTeamEditingRoleId);
+        if (!role.system) role.name = name;
+        role.description = desc;
+        role.modules = pmTeamRoleDraft.modules;
+        var affected = pmTeamMembersOfRole(role.id).length;
+        roleOverlay.classList.remove('open');
+        renderPmTeams();
+        showToast(affected
+          ? role.name + ' updated \u2014 applies to ' + affected + ' member' + (affected === 1 ? '' : 's') + ', except where someone has their own exceptions.'
+          : role.name + ' updated.');
+      } else {
+        pmTeamRoles.push({ id: pmTeamNextId('role'), name: name, description: desc, active: true, system: false, modules: pmTeamRoleDraft.modules });
+        roleOverlay.classList.remove('open');
+        pmTeamTab = 'roles';
+        document.querySelectorAll('#pmTeamTabs .pm-tab-pill').forEach(function (p) {
+          p.classList.toggle('active', p.getAttribute('data-team-tab') === 'roles');
+        });
+        renderPmTeams();
+        var g = pmTeamGrantedCount(function (id) { return pmTeamRoleDraft.modules[id] || 'none'; });
+        showToast(name + ' created with access to ' + g + ' of ' + PMTEAM_MODULE_COUNT + ' modules.');
+      }
+    });
+
+    /* ---- member overrides ---- */
+    var permOverlay = document.getElementById('pmTeamMemberPermOverlay');
+    document.getElementById('pmTeamMemberPermClose').addEventListener('click', function () { permOverlay.classList.remove('open'); });
+    permOverlay.addEventListener('click', function (e) { if (e.target === permOverlay) permOverlay.classList.remove('open'); });
+    document.getElementById('pmTeamMemberPermReset').addEventListener('click', function () {
+      var m = pmTeamMembers.filter(function (x) { return x.id === pmTeamPermMemberId; })[0];
+      if (!m) return;
+      m.overrides = {};
+      pmTeamRenderMemberPerms();
+      renderPmTeams();
+      showToast(pmTeamDisplayName(m) + ' is back to their role\u2019s access.');
+    });
+    document.getElementById('pmTeamMemberPermMatrix').addEventListener('click', function (e) {
+      var set = e.target.closest('[data-mx-set]');
+      if (!set) return;
+      var m = pmTeamMembers.filter(function (x) { return x.id === pmTeamPermMemberId; })[0];
+      if (!m) return;
+      var mid = set.getAttribute('data-mx-set');
+      var val = set.getAttribute('data-mx-value');
+      var roleLevel = pmTeamRoleLevel(pmTeamRoleById(m.roleId), mid);
+      /* Storing an override only when it differs keeps "N changed" literally true. */
+      if (val === roleLevel) delete m.overrides[mid]; else m.overrides[mid] = val;
+      pmTeamRenderMemberPerms();
+      renderPmTeams();
+    });
+
+    /* ---- remove confirmation ---- */
+    var removeOverlay = document.getElementById('pmTeamRemoveOverlay');
+    document.getElementById('pmTeamRemoveCancel').addEventListener('click', function () {
+      removeOverlay.classList.remove('open');
+      pmTeamPendingRemove = null;
+    });
+    removeOverlay.addEventListener('click', function (e) {
+      if (e.target === removeOverlay) { removeOverlay.classList.remove('open'); pmTeamPendingRemove = null; }
+    });
+    document.getElementById('pmTeamRemoveConfirm').addEventListener('click', function () {
+      if (!pmTeamPendingRemove) return;
+      var label;
+      if (pmTeamPendingRemove.kind === 'member') {
+        var m = pmTeamMembers.filter(function (x) { return x.id === pmTeamPendingRemove.id; })[0];
+        label = m ? pmTeamDisplayName(m) : 'Member';
+        pmTeamMembers = pmTeamMembers.filter(function (x) { return x.id !== pmTeamPendingRemove.id; });
+      } else {
+        var r = pmTeamRoleById(pmTeamPendingRemove.id);
+        label = r ? r.name : 'Role';
+        pmTeamRoles = pmTeamRoles.filter(function (x) { return x.id !== pmTeamPendingRemove.id; });
+      }
+      pmTeamPendingRemove = null;
+      removeOverlay.classList.remove('open');
+      renderPmTeams();
+      showToast(label + ' removed.');
+    });
+
+    /* ---- table actions ---- */
+    document.getElementById('pmTeamsView').addEventListener('click', function (e) {
+      var perms = e.target.closest('[data-team-member-perms]');
+      if (perms) { pmTeamOpenMemberPerms(perms.getAttribute('data-team-member-perms')); return; }
+
+      var mToggle = e.target.closest('[data-team-member-toggle]');
+      if (mToggle) {
+        var mem = pmTeamMembers.filter(function (x) { return x.id === mToggle.getAttribute('data-team-member-toggle'); })[0];
+        if (!mem) return;
+        mem.status = mem.status === 'active' ? 'inactive' : 'active';
+        renderPmTeams();
+        showToast(pmTeamDisplayName(mem) + (mem.status === 'active' ? ' can sign in again.' : ' has been switched off \u2014 they can\u2019t sign in.'));
+        return;
+      }
+      var rToggle = e.target.closest('[data-team-role-toggle]');
+      if (rToggle) {
+        if (rToggle.disabled) { showToast('Built-in roles stay active.'); return; }
+        var role = pmTeamRoleById(rToggle.getAttribute('data-team-role-toggle'));
+        if (!role) return;
+        role.active = !role.active;
+        renderPmTeams();
+        var held = pmTeamMembersOfRole(role.id).length;
+        showToast(role.active
+          ? role.name + ' is active again.' + (held ? ' ' + held + ' member' + (held === 1 ? '' : 's') + ' can sign in.' : '')
+          : held
+            ? role.name + ' switched off \u2014 ' + held + ' member' + (held === 1 ? '' : 's') + ' holding it can no longer sign in.'
+            : role.name + ' switched off.');
+        return;
+      }
+      var resend = e.target.closest('[data-team-resend]');
+      if (resend) {
+        var rm = pmTeamMembers.filter(function (x) { return x.id === resend.getAttribute('data-team-resend'); })[0];
+        if (rm) showToast('Invite resent to ' + rm.email + '.');
+        return;
+      }
+      var edit = e.target.closest('[data-team-role-edit]');
+      if (edit) { pmTeamOpenRoleModal(edit.getAttribute('data-team-role-edit')); return; }
+
+      var mRemove = e.target.closest('[data-team-member-remove]');
+      if (mRemove) {
+        if (mRemove.disabled) { showToast('The owner can\u2019t be removed.'); return; }
+        var target = pmTeamMembers.filter(function (x) { return x.id === mRemove.getAttribute('data-team-member-remove'); })[0];
+        if (!target) return;
+        pmTeamPendingRemove = { kind: 'member', id: target.id };
+        document.getElementById('pmTeamRemoveTitle').textContent = 'Remove this member?';
+        document.getElementById('pmTeamRemoveDesc').textContent =
+          pmTeamDisplayName(target) + ' will lose console access straight away. Anything they did stays in the activity log.';
+        removeOverlay.classList.add('open');
+        return;
+      }
+      var rRemove = e.target.closest('[data-team-role-remove]');
+      if (rRemove) {
+        if (rRemove.disabled) { showToast(rRemove.getAttribute('data-tooltip') + '.'); return; }
+        var rr = pmTeamRoleById(rRemove.getAttribute('data-team-role-remove'));
+        if (!rr) return;
+        pmTeamPendingRemove = { kind: 'role', id: rr.id };
+        document.getElementById('pmTeamRemoveTitle').textContent = 'Delete this role?';
+        document.getElementById('pmTeamRemoveDesc').textContent =
+          '\u201c' + rr.name + '\u201d will no longer be available when inviting or reassigning people.';
+        removeOverlay.classList.add('open');
+      }
+    });
+
+    /* ---- role dropdowns ---- */
+    ['pmTeamsView', 'pmTeamInviteOverlay'].forEach(function (id) {
+      document.getElementById(id).addEventListener('click', function (e) {
+        var btn = e.target.closest('.team-dd-inner .pm-custom-dd-btn');
+        if (btn) {
+          e.stopPropagation();
+          var menu = btn.nextElementSibling;
+          var wasOpen = btn.classList.contains('open');
+          if (typeof closeAllCustomDropdowns === 'function') closeAllCustomDropdowns();
+          if (!wasOpen) {
+            btn.classList.add('open');
+            menu.classList.add('open');
+            var below = window.innerHeight - btn.getBoundingClientRect().bottom;
+            menu.classList.toggle('drop-up', below < Math.min(menu.scrollHeight + 20, 260));
+          }
+          return;
+        }
+        var item = e.target.closest('.team-dd-inner .cdd-item');
+        if (!item) return;
+        e.stopPropagation();
+        var trigger = item.closest('.team-dd-inner').querySelector('.pm-custom-dd-btn');
+        var value = item.getAttribute('data-svcp-dd-value');
+        if (typeof closeAllCustomDropdowns === 'function') closeAllCustomDropdowns();
+
+        if (trigger.hasAttribute('data-invite')) {
+          pmTeamInviteRoleId = value;
+          pmTeamRenderInviteRoleDD();
+          return;
+        }
+        var mid = trigger.getAttribute('data-member');
+        var mm = pmTeamMembers.filter(function (x) { return x.id === mid; })[0];
+        if (!mm) return;
+        var had = pmTeamOverrideCount(mm);
+        mm.roleId = value;
+        /* Exceptions were made against the old role, so carrying them into a new one would
+           silently mean something different. They're cleared, and the admin is told. */
+        mm.overrides = {};
+        renderPmTeams();
+        var nr = pmTeamRoleById(value);
+        showToast(pmTeamDisplayName(mm) + ' is now ' + nr.name +
+          (had ? ' \u2014 their ' + had + ' custom exception' + (had === 1 ? ' was' : 's were') + ' cleared.' : '.'));
+      });
+    });
+
+    /* One handler for every X in the module — each lives inside its own overlay. */
+    document.querySelectorAll('#pmTeamInviteOverlay, #pmTeamRoleOverlay, #pmTeamMemberPermOverlay, #pmTeamRemoveOverlay').forEach(function (ov) {
+      var x = ov.querySelector('[data-team-close]');
+      if (x) x.addEventListener('click', function () { ov.classList.remove('open'); pmTeamPendingRemove = null; });
+    });
+
+    renderPmTeams();
+  }
+
+  /* =========================================================
      PM: JOB RESPONSES
   ========================================================== */
   var PMJR_COLORS = { purple: '#7c5cdb', navy: '#1e2a44', brown: '#b0703f', teal: '#0f9488' };
@@ -29687,7 +30819,7 @@
 
   /* ---- PM Settings view ---- */
   function showPMView(view) {
-    var viewIds = { home: 'pmHomeView', settings: 'pmSettingsView', explore: 'pmExploreView', responses: 'pmResponsesView', properties: 'pmPropertiesView', propertyform: 'pmPropertyFormView', propertyjobs: 'pmPropertyJobsView', compliancesettings: 'pmComplianceSettingsView', tickets: 'pmTicketsView', servicespricing: 'pmServicesPricingView', servicetemplate: 'pmServiceTemplateView' };
+    var viewIds = { home: 'pmHomeView', settings: 'pmSettingsView', explore: 'pmExploreView', responses: 'pmResponsesView', properties: 'pmPropertiesView', propertyform: 'pmPropertyFormView', propertyjobs: 'pmPropertyJobsView', compliancesettings: 'pmComplianceSettingsView', tickets: 'pmTicketsView', servicespricing: 'pmServicesPricingView', servicetemplate: 'pmServiceTemplateView', teams: 'pmTeamsView' };
     Object.keys(viewIds).forEach(function (key) {
       var el = document.getElementById(viewIds[key]);
       if (key === view) {
@@ -34428,8 +35560,6 @@
       }
     }
     var isCompany = supplierBusinessType === 'company';
-    var teamsNavItem = document.getElementById('supTeamsNavItem');
-    if (teamsNavItem) teamsNavItem.style.display = isCompany ? '' : 'none';
     document.getElementById('supIdentitySoleTrader').style.display = isCompany ? 'none' : '';
     document.getElementById('supIdentityCompany').style.display = isCompany ? '' : 'none';
     document.getElementById('supElInsuranceCard').style.display = isCompany ? '' : 'none';
@@ -35458,6 +36588,9 @@
         initPmsvcOnce();
         pmsvcRefreshFilters();
         pmsvcRenderList();
+      } else if (item.getAttribute('data-nav') === 'teams') {
+        showPMView('teams');
+        initPmTeamsOnce();
       } else {
         showToast(item.querySelector('.nav-label').textContent + ' isn\u2019t wired up in this prototype yet.');
       }
@@ -35994,7 +37127,8 @@
     'pricing': 'supPricingView',
     'calendar': 'supCalendarView',
     'profile-settings': 'supProfileSettingsView',
-    'inbox': 'supInboxView'
+    'inbox': 'supInboxView',
+    'teams': 'supTeamsView'
   };
   function initMobileMenuBtn(menuBtnId, sidebarId) {
     var menuBtn = document.getElementById(menuBtnId);
@@ -36056,6 +37190,9 @@
       } else if (nav === 'inbox') {
         showSupplierView('inbox');
         if (typeof initSupInboxOnce === 'function') initSupInboxOnce();
+      } else if (nav === 'teams') {
+        showSupplierView('teams');
+        initSupTeamsOnce();
       } else {
         showToast(item.querySelector('.nav-label').textContent + ' isn\u2019t wired up in this prototype yet.');
       }
@@ -36103,77 +37240,77 @@
 
   var SUPJR_JOBS = [
     { id: '2778', type: 'setprice', company: 'KEY RIDERS LTD', avatarInitial: 'K',
-      title: 'End of Tenancy / Deep / Regular / Communal',
+      title: 'End of Tenancy / Deep / Regular / Communal', cat: 'cleaning',
       due: '2026-07-08', urgency: 'Emergency \u2013 as soon as possible', emergency: true, postcode: 'N9 0TW',
       netPrice: 20, vat: 4, total: 24,
       bookedByName: 'Thomas Davies', bookedByInitials: 'TD', bookedByRole: null,
       property: { name: 'Travelodge Hotels Ltd, 3 Smythe Close', addr: 'Travelodge Hotels Ltd, 3 Smythe Close, London, N9 0TW', type: 'Residential', occupancy: null } },
 
     { id: '2763', type: 'setprice', company: 'KEY RIDERS LTD', avatarInitial: 'K',
-      title: 'End of Tenancy / Deep / Regular / Communal',
+      title: 'End of Tenancy / Deep / Regular / Communal', cat: 'cleaning',
       due: '2026-07-03', urgency: 'Emergency \u2013 as soon as possible', emergency: true, postcode: 'S75 2DH',
       netPrice: 100, vat: 20, total: 120,
       bookedByName: 'Thomas Davies', bookedByInitials: 'TD', bookedByRole: null,
       property: { name: 'Q & Q Recovery, West Road', addr: 'Q & Q Recovery, West Road, Barnsley, S75 2DH', type: 'Residential', occupancy: 'Occupied' } },
 
     { id: '2777', type: 'setprice', company: 'WHITEHALL ESTATES', avatarInitial: 'W',
-      title: 'EICR \u2014 Electrical Installation Condition Report',
+      title: 'EICR \u2014 Electrical Installation Condition Report', cat: 'electrical',
       due: '2026-07-06', urgency: 'Flexible', emergency: false, postcode: 'SW1A 2BX',
       netPrice: 101.67, vat: 20.33, total: 122,
       bookedByName: 'Priya Shah', bookedByInitials: 'PS', bookedByRole: null,
       property: { name: 'Flat 1, 39 Whitehall', addr: 'Flat 1, 39 Whitehall, London, SW1A 2BX', type: 'Residential', occupancy: 'Occupied' } },
 
     { id: '2775', type: 'setprice', company: 'KEY RIDERS LTD', avatarInitial: 'K',
-      title: 'PAT Testing',
+      title: 'PAT Testing', cat: 'electrical',
       due: '2026-07-06', urgency: 'Flexible', emergency: false, postcode: 'S75 2DH',
       netPrice: 16.67, vat: 3.33, total: 20,
       bookedByName: 'Thomas Davies', bookedByInitials: 'TD', bookedByRole: null,
       property: { name: 'Q & Q Recovery, West Road', addr: 'Q & Q Recovery, West Road, Barnsley, S75 2DH', type: 'Residential', occupancy: 'Occupied' } },
 
     { id: '2779', type: 'setprice', company: 'KEY RIDERS LTD', avatarInitial: 'K',
-      title: 'End of Tenancy / Deep / Regular / Communal',
+      title: 'End of Tenancy / Deep / Regular / Communal', cat: 'cleaning',
       due: '2026-07-21', urgency: 'Flexible', emergency: false, postcode: 'S75 2DH',
       netPrice: 41.67, vat: 8.33, total: 50,
       bookedByName: 'Thomas Davies', bookedByInitials: 'TD', bookedByRole: null,
       property: { name: 'Q & Q Recovery, West Road', addr: 'Q & Q Recovery, West Road, Barnsley, S75 2DH', type: 'Residential', occupancy: 'Occupied' } },
 
     { id: '2769', type: 'quote', company: 'NEW SERVICES LTD.', avatarInitial: 'N',
-      title: 'Carpet / Stair Carpet Steam Clean',
+      title: 'Carpet / Stair Carpet Steam Clean', cat: 'cleaning',
       due: '2026-07-06', urgency: 'Emergency \u2013 as soon as possible', emergency: true, postcode: 'BA12 0SW',
       quoteStatus: 'needs-quote',
       bookedByName: 'fotatap', bookedByInitials: 'FO', bookedByRole: 'Manager',
       property: { name: 'Flat 4B, 44 Sherrington', addr: 'Flat 4B, 44 Sherrington, Warminster, BA12 0SW', type: 'Residential', occupancy: 'Occupied' } },
 
     { id: '2770', type: 'quote', company: 'NEW SERVICES LTD.', avatarInitial: 'N',
-      title: 'Carpet / Stair Carpet Steam Clean',
+      title: 'Carpet / Stair Carpet Steam Clean', cat: 'cleaning',
       due: '2026-07-06', urgency: 'Emergency \u2013 as soon as possible', emergency: true, postcode: 'BA12 0SW',
       quoteStatus: 'needs-quote',
       bookedByName: 'fotatap', bookedByInitials: 'FO', bookedByRole: 'Manager',
       property: { name: 'Flat 4B, 44 Sherrington', addr: 'Flat 4B, 44 Sherrington, Warminster, BA12 0SW', type: 'Residential', occupancy: 'Occupied' } },
 
     { id: '2764', type: 'quote', company: 'KEY RIDERS LTD', avatarInitial: 'K',
-      title: 'Boiler Repair / No Hot Water / Gas Leak Emergency',
+      title: 'Boiler Repair / No Hot Water / Gas Leak Emergency', cat: 'plumbing',
       due: '2026-07-03', urgency: 'Emergency \u2013 as soon as possible', emergency: true, postcode: 'S75 2DH',
       quoteStatus: 'needs-quote',
       bookedByName: 'Thomas Davies', bookedByInitials: 'TD', bookedByRole: null,
       property: { name: 'Q & Q Recovery, West Road', addr: 'Q & Q Recovery, West Road, Barnsley, S75 2DH', type: 'Residential', occupancy: 'Occupied' } },
 
     { id: '2746', type: 'quote', company: 'KEY RIDERS LTD', avatarInitial: 'K',
-      title: 'Door Entry / Intercom / Smart Doorbell',
+      title: 'Door Entry / Intercom / Smart Doorbell', cat: 'electrical',
       due: '2026-07-10', urgency: 'Flexible up to 10/07/2026', emergency: false, postcode: 'SW1A 2BX',
       quoteStatus: 'submitted', submittedQuoteTotal: 30,
       bookedByName: 'Thomas Davies', bookedByInitials: 'TD', bookedByRole: null,
       property: { name: 'Carrington, PO Box 81490', addr: 'Carrington, PO Box 81490, London, SW18 9WR', type: 'Residential', occupancy: null } },
 
     { id: '2724', type: 'quote', company: 'OLD SHADES MANAGEMENT', avatarInitial: 'O',
-      title: 'Carpet / Stair Carpet Steam Clean',
+      title: 'Carpet / Stair Carpet Steam Clean', cat: 'cleaning',
       due: '2026-07-01', urgency: 'Flexible', emergency: false, postcode: 'SW1A 2BX',
       quoteStatus: 'submitted', submittedQuoteTotal: 42,
       bookedByName: 'Morgan Ellis', bookedByInitials: 'ME', bookedByRole: null,
       property: { name: 'Old Shades, 37 Whitehall', addr: 'Old Shades, 37 Whitehall, London, SW1A 2BX', type: 'Residential', occupancy: null } },
 
     { id: '2790', type: 'setprice', company: 'KEY RIDERS LTD', avatarInitial: 'K',
-      title: 'Smoke Alarm Installation',
+      title: 'Smoke Alarm Installation', cat: 'fire',
       due: '2026-07-16', urgency: 'Emergency \u2013 as soon as possible', emergency: true, postcode: 'S75 2DH',
       netPrice: 375, vat: 75, total: 450,
       breakdown: [
@@ -58164,6 +59301,933 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     if (supsvcInited && document.getElementById('supPricingView') && document.getElementById('supPricingView').style.display !== 'none') {
       supsvcRenderAll();
     }
+  }
+
+  /* =========================================================
+     SUPPLIER TEAMS MODULE (mirrors Admin's Teams module exactly, adapted to
+     Supplier's own sidebar modules and roles)
+  ========================================================== */
+  var SUPTEAM_LEVELS = [
+    { id: 'none',  name: 'None',  short: 'None' },
+    { id: 'read',  name: 'Read only',  short: 'Read' },
+    { id: 'write', name: 'Write only', short: 'Write' },
+    { id: 'both',  name: 'Both', short: 'Both' }
+  ];
+  function supTeamLevel(id) {
+    for (var i = 0; i < SUPTEAM_LEVELS.length; i++) { if (SUPTEAM_LEVELS[i].id === id) return SUPTEAM_LEVELS[i]; }
+    return SUPTEAM_LEVELS[0];
+  }
+
+  // Mirrors this Supplier console's own sidebar exactly (Dashboard/Inbox, My Jobs/Job Requests/
+  // Calendar, Service Area/Services & Pricing, Payouts/Disputes/Teams) rather than Admin's module
+  // list, since this is what a supplier's own crew members actually need scoped access to.
+  var SUPTEAM_MODULE_GROUPS = [
+    { id: 'overview', name: 'Overview', modules: [
+      { id: 'dashboard', name: 'Dashboard' },
+      { id: 'inbox', name: 'Inbox' }
+    ] },
+    { id: 'work', name: 'Work', modules: [
+      { id: 'myjobs', name: 'My Jobs' },
+      { id: 'jobrequests', name: 'Job Requests' },
+      { id: 'calendar', name: 'Calendar' }
+    ] },
+    { id: 'business', name: 'Business', modules: [
+      { id: 'servicearea', name: 'Service Area' },
+      { id: 'pricing', name: 'Services & Pricing' }
+    ] },
+    { id: 'finance', name: 'Finance', modules: [
+      { id: 'payouts', name: 'Payouts' },
+      { id: 'supdisputes', name: 'Disputes' },
+      { id: 'teams', name: 'Teams' }
+    ] }
+  ];
+  var SUPTEAM_ALL_MODULES = [];
+  SUPTEAM_MODULE_GROUPS.forEach(function (g) { g.modules.forEach(function (m) { SUPTEAM_ALL_MODULES.push(m); }); });
+  var SUPTEAM_MODULE_COUNT = SUPTEAM_ALL_MODULES.length;
+  function supTeamModuleName(id) {
+    for (var i = 0; i < SUPTEAM_ALL_MODULES.length; i++) { if (SUPTEAM_ALL_MODULES[i].id === id) return SUPTEAM_ALL_MODULES[i].name; }
+    return id;
+  }
+  function supTeamEveryModule(level) {
+    var m = {};
+    SUPTEAM_ALL_MODULES.forEach(function (mod) { m[mod.id] = level; });
+    return m;
+  }
+
+  var supTeamUid = 0;
+  function supTeamNextId(p) { supTeamUid += 1; return p + '_' + supTeamUid; }
+
+  var supTeamRoles = [
+    { id: 'role_manager', name: 'Business Manager', description: 'Runs day to day operations across jobs and scheduling.', active: true, system: true, modules: supTeamEveryModule('both') },
+    { id: 'role_fieldcrew', name: 'Field Crew Lead', description: 'Handles job requests, the calendar and day-to-day jobs.', active: true, system: false,
+      modules: { dashboard: 'read', myjobs: 'both', jobrequests: 'both', calendar: 'both', inbox: 'write' } },
+    { id: 'role_office', name: 'Office Admin', description: 'Manages pricing, service area and incoming messages.', active: true, system: false,
+      modules: { dashboard: 'read', servicearea: 'both', pricing: 'both', inbox: 'both' } },
+    { id: 'role_finance', name: 'Finance', description: 'Payouts and dispute resolution.', active: true, system: false,
+      modules: { dashboard: 'read', payouts: 'both', supdisputes: 'both', myjobs: 'read' } },
+    { id: 'role_dispatcher', name: 'Dispatcher', description: 'Answers inbox messages and triages job requests.', active: false, system: false,
+      modules: { dashboard: 'read', inbox: 'both', jobrequests: 'read' } }
+  ];
+
+  function supTeamRoleById(id) {
+    for (var i = 0; i < supTeamRoles.length; i++) { if (supTeamRoles[i].id === id) return supTeamRoles[i]; }
+    return null;
+  }
+  function supTeamRoleLevel(role, modId) { return (role && role.modules && role.modules[modId]) || 'none'; }
+  function supTeamMemberLevel(m, modId) {
+    if (m.overrides && m.overrides[modId]) return m.overrides[modId];
+    return supTeamRoleLevel(supTeamRoleById(m.roleId), modId);
+  }
+  function supTeamOverrideCount(m) { return m.overrides ? Object.keys(m.overrides).length : 0; }
+  function supTeamGrantedCount(getLevel) {
+    var n = 0;
+    SUPTEAM_ALL_MODULES.forEach(function (mod) { if (getLevel(mod.id) !== 'none') n += 1; });
+    return n;
+  }
+  function supTeamLevelTally(getLevel) {
+    var t = { read: 0, write: 0, both: 0 };
+    SUPTEAM_ALL_MODULES.forEach(function (mod) {
+      var l = getLevel(mod.id);
+      if (t[l] !== undefined) t[l] += 1;
+    });
+    return t;
+  }
+
+  function supTeamAvatarHtml(m) {
+    if (m.photo) {
+      return '<span class="team-avatar has-photo"><img src="' + supjrEscapeHtml(m.photo) + '" alt="" loading="lazy"></span>';
+    }
+    return '<span class="team-avatar">' + supjrEscapeHtml(supTeamInitials(supTeamDisplayName(m))) + '</span>';
+  }
+  function supTeamInitials(name) {
+    var parts = String(name || '').trim().split(/\s+/);
+    if (!parts[0]) return '?';
+    return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
+  }
+  function supTeamNameFromEmail(email) {
+    var local = String(email).split('@')[0].replace(/[._-]+/g, ' ');
+    return local.replace(/\b\w/g, function (m) { return m.toUpperCase(); });
+  }
+  function supTeamDisplayName(m) { return m.name || supTeamNameFromEmail(m.email); }
+
+  function supTeamMakeMember(o) {
+    return {
+      id: supTeamNextId('mem'),
+      name: o.name || '',
+      email: o.email,
+      roleId: o.roleId,
+      overrides: o.overrides || {},
+      photo: o.photo || '',
+      status: o.status || 'active',
+      lastActive: o.lastActive === undefined ? null : o.lastActive,
+      // Which jobs this member can see, separate from their module-level Access above: 'all' (no
+      // restriction), 'categories'/'roles' (trade-based, using the same taxonomy as Explore
+      // Suppliers), or 'jobs' (hand-picked individual jobs from SUPJR_JOBS).
+      jobAccess: o.jobAccess || { mode: 'all', categories: [], roles: [], jobs: [] }
+    };
+  }
+
+  var supTeamMembers = [
+    supTeamMakeMember({ name: 'Ferna', email: 'greenwood86@gmail.com', roleId: 'role_manager', lastActive: 0, photo: 'https://i.pravatar.cc/150?img=47' }),
+    supTeamMakeMember({ name: 'Priya Shah', email: 'priya.shah@fernaworks.co.uk', roleId: 'role_fieldcrew', lastActive: 0, photo: 'https://i.pravatar.cc/150?img=32',
+      jobAccess: { mode: 'categories', categories: ['cleaning', 'electrical'], roles: [], jobs: [] } }),
+    supTeamMakeMember({ name: 'Tom Blake', email: 'tom.blake@fernaworks.co.uk', roleId: 'role_fieldcrew', lastActive: 1,
+      jobAccess: { mode: 'roles', categories: [], roles: ['Cleaner'], jobs: [] } }),
+    /* One seeded exception so the override path is visible without hunting for it. */
+    supTeamMakeMember({ name: 'Sofia Marchetti', email: 'sofia.marchetti@fernaworks.co.uk', roleId: 'role_office', lastActive: 2,
+      overrides: { supdisputes: 'read' } }),
+    supTeamMakeMember({ name: 'Daniel Whitfield', email: 'daniel.whitfield@fernaworks.co.uk', roleId: 'role_finance', lastActive: 6, photo: 'https://i.pravatar.cc/150?img=12' }),
+    supTeamMakeMember({ name: 'Hannah Cole', email: 'hannah.cole@fernaworks.co.uk', roleId: 'role_dispatcher', status: 'inactive', lastActive: 34,
+      jobAccess: { mode: 'jobs', categories: [], roles: [], jobs: ['2777', '2775'] } }),
+    supTeamMakeMember({ email: 'ravi.shah@fernaworks.co.uk', roleId: 'role_fieldcrew', status: 'invited', lastActive: null })
+  ];
+
+  var supTeamTab = 'members';
+  var supTeamSearch = '';
+  var supTeamPendingRemove = null;
+  var supTeamEditingRoleId = null;
+  var supTeamInviteRoleId = 'role_fieldcrew';
+  var supTeamRoleDraft = null;     // { name, description, modules } while the role modal is open
+  var supTeamPermMemberId = null;  // member whose overrides are open
+
+  function supTeamLastActiveText(m) {
+    if (m.status === 'invited') return 'Invite pending';
+    if (m.lastActive === null) return 'Never';
+    if (m.lastActive === 0) return 'Today';
+    if (m.lastActive === 1) return 'Yesterday';
+    if (m.lastActive < 30) return m.lastActive + ' days ago';
+    return Math.floor(m.lastActive / 30) + ' month' + (m.lastActive < 60 ? '' : 's') + ' ago';
+  }
+  function supTeamMembersOfRole(roleId) { return supTeamMembers.filter(function (m) { return m.roleId === roleId; }); }
+
+  /* Signing in needs both: the person switched on, and their role live. Suspending a role
+     suspends everyone holding it — there is no per-member exception. */
+  function supTeamRoleBlocked(m) {
+    var role = supTeamRoleById(m.roleId);
+    return !!(role && !role.active);
+  }
+  function supTeamStatusLabel(m) {
+    if (m.status === 'invited') return { key: 'invited', text: 'Invited' };
+    if (m.status !== 'active') return { key: 'inactive', text: 'Inactive' };
+    if (supTeamRoleBlocked(m)) return { key: 'blocked', text: 'Blocked by role' };
+    return { key: 'active', text: 'Active' };
+  }
+
+  function supTeamFilteredMembers() {
+    var t = supTeamSearch.trim().toLowerCase();
+    if (!t) return supTeamMembers;
+    return supTeamMembers.filter(function (m) {
+      var role = supTeamRoleById(m.roleId);
+      return (m.name + ' ' + m.email + ' ' + (role ? role.name : '')).toLowerCase().indexOf(t) !== -1;
+    });
+  }
+  function supTeamFilteredRoles() {
+    // Owner and Administrator always carry full access to everything and can't be edited,
+    // deactivated, or deleted — there's nothing to manage about them, so they're left out of
+    // this list entirely rather than shown as two permanently-locked, non-interactive rows.
+    // They still fully exist as real roles: supTeamRoleById, the Members table, and the role picker
+    // all still resolve and assign them normally — this only affects what's listed here.
+    var manageable = supTeamRoles.filter(function (r) { return !r.system; });
+    var t = supTeamSearch.trim().toLowerCase();
+    if (!t) return manageable;
+    return manageable.filter(function (r) {
+      return (r.name + ' ' + r.description).toLowerCase().indexOf(t) !== -1;
+    });
+  }
+
+  /* ---------- Permission matrix (shared by the role editor and member overrides) ---------- */
+  function supTeamMatrixHtml(getLevel, opts) {
+    opts = opts || {};
+    return SUPTEAM_MODULE_GROUPS.map(function (g) {
+      return '<div class="team-mx-group">' +
+        '<div class="team-mx-group-head">' +
+          '<span class="team-mx-group-name">' + g.name + '</span>' +
+          (opts.quickActions
+            ? '<span class="team-mx-quick">' +
+                '<button type="button" data-mx-group="' + g.id + '" data-mx-level="both">All</button>' +
+                '<button type="button" data-mx-group="' + g.id + '" data-mx-level="none">None</button>' +
+              '</span>'
+            : '') +
+        '</div>' +
+        g.modules.map(function (mod) {
+          var level = getLevel(mod.id);
+          var badge = opts.badgeFor ? opts.badgeFor(mod.id) : '';
+          return '<div class="team-mx-row" data-mx-row="' + mod.id + '">' +
+            '<span class="team-mx-name">' + mod.name + badge + '</span>' +
+            '<span class="team-mx-seg">' + SUPTEAM_LEVELS.map(function (l) {
+              return '<button type="button" class="team-mx-opt' + (l.id === level ? ' on' : '') +
+                ' lvl-' + l.id + '" data-mx-set="' + mod.id + '" data-mx-value="' + l.id + '">' + l.short + '</button>';
+            }).join('') + '</span>' +
+          '</div>';
+        }).join('') +
+      '</div>';
+    }).join('');
+  }
+
+  /* ---------- Render ---------- */
+  var SUPTEAM_TRASH = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg>';
+  var SUPTEAM_LOCK = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>';
+
+  function supTeamLevelChips(tally) {
+    return SUPTEAM_LEVELS.filter(function (l) { return l.id !== 'none' && tally[l.id]; })
+      .map(function (l) { return '<span class="team-lvl-chip lvl-' + l.id + '">' + tally[l.id] + ' ' + l.short.toLowerCase() + '</span>'; })
+      .join('');
+  }
+
+  function renderSupTeamStats() {
+    var box = document.getElementById('supTeamStats');
+    if (!box) return;
+    var active = supTeamMembers.filter(function (m) { return m.status === 'active'; }).length;
+    var invited = supTeamMembers.filter(function (m) { return m.status === 'invited'; }).length;
+    var custom = supTeamMembers.filter(function (m) { return supTeamOverrideCount(m) > 0; }).length;
+    // Matches supTeamFilteredRoles: Owner/Administrator aren't shown as manageable rows, so they're
+    // not counted here either — otherwise this number wouldn't match what's actually in the table.
+    var activeRoles = supTeamRoles.filter(function (r) { return r.active && !r.system; }).length;
+    box.innerHTML = [
+      { n: active, label: 'Active members' },
+      { n: invited, label: 'Invites pending', tint: invited > 0 },
+      { n: activeRoles, label: 'Active roles' },
+      { n: custom, label: 'With custom access', tint: custom > 0 }
+    ].map(function (s) {
+      return '<div class="team-stat' + (s.tint ? ' tint' : '') + '"><div class="ts-num">' + s.n + '</div><div class="ts-label">' + s.label + '</div></div>';
+    }).join('');
+  }
+
+  function renderSupTeamMembers() {
+    var body = document.getElementById('supTeamMembersBody');
+    if (!body) return;
+    var list = supTeamFilteredMembers();
+    document.querySelector('#supTeamMembersPanel .team-table-wrap').style.display = list.length ? '' : 'none';
+    document.getElementById('supTeamMembersEmpty').style.display = list.length ? 'none' : '';
+
+    body.innerHTML = list.map(function (m) {
+      var role = supTeamRoleById(m.roleId);
+      var roleInactive = role && !role.active;
+      var overrides = supTeamOverrideCount(m);
+      var granted = supTeamGrantedCount(function (id) { return supTeamMemberLevel(m, id); });
+      return '<tr>' +
+        '<td><div class="team-person">' +
+          supTeamAvatarHtml(m) +
+          '<span class="team-person-main">' +
+            '<span class="team-person-name">' + supjrEscapeHtml(supTeamDisplayName(m)) + '</span>' +
+            '<span class="team-person-email">' + supjrEscapeHtml(m.email) + '</span>' +
+          '</span>' +
+        '</div></td>' +
+        '<td><div class="team-role-cell">' + supTeamRoleDDHtml(role, 'data-member="' + m.id + '"') +
+          (roleInactive
+            ? '<div class="team-role-warn">Role is switched off \u2014 they can\u2019t sign in until it\u2019s back on.</div>'
+            : '') +
+        '</div></td>' +
+        /* Access is a button, not a label: it's the way in to this person's exceptions. */
+        '<td><button type="button" class="team-access-btn" data-team-member-perms="' + m.id + '">' +
+          '<span class="team-perm-chip ' + (overrides ? 'custom' : 'inherited') + '">' +
+            (overrides ? 'Custom \u00b7 ' + overrides + ' changed' : 'Role default') + '</span>' +
+          '<span class="team-access-sub">' + granted + ' of ' + SUPTEAM_MODULE_COUNT + ' modules</span>' +
+        '</button></td>' +
+        '<td>' + supTeamJobAccessCellHtml(m) + '</td>' +
+        '<td class="team-lastactive">' + supjrEscapeHtml(supTeamLastActiveText(m)) + '</td>' +
+        '<td><span class="team-status-chip st-' + supTeamStatusLabel(m).key + '">' + supTeamStatusLabel(m).text + '</span></td>' +
+        '<td><div class="team-actions">' +
+          (m.status === 'invited'
+            ? '<button type="button" class="btn btn-secondary-light team-mini-btn" data-team-resend="' + m.id + '">Resend</button>'
+            : '<span class="team-toggle-wrap">' +
+                '<button type="button" class="toggle-switch sm' + (m.status === 'active' ? ' on' : '') + '" data-team-member-toggle="' + m.id + '" role="switch" aria-checked="' + (m.status === 'active' ? 'true' : 'false') + '" aria-label="Member active"><span class="thumb"></span></button>' +
+              '</span>') +
+          '<button type="button" class="svcp-icon-btn danger" data-team-member-remove="' + m.id + '"' +
+            (role && role.id === 'role_manager' ? ' disabled data-tooltip="The Business Manager can\u2019t be removed"' : ' data-tooltip="Remove member"') +
+            ' aria-label="Remove member">' + SUPTEAM_TRASH + '</button>' +
+        '</div></td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  /* ---------- Job Access: per-member restriction on which jobs they can see ----------
+     Separate concept from the module-level Access column above (which gates entire app
+     sections like My Jobs or Calendar). This gates *which jobs within* My Jobs/Job Requests
+     a member sees. Categories and Roles both resolve against each job's single `cat` field
+     (SUPJR_JOBS has no separate role field to match against) — Roles is the finer-grained
+     mental model for the supplier setting it, Categories the broader one, even though in this
+     dataset a role's own parent category is the most specific signal available to filter by. */
+  function supTeamJobMatchesAccess(job, ja) {
+    if (!ja || ja.mode === 'all') return true;
+    if (ja.mode === 'categories') return ja.categories.indexOf(job.cat) !== -1;
+    if (ja.mode === 'roles') {
+      return ja.roles.some(function (roleLabel) {
+        var trade = PMEX_TRADE_ITEMS.find(function (t) { return t.label === roleLabel; });
+        return trade && trade.cat === job.cat;
+      });
+    }
+    if (ja.mode === 'jobs') return ja.jobs.indexOf(job.id) !== -1;
+    return true;
+  }
+  function supTeamJobAccessCount(ja) {
+    return SUPJR_JOBS.filter(function (j) { return supTeamJobMatchesAccess(j, ja); }).length;
+  }
+  function supTeamCatLabel(key) {
+    var c = PMEX_CAT_DEFS.find(function (c) { return c.key === key; });
+    return c ? c.label : key;
+  }
+  // Powers both the Members table cell and the modal's own summary line, so the count shown
+  // while editing always matches what lands on the table the moment it's saved.
+  function supTeamJobAccessSummary(ja) {
+    var n = supTeamJobAccessCount(ja);
+    if (ja.mode === 'all') return { chip: 'inherited', main: 'All jobs', sub: n + ' of ' + SUPJR_JOBS.length + ' jobs' };
+    if (ja.mode === 'categories') {
+      var label = ja.categories.length === 1 ? supTeamCatLabel(ja.categories[0]) : ja.categories.length + ' categories';
+      return { chip: 'custom', main: label, sub: n + ' of ' + SUPJR_JOBS.length + ' jobs' };
+    }
+    if (ja.mode === 'roles') {
+      var rlabel = ja.roles.length === 1 ? ja.roles[0] : ja.roles.length + ' roles';
+      return { chip: 'custom', main: rlabel, sub: n + ' of ' + SUPJR_JOBS.length + ' jobs' };
+    }
+    return { chip: 'custom', main: ja.jobs.length + ' specific job' + (ja.jobs.length === 1 ? '' : 's'), sub: n + ' of ' + SUPJR_JOBS.length + ' jobs' };
+  }
+  function supTeamJobAccessCellHtml(m) {
+    if (m.status === 'invited') return '<span class="team-access-sub">Set after they join</span>';
+    var s = supTeamJobAccessSummary(m.jobAccess);
+    return '<button type="button" class="team-access-btn" data-team-job-access="' + m.id + '">' +
+      '<span class="team-perm-chip ' + s.chip + '">' + supjrEscapeHtml(s.main) + '</span>' +
+      '<span class="team-access-sub">' + s.sub + '</span>' +
+    '</button>';
+  }
+
+  var supTeamJobAccessMemberId = null;
+  var supTeamJobAccessDraft = null; // working copy edited in the modal; only written back on Save
+
+  function supTeamOpenJobAccess(id) {
+    var m = supTeamMembers.find(function (x) { return x.id === id; });
+    if (!m) return;
+    supTeamJobAccessMemberId = id;
+    // Deep-copy so Cancel (or clicking the backdrop) can discard edits with no trace.
+    supTeamJobAccessDraft = {
+      mode: m.jobAccess.mode,
+      categories: m.jobAccess.categories.slice(),
+      roles: m.jobAccess.roles.slice(),
+      jobs: m.jobAccess.jobs.slice()
+    };
+    document.getElementById('supTeamJobAccessSub').textContent = supTeamDisplayName(m) + ' \u2014 choose which jobs they can see.';
+    supTeamRenderJobAccessModal();
+    document.getElementById('supTeamJobAccessOverlay').classList.add('open');
+  }
+  function supTeamSwitchJobAccessMode(mode) {
+    supTeamJobAccessDraft.mode = mode;
+    supTeamRenderJobAccessModal();
+  }
+  function supTeamJobAccessModeCard(mode, title, desc, icon) {
+    var active = supTeamJobAccessDraft.mode === mode;
+    return '<button type="button" class="team-ja-mode-card' + (active ? ' active' : '') + '" data-team-ja-mode="' + mode + '">' +
+      '<span class="team-ja-mode-icon">' + icon + '</span>' +
+      '<span class="team-ja-mode-title">' + title + '</span>' +
+      '<span class="team-ja-mode-desc">' + desc + '</span>' +
+    '</button>';
+  }
+  function supTeamRenderJobAccessModal() {
+    var draft = supTeamJobAccessDraft;
+    var modeWrap = document.getElementById('supTeamJobAccessModes');
+    modeWrap.innerHTML =
+      supTeamJobAccessModeCard('all', 'All jobs', 'No restriction \u2014 sees everything.', '\u{1F4C2}') +
+      supTeamJobAccessModeCard('categories', 'Categories', 'e.g. only Plumbing or Electrical jobs.', '\u{1F527}') +
+      supTeamJobAccessModeCard('roles', 'Roles', 'e.g. only jobs matching Cleaner.', '\u{1F464}') +
+      supTeamJobAccessModeCard('jobs', 'Specific jobs', 'Hand-pick individual jobs.', '\u{1F4CC}');
+
+    var panel = document.getElementById('supTeamJobAccessPanel');
+    if (draft.mode === 'all') {
+      panel.innerHTML = '<div class="team-ja-all-note">' + supTeamAllJobsSvg() +
+        '<div><strong>Every current and future job is visible.</strong><div class="team-ja-all-sub">The best fit for anyone managing the account day to day.</div></div></div>';
+    } else if (draft.mode === 'categories') {
+      panel.innerHTML = '<div class="team-ja-grid">' + PMEX_CAT_DEFS.map(function (c) {
+        var count = SUPJR_JOBS.filter(function (j) { return j.cat === c.key; }).length;
+        var checked = draft.categories.indexOf(c.key) !== -1;
+        return '<label class="team-ja-check-card' + (checked ? ' checked' : '') + '">' +
+          '<input type="checkbox" data-team-ja-cat="' + c.key + '"' + (checked ? ' checked' : '') + '>' +
+          '<span class="team-ja-check-icon">' + c.icon + '</span>' +
+          '<span class="team-ja-check-label">' + supjrEscapeHtml(c.label) + '</span>' +
+          '<span class="team-ja-check-count">' + count + ' job' + (count === 1 ? '' : 's') + '</span>' +
+        '</label>';
+      }).join('') + '</div>';
+    } else if (draft.mode === 'roles') {
+      panel.innerHTML = '<div class="team-ja-grid">' + PMEX_TRADE_ITEMS.map(function (t) {
+        var count = SUPJR_JOBS.filter(function (j) { return j.cat === t.cat; }).length;
+        var checked = draft.roles.indexOf(t.label) !== -1;
+        return '<label class="team-ja-check-card' + (checked ? ' checked' : '') + '">' +
+          '<input type="checkbox" data-team-ja-role="' + supjrEscapeHtml(t.label) + '"' + (checked ? ' checked' : '') + '>' +
+          '<span class="team-ja-check-label">' + supjrEscapeHtml(t.label) + '</span>' +
+          '<span class="team-ja-check-count">' + count + ' job' + (count === 1 ? '' : 's') + '</span>' +
+        '</label>';
+      }).join('') + '</div>';
+    } else {
+      var q = (supTeamJobAccessJobSearch || '').toLowerCase();
+      var jobs = SUPJR_JOBS.filter(function (j) { return !q || j.title.toLowerCase().indexOf(q) !== -1 || j.company.toLowerCase().indexOf(q) !== -1; });
+      panel.innerHTML =
+        '<div class="team-field" style="margin-bottom:12px;">' +
+          '<input type="text" id="supTeamJaJobSearch" placeholder="Search jobs by title or company" value="' + supjrEscapeHtml(supTeamJobAccessJobSearch || '') + '" autocomplete="off">' +
+        '</div>' +
+        '<div class="team-ja-job-list">' + (jobs.length ? jobs.map(function (j) {
+          var checked = draft.jobs.indexOf(j.id) !== -1;
+          return '<label class="team-ja-job-row' + (checked ? ' checked' : '') + '">' +
+            '<input type="checkbox" data-team-ja-job="' + j.id + '"' + (checked ? ' checked' : '') + '>' +
+            '<span class="team-ja-job-main">' +
+              '<span class="team-ja-job-title">' + supjrEscapeHtml(j.title) + '</span>' +
+              '<span class="team-ja-job-meta">' + supjrEscapeHtml(j.company) + ' \u00b7 ' + supTeamCatLabel(j.cat) + ' \u00b7 Due ' + supjrEscapeHtml(j.due) + '</span>' +
+            '</span>' +
+          '</label>';
+        }).join('') : '<div class="team-ja-job-empty">No jobs match your search.</div>') + '</div>';
+      var searchInput = document.getElementById('supTeamJaJobSearch');
+      if (searchInput) searchInput.addEventListener('input', function (e) {
+        supTeamJobAccessJobSearch = e.target.value;
+        supTeamRenderJobAccessModal();
+        document.getElementById('supTeamJaJobSearch').focus();
+        var val = document.getElementById('supTeamJaJobSearch').value;
+        document.getElementById('supTeamJaJobSearch').setSelectionRange(val.length, val.length);
+      });
+    }
+
+    var s = supTeamJobAccessSummary(draft);
+    document.getElementById('supTeamJobAccessCount').textContent = s.sub;
+  }
+  var supTeamJobAccessJobSearch = '';
+  function supTeamSaveJobAccess() {
+    var m = supTeamMembers.find(function (x) { return x.id === supTeamJobAccessMemberId; });
+    if (m) m.jobAccess = supTeamJobAccessDraft;
+    supTeamJobAccessJobSearch = '';
+    document.getElementById('supTeamJobAccessOverlay').classList.remove('open');
+    renderSupTeamMembers();
+  }
+  function supTeamAllJobsSvg() {
+    return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;color:var(--accent-blue);"><path d="M20 7H4a2 2 0 00-2 2v9a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>';
+  }
+
+  function renderSupTeamRoles() {
+    var body = document.getElementById('supTeamRolesBody');
+    if (!body) return;
+    var list = supTeamFilteredRoles();
+    document.querySelector('#supTeamRolesPanel .team-table-wrap').style.display = list.length ? '' : 'none';
+    document.getElementById('supTeamRolesEmpty').style.display = list.length ? 'none' : '';
+
+    body.innerHTML = list.map(function (r) {
+      var count = supTeamMembersOfRole(r.id).length;
+      var getLevel = function (id) { return supTeamRoleLevel(r, id); };
+      var granted = supTeamGrantedCount(getLevel);
+      var tally = supTeamLevelTally(getLevel);
+      var summary = granted === 0 ? 'No modules'
+        : granted === SUPTEAM_MODULE_COUNT && tally.both === SUPTEAM_MODULE_COUNT ? 'Every module \u00b7 full access'
+        : granted + ' of ' + SUPTEAM_MODULE_COUNT + ' modules';
+      return '<tr>' +
+        '<td><div class="team-role-main">' +
+          '<span class="team-role-name">' + supjrEscapeHtml(r.name) +
+            (r.system ? '<span class="team-sys-chip">' + SUPTEAM_LOCK + 'Built in</span>' : '') + '</span>' +
+          (r.description ? '<span class="team-role-desc">' + supjrEscapeHtml(r.description) + '</span>' : '') +
+        '</div></td>' +
+        '<td><button type="button" class="team-access-btn" data-team-role-edit="' + r.id + '">' +
+          '<span class="team-access-summary">' + summary + '</span>' +
+          '<span class="team-lvl-chips">' + supTeamLevelChips(tally) + '</span>' +
+        '</button></td>' +
+        '<td><span class="team-count-chip">' + count + '</span></td>' +
+        '<td><span class="team-toggle-wrap">' +
+          '<button type="button" class="toggle-switch sm' + (r.active ? ' on' : '') + '" data-team-role-toggle="' + r.id + '"' +
+            (r.system ? ' disabled data-tooltip="Built-in roles stay active"' : '') +
+            ' role="switch" aria-checked="' + (r.active ? 'true' : 'false') + '" aria-label="Role active"><span class="thumb"></span></button>' +
+          '<span class="team-toggle-label' + (r.active ? ' on' : '') + '">' + (r.active ? 'Active' : 'Inactive') + '</span>' +
+        '</span></td>' +
+        '<td><div class="team-actions">' +
+          '<button type="button" class="svcp-icon-btn" data-team-role-edit="' + r.id + '" data-tooltip="Edit role &amp; permissions" aria-label="Edit role"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>' +
+          '<button type="button" class="svcp-icon-btn danger" data-team-role-remove="' + r.id + '"' +
+            (r.system ? ' disabled data-tooltip="Built-in roles can\u2019t be deleted"' : count ? ' disabled data-tooltip="Reassign its ' + count + ' member' + (count === 1 ? '' : 's') + ' first"' : ' data-tooltip="Delete role"') +
+            ' aria-label="Delete role">' + SUPTEAM_TRASH + '</button>' +
+        '</div></td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  /* The role picker lists names only — a member's access is spelled out in its own column,
+     so repeating a level here was both redundant and, once permissions went per-module,
+     wrong. */
+  function supTeamRoleDDHtml(role, extraAttrs) {
+    // Owner/Administrator are excluded here the same way they're excluded from the Roles table
+    // (see supTeamFilteredRoles) — promoting someone to full, unrestricted access isn't meant to be
+    // as casual as picking it from this list. A member who already holds one of these still shows
+    // it correctly as their current role (the `role` param, independent of `options` below) —
+    // this only affects what's offered as something to switch *to*.
+    var options = supTeamRoles.filter(function (r) { return r.active && !r.system; });
+    return svcpDDShell('data-ddrole="team-role" ' + (extraAttrs || '') + ' class="pm-custom-dd-btn"',
+      role ? role.id : '', role ? role.name : 'Select a role\u2026', !role,
+      options.map(function (r) { return svcpDDItem(r.id, r.name, role && r.id === role.id); }).join('')
+    ).replace('<div class="svcp-dd">', '<div class="team-dd-inner">');
+  }
+
+  function renderSupTeams() {
+    renderSupTeamStats();
+    var membersOn = supTeamTab === 'members';
+    document.getElementById('supTeamMembersPanel').style.display = membersOn ? '' : 'none';
+    document.getElementById('supTeamRolesPanel').style.display = membersOn ? 'none' : '';
+    if (membersOn) renderSupTeamMembers(); else renderSupTeamRoles();
+    var n = membersOn ? supTeamFilteredMembers().length : supTeamFilteredRoles().length;
+    document.getElementById('supTeamCount').textContent = n + (membersOn ? ' member' : ' role') + (n === 1 ? '' : 's');
+  }
+
+  /* ---------- Invite ---------- */
+  function supTeamRenderInviteRoleDD() {
+    var wrap = document.getElementById('supTeamInviteRoleDD');
+    var role = supTeamRoleById(supTeamInviteRoleId);
+    if (!role || !role.active || role.system) {
+      var firstActive = supTeamRoles.filter(function (r) { return r.active && !r.system; })[0];
+      role = firstActive || null;
+      supTeamInviteRoleId = role ? role.id : '';
+    }
+    wrap.innerHTML = supTeamRoleDDHtml(role, 'data-invite="1"');
+    var hint = document.getElementById('supTeamInviteRoleHint');
+    if (!role) { hint.textContent = 'No active roles available. Switch one on first.'; return; }
+    var getLevel = function (id) { return supTeamRoleLevel(role, id); };
+    var granted = supTeamGrantedCount(getLevel);
+    hint.innerHTML = 'Gives access to <b>' + granted + ' of ' + SUPTEAM_MODULE_COUNT + ' modules</b>. ' +
+      'You can fine-tune it for this person once they\u2019ve accepted.';
+  }
+  function supTeamOpenInvite() {
+    document.getElementById('supTeamInviteEmail').value = '';
+    document.getElementById('supTeamInviteEmailError').style.display = 'none';
+    supTeamRenderInviteRoleDD();
+    document.getElementById('supTeamInviteOverlay').classList.add('open');
+    setTimeout(function () { document.getElementById('supTeamInviteEmail').focus(); }, 50);
+  }
+
+  /* ---------- Role editor ---------- */
+  function supTeamRenderRoleMatrix() {
+    document.getElementById('supTeamRoleMatrix').innerHTML =
+      supTeamMatrixHtml(function (id) { return supTeamRoleDraft.modules[id] || 'none'; }, { quickActions: true });
+    var granted = supTeamGrantedCount(function (id) { return supTeamRoleDraft.modules[id] || 'none'; });
+    document.getElementById('supTeamRoleMatrixCount').textContent = granted + ' of ' + SUPTEAM_MODULE_COUNT + ' modules';
+  }
+  function supTeamOpenRoleModal(roleId) {
+    supTeamEditingRoleId = roleId || null;
+    var role = roleId ? supTeamRoleById(roleId) : null;
+    supTeamRoleDraft = {
+      name: role ? role.name : '',
+      description: role ? role.description : '',
+      modules: role ? JSON.parse(JSON.stringify(role.modules)) : {}
+    };
+    document.getElementById('supTeamRoleModalTitle').textContent = role ? 'Edit role' : 'New role';
+    document.getElementById('supTeamRoleSave').textContent = role ? 'Save role' : 'Create role';
+    document.getElementById('supTeamRoleName').value = supTeamRoleDraft.name;
+    document.getElementById('supTeamRoleName').disabled = !!(role && role.system);
+    document.getElementById('supTeamRoleDesc').value = supTeamRoleDraft.description;
+    document.getElementById('supTeamRoleNameError').style.display = 'none';
+    supTeamRenderRoleMatrix();
+    document.getElementById('supTeamRoleOverlay').classList.add('open');
+  }
+
+  /* ---------- Member overrides ---------- */
+  function supTeamRenderMemberPerms() {
+    var m = supTeamMembers.filter(function (x) { return x.id === supTeamPermMemberId; })[0];
+    if (!m) return;
+    var role = supTeamRoleById(m.roleId);
+    document.getElementById('supTeamMemberPermTitle').textContent = supTeamDisplayName(m) + '\u2019s access';
+    document.getElementById('supTeamMemberPermSub').innerHTML =
+      'Inheriting from <b>' + supjrEscapeHtml(role ? role.name : 'no role') + '</b>. ' +
+      'Change a row to make an exception for this person only \u2014 the role itself stays as it is.';
+
+    var overrides = supTeamOverrideCount(m);
+    var resetBtn = document.getElementById('supTeamMemberPermReset');
+    resetBtn.style.display = overrides ? '' : 'none';
+    resetBtn.textContent = 'Reset all to ' + (role ? role.name : 'role');
+
+    document.getElementById('supTeamMemberPermMatrix').innerHTML = supTeamMatrixHtml(
+      function (id) { return supTeamMemberLevel(m, id); },
+      { badgeFor: function (id) {
+          return (m.overrides && m.overrides[id])
+            ? '<span class="team-mx-badge">Changed \u00b7 role says ' + supTeamLevel(supTeamRoleLevel(role, id)).short.toLowerCase() + '</span>'
+            : '';
+        } }
+    );
+    document.getElementById('supTeamMemberPermCount').textContent = overrides
+      ? overrides + ' exception' + (overrides === 1 ? '' : 's') + ' to the role'
+      : 'No exceptions \u2014 matches the role exactly';
+  }
+  function supTeamOpenMemberPerms(id) {
+    supTeamPermMemberId = id;
+    supTeamRenderMemberPerms();
+    document.getElementById('supTeamMemberPermOverlay').classList.add('open');
+  }
+
+  /* ---------- Wiring ---------- */
+  function initSupTeamsOnce() {
+    if (initSupTeamsOnce.done) return;
+    initSupTeamsOnce.done = true;
+
+    document.getElementById('supTeamSearch').addEventListener('input', function () {
+      supTeamSearch = this.value;
+      renderSupTeams();
+    });
+    document.getElementById('supTeamTabs').addEventListener('click', function (e) {
+      var pill = e.target.closest('[data-team-tab]');
+      if (!pill) return;
+      supTeamTab = pill.getAttribute('data-team-tab');
+      this.querySelectorAll('.pm-tab-pill').forEach(function (p) { p.classList.toggle('active', p === pill); });
+      renderSupTeams();
+    });
+
+    document.getElementById('supTeamInviteBtn').addEventListener('click', supTeamOpenInvite);
+    document.getElementById('supTeamAddRoleBtn').addEventListener('click', function () { supTeamOpenRoleModal(null); });
+
+    /* ---- invite ---- */
+    var inviteOverlay = document.getElementById('supTeamInviteOverlay');
+    document.getElementById('supTeamInviteCancel').addEventListener('click', function () { inviteOverlay.classList.remove('open'); });
+    inviteOverlay.addEventListener('click', function (e) { if (e.target === inviteOverlay) inviteOverlay.classList.remove('open'); });
+    document.getElementById('supTeamInviteSend').addEventListener('click', function () {
+      var input = document.getElementById('supTeamInviteEmail');
+      var err = document.getElementById('supTeamInviteEmailError');
+      var email = input.value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        err.textContent = 'Enter a valid email address.';
+        err.style.display = ''; input.focus(); return;
+      }
+      if (supTeamMembers.filter(function (m) { return m.email.toLowerCase() === email.toLowerCase(); })[0]) {
+        err.textContent = 'That address is already on the supTeam.';
+        err.style.display = ''; input.focus(); return;
+      }
+      if (!supTeamInviteRoleId) { showToast('Switch a role on before inviting anyone to it.'); return; }
+      supTeamMembers.push(supTeamMakeMember({ email: email, roleId: supTeamInviteRoleId, status: 'invited', lastActive: null }));
+      inviteOverlay.classList.remove('open');
+      supTeamTab = 'members';
+      document.querySelectorAll('#supTeamTabs .pm-tab-pill').forEach(function (p) {
+        p.classList.toggle('active', p.getAttribute('data-team-tab') === 'members');
+      });
+      renderSupTeams();
+      showToast('Invite sent to ' + email + ' as ' + supTeamRoleById(supTeamInviteRoleId).name + '.');
+    });
+
+    /* ---- role editor ---- */
+    var roleOverlay = document.getElementById('supTeamRoleOverlay');
+    document.getElementById('supTeamRoleCancel').addEventListener('click', function () { roleOverlay.classList.remove('open'); });
+    roleOverlay.addEventListener('click', function (e) { if (e.target === roleOverlay) roleOverlay.classList.remove('open'); });
+
+    document.getElementById('supTeamRoleMatrix').addEventListener('click', function (e) {
+      var set = e.target.closest('[data-mx-set]');
+      if (set) {
+        var mid = set.getAttribute('data-mx-set');
+        var val = set.getAttribute('data-mx-value');
+        if (val === 'none') delete supTeamRoleDraft.modules[mid]; else supTeamRoleDraft.modules[mid] = val;
+        supTeamRenderRoleMatrix();
+        return;
+      }
+      var grp = e.target.closest('[data-mx-group]');
+      if (grp) {
+        var gid = grp.getAttribute('data-mx-group');
+        var lvl = grp.getAttribute('data-mx-level');
+        var group = SUPTEAM_MODULE_GROUPS.filter(function (g) { return g.id === gid; })[0];
+        group.modules.forEach(function (mod) {
+          if (lvl === 'none') delete supTeamRoleDraft.modules[mod.id]; else supTeamRoleDraft.modules[mod.id] = lvl;
+        });
+        supTeamRenderRoleMatrix();
+      }
+    });
+
+    document.getElementById('supTeamRoleSave').addEventListener('click', function () {
+      var nameEl = document.getElementById('supTeamRoleName');
+      var name = nameEl.disabled ? supTeamRoleDraft.name : nameEl.value.trim();
+      var err = document.getElementById('supTeamRoleNameError');
+      if (!name) { err.style.display = ''; nameEl.focus(); return; }
+      var desc = document.getElementById('supTeamRoleDesc').value.trim();
+      if (supTeamEditingRoleId) {
+        var role = supTeamRoleById(supTeamEditingRoleId);
+        if (!role.system) role.name = name;
+        role.description = desc;
+        role.modules = supTeamRoleDraft.modules;
+        var affected = supTeamMembersOfRole(role.id).length;
+        roleOverlay.classList.remove('open');
+        renderSupTeams();
+        showToast(affected
+          ? role.name + ' updated \u2014 applies to ' + affected + ' member' + (affected === 1 ? '' : 's') + ', except where someone has their own exceptions.'
+          : role.name + ' updated.');
+      } else {
+        supTeamRoles.push({ id: supTeamNextId('role'), name: name, description: desc, active: true, system: false, modules: supTeamRoleDraft.modules });
+        roleOverlay.classList.remove('open');
+        supTeamTab = 'roles';
+        document.querySelectorAll('#supTeamTabs .pm-tab-pill').forEach(function (p) {
+          p.classList.toggle('active', p.getAttribute('data-team-tab') === 'roles');
+        });
+        renderSupTeams();
+        var g = supTeamGrantedCount(function (id) { return supTeamRoleDraft.modules[id] || 'none'; });
+        showToast(name + ' created with access to ' + g + ' of ' + SUPTEAM_MODULE_COUNT + ' modules.');
+      }
+    });
+
+    /* ---- member overrides ---- */
+    var permOverlay = document.getElementById('supTeamMemberPermOverlay');
+    document.getElementById('supTeamMemberPermClose').addEventListener('click', function () { permOverlay.classList.remove('open'); });
+    permOverlay.addEventListener('click', function (e) { if (e.target === permOverlay) permOverlay.classList.remove('open'); });
+    document.getElementById('supTeamMemberPermReset').addEventListener('click', function () {
+      var m = supTeamMembers.filter(function (x) { return x.id === supTeamPermMemberId; })[0];
+      if (!m) return;
+      m.overrides = {};
+      supTeamRenderMemberPerms();
+      renderSupTeams();
+      showToast(supTeamDisplayName(m) + ' is back to their role\u2019s access.');
+    });
+    document.getElementById('supTeamMemberPermMatrix').addEventListener('click', function (e) {
+      var set = e.target.closest('[data-mx-set]');
+      if (!set) return;
+      var m = supTeamMembers.filter(function (x) { return x.id === supTeamPermMemberId; })[0];
+      if (!m) return;
+      var mid = set.getAttribute('data-mx-set');
+      var val = set.getAttribute('data-mx-value');
+      var roleLevel = supTeamRoleLevel(supTeamRoleById(m.roleId), mid);
+      /* Storing an override only when it differs keeps "N changed" literally true. */
+      if (val === roleLevel) delete m.overrides[mid]; else m.overrides[mid] = val;
+      supTeamRenderMemberPerms();
+      renderSupTeams();
+    });
+
+    /* ---- job access ---- */
+    var jaOverlay = document.getElementById('supTeamJobAccessOverlay');
+    document.getElementById('supTeamJobAccessCancel').addEventListener('click', function () { jaOverlay.classList.remove('open'); });
+    jaOverlay.addEventListener('click', function (e) { if (e.target === jaOverlay) jaOverlay.classList.remove('open'); });
+    document.getElementById('supTeamJobAccessModes').addEventListener('click', function (e) {
+      var card = e.target.closest('[data-team-ja-mode]');
+      if (card) supTeamSwitchJobAccessMode(card.getAttribute('data-team-ja-mode'));
+    });
+    document.getElementById('supTeamJobAccessPanel').addEventListener('change', function (e) {
+      var draft = supTeamJobAccessDraft;
+      var cat = e.target.closest('[data-team-ja-cat]');
+      if (cat) {
+        var ck = cat.getAttribute('data-team-ja-cat');
+        var i = draft.categories.indexOf(ck);
+        if (e.target.checked && i === -1) draft.categories.push(ck);
+        else if (!e.target.checked && i !== -1) draft.categories.splice(i, 1);
+        supTeamRenderJobAccessModal();
+        return;
+      }
+      var role = e.target.closest('[data-team-ja-role]');
+      if (role) {
+        var rl = role.getAttribute('data-team-ja-role');
+        var ri = draft.roles.indexOf(rl);
+        if (e.target.checked && ri === -1) draft.roles.push(rl);
+        else if (!e.target.checked && ri !== -1) draft.roles.splice(ri, 1);
+        supTeamRenderJobAccessModal();
+        return;
+      }
+      var jobChk = e.target.closest('[data-team-ja-job]');
+      if (jobChk) {
+        var jid = jobChk.getAttribute('data-team-ja-job');
+        var ji = draft.jobs.indexOf(jid);
+        if (e.target.checked && ji === -1) draft.jobs.push(jid);
+        else if (!e.target.checked && ji !== -1) draft.jobs.splice(ji, 1);
+        // Re-render would drop focus from the search box mid-type; the job list itself doesn't
+        // need a full re-render just to reflect one row's own checked state, so leave it be —
+        // only the running count in the footer needs to stay live.
+        document.getElementById('supTeamJobAccessCount').textContent = supTeamJobAccessSummary(draft).sub;
+      }
+    });
+    document.getElementById('supTeamJobAccessSave').addEventListener('click', function () {
+      var m = supTeamMembers.filter(function (x) { return x.id === supTeamJobAccessMemberId; })[0];
+      var label = m ? supTeamDisplayName(m) : 'Member';
+      supTeamSaveJobAccess();
+      showToast(label + '\u2019s job access updated.');
+    });
+
+    /* ---- remove confirmation ---- */
+    var removeOverlay = document.getElementById('supTeamRemoveOverlay');
+    document.getElementById('supTeamRemoveCancel').addEventListener('click', function () {
+      removeOverlay.classList.remove('open');
+      supTeamPendingRemove = null;
+    });
+    removeOverlay.addEventListener('click', function (e) {
+      if (e.target === removeOverlay) { removeOverlay.classList.remove('open'); supTeamPendingRemove = null; }
+    });
+    document.getElementById('supTeamRemoveConfirm').addEventListener('click', function () {
+      if (!supTeamPendingRemove) return;
+      var label;
+      if (supTeamPendingRemove.kind === 'member') {
+        var m = supTeamMembers.filter(function (x) { return x.id === supTeamPendingRemove.id; })[0];
+        label = m ? supTeamDisplayName(m) : 'Member';
+        supTeamMembers = supTeamMembers.filter(function (x) { return x.id !== supTeamPendingRemove.id; });
+      } else {
+        var r = supTeamRoleById(supTeamPendingRemove.id);
+        label = r ? r.name : 'Role';
+        supTeamRoles = supTeamRoles.filter(function (x) { return x.id !== supTeamPendingRemove.id; });
+      }
+      supTeamPendingRemove = null;
+      removeOverlay.classList.remove('open');
+      renderSupTeams();
+      showToast(label + ' removed.');
+    });
+
+    /* ---- table actions ---- */
+    document.getElementById('supTeamsView').addEventListener('click', function (e) {
+      var perms = e.target.closest('[data-team-member-perms]');
+      if (perms) { supTeamOpenMemberPerms(perms.getAttribute('data-team-member-perms')); return; }
+
+      var jobAccess = e.target.closest('[data-team-job-access]');
+      if (jobAccess) { supTeamOpenJobAccess(jobAccess.getAttribute('data-team-job-access')); return; }
+
+      var mToggle = e.target.closest('[data-team-member-toggle]');
+      if (mToggle) {
+        var mem = supTeamMembers.filter(function (x) { return x.id === mToggle.getAttribute('data-team-member-toggle'); })[0];
+        if (!mem) return;
+        mem.status = mem.status === 'active' ? 'inactive' : 'active';
+        renderSupTeams();
+        showToast(supTeamDisplayName(mem) + (mem.status === 'active' ? ' can sign in again.' : ' has been switched off \u2014 they can\u2019t sign in.'));
+        return;
+      }
+      var rToggle = e.target.closest('[data-team-role-toggle]');
+      if (rToggle) {
+        if (rToggle.disabled) { showToast('Built-in roles stay active.'); return; }
+        var role = supTeamRoleById(rToggle.getAttribute('data-team-role-toggle'));
+        if (!role) return;
+        role.active = !role.active;
+        renderSupTeams();
+        var held = supTeamMembersOfRole(role.id).length;
+        showToast(role.active
+          ? role.name + ' is active again.' + (held ? ' ' + held + ' member' + (held === 1 ? '' : 's') + ' can sign in.' : '')
+          : held
+            ? role.name + ' switched off \u2014 ' + held + ' member' + (held === 1 ? '' : 's') + ' holding it can no longer sign in.'
+            : role.name + ' switched off.');
+        return;
+      }
+      var resend = e.target.closest('[data-team-resend]');
+      if (resend) {
+        var rm = supTeamMembers.filter(function (x) { return x.id === resend.getAttribute('data-team-resend'); })[0];
+        if (rm) showToast('Invite resent to ' + rm.email + '.');
+        return;
+      }
+      var edit = e.target.closest('[data-team-role-edit]');
+      if (edit) { supTeamOpenRoleModal(edit.getAttribute('data-team-role-edit')); return; }
+
+      var mRemove = e.target.closest('[data-team-member-remove]');
+      if (mRemove) {
+        if (mRemove.disabled) { showToast('The owner can\u2019t be removed.'); return; }
+        var target = supTeamMembers.filter(function (x) { return x.id === mRemove.getAttribute('data-team-member-remove'); })[0];
+        if (!target) return;
+        supTeamPendingRemove = { kind: 'member', id: target.id };
+        document.getElementById('supTeamRemoveTitle').textContent = 'Remove this member?';
+        document.getElementById('supTeamRemoveDesc').textContent =
+          supTeamDisplayName(target) + ' will lose console access straight away. Anything they did stays in the activity log.';
+        removeOverlay.classList.add('open');
+        return;
+      }
+      var rRemove = e.target.closest('[data-team-role-remove]');
+      if (rRemove) {
+        if (rRemove.disabled) { showToast(rRemove.getAttribute('data-tooltip') + '.'); return; }
+        var rr = supTeamRoleById(rRemove.getAttribute('data-team-role-remove'));
+        if (!rr) return;
+        supTeamPendingRemove = { kind: 'role', id: rr.id };
+        document.getElementById('supTeamRemoveTitle').textContent = 'Delete this role?';
+        document.getElementById('supTeamRemoveDesc').textContent =
+          '\u201c' + rr.name + '\u201d will no longer be available when inviting or reassigning people.';
+        removeOverlay.classList.add('open');
+      }
+    });
+
+    /* ---- role dropdowns ---- */
+    ['supTeamsView', 'supTeamInviteOverlay'].forEach(function (id) {
+      document.getElementById(id).addEventListener('click', function (e) {
+        var btn = e.target.closest('.team-dd-inner .pm-custom-dd-btn');
+        if (btn) {
+          e.stopPropagation();
+          var menu = btn.nextElementSibling;
+          var wasOpen = btn.classList.contains('open');
+          if (typeof closeAllCustomDropdowns === 'function') closeAllCustomDropdowns();
+          if (!wasOpen) {
+            btn.classList.add('open');
+            menu.classList.add('open');
+            var below = window.innerHeight - btn.getBoundingClientRect().bottom;
+            menu.classList.toggle('drop-up', below < Math.min(menu.scrollHeight + 20, 260));
+          }
+          return;
+        }
+        var item = e.target.closest('.team-dd-inner .cdd-item');
+        if (!item) return;
+        e.stopPropagation();
+        var trigger = item.closest('.team-dd-inner').querySelector('.pm-custom-dd-btn');
+        var value = item.getAttribute('data-svcp-dd-value');
+        if (typeof closeAllCustomDropdowns === 'function') closeAllCustomDropdowns();
+
+        if (trigger.hasAttribute('data-invite')) {
+          supTeamInviteRoleId = value;
+          supTeamRenderInviteRoleDD();
+          return;
+        }
+        var mid = trigger.getAttribute('data-member');
+        var mm = supTeamMembers.filter(function (x) { return x.id === mid; })[0];
+        if (!mm) return;
+        var had = supTeamOverrideCount(mm);
+        mm.roleId = value;
+        /* Exceptions were made against the old role, so carrying them into a new one would
+           silently mean something different. They're cleared, and the admin is told. */
+        mm.overrides = {};
+        renderSupTeams();
+        var nr = supTeamRoleById(value);
+        showToast(supTeamDisplayName(mm) + ' is now ' + nr.name +
+          (had ? ' \u2014 their ' + had + ' custom exception' + (had === 1 ? ' was' : 's were') + ' cleared.' : '.'));
+      });
+    });
+
+    /* One handler for every X in the module — each lives inside its own overlay. */
+    document.querySelectorAll('#supTeamInviteOverlay, #supTeamRoleOverlay, #supTeamMemberPermOverlay, #supTeamRemoveOverlay').forEach(function (ov) {
+      var x = ov.querySelector('[data-team-close]');
+      if (x) x.addEventListener('click', function () { ov.classList.remove('open'); supTeamPendingRemove = null; });
+    });
+
+    renderSupTeams();
   }
 
   svcpRefreshFilters();
