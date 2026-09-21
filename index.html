@@ -7184,6 +7184,7 @@
   .confirm-modal-icon { width: 64px; height: 64px; border-radius: 50%; background: var(--icon-tint-bg); color: var(--navy-900); display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; }
   .confirm-modal-title { font-size: 18px; font-weight: 800; color: var(--text-heading); margin-bottom: 10px; }
   .confirm-modal-desc { font-size: 13.5px; color: var(--text-body-muted); line-height: 1.6; margin-bottom: 22px; }
+  #pmprefRemoveOverlay .confirm-modal-title, #pmprefRemoveOverlay .confirm-modal-desc { text-align: left; }
   /* Actions sit right-aligned at their natural width rather than splitting the row in half,
      so the primary action lands where the eye finishes reading. */
   .confirm-modal-btns { margin-top: 20px; text-align: right; }
@@ -8950,9 +8951,275 @@
 
   .team-ja-footer { align-items: center; }
 
+  /* ---------- Internal Team / Service Team switcher ---------- */
+  .team-type-switch { display: flex; gap: 10px; margin-bottom: 18px; }
+  .team-type-btn {
+    flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 3px; text-align: left;
+    border: 1.5px solid var(--border-subtle); border-radius: 12px; background: #fff; padding: 13px 16px;
+    cursor: pointer; font-family: inherit; color: var(--text-heading);
+    transition: border-color 150ms ease-out, background-color 150ms ease-out;
+  }
+  .team-type-btn:hover { border-color: #b9cde9; }
+  .team-type-btn.active { border-color: var(--accent-blue); background: var(--icon-tint-bg); }
+  .team-type-btn svg { margin-bottom: 2px; color: var(--accent-blue); }
+  .team-type-btn span:nth-child(2) { font-size: 14.5px; font-weight: 800; }
+  .team-type-desc { font-size: 11.5px; font-weight: 400; color: var(--text-body-muted); }
+
+  /* ---------- Service Team: role/certification, availability, performance ---------- */
+  .team-svc-roles { display: flex; flex-wrap: wrap; gap: 5px; max-width: 220px; }
+  .team-svc-role-chip {
+    font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px;
+    background: var(--icon-tint-bg); color: var(--accent-blue); white-space: nowrap;
+  }
+  .team-svc-avail { display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: var(--text-heading); }
+  .team-svc-avail-hours { font-size: 11px; color: var(--text-body-muted); }
+  .team-svc-perf { display: flex; flex-direction: column; gap: 2px; }
+  .team-svc-perf-stars { font-size: 12px; color: #f59e0b; letter-spacing: 1px; }
+  .team-svc-perf-jobs { font-size: 11px; color: var(--text-body-muted); }
+  .team-status-pill { font-size: 10.5px; font-weight: 700; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+  .team-status-pill.active { background: #ecfdf5; color: #059669; }
+  .team-status-pill.inactive { background: var(--surface-soft); color: #64748b; }
+
+  .team-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* Day-of-week availability picker in the Add/Edit Service Team member modal */
+  .team-avail-days { display: flex; gap: 6px; }
+  .team-avail-day-chip {
+    flex: 1; border: 1.5px solid var(--border-subtle); border-radius: 9px; background: #fff;
+    padding: 8px 0; font-size: 12px; font-weight: 700; color: var(--text-body-muted); cursor: pointer;
+    font-family: inherit; transition: border-color 150ms ease-out, background-color 150ms ease-out, color 150ms ease-out;
+  }
+  .team-avail-day-chip:hover { border-color: #b9cde9; }
+  .team-avail-day-chip.on { border-color: var(--accent-blue); background: var(--icon-tint-bg); color: var(--accent-blue); }
+
+  /* ---------- Dispatch rules ---------- */
+  .team-dispatch-intro { font-size: 12.5px; color: var(--text-body-muted); margin-bottom: 14px; }
+  .team-dispatch-card {
+    display: flex; align-items: center; gap: 14px; border: 1px solid var(--border-subtle); border-radius: 12px;
+    background: #fff; padding: 14px 16px;
+  }
+  .team-dispatch-card + .team-dispatch-card { margin-top: 10px; }
+  .team-dispatch-order {
+    flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; background: var(--surface-soft);
+    color: var(--text-body-muted); font-size: 11.5px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+  }
+  .team-dispatch-icon { flex-shrink: 0; font-size: 18px; }
+  .team-dispatch-main { flex: 1; min-width: 0; }
+  .team-dispatch-name { font-size: 13.5px; font-weight: 700; color: var(--text-heading); margin-bottom: 3px; }
+  .team-dispatch-detail { font-size: 12px; color: var(--text-body-muted); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+
+  /* ---------- Preferred Suppliers ---------- */
+  .pmpref-main-tabs-row { align-items: center; margin-bottom: 14px; }
+  .pmpref-add-btn { margin-left: auto; }
+
+  .pmpref-supplier-link { color: var(--accent-blue); font-weight: 700; white-space: nowrap; }
+  .pmpref-row { cursor: pointer; transition: background-color 120ms ease-out; }
+  .pmpref-row:hover { background: var(--surface-soft); }
+  .pmpref-nowrap { white-space: nowrap; }
+
+  /* ---- List/Card view toggle ---- */
+  .pmpref-view-toggle { display: flex; gap: 3px; background: var(--surface-soft); border-radius: 9px; padding: 3px; margin-left: 8px; }
+  .pmpref-view-btn {
+    display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 6px;
+    border: none; background: none; color: #94a3b8; cursor: pointer;
+  }
+  .pmpref-view-btn:hover { color: var(--text-heading); }
+  .pmpref-view-btn.active { background: #fff; color: var(--accent-blue); box-shadow: 0 1px 3px rgba(15,23,42,0.12); }
+
+  /* ---- Expandable row detail ("View" chevron) ---- */
+  .pmpref-view-chevron svg { transition: transform 150ms ease-out; }
+  .pmpref-view-chevron.open svg { transform: rotate(180deg); }
+  .pmpref-row-expanded { background: var(--surface-soft); }
+  .pmpref-expand-row td { padding: 0 !important; border-top: none !important; }
+  .pmpref-expand-content {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; background: var(--surface-soft);
+    padding: 14px 20px 18px; border-bottom: 1px solid var(--border-subtle); cursor: default;
+  }
+  .pmpref-expand-col { min-width: 0; }
+
+  @media (max-width: 760px) {
+    .pmpref-view-toggle { display: none; }
+  }
+
+  /* ---- Card view ---- */
+  .pmpref-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; align-items: stretch; }
+  .pmpref-card {
+    display: flex; flex-direction: column; height: 100%; background: #fff; border: 1px solid var(--border-subtle);
+    border-radius: 14px; padding: 16px; cursor: pointer; transition: border-color 150ms ease-out, box-shadow 150ms ease-out;
+  }
+  .pmpref-card:hover { border-color: #b9cde9; box-shadow: 0 4px 16px rgba(15,23,42,0.07); }
+  .pmpref-card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .pmpref-card-name-wrap { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .pmpref-card-name { font-size: 14.5px; white-space: normal; }
+  .pmpref-card-divider { border-top: 1px solid var(--border-subtle); margin: 10px 0; }
+  /* The trick that keeps the footer flush to the card's bottom edge regardless of how many chips
+     sit above it: this divider (and everything after it) gets pushed down by the flex column's
+     free space, so every card in a row lines its footer up at the same height. */
+  .pmpref-card-divider-footer { margin-top: 12px; margin-bottom: 12px; }
+  .pmpref-card-chip-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: #94a3b8; margin-bottom: 6px; }
+  .pmpref-card-chip-row { display: flex; flex-wrap: wrap; gap: 5px; }
+  .pmpref-chip-cat, .pmpref-chip-role, .pmpref-chip-prop {
+    font-size: 11px; font-weight: 600; color: #183060; background: #e7edf6; padding: 3px 9px; border-radius: 999px; white-space: nowrap;
+  }
+  .pmpref-chip-more { font-size: 11px; font-weight: 700; color: var(--text-body-muted); background: var(--surface-soft); padding: 3px 9px; border-radius: 999px; white-space: nowrap; cursor: default; }
+  .pmpref-chip-count-badge {
+    display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 22px;
+    font-size: 11.5px; font-weight: 800; color: var(--accent-blue); background: var(--icon-tint-bg);
+    border-radius: 999px; padding: 0 6px; cursor: default;
+  }
+  .pmpref-card-bottom { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+
+  @media (max-width: 560px) {
+    .pmpref-card-grid { grid-template-columns: 1fr; }
+  }
+
+  .pmpref-rating-line { display: flex; align-items: center; gap: 3px; white-space: nowrap; font-size: 12px; color: var(--text-body-muted); }
+  .pmpref-cell-muted { color: #94a3b8; }
+  .pmpref-chip-static {
+    display: inline-flex; align-items: center; font-size: 12px; font-weight: 600; color: var(--text-heading);
+    background: var(--surface-soft); border-radius: 20px; padding: 3px 10px; white-space: nowrap;
+  }
+  .pmpref-chip-count { cursor: default; background: var(--icon-tint-bg); color: var(--accent-blue); }
+
+  .pmpref-priority-chip { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 700; padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+  .pmpref-priority-chip .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .pmpref-priority-chip.tier1 { background: var(--icon-tint-bg); color: var(--accent-blue); }
+  .pmpref-priority-chip.tier1 .dot { background: var(--accent-blue); }
+  .pmpref-priority-chip.tier2 { background: var(--surface-soft); color: #64748b; }
+  .pmpref-priority-chip.tier2 .dot { background: #64748b; }
+
+  /* ---- Searchable dropdowns (filters + the modal's Category/Role pickers) ---- */
+  .pmpref-sdd { position: relative; width: auto; }
+  .pmpref-sdd-btn { width: auto; min-width: 132px; white-space: nowrap; position: relative; z-index: 26; }
+  .pmpref-sdd-search { padding: 4px 4px 8px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 4px; }
+  .pmpref-sdd-search input {
+    width: 100%; border: 1px solid var(--border-subtle); border-radius: 7px; padding: 6px 9px;
+    font-size: 12.5px; font-family: inherit; color: var(--text-heading);
+  }
+  .pmpref-sdd-search input:focus { outline: none; border-color: var(--accent-blue); }
+  .pmpref-sdd-item { justify-content: flex-start; gap: 8px; }
+  .pmpref-sdd-item.selected { background: var(--icon-tint-bg); color: var(--accent-blue); font-weight: 700; }
+  .pmpref-sdd-check {
+    width: 15px; height: 15px; border-radius: 4px; border: 1.5px solid var(--border-subtle); flex-shrink: 0; position: relative;
+  }
+  .pmpref-sdd-item.selected .pmpref-sdd-check { background: var(--accent-blue); border-color: var(--accent-blue); }
+  .pmpref-sdd-item.selected .pmpref-sdd-check::after {
+    content: ''; position: absolute; left: 4px; top: 1px; width: 4px; height: 8px;
+    border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg);
+  }
+  .pmpref-dd-empty { padding: 14px 10px; font-size: 12.5px; color: var(--text-body-muted); text-align: center; }
+
+  /* Supplier search + picked-supplier state in the Add/Edit modal */
+  .pmpref-supplier-picker { position: relative; }
+  .pmpref-supplier-dd {
+    display: none; position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 30;
+    background: #fff; border: 1px solid var(--border-subtle); border-radius: 12px; box-shadow: 0 10px 30px rgba(15,23,42,0.12);
+    max-height: 260px; overflow-y: auto; padding: 6px;
+  }
+  .pmpref-dd-item { display: flex; flex-direction: column; gap: 2px; padding: 9px 10px; border-radius: 9px; cursor: pointer; }
+  .pmpref-dd-item:hover { background: var(--surface-soft); }
+  .pmpref-dd-name { font-size: 13px; font-weight: 700; color: var(--text-heading); }
+  .pmpref-dd-meta { font-size: 11.5px; color: var(--text-body-muted); display: flex; align-items: center; gap: 3px; white-space: nowrap; }
+  .pmpref-supplier-chosen {
+    align-items: center; justify-content: space-between; gap: 10px; border: 1.5px solid var(--accent-blue);
+    background: var(--icon-tint-bg); border-radius: 12px; padding: 10px 12px;
+  }
+  .pmpref-change-btn {
+    border: 1px solid var(--border-subtle); background: #fff; border-radius: 7px; padding: 4px 10px;
+    font-size: 11.5px; font-weight: 700; color: var(--accent-blue); cursor: pointer; font-family: inherit; flex-shrink: 0;
+  }
+  .pmpref-change-btn:hover { background: var(--surface-soft); }
+
+  .pmpref-field-col { display: flex; flex-direction: column; margin-top: 14px; }
+  .pmpref-field-col:first-of-type { margin-top: 0; }
+  .pmpref-field-label { font-size: 12px; font-weight: 700; color: var(--text-heading); margin-bottom: 6px; }
+  .pmpref-field-col .pmpref-sdd-btn { width: 100%; }
+
+  /* Closable chips: selected categories, roles, and specific properties */
+  .pmpref-chip-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .pmpref-chip-row:empty { margin-top: 0; }
+  .pmpref-chip {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--accent-blue);
+    background: var(--icon-tint-bg); border-radius: 20px; padding: 4px 6px 4px 11px;
+  }
+  .pmpref-chip button { display: flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 50%; border: none; background: rgba(40,72,144,0.14); color: var(--accent-blue); cursor: pointer; padding: 0; }
+  .pmpref-chip button:hover { background: rgba(40,72,144,0.26); }
+
+  /* Scope / Priority radio cards */
+  .pmpref-scope-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .pmpref-radio-card {
+    display: flex; align-items: flex-start; gap: 9px; border: 1.5px solid var(--border-subtle); border-radius: 12px;
+    background: #fff; padding: 12px 13px; cursor: pointer; transition: border-color 150ms ease-out, background-color 150ms ease-out;
+  }
+  .pmpref-radio-card:hover { border-color: #b9cde9; }
+  .pmpref-radio-card:has(input:checked) { border-color: var(--accent-blue); background: var(--icon-tint-bg); }
+  .pmpref-radio-card input { margin-top: 2px; accent-color: var(--accent-blue); flex-shrink: 0; }
+  .pmpref-radio-card span { display: flex; flex-direction: column; gap: 2px; font-size: 13px; color: var(--text-heading); }
+  .pmpref-radio-card small { font-size: 11px; font-weight: 400; color: var(--text-body-muted); }
+
+  /* Property checklist */
+  .pmpref-property-list { border: 1px solid var(--border-subtle); border-radius: 12px; max-height: 180px; overflow-y: auto; background: #fff; margin-top: 8px; }
+  .pmpref-prop-row { display: flex; align-items: center; gap: 10px; padding: 9px 13px; cursor: pointer; font-size: 13px; color: var(--text-heading); }
+  .pmpref-prop-row + .pmpref-prop-row { border-top: 1px solid var(--border-subtle); }
+  .pmpref-prop-row:hover { background: var(--surface-soft); }
+  .pmpref-prop-row.checked { background: var(--icon-tint-bg); }
+  .pmpref-prop-row input { width: 15px; height: 15px; accent-color: var(--accent-blue); cursor: pointer; }
+
+  /* Summary box */
+  .pmpref-summary { margin-top: 16px; border: 1px solid var(--border-subtle); border-radius: 12px; background: var(--surface-soft); padding: 13px 15px; }
+  .pmpref-summary-title { font-size: 13.5px; font-weight: 800; color: var(--text-heading); margin-bottom: 8px; }
+  .pmpref-summary-line { display: flex; justify-content: space-between; gap: 10px; font-size: 12.5px; color: var(--text-body-muted); padding: 3px 0; }
+  .pmpref-summary-line strong { color: var(--text-heading); font-weight: 700; text-align: right; }
+
+  /* Modal: scrollable body, footer stays fixed so the modal never overflows the viewport */
+  .pmpref-modal-card { display: flex; flex-direction: column; max-height: 85vh; padding: 32px 0 0; }
+  .pmpref-modal-header { flex-shrink: 0; padding: 0 32px; }
+  .pmpref-modal-scroll { flex: 1; overflow-y: auto; padding: 14px 32px 4px; }
+  .pmpref-modal-footer { flex-shrink: 0; padding: 16px 32px; border-top: 1px solid var(--border-subtle); }
+
+  /* Details page: smaller Edit/Remove/Block buttons, "preferred for" context banner */
+  .pmpref-pp-btn-row { gap: 8px; }
+  .pmpref-sm-btn { padding: 7px 14px !important; font-size: 12.5px !important; height: auto !important; }
+  .pmex-pp-quote-btn.danger { color: #dc2626; border-color: #fecaca; }
+  .pmex-pp-quote-btn.danger:hover { background: #fef2f2; }
+  .pmpref-context-banner {
+    display: flex; align-items: center; gap: 8px; background: var(--icon-tint-bg); color: var(--accent-blue);
+    border-radius: 9px; padding: 8px 12px; margin: 0 0 16px; font-size: 12px; line-height: 1.4; flex-wrap: wrap;
+  }
+  .pmpref-context-banner svg { flex-shrink: 0; }
+  .pmpref-context-banner strong { color: var(--text-heading); }
+  .pmpref-context-props { color: var(--text-body-muted); }
+  .pmpref-context-banner-blocked { background: #fef2f2; color: #dc2626; }
+  .pmpref-context-heading { font-weight: 800; color: var(--text-heading); flex-shrink: 0; white-space: nowrap; }
+  .pmpref-context-heading::after { content: '\00b7'; margin-left: 10px; color: var(--accent-blue); opacity: 0.5; font-weight: 400; }
+  .pmpref-context-segments { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; }
+  .pmpref-context-seg { display: flex; align-items: baseline; gap: 4px; white-space: nowrap; }
+  .pmpref-context-seg-label { font-size: 11px; font-weight: 700; color: var(--accent-blue); opacity: 0.8; }
+  .pmpref-context-seg-val { font-size: 12px; font-weight: 700; color: var(--text-heading); }
+  .pmpref-context-view-btn {
+    flex-shrink: 0; margin-left: auto; border: none; background: none; color: var(--accent-blue);
+    font-size: 11.5px; font-weight: 700; text-decoration: underline; cursor: pointer; font-family: inherit; padding: 0;
+  }
+  .pmpref-context-view-btn:hover { color: #1d3a70; }
+
+  #pmprefRemoveConfirm.pmpref-block-confirm { background: #dc2626; border-color: #dc2626; }
+  #pmprefRemoveConfirm.pmpref-block-confirm:hover { background: #b91c1c; }
+  #pmprefAddOverlay .confirm-modal-confirm, #pmprefAddOverlay .pmprop-del-cancel { padding-top: 10px; padding-bottom: 10px; }
+  #pmprefAddOverlay .team-person-email { display: flex; align-items: center; gap: 3px; white-space: nowrap; }
+
+  @media (max-width: 640px) {
+    .pmpref-scope-row { grid-template-columns: 1fr; }
+  }
+
+
   @media (max-width: 560px) {
     .team-ja-modes { grid-template-columns: repeat(2, 1fr); }
     .team-ja-grid { grid-template-columns: repeat(2, 1fr); }
+    .team-type-switch { flex-direction: column; }
+    .team-field-row { grid-template-columns: 1fr; }
+    .team-avail-days { flex-wrap: wrap; }
+    .team-avail-day-chip { flex: 1 1 30%; }
+    .team-dispatch-card { flex-wrap: wrap; }
   }
 
   @media (max-width: 560px) {
@@ -13573,6 +13840,14 @@
           <h1>Explore Suppliers</h1>
           <div class="dash-content-sub">Find and book any service for your property.</div>
         </div>
+        <div id="pmPrefTopbarTitle" style="display:none;min-width:0;">
+          <h1>Preferred Suppliers</h1>
+          <div class="dash-content-sub">Suppliers you want to use first for specific services and properties.</div>
+        </div>
+        <button type="button" class="pmprop-back-btn" id="pmprefProfileTopbarBackBtn" aria-label="Back" style="display:none;flex-shrink:0;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <div id="pmPrefProfileTopbarTitle" style="display:none;min-width:0;">
+          <div class="pmprop-form-title" id="pmPrefProfileTopbarName">Supplier</div>
+        </div>
         <div class="pmprop-topbar-right-group" id="pmpropTopbarRightGroup">
           <button type="button" class="pmex-quotelist-btn" id="pmexQuoteListBtn" style="display:none;">Quote list <span class="pmex-quotelist-count" id="pmexQuoteListCount">0</span></button>
           <button type="button" class="pmprop-delete-btn" id="pmpropFormDeleteBtn" style="display:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg><span> Delete</span></button>
@@ -14596,7 +14871,7 @@
           <div class="modal-overlay" id="pmTeamInviteOverlay">
             <div class="confirm-modal-card team-modal-card">
               <button type="button" class="modal-close-x" data-team-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-              <div class="team-modal-title">Invite a pmTeam member</div>
+              <div class="team-modal-title">Invite a team member</div>
               <div class="team-modal-desc">They&rsquo;ll get an email with a link to set up their console login. The role you pick decides what they can reach and what they can change.</div>
 
               <div class="team-field">
@@ -14680,6 +14955,206 @@
               <div class="confirm-modal-btns">
                 <button type="button" class="pmprop-del-cancel" id="pmTeamRemoveCancel">Cancel</button>
                 <button type="button" class="confirm-modal-confirm" id="pmTeamRemoveConfirm" style="background:#b91c1c;">Remove</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="pmPrefSuppliersView" style="display:none;">
+            <div class="dash-section">
+              <div id="pmprefListWrap">
+                <div class="pm-tab-pills pmpref-main-tabs-row" id="pmprefMainTabs">
+                  <div class="pm-tab-pill active" data-pref-main-tab="preferred">Preferred</div>
+                  <div class="pm-tab-pill" data-pref-main-tab="excluded">Blocked</div>
+                  <button type="button" class="btn btn-primary pmpref-add-btn" id="pmprefAddBtn">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M12 5v14M5 12h14"/></svg>
+                    Add preferred supplier
+                  </button>
+                </div>
+
+                <div id="pmprefPreferredSection">
+                  <div class="pm-filter-card">
+                    <div class="pm-search-row" style="margin-bottom:0;flex-wrap:wrap;">
+                      <div class="pm-search-input-wrap" style="max-width:220px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                        <input type="text" id="pmprefSearch" placeholder="Search suppliers...">
+                      </div>
+                      <div class="pmpref-sdd" id="pmprefCatFilterDd" data-pmpref-sdd="catFilter">
+                        <button type="button" class="pm-custom-dd-btn pmpref-sdd-btn"><span class="cdd-value">Category: All</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                        <div class="pm-custom-dd-menu pmpref-sdd-menu">
+                          <div class="pmpref-sdd-search"><input type="text" placeholder="Search categories..."></div>
+                          <div class="pmpref-sdd-list"></div>
+                        </div>
+                      </div>
+                      <div class="pmpref-sdd" id="pmprefRoleFilterDd" data-pmpref-sdd="roleFilter">
+                        <button type="button" class="pm-custom-dd-btn pmpref-sdd-btn"><span class="cdd-value">Role: All</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                        <div class="pm-custom-dd-menu pmpref-sdd-menu">
+                          <div class="pmpref-sdd-search"><input type="text" placeholder="Search roles..."></div>
+                          <div class="pmpref-sdd-list"></div>
+                        </div>
+                      </div>
+                      <div class="pmpref-sdd" id="pmprefPropFilterDd" data-pmpref-sdd="propFilter">
+                        <button type="button" class="pm-custom-dd-btn pmpref-sdd-btn"><span class="cdd-value">Property: All</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                        <div class="pm-custom-dd-menu pmpref-sdd-menu">
+                          <div class="pmpref-sdd-search"><input type="text" placeholder="Search properties..."></div>
+                          <div class="pmpref-sdd-list"></div>
+                        </div>
+                      </div>
+                      <div class="pmpref-sdd" id="pmprefPriorityFilterDd" data-pmpref-sdd="priorityFilter">
+                        <button type="button" class="pm-custom-dd-btn pmpref-sdd-btn"><span class="cdd-value">Priority: All</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                        <div class="pm-custom-dd-menu pmpref-sdd-menu">
+                          <div class="pmpref-sdd-list">
+                            <div class="cdd-item" data-pmpref-sdd-opt="">Priority: All</div>
+                            <div class="cdd-item" data-pmpref-sdd-opt="tier1">Tier 1 &middot; Primary</div>
+                            <div class="cdd-item" data-pmpref-sdd-opt="tier2">Tier 2 &middot; Backup</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="pmpref-view-toggle" id="pmprefViewToggle">
+                        <button type="button" class="pmpref-view-btn active" data-pmpref-view="list" aria-label="List view" data-tooltip="List view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg></button>
+                        <button type="button" class="pmpref-view-btn" data-pmpref-view="card" aria-label="Card view" data-tooltip="Card view"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="pmprefSuppliersPanel">
+                    <div class="pmpref-card-grid" id="pmprefCardGrid" style="display:none;"></div>
+                    <div class="pm-table-wrap team-table-wrap">
+                      <div class="pm-table-scroll">
+                        <table class="admin-table pmpref-table">
+                          <thead><tr><th>Supplier</th><th>Categories</th><th>Roles</th><th>Properties</th><th>Priority</th><th style="text-align:right;">Actions</th></tr></thead>
+                          <tbody id="pmprefSuppliersBody"></tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="svcp-empty" id="pmprefSuppliersEmpty" style="display:none;">
+                      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                      <div class="svcp-empty-title">No preferred suppliers yet</div>
+                      <div class="svcp-empty-desc">Add one to start routing jobs to your first-choice suppliers automatically.</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="pmprefExcludedSection" style="display:none;">
+                  <div class="pm-table-wrap team-table-wrap">
+                    <div class="pm-table-scroll">
+                      <table class="admin-table">
+                        <thead><tr><th>Supplier</th><th>Reason</th><th>Excluded on</th><th style="text-align:right;">Actions</th></tr></thead>
+                        <tbody id="pmprefExcludedBody"></tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="svcp-empty" id="pmprefExcludedEmpty" style="display:none;">
+                    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+                    <div class="svcp-empty-title">No excluded suppliers</div>
+                    <div class="svcp-empty-desc">Suppliers you block will show up here and never receive your jobs.</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Reuses the exact Explore Suppliers profile page design (same pmex-pp-* structure
+                   and CSS) via pmprefProfileHtml(), which is pmexProviderProfileHtml() with the
+                   Book now/Request quote button row swapped for Edit preference/Remove preferred. -->
+              <div id="pmprefProfileWrap" style="display:none;">
+                <div id="pmprefProfileContent"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Add / edit a preferred supplier -->
+          <div class="modal-overlay" id="pmprefAddOverlay">
+            <div class="confirm-modal-card team-modal-card team-modal-wide pmpref-modal-card">
+              <button type="button" class="modal-close-x" data-pmpref-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+              <div class="pmpref-modal-header">
+                <div class="team-modal-title" id="pmprefAddTitle">Add preferred supplier</div>
+                <div class="team-modal-desc">Pick who should get this work first, for which service, and at which properties.</div>
+              </div>
+              <div class="pmpref-modal-scroll">
+                <div class="team-mx-head"><span class="team-mx-count">Supplier</span></div>
+                <div class="pmpref-supplier-picker" id="pmprefSupplierPicker">
+                  <div class="team-field">
+                    <input type="text" id="pmprefSupplierSearch" placeholder="Search supplier by name or location..." autocomplete="off">
+                  </div>
+                  <div class="pmpref-supplier-dd" id="pmprefSupplierDd"></div>
+                  <div class="pmpref-supplier-chosen" id="pmprefSupplierChosen" style="display:none;"></div>
+                </div>
+
+                <div class="team-mx-head" style="margin-top:14px;">
+                  <span class="team-mx-count">Preferred for</span>
+                </div>
+                <div class="pmpref-field-col">
+                  <label class="pmpref-field-label" for="pmprefCatPickerDd">Category</label>
+                  <div class="pmpref-sdd" id="pmprefCatPickerDd" data-pmpref-sdd="catPicker">
+                    <button type="button" class="pm-custom-dd-btn pmpref-sdd-btn" type="button"><span class="cdd-value">Select category</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                    <div class="pm-custom-dd-menu pmpref-sdd-menu">
+                      <div class="pmpref-sdd-search"><input type="text" placeholder="Search categories..."></div>
+                      <div class="pmpref-sdd-list" id="pmprefCatPickerList"></div>
+                    </div>
+                  </div>
+                  <div class="pmpref-chip-row" id="pmprefCatChips"></div>
+                </div>
+                <div class="pmpref-field-col">
+                  <label class="pmpref-field-label" for="pmprefRolePickerDd">Role</label>
+                  <div class="pmpref-sdd" id="pmprefRolePickerDd" data-pmpref-sdd="rolePicker">
+                    <button type="button" class="pm-custom-dd-btn pmpref-sdd-btn" type="button"><span class="cdd-value">Select role</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                    <div class="pm-custom-dd-menu pmpref-sdd-menu">
+                      <div class="pmpref-sdd-search"><input type="text" placeholder="Search roles..."></div>
+                      <div class="pmpref-sdd-list" id="pmprefRolePickerList"></div>
+                    </div>
+                  </div>
+                  <div class="pmpref-chip-row" id="pmprefRoleChips"></div>
+                </div>
+
+                <div class="team-mx-head" style="margin-top:14px;"><span class="team-mx-count">Property scope</span></div>
+                <div class="pmpref-scope-row">
+                  <label class="pmpref-radio-card"><input type="radio" name="pmprefScope" value="all" checked><span>All properties</span></label>
+                  <label class="pmpref-radio-card"><input type="radio" name="pmprefScope" value="specific"><span>Specific properties</span></label>
+                </div>
+                <div id="pmprefPropertyPicker" style="display:none;">
+                  <div class="pmpref-chip-row" id="pmprefPropChips"></div>
+                  <div class="team-field" style="margin-top:8px;">
+                    <input type="text" id="pmprefPropertySearch" placeholder="Search properties..." autocomplete="off">
+                  </div>
+                  <div class="pmpref-property-list" id="pmprefPropertyList"></div>
+                </div>
+
+                <div class="team-mx-head" style="margin-top:14px;"><span class="team-mx-count">Priority</span></div>
+                <div class="pmpref-scope-row" style="margin-bottom:18px;">
+                  <label class="pmpref-radio-card"><input type="radio" name="pmprefPriority" value="tier1" checked><span><strong>Tier 1 &mdash; Primary</strong><small>First supplier to receive the job.</small></span></label>
+                  <label class="pmpref-radio-card"><input type="radio" name="pmprefPriority" value="tier2"><span><strong>Tier 2 &mdash; Backup</strong><small>Used if the primary supplier doesn't accept or respond.</small></span></label>
+                </div>
+
+                <div class="pmpref-summary" id="pmprefSummary" style="display:none;"></div>
+              </div>
+
+              <div class="confirm-modal-btns pmpref-modal-footer">
+                <button type="button" class="pmprop-del-cancel" id="pmprefAddCancel">Cancel</button>
+                <button type="button" class="confirm-modal-confirm" id="pmprefAddSave">Save preferred supplier</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Full "preferred for" detail popup, opened from the context banner's View details button -->
+          <div class="modal-overlay" id="pmprefDetailOverlay">
+            <div class="confirm-modal-card team-modal-card">
+              <button type="button" class="modal-close-x" data-pmpref-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+              <div class="team-modal-title" id="pmprefDetailSupplierName"></div>
+              <div class="team-modal-desc">Preferred for</div>
+              <div id="pmprefDetailRows"></div>
+            </div>
+          </div>
+
+          <!-- Remove confirmation (also reused for Unblock, with the copy swapped in JS) -->
+          <div class="modal-overlay" id="pmprefRemoveOverlay">
+            <div class="confirm-modal-card">
+              <div class="confirm-modal-title" id="pmprefRemoveTitle">Remove preferred supplier?</div>
+              <div class="confirm-modal-desc" id="pmprefRemoveDesc"></div>
+              <div class="team-field pmpref-block-reason-field" id="pmprefBlockReasonField" style="display:none;text-align:left;margin-bottom:18px;">
+                <label for="pmprefBlockReasonInput">Reason for blocking</label>
+                <input type="text" id="pmprefBlockReasonInput" placeholder="e.g. Missed jobs, poor communication...">
+              </div>
+              <div class="confirm-modal-btns">
+                <button type="button" class="pmprop-del-cancel" data-pmpref-close>Cancel</button>
+                <button type="button" class="confirm-modal-confirm danger" id="pmprefRemoveConfirm">Remove</button>
               </div>
             </div>
           </div>
@@ -16318,9 +16793,9 @@
             <div class="dash-header" style="align-items:flex-start;margin-bottom:16px;">
               <div>
                 <h1 style="font-size:22px;font-weight:800;color:var(--text-heading);margin-bottom:4px;">Teams</h1>
-                <p style="font-size:13.5px;color:var(--text-body-muted);">Who works in the Keylr console, what they can reach, and what they&rsquo;re allowed to do there.</p>
+                <p style="font-size:13.5px;color:var(--text-body-muted);">Your Internal Team runs the account. Your Service Team gets dispatched to jobs.</p>
               </div>
-              <div class="team-header-actions">
+              <div class="team-header-actions" id="supInternalTeamActions">
                 <button type="button" class="btn btn-secondary-light" id="supTeamAddRoleBtn">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M12 5v14M5 12h14"/></svg>
                   New role
@@ -16330,8 +16805,36 @@
                   Invite member
                 </button>
               </div>
+              <div class="team-header-actions" id="supServiceTeamActions" style="display:none;">
+                <button type="button" class="btn btn-secondary-light" id="supDispatchAddRuleBtn" style="display:none;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M12 5v14M5 12h14"/></svg>
+                  Add dispatch rule
+                </button>
+                <button type="button" class="btn btn-primary" id="supSvcTeamAddBtn">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>
+                  Add service team member
+                </button>
+              </div>
             </div>
 
+            <!-- Internal Team / Service Team switcher \u2014 the two team types share this one page,
+                 since a supplier only has one "Teams" concept to think about, just two tabs of who's
+                 on it. Kept visually louder than the Members/Roles sub-pills below since it's the
+                 primary choice now, not a secondary filter. -->
+            <div class="team-type-switch" id="supTeamTypeSwitch">
+              <button type="button" class="team-type-btn active" data-team-type="internal">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l8-4v18M13 21V11l6 3v7M9 9v.01M9 12v.01M9 15v.01"/></svg>
+                <span>Internal Team</span>
+                <span class="team-type-desc">Runs the account</span>
+              </button>
+              <button type="button" class="team-type-btn" data-team-type="service">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+                <span>Service Team</span>
+                <span class="team-type-desc">Gets dispatched to jobs</span>
+              </button>
+            </div>
+
+            <div id="supInternalTeamSection">
             <div class="team-stats" id="supTeamStats"></div>
 
             <div class="pm-filter-card">
@@ -16383,13 +16886,63 @@
                 <div class="svcp-empty-desc">Try a different search term.</div>
               </div>
             </div>
+            </div>
+            <!-- /supInternalTeamSection -->
+
+            <div id="supServiceTeamSection" style="display:none;">
+              <div class="team-stats" id="supSvcTeamStats"></div>
+
+              <div class="pm-filter-card">
+                <div class="pm-search-row" style="margin-bottom:0;">
+                  <div class="pm-search-input-wrap" style="max-width:280px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                    <input type="text" id="supSvcTeamSearch" placeholder="Search people or roles">
+                  </div>
+                  <div class="pm-tab-pills" id="supSvcTeamTabs">
+                    <div class="pm-tab-pill active" data-svcteam-tab="members">Members</div>
+                    <div class="pm-tab-pill" data-svcteam-tab="dispatch">Dispatch rules</div>
+                  </div>
+                  <div class="pm-count-actions">
+                    <span class="pm-count-text" id="supSvcTeamCount">0</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Service Team \u2014 Members -->
+              <div id="supSvcTeamMembersPanel">
+                <div class="pm-table-wrap team-table-wrap">
+                  <div class="pm-table-scroll">
+                    <table class="admin-table">
+                      <thead><tr><th>Member</th><th>Role &amp; certification</th><th>Availability</th><th>Performance</th><th>Status</th><th style="text-align:right;">Actions</th></tr></thead>
+                      <tbody id="supSvcTeamMembersBody"></tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="svcp-empty" id="supSvcTeamMembersEmpty" style="display:none;">
+                  <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/></svg>
+                  <div class="svcp-empty-title">No members match</div>
+                  <div class="svcp-empty-desc">Try a different search term.</div>
+                </div>
+              </div>
+
+              <!-- Service Team \u2014 Dispatch Rules -->
+              <div id="supSvcDispatchPanel" style="display:none;">
+                <div class="team-dispatch-intro">Rules run top to bottom &mdash; the first matching rule for an incoming job decides who it's offered to.</div>
+                <div id="supSvcDispatchList"></div>
+                <div class="svcp-empty" id="supSvcDispatchEmpty" style="display:none;">
+                  <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+                  <div class="svcp-empty-title">No dispatch rules yet</div>
+                  <div class="svcp-empty-desc">Without a rule, new jobs are offered to the whole Service Team.</div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- Invite member -->
           <div class="modal-overlay" id="supTeamInviteOverlay">
             <div class="confirm-modal-card team-modal-card">
               <button type="button" class="modal-close-x" data-team-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-              <div class="team-modal-title">Invite a supTeam member</div>
+              <div class="team-modal-title">Invite a team member</div>
               <div class="team-modal-desc">They&rsquo;ll get an email with a link to set up their console login. The role you pick decides what they can reach and what they can change.</div>
 
               <div class="team-field">
@@ -16478,6 +17031,74 @@
                 <span style="flex:1;"></span>
                 <button type="button" class="pmprop-del-cancel" id="supTeamJobAccessCancel">Cancel</button>
                 <button type="button" class="confirm-modal-confirm" id="supTeamJobAccessSave">Save</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Add / edit a Service Team member -->
+          <div class="modal-overlay" id="supSvcTeamMemberOverlay">
+            <div class="confirm-modal-card team-modal-card team-modal-wide">
+              <button type="button" class="modal-close-x" data-team-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+              <div class="team-modal-title" id="supSvcTeamMemberTitle">Add service team member</div>
+              <div class="team-modal-desc">Field staff who get dispatched to jobs &mdash; they work under your organisation's own certification, so there's no separate document to upload here.</div>
+
+              <div class="team-field-row">
+                <div class="team-field">
+                  <label for="supSvcTeamName">Full name</label>
+                  <input type="text" id="supSvcTeamName" placeholder="e.g. Marcus Webb" autocomplete="off">
+                </div>
+                <div class="team-field">
+                  <label for="supSvcTeamContact">Email or phone</label>
+                  <input type="text" id="supSvcTeamContact" placeholder="marcus@fernaworks.co.uk" autocomplete="off">
+                </div>
+              </div>
+
+              <div class="team-mx-head" style="margin-top:14px;">
+                <span class="team-mx-count">Role &amp; certification &mdash; drives dispatch matching</span>
+              </div>
+              <div class="team-ja-grid" id="supSvcTeamRoleGrid" style="grid-template-columns:repeat(3,1fr);max-height:220px;"></div>
+
+              <div class="team-mx-head" style="margin-top:14px;">
+                <span class="team-mx-count">Availability</span>
+              </div>
+              <div class="team-avail-days" id="supSvcTeamAvailDays"></div>
+              <div class="team-field-row" style="margin-top:10px;">
+                <div class="team-field">
+                  <label for="supSvcTeamAvailStart">Working from</label>
+                  <input type="time" id="supSvcTeamAvailStart" value="09:00">
+                </div>
+                <div class="team-field">
+                  <label for="supSvcTeamAvailEnd">Working until</label>
+                  <input type="time" id="supSvcTeamAvailEnd" value="17:00">
+                </div>
+              </div>
+
+              <div class="confirm-modal-btns">
+                <button type="button" class="pmprop-del-cancel" id="supSvcTeamMemberCancel">Cancel</button>
+                <button type="button" class="confirm-modal-confirm" id="supSvcTeamMemberSave">Save member</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Add / edit a dispatch rule -->
+          <div class="modal-overlay" id="supDispatchRuleOverlay">
+            <div class="confirm-modal-card team-modal-card team-modal-wide">
+              <button type="button" class="modal-close-x" data-team-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+              <div class="team-modal-title" id="supDispatchRuleTitle">Add dispatch rule</div>
+              <div class="team-modal-desc">Decide how an incoming job for this Category/Role gets offered to your Service Team.</div>
+
+              <div class="team-mx-head"><span class="team-mx-count">Applies to</span></div>
+              <div class="team-field">
+                <select id="supDispatchScope"></select>
+              </div>
+
+              <div class="team-mx-head" style="margin-top:14px;"><span class="team-mx-count">Strategy</span></div>
+              <div class="team-ja-modes" id="supDispatchStrategyCards"></div>
+              <div id="supDispatchStrategyPanel"></div>
+
+              <div class="confirm-modal-btns">
+                <button type="button" class="pmprop-del-cancel" id="supDispatchRuleCancel">Cancel</button>
+                <button type="button" class="confirm-modal-confirm" id="supDispatchRuleSave">Save rule</button>
               </div>
             </div>
           </div>
@@ -26568,6 +27189,716 @@
   }
 
   /* =========================================================
+     PM: PREFERRED SUPPLIERS
+     Priority (Tier 1/Tier 2) belongs to the preference itself, not the supplier —
+     the same supplier can be Tier 1 for one set of properties and Tier 2 for
+     another. Categories and Roles are independent multi-select lists on each
+     preference (not paired rows) — a supplier can be preferred for several
+     categories and several roles at once. Reuses the real supplier directory
+     (PMEX_PROVIDERS), category taxonomy (PMEX_CAT_DEFS) and property list
+     (PMPROP_PROPERTIES) rather than inventing disconnected data.
+  ========================================================== */
+  function pmprefSupplier(id) { return PMEX_PROVIDERS.find(function (p) { return p.id === id; }); }
+  function pmprefNextId(prefix) { pmTeamUid += 1; return prefix + '_' + pmTeamUid; }
+
+  var pmprefPreferences = [
+    { id: 'pref_1', supplierId: 'pv1', categories: ['plumbing', 'maintenance'], roles: [PMEX_PROVIDERS[0].services[0].name, PMEX_PROVIDERS[0].services[1].name], propertyScope: 'all', priority: 'tier1', complianceOk: true, addedOn: '2026-07-02' },
+    { id: 'pref_2', supplierId: 'pv2', categories: ['plumbing'], roles: [PMEX_PROVIDERS[1].services[0].name], propertyScope: ['prop-2', 'prop-3'], priority: 'tier2', complianceOk: true, addedOn: '2026-07-14' },
+    { id: 'pref_3', supplierId: 'pv5', categories: ['electrical'], roles: [PMEX_PROVIDERS.find(function (p) { return p.id === 'pv5'; }).services[0].name], propertyScope: 'all', priority: 'tier1', complianceOk: true, addedOn: '2026-06-20' },
+    { id: 'pref_4', supplierId: 'pv3', categories: ['cleaning'], roles: [PMEX_PROVIDERS.find(function (p) { return p.id === 'pv3'; }).services[0].name, PMEX_PROVIDERS.find(function (p) { return p.id === 'pv3'; }).services[1].name], propertyScope: ['prop-1', 'prop-4', 'prop-5'], priority: 'tier1', complianceOk: true, addedOn: '2026-08-01' },
+    { id: 'pref_5', supplierId: 'pv6', categories: ['fire'], roles: [PMEX_PROVIDERS.find(function (p) { return p.id === 'pv6'; }).services[0].name], propertyScope: 'all', priority: 'tier1', complianceOk: false, addedOn: '2026-05-11' }
+  ];
+  var pmprefExcluded = [
+    { id: 'excl_1', supplierId: 'pv4', reason: 'Missed two scheduled jobs without notice', excludedOn: '2026-09-12' }
+  ];
+
+  function pmprefPrefsForSupplier(sid) { return pmprefPreferences.filter(function (r) { return r.supplierId === sid; }); }
+  function pmprefIsExcluded(sid) { return pmprefExcluded.some(function (e) { return e.supplierId === sid; }); }
+  function pmprefPropertyById(id) { return PMPROP_PROPERTIES.find(function (p) { return p.id === id; }); }
+  function pmprefScopeText(scope) {
+    if (scope === 'all') return 'All properties';
+    if (!scope.length) return 'No properties';
+    return scope.length + ' propert' + (scope.length === 1 ? 'y' : 'ies');
+  }
+  function pmprefPriorityChip(priority) {
+    return priority === 'tier1'
+      ? '<span class="pmpref-priority-chip tier1"><span class="dot"></span>Tier 1 \u00b7 Primary</span>'
+      : '<span class="pmpref-priority-chip tier2"><span class="dot"></span>Tier 2 \u00b7 Backup</span>';
+  }
+  function pmprefCatLabel(key) {
+    var c = PMEX_CAT_DEFS.find(function (c) { return c.key === key; });
+    return c ? c.label : key;
+  }
+  // Powers the Categories/Roles table cells: the name itself when there's exactly one, otherwise
+  // a count chip ("3 Categories") with the full list available on hover via a native tooltip.
+  function pmprefListCellHtml(items, singularWord, pluralWord) {
+    if (!items.length) return '<span class="pmpref-cell-muted">\u2014</span>';
+    if (items.length === 1) return '<span class="pmpref-chip-static">' + pmexEscapeHtml(items[0]) + '</span>';
+    return '<span class="pmpref-chip-static pmpref-chip-count" title="' + pmexEscapeHtml(items.join(', ')) + '">' + items.length + ' ' + pluralWord + '</span>';
+  }
+  function pmprefCatChipList(catKeys) { return catKeys.map(function (k) { return pmprefCatLabel(k); }); }
+
+  function pmprefPopulateFilterOptions() {
+    // no-op placeholder kept for call-site compatibility; searchable dropdowns pull options live
+  }
+
+  function pmprefFilteredPrefs() {
+    var q = (document.getElementById('pmprefSearch').value || '').toLowerCase();
+    var cat = pmprefSddState.catFilter;
+    var role = pmprefSddState.roleFilter;
+    var prop = pmprefSddState.propFilter;
+    var priority = pmprefSddState.priorityFilter;
+    return pmprefPreferences.filter(function (r) {
+      var sup = pmprefSupplier(r.supplierId);
+      if (!sup) return false;
+      if (q && sup.name.toLowerCase().indexOf(q) === -1 && !r.roles.some(function (rl) { return rl.toLowerCase().indexOf(q) !== -1; })) return false;
+      if (cat.length && !r.categories.some(function (c) { return cat.indexOf(c) !== -1; })) return false;
+      if (role && r.roles.indexOf(role) === -1) return false;
+      if (prop && r.propertyScope !== 'all' && r.propertyScope.indexOf(prop) === -1) return false;
+      if (priority && r.priority !== priority) return false;
+      return true;
+    });
+  }
+
+  function pmprefSupplierSummary(sid, myRules) {
+    var sup = pmprefSupplier(sid);
+    var allCats = [], allRoles = [];
+    myRules.forEach(function (r) {
+      r.categories.forEach(function (c) { if (allCats.indexOf(c) === -1) allCats.push(c); });
+      r.roles.forEach(function (rl) { if (allRoles.indexOf(rl) === -1) allRoles.push(rl); });
+    });
+    var anyAll = myRules.some(function (r) { return r.propertyScope === 'all'; });
+    var propCount = anyAll ? null : Array.from(new Set(myRules.reduce(function (acc, r) { return acc.concat(r.propertyScope); }, []))).length;
+    var hasT1 = myRules.some(function (r) { return r.priority === 'tier1'; });
+    var propText = anyAll ? 'All properties' : propCount + ' Propert' + (propCount === 1 ? 'y' : 'ies');
+    return { sup: sup, allCats: allCats, allRoles: allRoles, propText: propText, priorityHtml: pmprefPriorityChip(hasT1 ? 'tier1' : 'tier2') };
+  }
+  function pmprefGroupedBySupplier() {
+    var rules = pmprefFilteredPrefs();
+    var bySupplier = {};
+    rules.forEach(function (r) { (bySupplier[r.supplierId] = bySupplier[r.supplierId] || []).push(r); });
+    return bySupplier;
+  }
+  var pmprefExpandedRows = {};
+  function renderPmprefTable() {
+    var bySupplier = pmprefGroupedBySupplier();
+    var supplierIds = Object.keys(bySupplier);
+    document.querySelector('#pmprefSuppliersPanel .team-table-wrap').style.display = (supplierIds.length && pmprefViewMode === 'list') ? '' : 'none';
+    document.getElementById('pmprefSuppliersEmpty').style.display = supplierIds.length ? 'none' : '';
+    document.getElementById('pmprefSuppliersBody').innerHTML = supplierIds.map(function (sid) {
+      var myRules = bySupplier[sid];
+      var s = pmprefSupplierSummary(sid, myRules);
+      var expanded = !!pmprefExpandedRows[sid];
+      var row = '<tr class="pmpref-row' + (expanded ? ' pmpref-row-expanded' : '') + '" data-pmpref-row-open="' + sid + '">' +
+        '<td><div class="team-person"><div class="team-avatar"><img src="https://i.pravatar.cc/64?img=' + (PMEX_PROVIDERS.indexOf(s.sup) % 70 + 3) + '" alt=""></div>' +
+          '<div class="team-person-main"><span class="pmpref-supplier-link">' + pmexEscapeHtml(s.sup.name) + '</span>' +
+          '<div class="team-person-email pmpref-rating-line">' + starRatingInline(s.sup.rating) + ' ' + s.sup.rating + '</div></div></div></td>' +
+        '<td>' + pmprefListCellHtml(pmprefCatChipList(s.allCats), 'category', 'Categories') + '</td>' +
+        '<td>' + pmprefListCellHtml(s.allRoles, 'role', 'Roles') + '</td>' +
+        '<td class="pmpref-nowrap">' + s.propText + '</td>' +
+        '<td>' + s.priorityHtml + '</td>' +
+        '<td style="text-align:right;"><div class="team-actions" data-pmpref-stop>' +
+          '<button type="button" class="svcp-icon-btn pmpref-view-chevron' + (expanded ? ' open' : '') + '" data-pmpref-toggle-view="' + sid + '" data-tooltip="View details"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>' +
+          '<button type="button" class="svcp-icon-btn" data-pmpref-edit="' + myRules[0].id + '" data-tooltip="Edit preference"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg></button>' +
+          '<button type="button" class="svcp-icon-btn danger" data-pmpref-remove-supplier="' + sid + '" data-tooltip="Remove preferred">' + PMTEAM_TRASH + '</button>' +
+        '</div></td>' +
+      '</tr>';
+      if (expanded) {
+        var propNames = s.propText === 'All properties' ? ['All properties'] : Array.from(new Set(myRules.reduce(function (acc, r) { return r.propertyScope === 'all' ? acc : acc.concat(r.propertyScope.map(function (id) { var p = pmprefPropertyById(id); return p ? p.name : id; })); }, [])));
+        row += '<tr class="pmpref-expand-row"><td colspan="6"><div class="pmpref-expand-content" data-pmpref-stop>' +
+          '<div class="pmpref-expand-col"><div class="pmpref-card-chip-label">Categories</div><div class="pmpref-card-chip-row">' + pmprefIndividualChipsHtml(pmprefCatChipList(s.allCats), 'pmpref-chip-cat', 99) + '</div></div>' +
+          '<div class="pmpref-expand-col"><div class="pmpref-card-chip-label">Roles</div><div class="pmpref-card-chip-row">' + pmprefIndividualChipsHtml(s.allRoles, 'pmpref-chip-role', 99) + '</div></div>' +
+          '<div class="pmpref-expand-col"><div class="pmpref-card-chip-label">Properties</div><div class="pmpref-card-chip-row">' + pmprefIndividualChipsHtml(propNames, 'pmpref-chip-prop', 99) + '</div></div>' +
+        '</div></td></tr>';
+      }
+      return row;
+    }).join('');
+  }
+  function pmprefIndividualChipsHtml(items, chipClass, maxVisible) {
+    if (!items.length) return '<span class="pmpref-cell-muted">\u2014</span>';
+    maxVisible = maxVisible || 3;
+    var visible = items.slice(0, maxVisible);
+    var remaining = items.length - visible.length;
+    return visible.map(function (v) { return '<span class="' + chipClass + '">' + pmexEscapeHtml(v) + '</span>'; }).join('') +
+      (remaining > 0 ? '<span class="pmpref-chip-more" title="' + pmexEscapeHtml(items.slice(maxVisible).join(', ')) + '">+' + remaining + '</span>' : '');
+  }
+  // Card view: always shows the first item's real name as a chip, plus a "+N" badge for anything
+  // beyond that - so the card never hides every name behind a bare count, only what doesn't fit.
+  function pmprefCardChipOrCountHtml(items, chipClass) {
+    return pmprefIndividualChipsHtml(items, chipClass, 1);
+  }
+  function renderPmprefCards() {
+    var bySupplier = pmprefGroupedBySupplier();
+    var supplierIds = Object.keys(bySupplier);
+    var grid = document.getElementById('pmprefCardGrid');
+    grid.style.display = (supplierIds.length && pmprefViewMode === 'card') ? '' : 'none';
+    document.getElementById('pmprefSuppliersEmpty').style.display = supplierIds.length ? 'none' : '';
+    grid.innerHTML = supplierIds.map(function (sid) {
+      var myRules = bySupplier[sid];
+      var s = pmprefSupplierSummary(sid, myRules);
+      var propNames = s.propText === 'All properties' ? ['All properties'] : myRules.reduce(function (acc, r) { return r.propertyScope === 'all' ? acc : acc.concat(r.propertyScope.map(function (id) { var p = pmprefPropertyById(id); return p ? p.name : id; })); }, []);
+      propNames = Array.from(new Set(propNames));
+      return '<div class="pmpref-card" data-pmpref-row-open="' + sid + '">' +
+        '<div class="pmpref-card-top">' +
+          '<div class="team-avatar"><img src="https://i.pravatar.cc/64?img=' + (PMEX_PROVIDERS.indexOf(s.sup) % 70 + 3) + '" alt=""></div>' +
+          '<div class="pmpref-card-name-wrap"><span class="pmpref-supplier-link pmpref-card-name">' + pmexEscapeHtml(s.sup.name) + '</span>' +
+          '<div class="pmpref-rating-line">' + starRatingInline(s.sup.rating) + ' ' + s.sup.rating + '</div></div>' +
+        '</div>' +
+        '<div class="pmpref-card-divider"></div>' +
+        '<div class="pmpref-card-chip-label">Categories</div>' +
+        '<div class="pmpref-card-chip-row">' + pmprefCardChipOrCountHtml(pmprefCatChipList(s.allCats), 'pmpref-chip-cat') + '</div>' +
+        '<div class="pmpref-card-divider"></div>' +
+        '<div class="pmpref-card-chip-label">Roles</div>' +
+        '<div class="pmpref-card-chip-row">' + pmprefCardChipOrCountHtml(s.allRoles, 'pmpref-chip-role') + '</div>' +
+        '<div class="pmpref-card-divider"></div>' +
+        '<div class="pmpref-card-chip-label">Properties</div>' +
+        '<div class="pmpref-card-chip-row">' + pmprefCardChipOrCountHtml(propNames, 'pmpref-chip-prop') + '</div>' +
+        '<div class="pmpref-card-divider pmpref-card-divider-footer"></div>' +
+        '<div class="pmpref-card-bottom">' +
+          s.priorityHtml +
+          '<div class="team-actions" data-pmpref-stop>' +
+            '<button type="button" class="svcp-icon-btn" data-pmpref-edit="' + myRules[0].id + '" data-tooltip="Edit preference"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg></button>' +
+            '<button type="button" class="svcp-icon-btn danger" data-pmpref-remove-supplier="' + sid + '" data-tooltip="Remove preferred">' + PMTEAM_TRASH + '</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+  var pmprefViewMode = window.matchMedia('(max-width: 760px)').matches ? 'card' : 'list';
+  function pmprefSwitchView(mode) {
+    pmprefViewMode = mode;
+    document.querySelectorAll('#pmprefViewToggle .pmpref-view-btn').forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-pmpref-view') === mode); });
+    renderPmprefTable();
+    renderPmprefCards();
+  }
+  function starRatingInline(rating) {
+    return '<svg width="11" height="11" viewBox="0 0 12 12" fill="#f59e0b" stroke="#f59e0b" style="vertical-align:-1px;flex-shrink:0;"><path d="M6 1l1.2 3.6H11L8.2 7l1.1 3.6L6 8.8 2.7 10.6 3.8 7 1 4.6h3.8z"/></svg>';
+  }
+
+  function renderPmprefExcluded() {
+    document.querySelector('#pmprefExcludedSection .team-table-wrap').style.display = pmprefExcluded.length ? '' : 'none';
+    document.getElementById('pmprefExcludedEmpty').style.display = pmprefExcluded.length ? 'none' : '';
+    document.getElementById('pmprefExcludedBody').innerHTML = pmprefExcluded.map(function (e) {
+      var sup = pmprefSupplier(e.supplierId);
+      return '<tr class="pmpref-row" data-pmpref-row-open="' + e.supplierId + '">' +
+        '<td><div class="team-person"><div class="team-avatar"><img src="https://i.pravatar.cc/64?img=' + (sup ? PMEX_PROVIDERS.indexOf(sup) % 70 + 3 : 5) + '" alt=""></div>' +
+          '<div class="team-person-main"><span class="pmpref-supplier-link">' + pmexEscapeHtml(sup ? sup.name : 'Unknown supplier') + '</span>' +
+          (sup ? '<div class="team-person-email pmpref-rating-line">' + starRatingInline(sup.rating) + ' ' + sup.rating + '</div>' : '') + '</div></div></td>' +
+        '<td>' + pmexEscapeHtml(e.reason) + '</td>' +
+        '<td class="pmpref-nowrap">' + pmexEscapeHtml(e.excludedOn) + '</td>' +
+        '<td style="text-align:right;" data-pmpref-stop><button type="button" class="btn btn-secondary-light" data-pmpref-unblock="' + e.id + '" style="padding:6px 14px;font-size:12.5px;">Unblock</button></td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function renderPmprefAll() {
+    renderPmprefTable();
+    renderPmprefCards();
+    renderPmprefExcluded();
+  }
+
+  /* ---------- Searchable dropdowns (filters + the modal's Category/Role pickers) ---------- */
+  // catFilter/roleFilter/propFilter/priorityFilter are single-select strings ('' = All).
+  // catPicker/rolePicker (used only inside the Add/Edit modal) are multi-select arrays.
+  var pmprefSddState = { catFilter: [], roleFilter: '', propFilter: '', priorityFilter: '', catPicker: [], rolePicker: [] };
+  var pmprefSddMulti = { catFilter: true, catPicker: true, rolePicker: true };
+  var pmprefSddSearch = {};
+
+  function pmprefAllRoleNames() {
+    var names = [];
+    PMEX_PROVIDERS.forEach(function (p) { p.services.forEach(function (sv) { if (names.indexOf(sv.name) === -1) names.push(sv.name); }); });
+    return names.sort();
+  }
+  function pmprefSddOptions(kind) {
+    if (kind === 'catFilter' || kind === 'catPicker') {
+      return PMEX_CAT_DEFS.map(function (c) { return { value: c.key, label: c.label }; });
+    }
+    if (kind === 'roleFilter' || kind === 'rolePicker') {
+      return pmprefAllRoleNames().map(function (n) { return { value: n, label: n }; });
+    }
+    if (kind === 'propFilter') return PMPROP_PROPERTIES.map(function (p) { return { value: p.id, label: p.name }; });
+    if (kind === 'priorityFilter') return [{ value: 'tier1', label: 'Tier 1 \u00b7 Primary' }, { value: 'tier2', label: 'Tier 2 \u00b7 Backup' }];
+    return [];
+  }
+  function pmprefSddLabelFor(kind, placeholder) {
+    var sel = pmprefSddState[kind];
+    var opts = pmprefSddOptions(kind);
+    if (pmprefSddMulti[kind]) {
+      if (!sel.length) return placeholder;
+      if (sel.length === 1) { var o = opts.find(function (x) { return x.value === sel[0]; }); return o ? o.label : placeholder; }
+      return sel.length + ' selected';
+    }
+    if (!sel) return placeholder;
+    var found = opts.find(function (x) { return x.value === sel; });
+    return found ? found.label : placeholder;
+  }
+  function pmprefSddPlaceholder(kind) {
+    return { catFilter: 'Category: All', roleFilter: 'Role: All', propFilter: 'Property: All', priorityFilter: 'Priority: All', catPicker: 'Select category', rolePicker: 'Select role' }[kind];
+  }
+  function pmprefSddRenderMenu(kind) {
+    var wrap = document.querySelector('[data-pmpref-sdd="' + kind + '"]');
+    if (!wrap) return;
+    var list = wrap.querySelector('.pmpref-sdd-list');
+    var q = (pmprefSddSearch[kind] || '').toLowerCase();
+    var opts = pmprefSddOptions(kind).filter(function (o) { return !q || o.label.toLowerCase().indexOf(q) !== -1; });
+    var sel = pmprefSddState[kind];
+    var isSelected = function (v) { return pmprefSddMulti[kind] ? sel.indexOf(v) !== -1 : sel === v; };
+    var itemsHtml = opts.length ? opts.map(function (o) {
+      return '<div class="cdd-item pmpref-sdd-item' + (isSelected(o.value) ? ' selected' : '') + '" data-pmpref-sdd-opt="' + pmexEscapeHtml(o.value) + '">' +
+        (pmprefSddMulti[kind] ? '<span class="pmpref-sdd-check"></span>' : '') +
+        '<span>' + pmexEscapeHtml(o.label) + '</span>' +
+      '</div>';
+    }).join('') : '<div class="pmpref-dd-empty">No matches.</div>';
+    if (!pmprefSddMulti[kind]) {
+      itemsHtml = '<div class="cdd-item pmpref-sdd-item' + (!sel ? ' selected' : '') + '" data-pmpref-sdd-opt="">' + pmprefSddPlaceholder(kind) + '</div>' + itemsHtml;
+    }
+    list.innerHTML = itemsHtml;
+    wrap.querySelector('.cdd-value').textContent = pmprefSddLabelFor(kind, pmprefSddPlaceholder(kind));
+  }
+  function pmprefSddUpdateLabel(kind) {
+    var wrap = document.querySelector('[data-pmpref-sdd="' + kind + '"]');
+    if (!wrap) return;
+    wrap.querySelector('.cdd-value').textContent = pmprefSddLabelFor(kind, pmprefSddPlaceholder(kind));
+  }
+  function pmprefSddClose(kind) {
+    var wrap = document.querySelector('[data-pmpref-sdd="' + kind + '"]');
+    if (!wrap) return;
+    wrap.querySelector('.pm-custom-dd-btn').classList.remove('open');
+    wrap.querySelector('.pm-custom-dd-menu').classList.remove('open');
+  }
+  function pmprefSddCloseAll() { ['catFilter', 'roleFilter', 'propFilter', 'priorityFilter', 'catPicker', 'rolePicker'].forEach(pmprefSddClose); }
+  function pmprefWireSdd(kind, onChange) {
+    var wrap = document.querySelector('[data-pmpref-sdd="' + kind + '"]');
+    if (!wrap) return;
+    var btn = wrap.querySelector('.pm-custom-dd-btn');
+    var menu = wrap.querySelector('.pm-custom-dd-menu');
+    var searchInput = wrap.querySelector('.pmpref-sdd-search input');
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var isOpen = btn.classList.contains('open');
+      pmprefSddCloseAll();
+      if (!isOpen) {
+        pmprefSddSearch[kind] = '';
+        if (searchInput) searchInput.value = '';
+        pmprefSddRenderMenu(kind);
+        btn.classList.add('open');
+        menu.classList.add('open');
+      }
+    });
+    if (searchInput) searchInput.addEventListener('input', function (e) { pmprefSddSearch[kind] = e.target.value; pmprefSddRenderMenu(kind); });
+    wrap.querySelector('.pmpref-sdd-list').addEventListener('click', function (e) {
+      var item = e.target.closest('[data-pmpref-sdd-opt]');
+      if (!item) return;
+      e.stopPropagation();
+      var val = item.getAttribute('data-pmpref-sdd-opt');
+      if (pmprefSddMulti[kind]) {
+        var i = pmprefSddState[kind].indexOf(val);
+        if (i === -1) pmprefSddState[kind].push(val); else pmprefSddState[kind].splice(i, 1);
+        pmprefSddRenderMenu(kind);
+      } else {
+        pmprefSddState[kind] = val;
+        pmprefSddUpdateLabel(kind);
+        pmprefSddClose(kind);
+      }
+      if (onChange) onChange();
+    });
+  }
+  document.addEventListener('click', function (e) { if (!e.target.closest('.pmpref-sdd')) pmprefSddCloseAll(); });
+
+  /* ---- Reused Explore Suppliers profile page, with the button row swapped, a "preferred for"
+         context banner added, and a Block-supplier action \u2014 topbar title/back replace the old
+         inline ones so this detail page matches every other detail page's pattern in the app. ---- */
+  function pmprefBannerSegHtml(label, items, pluralWord) {
+    if (!items.length) return '';
+    var val = items.length === 1
+      ? '<span class="pmpref-context-seg-val">' + pmexEscapeHtml(items[0]) + '</span>'
+      : '<span class="pmpref-context-seg-val">' + items.length + ' ' + pluralWord + '</span>';
+    return '<span class="pmpref-context-seg"><span class="pmpref-context-seg-label">' + pmexEscapeHtml(label) + ':</span>' + val + '</span>';
+  }
+  function pmprefBannerHtml(allCats, allRoles, propNames) {
+    return '<div class="pmpref-context-banner">' +
+      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>' +
+      '<span class="pmpref-context-heading">Preferred for</span>' +
+      '<div class="pmpref-context-segments">' +
+        pmprefBannerSegHtml('Category', pmprefCatChipList(allCats), 'Categories') +
+        pmprefBannerSegHtml('Role', allRoles, 'Roles') +
+        pmprefBannerSegHtml('Property', propNames, 'Properties') +
+      '</div>' +
+      '<button type="button" class="pmpref-context-view-btn" id="pmprefContextViewBtn">View details</button>' +
+    '</div>';
+  }
+  function pmprefShowProfile(sid) {
+    var p = pmprefSupplier(sid);
+    if (!p) return;
+    var idx = PMEX_PROVIDERS.indexOf(p);
+    var html = pmexProviderProfileHtml(p, idx);
+    var myRules = pmprefPrefsForSupplier(sid);
+    var exclEntry = pmprefExcluded.find(function (x) { return x.supplierId === sid; });
+    var prefBtns;
+    if (exclEntry) {
+      prefBtns = '<div class="pmex-pp-btn-row pmpref-pp-btn-row">' +
+        '<button type="button" class="pmex-pp-book-btn pmpref-sm-btn" id="pmprefProfileUnblockBtn"><svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="5.5"/></svg> Unblock supplier</button>' +
+        '</div>';
+    } else {
+      prefBtns = '<div class="pmex-pp-btn-row pmpref-pp-btn-row">' +
+        '<button type="button" class="pmex-pp-book-btn pmpref-sm-btn" id="pmprefProfileEditBtn"><svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 1.7a1.7 1.7 0 012.4 2.4L4.9 11.6 1.7 12.3l.7-3.2z"/></svg> Edit preference</button>' +
+        '<button type="button" class="pmex-pp-quote-btn pmpref-sm-btn danger" id="pmprefProfileRemoveBtn"><svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4h10M5 4V2.5A1 1 0 016 1.5h2a1 1 0 011 1V4M3.5 4v8a1 1 0 001 1h5a1 1 0 001-1V4"/></svg> Remove preferred</button>' +
+        '<button type="button" class="pmex-pp-quote-btn pmpref-sm-btn danger" id="pmprefProfileBlockBtn"><svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="5.5"/><path d="M3.2 3.2l7.6 7.6"/></svg> Block supplier</button>' +
+        '</div>';
+    }
+    html = html.replace(/<div class="pmex-pp-btn-row">[\s\S]*?<\/div>\s*<\/div>/, prefBtns + '</div>');
+    if (exclEntry) {
+      var blockedBanner = '<div class="pmpref-context-banner pmpref-context-banner-blocked">' +
+        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M4.9 4.9l14.2 14.2"/></svg>' +
+        '<div><strong>Blocked</strong> ' + pmexEscapeHtml(exclEntry.reason) + '<span class="pmpref-context-props"> \u00b7 since ' + pmexEscapeHtml(exclEntry.excludedOn) + '</span></div>' +
+      '</div>';
+      html = html.replace('<div class="pmex-pp-stats">', blockedBanner + '<div class="pmex-pp-stats">');
+    } else if (myRules.length) {
+      var allCats = [], allRoles = [];
+      myRules.forEach(function (r) {
+        r.categories.forEach(function (c) { if (allCats.indexOf(c) === -1) allCats.push(c); });
+        r.roles.forEach(function (rl) { if (allRoles.indexOf(rl) === -1) allRoles.push(rl); });
+      });
+      var anyAll = myRules.some(function (r) { return r.propertyScope === 'all'; });
+      var propNames = anyAll ? ['All properties'] : Array.from(new Set(myRules.reduce(function (acc, r) { return acc.concat(r.propertyScope); }, []))).map(function (id) { var pr = pmprefPropertyById(id); return pr ? pr.name : id; });
+      html = html.replace('<div class="pmex-pp-stats">', pmprefBannerHtml(allCats, allRoles, propNames) + '<div class="pmex-pp-stats">');
+    }
+    document.getElementById('pmprefProfileContent').innerHTML = html;
+    document.getElementById('pmprefListWrap').style.display = 'none';
+    document.getElementById('pmprefProfileWrap').style.display = '';
+    document.getElementById('pmPrefTopbarTitle').style.display = 'none';
+    document.getElementById('pmPrefProfileTopbarTitle').style.display = '';
+    document.getElementById('pmprefProfileTopbarBackBtn').style.display = '';
+    document.getElementById('pmPrefProfileTopbarName').textContent = p.name;
+    document.querySelector('#pmDashboard .dash-scroll-area').scrollTo({ top: 0, behavior: 'smooth' });
+    if (exclEntry) {
+      var unblockBtn = document.getElementById('pmprefProfileUnblockBtn');
+      if (unblockBtn) unblockBtn.addEventListener('click', function () { pmprefConfirmUnblock(exclEntry.id); });
+    } else {
+      var editBtn = document.getElementById('pmprefProfileEditBtn');
+      var removeBtn = document.getElementById('pmprefProfileRemoveBtn');
+      var blockBtn = document.getElementById('pmprefProfileBlockBtn');
+      if (editBtn) editBtn.addEventListener('click', function () { if (myRules[0]) pmprefOpenEdit(myRules[0].id); });
+      if (removeBtn) removeBtn.addEventListener('click', function () { pmprefConfirmRemoveSupplier(sid); });
+      if (blockBtn) blockBtn.addEventListener('click', function () { pmprefConfirmBlockSupplier(sid); });
+      var viewDetailsBtn = document.getElementById('pmprefContextViewBtn');
+      if (viewDetailsBtn && myRules.length) viewDetailsBtn.addEventListener('click', function () { pmprefOpenDetailPopup(p, allCats, allRoles, propNames); });
+    }
+  }
+  function pmprefOpenDetailPopup(p, allCats, allRoles, propNames) {
+    document.getElementById('pmprefDetailSupplierName').textContent = p.name;
+    document.getElementById('pmprefDetailRows').innerHTML =
+      '<div class="team-mx-head" style="margin-top:14px;"><span class="team-mx-count">Categories</span></div>' +
+      '<div class="pmpref-card-chip-row">' + pmprefIndividualChipsHtml(pmprefCatChipList(allCats), 'pmpref-chip-cat', 99) + '</div>' +
+      '<div class="team-mx-head" style="margin-top:14px;"><span class="team-mx-count">Roles</span></div>' +
+      '<div class="pmpref-card-chip-row">' + pmprefIndividualChipsHtml(allRoles, 'pmpref-chip-role', 99) + '</div>' +
+      '<div class="team-mx-head" style="margin-top:14px;"><span class="team-mx-count">Properties</span></div>' +
+      '<div class="pmpref-card-chip-row">' + pmprefIndividualChipsHtml(propNames, 'pmpref-chip-prop', 99) + '</div>';
+    document.getElementById('pmprefDetailOverlay').classList.add('open');
+  }
+  function pmprefShowList() {
+    document.getElementById('pmprefProfileWrap').style.display = 'none';
+    document.getElementById('pmprefListWrap').style.display = '';
+    document.getElementById('pmPrefTopbarTitle').style.display = '';
+    document.getElementById('pmPrefProfileTopbarTitle').style.display = 'none';
+    document.getElementById('pmprefProfileTopbarBackBtn').style.display = 'none';
+  }
+
+  /* ---- Add / Edit modal ---- */
+  var pmprefEditId = null;
+  var pmprefDraftSupplierId = null;
+  var pmprefDraftScope = 'all';
+  var pmprefDraftProps = [];
+  var pmprefDraftPriority = 'tier1';
+  var pmprefPropSearchTerm = '';
+
+  function pmprefChipRow(containerId, items, labelFn, onRemove) {
+    var el = document.getElementById(containerId);
+    if (!items.length) { el.innerHTML = ''; return; }
+    el.innerHTML = items.map(function (v, i) {
+      return '<span class="pmpref-chip">' + pmexEscapeHtml(labelFn(v)) +
+        '<button type="button" data-chip-remove="' + i + '" aria-label="Remove"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></span>';
+    }).join('');
+    el.querySelectorAll('[data-chip-remove]').forEach(function (b) {
+      b.addEventListener('click', function () { onRemove(+b.getAttribute('data-chip-remove')); });
+    });
+  }
+  function pmprefRenderPropertyList() {
+    var list = document.getElementById('pmprefPropertyList');
+    var q = pmprefPropSearchTerm.toLowerCase();
+    var props = PMPROP_PROPERTIES.filter(function (p) { return !q || p.name.toLowerCase().indexOf(q) !== -1; });
+    list.innerHTML = props.map(function (p) {
+      var checked = pmprefDraftProps.indexOf(p.id) !== -1;
+      return '<label class="pmpref-prop-row' + (checked ? ' checked' : '') + '">' +
+        '<input type="checkbox" data-pmpref-prop="' + p.id + '"' + (checked ? ' checked' : '') + '>' +
+        '<span>' + pmexEscapeHtml(p.name) + '</span>' +
+      '</label>';
+    }).join('');
+  }
+  function pmprefRenderSupplierDd(query) {
+    var dd = document.getElementById('pmprefSupplierDd');
+    if (!query) { dd.style.display = 'none'; dd.innerHTML = ''; return; }
+    var q = query.toLowerCase();
+    var matches = PMEX_PROVIDERS.filter(function (p) { return !pmprefIsExcluded(p.id) && (p.name.toLowerCase().indexOf(q) !== -1 || p.areas.toLowerCase().indexOf(q) !== -1); }).slice(0, 6);
+    if (!matches.length) { dd.style.display = 'block'; dd.innerHTML = '<div class="pmpref-dd-empty">No suppliers match.</div>'; return; }
+    dd.style.display = 'block';
+    dd.innerHTML = matches.map(function (p) {
+      return '<div class="pmpref-dd-item" data-pmpref-pick-supplier="' + p.id + '">' +
+        '<span class="pmpref-dd-name">' + pmexEscapeHtml(p.name) + '</span>' +
+        '<span class="pmpref-dd-meta">' + starRatingInline(p.rating) + ' ' + p.rating + ' \u00b7 ' + pmexEscapeHtml(p.areas) + '</span>' +
+      '</div>';
+    }).join('');
+  }
+  function pmprefRenderChosenSupplier() {
+    var wrap = document.getElementById('pmprefSupplierChosen');
+    var searchWrap = document.getElementById('pmprefSupplierSearch');
+    if (!pmprefDraftSupplierId) { wrap.style.display = 'none'; searchWrap.parentElement.style.display = ''; return; }
+    var sup = pmprefSupplier(pmprefDraftSupplierId);
+    searchWrap.parentElement.style.display = 'none';
+    wrap.style.display = 'flex';
+    wrap.innerHTML =
+      '<div class="team-person"><div class="team-avatar"><img src="https://i.pravatar.cc/64?img=' + (PMEX_PROVIDERS.indexOf(sup) % 70 + 3) + '" alt=""></div>' +
+      '<div class="team-person-main"><div class="team-person-name">' + pmexEscapeHtml(sup.name) + '</div>' +
+      '<div class="team-person-email">' + starRatingInline(sup.rating) + ' ' + sup.rating + ' \u00b7 ' + pmexEscapeHtml(sup.areas) + '</div></div></div>' +
+      '<button type="button" class="pmpref-change-btn" id="pmprefSupplierChangeBtn">Change</button>';
+  }
+  function pmprefRenderSummary() {
+    var box = document.getElementById('pmprefSummary');
+    if (!pmprefDraftSupplierId) { box.style.display = 'none'; return; }
+    var sup = pmprefSupplier(pmprefDraftSupplierId);
+    var catText = pmprefCatChipList(pmprefSddState.catPicker).join(', ') || '\u2014';
+    var roleText = pmprefSddState.rolePicker.join(', ') || '\u2014';
+    var scopeText = pmprefDraftScope === 'all' ? 'All properties' : pmprefDraftProps.length + ' propert' + (pmprefDraftProps.length === 1 ? 'y' : 'ies') + ' selected';
+    box.style.display = 'block';
+    box.innerHTML = '<div class="pmpref-summary-title">' + pmexEscapeHtml(sup.name) + '</div>' +
+      '<div class="pmpref-summary-line"><span>Categories</span><strong>' + pmexEscapeHtml(catText) + '</strong></div>' +
+      '<div class="pmpref-summary-line"><span>Roles</span><strong>' + pmexEscapeHtml(roleText) + '</strong></div>' +
+      '<div class="pmpref-summary-line"><span>Properties</span><strong>' + scopeText + '</strong></div>' +
+      '<div class="pmpref-summary-line"><span>Priority</span><strong>' + (pmprefDraftPriority === 'tier1' ? 'Tier 1 \u00b7 Primary' : 'Tier 2 \u00b7 Backup') + '</strong></div>';
+  }
+  function pmprefRenderModal() {
+    pmprefRenderChosenSupplier();
+    pmprefChipRow('pmprefCatChips', pmprefSddState.catPicker, pmprefCatLabel, function (i) { pmprefSddState.catPicker.splice(i, 1); pmprefRenderModal(); });
+    pmprefChipRow('pmprefRoleChips', pmprefSddState.rolePicker, function (v) { return v; }, function (i) { pmprefSddState.rolePicker.splice(i, 1); pmprefRenderModal(); });
+    document.getElementById('pmprefPropertyPicker').style.display = pmprefDraftScope === 'specific' ? '' : 'none';
+    if (pmprefDraftScope === 'specific') {
+      pmprefRenderPropertyList();
+      pmprefChipRow('pmprefPropChips', pmprefDraftProps, function (id) { var p = pmprefPropertyById(id); return p ? p.name : id; }, function (i) { pmprefDraftProps.splice(i, 1); pmprefRenderModal(); });
+    }
+    document.querySelectorAll('input[name="pmprefScope"]').forEach(function (r) { r.checked = r.value === pmprefDraftScope; });
+    document.querySelectorAll('input[name="pmprefPriority"]').forEach(function (r) { r.checked = r.value === pmprefDraftPriority; });
+    pmprefRenderSummary();
+  }
+  function pmprefOpenAdd() {
+    pmprefEditId = null;
+    pmprefDraftSupplierId = null;
+    pmprefSddState.catPicker = [];
+    pmprefSddState.rolePicker = [];
+    pmprefDraftScope = 'all';
+    pmprefDraftProps = [];
+    pmprefDraftPriority = 'tier1';
+    pmprefPropSearchTerm = '';
+    document.getElementById('pmprefAddTitle').textContent = 'Add preferred supplier';
+    document.getElementById('pmprefSupplierSearch').value = '';
+    document.getElementById('pmprefSupplierDd').style.display = 'none';
+    pmprefRenderModal();
+    document.getElementById('pmprefAddOverlay').classList.add('open');
+  }
+  function pmprefOpenEdit(ruleId) {
+    var rule = pmprefPreferences.find(function (r) { return r.id === ruleId; });
+    if (!rule) return;
+    pmprefEditId = ruleId;
+    pmprefDraftSupplierId = rule.supplierId;
+    pmprefSddState.catPicker = rule.categories.slice();
+    pmprefSddState.rolePicker = rule.roles.slice();
+    pmprefDraftScope = rule.propertyScope === 'all' ? 'all' : 'specific';
+    pmprefDraftProps = rule.propertyScope === 'all' ? [] : rule.propertyScope.slice();
+    pmprefDraftPriority = rule.priority;
+    pmprefPropSearchTerm = '';
+    document.getElementById('pmprefAddTitle').textContent = 'Edit preference';
+    pmprefRenderModal();
+    document.getElementById('pmprefAddOverlay').classList.add('open');
+  }
+  function pmprefSaveModal() {
+    if (!pmprefDraftSupplierId) { showToast('Pick a supplier first.'); return; }
+    if (!pmprefSddState.catPicker.length || !pmprefSddState.rolePicker.length) { showToast('Pick at least one Category and one Role.'); return; }
+    if (pmprefDraftScope === 'specific' && !pmprefDraftProps.length) { showToast('Pick at least one property, or choose All properties.'); return; }
+    var scope = pmprefDraftScope === 'all' ? 'all' : pmprefDraftProps.slice();
+    if (pmprefEditId) {
+      var rule = pmprefPreferences.find(function (r) { return r.id === pmprefEditId; });
+      Object.assign(rule, { categories: pmprefSddState.catPicker.slice(), roles: pmprefSddState.rolePicker.slice(), propertyScope: scope, priority: pmprefDraftPriority });
+    } else {
+      pmprefPreferences.push({ id: pmprefNextId('pref'), supplierId: pmprefDraftSupplierId, categories: pmprefSddState.catPicker.slice(), roles: pmprefSddState.rolePicker.slice(), propertyScope: scope, priority: pmprefDraftPriority, complianceOk: true, addedOn: new Date().toISOString().slice(0, 10) });
+    }
+    document.getElementById('pmprefAddOverlay').classList.remove('open');
+    renderPmprefAll();
+    showToast(pmprefSupplier(pmprefDraftSupplierId).name + (pmprefEditId ? ' preference updated.' : ' added to your preferred suppliers.'));
+  }
+
+  /* ---- Remove / Block / Unblock ---- */
+  var pmprefPendingAction = null; // { kind: 'supplier'|'unblock'|'block', id }
+  function pmprefConfirmRemoveSupplier(sid) {
+    var sup = pmprefSupplier(sid);
+    pmprefPendingAction = { kind: 'supplier', id: sid };
+    document.getElementById('pmprefRemoveTitle').textContent = 'Remove preferred supplier?';
+    document.getElementById('pmprefRemoveDesc').textContent = 'Are you sure you want to remove ' + (sup ? sup.name : 'this supplier') + ' from your preferred list? They will no longer get direct auto-assigned jobs, but can still see open marketplace jobs unless blocked.';
+    document.getElementById('pmprefRemoveConfirm').classList.remove('pmpref-block-confirm');
+    document.getElementById('pmprefRemoveConfirm').textContent = 'Remove';
+    document.getElementById('pmprefBlockReasonField').style.display = 'none';
+    document.getElementById('pmprefRemoveOverlay').classList.add('open');
+  }
+  function pmprefConfirmUnblock(exclId) {
+    pmprefPendingAction = { kind: 'unblock', id: exclId };
+    var e = pmprefExcluded.find(function (x) { return x.id === exclId; });
+    var sup = e ? pmprefSupplier(e.supplierId) : null;
+    document.getElementById('pmprefRemoveTitle').textContent = 'Unblock this supplier?';
+    document.getElementById('pmprefRemoveDesc').textContent = (sup ? sup.name : 'This supplier') + ' will be able to see and receive your jobs on the open marketplace again.';
+    document.getElementById('pmprefRemoveConfirm').classList.remove('pmpref-block-confirm');
+    document.getElementById('pmprefRemoveConfirm').textContent = 'Unblock';
+    document.getElementById('pmprefBlockReasonField').style.display = 'none';
+    document.getElementById('pmprefRemoveOverlay').classList.add('open');
+  }
+  function pmprefConfirmBlockSupplier(sid) {
+    var sup = pmprefSupplier(sid);
+    pmprefPendingAction = { kind: 'block', id: sid };
+    document.getElementById('pmprefRemoveTitle').textContent = 'Block this supplier?';
+    document.getElementById('pmprefRemoveDesc').textContent = 'Are you sure you want to block ' + (sup ? sup.name : 'this supplier') + '? Any preferences for them will be removed, and they will never see or receive your jobs until unblocked.';
+    document.getElementById('pmprefRemoveConfirm').classList.add('pmpref-block-confirm');
+    document.getElementById('pmprefRemoveConfirm').textContent = 'Block supplier';
+    document.getElementById('pmprefBlockReasonInput').value = '';
+    document.getElementById('pmprefBlockReasonField').style.display = '';
+    document.getElementById('pmprefRemoveOverlay').classList.add('open');
+  }
+
+  function initPmprefOnce() {
+    if (initPmprefOnce.done) return;
+    initPmprefOnce.done = true;
+
+    document.getElementById('pmprefAddBtn').addEventListener('click', pmprefOpenAdd);
+    document.getElementById('pmprefViewToggle').addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-pmpref-view]');
+      if (btn) pmprefSwitchView(btn.getAttribute('data-pmpref-view'));
+    });
+    pmprefSwitchView(pmprefViewMode);
+    document.getElementById('pmprefMainTabs').addEventListener('click', function (e) {
+      var tab = e.target.closest('[data-pref-main-tab]');
+      if (!tab) return;
+      document.querySelectorAll('#pmprefMainTabs .pm-tab-pill').forEach(function (p) { p.classList.toggle('active', p === tab); });
+      var isPreferred = tab.getAttribute('data-pref-main-tab') === 'preferred';
+      document.getElementById('pmprefPreferredSection').style.display = isPreferred ? '' : 'none';
+      document.getElementById('pmprefExcludedSection').style.display = isPreferred ? 'none' : '';
+    });
+    document.getElementById('pmprefSearch').addEventListener('input', renderPmprefAll);
+    ['catFilter', 'roleFilter', 'propFilter', 'priorityFilter'].forEach(function (kind) { pmprefWireSdd(kind, renderPmprefAll); });
+    pmprefWireSdd('catPicker', function () {
+      // Role options are scoped to the supplier, not the category, so nothing about the existing
+      // role selections needs to change here — just re-render to reflect the new category chips.
+      pmprefRenderModal();
+    });
+    pmprefWireSdd('rolePicker', pmprefRenderModal);
+
+    function pmprefSupplierListClick(e) {
+      if (e.target.closest('[data-pmpref-stop]')) {
+        var toggle = e.target.closest('[data-pmpref-toggle-view]');
+        if (toggle) {
+          var tsid = toggle.getAttribute('data-pmpref-toggle-view');
+          pmprefExpandedRows[tsid] = !pmprefExpandedRows[tsid];
+          renderPmprefTable();
+          return;
+        }
+        var edit = e.target.closest('[data-pmpref-edit]'); if (edit) { pmprefOpenEdit(edit.getAttribute('data-pmpref-edit')); return; }
+        var rm = e.target.closest('[data-pmpref-remove-supplier]'); if (rm) pmprefConfirmRemoveSupplier(rm.getAttribute('data-pmpref-remove-supplier'));
+        return;
+      }
+      var row = e.target.closest('[data-pmpref-row-open]');
+      if (row) pmprefShowProfile(row.getAttribute('data-pmpref-row-open'));
+    }
+    document.getElementById('pmprefSuppliersBody').addEventListener('click', pmprefSupplierListClick);
+    document.getElementById('pmprefCardGrid').addEventListener('click', pmprefSupplierListClick);
+    document.getElementById('pmprefExcludedBody').addEventListener('click', function (e) {
+      var unblock = e.target.closest('[data-pmpref-unblock]');
+      if (unblock) { pmprefConfirmUnblock(unblock.getAttribute('data-pmpref-unblock')); return; }
+      var row = e.target.closest('[data-pmpref-row-open]');
+      if (row) pmprefShowProfile(row.getAttribute('data-pmpref-row-open'));
+    });
+    document.getElementById('pmprefProfileTopbarBackBtn').addEventListener('click', pmprefShowList);
+
+    var detailOverlay = document.getElementById('pmprefDetailOverlay');
+    document.querySelectorAll('#pmprefDetailOverlay [data-pmpref-close]').forEach(function (b) { b.addEventListener('click', function () { detailOverlay.classList.remove('open'); }); });
+    detailOverlay.addEventListener('click', function (e) { if (e.target === detailOverlay) detailOverlay.classList.remove('open'); });
+
+    // Add/Edit modal wiring
+    var addOverlay = document.getElementById('pmprefAddOverlay');
+    document.querySelectorAll('#pmprefAddOverlay [data-pmpref-close]').forEach(function (b) { b.addEventListener('click', function () { addOverlay.classList.remove('open'); }); });
+    document.getElementById('pmprefAddCancel').addEventListener('click', function () { addOverlay.classList.remove('open'); });
+    addOverlay.addEventListener('click', function (e) { if (e.target === addOverlay) addOverlay.classList.remove('open'); });
+
+    document.getElementById('pmprefSupplierSearch').addEventListener('input', function (e) { pmprefRenderSupplierDd(e.target.value); });
+    document.getElementById('pmprefSupplierDd').addEventListener('click', function (e) {
+      var item = e.target.closest('[data-pmpref-pick-supplier]');
+      if (!item) return;
+      pmprefDraftSupplierId = item.getAttribute('data-pmpref-pick-supplier');
+      pmprefSddState.catPicker = [];
+      pmprefSddState.rolePicker = [];
+      document.getElementById('pmprefSupplierDd').style.display = 'none';
+      pmprefRenderModal();
+    });
+    document.getElementById('pmprefSupplierChosen').addEventListener('click', function (e) {
+      if (e.target.closest('#pmprefSupplierChangeBtn')) {
+        pmprefDraftSupplierId = null;
+        document.getElementById('pmprefSupplierSearch').value = '';
+        pmprefRenderModal();
+      }
+    });
+    document.querySelectorAll('input[name="pmprefScope"]').forEach(function (r) {
+      r.addEventListener('change', function () { pmprefDraftScope = r.value; pmprefRenderModal(); });
+    });
+    document.querySelectorAll('input[name="pmprefPriority"]').forEach(function (r) {
+      r.addEventListener('change', function () { pmprefDraftPriority = r.value; pmprefRenderSummary(); });
+    });
+    document.getElementById('pmprefPropertySearch').addEventListener('input', function (e) { pmprefPropSearchTerm = e.target.value; pmprefRenderPropertyList(); });
+    document.getElementById('pmprefPropertyList').addEventListener('change', function (e) {
+      var chk = e.target.closest('[data-pmpref-prop]');
+      if (!chk) return;
+      var pid = chk.getAttribute('data-pmpref-prop');
+      var i = pmprefDraftProps.indexOf(pid);
+      if (chk.checked && i === -1) pmprefDraftProps.push(pid);
+      else if (!chk.checked && i !== -1) pmprefDraftProps.splice(i, 1);
+      pmprefRenderModal();
+    });
+    document.getElementById('pmprefAddSave').addEventListener('click', pmprefSaveModal);
+
+    // Remove / Block / Unblock confirmation (one shared modal, copy + action swapped per kind)
+    var removeOverlay = document.getElementById('pmprefRemoveOverlay');
+    document.querySelectorAll('#pmprefRemoveOverlay [data-pmpref-close]').forEach(function (b) { b.addEventListener('click', function () { removeOverlay.classList.remove('open'); pmprefPendingAction = null; }); });
+    removeOverlay.addEventListener('click', function (e) { if (e.target === removeOverlay) { removeOverlay.classList.remove('open'); pmprefPendingAction = null; } });
+    document.getElementById('pmprefRemoveConfirm').addEventListener('click', function () {
+      if (!pmprefPendingAction) return;
+      var action = pmprefPendingAction;
+      var wasOnProfile = getComputedStyle(document.getElementById('pmprefProfileWrap')).display !== 'none';
+      if (action.kind === 'supplier') {
+        pmprefPreferences = pmprefPreferences.filter(function (r) { return r.supplierId !== action.id; });
+        if (wasOnProfile) pmprefShowList();
+      } else if (action.kind === 'unblock') {
+        pmprefExcluded = pmprefExcluded.filter(function (x) { return x.id !== action.id; });
+      } else if (action.kind === 'block') {
+        var sup = pmprefSupplier(action.id);
+        var reason = document.getElementById('pmprefBlockReasonInput').value.trim() || 'PM blocked supplier';
+        pmprefPreferences = pmprefPreferences.filter(function (r) { return r.supplierId !== action.id; });
+        if (!pmprefIsExcluded(action.id)) pmprefExcluded.push({ id: pmprefNextId('excl'), supplierId: action.id, reason: reason, excludedOn: new Date().toISOString().slice(0, 10) });
+        if (wasOnProfile) pmprefShowList();
+      }
+      pmprefPendingAction = null;
+      removeOverlay.classList.remove('open');
+      renderPmprefAll();
+      showToast(action.kind === 'unblock' ? 'Supplier unblocked.' : action.kind === 'block' ? 'Supplier blocked.' : 'Removed.');
+    });
+
+    renderPmprefAll();
+  }
+
+
+  /* =========================================================
      PM: JOB RESPONSES
   ========================================================== */
   var PMJR_COLORS = { purple: '#7c5cdb', navy: '#1e2a44', brown: '#b0703f', teal: '#0f9488' };
@@ -30818,7 +32149,7 @@
 
   /* ---- PM Settings view ---- */
   function showPMView(view) {
-    var viewIds = { home: 'pmHomeView', settings: 'pmSettingsView', explore: 'pmExploreView', responses: 'pmResponsesView', properties: 'pmPropertiesView', propertyform: 'pmPropertyFormView', propertyjobs: 'pmPropertyJobsView', compliancesettings: 'pmComplianceSettingsView', tickets: 'pmTicketsView', servicespricing: 'pmServicesPricingView', servicetemplate: 'pmServiceTemplateView', teams: 'pmTeamsView' };
+    var viewIds = { home: 'pmHomeView', settings: 'pmSettingsView', explore: 'pmExploreView', responses: 'pmResponsesView', properties: 'pmPropertiesView', propertyform: 'pmPropertyFormView', propertyjobs: 'pmPropertyJobsView', compliancesettings: 'pmComplianceSettingsView', tickets: 'pmTicketsView', servicespricing: 'pmServicesPricingView', servicetemplate: 'pmServiceTemplateView', teams: 'pmTeamsView', preferredsuppliers: 'pmPrefSuppliersView' };
     Object.keys(viewIds).forEach(function (key) {
       var el = document.getElementById(viewIds[key]);
       if (key === view) {
@@ -30849,6 +32180,9 @@
     var svcDetailTitleWrap = document.getElementById('pmSvcDetailTopbarTitle');
     var exploreTitleWrap = document.getElementById('pmExploreTopbarTitle');
     var exploreQuoteListBtn = document.getElementById('pmexQuoteListBtn');
+    var prefTitleWrap = document.getElementById('pmPrefTopbarTitle');
+    var prefProfileTitleWrap = document.getElementById('pmPrefProfileTopbarTitle');
+    var prefProfileBackBtn = document.getElementById('pmprefProfileTopbarBackBtn');
     var svcBackBtn = document.getElementById('pmsvcBackBtn');
     var sharedBackBtn = document.getElementById('pmpropFormBackBtn');
     var propFormDeleteBtn = document.getElementById('pmpropFormDeleteBtn');
@@ -30869,6 +32203,9 @@
     // never lingers visible after navigating away to an unrelated view, since it lives in the
     // shared topbar rather than inside Explore's own view container.
     if (exploreQuoteListBtn && view !== 'explore') exploreQuoteListBtn.style.display = 'none';
+    if (prefTitleWrap) prefTitleWrap.style.display = (view === 'preferredsuppliers') ? '' : 'none';
+    if (prefProfileTitleWrap && view !== 'preferredsuppliers') prefProfileTitleWrap.style.display = 'none';
+    if (prefProfileBackBtn && view !== 'preferredsuppliers') prefProfileBackBtn.style.display = 'none';
     // Delete's own visibility (new vs edit) is still driven separately by pmpropOpenNew/
     // pmpropOpenEdit — this just makes sure it never lingers into an unrelated view if the PM
     // navigates away some other way (sidebar click, browser back, etc.) mid-edit.
@@ -36590,6 +37927,9 @@
       } else if (item.getAttribute('data-nav') === 'teams') {
         showPMView('teams');
         initPmTeamsOnce();
+      } else if (item.getAttribute('data-nav') === 'suppliers') {
+        showPMView('preferredsuppliers');
+        initPmprefOnce();
       } else {
         showToast(item.querySelector('.nav-label').textContent + ' isn\u2019t wired up in this prototype yet.');
       }
@@ -37192,6 +38532,7 @@
       } else if (nav === 'teams') {
         showSupplierView('teams');
         initSupTeamsOnce();
+        initSupSvcTeamOnce();
       } else {
         showToast(item.querySelector('.nav-label').textContent + ' isn\u2019t wired up in this prototype yet.');
       }
@@ -60099,6 +61440,14 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         var m = supTeamMembers.filter(function (x) { return x.id === supTeamPendingRemove.id; })[0];
         label = m ? supTeamDisplayName(m) : 'Member';
         supTeamMembers = supTeamMembers.filter(function (x) { return x.id !== supTeamPendingRemove.id; });
+      } else if (supTeamPendingRemove.kind === 'svcmember') {
+        var sm = supSvcTeamMembers.filter(function (x) { return x.id === supTeamPendingRemove.id; })[0];
+        label = sm ? sm.name : 'Member';
+        supSvcTeamMembers = supSvcTeamMembers.filter(function (x) { return x.id !== supTeamPendingRemove.id; });
+      } else if (supTeamPendingRemove.kind === 'dispatchrule') {
+        var dr = supDispatchRules.filter(function (x) { return x.id === supTeamPendingRemove.id; })[0];
+        label = dr ? dr.name : 'Rule';
+        supDispatchRules = supDispatchRules.filter(function (x) { return x.id !== supTeamPendingRemove.id; });
       } else {
         var r = supTeamRoleById(supTeamPendingRemove.id);
         label = r ? r.name : 'Role';
@@ -60107,6 +61456,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       supTeamPendingRemove = null;
       removeOverlay.classList.remove('open');
       renderSupTeams();
+      renderSupSvcTeam();
       showToast(label + ' removed.');
     });
 
@@ -60227,6 +61577,346 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     });
 
     renderSupTeams();
+  }
+
+  /* =========================================================
+     SUPPLIER TEAMS \u2014 SERVICE TEAM + DISPATCH RULES
+     Second, distinct team type on the same Teams page: field staff who get
+     dispatched to jobs, tagged by Category/Role rather than granted module
+     permissions. Reuses PMEX_CAT_DEFS/PMEX_TRADE_ITEMS so "Category/Role"
+     means the same thing here as it does in Explore Suppliers and Job Access.
+  ========================================================== */
+  var SUP_AVAIL_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  var SUP_DISPATCH_STRATEGIES = [
+    { id: 'roundrobin', label: 'Round robin', desc: 'Rotates evenly across everyone who matches.', icon: '\u{1F504}' },
+    { id: 'zone', label: 'Geographic zone', desc: 'Routes by postcode area.', icon: '\u{1F4CD}' },
+    { id: 'namedlead', label: 'Named lead', desc: 'One person first, every time.', icon: '\u2B50' }
+  ];
+
+  var supSvcTeamMembers = [
+    { id: 'svcmem_1', name: 'Marcus Webb', contact: 'marcus.webb@fernaworks.co.uk', photo: 'https://i.pravatar.cc/150?img=51',
+      roles: ['Gas Engineer', 'Plumber'], availDays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'], availStart: '08:00', availEnd: '17:00',
+      status: 'active', jobsCompleted: 34, rating: 4.9 },
+    { id: 'svcmem_2', name: 'Aisha Patel', contact: 'aisha.patel@fernaworks.co.uk', photo: 'https://i.pravatar.cc/150?img=45',
+      roles: ['Electrician'], availDays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], availStart: '07:00', availEnd: '18:00',
+      status: 'active', jobsCompleted: 28, rating: 4.7 },
+    { id: 'svcmem_3', name: 'Jamie O\u2019Connor', contact: 'jamie.oconnor@fernaworks.co.uk', photo: '',
+      roles: ['Cleaner'], availDays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], availStart: '08:00', availEnd: '20:00',
+      status: 'active', jobsCompleted: 52, rating: 4.8 },
+    { id: 'svcmem_4', name: 'Ryan Foster', contact: 'ryan.foster@fernaworks.co.uk', photo: '',
+      roles: ['Handyman', 'Locksmith'], availDays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'], availStart: '09:00', availEnd: '17:00',
+      status: 'active', jobsCompleted: 19, rating: 4.6 },
+    { id: 'svcmem_5', name: 'Zainab Hussain', contact: 'zainab.hussain@fernaworks.co.uk', photo: '',
+      roles: ['Fire Safety Assessor'], availDays: ['Mon', 'Tue', 'Wed', 'Thu'], availStart: '08:00', availEnd: '16:00',
+      status: 'inactive', jobsCompleted: 12, rating: 5.0 }
+  ];
+
+  var supDispatchRules = [
+    { id: 'rule_1', name: 'Cleaning \u2014 round robin', scope: 'cleaning', strategy: 'roundrobin', config: {} },
+    { id: 'rule_2', name: 'Fire Safety \u2014 Zainab leads', scope: 'fire', strategy: 'namedlead', config: { leadId: 'svcmem_5' } },
+    { id: 'rule_3', name: 'Plumbing & Gas \u2014 SW1A zone', scope: 'plumbing', strategy: 'zone', config: { postcode: 'SW1A' } }
+  ];
+
+  function supSvcTeamNextId() { supTeamUid += 1; return 'svcmem_' + supTeamUid; }
+  function supDispatchNextId() { supTeamUid += 1; return 'rule_' + supTeamUid; }
+  function supSvcRoleTrade(label) { return PMEX_TRADE_ITEMS.find(function (t) { return t.label === label; }); }
+  function supSvcMemberById(id) { return supSvcTeamMembers.filter(function (m) { return m.id === id; })[0]; }
+
+  function supSvcAvailText(m) {
+    if (m.availDays.length === 7) var daysText = 'Every day';
+    else if (m.availDays.length === 5 && SUP_AVAIL_DAYS.slice(0, 5).every(function (d) { return m.availDays.indexOf(d) !== -1; })) daysText = 'Weekdays';
+    else daysText = m.availDays.join(', ');
+    return daysText;
+  }
+
+  function renderSupSvcTeamStats() {
+    var wrap = document.getElementById('supSvcTeamStats');
+    var active = supSvcTeamMembers.filter(function (m) { return m.status === 'active'; }).length;
+    var totalJobs = supSvcTeamMembers.reduce(function (n, m) { return n + m.jobsCompleted; }, 0);
+    var rated = supSvcTeamMembers.filter(function (m) { return m.rating; });
+    var avgRating = rated.length ? (rated.reduce(function (n, m) { return n + m.rating; }, 0) / rated.length).toFixed(1) : '\u2014';
+    wrap.innerHTML =
+      '<div class="team-stat"><div class="ts-num">' + active + '</div><div class="ts-label">Active members</div></div>' +
+      '<div class="team-stat"><div class="ts-num">' + totalJobs + '</div><div class="ts-label">Jobs completed</div></div>' +
+      '<div class="team-stat"><div class="ts-num">' + avgRating + '</div><div class="ts-label">Avg. rating</div></div>' +
+      '<div class="team-stat"><div class="ts-num">' + supDispatchRules.length + '</div><div class="ts-label">Dispatch rules</div></div>';
+  }
+  function supSvcTeamFiltered() {
+    var q = (document.getElementById('supSvcTeamSearch').value || '').toLowerCase();
+    if (!q) return supSvcTeamMembers;
+    return supSvcTeamMembers.filter(function (m) {
+      return m.name.toLowerCase().indexOf(q) !== -1 || m.roles.some(function (r) { return r.toLowerCase().indexOf(q) !== -1; });
+    });
+  }
+  function renderSupSvcTeamMembers() {
+    var body = document.getElementById('supSvcTeamMembersBody');
+    var list = supSvcTeamFiltered();
+    document.querySelector('#supSvcTeamMembersPanel .team-table-wrap').style.display = list.length ? '' : 'none';
+    document.getElementById('supSvcTeamMembersEmpty').style.display = list.length ? 'none' : '';
+    document.getElementById('supSvcTeamCount').textContent = list.length + ' member' + (list.length === 1 ? '' : 's');
+    body.innerHTML = list.map(function (m) {
+      var stars = '\u2605'.repeat(Math.round(m.rating)) + '\u2606'.repeat(5 - Math.round(m.rating));
+      return '<tr>' +
+        '<td><div class="team-person"><div class="team-avatar">' + (m.photo ? '<img src="' + m.photo + '" alt="">' : supTeamInitials(m.name)) + '</div>' +
+          '<div class="team-person-main"><div class="team-person-name">' + supjrEscapeHtml(m.name) + '</div><div class="team-person-email">' + supjrEscapeHtml(m.contact) + '</div></div></div></td>' +
+        '<td><div class="team-svc-roles">' + m.roles.map(function (r) { return '<span class="team-svc-role-chip">' + supjrEscapeHtml(r) + '</span>'; }).join('') + '</div></td>' +
+        '<td><div class="team-svc-avail"><span>' + supSvcAvailText(m) + '</span><span class="team-svc-avail-hours">' + m.availStart + '\u2013' + m.availEnd + '</span></div></td>' +
+        '<td><div class="team-svc-perf"><span class="team-svc-perf-stars" title="' + m.rating + ' / 5">' + stars + '</span><span class="team-svc-perf-jobs">' + m.jobsCompleted + ' jobs completed</span></div></td>' +
+        '<td>' + (m.status === 'active' ? '<span class="team-status-pill active">Active</span>' : '<span class="team-status-pill inactive">Inactive</span>') + '</td>' +
+        '<td style="text-align:right;"><div class="team-actions">' +
+          '<button type="button" class="svcp-icon-btn" data-svcteam-edit="' + m.id + '" data-tooltip="Edit"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg></button>' +
+          '<button type="button" class="svcp-icon-btn danger" data-svcteam-remove="' + m.id + '" data-tooltip="Remove">' + SUPTEAM_TRASH + '</button>' +
+        '</div></td>' +
+      '</tr>';
+    }).join('');
+  }
+  function supDispatchScopeLabel(scope) { return scope === 'all' ? 'All categories' : supTeamCatLabel(scope); }
+  function supDispatchStrategyMeta(id) { return SUP_DISPATCH_STRATEGIES.find(function (s) { return s.id === id; }); }
+  function supDispatchConfigText(rule) {
+    if (rule.strategy === 'namedlead') { var lead = supSvcMemberById(rule.config.leadId); return lead ? lead.name + ' first, then the rest of the matching team.' : 'No lead set.'; }
+    if (rule.strategy === 'zone') return 'Postcodes starting ' + (rule.config.postcode || '\u2014') + '.';
+    return 'Shared evenly across everyone who matches ' + supDispatchScopeLabel(rule.scope) + '.';
+  }
+  function renderSupDispatchRules() {
+    var list = document.getElementById('supSvcDispatchList');
+    document.getElementById('supSvcDispatchEmpty').style.display = supDispatchRules.length ? 'none' : '';
+    list.innerHTML = supDispatchRules.map(function (rule, i) {
+      var strat = supDispatchStrategyMeta(rule.strategy);
+      return '<div class="team-dispatch-card">' +
+        '<div class="team-dispatch-order">' + (i + 1) + '</div>' +
+        '<div class="team-dispatch-icon">' + strat.icon + '</div>' +
+        '<div class="team-dispatch-main">' +
+          '<div class="team-dispatch-name">' + supjrEscapeHtml(rule.name) + '</div>' +
+          '<div class="team-dispatch-detail"><span class="team-svc-role-chip">' + supDispatchScopeLabel(rule.scope) + '</span> \u00b7 ' + strat.label + ' \u2014 ' + supDispatchConfigText(rule) + '</div>' +
+        '</div>' +
+        '<div class="team-actions">' +
+          '<button type="button" class="svcp-icon-btn" data-dispatch-edit="' + rule.id + '" data-tooltip="Edit"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg></button>' +
+          '<button type="button" class="svcp-icon-btn danger" data-dispatch-remove="' + rule.id + '" data-tooltip="Remove">' + SUPTEAM_TRASH + '</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+  function renderSupSvcTeam() {
+    renderSupSvcTeamStats();
+    var tab = document.querySelector('#supSvcTeamTabs .pm-tab-pill.active').getAttribute('data-svcteam-tab');
+    document.getElementById('supSvcTeamMembersPanel').style.display = tab === 'members' ? '' : 'none';
+    document.getElementById('supSvcDispatchPanel').style.display = tab === 'dispatch' ? '' : 'none';
+    document.getElementById('supDispatchAddRuleBtn').style.display = tab === 'dispatch' ? '' : 'none';
+    document.getElementById('supSvcTeamAddBtn').style.display = tab === 'members' ? '' : 'none';
+    document.querySelector('#supServiceTeamSection .pm-search-input-wrap').style.display = tab === 'members' ? '' : 'none';
+    if (tab === 'members') renderSupSvcTeamMembers(); else renderSupDispatchRules();
+  }
+
+  function supSwitchTeamType(type) {
+    document.querySelectorAll('#supTeamTypeSwitch .team-type-btn').forEach(function (b) {
+      b.classList.toggle('active', b.getAttribute('data-team-type') === type);
+    });
+    document.getElementById('supInternalTeamSection').style.display = type === 'internal' ? '' : 'none';
+    document.getElementById('supServiceTeamSection').style.display = type === 'service' ? '' : 'none';
+    document.getElementById('supInternalTeamActions').style.display = type === 'internal' ? '' : 'none';
+    document.getElementById('supServiceTeamActions').style.display = type === 'service' ? '' : 'none';
+    if (type === 'service') renderSupSvcTeam();
+  }
+
+  /* ---- Service Team member modal ---- */
+  var supSvcTeamEditId = null;
+  var supSvcTeamDraftRoles = [];
+  var supSvcTeamDraftDays = [];
+  function supSvcTeamRenderRoleGrid() {
+    document.getElementById('supSvcTeamRoleGrid').innerHTML = PMEX_TRADE_ITEMS.map(function (t) {
+      var checked = supSvcTeamDraftRoles.indexOf(t.label) !== -1;
+      return '<label class="team-ja-check-card' + (checked ? ' checked' : '') + '">' +
+        '<input type="checkbox" data-svcteam-role="' + supjrEscapeHtml(t.label) + '"' + (checked ? ' checked' : '') + '>' +
+        '<span class="team-ja-check-label">' + supjrEscapeHtml(t.label) + '</span>' +
+        '<span class="team-ja-check-count">' + supTeamCatLabel(t.cat) + '</span>' +
+      '</label>';
+    }).join('');
+  }
+  function supSvcTeamRenderAvailDays() {
+    document.getElementById('supSvcTeamAvailDays').innerHTML = SUP_AVAIL_DAYS.map(function (d) {
+      var on = supSvcTeamDraftDays.indexOf(d) !== -1;
+      return '<button type="button" class="team-avail-day-chip' + (on ? ' on' : '') + '" data-svcteam-day="' + d + '">' + d + '</button>';
+    }).join('');
+  }
+  function supSvcTeamOpenModal(id) {
+    var m = id ? supSvcMemberById(id) : null;
+    supSvcTeamEditId = id || null;
+    supSvcTeamDraftRoles = m ? m.roles.slice() : [];
+    supSvcTeamDraftDays = m ? m.availDays.slice() : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+    document.getElementById('supSvcTeamMemberTitle').textContent = m ? 'Edit service team member' : 'Add service team member';
+    document.getElementById('supSvcTeamName').value = m ? m.name : '';
+    document.getElementById('supSvcTeamContact').value = m ? m.contact : '';
+    document.getElementById('supSvcTeamAvailStart').value = m ? m.availStart : '09:00';
+    document.getElementById('supSvcTeamAvailEnd').value = m ? m.availEnd : '17:00';
+    supSvcTeamRenderRoleGrid();
+    supSvcTeamRenderAvailDays();
+    document.getElementById('supSvcTeamMemberOverlay').classList.add('open');
+  }
+  function supSvcTeamSaveModal() {
+    var name = document.getElementById('supSvcTeamName').value.trim();
+    if (!name) { showToast('Add their name first.'); return; }
+    if (!supSvcTeamDraftRoles.length) { showToast('Pick at least one Role.'); return; }
+    var fields = {
+      name: name,
+      contact: document.getElementById('supSvcTeamContact').value.trim(),
+      roles: supSvcTeamDraftRoles.slice(),
+      availDays: supSvcTeamDraftDays.slice(),
+      availStart: document.getElementById('supSvcTeamAvailStart').value || '09:00',
+      availEnd: document.getElementById('supSvcTeamAvailEnd').value || '17:00'
+    };
+    if (supSvcTeamEditId) {
+      var m = supSvcMemberById(supSvcTeamEditId);
+      Object.assign(m, fields);
+    } else {
+      supSvcTeamMembers.push(Object.assign({ id: supSvcTeamNextId(), photo: '', status: 'active', jobsCompleted: 0, rating: 0 }, fields));
+    }
+    document.getElementById('supSvcTeamMemberOverlay').classList.remove('open');
+    renderSupSvcTeam();
+    showToast(name + (supSvcTeamEditId ? ' updated.' : ' added to your Service Team.'));
+  }
+
+  /* ---- Dispatch rule modal ---- */
+  var supDispatchEditId = null;
+  var supDispatchDraftStrategy = 'roundrobin';
+  function supDispatchRenderScope() {
+    var sel = document.getElementById('supDispatchScope');
+    sel.innerHTML = '<option value="all">All categories</option>' + PMEX_CAT_DEFS.map(function (c) {
+      return '<option value="' + c.key + '">' + supjrEscapeHtml(c.label) + '</option>';
+    }).join('');
+  }
+  function supDispatchRenderStrategyCards() {
+    document.getElementById('supDispatchStrategyCards').innerHTML = SUP_DISPATCH_STRATEGIES.map(function (s) {
+      return '<button type="button" class="team-ja-mode-card' + (supDispatchDraftStrategy === s.id ? ' active' : '') + '" data-dispatch-strategy="' + s.id + '">' +
+        '<span class="team-ja-mode-icon">' + s.icon + '</span><span class="team-ja-mode-title">' + s.label + '</span><span class="team-ja-mode-desc">' + s.desc + '</span>' +
+      '</button>';
+    }).join('');
+  }
+  function supDispatchRenderStrategyPanel(existingConfig) {
+    var cfg = existingConfig || {};
+    var panel = document.getElementById('supDispatchStrategyPanel');
+    if (supDispatchDraftStrategy === 'namedlead') {
+      panel.innerHTML = '<div class="team-field" style="margin-top:12px;"><label>Lead</label><select id="supDispatchLeadSelect">' +
+        supSvcTeamMembers.map(function (m) { return '<option value="' + m.id + '"' + (cfg.leadId === m.id ? ' selected' : '') + '>' + supjrEscapeHtml(m.name) + '</option>'; }).join('') +
+      '</select></div>';
+    } else if (supDispatchDraftStrategy === 'zone') {
+      panel.innerHTML = '<div class="team-field" style="margin-top:12px;"><label>Postcode starts with</label><input type="text" id="supDispatchPostcode" placeholder="e.g. SW1A" value="' + supjrEscapeHtml(cfg.postcode || '') + '"></div>';
+    } else {
+      panel.innerHTML = '<div class="team-ja-all-note" style="margin-top:12px;">' + supTeamAllJobsSvg() + '<div><strong>No further setup needed.</strong><div class="team-ja-all-sub">Matching jobs rotate evenly across everyone who covers this Category/Role.</div></div></div>';
+    }
+  }
+  function supDispatchOpenModal(id) {
+    var rule = id ? supDispatchRules.filter(function (r) { return r.id === id; })[0] : null;
+    supDispatchEditId = id || null;
+    supDispatchDraftStrategy = rule ? rule.strategy : 'roundrobin';
+    document.getElementById('supDispatchRuleTitle').textContent = rule ? 'Edit dispatch rule' : 'Add dispatch rule';
+    supDispatchRenderScope();
+    document.getElementById('supDispatchScope').value = rule ? rule.scope : 'all';
+    supDispatchRenderStrategyCards();
+    supDispatchRenderStrategyPanel(rule ? rule.config : null);
+    document.getElementById('supDispatchRuleOverlay').classList.add('open');
+  }
+  function supDispatchSaveModal() {
+    var scope = document.getElementById('supDispatchScope').value;
+    var config = {};
+    if (supDispatchDraftStrategy === 'namedlead') {
+      var leadSel = document.getElementById('supDispatchLeadSelect');
+      if (!leadSel || !leadSel.value) { showToast('Add a Service Team member first.'); return; }
+      config.leadId = leadSel.value;
+    } else if (supDispatchDraftStrategy === 'zone') {
+      config.postcode = (document.getElementById('supDispatchPostcode').value || '').trim().toUpperCase();
+      if (!config.postcode) { showToast('Add a postcode area.'); return; }
+    }
+    var strat = supDispatchStrategyMeta(supDispatchDraftStrategy);
+    var name = supDispatchScopeLabel(scope) + ' \u2014 ' + strat.label.toLowerCase();
+    if (supDispatchEditId) {
+      var rule = supDispatchRules.filter(function (r) { return r.id === supDispatchEditId; })[0];
+      Object.assign(rule, { scope: scope, strategy: supDispatchDraftStrategy, config: config, name: name });
+    } else {
+      supDispatchRules.push({ id: supDispatchNextId(), scope: scope, strategy: supDispatchDraftStrategy, config: config, name: name });
+    }
+    document.getElementById('supDispatchRuleOverlay').classList.remove('open');
+    renderSupSvcTeam();
+    showToast('Dispatch rule saved.');
+  }
+
+  function initSupSvcTeamOnce() {
+    if (initSupSvcTeamOnce.done) return;
+    initSupSvcTeamOnce.done = true;
+
+    document.getElementById('supTeamTypeSwitch').addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-team-type]');
+      if (btn) supSwitchTeamType(btn.getAttribute('data-team-type'));
+    });
+    document.getElementById('supSvcTeamTabs').addEventListener('click', function (e) {
+      var tab = e.target.closest('[data-svcteam-tab]');
+      if (!tab) return;
+      document.querySelectorAll('#supSvcTeamTabs .pm-tab-pill').forEach(function (p) { p.classList.toggle('active', p === tab); });
+      renderSupSvcTeam();
+    });
+    document.getElementById('supSvcTeamSearch').addEventListener('input', renderSupSvcTeamMembers);
+    document.getElementById('supSvcTeamAddBtn').addEventListener('click', function () { supSvcTeamOpenModal(null); });
+
+    var svcOverlay = document.getElementById('supSvcTeamMemberOverlay');
+    document.getElementById('supSvcTeamMemberCancel').addEventListener('click', function () { svcOverlay.classList.remove('open'); });
+    svcOverlay.addEventListener('click', function (e) { if (e.target === svcOverlay) svcOverlay.classList.remove('open'); });
+    document.getElementById('supSvcTeamRoleGrid').addEventListener('change', function (e) {
+      var chk = e.target.closest('[data-svcteam-role]');
+      if (!chk) return;
+      var label = chk.getAttribute('data-svcteam-role');
+      var i = supSvcTeamDraftRoles.indexOf(label);
+      if (chk.checked && i === -1) supSvcTeamDraftRoles.push(label);
+      else if (!chk.checked && i !== -1) supSvcTeamDraftRoles.splice(i, 1);
+      supSvcTeamRenderRoleGrid();
+    });
+    document.getElementById('supSvcTeamAvailDays').addEventListener('click', function (e) {
+      var chip = e.target.closest('[data-svcteam-day]');
+      if (!chip) return;
+      var d = chip.getAttribute('data-svcteam-day');
+      var i = supSvcTeamDraftDays.indexOf(d);
+      if (i === -1) supSvcTeamDraftDays.push(d); else supSvcTeamDraftDays.splice(i, 1);
+      supSvcTeamRenderAvailDays();
+    });
+    document.getElementById('supSvcTeamMemberSave').addEventListener('click', supSvcTeamSaveModal);
+
+    document.getElementById('supSvcTeamMembersBody').addEventListener('click', function (e) {
+      var edit = e.target.closest('[data-svcteam-edit]');
+      if (edit) { supSvcTeamOpenModal(edit.getAttribute('data-svcteam-edit')); return; }
+      var remove = e.target.closest('[data-svcteam-remove]');
+      if (remove) {
+        var m = supSvcMemberById(remove.getAttribute('data-svcteam-remove'));
+        if (!m) return;
+        supTeamPendingRemove = { kind: 'svcmember', id: m.id };
+        document.getElementById('supTeamRemoveTitle').textContent = 'Remove from Service Team?';
+        document.getElementById('supTeamRemoveDesc').textContent = m.name + ' will stop receiving new job dispatches. Any dispatch rules naming them as lead will need a new lead picked.';
+        document.getElementById('supTeamRemoveOverlay').classList.add('open');
+      }
+    });
+
+    document.getElementById('supDispatchAddRuleBtn').addEventListener('click', function () { supDispatchOpenModal(null); });
+    var dispatchOverlay = document.getElementById('supDispatchRuleOverlay');
+    document.getElementById('supDispatchRuleCancel').addEventListener('click', function () { dispatchOverlay.classList.remove('open'); });
+    dispatchOverlay.addEventListener('click', function (e) { if (e.target === dispatchOverlay) dispatchOverlay.classList.remove('open'); });
+    document.getElementById('supDispatchStrategyCards').addEventListener('click', function (e) {
+      var card = e.target.closest('[data-dispatch-strategy]');
+      if (!card) return;
+      supDispatchDraftStrategy = card.getAttribute('data-dispatch-strategy');
+      supDispatchRenderStrategyCards();
+      supDispatchRenderStrategyPanel(null);
+    });
+    document.getElementById('supDispatchRuleSave').addEventListener('click', supDispatchSaveModal);
+    document.getElementById('supSvcDispatchList').addEventListener('click', function (e) {
+      var edit = e.target.closest('[data-dispatch-edit]');
+      if (edit) { supDispatchOpenModal(edit.getAttribute('data-dispatch-edit')); return; }
+      var remove = e.target.closest('[data-dispatch-remove]');
+      if (remove) {
+        var rule = supDispatchRules.filter(function (r) { return r.id === remove.getAttribute('data-dispatch-remove'); })[0];
+        if (!rule) return;
+        supTeamPendingRemove = { kind: 'dispatchrule', id: rule.id };
+        document.getElementById('supTeamRemoveTitle').textContent = 'Remove this dispatch rule?';
+        document.getElementById('supTeamRemoveDesc').textContent = 'New jobs matching ' + supDispatchScopeLabel(rule.scope) + ' will fall through to the next matching rule, or the whole Service Team if none apply.';
+        document.getElementById('supTeamRemoveOverlay').classList.add('open');
+      }
+    });
   }
 
   svcpRefreshFilters();
