@@ -2438,7 +2438,7 @@
   .dash-scroll-area { flex: 1; overflow-y: auto; overflow-x: hidden; scroll-behavior: smooth; background: #F9FAFB; }
   @keyframes supViewFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   .sup-view-animate { animation: supViewFadeIn 320ms cubic-bezier(0.16,1,0.3,1); }
-  .dash-content { max-width: 1240px; margin: 0 auto; padding: 24px 32px 60px; background: #F9FAFB; }
+  .dash-content { margin: 0 auto; padding: 24px 32px 60px; background: #F9FAFB; }
   /* Account Settings and Inbox control their own padding directly (see #supProfileSettingsView
      .dash-section and #supInboxView below) instead of relying on dash-content's shared padding —
      this negative margin exactly cancels dash-content's padding for just these two views, so
@@ -9015,52 +9015,82 @@
   .pmpref-supplier-link { color: var(--accent-blue); font-weight: 700; white-space: nowrap; }
   .pmpref-row { cursor: pointer; transition: background-color 120ms ease-out; }
   .pmpref-row:hover { background: var(--surface-soft); }
+  .pmpref-row:active { background: #e2e8f0; }
   .pmpref-nowrap { white-space: nowrap; }
 
   /* ---- List/Card view toggle ---- */
   .pmpref-view-toggle { display: flex; gap: 3px; background: var(--surface-soft); border-radius: 9px; padding: 3px; margin-left: 8px; }
   .pmpref-view-btn {
     display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 6px;
-    border: none; background: none; color: #94a3b8; cursor: pointer;
+    border: none; background: none; color: #94a3b8; cursor: pointer; transition: transform 100ms ease-out, color 150ms ease-out;
   }
   .pmpref-view-btn:hover { color: var(--text-heading); }
+  .pmpref-view-btn:active { transform: scale(0.9); }
   .pmpref-view-btn.active { background: #fff; color: var(--accent-blue); box-shadow: 0 1px 3px rgba(15,23,42,0.12); }
 
-  /* ---- Expandable row detail ("View" chevron) ---- */
-  .pmpref-view-chevron svg { transition: transform 150ms ease-out; }
-  .pmpref-view-chevron.open svg { transform: rotate(180deg); }
-  .pmpref-row-expanded { background: var(--surface-soft); }
-  .pmpref-expand-row td { padding: 0 !important; border-top: none !important; }
-  .pmpref-expand-content {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; background: var(--surface-soft);
-    padding: 14px 20px 18px; border-bottom: 1px solid var(--border-subtle); cursor: default;
-  }
-  .pmpref-expand-col { min-width: 0; }
+  /* Plain-text cells (Jobs, Properties in the table) - lighter weight than a chip, but still
+     legible against the white row background, since a bare unstyled string read as too flat. */
+  .pmpref-cell-text { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--text-body-muted); min-width: 0; }
+  .pmpref-cell-text-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+  .pmpref-cell-text-more { font-size: 11px; color: var(--text-body-muted); background: var(--surface-soft); padding: 2px 7px; border-radius: 999px; white-space: nowrap; cursor: default; flex-shrink: 0; }
+  .pmpref-table td:nth-child(4), .pmpref-table td:nth-child(5) { max-width: 230px; }
+  .pmpref-table th:nth-child(2), .pmpref-table td:nth-child(2), .pmpref-table th:nth-child(3), .pmpref-table td:nth-child(3) { width: 160px; }
+  /* This table has more columns (7) than the shared "team table" styling assumes (which turns off
+     scrolling because those simpler tables fit their columns) - re-enable horizontal scroll here
+     specifically, since at narrower desktop widths this table genuinely doesn't fit. */
+  #pmprefSuppliersPanel .team-table-wrap, #pmprefSuppliersPanel .pm-table-scroll { overflow-x: auto; }
+  #pmprefSuppliersPanel .pmpref-table { min-width: 920px; }
 
   @media (max-width: 760px) {
     .pmpref-view-toggle { display: none; }
   }
 
   /* ---- Card view ---- */
-  .pmpref-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; align-items: stretch; }
+  .pmpref-card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: stretch; }
   .pmpref-card {
     display: flex; flex-direction: column; height: 100%; background: #fff; border: 1px solid var(--border-subtle);
-    border-radius: 14px; padding: 16px; cursor: pointer; transition: border-color 150ms ease-out, box-shadow 150ms ease-out;
+    border-radius: 14px; padding: 18px; cursor: pointer; transition: border-color 150ms ease-out, box-shadow 150ms ease-out, transform 100ms ease-out;
   }
   .pmpref-card:hover { border-color: #b9cde9; box-shadow: 0 4px 16px rgba(15,23,42,0.07); }
-  .pmpref-card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .pmpref-card:active { transform: scale(0.985); }
+  .pmpref-card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
   .pmpref-card-name-wrap { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-  .pmpref-card-name { font-size: 14.5px; white-space: normal; }
+  .pmpref-card-name { font-size: 13px; white-space: normal; }
   .pmpref-card-divider { border-top: 1px solid var(--border-subtle); margin: 10px 0; }
-  /* The trick that keeps the footer flush to the card's bottom edge regardless of how many chips
-     sit above it: this divider (and everything after it) gets pushed down by the flex column's
-     free space, so every card in a row lines its footer up at the same height. */
+  /* The trick that keeps the footer flush to the card's bottom edge regardless of how much
+     content sits above it: this divider (and everything after it) gets pushed down by the flex
+     column's free space, so every card in a row lines its footer up at the same height. */
+  .pmpref-card-spacer { flex: 1; }
   .pmpref-card-divider-footer { margin-top: 12px; margin-bottom: 12px; }
-  .pmpref-card-chip-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: #94a3b8; margin-bottom: 6px; }
+
+  /* Every fact gets the same explicit icon + text label, so which quadrant is which is never in
+     doubt - relying on icon shape alone to carry that meaning was the problem last time. Category
+     stays a short pill row (genuinely tag-like); role, job template and properties are flowing,
+     comma-separated names capped to two with a "+N more" toggle, so real names are always shown
+     rather than a bare count. Arranged 2x2 to use the card's full width instead of one narrow
+     column of text, which was leaving the right half of the card empty. */
+  .pmpref-card-fact-grid { display: grid; gap: 14px; align-items: start; }
+  .pmpref-card-fact { min-width: 0; }
+  .pmpref-card-fact-label {
+    display: flex; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.03em; color: #7c8ba1; margin-bottom: 7px;
+  }
+  .pmpref-card-fact-icon {
+    display: flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 5px;
+    background: var(--icon-tint-bg); color: var(--accent-blue); flex-shrink: 0;
+  }
+  .pmpref-card-fact-icon svg { width: 10px; height: 10px; }
+  .pmpref-card-fact-value { font-size: 12.5px; line-height: 1.5; color: var(--text-heading); }
+  .pmpref-flow-more { font-size: inherit; font-weight: 700; color: var(--accent-blue); background: none; border: none; text-decoration: underline; cursor: pointer; padding: 0; font-family: inherit; }
+
   .pmpref-card-chip-row { display: flex; flex-wrap: wrap; gap: 5px; }
-  .pmpref-chip-cat, .pmpref-chip-role, .pmpref-chip-prop {
+  .pmpref-row .pmpref-card-chip-row { flex-wrap: nowrap; }
+  .pmpref-chip-cat, .pmpref-chip-role, .pmpref-chip-job, .pmpref-chip-prop {
     font-size: 11px; font-weight: 600; color: #183060; background: #e7edf6; padding: 3px 9px; border-radius: 999px; white-space: nowrap;
   }
+  /* Cards keep only the category pill; a light outline reads calmer than a solid fill stacked
+     above the flowing role/job/properties fact values below it. */
+  .pmpref-card .pmpref-chip-cat { color: var(--text-heading); background: #fff; border: 1px solid var(--border-subtle); }
   .pmpref-chip-more { font-size: 11px; font-weight: 700; color: var(--text-body-muted); background: var(--surface-soft); padding: 3px 9px; border-radius: 999px; white-space: nowrap; cursor: default; }
   .pmpref-chip-count-badge {
     display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 22px;
@@ -9129,9 +9159,27 @@
     font-size: 11.5px; font-weight: 700; color: var(--accent-blue); cursor: pointer; font-family: inherit; flex-shrink: 0;
   }
   .pmpref-change-btn:hover { background: var(--surface-soft); }
+  #pmprefSupplierChosen .team-person-name { font-size: 13.5px; }
+  .pmpref-field-hint { font-size: 11.5px; color: var(--text-body-muted); margin: -6px 0 10px; }
+
+  /* ---- Numbered step cards (Add preferred supplier modal) ---- */
+  .pmpref-step { background: var(--surface-soft); border-radius: 12px; padding: 15px 16px 12px; margin-bottom: 10px; }
+  .pmpref-step-head { display: flex; align-items: center; gap: 9px; margin-bottom: 11px; }
+  .pmpref-step-num {
+    display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%;
+    background: var(--accent-blue); color: #fff; font-size: 12px; font-weight: 800; flex-shrink: 0;
+  }
+  .pmpref-step-title { font-size: 14px; font-weight: 800; color: var(--text-heading); }
+  .pmpref-step-body { padding-bottom: 0; }
+  .pmpref-prefill-hint { color: var(--accent-blue); font-weight: 600; }
 
   .pmpref-field-col { display: flex; flex-direction: column; margin-top: 14px; }
   .pmpref-field-col:first-of-type { margin-top: 0; }
+  .pmpref-field-row-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 10px; align-items: start; }
+  .pmpref-field-row-3 .pmpref-field-col { margin-top: 0; }
+  @media (max-width: 760px) {
+    .pmpref-field-row-3 { grid-template-columns: 1fr; }
+  }
   .pmpref-field-label { font-size: 12px; font-weight: 700; color: var(--text-heading); margin-bottom: 6px; }
   .pmpref-field-col .pmpref-sdd-btn { width: 100%; }
 
@@ -9166,13 +9214,9 @@
   .pmpref-prop-row input { width: 15px; height: 15px; accent-color: var(--accent-blue); cursor: pointer; }
 
   /* Summary box */
-  .pmpref-summary { margin-top: 16px; border: 1px solid var(--border-subtle); border-radius: 12px; background: var(--surface-soft); padding: 13px 15px; }
-  .pmpref-summary-title { font-size: 13.5px; font-weight: 800; color: var(--text-heading); margin-bottom: 8px; }
-  .pmpref-summary-line { display: flex; justify-content: space-between; gap: 10px; font-size: 12.5px; color: var(--text-body-muted); padding: 3px 0; }
-  .pmpref-summary-line strong { color: var(--text-heading); font-weight: 700; text-align: right; }
 
   /* Modal: scrollable body, footer stays fixed so the modal never overflows the viewport */
-  .pmpref-modal-card { display: flex; flex-direction: column; max-height: 85vh; padding: 32px 0 0; }
+  .pmpref-modal-card { display: flex; flex-direction: column; max-height: 85vh; padding: 32px 0 0; max-width: 1200px; }
   .pmpref-modal-header { flex-shrink: 0; padding: 0 32px; }
   .pmpref-modal-scroll { flex: 1; overflow-y: auto; padding: 14px 32px 4px; }
   .pmpref-modal-footer { flex-shrink: 0; padding: 16px 32px; border-top: 1px solid var(--border-subtle); }
@@ -9190,17 +9234,38 @@
   .pmpref-context-banner strong { color: var(--text-heading); }
   .pmpref-context-props { color: var(--text-body-muted); }
   .pmpref-context-banner-blocked { background: #fef2f2; color: #dc2626; }
-  .pmpref-context-heading { font-weight: 800; color: var(--text-heading); flex-shrink: 0; white-space: nowrap; }
-  .pmpref-context-heading::after { content: '\00b7'; margin-left: 10px; color: var(--accent-blue); opacity: 0.5; font-weight: 400; }
-  .pmpref-context-segments { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; }
-  .pmpref-context-seg { display: flex; align-items: baseline; gap: 4px; white-space: nowrap; }
-  .pmpref-context-seg-label { font-size: 11px; font-weight: 700; color: var(--accent-blue); opacity: 0.8; }
-  .pmpref-context-seg-val { font-size: 12px; font-weight: 700; color: var(--text-heading); }
-  .pmpref-context-view-btn {
-    flex-shrink: 0; margin-left: auto; border: none; background: none; color: var(--accent-blue);
-    font-size: 11.5px; font-weight: 700; text-decoration: underline; cursor: pointer; font-family: inherit; padding: 0;
+
+  /* ---- Inline "Preferred for" detail block (profile page) ---- */
+  .pmpref-detail-block { background: #fff; border: 1.5px solid var(--border-subtle); border-radius: 14px; padding: 16px 18px; margin: 0 0 16px; }
+  .pmpref-detail-header {
+    display: flex; align-items: center; gap: 8px; color: var(--accent-blue); margin-bottom: 14px; flex-wrap: wrap;
+    width: 100%; border: none; background: none; padding: 0; font: inherit; text-align: left; cursor: pointer;
   }
-  .pmpref-context-view-btn:hover { color: #1d3a70; }
+  .pmpref-detail-header:hover .pmpref-detail-title { color: #1d3a70; }
+  .pmpref-detail-title { font-weight: 800; color: var(--text-heading); font-size: 13px; }
+  .pmpref-added-on { font-size: 11.5px; color: var(--text-body-muted); margin-left: auto; }
+  .pmpref-detail-chevron { flex-shrink: 0; color: var(--text-body-muted); transition: transform 150ms ease-out; }
+  .pmpref-detail-header[data-expanded="true"] .pmpref-detail-chevron { transform: rotate(180deg); }
+  .pmpref-detail-header[data-expanded="false"] { margin-bottom: 0; }
+  .pmpref-detail-sections { display: flex; flex-direction: column; gap: 14px; }
+  .pmpref-detail-section-head { display: flex; align-items: center; gap: 7px; margin-bottom: 8px; }
+  .pmpref-detail-section-icon {
+    display: flex; align-items: center; justify-content: center; width: 21px; height: 21px; border-radius: 6px;
+    background: var(--icon-tint-bg); color: var(--accent-blue); flex-shrink: 0;
+  }
+  .pmpref-detail-section-icon svg { width: 11px; height: 11px; }
+  .pmpref-detail-section-title { font-size: 12px; font-weight: 700; color: var(--text-heading); }
+  .pmpref-detail-section-count { font-size: 11px; color: var(--text-body-muted); }
+  .pmpref-detail-chip-row { display: flex; flex-wrap: wrap; gap: 6px; padding-left: 28px; }
+
+  /* ---- Click-press feedback, scoped to this module only ---- */
+  #pmprefSuppliersBody .svcp-icon-btn, .pmpref-card .svcp-icon-btn, #pmprefExcludedBody .svcp-icon-btn { transition: transform 100ms ease-out; }
+  #pmprefSuppliersBody .svcp-icon-btn:active, .pmpref-card .svcp-icon-btn:active, #pmprefExcludedBody .svcp-icon-btn:active { transform: scale(0.88); }
+  .pmpref-radio-card, .pmpref-chip-more, .pmpref-flow-more { transition: transform 100ms ease-out; }
+  .pmpref-radio-card:active { transform: scale(0.98); }
+  .pmpref-chip-more:active, .pmpref-flow-more:active { transform: scale(0.92); }
+  #pmprefAddSave, #pmprefAddCancel, #pmprefRemoveConfirm { transition: transform 100ms ease-out, background 150ms ease-out, border-color 150ms ease-out; }
+  #pmprefAddSave:active, #pmprefAddCancel:active, #pmprefRemoveConfirm:active { transform: scale(0.97); }
 
   #pmprefRemoveConfirm.pmpref-block-confirm { background: #dc2626; border-color: #dc2626; }
   #pmprefRemoveConfirm.pmpref-block-confirm:hover { background: #b91c1c; }
@@ -14999,6 +15064,13 @@
                           <div class="pmpref-sdd-list"></div>
                         </div>
                       </div>
+                      <div class="pmpref-sdd" id="pmprefJobFilterDd" data-pmpref-sdd="jobFilter">
+                        <button type="button" class="pm-custom-dd-btn pmpref-sdd-btn"><span class="cdd-value">Job: All</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                        <div class="pm-custom-dd-menu pmpref-sdd-menu">
+                          <div class="pmpref-sdd-search"><input type="text" placeholder="Search job templates..."></div>
+                          <div class="pmpref-sdd-list"></div>
+                        </div>
+                      </div>
                       <div class="pmpref-sdd" id="pmprefPriorityFilterDd" data-pmpref-sdd="priorityFilter">
                         <button type="button" class="pm-custom-dd-btn pmpref-sdd-btn"><span class="cdd-value">Priority: All</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
                         <div class="pm-custom-dd-menu pmpref-sdd-menu">
@@ -15021,7 +15093,7 @@
                     <div class="pm-table-wrap team-table-wrap">
                       <div class="pm-table-scroll">
                         <table class="admin-table pmpref-table">
-                          <thead><tr><th>Supplier</th><th>Categories</th><th>Roles</th><th>Properties</th><th>Priority</th><th style="text-align:right;">Actions</th></tr></thead>
+                          <thead><tr><th>Supplier</th><th>Categories</th><th>Roles</th><th>Jobs</th><th>Properties</th><th>Priority</th><th style="text-align:right;">Actions</th></tr></thead>
                           <tbody id="pmprefSuppliersBody"></tbody>
                         </table>
                       </div>
@@ -15038,7 +15110,7 @@
                   <div class="pm-table-wrap team-table-wrap">
                     <div class="pm-table-scroll">
                       <table class="admin-table">
-                        <thead><tr><th>Supplier</th><th>Reason</th><th>Excluded on</th><th style="text-align:right;">Actions</th></tr></thead>
+                        <thead><tr><th>Supplier</th><th style="width:38%;">Reason</th><th>Blocked on</th><th style="text-align:right;">Actions</th></tr></thead>
                         <tbody id="pmprefExcludedBody"></tbody>
                       </table>
                     </div>
@@ -15069,77 +15141,95 @@
                 <div class="team-modal-desc">Pick who should get this work first, for which service, and at which properties.</div>
               </div>
               <div class="pmpref-modal-scroll">
-                <div class="team-mx-head"><span class="team-mx-count">Supplier</span></div>
-                <div class="pmpref-supplier-picker" id="pmprefSupplierPicker">
-                  <div class="team-field">
-                    <input type="text" id="pmprefSupplierSearch" placeholder="Search supplier by name or location..." autocomplete="off">
-                  </div>
-                  <div class="pmpref-supplier-dd" id="pmprefSupplierDd"></div>
-                  <div class="pmpref-supplier-chosen" id="pmprefSupplierChosen" style="display:none;"></div>
-                </div>
 
-                <div class="team-mx-head" style="margin-top:14px;">
-                  <span class="team-mx-count">Preferred for</span>
-                </div>
-                <div class="pmpref-field-col">
-                  <label class="pmpref-field-label" for="pmprefCatPickerDd">Category</label>
-                  <div class="pmpref-sdd" id="pmprefCatPickerDd" data-pmpref-sdd="catPicker">
-                    <button type="button" class="pm-custom-dd-btn pmpref-sdd-btn" type="button"><span class="cdd-value">Select category</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
-                    <div class="pm-custom-dd-menu pmpref-sdd-menu">
-                      <div class="pmpref-sdd-search"><input type="text" placeholder="Search categories..."></div>
-                      <div class="pmpref-sdd-list" id="pmprefCatPickerList"></div>
+                <div class="pmpref-step">
+                  <div class="pmpref-step-head"><span class="pmpref-step-num">1</span><span class="pmpref-step-title">Choose supplier</span></div>
+                  <div class="pmpref-step-body">
+                    <div class="pmpref-supplier-picker" id="pmprefSupplierPicker">
+                      <div class="team-field">
+                        <input type="text" id="pmprefSupplierSearch" placeholder="Search supplier by name or location..." autocomplete="off">
+                      </div>
+                      <div class="pmpref-supplier-dd" id="pmprefSupplierDd"></div>
+                      <div class="pmpref-supplier-chosen" id="pmprefSupplierChosen" style="display:none;"></div>
                     </div>
                   </div>
-                  <div class="pmpref-chip-row" id="pmprefCatChips"></div>
                 </div>
-                <div class="pmpref-field-col">
-                  <label class="pmpref-field-label" for="pmprefRolePickerDd">Role</label>
-                  <div class="pmpref-sdd" id="pmprefRolePickerDd" data-pmpref-sdd="rolePicker">
-                    <button type="button" class="pm-custom-dd-btn pmpref-sdd-btn" type="button"><span class="cdd-value">Select role</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
-                    <div class="pm-custom-dd-menu pmpref-sdd-menu">
-                      <div class="pmpref-sdd-search"><input type="text" placeholder="Search roles..."></div>
-                      <div class="pmpref-sdd-list" id="pmprefRolePickerList"></div>
+
+                <div class="pmpref-step">
+                  <div class="pmpref-step-head"><span class="pmpref-step-num">2</span><span class="pmpref-step-title">What are they preferred for?</span></div>
+                  <div class="pmpref-step-body">
+                    <div class="pmpref-field-row-3">
+                    <div class="pmpref-field-col">
+                      <label class="pmpref-field-label" for="pmprefCatPickerDd">Category</label>
+                      <div class="pmpref-sdd" id="pmprefCatPickerDd" data-pmpref-sdd="catPicker">
+                        <button type="button" class="pm-custom-dd-btn pmpref-sdd-btn" type="button"><span class="cdd-value">Select category</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                        <div class="pm-custom-dd-menu pmpref-sdd-menu drop-up">
+                          <div class="pmpref-sdd-search"><input type="text" placeholder="Search categories..."></div>
+                          <div class="pmpref-sdd-list" id="pmprefCatPickerList"></div>
+                        </div>
+                      </div>
+                      <div class="pmpref-chip-row" id="pmprefCatChips"></div>
+                    </div>
+                    <div class="pmpref-field-col">
+                      <label class="pmpref-field-label" for="pmprefRolePickerDd">Role</label>
+                      <div class="pmpref-sdd" id="pmprefRolePickerDd" data-pmpref-sdd="rolePicker">
+                        <button type="button" class="pm-custom-dd-btn pmpref-sdd-btn" type="button"><span class="cdd-value">Select role</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                        <div class="pm-custom-dd-menu pmpref-sdd-menu drop-up">
+                          <div class="pmpref-sdd-search"><input type="text" placeholder="Search roles..."></div>
+                          <div class="pmpref-sdd-list" id="pmprefRolePickerList"></div>
+                        </div>
+                      </div>
+                      <div class="pmpref-chip-row" id="pmprefRoleChips"></div>
+                    </div>
+                    <div class="pmpref-field-col">
+                      <label class="pmpref-field-label" for="pmprefJobPickerDd">Job template</label>
+                      <div class="pmpref-sdd" id="pmprefJobPickerDd" data-pmpref-sdd="jobPicker">
+                        <button type="button" class="pm-custom-dd-btn pmpref-sdd-btn" type="button"><span class="cdd-value">Select job template</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                        <div class="pm-custom-dd-menu pmpref-sdd-menu drop-up">
+                          <div class="pmpref-sdd-search"><input type="text" placeholder="Search job templates..."></div>
+                          <div class="pmpref-sdd-list" id="pmprefJobPickerList"></div>
+                        </div>
+                      </div>
+                      <div class="pmpref-chip-row" id="pmprefJobChips"></div>
+                    </div>
                     </div>
                   </div>
-                  <div class="pmpref-chip-row" id="pmprefRoleChips"></div>
                 </div>
 
-                <div class="team-mx-head" style="margin-top:14px;"><span class="team-mx-count">Property scope</span></div>
-                <div class="pmpref-scope-row">
-                  <label class="pmpref-radio-card"><input type="radio" name="pmprefScope" value="all" checked><span>All properties</span></label>
-                  <label class="pmpref-radio-card"><input type="radio" name="pmprefScope" value="specific"><span>Specific properties</span></label>
-                </div>
-                <div id="pmprefPropertyPicker" style="display:none;">
-                  <div class="pmpref-chip-row" id="pmprefPropChips"></div>
-                  <div class="team-field" style="margin-top:8px;">
-                    <input type="text" id="pmprefPropertySearch" placeholder="Search properties..." autocomplete="off">
+                <div class="pmpref-step">
+                  <div class="pmpref-step-head"><span class="pmpref-step-num">3</span><span class="pmpref-step-title">Which properties?</span></div>
+                  <div class="pmpref-step-body">
+                    <div class="pmpref-field-hint">Select which properties this applies to.</div>
+                    <div class="pmpref-scope-row">
+                      <label class="pmpref-radio-card"><input type="radio" name="pmprefScope" value="all" checked><span>All properties</span></label>
+                      <label class="pmpref-radio-card"><input type="radio" name="pmprefScope" value="specific"><span>Specific properties</span></label>
+                    </div>
+                    <div id="pmprefPropertyPicker" style="display:none;">
+                      <div class="pmpref-chip-row" id="pmprefPropChips"></div>
+                      <div class="team-field" style="margin-top:8px;">
+                        <input type="text" id="pmprefPropertySearch" placeholder="Search properties..." autocomplete="off">
+                      </div>
+                      <div class="pmpref-property-list" id="pmprefPropertyList"></div>
+                    </div>
                   </div>
-                  <div class="pmpref-property-list" id="pmprefPropertyList"></div>
                 </div>
 
-                <div class="team-mx-head" style="margin-top:14px;"><span class="team-mx-count">Priority</span></div>
-                <div class="pmpref-scope-row" style="margin-bottom:18px;">
-                  <label class="pmpref-radio-card"><input type="radio" name="pmprefPriority" value="tier1" checked><span><strong>Tier 1 &mdash; Primary</strong><small>First supplier to receive the job.</small></span></label>
-                  <label class="pmpref-radio-card"><input type="radio" name="pmprefPriority" value="tier2"><span><strong>Tier 2 &mdash; Backup</strong><small>Used if the primary supplier doesn't accept or respond.</small></span></label>
+                <div class="pmpref-step">
+                  <div class="pmpref-step-head"><span class="pmpref-step-num">4</span><span class="pmpref-step-title">Priority level</span></div>
+                  <div class="pmpref-step-body">
+                    <div class="pmpref-scope-row">
+                      <label class="pmpref-radio-card"><input type="radio" name="pmprefPriority" value="tier1" checked><span><strong>Tier 1 &mdash; Primary</strong><small>First supplier to receive the job.</small></span></label>
+                      <label class="pmpref-radio-card"><input type="radio" name="pmprefPriority" value="tier2"><span><strong>Tier 2 &mdash; Backup</strong><small>Used if the primary supplier doesn't accept or respond.</small></span></label>
+                    </div>
+                  </div>
                 </div>
 
-                <div class="pmpref-summary" id="pmprefSummary" style="display:none;"></div>
               </div>
 
               <div class="confirm-modal-btns pmpref-modal-footer">
                 <button type="button" class="pmprop-del-cancel" id="pmprefAddCancel">Cancel</button>
                 <button type="button" class="confirm-modal-confirm" id="pmprefAddSave">Save preferred supplier</button>
               </div>
-            </div>
-          </div>
-
-          <!-- Full "preferred for" detail popup, opened from the context banner's View details button -->
-          <div class="modal-overlay" id="pmprefDetailOverlay">
-            <div class="confirm-modal-card team-modal-card">
-              <button type="button" class="modal-close-x" data-pmpref-close aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-              <div class="team-modal-title" id="pmprefDetailSupplierName"></div>
-              <div class="team-modal-desc">Preferred for</div>
-              <div id="pmprefDetailRows"></div>
             </div>
           </div>
 
@@ -25466,6 +25556,7 @@
 
   var PMEX_PROVIDERS = [
     { id: 'pv1', name: 'Thameside Plumbing & Gas', businessType: 'Company', role: 'Gas Engineer \u00b7 Plumber \u00b7 HVAC', rating: 4.8, reviews: 136, jobs: 4210, price: 90, sla: '4 hours', hours: '06:00-22:00', days: 'Mon-Sun', emergency: true, certs: ['Gas Safe', 'CIPHE', 'WaterSafe'], areas: 'E1, EC1', insured: true, dbs: false, preferred: true, cat: ['plumbing', 'maintenance'], experience: 14, responseRate: 98, completionRate: 97, repeatClients: 82, memberSince: 2016,
+      jobTemplates: ['Annual Boiler Service', 'Emergency Gas Leak Callout', 'Tap & Valve Replacement', 'Radiator Bleeding', 'Bathroom Plumbing Fit-out'],
       services: [
         { name: 'Boiler Service', tags: ['RES', 'COM'], price: '\u00a3175', budget: true },
         { name: 'Gas Safety Check', tags: ['RES', 'COM'], price: '\u00a385', budget: true },
@@ -25475,6 +25566,7 @@
         { name: 'Underfloor Heating', tags: ['RES', 'COM'], quote: true }
       ] },
     { id: 'pv2', name: 'Clearflow Plumbing', businessType: 'Company', role: 'Plumber', rating: 4.2, reviews: 64, jobs: 1490, price: 75, sla: 'Same day', hours: '07:00-20:00', days: 'Mon-Sat', emergency: true, certs: ['Gas Safe', 'CIPHE'], areas: 'E1, E2', insured: true, dbs: true, cat: ['plumbing', 'maintenance'], experience: 7, responseRate: 95, completionRate: 96, repeatClients: 74, memberSince: 2019,
+      jobTemplates: ['Blocked Drain Clearance', 'Boiler Breakdown Repair', 'Pipe Leak Isolation', 'Washing Machine Plumbing'],
       services: [
         { name: 'Boiler Service', tags: ['RES', 'COM'], price: '\u00a3155', budget: true },
         { name: 'Leak Repair', tags: ['RES', 'COM'], price: '\u00a390', budget: true },
@@ -25482,6 +25574,7 @@
         { name: 'Pipe Repair', tags: ['RES', 'COM'], price: '\u00a3105', budget: true }
       ] },
     { id: 'pv3', name: 'Maria Ibanez', businessType: 'Sole Trader', role: 'Cleaner', rating: 4.9, reviews: 58, jobs: 610, price: 18, sla: 'Same day', hours: '07:00-20:00', days: 'Mon-Sun', emergency: false, certs: ['DBS'], areas: 'London, Manchester', insured: true, dbs: true, cat: ['cleaning'], experience: 5, responseRate: 99, completionRate: 98, repeatClients: 88, memberSince: 2021,
+      jobTemplates: ['Move-out Deep Clean', 'Weekly Maintenance Clean', 'Post-renovation Clean', 'Carpet & Upholstery Clean'],
       services: [
         { name: 'Standard Clean', tags: ['RES'], price: '\u00a318', budget: true },
         { name: 'Deep Clean', tags: ['RES'], price: '\u00a324', budget: true },
@@ -25489,6 +25582,7 @@
         { name: 'Carpet Clean', tags: ['RES', 'COM'], quote: true }
       ] },
     { id: 'pv4', name: 'Sparkle Commercial Clean', businessType: 'Company', role: 'Commercial Cleaning', rating: 3.6, reviews: 71, jobs: 455, price: 20, sla: 'Next day', hours: '08:00-17:00', days: 'Mon-Fri', emergency: false, certs: ['DBS'], areas: 'Manchester, Leeds', insured: true, dbs: true, cat: ['cleaning'], experience: 9, responseRate: 92, completionRate: 94, repeatClients: 70, memberSince: 2018,
+      jobTemplates: ['Office End-of-day Clean', 'Commercial Carpet Clean', 'Window Cleaning Round'],
       services: [
         { name: 'Office Clean', tags: ['COM'], price: '\u00a320/hr' },
         { name: 'Deep Clean', tags: ['RES', 'COM'], price: '\u00a3240' },
@@ -25496,6 +25590,7 @@
         { name: 'Window Clean', tags: ['RES', 'COM'], price: '\u00a342' }
       ] },
     { id: 'pv5', name: 'Voltix Electrical Ltd', businessType: 'Company', role: 'Electrician', rating: 4.6, reviews: 82, jobs: 905, price: 95, sla: 'Next day', hours: '08:00-18:00', days: 'Mon-Sat', emergency: true, certs: ['NICEIC', 'Part P'], areas: 'London, Home Counties', insured: true, dbs: false, preferred: true, cat: ['electrical'], experience: 11, responseRate: 97, completionRate: 97, repeatClients: 80, memberSince: 2017,
+      jobTemplates: ['5-yearly EICR Certificate', 'Consumer Unit Replacement', 'Emergency Fault Callout', 'Socket & Switch Installation'],
       services: [
         { name: 'EICR', tags: ['RES', 'COM'], price: '\u00a3180', budget: true },
         { name: 'Fault Finding', tags: ['RES', 'COM'], price: '\u00a390', budget: true },
@@ -25503,6 +25598,7 @@
         { name: 'Consumer Unit Upgrade', tags: ['RES'], price: '\u00a3820' }
       ] },
     { id: 'pv6', name: 'Guardian Fire Safety', businessType: 'Company', role: 'Fire Safety Engineer', rating: 4.7, reviews: 89, jobs: 540, price: 150, sla: '48 hours', hours: '09:00-17:00', days: 'Mon-Fri', emergency: false, certs: ['BAFE', 'IFE'], areas: 'UK Wide', insured: true, dbs: true, cat: ['fire'], experience: 16, responseRate: 96, completionRate: 99, repeatClients: 85, memberSince: 2015,
+      jobTemplates: ['Annual Fire Risk Assessment', 'Fire Alarm System Test', 'Emergency Lighting Check', 'Extinguisher Servicing'],
       services: [
         { name: 'Fire Risk Assessment', tags: ['RES', 'COM'], price: '\u00a3145' },
         { name: 'Fire Alarm Test', tags: ['COM'], price: '\u00a375' },
@@ -25510,6 +25606,7 @@
         { name: 'Fire Extinguisher Service', tags: ['COM'], quote: true }
       ] },
     { id: 'pv7', name: 'Inventory Experts UK', businessType: 'Sole Trader', role: 'Inventory Clerk', rating: 4.8, reviews: 203, jobs: 1780, price: 95, sla: 'Same day', hours: '08:00-20:00', days: 'Mon-Sun', emergency: false, certs: ['DBS'], areas: 'London & South East', insured: true, dbs: true, cat: ['inventory'], experience: 8, responseRate: 99, completionRate: 98, repeatClients: 91, memberSince: 2019,
+      jobTemplates: ['Tenancy Check-in Report', 'Tenancy Check-out Report', 'Mid-tenancy Inspection'],
       services: [
         { name: 'Check-In Report', tags: ['RES'], price: '\u00a390' },
         { name: 'Check-Out Report', tags: ['RES'], price: '\u00a390' },
@@ -25517,6 +25614,7 @@
         { name: 'Full Inventory', tags: ['RES'], price: '\u00a3175' }
       ] },
     { id: 'pv8', name: 'Dan Whitfield', businessType: 'Sole Trader', role: 'Handyman', rating: 4.7, reviews: 36, jobs: 812, price: 25, sla: 'Same day', hours: '07:00-19:00', days: 'Mon-Sat', emergency: true, certs: ['DBS'], areas: 'E1, E2', insured: true, dbs: true, cat: ['repairs', 'maintenance'], experience: 12, responseRate: 97, completionRate: 96, repeatClients: 79, memberSince: 2016,
+      jobTemplates: ['Flat-pack Furniture Assembly', 'Lock & Door Ironmongery Swap', 'Shelving & Wall Fixings'],
       services: [
         { name: 'General Repairs', tags: ['RES', 'COM'], price: '\u00a325', budget: true },
         { name: 'Lock Change', tags: ['RES', 'COM'], price: '\u00a360', budget: true },
@@ -27202,11 +27300,11 @@
   function pmprefNextId(prefix) { pmTeamUid += 1; return prefix + '_' + pmTeamUid; }
 
   var pmprefPreferences = [
-    { id: 'pref_1', supplierId: 'pv1', categories: ['plumbing', 'maintenance'], roles: [PMEX_PROVIDERS[0].services[0].name, PMEX_PROVIDERS[0].services[1].name], propertyScope: 'all', priority: 'tier1', complianceOk: true, addedOn: '2026-07-02' },
-    { id: 'pref_2', supplierId: 'pv2', categories: ['plumbing'], roles: [PMEX_PROVIDERS[1].services[0].name], propertyScope: ['prop-2', 'prop-3'], priority: 'tier2', complianceOk: true, addedOn: '2026-07-14' },
-    { id: 'pref_3', supplierId: 'pv5', categories: ['electrical'], roles: [PMEX_PROVIDERS.find(function (p) { return p.id === 'pv5'; }).services[0].name], propertyScope: 'all', priority: 'tier1', complianceOk: true, addedOn: '2026-06-20' },
-    { id: 'pref_4', supplierId: 'pv3', categories: ['cleaning'], roles: [PMEX_PROVIDERS.find(function (p) { return p.id === 'pv3'; }).services[0].name, PMEX_PROVIDERS.find(function (p) { return p.id === 'pv3'; }).services[1].name], propertyScope: ['prop-1', 'prop-4', 'prop-5'], priority: 'tier1', complianceOk: true, addedOn: '2026-08-01' },
-    { id: 'pref_5', supplierId: 'pv6', categories: ['fire'], roles: [PMEX_PROVIDERS.find(function (p) { return p.id === 'pv6'; }).services[0].name], propertyScope: 'all', priority: 'tier1', complianceOk: false, addedOn: '2026-05-11' }
+    { id: 'pref_1', supplierId: 'pv1', categories: ['plumbing', 'maintenance'], roles: [PMEX_PROVIDERS[0].services[0].name, PMEX_PROVIDERS[0].services[1].name], jobs: [PMEX_PROVIDERS[0].jobTemplates[0], PMEX_PROVIDERS[0].jobTemplates[1]], propertyScope: 'all', priority: 'tier1', complianceOk: true, addedOn: '2026-07-02' },
+    { id: 'pref_2', supplierId: 'pv2', categories: ['plumbing'], roles: [PMEX_PROVIDERS[1].services[0].name], jobs: [PMEX_PROVIDERS[1].jobTemplates[0]], propertyScope: ['prop-2', 'prop-3'], priority: 'tier2', complianceOk: true, addedOn: '2026-07-14' },
+    { id: 'pref_3', supplierId: 'pv5', categories: ['electrical'], roles: [PMEX_PROVIDERS.find(function (p) { return p.id === 'pv5'; }).services[0].name], jobs: [PMEX_PROVIDERS.find(function (p) { return p.id === 'pv5'; }).jobTemplates[0]], propertyScope: 'all', priority: 'tier1', complianceOk: true, addedOn: '2026-06-20' },
+    { id: 'pref_4', supplierId: 'pv3', categories: ['cleaning'], roles: [PMEX_PROVIDERS.find(function (p) { return p.id === 'pv3'; }).services[0].name, PMEX_PROVIDERS.find(function (p) { return p.id === 'pv3'; }).services[1].name], jobs: [PMEX_PROVIDERS.find(function (p) { return p.id === 'pv3'; }).jobTemplates[0], PMEX_PROVIDERS.find(function (p) { return p.id === 'pv3'; }).jobTemplates[1], PMEX_PROVIDERS.find(function (p) { return p.id === 'pv3'; }).jobTemplates[2]], propertyScope: ['prop-1', 'prop-4', 'prop-5'], priority: 'tier1', complianceOk: true, addedOn: '2026-08-01' },
+    { id: 'pref_5', supplierId: 'pv6', categories: ['fire'], roles: [PMEX_PROVIDERS.find(function (p) { return p.id === 'pv6'; }).services[0].name], jobs: [PMEX_PROVIDERS.find(function (p) { return p.id === 'pv6'; }).jobTemplates[0]], propertyScope: 'all', priority: 'tier1', complianceOk: false, addedOn: '2026-05-11' }
   ];
   var pmprefExcluded = [
     { id: 'excl_1', supplierId: 'pv4', reason: 'Missed two scheduled jobs without notice', excludedOn: '2026-09-12' }
@@ -27231,11 +27329,6 @@
   }
   // Powers the Categories/Roles table cells: the name itself when there's exactly one, otherwise
   // a count chip ("3 Categories") with the full list available on hover via a native tooltip.
-  function pmprefListCellHtml(items, singularWord, pluralWord) {
-    if (!items.length) return '<span class="pmpref-cell-muted">\u2014</span>';
-    if (items.length === 1) return '<span class="pmpref-chip-static">' + pmexEscapeHtml(items[0]) + '</span>';
-    return '<span class="pmpref-chip-static pmpref-chip-count" title="' + pmexEscapeHtml(items.join(', ')) + '">' + items.length + ' ' + pluralWord + '</span>';
-  }
   function pmprefCatChipList(catKeys) { return catKeys.map(function (k) { return pmprefCatLabel(k); }); }
 
   function pmprefPopulateFilterOptions() {
@@ -27247,14 +27340,16 @@
     var cat = pmprefSddState.catFilter;
     var role = pmprefSddState.roleFilter;
     var prop = pmprefSddState.propFilter;
+    var job = pmprefSddState.jobFilter;
     var priority = pmprefSddState.priorityFilter;
     return pmprefPreferences.filter(function (r) {
       var sup = pmprefSupplier(r.supplierId);
       if (!sup) return false;
       if (q && sup.name.toLowerCase().indexOf(q) === -1 && !r.roles.some(function (rl) { return rl.toLowerCase().indexOf(q) !== -1; })) return false;
       if (cat.length && !r.categories.some(function (c) { return cat.indexOf(c) !== -1; })) return false;
-      if (role && r.roles.indexOf(role) === -1) return false;
-      if (prop && r.propertyScope !== 'all' && r.propertyScope.indexOf(prop) === -1) return false;
+      if (role.length && !r.roles.some(function (rl) { return role.indexOf(rl) !== -1; })) return false;
+      if (prop.length && r.propertyScope !== 'all' && !r.propertyScope.some(function (pid) { return prop.indexOf(pid) !== -1; })) return false;
+      if (job.length && !(r.jobs || []).some(function (j) { return job.indexOf(j) !== -1; })) return false;
       if (priority && r.priority !== priority) return false;
       return true;
     });
@@ -27262,16 +27357,17 @@
 
   function pmprefSupplierSummary(sid, myRules) {
     var sup = pmprefSupplier(sid);
-    var allCats = [], allRoles = [];
+    var allCats = [], allRoles = [], allJobs = [];
     myRules.forEach(function (r) {
       r.categories.forEach(function (c) { if (allCats.indexOf(c) === -1) allCats.push(c); });
       r.roles.forEach(function (rl) { if (allRoles.indexOf(rl) === -1) allRoles.push(rl); });
+      (r.jobs || []).forEach(function (j) { if (allJobs.indexOf(j) === -1) allJobs.push(j); });
     });
     var anyAll = myRules.some(function (r) { return r.propertyScope === 'all'; });
-    var propCount = anyAll ? null : Array.from(new Set(myRules.reduce(function (acc, r) { return acc.concat(r.propertyScope); }, []))).length;
+    var propNames = anyAll ? PMPROP_PROPERTIES.map(function (p) { return p.name; }) :
+      Array.from(new Set(myRules.reduce(function (acc, r) { return acc.concat(r.propertyScope); }, []))).map(function (id) { var pr = pmprefPropertyById(id); return pr ? pr.name : id; });
     var hasT1 = myRules.some(function (r) { return r.priority === 'tier1'; });
-    var propText = anyAll ? 'All properties' : propCount + ' Propert' + (propCount === 1 ? 'y' : 'ies');
-    return { sup: sup, allCats: allCats, allRoles: allRoles, propText: propText, priorityHtml: pmprefPriorityChip(hasT1 ? 'tier1' : 'tier2') };
+    return { sup: sup, allCats: allCats, allRoles: allRoles, allJobs: allJobs, propNames: propNames, priorityHtml: pmprefPriorityChip(hasT1 ? 'tier1' : 'tier2') };
   }
   function pmprefGroupedBySupplier() {
     var rules = pmprefFilteredPrefs();
@@ -27279,7 +27375,6 @@
     rules.forEach(function (r) { (bySupplier[r.supplierId] = bySupplier[r.supplierId] || []).push(r); });
     return bySupplier;
   }
-  var pmprefExpandedRows = {};
   function renderPmprefTable() {
     var bySupplier = pmprefGroupedBySupplier();
     var supplierIds = Object.keys(bySupplier);
@@ -27288,31 +27383,27 @@
     document.getElementById('pmprefSuppliersBody').innerHTML = supplierIds.map(function (sid) {
       var myRules = bySupplier[sid];
       var s = pmprefSupplierSummary(sid, myRules);
-      var expanded = !!pmprefExpandedRows[sid];
-      var row = '<tr class="pmpref-row' + (expanded ? ' pmpref-row-expanded' : '') + '" data-pmpref-row-open="' + sid + '">' +
+      return '<tr class="pmpref-row" data-pmpref-row-open="' + sid + '">' +
         '<td><div class="team-person"><div class="team-avatar"><img src="https://i.pravatar.cc/64?img=' + (PMEX_PROVIDERS.indexOf(s.sup) % 70 + 3) + '" alt=""></div>' +
           '<div class="team-person-main"><span class="pmpref-supplier-link">' + pmexEscapeHtml(s.sup.name) + '</span>' +
           '<div class="team-person-email pmpref-rating-line">' + starRatingInline(s.sup.rating) + ' ' + s.sup.rating + '</div></div></div></td>' +
-        '<td>' + pmprefListCellHtml(pmprefCatChipList(s.allCats), 'category', 'Categories') + '</td>' +
-        '<td>' + pmprefListCellHtml(s.allRoles, 'role', 'Roles') + '</td>' +
-        '<td class="pmpref-nowrap">' + s.propText + '</td>' +
+        '<td><div class="pmpref-card-chip-row">' + pmprefIndividualChipsHtml(pmprefCatChipList(s.allCats), 'pmpref-chip-cat', 1) + '</div></td>' +
+        '<td><div class="pmpref-card-chip-row">' + pmprefIndividualChipsHtml(s.allRoles, 'pmpref-chip-role', 1) + '</div></td>' +
+        '<td>' + pmprefTextCellHtml(s.allJobs) + '</td>' +
+        '<td>' + pmprefTextCellHtml(s.propNames) + '</td>' +
         '<td>' + s.priorityHtml + '</td>' +
         '<td style="text-align:right;"><div class="team-actions" data-pmpref-stop>' +
-          '<button type="button" class="svcp-icon-btn pmpref-view-chevron' + (expanded ? ' open' : '') + '" data-pmpref-toggle-view="' + sid + '" data-tooltip="View details"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>' +
           '<button type="button" class="svcp-icon-btn" data-pmpref-edit="' + myRules[0].id + '" data-tooltip="Edit preference"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg></button>' +
           '<button type="button" class="svcp-icon-btn danger" data-pmpref-remove-supplier="' + sid + '" data-tooltip="Remove preferred">' + PMTEAM_TRASH + '</button>' +
         '</div></td>' +
       '</tr>';
-      if (expanded) {
-        var propNames = s.propText === 'All properties' ? ['All properties'] : Array.from(new Set(myRules.reduce(function (acc, r) { return r.propertyScope === 'all' ? acc : acc.concat(r.propertyScope.map(function (id) { var p = pmprefPropertyById(id); return p ? p.name : id; })); }, [])));
-        row += '<tr class="pmpref-expand-row"><td colspan="6"><div class="pmpref-expand-content" data-pmpref-stop>' +
-          '<div class="pmpref-expand-col"><div class="pmpref-card-chip-label">Categories</div><div class="pmpref-card-chip-row">' + pmprefIndividualChipsHtml(pmprefCatChipList(s.allCats), 'pmpref-chip-cat', 99) + '</div></div>' +
-          '<div class="pmpref-expand-col"><div class="pmpref-card-chip-label">Roles</div><div class="pmpref-card-chip-row">' + pmprefIndividualChipsHtml(s.allRoles, 'pmpref-chip-role', 99) + '</div></div>' +
-          '<div class="pmpref-expand-col"><div class="pmpref-card-chip-label">Properties</div><div class="pmpref-card-chip-row">' + pmprefIndividualChipsHtml(propNames, 'pmpref-chip-prop', 99) + '</div></div>' +
-        '</div></td></tr>';
-      }
       return row;
     }).join('');
+  }
+  function pmprefTextCellHtml(items) {
+    if (!items.length) return '<span class="pmpref-cell-muted">\u2014</span>';
+    var extra = items.length - 1;
+    return '<span class="pmpref-cell-text"><span class="pmpref-cell-text-name" title="' + pmexEscapeHtml(items[0]) + '">' + pmexEscapeHtml(items[0]) + '</span>' + (extra > 0 ? '<span class="pmpref-cell-text-more" title="' + pmexEscapeHtml(items.slice(1).join(', ')) + '">+' + extra + ' more</span>' : '') + '</span>';
   }
   function pmprefIndividualChipsHtml(items, chipClass, maxVisible) {
     if (!items.length) return '<span class="pmpref-cell-muted">\u2014</span>';
@@ -27322,10 +27413,23 @@
     return visible.map(function (v) { return '<span class="' + chipClass + '">' + pmexEscapeHtml(v) + '</span>'; }).join('') +
       (remaining > 0 ? '<span class="pmpref-chip-more" title="' + pmexEscapeHtml(items.slice(maxVisible).join(', ')) + '">+' + remaining + '</span>' : '');
   }
-  // Card view: always shows the first item's real name as a chip, plus a "+N" badge for anything
-  // beyond that - so the card never hides every name behind a bare count, only what doesn't fit.
-  function pmprefCardChipOrCountHtml(items, chipClass) {
-    return pmprefIndividualChipsHtml(items, chipClass, 1);
+  var pmprefCardExpandedSections = {};
+  function pmprefFlowListHtml(sid, sectionKey, items, maxShow) {
+    if (!items.length) return '<span class="pmpref-cell-muted">None specified</span>';
+    var stateKey = sid + ':' + sectionKey;
+    var expanded = !!pmprefCardExpandedSections[stateKey];
+    if (expanded || items.length <= maxShow) {
+      var text = pmexEscapeHtml(items.join(', '));
+      return items.length > maxShow ? text + ' <button type="button" class="pmpref-flow-more" data-pmpref-card-collapse="' + stateKey + '">Show less</button>' : text;
+    }
+    var extra = items.length - maxShow;
+    return pmexEscapeHtml(items.slice(0, maxShow).join(', ')) + ' <button type="button" class="pmpref-flow-more" data-pmpref-card-expand="' + stateKey + '">+' + extra + ' more</button>';
+  }
+  function pmprefCardFactHtml(iconSvg, label, valueHtml) {
+    return '<div class="pmpref-card-fact">' +
+      '<div class="pmpref-card-fact-label"><span class="pmpref-card-fact-icon">' + iconSvg + '</span>' + pmexEscapeHtml(label) + '</div>' +
+      '<div class="pmpref-card-fact-value">' + valueHtml + '</div>' +
+    '</div>';
   }
   function renderPmprefCards() {
     var bySupplier = pmprefGroupedBySupplier();
@@ -27336,23 +27440,19 @@
     grid.innerHTML = supplierIds.map(function (sid) {
       var myRules = bySupplier[sid];
       var s = pmprefSupplierSummary(sid, myRules);
-      var propNames = s.propText === 'All properties' ? ['All properties'] : myRules.reduce(function (acc, r) { return r.propertyScope === 'all' ? acc : acc.concat(r.propertyScope.map(function (id) { var p = pmprefPropertyById(id); return p ? p.name : id; })); }, []);
-      propNames = Array.from(new Set(propNames));
       return '<div class="pmpref-card" data-pmpref-row-open="' + sid + '">' +
         '<div class="pmpref-card-top">' +
           '<div class="team-avatar"><img src="https://i.pravatar.cc/64?img=' + (PMEX_PROVIDERS.indexOf(s.sup) % 70 + 3) + '" alt=""></div>' +
           '<div class="pmpref-card-name-wrap"><span class="pmpref-supplier-link pmpref-card-name">' + pmexEscapeHtml(s.sup.name) + '</span>' +
           '<div class="pmpref-rating-line">' + starRatingInline(s.sup.rating) + ' ' + s.sup.rating + '</div></div>' +
         '</div>' +
-        '<div class="pmpref-card-divider"></div>' +
-        '<div class="pmpref-card-chip-label">Categories</div>' +
-        '<div class="pmpref-card-chip-row">' + pmprefCardChipOrCountHtml(pmprefCatChipList(s.allCats), 'pmpref-chip-cat') + '</div>' +
-        '<div class="pmpref-card-divider"></div>' +
-        '<div class="pmpref-card-chip-label">Roles</div>' +
-        '<div class="pmpref-card-chip-row">' + pmprefCardChipOrCountHtml(s.allRoles, 'pmpref-chip-role') + '</div>' +
-        '<div class="pmpref-card-divider"></div>' +
-        '<div class="pmpref-card-chip-label">Properties</div>' +
-        '<div class="pmpref-card-chip-row">' + pmprefCardChipOrCountHtml(propNames, 'pmpref-chip-prop') + '</div>' +
+        '<div class="pmpref-card-fact-grid">' +
+          pmprefCardFactHtml(PMPREF_ICON_CAT, 'Category', pmprefIndividualChipsHtml(pmprefCatChipList(s.allCats), 'pmpref-chip-cat', 99)) +
+          pmprefCardFactHtml(PMPREF_ICON_ROLE, 'Role', pmprefFlowListHtml(sid, 'role', s.allRoles, 2)) +
+          pmprefCardFactHtml(PMPREF_ICON_JOB, 'Job template', pmprefFlowListHtml(sid, 'job', s.allJobs, 2)) +
+          pmprefCardFactHtml(PMPREF_ICON_PROP, 'Properties', pmprefFlowListHtml(sid, 'prop', s.propNames, 2)) +
+        '</div>' +
+        '<div class="pmpref-card-spacer"></div>' +
         '<div class="pmpref-card-divider pmpref-card-divider-footer"></div>' +
         '<div class="pmpref-card-bottom">' +
           s.priorityHtml +
@@ -27371,6 +27471,13 @@
     renderPmprefTable();
     renderPmprefCards();
   }
+  // Tables are force-hidden on mobile (.pm-table-wrap !important rule) regardless of view state,
+  // so if the viewport shrinks into that range while still on list view, the card grid must take
+  // over automatically - the toggle that would let the person switch manually is itself hidden
+  // at this width, so this can't be left for them to fix.
+  window.matchMedia('(max-width: 760px)').addEventListener('change', function (e) {
+    if (e.matches && pmprefViewMode === 'list') pmprefSwitchView('card');
+  });
   function starRatingInline(rating) {
     return '<svg width="11" height="11" viewBox="0 0 12 12" fill="#f59e0b" stroke="#f59e0b" style="vertical-align:-1px;flex-shrink:0;"><path d="M6 1l1.2 3.6H11L8.2 7l1.1 3.6L6 8.8 2.7 10.6 3.8 7 1 4.6h3.8z"/></svg>';
   }
@@ -27400,13 +27507,18 @@
   /* ---------- Searchable dropdowns (filters + the modal's Category/Role pickers) ---------- */
   // catFilter/roleFilter/propFilter/priorityFilter are single-select strings ('' = All).
   // catPicker/rolePicker (used only inside the Add/Edit modal) are multi-select arrays.
-  var pmprefSddState = { catFilter: [], roleFilter: '', propFilter: '', priorityFilter: '', catPicker: [], rolePicker: [] };
-  var pmprefSddMulti = { catFilter: true, catPicker: true, rolePicker: true };
+  var pmprefSddState = { catFilter: [], roleFilter: [], propFilter: [], jobFilter: [], priorityFilter: '', catPicker: [], rolePicker: [], jobPicker: [] };
+  var pmprefSddMulti = { catFilter: true, roleFilter: true, propFilter: true, jobFilter: true, catPicker: true, rolePicker: true, jobPicker: true };
   var pmprefSddSearch = {};
 
   function pmprefAllRoleNames() {
     var names = [];
     PMEX_PROVIDERS.forEach(function (p) { p.services.forEach(function (sv) { if (names.indexOf(sv.name) === -1) names.push(sv.name); }); });
+    return names.sort();
+  }
+  function pmprefAllJobNames() {
+    var names = [];
+    PMEX_PROVIDERS.forEach(function (p) { (p.jobTemplates || []).forEach(function (j) { if (names.indexOf(j) === -1) names.push(j); }); });
     return names.sort();
   }
   function pmprefSddOptions(kind) {
@@ -27415,6 +27527,13 @@
     }
     if (kind === 'roleFilter' || kind === 'rolePicker') {
       return pmprefAllRoleNames().map(function (n) { return { value: n, label: n }; });
+    }
+    if (kind === 'jobFilter') {
+      return pmprefAllJobNames().map(function (n) { return { value: n, label: n }; });
+    }
+    if (kind === 'jobPicker') {
+      var picked = pmprefDraftSupplierId ? pmprefSupplier(pmprefDraftSupplierId) : null;
+      return (picked && picked.jobTemplates ? picked.jobTemplates : []).map(function (n) { return { value: n, label: n }; });
     }
     if (kind === 'propFilter') return PMPROP_PROPERTIES.map(function (p) { return { value: p.id, label: p.name }; });
     if (kind === 'priorityFilter') return [{ value: 'tier1', label: 'Tier 1 \u00b7 Primary' }, { value: 'tier2', label: 'Tier 2 \u00b7 Backup' }];
@@ -27433,8 +27552,9 @@
     return found ? found.label : placeholder;
   }
   function pmprefSddPlaceholder(kind) {
-    return { catFilter: 'Category: All', roleFilter: 'Role: All', propFilter: 'Property: All', priorityFilter: 'Priority: All', catPicker: 'Select category', rolePicker: 'Select role' }[kind];
+    return { catFilter: 'Category: All', roleFilter: 'Role: All', propFilter: 'Property: All', jobFilter: 'Job: All', priorityFilter: 'Priority: All', catPicker: 'Select category', rolePicker: 'Select role', jobPicker: 'Select job template' }[kind];
   }
+  var pmprefFilterKinds = { catFilter: 'Categories', roleFilter: 'Roles', propFilter: 'Properties', jobFilter: 'Job templates' };
   function pmprefSddRenderMenu(kind) {
     var wrap = document.querySelector('[data-pmpref-sdd="' + kind + '"]');
     if (!wrap) return;
@@ -27451,6 +27571,10 @@
     }).join('') : '<div class="pmpref-dd-empty">No matches.</div>';
     if (!pmprefSddMulti[kind]) {
       itemsHtml = '<div class="cdd-item pmpref-sdd-item' + (!sel ? ' selected' : '') + '" data-pmpref-sdd-opt="">' + pmprefSddPlaceholder(kind) + '</div>' + itemsHtml;
+    } else if (pmprefFilterKinds[kind] && opts.length && !q) {
+      var allSelected = opts.every(function (o) { return sel.indexOf(o.value) !== -1; });
+      itemsHtml = '<div class="cdd-item pmpref-sdd-item pmpref-sdd-selectall' + (allSelected ? ' selected' : '') + '" data-pmpref-sdd-selectall="1">' +
+        '<span class="pmpref-sdd-check"></span><span>All ' + pmexEscapeHtml(pmprefFilterKinds[kind]) + '</span></div>' + itemsHtml;
     }
     list.innerHTML = itemsHtml;
     wrap.querySelector('.cdd-value').textContent = pmprefSddLabelFor(kind, pmprefSddPlaceholder(kind));
@@ -27466,7 +27590,7 @@
     wrap.querySelector('.pm-custom-dd-btn').classList.remove('open');
     wrap.querySelector('.pm-custom-dd-menu').classList.remove('open');
   }
-  function pmprefSddCloseAll() { ['catFilter', 'roleFilter', 'propFilter', 'priorityFilter', 'catPicker', 'rolePicker'].forEach(pmprefSddClose); }
+  function pmprefSddCloseAll() { ['catFilter', 'roleFilter', 'propFilter', 'jobFilter', 'priorityFilter', 'catPicker', 'rolePicker', 'jobPicker'].forEach(pmprefSddClose); }
   function pmprefWireSdd(kind, onChange) {
     var wrap = document.querySelector('[data-pmpref-sdd="' + kind + '"]');
     if (!wrap) return;
@@ -27487,6 +27611,16 @@
     });
     if (searchInput) searchInput.addEventListener('input', function (e) { pmprefSddSearch[kind] = e.target.value; pmprefSddRenderMenu(kind); });
     wrap.querySelector('.pmpref-sdd-list').addEventListener('click', function (e) {
+      var selectAll = e.target.closest('[data-pmpref-sdd-selectall]');
+      if (selectAll) {
+        e.stopPropagation();
+        var allOpts = pmprefSddOptions(kind).map(function (o) { return o.value; });
+        var currentlyAll = allOpts.every(function (v) { return pmprefSddState[kind].indexOf(v) !== -1; });
+        pmprefSddState[kind] = currentlyAll ? [] : allOpts.slice();
+        pmprefSddRenderMenu(kind);
+        if (onChange) onChange();
+        return;
+      }
       var item = e.target.closest('[data-pmpref-sdd-opt]');
       if (!item) return;
       e.stopPropagation();
@@ -27508,23 +27642,34 @@
   /* ---- Reused Explore Suppliers profile page, with the button row swapped, a "preferred for"
          context banner added, and a Block-supplier action \u2014 topbar title/back replace the old
          inline ones so this detail page matches every other detail page's pattern in the app. ---- */
-  function pmprefBannerSegHtml(label, items, pluralWord) {
-    if (!items.length) return '';
-    var val = items.length === 1
-      ? '<span class="pmpref-context-seg-val">' + pmexEscapeHtml(items[0]) + '</span>'
-      : '<span class="pmpref-context-seg-val">' + items.length + ' ' + pluralWord + '</span>';
-    return '<span class="pmpref-context-seg"><span class="pmpref-context-seg-label">' + pmexEscapeHtml(label) + ':</span>' + val + '</span>';
+  function pmprefDetailSectionHtml(iconSvg, label, items, chipClass) {
+    return '<div class="pmpref-detail-section">' +
+      '<div class="pmpref-detail-section-head"><span class="pmpref-detail-section-icon">' + iconSvg + '</span>' +
+        '<span class="pmpref-detail-section-title">' + pmexEscapeHtml(label) + '</span>' +
+        '<span class="pmpref-detail-section-count">' + (items.length ? '(' + items.length + ')' : '') + '</span></div>' +
+      '<div class="pmpref-detail-chip-row">' + pmprefIndividualChipsHtml(items, chipClass, 99) + '</div>' +
+    '</div>';
   }
-  function pmprefBannerHtml(allCats, allRoles, propNames) {
-    return '<div class="pmpref-context-banner">' +
-      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>' +
-      '<span class="pmpref-context-heading">Preferred for</span>' +
-      '<div class="pmpref-context-segments">' +
-        pmprefBannerSegHtml('Category', pmprefCatChipList(allCats), 'Categories') +
-        pmprefBannerSegHtml('Role', allRoles, 'Roles') +
-        pmprefBannerSegHtml('Property', propNames, 'Properties') +
+  var PMPREF_ICON_CAT = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41L11 3.83A2 2 0 009.59 3.24L3 3v6.59a2 2 0 00.59 1.41l9.58 9.58a2 2 0 002.83 0l4.59-4.59a2 2 0 000-2.83z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>';
+  var PMPREF_ICON_ROLE = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>';
+  var PMPREF_ICON_JOB = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>';
+  var PMPREF_ICON_PROP = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V21a1 1 0 01-1 1H4a1 1 0 01-1-1z"/><path d="M9 21V12h6v9"/></svg>';
+  function pmprefDetailBlockHtml(s, myRules) {
+    var earliestAdded = myRules.reduce(function (min, r) { return r.addedOn < min ? r.addedOn : min; }, myRules[0].addedOn);
+    return '<div class="pmpref-detail-block">' +
+      '<button type="button" class="pmpref-detail-header" id="pmprefDetailToggle" data-expanded="true">' +
+        '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>' +
+        '<span class="pmpref-detail-title">Preferred for</span>' +
+        s.priorityHtml +
+        '<span class="pmpref-added-on">Since ' + pmexEscapeHtml(earliestAdded) + '</span>' +
+        '<svg class="pmpref-detail-chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' +
+      '</button>' +
+      '<div class="pmpref-detail-sections" id="pmprefDetailSections">' +
+        pmprefDetailSectionHtml(PMPREF_ICON_CAT, 'Categories', pmprefCatChipList(s.allCats), 'pmpref-chip-cat') +
+        pmprefDetailSectionHtml(PMPREF_ICON_ROLE, 'Roles', s.allRoles, 'pmpref-chip-role') +
+        pmprefDetailSectionHtml(PMPREF_ICON_JOB, 'Job templates', s.allJobs, 'pmpref-chip-job') +
+        pmprefDetailSectionHtml(PMPREF_ICON_PROP, 'Properties', s.propNames, 'pmpref-chip-prop') +
       '</div>' +
-      '<button type="button" class="pmpref-context-view-btn" id="pmprefContextViewBtn">View details</button>' +
     '</div>';
   }
   function pmprefShowProfile(sid) {
@@ -27554,14 +27699,8 @@
       '</div>';
       html = html.replace('<div class="pmex-pp-stats">', blockedBanner + '<div class="pmex-pp-stats">');
     } else if (myRules.length) {
-      var allCats = [], allRoles = [];
-      myRules.forEach(function (r) {
-        r.categories.forEach(function (c) { if (allCats.indexOf(c) === -1) allCats.push(c); });
-        r.roles.forEach(function (rl) { if (allRoles.indexOf(rl) === -1) allRoles.push(rl); });
-      });
-      var anyAll = myRules.some(function (r) { return r.propertyScope === 'all'; });
-      var propNames = anyAll ? ['All properties'] : Array.from(new Set(myRules.reduce(function (acc, r) { return acc.concat(r.propertyScope); }, []))).map(function (id) { var pr = pmprefPropertyById(id); return pr ? pr.name : id; });
-      html = html.replace('<div class="pmex-pp-stats">', pmprefBannerHtml(allCats, allRoles, propNames) + '<div class="pmex-pp-stats">');
+      var s = pmprefSupplierSummary(sid, myRules);
+      html = html.replace('<div class="pmex-pp-stats">', pmprefDetailBlockHtml(s, myRules) + '<div class="pmex-pp-stats">');
     }
     document.getElementById('pmprefProfileContent').innerHTML = html;
     document.getElementById('pmprefListWrap').style.display = 'none';
@@ -27581,20 +27720,15 @@
       if (editBtn) editBtn.addEventListener('click', function () { if (myRules[0]) pmprefOpenEdit(myRules[0].id); });
       if (removeBtn) removeBtn.addEventListener('click', function () { pmprefConfirmRemoveSupplier(sid); });
       if (blockBtn) blockBtn.addEventListener('click', function () { pmprefConfirmBlockSupplier(sid); });
-      var viewDetailsBtn = document.getElementById('pmprefContextViewBtn');
-      if (viewDetailsBtn && myRules.length) viewDetailsBtn.addEventListener('click', function () { pmprefOpenDetailPopup(p, allCats, allRoles, propNames); });
     }
-  }
-  function pmprefOpenDetailPopup(p, allCats, allRoles, propNames) {
-    document.getElementById('pmprefDetailSupplierName').textContent = p.name;
-    document.getElementById('pmprefDetailRows').innerHTML =
-      '<div class="team-mx-head" style="margin-top:14px;"><span class="team-mx-count">Categories</span></div>' +
-      '<div class="pmpref-card-chip-row">' + pmprefIndividualChipsHtml(pmprefCatChipList(allCats), 'pmpref-chip-cat', 99) + '</div>' +
-      '<div class="team-mx-head" style="margin-top:14px;"><span class="team-mx-count">Roles</span></div>' +
-      '<div class="pmpref-card-chip-row">' + pmprefIndividualChipsHtml(allRoles, 'pmpref-chip-role', 99) + '</div>' +
-      '<div class="team-mx-head" style="margin-top:14px;"><span class="team-mx-count">Properties</span></div>' +
-      '<div class="pmpref-card-chip-row">' + pmprefIndividualChipsHtml(propNames, 'pmpref-chip-prop', 99) + '</div>';
-    document.getElementById('pmprefDetailOverlay').classList.add('open');
+    var detailToggle = document.getElementById('pmprefDetailToggle');
+    if (detailToggle) {
+      detailToggle.addEventListener('click', function () {
+        var expanded = detailToggle.getAttribute('data-expanded') === 'true';
+        detailToggle.setAttribute('data-expanded', expanded ? 'false' : 'true');
+        document.getElementById('pmprefDetailSections').style.display = expanded ? 'none' : '';
+      });
+    }
   }
   function pmprefShowList() {
     document.getElementById('pmprefProfileWrap').style.display = 'none';
@@ -27662,24 +27796,11 @@
       '<div class="team-person-email">' + starRatingInline(sup.rating) + ' ' + sup.rating + ' \u00b7 ' + pmexEscapeHtml(sup.areas) + '</div></div></div>' +
       '<button type="button" class="pmpref-change-btn" id="pmprefSupplierChangeBtn">Change</button>';
   }
-  function pmprefRenderSummary() {
-    var box = document.getElementById('pmprefSummary');
-    if (!pmprefDraftSupplierId) { box.style.display = 'none'; return; }
-    var sup = pmprefSupplier(pmprefDraftSupplierId);
-    var catText = pmprefCatChipList(pmprefSddState.catPicker).join(', ') || '\u2014';
-    var roleText = pmprefSddState.rolePicker.join(', ') || '\u2014';
-    var scopeText = pmprefDraftScope === 'all' ? 'All properties' : pmprefDraftProps.length + ' propert' + (pmprefDraftProps.length === 1 ? 'y' : 'ies') + ' selected';
-    box.style.display = 'block';
-    box.innerHTML = '<div class="pmpref-summary-title">' + pmexEscapeHtml(sup.name) + '</div>' +
-      '<div class="pmpref-summary-line"><span>Categories</span><strong>' + pmexEscapeHtml(catText) + '</strong></div>' +
-      '<div class="pmpref-summary-line"><span>Roles</span><strong>' + pmexEscapeHtml(roleText) + '</strong></div>' +
-      '<div class="pmpref-summary-line"><span>Properties</span><strong>' + scopeText + '</strong></div>' +
-      '<div class="pmpref-summary-line"><span>Priority</span><strong>' + (pmprefDraftPriority === 'tier1' ? 'Tier 1 \u00b7 Primary' : 'Tier 2 \u00b7 Backup') + '</strong></div>';
-  }
   function pmprefRenderModal() {
     pmprefRenderChosenSupplier();
     pmprefChipRow('pmprefCatChips', pmprefSddState.catPicker, pmprefCatLabel, function (i) { pmprefSddState.catPicker.splice(i, 1); pmprefRenderModal(); });
     pmprefChipRow('pmprefRoleChips', pmprefSddState.rolePicker, function (v) { return v; }, function (i) { pmprefSddState.rolePicker.splice(i, 1); pmprefRenderModal(); });
+    pmprefChipRow('pmprefJobChips', pmprefSddState.jobPicker, function (v) { return v; }, function (i) { pmprefSddState.jobPicker.splice(i, 1); pmprefRenderModal(); });
     document.getElementById('pmprefPropertyPicker').style.display = pmprefDraftScope === 'specific' ? '' : 'none';
     if (pmprefDraftScope === 'specific') {
       pmprefRenderPropertyList();
@@ -27687,13 +27808,13 @@
     }
     document.querySelectorAll('input[name="pmprefScope"]').forEach(function (r) { r.checked = r.value === pmprefDraftScope; });
     document.querySelectorAll('input[name="pmprefPriority"]').forEach(function (r) { r.checked = r.value === pmprefDraftPriority; });
-    pmprefRenderSummary();
   }
   function pmprefOpenAdd() {
     pmprefEditId = null;
     pmprefDraftSupplierId = null;
     pmprefSddState.catPicker = [];
     pmprefSddState.rolePicker = [];
+    pmprefSddState.jobPicker = [];
     pmprefDraftScope = 'all';
     pmprefDraftProps = [];
     pmprefDraftPriority = 'tier1';
@@ -27711,6 +27832,7 @@
     pmprefDraftSupplierId = rule.supplierId;
     pmprefSddState.catPicker = rule.categories.slice();
     pmprefSddState.rolePicker = rule.roles.slice();
+    pmprefSddState.jobPicker = (rule.jobs || []).slice();
     pmprefDraftScope = rule.propertyScope === 'all' ? 'all' : 'specific';
     pmprefDraftProps = rule.propertyScope === 'all' ? [] : rule.propertyScope.slice();
     pmprefDraftPriority = rule.priority;
@@ -27726,9 +27848,9 @@
     var scope = pmprefDraftScope === 'all' ? 'all' : pmprefDraftProps.slice();
     if (pmprefEditId) {
       var rule = pmprefPreferences.find(function (r) { return r.id === pmprefEditId; });
-      Object.assign(rule, { categories: pmprefSddState.catPicker.slice(), roles: pmprefSddState.rolePicker.slice(), propertyScope: scope, priority: pmprefDraftPriority });
+      Object.assign(rule, { categories: pmprefSddState.catPicker.slice(), roles: pmprefSddState.rolePicker.slice(), jobs: pmprefSddState.jobPicker.slice(), propertyScope: scope, priority: pmprefDraftPriority });
     } else {
-      pmprefPreferences.push({ id: pmprefNextId('pref'), supplierId: pmprefDraftSupplierId, categories: pmprefSddState.catPicker.slice(), roles: pmprefSddState.rolePicker.slice(), propertyScope: scope, priority: pmprefDraftPriority, complianceOk: true, addedOn: new Date().toISOString().slice(0, 10) });
+      pmprefPreferences.push({ id: pmprefNextId('pref'), supplierId: pmprefDraftSupplierId, categories: pmprefSddState.catPicker.slice(), roles: pmprefSddState.rolePicker.slice(), jobs: pmprefSddState.jobPicker.slice(), propertyScope: scope, priority: pmprefDraftPriority, complianceOk: true, addedOn: new Date().toISOString().slice(0, 10) });
     }
     document.getElementById('pmprefAddOverlay').classList.remove('open');
     renderPmprefAll();
@@ -27789,23 +27911,21 @@
       document.getElementById('pmprefExcludedSection').style.display = isPreferred ? 'none' : '';
     });
     document.getElementById('pmprefSearch').addEventListener('input', renderPmprefAll);
-    ['catFilter', 'roleFilter', 'propFilter', 'priorityFilter'].forEach(function (kind) { pmprefWireSdd(kind, renderPmprefAll); });
+    ['catFilter', 'roleFilter', 'propFilter', 'jobFilter', 'priorityFilter'].forEach(function (kind) { pmprefWireSdd(kind, renderPmprefAll); });
     pmprefWireSdd('catPicker', function () {
       // Role options are scoped to the supplier, not the category, so nothing about the existing
       // role selections needs to change here — just re-render to reflect the new category chips.
       pmprefRenderModal();
     });
     pmprefWireSdd('rolePicker', pmprefRenderModal);
+    pmprefWireSdd('jobPicker', pmprefRenderModal);
 
     function pmprefSupplierListClick(e) {
+      var expandBtn = e.target.closest('[data-pmpref-card-expand]');
+      if (expandBtn) { e.stopPropagation(); pmprefCardExpandedSections[expandBtn.getAttribute('data-pmpref-card-expand')] = true; renderPmprefCards(); return; }
+      var collapseBtn = e.target.closest('[data-pmpref-card-collapse]');
+      if (collapseBtn) { e.stopPropagation(); delete pmprefCardExpandedSections[collapseBtn.getAttribute('data-pmpref-card-collapse')]; renderPmprefCards(); return; }
       if (e.target.closest('[data-pmpref-stop]')) {
-        var toggle = e.target.closest('[data-pmpref-toggle-view]');
-        if (toggle) {
-          var tsid = toggle.getAttribute('data-pmpref-toggle-view');
-          pmprefExpandedRows[tsid] = !pmprefExpandedRows[tsid];
-          renderPmprefTable();
-          return;
-        }
         var edit = e.target.closest('[data-pmpref-edit]'); if (edit) { pmprefOpenEdit(edit.getAttribute('data-pmpref-edit')); return; }
         var rm = e.target.closest('[data-pmpref-remove-supplier]'); if (rm) pmprefConfirmRemoveSupplier(rm.getAttribute('data-pmpref-remove-supplier'));
         return;
@@ -27823,10 +27943,6 @@
     });
     document.getElementById('pmprefProfileTopbarBackBtn').addEventListener('click', pmprefShowList);
 
-    var detailOverlay = document.getElementById('pmprefDetailOverlay');
-    document.querySelectorAll('#pmprefDetailOverlay [data-pmpref-close]').forEach(function (b) { b.addEventListener('click', function () { detailOverlay.classList.remove('open'); }); });
-    detailOverlay.addEventListener('click', function (e) { if (e.target === detailOverlay) detailOverlay.classList.remove('open'); });
-
     // Add/Edit modal wiring
     var addOverlay = document.getElementById('pmprefAddOverlay');
     document.querySelectorAll('#pmprefAddOverlay [data-pmpref-close]').forEach(function (b) { b.addEventListener('click', function () { addOverlay.classList.remove('open'); }); });
@@ -27838,8 +27954,10 @@
       var item = e.target.closest('[data-pmpref-pick-supplier]');
       if (!item) return;
       pmprefDraftSupplierId = item.getAttribute('data-pmpref-pick-supplier');
-      pmprefSddState.catPicker = [];
-      pmprefSddState.rolePicker = [];
+      var picked = pmprefSupplier(pmprefDraftSupplierId);
+      pmprefSddState.catPicker = picked.cat ? picked.cat.slice() : [];
+      pmprefSddState.rolePicker = picked.services ? picked.services.map(function (sv) { return sv.name; }) : [];
+      pmprefSddState.jobPicker = picked.jobTemplates ? picked.jobTemplates.slice() : [];
       document.getElementById('pmprefSupplierDd').style.display = 'none';
       pmprefRenderModal();
     });
@@ -27854,7 +27972,7 @@
       r.addEventListener('change', function () { pmprefDraftScope = r.value; pmprefRenderModal(); });
     });
     document.querySelectorAll('input[name="pmprefPriority"]').forEach(function (r) {
-      r.addEventListener('change', function () { pmprefDraftPriority = r.value; pmprefRenderSummary(); });
+      r.addEventListener('change', function () { pmprefDraftPriority = r.value; });
     });
     document.getElementById('pmprefPropertySearch').addEventListener('input', function (e) { pmprefPropSearchTerm = e.target.value; pmprefRenderPropertyList(); });
     document.getElementById('pmprefPropertyList').addEventListener('change', function (e) {
