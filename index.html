@@ -3430,6 +3430,8 @@
   .status-pill.blue { background: #e8f0f8; color: #284890; }
   .status-pill.green { background: #d8f8e0; color: #1a7a3e; }
   .status-pill.gray { background: var(--surface-soft); color: var(--text-body-muted); }
+  .status-pill.purple { background: #f2ecfc; color: #7c3aed; }
+  .status-pill.red { background: #fce8e8; color: #c0392b; }
 
   .pm-summary-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
   .pm-summary-chip { font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 999px; }
@@ -5318,7 +5320,7 @@
   .pminv-empty-state { padding: 60px 30px; text-align: center; font-size: 13px; color: var(--text-body-muted); line-height: 1.6; max-width: 560px; margin: 0 auto; }
 
   /* Pay modal */
-  .pminv-modal { background: #fff; border-radius: 18px; padding: 30px 30px 26px; max-width: 460px; width: 100%; }
+  .pminv-modal { background: #fff; border-radius: 18px; padding: 30px 30px 26px; max-width: 600px; width: 100%; }
   .pminv-modal-icon { width: 42px; height: 42px; border-radius: 11px; background: var(--icon-tint-bg); color: var(--accent-blue); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
   .pminv-modal-title { font-size: 19px; font-weight: 800; color: var(--text-heading); margin-bottom: 8px; }
   .pminv-modal-sub { font-size: 13px; color: var(--text-body-muted); line-height: 1.5; margin-bottom: 20px; }
@@ -5350,7 +5352,7 @@
   .pminv-pdf-foot .btn svg { margin-right: 6px; }
 
   .pminv-doc-title { font-size: 26px; font-weight: 800; color: var(--text-heading); letter-spacing: -0.01em; margin-bottom: 4px; }
-  .pminv-doc-issuer { font-size: 12.5px; color: var(--text-body-muted); max-width: 420px; line-height: 1.5; margin-bottom: 22px; }
+  .pminv-doc-issuer { font-size: 12.5px; color: var(--text-body-muted); line-height: 1.5; margin-bottom: 22px; white-space: nowrap; }
   .pminv-doc-top-row { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 22px; flex-wrap: wrap; gap: 16px; }
   .pminv-doc-company { text-align: right; font-size: 12.5px; color: var(--text-body-muted); line-height: 1.5; }
   .pminv-doc-company strong { display: block; font-size: 15px; font-weight: 800; color: var(--text-heading); margin-bottom: 3px; }
@@ -5365,7 +5367,7 @@
   .pminv-doc-party-addr em { font-style: italic; display: block; margin-top: 8px; }
   .pminv-doc-svc-label { font-size: 13px; color: var(--text-heading); margin-bottom: 12px; }
   .pminv-doc-table { width: 100%; border-collapse: collapse; }
-  .pminv-doc-table th { background: var(--navy-900); color: #fff; text-align: left; font-size: 10.5px; font-weight: 700; letter-spacing: 0.02em; padding: 11px 13px; }
+  .pminv-doc-table th { background: var(--navy-900); color: #fff; text-align: left; font-size: 10.5px; font-weight: 700; letter-spacing: 0.02em; padding: 11px 13px; white-space: nowrap; }
   .pminv-doc-table td { padding: 11px 13px; border-bottom: 1px solid var(--border-subtle); font-size: 12.5px; color: var(--text-heading); }
 
   /* Consolidated Payments */
@@ -10899,6 +10901,357 @@
   .adminprop-massupload-file-row .name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
 
   .adminprop-del-confirm:hover { opacity: 0.9; }
+
+  /* ==================== Ported: PM Invoices, Supplier Payouts, Admin Invoices/Earnings ==================== */
+.cdd-status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.cdd-item-label { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.admin-cxjob-close { background: none; border: none; color: var(--text-body-muted); cursor: pointer; display: flex; padding: 4px; border-radius: 6px; margin-top: 2px; }
+.admin-cxjob-close:hover { background: var(--surface-soft); color: var(--text-heading); }
+.admin-cxjob-confirm { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); color: #fff; border: none; font: inherit; font-size: 13.5px; font-weight: 700; padding: 11px 22px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.admin-cxjob-confirm:hover { filter: brightness(1.08); }
+/* ---- Admin Keylr Earnings ---- */
+  .adern-info-banner { display: flex; align-items: center; gap: 10px; background: var(--icon-tint-bg); color: var(--accent-blue); border-radius: 12px; padding: 13px 18px; font-size: 13px; line-height: 1.5; margin-bottom: 18px; }
+.adern-info-banner b { font-weight: 800; }
+.adern-stat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 20px; }
+  .adern-stat-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 16px 18px; }
+.adern-stat-card.highlight { background: #eafaf0; border-color: #bfe3cc; }
+.adern-stat-card .lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.04em; color: var(--text-body-muted); text-transform: uppercase; display: flex; align-items: center; gap: 5px; margin-bottom: 8px; }
+.adern-stat-card .lbl svg { color: #94a3b8; flex-shrink: 0; }
+.adern-stat-card .val { font-size: 24px; font-weight: 800; color: var(--text-heading); margin-bottom: 6px; }
+.adern-stat-card.highlight .val { color: #17703a; }
+.adern-stat-card .sub { font-size: 11.5px; color: var(--text-body-muted); line-height: 1.4; }
+.adern-chart-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 22px 24px; margin-top: 16px; }
+.adern-chart-title { font-size: 15px; font-weight: 800; color: var(--text-heading); }
+.adern-chart-sub { font-size: 12.5px; color: var(--text-body-muted); margin-top: 3px; }
+/* ---- Admin Invoices: View Invoice modal ---- */
+  .adinv-modal-card { background: #fff; border-radius: 16px; width: 100%; max-width: 980px; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; }
+.adinv-modal-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; padding: 20px 26px; border-bottom: 1px solid var(--border-subtle); flex-shrink: 0; }
+.adinv-modal-title { font-size: 16px; font-weight: 800; color: var(--text-heading); font-family: 'Courier New', monospace; }
+.adinv-modal-sub { font-size: 12.5px; color: var(--text-body-muted); margin-top: 3px; }
+.adinv-modal-scroll { overflow-y: auto; flex: 1; padding: 26px; background: var(--surface-soft); }
+.adinv-modal-foot { display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding: 16px 26px; border-top: 1px solid var(--border-subtle); flex-shrink: 0; }
+.adinv-sheet { background: #fff; border-radius: 12px; padding: 32px 36px; max-width: 820px; margin: 0 auto; }
+.adinv-sheet-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; border-bottom: 2px solid var(--accent-blue); padding-bottom: 18px; margin-bottom: 20px; }
+.adinv-sheet-title { font-size: 24px; font-weight: 800; color: var(--text-heading); letter-spacing: 0.02em; margin-bottom: 8px; }
+.adinv-sheet-issuedby { font-size: 12px; color: var(--text-body-muted); max-width: 380px; line-height: 1.5; }
+.adinv-sheet-issuer { text-align: right; font-size: 12px; color: var(--text-body-muted); line-height: 1.5; }
+.adinv-sheet-issuer .name { font-size: 15px; font-weight: 800; color: var(--text-heading); margin-bottom: 2px; }
+.adinv-sheet-metarow { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; background: var(--surface-soft); border-radius: 10px; padding: 14px 16px; margin-bottom: 22px; }
+.adinv-sheet-metarow .lbl { font-size: 9.5px; font-weight: 700; letter-spacing: 0.03em; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px; }
+.adinv-sheet-metarow .val { font-size: 12.5px; font-weight: 700; color: var(--text-heading); }
+.adinv-status-pill { display: inline-block; background: #fef3c7; color: #92620a; font-size: 10px; font-weight: 800; letter-spacing: 0.03em; padding: 3px 10px; border-radius: 999px; }
+.adinv-parties-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 24px; }
+.adinv-party-head { font-size: 10px; font-weight: 700; letter-spacing: 0.03em; color: var(--accent-blue); text-transform: uppercase; border-bottom: 1px solid var(--accent-blue); padding-bottom: 6px; margin-bottom: 8px; }
+.adinv-parties-row .name { font-size: 13.5px; font-weight: 800; color: var(--text-heading); margin-bottom: 4px; }
+.adinv-parties-row > div { font-size: 12px; color: var(--text-body-muted); line-height: 1.6; }
+.adinv-party-note { font-style: italic; margin-top: 8px; }
+.adinv-services-label { font-size: 12.5px; color: var(--text-body-muted); margin-bottom: 10px; }
+.adinv-table { width: 100%; border-collapse: collapse; margin-bottom: 18px; }
+.adinv-table thead th { background: #1e2a44; color: #fff; font-size: 10px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; padding: 10px 12px; text-align: left; }
+.adinv-table td { padding: 12px; border-bottom: 1px solid var(--border-subtle); font-size: 12.5px; color: var(--text-heading); text-align: right; }
+.adinv-table td:first-child, .adinv-table td:nth-child(2), .adinv-table td:nth-child(3), .adinv-table td:nth-child(4) { text-align: left; }
+.adinv-totals { max-width: 320px; margin-left: auto; }
+.adinv-totals .row { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; font-size: 13px; }
+.adinv-totals .row .lbl { color: var(--text-body-muted); }
+.adinv-totals .row .val { font-weight: 700; color: var(--text-heading); }
+.adinv-totals .row.grand { border-top: 2px solid var(--text-heading); margin-top: 6px; padding-top: 12px; }
+.adinv-totals .row.grand .lbl { font-weight: 800; color: var(--text-heading); font-size: 13.5px; }
+.adinv-totals .row.grand .val { font-weight: 800; font-size: 17px; color: var(--text-heading); }
+.admq-btn-outline { background: #fff; border: 1px solid var(--border-subtle); color: var(--text-heading); font-size: 13px; font-weight: 700; padding: 10px 18px; border-radius: 9px; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; }
+.admq-btn-outline:hover { background: var(--surface-soft); }
+.admq-btn-outline.danger { color: #c0392b; border-color: #fbd9d6; }
+.admq-btn-outline.danger:hover { background: #fef2f2; }
+.notif-panel-pager { display: flex; align-items: center; gap: 10px; }
+.notif-panel-pager button { width: 26px; height: 26px; border-radius: 8px; border: 1px solid var(--border-subtle); background: #fff; display: flex; align-items: center; justify-content: center; color: var(--text-heading); cursor: pointer; flex-shrink: 0; }
+.notif-panel-pager button:hover:not(:disabled) { background: var(--surface-soft); }
+.notif-panel-pager button:disabled { opacity: 0.4; cursor: not-allowed; }
+.notif-panel-pager span { font-weight: 700; color: var(--text-heading); min-width: 34px; text-align: center; }
+/* Filter card: date pill row on top, search + dropdown row below, divided by a hairline */
+  .pmjobs-filter-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 16px 18px; margin-bottom: 16px; }
+.pmjobs-search-filter-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.pmjobs-search-filter-row .pmjr-search-wrap { flex: 1 1 260px; max-width: 340px; min-width: 200px; margin-bottom: 0; }
+.pmjobs-count-text { font-size: 12.5px; color: var(--text-body-muted); white-space: nowrap; flex-shrink: 0; }
+.pmjobs-dd-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-left: auto; }
+.pmjobs-dd-group .pm-filter-field { width: auto; min-width: 132px; }
+.pmjobs-dd-group .pm-custom-dd-btn { padding: 8px 12px; }
+.pmjobs-dd-group .pm-custom-dd-menu { min-width: 190px; width: max-content; max-width: 260px; }
+.pmjobs-dd-group .pm-custom-dd-btn.filter-active { border-color: var(--accent-blue); color: var(--accent-blue); font-weight: 600; }
+.pmjobs-dd-group .pm-custom-dd-btn.filter-active svg:first-child { color: var(--accent-blue); }
+  /* Admin Invoices / Keylr Earnings search bars: narrower and matching the PM module's compact
+     32px-tall search field, rather than the taller/wider default .field-input sizing - scoped to
+     these two search wraps specifically so no other .field-input usage elsewhere is affected. */
+  .adminInv-search-wrap, .adern-search-wrap { flex: 0 0 auto !important; width: 220px; max-width: 220px; }
+  .adminInv-search-wrap .field-input, .adern-search-wrap .field-input { height: 32px; padding-top: 8px; padding-bottom: 8px; font-size: 12.5px; }
+  /* The base rule's flex: 1 1 260px is meant to size the search box's *width* when this row is
+       a horizontal flex row — once the row above switches to flex-direction: column, that same
+       flex-grow: 1 instead stretches the box's *height* to fill leftover vertical space in the
+       column (visually: a ~260px-tall search box with the icon floating alone in the middle of
+       it). Reset to a natural, content-sized box for the column layout. */
+  @media (max-width: 720px) {
+    .pmjobs-search-filter-row .pmjr-search-wrap { flex: 0 0 auto; max-width: none; }
+    .pmjobs-dd-group { margin-left: 0; width: 100%; }
+    .pmjobs-dd-group .pm-filter-field { flex: 1 1 46%; }
+  }
+.pmjd-ckl-section-tab .cnt { background: rgba(255,255,255,0.18); padding: 1px 8px; border-radius: 999px; font-size: 11px; }
+.pmbook-tab .cnt { font-size: 10px; font-weight: 700; background: var(--surface-soft); color: var(--text-body-muted); padding: 1px 7px; border-radius: 999px; }
+.pmbook-tab.active .cnt { background: rgba(255,255,255,0.2); color: #fff; }
+.pmbook-ckl-room-tab .cnt { font-size: 12px; font-weight: 700; color: inherit; }
+/* ==========================================================================
+     PM INVOICES — per-job invoice table (6 status tabs), Approve & Pay modal,
+     self-billed invoice PDF viewer, and the Consolidated Payments statement view.
+     ========================================================================== */
+  .pminv-toptabs { display: inline-flex; gap: 4px; background: var(--surface-soft); border-radius: 12px; padding: 4px; margin-bottom: 22px; }
+.pminv-toptab { display: flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 9px; font-size: 13px; font-weight: 700; color: var(--text-body-muted); background: none; border: none; cursor: pointer; font-family: inherit; }
+.pminv-toptab.active { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); color: #fff; }
+.pminv-toptab:not(.active):hover { color: var(--text-heading); }
+.pminv-section-label { font-size: 11px; font-weight: 800; letter-spacing: 0.05em; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px; }
+.pminv-section-desc { font-size: 12.5px; color: var(--text-body-muted); margin-bottom: 20px; max-width: 900px; line-height: 1.5; }
+.pminv-tabs-filter-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; }
+.pminv-status-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.pminv-period-field { flex-shrink: 0; }
+.pminv-period-controls { display: flex; align-items: center; gap: 8px; }
+.pminv-period-stepper { display: flex; align-items: center; gap: 2px; border: 1px solid var(--border-subtle); border-radius: 10px; padding: 4px; background: #fff; position: relative; }
+.pminv-stepper-btn {
+  display: flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 7px;
+  border: none; background: none; color: var(--text-heading); cursor: pointer; flex-shrink: 0;
+}
+.pminv-stepper-btn:hover:not(:disabled) { background: var(--surface-soft); }
+.pminv-stepper-btn:disabled { color: #cbd5e1; cursor: not-allowed; }
+.pminv-stepper-label-btn {
+  font-size: 12.5px; font-weight: 700; color: var(--text-heading); padding: 0 8px; white-space: nowrap; min-width: 130px;
+  text-align: center; background: none; border: none; cursor: pointer; border-radius: 6px; height: 24px;
+}
+.pminv-stepper-label-btn:hover { background: var(--surface-soft); color: var(--accent-blue); }
+.pminv-billing-period-wrap { position: relative; flex-shrink: 0; }
+.pminv-stmt-type-switch { display: flex; gap: 8px; flex-shrink: 0; margin-bottom: 14px; }
+.pminv-clear-filter-btn {
+  font-size: 12px; font-weight: 700; color: var(--accent-blue); background: none; border: none; cursor: pointer;
+  padding: 4px 6px; flex-shrink: 0; white-space: nowrap;
+}
+.pminv-clear-filter-btn:hover { text-decoration: underline; }
+.pminv-picker-popover {
+  position: absolute; top: calc(100% + 8px); right: 0; z-index: 40; background: #fff; border: 1px solid var(--border-subtle);
+  border-radius: 12px; box-shadow: 0 12px 32px rgba(15, 23, 42, 0.14); padding: 14px; width: 300px;
+}
+.pminv-picker-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.pminv-picker-nav-label { font-size: 13px; font-weight: 800; color: var(--text-heading); }
+.pminv-picker-nav-btn { display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 6px; border: none; background: none; color: var(--text-body-muted); cursor: pointer; }
+.pminv-picker-nav-btn:hover:not(:disabled) { background: var(--surface-soft); color: var(--text-heading); }
+.pminv-picker-nav-btn:disabled { color: #e2e8f0; cursor: not-allowed; }
+.pminv-picker-grid-years, .pminv-picker-grid-months { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.pminv-picker-cell {
+  font-size: 12.5px; font-weight: 600; color: var(--text-heading); padding: 9px 4px; border-radius: 8px; text-align: center;
+  cursor: pointer; border: 1px solid transparent;
+}
+.pminv-picker-cell:hover { background: var(--surface-soft); }
+.pminv-picker-cell.current { border-color: var(--accent-blue); color: var(--accent-blue); font-weight: 800; }
+.pminv-picker-cal-weekdays, .pminv-picker-cal-week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.pminv-picker-cal-weekdays { margin-bottom: 4px; }
+.pminv-picker-cal-wd { font-size: 10px; font-weight: 700; color: #94a3b8; text-align: center; padding-bottom: 4px; }
+.pminv-picker-cal-day {
+  font-size: 12px; font-weight: 600; color: var(--text-heading); text-align: center; padding: 7px 0; cursor: pointer; border-radius: 6px;
+}
+.pminv-picker-cal-day.muted { color: #cbd5e1; }
+.pminv-picker-cal-day.today { color: var(--accent-blue); font-weight: 800; }
+.pminv-picker-cal-week:hover .pminv-picker-cal-day { background: var(--icon-tint-bg); }
+.pminv-picker-cal-week.week-selected .pminv-picker-cal-day { background: var(--accent-blue); color: #fff; }
+.pminv-picker-half-toggle { display: flex; gap: 6px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-subtle); }
+.pminv-picker-half-btn {
+  flex: 1; font-size: 11.5px; font-weight: 700; color: var(--text-body-muted); background: var(--surface-soft); border: 1px solid transparent;
+  border-radius: 8px; padding: 8px 4px; cursor: pointer; text-align: center;
+}
+.pminv-picker-half-btn.selected { background: var(--accent-blue); color: #fff; }
+.pm-custom-dd-menu .cdd-section-label { font-size: 10px; font-weight: 800; letter-spacing: 0.05em; color: #94a3b8; text-transform: uppercase; padding: 10px 14px 4px; }
+.pminv-status-tab { font-size: 12.5px; font-weight: 700; color: var(--text-body-muted); padding: 7px 15px; border-radius: 999px; border: 1px solid var(--border-subtle); background: #fff; white-space: nowrap; cursor: pointer; }
+.pminv-status-tab.active { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); color: #fff; border-color: transparent; }
+.pminv-status-tab:not(.active):hover { color: var(--text-heading); background: var(--surface-soft); }
+.pminv-table-wrap { background: #fff; border: 1px solid var(--border-subtle); border-top: 1px solid var(--border-subtle); border-radius: 14px; overflow: hidden; overflow-x: auto; }
+.pminv-table { width: 100%; border-collapse: collapse; min-width: 880px; }
+.pminv-table th { text-align: left; font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; color: #94a3b8; text-transform: uppercase; padding: 13px 20px; border-bottom: 1px solid var(--border-subtle); background: var(--surface-soft); white-space: nowrap; }
+.pminv-table td { padding: 14px 20px; border-bottom: 1px solid var(--border-subtle); font-size: 13px; color: var(--text-heading); vertical-align: middle; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 240px; }
+.pminv-table tr:last-child td { border-bottom: none; }
+.pminv-table tr.clickable { cursor: pointer; }
+.pminv-table tr.clickable:hover td { background: var(--surface-soft); }
+.pminv-id-link { font-weight: 800; color: var(--accent-blue); }
+.pminv-id-sub { font-size: 11px; font-weight: 600; color: var(--text-body-muted); margin-top: 1px; }
+.pminv-jobid-sub { font-size: 11px; font-weight: 700; color: var(--text-body-muted); margin-bottom: 2px; }
+.pminv-actions-cell { display: flex; align-items: center; gap: 6px; }
+  /* The table's own td rule sets overflow:hidden on every cell for text-ellipsis truncation on
+     long content elsewhere in the row - harmless for those, but it was the actual reason the View
+     Job tooltip (positioned above via the shared [data-tooltip] system) was getting clipped, since
+     the tooltip is a descendant of this cell regardless of what any outer wrapper does. This column
+     has no long text to truncate, so freeing it doesn't affect anything else. */
+  .pminv-table td:last-child { overflow: visible; }
+.pminv-amount { font-weight: 800; }
+.pminv-dash-cell { color: #cbd5e1; }
+.pminv-approve-btn { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); color: #fff; border: none; border-radius: 8px; padding: 8px 15px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; white-space: nowrap; }
+.pminv-approve-btn:hover { opacity: 0.88; }
+.pminv-pdf-btn { width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--border-subtle); background: #fff; color: var(--text-body-muted); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+.pminv-pdf-btn:hover { background: var(--surface-soft); color: var(--text-heading); }
+.pminv-pdf-btn[disabled] { opacity: 0.4; cursor: default; pointer-events: none; }
+.pminv-empty-state { padding: 60px 30px; text-align: center; font-size: 13px; color: var(--text-body-muted); line-height: 1.6; max-width: 560px; margin: 0 auto; }
+/* Pay modal */
+  .pminv-modal { background: #fff; border-radius: 18px; padding: 30px 30px 26px; max-width: 600px; width: 100%; }
+.pminv-modal-icon { width: 42px; height: 42px; border-radius: 11px; background: var(--icon-tint-bg); color: var(--accent-blue); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+.pminv-modal-title { font-size: 19px; font-weight: 800; color: var(--text-heading); margin-bottom: 8px; }
+.pminv-modal-sub { font-size: 13px; color: var(--text-body-muted); line-height: 1.5; margin-bottom: 20px; }
+.pminv-modal-sub strong { color: var(--text-heading); }
+.pminv-modal-amtbox { background: var(--surface-soft); border-radius: 12px; padding: 4px 16px; margin-bottom: 22px; }
+.pminv-modal-amtrow { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; font-size: 13.5px; color: var(--text-body-muted); }
+.pminv-modal-amtrow:not(:last-child) { border-bottom: 1px solid var(--border-subtle); }
+.pminv-modal-amtrow.strong { font-weight: 800; color: var(--text-heading); font-size: 14.5px; }
+.pminv-modal-label { font-size: 11px; font-weight: 800; letter-spacing: 0.05em; color: #94a3b8; text-transform: uppercase; margin-bottom: 10px; }
+.pminv-paymethod-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px; }
+.pminv-paymethod-card { border: 1.5px solid var(--border-subtle); border-radius: 12px; padding: 14px 15px; cursor: pointer; }
+.pminv-paymethod-card .t { font-size: 13.5px; font-weight: 800; color: var(--text-heading); margin-bottom: 3px; }
+.pminv-paymethod-card .s { font-size: 11.5px; color: var(--text-body-muted); line-height: 1.4; }
+.pminv-paymethod-card.active { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); border-color: var(--btn-grad-end); }
+.pminv-paymethod-card.active .t, .pminv-paymethod-card.active .s { color: #fff; }
+.pminv-paymethod-card.active .s { color: rgba(255,255,255,0.7); }
+.pminv-modal-btns { display: flex; gap: 10px; }
+.pminv-modal-btns .btn { flex: 1; justify-content: center; }
+/* Invoice PDF viewer */
+  .pminv-pdf-modal { background: #fff; border-radius: 16px; max-width: 900px; width: 100%; max-height: 86vh; display: flex; flex-direction: column; overflow: hidden; }
+.pminv-pdf-head { display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; border-bottom: 1px solid var(--border-subtle); flex-shrink: 0; }
+.pminv-pdf-head-title { font-size: 15px; font-weight: 800; color: var(--text-heading); }
+.pminv-pdf-head-sub { font-size: 12.5px; color: var(--text-body-muted); margin-top: 2px; }
+.pminv-pdf-close { width: 30px; height: 30px; border-radius: 8px; border: none; background: var(--surface-soft); color: var(--text-body-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+.pminv-pdf-close:hover { background: #e8ecf0; color: var(--text-heading); }
+.pminv-pdf-scroll { flex: 1; overflow-y: auto; padding: 34px 40px; }
+.pminv-pdf-foot { display: flex; justify-content: flex-end; gap: 10px; padding: 16px 24px; border-top: 1px solid var(--border-subtle); flex-shrink: 0; }
+.pminv-pdf-foot .btn svg { margin-right: 6px; }
+.pminv-doc-title { font-size: 26px; font-weight: 800; color: var(--text-heading); letter-spacing: -0.01em; margin-bottom: 4px; }
+.pminv-doc-issuer { font-size: 12.5px; color: var(--text-body-muted); line-height: 1.5; margin-bottom: 22px; white-space: nowrap; }
+.pminv-doc-top-row { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 22px; flex-wrap: wrap; gap: 16px; }
+.pminv-doc-company { text-align: right; font-size: 12.5px; color: var(--text-body-muted); line-height: 1.5; }
+.pminv-doc-company strong { display: block; font-size: 15px; font-weight: 800; color: var(--text-heading); margin-bottom: 3px; }
+.pminv-doc-divider { border: none; border-top: 2px solid var(--navy-900); margin: 0 0 20px; }
+.pminv-doc-info-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; margin-bottom: 26px; }
+.pminv-doc-info-item .lbl { font-size: 9.5px; font-weight: 700; letter-spacing: 0.03em; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px; line-height: 1.3; }
+.pminv-doc-info-item .val { font-size: 13px; font-weight: 700; color: var(--text-heading); }
+.pminv-doc-parties { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 26px; }
+.pminv-doc-party-label { font-size: 11px; font-weight: 700; color: var(--accent-blue); text-transform: uppercase; letter-spacing: 0.02em; padding-bottom: 6px; border-bottom: 1.5px solid var(--accent-blue); margin-bottom: 9px; }
+.pminv-doc-party-name { font-size: 14px; font-weight: 800; color: var(--text-heading); margin-bottom: 6px; }
+.pminv-doc-party-addr { font-size: 12px; color: var(--text-body-muted); line-height: 1.55; }
+.pminv-doc-party-addr em { font-style: italic; display: block; margin-top: 8px; }
+.pminv-doc-svc-label { font-size: 13px; color: var(--text-heading); margin-bottom: 12px; }
+.pminv-doc-table { width: 100%; border-collapse: collapse; }
+.pminv-doc-table th { background: var(--navy-900); color: #fff; text-align: left; font-size: 10.5px; font-weight: 700; letter-spacing: 0.02em; padding: 11px 13px; white-space: nowrap; }
+.pminv-doc-table td { padding: 11px 13px; border-bottom: 1px solid var(--border-subtle); font-size: 12.5px; color: var(--text-heading); }
+.pminv-doc-totals-row { display: flex; align-items: center; justify-content: flex-end; gap: 40px; padding: 10px 13px; font-size: 13px; color: var(--text-body-muted); }
+.pminv-doc-totals-row .val { min-width: 90px; text-align: right; }
+.pminv-doc-totals-row.strong { font-weight: 800; color: var(--text-heading); font-size: 14px; border-top: 1px solid var(--border-subtle); margin-top: 2px; padding-top: 14px; }
+.pminv-doc-sba-note { font-size: 12px; color: var(--text-body-muted); line-height: 1.6; background: var(--surface-soft); border-radius: 10px; padding: 16px 18px; margin-top: 24px; }
+  .pminv-stmt-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 16px; padding: 22px 26px; margin-bottom: 16px; }
+.pminv-stmt-head-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 22px; }
+.pminv-stmt-eyebrow { display: flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 800; letter-spacing: 0.04em; color: var(--accent-blue); text-transform: uppercase; margin-bottom: 8px; }
+.pminv-stmt-title { font-size: 22px; font-weight: 800; color: var(--text-heading); display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.pminv-stmt-dash { color: #94a3b8; font-weight: 600; }
+.pminv-stmt-sub { font-size: 12.5px; color: var(--text-body-muted); margin-top: 6px; }
+.pminv-stmt-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .pminv-stmt-stat { border: 1px solid var(--border-subtle); border-radius: 12px; padding: 14px 16px; }
+.pminv-stmt-stat .lbl { font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px; }
+.pminv-stmt-stat .val { font-size: 19px; font-weight: 800; color: var(--text-heading); }
+.pminv-stmt-stat.paid { border-color: #bfe3cc; }
+.pminv-stmt-stat.paid .val { color: #1a7a3e; }
+.pminv-stmt-stat.outstanding { border-color: #f5dc9e; }
+.pminv-stmt-stat.outstanding .val { color: #b45309; }
+.pminv-stmt-stat.overdue .val { color: #94a3b8; }
+.pminv-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 16px; padding: 22px 26px; margin-bottom: 16px; }
+.pminv-card-head { display: flex; align-items: center; gap: 9px; font-size: 13.5px; font-weight: 800; color: var(--text-heading); margin-bottom: 4px; }
+.pminv-card-head svg { color: var(--accent-blue); flex-shrink: 0; }
+.pminv-card-head-row { font-size: 13.5px; font-weight: 800; color: var(--text-heading); }
+.pminv-card-empty { text-align: center; padding: 30px 20px 10px; }
+.pminv-card-empty .t { font-size: 14.5px; font-weight: 800; color: var(--text-heading); margin-bottom: 6px; }
+.pminv-card-empty .s { font-size: 12.5px; color: var(--text-body-muted); display: ruby; }
+.pminv-card-note { font-size: 12.5px; color: var(--text-body-muted); margin-top: 10px; }
+
+  /* =========================================================
+     SUPPLIER "My Jobs" (supj prefix) — list page: search + status
+     filter (top right), status tabs, job table.
+  ========================================================== */
+  .supj-search-wrap { position: relative; width: 340px; max-width: 100%; flex-shrink: 0; }
+.supj-search-wrap svg { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; }
+.supj-search-wrap input { padding-left: 38px; padding-top: 9px; padding-bottom: 9px; font-size: 13px; }
+.supj-tabs-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+#supjStatusFilterMenu .cdd-item .cnt { margin-left: auto; font-size: 11px; font-weight: 700; background: var(--surface-soft); color: var(--text-body-muted); padding: 1px 8px; border-radius: 999px; }
+.supj-tabs { display: inline-flex; gap: 4px; background: var(--surface-soft); border-radius: 12px; padding: 4px; flex-wrap: wrap; }
+.supj-tab { display: flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 9px; font-size: 13px; font-weight: 700; color: var(--text-body-muted); cursor: pointer; white-space: nowrap; }
+.supj-tab .cnt { font-size: 11px; font-weight: 700; background: rgba(255,255,255,0.6); color: inherit; padding: 1px 8px; border-radius: 999px; }
+.supj-tab.active { background: linear-gradient(135deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%); color: #fff; }
+.supj-tab.active .cnt { background: rgba(255,255,255,0.22); color: #fff; }
+.supj-tab:not(.active):hover { color: var(--text-heading); }
+
+  /* Payouts */
+  .suppo-stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+  .suppo-stat-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 18px 20px; }
+.suppo-stat-card .label { font-size: 12.5px; font-weight: 700; color: var(--text-body-muted); }
+.suppo-stat-card .value { font-size: 24px; font-weight: 800; color: var(--text-heading); margin-top: 8px; }
+.suppo-stat-card .value.amber { color: #92620a; }
+.suppo-stat-card .sub { font-size: 12px; color: var(--text-body-muted); margin-top: 4px; }
+.suppo-stat-card.dark { background: linear-gradient(135deg, #22447f 0%, #0d1b3d 100%); border-color: transparent; }
+.suppo-stat-card.dark .label, .suppo-stat-card.dark .sub { color: rgba(255,255,255,0.65); }
+.suppo-stat-card.dark .value { color: #fff; }
+.suppo-stat-card.warn { background: #fef6ec; border-color: #f5dfb8; }
+.suppo-stat-card.warn .value { color: #b5620c; }
+.suppo-stat-card.warn .sub { color: #92620a; }
+.suppo-table td { vertical-align: top; }
+.suppo-row { cursor: pointer; }
+.suppo-row:hover { background: var(--surface-soft); }
+.suppo-ref { font-weight: 800; color: var(--accent-blue); font-size: 13px; }
+.suppo-terms-pill { display: inline-block; font-size: 11.5px; font-weight: 700; color: var(--text-body-muted); background: var(--surface-soft); padding: 3px 10px; border-radius: 999px; }
+.suppo-job-name { font-weight: 700; color: var(--text-heading); font-size: 13px; line-height: 1.35; }
+.suppo-job-sub { font-size: 12px; color: var(--text-body-muted); margin-top: 2px; }
+.suppo-amount { font-weight: 800; color: var(--text-heading); font-size: 13.5px; }
+.notif-panel-pager span#suppoPageNumbers { display: inline-flex; gap: 4px; }
+.notif-panel-pager .suppo-page-btn { width: 26px; height: 26px; border-radius: 8px; border: 1px solid var(--border-subtle); background: #fff; font-family: inherit; font-size: 12px; font-weight: 700; color: var(--text-heading); cursor: pointer; }
+.notif-panel-pager .suppo-page-btn.active { background: linear-gradient(135deg, #22447f 0%, #0d1b3d 100%); color: #fff; border-color: transparent; }
+/* View Payout drawer */
+  .suppo-drawer-head { padding: 20px 22px; border-bottom: 1px solid var(--border-subtle); flex-shrink: 0; }
+.suppo-drawer-head-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.suppo-drawer-ref { font-size: 13.5px; font-weight: 800; color: var(--accent-blue); }
+.suppo-drawer-terms-pill { font-size: 11px; font-weight: 700; color: var(--text-body-muted); background: var(--surface-soft); padding: 3px 10px; border-radius: 999px; }
+.suppo-drawer-net-label { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; color: var(--text-body-muted); text-transform: uppercase; }
+.suppo-drawer-net-value { font-size: 30px; font-weight: 800; color: var(--text-heading); margin-top: 4px; }
+.suppo-drawer-body { flex: 1; min-height: 0; overflow-y: auto; padding: 20px 22px; }
+.suppo-drawer-section { border: 1px solid var(--border-subtle); border-radius: 12px; padding: 16px 18px; margin-bottom: 16px; }
+.suppo-drawer-section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; color: var(--text-body-muted); text-transform: uppercase; margin-bottom: 10px; }
+.suppo-drawer-field-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 0; font-size: 13px; }
+.suppo-drawer-field-row span:first-child { color: var(--text-body-muted); }
+.suppo-drawer-field-row span:last-child { font-weight: 700; color: var(--text-heading); }
+.suppo-drawer-field-row.total { border-top: 1px solid var(--border-subtle); margin-top: 4px; padding-top: 12px; }
+.suppo-drawer-field-row.total span:first-child { font-weight: 800; color: var(--text-heading); }
+.suppo-drawer-field-row.total span:last-child { font-size: 16px; color: #1a7a3e; }
+.suppo-drawer-job-title { font-size: 14px; font-weight: 800; color: var(--text-heading); margin-bottom: 6px; }
+.suppo-drawer-job-sub { font-size: 12.5px; color: var(--text-body-muted); margin-top: 2px; }
+.suppo-custom-range-row { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.suppo-custom-range-row input[type="date"] { width: auto; padding: 8px 12px; font-size: 12.5px; }
+.supp-cat-chip .cnt { opacity: 0.75; font-weight: 600; }
+.supjd-chat-close { width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.12); border: none; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+.supjd-chat-close:hover { background: rgba(255,255,255,0.22); }
+  /* =========================================================
+     QUOTES module (pmqr prefix — "PM Quote Requests"). Fully independent
+     of pmjr* (Job Responses) ids/state; only borrows the established
+     visual grammar (status-tab underline style from .pminv-status-tab,
+     split list+detail grid proportions from .pmjr-layout).
+  ========================================================== */
+  .pmqr-toolbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 0 0 16px; }
+
+  /* -- responsive overrides -- */
+@media (max-width: 1200px) { .adern-stat-grid { grid-template-columns: repeat(2, 1fr); } }
+
+@media (max-width: 780px) { .pminv-stmt-stats { grid-template-columns: repeat(2, 1fr); } }
+
+@media (max-width: 620px) {
+    .pminv-doc-info-grid { grid-template-columns: repeat(3, 1fr); }
+    .pminv-doc-parties { grid-template-columns: 1fr; }
+    .pminv-doc-company { text-align: left; }
+    .pminv-doc-top-row { flex-direction: column; }
+    .pminv-pdf-scroll { padding: 22px 18px; }
+  }
+
+@media (max-width: 900px) { .suppo-stat-grid { grid-template-columns: repeat(2, 1fr); } }
+
 </style>
 </head>
 <body>
@@ -13832,6 +14185,10 @@
 
         <div class="dash-nav-group">
           <div class="dash-nav-group-label">Finance &amp; People</div>
+          <div class="dash-nav-item" data-nav="pminvoices">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg>
+            <span class="nav-label">Invoices</span>
+          </div>
           <div class="dash-nav-item" data-nav="invoices">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg>
             <span class="nav-label">Billing &amp; payments</span>
@@ -13908,6 +14265,10 @@
         <div id="pmPrefTopbarTitle" style="display:none;min-width:0;">
           <h1>Preferred Suppliers</h1>
           <div class="dash-content-sub">Suppliers you want to use first for specific services and properties.</div>
+        </div>
+        <div id="pmInvoicesTopbarTitle" style="display:none;min-width:0;">
+          <h1>Invoices</h1>
+          <div class="dash-content-sub">Your billing periods plus standalone invoices for paid jobs.</div>
         </div>
         <button type="button" class="pmprop-back-btn" id="pmprefProfileTopbarBackBtn" aria-label="Back" style="display:none;flex-shrink:0;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
         <div id="pmPrefProfileTopbarTitle" style="display:none;min-width:0;">
@@ -15132,6 +15493,123 @@
             </div>
           </div>
 
+          <div id="pmInvoicesView" style="display:none;">
+            <div class="dash-section">
+              <div class="pminv-toptabs">
+                <button type="button" class="pminv-toptab active" data-inv-tab="invoices"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg>Invoices</button>
+                <button type="button" class="pminv-toptab" data-inv-tab="consolidated"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Consolidated Statements</button>
+              </div>
+
+              <div id="pminvInvoicesPane">
+                <div class="pminv-section-label">Per-job invoices</div>
+                <div class="pminv-section-desc">Invoices for jobs paid outside the consolidated cycle. Click to download.</div>
+
+                <div class="pminv-tabs-filter-row">
+                  <div class="pminv-status-tabs" id="pminvStatusTabs">
+                    <div class="pminv-status-tab active" data-status="awaiting">Awaiting Approval</div>
+                    <div class="pminv-status-tab" data-status="paid">Paid</div>
+                    <div class="pminv-status-tab" data-status="escrowed">Escrowed</div>
+                    <div class="pminv-status-tab" data-status="disputed">Disputed</div>
+                    <div class="pminv-status-tab" data-status="failed">Overdue</div>
+                  </div>
+                  <div class="pminv-period-controls">
+                    <div class="pm-filter-field pminv-period-field">
+                      <button type="button" class="pm-custom-dd-btn" data-dd="pminvPeriodFilter"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px;"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg><span class="cdd-value">All Time</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                      <div class="pm-custom-dd-menu" data-dd-menu="pminvPeriodFilter" id="pminvPeriodFilterMenu">
+                        <div class="cdd-item selected" data-value="all">All Time</div>
+                        <div class="cdd-item" data-value="weekly">Weekly</div>
+                        <div class="cdd-item" data-value="monthly">Monthly</div>
+                        <div class="cdd-item" data-value="yearly">Yearly</div>
+                      </div>
+                    </div>
+                    <div class="pminv-period-stepper" id="pminvPeriodStepper" style="display:none;">
+                      <button type="button" class="pminv-stepper-btn" id="pminvStepperPrev" aria-label="Previous period"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+                      <button type="button" class="pminv-stepper-label-btn" id="pminvStepperLabelBtn" aria-label="Pick a specific period"></button>
+                      <button type="button" class="pminv-stepper-btn" id="pminvStepperNext" aria-label="Next period" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+                      <div class="pminv-picker-popover" id="pminvPickerPopover" style="display:none;"></div>
+                    </div>
+                    <div class="pminv-billing-period-wrap">
+                      <button type="button" class="pm-custom-dd-btn" id="pminvBillingPeriodBtn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px;"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg><span class="cdd-value" id="pminvBillingPeriodLabel">Billing Period</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                      <div class="pminv-picker-popover" id="pminvBillingPeriodPopover" style="display:none;"></div>
+                    </div>
+                    <button type="button" class="pminv-clear-filter-btn" id="pminvClearFilterBtn" style="display:none;">Clear</button>
+                  </div>
+                </div>
+
+                <div class="pminv-table-wrap" id="pminvTableWrap">
+                  <table class="pminv-table">
+                    <thead><tr id="pminvTableHeadRow"><th>Invoice</th><th>Job</th><th>Property</th><th>Supplier</th><th>Due</th><th>Amount</th><th>Status</th><th>Pay</th><th>Actions</th></tr></thead>
+                    <tbody id="pminvTableBody"></tbody>
+                  </table>
+                  <div class="pminv-empty-state" id="pminvEmptyState" style="display:none;"></div>
+                </div>
+              </div>
+
+              <div id="pminvConsolidatedPane" style="display:none;">
+                <div class="pminv-stmt-type-switch" id="pminvStmtTypeSwitch">
+                  <button type="button" class="pm-tab-pill active" data-stmt-type="pre">Pre-Consolidated</button>
+                  <button type="button" class="pm-tab-pill" data-stmt-type="post">Post-Consolidated</button>
+                </div>
+                <div class="pminv-stmt-card">
+                  <div class="pminv-stmt-head-row">
+                    <div id="pminvStmtHeadInfo"></div>
+                    <div style="position:relative;">
+                      <button type="button" class="pm-custom-dd-btn" data-dd="pminvPeriod" style="min-width:210px;"><span class="cdd-value">1 Jul 2026 – 15 Jul 2026</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                      <div class="pm-custom-dd-menu" data-dd-menu="pminvPeriod" id="pminvPeriodMenu"></div>
+                    </div>
+                  </div>
+                  <div class="pminv-stmt-stats" id="pminvStmtStats"></div>
+                </div>
+                <div id="pminvStatementCards"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-overlay" id="pminvPayModalOverlay">
+            <div class="pminv-modal">
+              <div class="pminv-modal-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 11-14h-7l1-6z"/></svg></div>
+              <div class="pminv-modal-title">Pay This Job Now</div>
+              <div class="pminv-modal-sub"><strong id="pminvPayModalJobRef">JOB-0000</strong> — we'll release the supplier payment immediately. Your DD for the rest of the period is unaffected.</div>
+
+              <div class="pminv-modal-amtbox">
+                <div class="pminv-modal-amtrow"><span>Job Total</span><span id="pminvPayModalTotal">£0.00</span></div>
+                <div class="pminv-modal-amtrow strong"><span>Pay Now</span><span id="pminvPayModalNow">£0.00</span></div>
+              </div>
+
+              <div class="pminv-modal-label">Payment method</div>
+              <div class="pminv-paymethod-row">
+                <div class="pminv-paymethod-card active" data-paymethod="card">
+                  <div class="t">Card</div>
+                  <div class="s">Instant. Charged via Stripe.</div>
+                </div>
+                <div class="pminv-paymethod-card" data-paymethod="bank">
+                  <div class="t">Pay by Bank</div>
+                  <div class="s">Open Banking — confirm in your bank app.</div>
+                </div>
+              </div>
+
+              <div class="pminv-modal-btns">
+                <button type="button" class="btn" id="pminvPayModalCancelBtn">Cancel</button>
+                <button type="button" class="btn btn-primary" id="pminvPayModalContinueBtn">Continue</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-overlay" id="pminvPdfModalOverlay">
+            <div class="pminv-pdf-modal">
+              <div class="pminv-pdf-head">
+                <div>
+                  <div class="pminv-pdf-head-title" id="pminvPdfHeadTitle">SB-2026-000000</div>
+                </div>
+                <button type="button" class="pminv-pdf-close" id="pminvPdfCloseBtn" aria-label="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+              </div>
+              <div class="pminv-pdf-scroll" id="pminvPdfScroll"></div>
+              <div class="pminv-pdf-foot">
+                <button type="button" class="btn btn-primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Print / PDF</button>
+              </div>
+            </div>
+          </div>
+
           <!-- Add / edit a preferred supplier -->
           <div class="modal-overlay" id="pmprefAddOverlay">
             <div class="confirm-modal-card team-modal-card team-modal-wide pmpref-modal-card">
@@ -16243,6 +16721,139 @@
               </div>
             </div>
           </div>
+
+          <div id="supPayoutsView" style="display:none;">
+            <div class="dash-section">
+              <div class="dash-header" style="align-items:flex-start;margin-bottom:20px;justify-content:flex-end;">
+                <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+                  <button type="button" class="btn" id="suppoExpressDashBtn" style="border:1px solid var(--border-subtle);background:#fff;color:var(--text-heading);font-weight:700;white-space:nowrap;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>View Keylr&rsquo;s Express dashboard</button>
+                  <span class="status-pill green" style="white-space:nowrap;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;vertical-align:-2px;"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>NatWest &bull;&bull;2258</span>
+                </div>
+              </div>
+
+              <div class="suppo-stat-grid">
+                <div class="suppo-stat-card dark">
+                  <div class="label">Total Earned</div>
+                  <div class="value" id="suppoStatTotalEarned">&pound;0.00</div>
+                  <div class="sub">All time, after Keylr fee</div>
+                </div>
+                <div class="suppo-stat-card">
+                  <div class="label">Pending Payout</div>
+                  <div class="value amber" id="suppoStatPending">&pound;0.00</div>
+                  <div class="sub">Awaiting schedule</div>
+                </div>
+                <div class="suppo-stat-card warn">
+                  <div class="label">Overdue</div>
+                  <div class="value" id="suppoStatOverdue">&pound;0.00</div>
+                  <div class="sub" id="suppoStatOverdueSub">0 late payouts</div>
+                </div>
+                <div class="suppo-stat-card">
+                  <div class="label">Disputed</div>
+                  <div class="value" id="suppoStatDisputed">&pound;0.00</div>
+                  <div class="sub" id="suppoStatDisputedSub">0 under review</div>
+                </div>
+              </div>
+
+              <div class="supj-tabs" id="suppoTabs" style="margin-bottom:18px;">
+                <div class="supj-tab active" data-suppo-tab="all">All <span class="cnt" id="suppoTabCntAll">0</span></div>
+                <div class="supj-tab" data-suppo-tab="paid">Paid <span class="cnt" id="suppoTabCntPaid">0</span></div>
+                <div class="supj-tab" data-suppo-tab="upfront">Upfront <span class="cnt" id="suppoTabCntUpfront">0</span></div>
+                <div class="supj-tab" data-suppo-tab="pending">Pending <span class="cnt" id="suppoTabCntPending">0</span></div>
+                <div class="supj-tab" data-suppo-tab="overdue">Overdue <span class="cnt" id="suppoTabCntOverdue">0</span></div>
+                <div class="supj-tab" data-suppo-tab="disputed">Disputed <span class="cnt" id="suppoTabCntDisputed">0</span></div>
+              </div>
+
+              <div class="supj-tabs-row" style="margin-bottom:20px;">
+                <div class="supj-search-wrap" style="width:420px;">
+                  <svg width="15" height="15" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="4.5"/><path d="M10 10l2.5 2.5"/></svg>
+                  <input type="text" class="field-input" id="suppoSearchInput" placeholder="Search payout ID, property, job..." autocomplete="off">
+                </div>
+                <div class="pm-filter-field" style="width:auto;flex-shrink:0;">
+                  <button type="button" class="pm-custom-dd-btn" data-dd="suppoTimeFilter"><span class="cdd-value" id="suppoTimeFilterLabel">All Time</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                  <div class="pm-custom-dd-menu" data-dd-menu="suppoTimeFilter">
+                    <div class="cdd-item" data-value="This Week">This Week<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                    <div class="cdd-item" data-value="This Month">This Month<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                    <div class="cdd-item" data-value="Last Month">Last Month<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                    <div class="cdd-item" data-value="Custom Range">Custom Range<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                    <div class="cdd-item selected" data-value="All Time">All Time<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                  </div>
+                </div>
+                <div class="suppo-custom-range-row" id="suppoCustomRangeRow" style="display:none;">
+                  <input type="date" class="field-input" id="suppoCustomRangeFrom">
+                  <span class="dash-content-sub">to</span>
+                  <input type="date" class="field-input" id="suppoCustomRangeTo">
+                  <button type="button" class="btn btn-primary" id="suppoCustomRangeApplyBtn" style="padding:9px 16px;">Apply</button>
+                </div>
+              </div>
+
+              <div class="pm-table-wrap" id="suppoTableWrap" style="border-top:1px solid var(--border-subtle);border-radius:14px;">
+                <div style="padding:20px 20px 0;font-size:15px;font-weight:800;color:var(--text-heading);">Payout History</div>
+                <div class="pm-table-scroll">
+                  <table class="admin-table suppo-table" style="min-width:900px;table-layout:fixed;">
+                    <colgroup>
+                      <col style="width:16%;"><col style="width:14%;"><col style="width:28%;"><col style="width:14%;"><col style="width:16%;"><col style="width:12%;">
+                    </colgroup>
+                    <thead>
+                      <tr><th>Reference</th><th>Payment Terms</th><th>Job</th><th>Net Amount</th><th>Expected Payment Date</th><th>Status</th></tr>
+                    </thead>
+                    <tbody id="suppoTableBody"></tbody>
+                  </table>
+                </div>
+                <div class="supj-tabs-row" style="padding:14px 20px;border-top:1px solid var(--border-subtle);margin-bottom:0;">
+                  <span class="dash-content-sub" id="suppoRangeText">Showing 1&ndash;10 of 0 payouts</span>
+                  <div style="display:flex;align-items:center;gap:14px;">
+                    <span class="dash-content-sub" style="display:flex;align-items:center;gap:8px;">Rows per page:
+                      <select id="suppoRowsPerPage" style="border:1px solid var(--border-subtle);border-radius:8px;padding:5px 8px;font-family:inherit;font-size:12.5px;color:var(--text-heading);">
+                        <option value="10">10</option><option value="25">25</option><option value="50">50</option>
+                      </select>
+                    </span>
+                    <div class="notif-panel-pager">
+                      <button type="button" id="suppoPrevBtn" aria-label="Previous page"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+                      <span id="suppoPageNumbers"></span>
+                      <button type="button" id="suppoNextBtn" aria-label="Next page"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+  <div class="svc-role-drawer-overlay" id="suppoDetailOverlay">
+    <div class="svc-role-drawer" style="width:460px;">
+      <div class="suppo-drawer-head">
+        <div class="suppo-drawer-head-top">
+          <span class="suppo-drawer-ref" id="suppoDrawerRef">KLR-PAY-00</span>
+          <span class="status-pill" id="suppoDrawerStatusPill">Status</span>
+          <span class="suppo-drawer-terms-pill" id="suppoDrawerTermsPill">Terms</span>
+          <button type="button" class="supjd-chat-close" id="suppoDrawerCloseBtn" aria-label="Close" style="margin-left:auto;background:var(--surface-soft);color:var(--text-body-muted);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+        </div>
+        <div class="suppo-drawer-net-label">NET PAYOUT</div>
+        <div class="suppo-drawer-net-value" id="suppoDrawerNetValue">&pound;0.00</div>
+      </div>
+      <div class="suppo-drawer-body">
+        <div class="suppo-drawer-section">
+          <div class="suppo-drawer-section-label">Payment Details</div>
+          <div class="suppo-drawer-field-row"><span>Expected Payment Date</span><span id="suppoDrawerDate">&mdash;</span></div>
+          <div class="suppo-drawer-field-row"><span>Receiving Account</span><span id="suppoDrawerAccount">NatWest &bull;&bull;2258</span></div>
+          <div class="suppo-drawer-field-row"><span>Reference</span><span id="suppoDrawerRefField">&mdash;</span></div>
+          <div class="suppo-drawer-field-row"><span>Payment Terms</span><span id="suppoDrawerTermsField">&mdash;</span></div>
+          <div class="suppo-drawer-field-row"><span>Status</span><span id="suppoDrawerStatusField">&mdash;</span></div>
+        </div>
+        <div class="suppo-drawer-section">
+          <div class="suppo-drawer-section-label">Job</div>
+          <div class="suppo-drawer-job-title" id="suppoDrawerJobTitle">&mdash;</div>
+          <div class="suppo-drawer-job-sub">Property &middot; <span id="suppoDrawerJobProp">&mdash;</span></div>
+          <div class="suppo-drawer-job-sub">Property Manager &middot; <span id="suppoDrawerJobPm">KEY RIDERS LTD</span></div>
+        </div>
+        <div class="suppo-drawer-section">
+          <div class="suppo-drawer-section-label">Financial Breakdown</div>
+          <div class="suppo-drawer-field-row"><span>Supplier Earning</span><span id="suppoDrawerEarning">&pound;0.00</span></div>
+          <div class="suppo-drawer-field-row"><span>VAT (20%)</span><span id="suppoDrawerVat">&pound;0.00</span></div>
+          <div class="suppo-drawer-field-row total"><span>Net Payout</span><span id="suppoDrawerNetPayout">&pound;0.00</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
           <div id="supJobRequestsView" style="display:none;">
             <div class="dash-section">
@@ -20735,6 +21346,238 @@
                 <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
                 <div class="svcp-empty-title" id="teamRolesEmptyTitle">No roles match</div>
                 <div class="svcp-empty-desc">Try a different search term.</div>
+              </div>
+            </div>
+          </div>
+
+          <div id="adminInvoicesView" style="display:none;">
+            <div class="dash-section">
+              <div class="pmjobs-filter-card">
+                <div class="pmjobs-search-filter-row">
+                  <div class="pmjr-search-wrap adminInv-search-wrap">
+                    <svg width="15" height="15" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="4.5"/><path d="M10 10l2.5 2.5"/></svg>
+                    <input type="text" class="field-input" style="padding-left:38px;" id="adminInvSearchInput" placeholder="Search by invoice number, supplier, Stripe id..." autocomplete="off">
+                  </div>
+                  <span class="pmjobs-count-text" id="adminInvCountText">164 invoices</span>
+                  <div class="pmjobs-dd-group">
+                    <div class="pm-filter-field">
+                      <button type="button" class="pm-custom-dd-btn" data-dd="adminInvTypeFilter"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px;"><path d="M12 2l9 5-9 5-9-5 9-5zM3 12l9 5 9-5M3 17l9 5 9-5"/></svg><span class="cdd-value">All Invoices</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                      <div class="pm-custom-dd-menu" data-dd-menu="adminInvTypeFilter" id="adminInvTypeFilterMenu">
+                        <div class="cdd-item selected" data-value="All Invoices">All Invoices<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        <div class="cdd-item" data-value="Supplier"><span class="cdd-item-label"><span class="cdd-status-dot" style="background:#7c3aed;"></span>Supplier</span><svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        <div class="cdd-item" data-value="Keylr Fee"><span class="cdd-item-label"><span class="cdd-status-dot" style="background:#1e2a44;"></span>Keylr Fee</span><svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                      </div>
+                    </div>
+                    <div class="pm-filter-field">
+                      <button type="button" class="pm-custom-dd-btn" data-dd="adminInvStatusFilter"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px;"><path d="M4 22V4a1 1 0 011-1h13l-2 4 2 4H5"/></svg><span class="cdd-value">All Statuses</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                      <div class="pm-custom-dd-menu" data-dd-menu="adminInvStatusFilter" id="adminInvStatusFilterMenu">
+                        <div class="cdd-item selected" data-value="All Statuses">All Statuses<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        <div class="cdd-item" data-value="Draft"><span class="cdd-item-label"><span class="cdd-status-dot" style="background:#94a3b8;"></span>Draft</span><svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        <div class="cdd-item" data-value="Finalised"><span class="cdd-item-label"><span class="cdd-status-dot" style="background:#284890;"></span>Finalised</span><svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                        <div class="cdd-item" data-value="Paid"><span class="cdd-item-label"><span class="cdd-status-dot" style="background:#1a7a3e;"></span>Paid</span><svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                      <div class="cdd-item" data-value="Credited"><span class="cdd-item-label"><span class="cdd-status-dot" style="background:#b45309;"></span>Credited</span><svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                    </div>
+                  </div>
+                  </div>
+                  <button type="button" class="ain-refresh-btn" id="adminInvRefreshBtn" aria-label="Refresh" style="flex-shrink:0;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg></button>
+                </div>
+              </div>
+
+              <div class="pm-table-wrap" id="adminInvTableWrap">
+                <div class="pm-table-scroll">
+                  <table class="admin-table" style="min-width:980px;table-layout:fixed;">
+                    <colgroup>
+                      <col style="width:16%;"><col style="width:20%;"><col style="width:11%;"><col style="width:9%;"><col style="width:11%;"><col style="width:10%;"><col style="width:11%;"><col style="width:6%;">
+                    </colgroup>
+                    <thead>
+                      <tr><th>Invoice</th><th>Party</th><th>Net</th><th>VAT</th><th>Gross</th><th>Status</th><th>Created</th><th>PDF</th></tr>
+                    </thead>
+                    <tbody id="adminInvTableBody"></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="dash-header" style="margin-top:16px;flex-wrap:wrap;gap:12px;">
+                <span class="pm-count-text" id="adminInvShowingText">Showing 20 of 164 invoices</span>
+                <div style="display:flex;gap:4px;align-items:center;">
+                  <button type="button" class="pmprop-page-btn" id="adminInvPagePrev" aria-label="Previous page"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg> Prev</button>
+                  <span class="pm-count-text" id="adminInvPageOfText">1 / 9</span>
+                  <button type="button" class="pmprop-page-btn" id="adminInvPageNext" aria-label="Next page">Next <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-overlay" id="adminInvModalOverlay">
+            <div class="adinv-modal-card">
+              <div class="adinv-modal-head">
+                <div>
+                  <div class="adinv-modal-title" id="adminInvModalTitle">SB-2026-000000 &middot; KS-2026-000000</div>
+                  <div class="adinv-modal-sub" id="adminInvModalSub">Job #0000</div>
+                </div>
+                <button type="button" class="admin-cxjob-close" id="adminInvModalCloseBtn" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+              </div>
+              <div class="adinv-modal-scroll">
+                <div class="adinv-sheet">
+                  <div class="adinv-sheet-top">
+                    <div>
+                      <div class="adinv-sheet-title">SELF-BILLED INVOICE</div>
+                      <div class="adinv-sheet-issuedby">Issued by Keylr Ltd (trading as Keylr) as agent on behalf of the supplier named below.</div>
+                    </div>
+                    <div class="adinv-sheet-issuer">
+                      <div class="name">Keylr</div>
+                      <div>Keylr Ltd (trading as Keylr)</div>
+                      <div>1 Keylr Way\London EC1A 1BB</div>
+                      <div>Co. Reg. No: 15019055</div>
+                    </div>
+                  </div>
+                  <div class="adinv-sheet-metarow">
+                    <div><div class="lbl">Invoice Number</div><div class="val" id="adinvMetaNumber">JB-0000</div></div>
+                    <div><div class="lbl">Invoice Date</div><div class="val" id="adinvMetaDate">&mdash;</div></div>
+                    <div><div class="lbl">Tax Point Date</div><div class="val" id="adinvMetaTaxPoint">&mdash;</div></div>
+                    <div><div class="lbl">Last Completion Date</div><div class="val" id="adinvMetaCompletion">&mdash;</div></div>
+                    <div><div class="lbl">Currency</div><div class="val">GBP</div></div>
+                    <div><div class="lbl">Status</div><div class="adinv-status-pill" id="adinvMetaStatus">UNPAID</div></div>
+                  </div>
+                  <div class="adinv-parties-row">
+                    <div>
+                      <div class="adinv-party-head">SUPPLIER (ON WHOSE BEHALF KEYLR IS BILLING)</div>
+                      <div class="name" id="adinvSupplierName">&mdash;</div>
+                      <div id="adinvSupplierAddr">&mdash;</div>
+                      <div id="adinvSupplierRegNo">Company Reg. No.: &mdash;</div>
+                      <div id="adinvSupplierVat">VAT No.: &mdash;</div>
+                    </div>
+                    <div>
+                      <div class="adinv-party-head">KEYLR (ISSUING AGENT)</div>
+                      <div class="name">Keylr Ltd</div>
+                      <div>1 Keylr Way\London EC1A 1BB</div>
+                      <div class="adinv-party-note">Issued by Keylr Ltd (trading as Keylr) as agent on behalf of the supplier named in this invoice.</div>
+                    </div>
+                    <div>
+                      <div class="adinv-party-head">PM (UNDERLYING CUSTOMER)</div>
+                      <div class="name" id="adinvPmName">&mdash;</div>
+                      <div id="adinvPmAddr">&mdash;</div>
+                      <div id="adinvPmRegNo">Company Reg. No.: &mdash;</div>
+                      <div id="adinvPmVat">VAT No.: &mdash;</div>
+                    </div>
+                  </div>
+                  <div class="adinv-services-label">Services supplied on behalf of the supplier:</div>
+                  <table class="adinv-table">
+                    <thead><tr><th>Job Ref</th><th>Job Date</th><th>Property Address</th><th>Service Description</th><th style="text-align:right;">Net (&#163;)</th><th style="text-align:right;">VAT Rate</th><th style="text-align:right;">VAT Amount (&#163;)</th><th style="text-align:right;">Gross (&#163;)</th></tr></thead>
+                    <tbody id="adinvLineRows"></tbody>
+                  </table>
+                  <div class="adinv-totals">
+                    <div class="row"><span class="lbl">Total Net</span><span class="val" id="adinvTotalNet">&#163;0.00</span></div>
+                    <div class="row"><span class="lbl">Total VAT</span><span class="val" id="adinvTotalVat">&#163;0.00</span></div>
+                    <div class="row grand"><span class="lbl">TOTAL GROSS PAYABLE</span><span class="val" id="adinvTotalGross">&#163;0.00</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="adinv-modal-foot">
+                <button type="button" class="admq-btn-outline" id="adminInvPrintBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>Print</button>
+                <button type="button" class="admin-cxjob-confirm" id="adminInvPdfBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>Print / PDF</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="adminEarningsView" style="display:none;">
+            <div class="dash-section">
+              <div class="adern-info-banner">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                <span><b>Collected (net)</b> is what Keylr has actually kept &mdash; collected fees minus credit notes and lost chargebacks. <b>Billed</b> is everything raised; the gap is still pending.</span>
+              </div>
+
+              <div class="adern-stat-grid">
+                <div class="adern-stat-card highlight">
+                  <div class="lbl">KEYLR FEES &mdash; COLLECTED (NET) <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div>
+                  <div class="val" id="adernStatCollected">&#163;0.00</div>
+                  <div class="sub">Collected fees, net of credit notes &amp; lost chargebacks</div>
+                </div>
+                <div class="adern-stat-card">
+                  <div class="lbl">MARKUP VAT <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div>
+                  <div class="val" id="adernStatVat">&#163;0.00</div>
+                  <div class="sub">VAT portion of the fees &mdash; kept separate for HMRC reporting</div>
+                </div>
+                <div class="adern-stat-card">
+                  <div class="lbl">GROSS PROCESSED (GMV) <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div>
+                  <div class="val" id="adernStatGmv">&#163;0.00</div>
+                  <div class="sub">Total PM spend that flowed through Keylr</div>
+                </div>
+                <div class="adern-stat-card">
+                  <div class="lbl">TRANSACTIONS <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div>
+                  <div class="val" id="adernStatTx">0</div>
+                  <div class="sub" id="adernStatTxSub">Jobs / KS invoices &middot; 0 active PMs</div>
+                </div>
+                <div class="adern-stat-card">
+                  <div class="lbl">EFFECTIVE TAKE RATE <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div>
+                  <div class="val" id="adernStatRate">0%</div>
+                  <div class="sub">Net fees &divide; gross processed</div>
+                </div>
+              </div>
+
+              <div class="pmjobs-filter-card">
+                <div class="pm-tab-pills" id="adernPeriodPills" style="padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid var(--border-subtle);">
+                  <div class="pm-tab-pill active" data-ern-period="month">This Month</div>
+                  <div class="pm-tab-pill" data-ern-period="lastmonth">Last Month</div>
+                  <div class="pm-tab-pill" data-ern-period="quarter">This Quarter</div>
+                  <div class="pm-tab-pill" data-ern-period="ytd">YTD</div>
+                  <div class="pm-tab-pill" data-ern-period="custom">Custom</div>
+                </div>
+                <div class="pmjobs-search-filter-row">
+                <div class="pmjr-search-wrap adern-search-wrap">
+                  <svg width="15" height="15" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="4.5"/><path d="M10 10l2.5 2.5"/></svg>
+                  <input type="text" class="field-input" style="padding-left:38px;" id="adernSearchInput" placeholder="Search job, PM, supplier, invoice..." autocomplete="off">
+                </div>
+                <div class="pmjobs-dd-group" style="margin-left:0;">
+                  <div class="pm-filter-field">
+                    <button type="button" class="pm-custom-dd-btn" data-dd="adernPmFilter"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px;"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg><span class="cdd-value">All PMs</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                    <div class="pm-custom-dd-menu" data-dd-menu="adernPmFilter" id="adernPmFilterMenu"></div>
+                  </div>
+                  <div class="pm-filter-field">
+                    <button type="button" class="pm-custom-dd-btn" data-dd="adernCycleFilter"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px;"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg><span class="cdd-value">All Cycles</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                    <div class="pm-custom-dd-menu" data-dd-menu="adernCycleFilter" id="adernCycleFilterMenu">
+                      <div class="cdd-item selected" data-value="All Cycles">All Cycles<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                      <div class="cdd-item" data-value="Monthly">Monthly<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                      <div class="cdd-item" data-value="Fortnightly">Fortnightly<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                    </div>
+                  </div>
+                  <div class="pm-filter-field">
+                    <button type="button" class="pm-custom-dd-btn" data-dd="adernStatusFilter"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px;"><path d="M4 22V4a1 1 0 011-1h13l-2 4 2 4H5"/></svg><span class="cdd-value">All Statuses</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                    <div class="pm-custom-dd-menu" data-dd-menu="adernStatusFilter" id="adernStatusFilterMenu">
+                      <div class="cdd-item selected" data-value="All Statuses">All Statuses<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                      <div class="cdd-item" data-value="Collected"><span class="cdd-item-label"><span class="cdd-status-dot" style="background:#1a7a3e;"></span>Collected</span><svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                      <div class="cdd-item" data-value="Distributed"><span class="cdd-item-label"><span class="cdd-status-dot" style="background:#284890;"></span>Distributed</span><svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                      <div class="cdd-item" data-value="Pending"><span class="cdd-item-label"><span class="cdd-status-dot" style="background:#b45309;"></span>Pending</span><svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                      <div class="cdd-item" data-value="Reversed"><span class="cdd-item-label"><span class="cdd-status-dot" style="background:#c0392b;"></span>Reversed</span><svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                      <div class="cdd-item" data-value="Refunded"><span class="cdd-item-label"><span class="cdd-status-dot" style="background:#94a3b8;"></span>Refunded</span><svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-primary" id="adernExportBtn" style="margin-left:auto;flex-shrink:0;width:auto;padding:10px 16px;font-size:12.5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>Export CSV</button>
+                </div>
+              </div>
+
+              <div class="pmjr-tabs-row" id="adernSubTabsRow" style="margin-bottom:0;">
+                <div class="pmjr-tab active" data-ern-tab="bypm">By PM</div>
+                <div class="pmjr-tab" data-ern-tab="bytx">By Transaction</div>
+                <div class="pmjr-tab" data-ern-tab="byperiod">By Period</div>
+              </div>
+
+              <div class="pm-table-wrap" id="adernTableWrap" style="margin-top:0;border-top-left-radius:0;border-top-right-radius:0;">
+                <div class="pm-table-scroll">
+                  <table class="admin-table" style="min-width:900px;">
+                    <thead>
+                      <tr><th>PM</th><th>Tier</th><th>Transactions</th><th>Gross Processed</th><th>Keylr Fee (Net) &darr;</th><th>VAT</th><th>Eff. %</th><th>Last Activity</th></tr>
+                    </thead>
+                    <tbody id="adernTableBody"></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="adern-chart-card">
+                <div class="adern-chart-title">Net Keylr Revenue &mdash; Monthly</div>
+                <div class="adern-chart-sub">Recognised fees over the selected range.</div>
+                <div id="adernChartMount" style="margin-top:24px;"></div>
               </div>
             </div>
           </div>
@@ -32267,7 +33110,7 @@
 
   /* ---- PM Settings view ---- */
   function showPMView(view) {
-    var viewIds = { home: 'pmHomeView', settings: 'pmSettingsView', explore: 'pmExploreView', responses: 'pmResponsesView', properties: 'pmPropertiesView', propertyform: 'pmPropertyFormView', propertyjobs: 'pmPropertyJobsView', compliancesettings: 'pmComplianceSettingsView', tickets: 'pmTicketsView', servicespricing: 'pmServicesPricingView', servicetemplate: 'pmServiceTemplateView', teams: 'pmTeamsView', preferredsuppliers: 'pmPrefSuppliersView' };
+    var viewIds = { home: 'pmHomeView', settings: 'pmSettingsView', explore: 'pmExploreView', responses: 'pmResponsesView', properties: 'pmPropertiesView', propertyform: 'pmPropertyFormView', propertyjobs: 'pmPropertyJobsView', compliancesettings: 'pmComplianceSettingsView', tickets: 'pmTicketsView', servicespricing: 'pmServicesPricingView', servicetemplate: 'pmServiceTemplateView', teams: 'pmTeamsView', preferredsuppliers: 'pmPrefSuppliersView', pminvoices: 'pmInvoicesView' };
     Object.keys(viewIds).forEach(function (key) {
       var el = document.getElementById(viewIds[key]);
       if (key === view) {
@@ -32299,6 +33142,7 @@
     var exploreTitleWrap = document.getElementById('pmExploreTopbarTitle');
     var exploreQuoteListBtn = document.getElementById('pmexQuoteListBtn');
     var prefTitleWrap = document.getElementById('pmPrefTopbarTitle');
+    var invoicesTitleWrap = document.getElementById('pmInvoicesTopbarTitle');
     var prefProfileTitleWrap = document.getElementById('pmPrefProfileTopbarTitle');
     var prefProfileBackBtn = document.getElementById('pmprefProfileTopbarBackBtn');
     var svcBackBtn = document.getElementById('pmsvcBackBtn');
@@ -32322,6 +33166,7 @@
     // shared topbar rather than inside Explore's own view container.
     if (exploreQuoteListBtn && view !== 'explore') exploreQuoteListBtn.style.display = 'none';
     if (prefTitleWrap) prefTitleWrap.style.display = (view === 'preferredsuppliers') ? '' : 'none';
+    if (invoicesTitleWrap) invoicesTitleWrap.style.display = (view === 'pminvoices') ? '' : 'none';
     if (prefProfileTitleWrap && view !== 'preferredsuppliers') prefProfileTitleWrap.style.display = 'none';
     if (prefProfileBackBtn && view !== 'preferredsuppliers') prefProfileBackBtn.style.display = 'none';
     // Delete's own visibility (new vs edit) is still driven separately by pmpropOpenNew/
@@ -38048,6 +38893,9 @@
       } else if (item.getAttribute('data-nav') === 'suppliers') {
         showPMView('preferredsuppliers');
         initPmprefOnce();
+      } else if (item.getAttribute('data-nav') === 'pminvoices') {
+        showPMView('pminvoices');
+        initPmInvoicesOnce();
       } else {
         showToast(item.querySelector('.nav-label').textContent + ' isn\u2019t wired up in this prototype yet.');
       }
@@ -38585,7 +39433,8 @@
     'calendar': 'supCalendarView',
     'profile-settings': 'supProfileSettingsView',
     'inbox': 'supInboxView',
-    'teams': 'supTeamsView'
+    'teams': 'supTeamsView',
+    'payouts': 'supPayoutsView'
   };
   function initMobileMenuBtn(menuBtnId, sidebarId) {
     var menuBtn = document.getElementById(menuBtnId);
@@ -38651,6 +39500,9 @@
         showSupplierView('teams');
         initSupTeamsOnce();
         initSupSvcTeamOnce();
+      } else if (nav === 'payouts') {
+        showSupplierView('payouts');
+        initSuppoOnce();
       } else {
         showToast(item.querySelector('.nav-label').textContent + ' isn\u2019t wired up in this prototype yet.');
       }
@@ -44270,7 +45122,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       properties: 'adminPropertiesView',
       propertyform: 'adminPropertyFormView',
       propertyjobs: 'adminPropertyJobsView',
-      compliancesettings: 'adminComplianceSettingsView'
+      compliancesettings: 'adminComplianceSettingsView',
+      invoices: 'adminInvoicesView',
+      'keylr-earnings': 'adminEarningsView'
     };
     Object.keys(adminViewIds).forEach(function (key) {
       var el = document.getElementById(adminViewIds[key]);
@@ -44346,6 +45200,12 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
         showAdminView('teams');
         initTeamsOnce();
         renderTeams();
+      } else if (nav === 'invoices') {
+        showAdminView('invoices');
+        initAdminInvoicesOnce();
+      } else if (nav === 'keylr-earnings') {
+        showAdminView('keylr-earnings');
+        initAdminEarningsOnce();
       } else {
         showAdminView('overview');
         document.querySelector('#adminDashboard .dash-nav-item[data-nav="overview"]').classList.add('active');
@@ -62047,7 +62907,1190 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   renderSupplierList();
   renderSupAppList();
 
+  /* ==================== Ported: PM Invoices ==================== */
+  var PMINV_STATUS_TONE = { all: 'gray', awaiting: 'amber', open: 'gray', paid: 'green', escrowed: 'blue', disputed: 'purple', failed: 'red' };
+  var PMINV_STATUS_LABEL = { all: 'All', awaiting: 'Awaiting', open: 'Open', paid: 'Paid', escrowed: 'Escrowed', disputed: 'Disputed', failed: 'Overdue' };
+  var PMINV_INVOICES = [
+    { id: 'SB-2026-000070', job: 'End of Tenancy / Deep / Regular / Communal', property: 'Carrington, PO Box 81490, London', supplier: 'Nadia Reid', due: '15 Jul 2026', date: '2026-07-09', amount: 64.80, status: 'awaiting', jobRef: 'JOB-2760' },
+    { id: 'SB-2026-000068', job: 'End of Tenancy / Deep / Regular / Communal', property: 'Carrington, PO Box 81490, London', supplier: 'Nadia Reid', due: '15 Jul 2026', date: '2026-07-09', amount: 72.00, status: 'awaiting', jobRef: 'JOB-2761' },
+    { id: 'SB-2026-000067', job: 'Appliance Installation (all white goods)', property: 'Carrington, PO Box 81490, London', supplier: 'Nadia Reid', due: '15 Jul 2026', date: '2026-07-08', amount: 480.00, status: 'awaiting', jobRef: 'JOB-2628' },
+    { id: 'SB-2026-000069', job: 'Smoke Alarm Installation', property: 'Carrington, PO Box 81490, London', supplier: 'Nadia Reid', due: '15 Jul 2026', date: '2026-07-08', amount: 486.00, status: 'awaiting', jobRef: 'JOB-2721' },
+    { id: 'SB-2026-000024', job: 'End of Tenancy / Deep / Regular / Communal', property: '45-47 Whitehall, London, SW1A', supplier: 'Liam Greenwood', due: '15 Jul 2026', date: '2026-07-07', amount: 588.96, status: 'awaiting', jobRef: 'JOB-2763' },
+    { id: 'SB-2026-000022', job: 'Boiler Service (Annual)', property: '45-47 Whitehall, London, SW1A', supplier: 'Liam Greenwood', due: '15 Jul 2026', date: '2026-07-07', amount: 403.20, status: 'awaiting', jobRef: 'JOB-2628' },
+    { id: 'SB-2026-000021', job: 'End of Tenancy / Deep / Regular / Communal', property: 'Apartment 3, 113 Newton Street', supplier: 'Nadia Reid', due: '\u2014', date: '2026-07-06', amount: 72.00, status: 'awaiting', jobRef: 'JOB-2765' },
+    { id: 'SB-2026-000020', job: 'Airbnb Turnover Clean', property: '45-47 Whitehall, London, SW1A', supplier: 'Liam Greenwood', due: '\u2014', date: '2026-07-06', amount: 177.12, status: 'awaiting', jobRef: 'JOB-2759' },
+
+    { id: 'SB-2026-000066', job: 'Carpet / Stair Carpet Steam Clean', property: 'Q & Q Recovery, West Road, Barnsley', supplier: 'rajat', due: '\u2014', date: '2026-07-06', amount: 840.00, status: 'paid', jobRef: 'JOB-2774' },
+    { id: 'DEP-2026-000019', job: 'Carpet / Stair Carpet Steam Clean', property: 'Q & Q Recovery, West Road, Barnsley', supplier: 'rajat', due: '\u2014', date: '2026-07-06', amount: 180.00, status: 'paid', jobRef: 'JOB-2774', isDeposit: true },
+    { id: 'SB-2026-000053', job: 'End of Tenancy / Deep / Regular / Communal', property: 'Carrington, PO Box 81490, London', supplier: 'sorogam', due: '\u2014', date: '2026-07-03', amount: 201.60, status: 'paid', jobRef: 'JOB-2606' },
+    { id: 'DEP-2026-000003', job: 'Carpet / Stair Carpet Steam Clean', property: 'Carrington, PO Box 81490, London', supplier: 'sorogam', due: '\u2014', date: '2026-07-03', amount: 360.00, status: 'paid', jobRef: 'JOB-2744', isDeposit: true },
+    { id: 'SB-2026-000035', job: 'End of Tenancy / Deep / Regular / Communal', property: 'Carrington, PO Box 81490, London', supplier: 'sorogam', due: '\u2014', date: '2026-07-02', amount: 288.00, status: 'paid', jobRef: 'JOB-2709' },
+    { id: 'SB-2026-000025', job: 'Boiler Service (Annual)', property: '45-47 Whitehall, London, SW1A', supplier: 'Liam Greenwood', due: '\u2014', date: '2026-07-02', amount: 288.00, status: 'paid', jobRef: 'JOB-2653' },
+    { id: 'SB-2026-000023', job: 'Appliance Installation (all white goods)', property: 'Carrington, PO Box 81490, London', supplier: 'Liam Greenwood', due: '\u2014', date: '2026-07-01', amount: 720.00, status: 'paid', jobRef: 'JOB-2628' },
+    { id: 'SB88-6000', job: null, property: null, supplier: 'Liam Greenwood', due: '28 May 2026', date: '2026-05-20', amount: 286.00, status: 'paid', jobRef: null },
+    { id: 'SB88-6006', job: null, property: null, supplier: 'Liam Greenwood', due: '28 Nov 2025', date: '2025-11-20', amount: 318.00, status: 'paid', jobRef: null },
+
+    { id: 'SB2-2026-000026', job: null, property: null, supplier: 'Owen Marsh', due: '1 Apr 2026', date: '2026-03-25', amount: 231.89, status: 'failed', jobRef: null },
+
+    { id: 'SB-2026-000058', job: 'Gas Safety Certificate (CP12)', property: 'Homeland 2, Barnsley', supplier: 'Liam Greenwood', due: '20 Jul 2026', date: '2026-07-10', amount: 95.00, status: 'escrowed', jobRef: 'JOB-2758' },
+    { id: 'SB-2026-000041', job: 'EICR \u2014 Electrical Installation', property: 'Homeland Heights, London', supplier: 'Liam Greenwood', due: '18 Jul 2026', date: '2026-07-09', amount: 175.68, status: 'disputed', jobRef: 'JOB-2776' }
+  ];
+  // This prototype's demo data clusters around the 1 Jul - 15 Jul billing period (matching the
+  // Consolidated Payments tab's own default statement period), so date-based filters treat that
+  // window as "now" rather than the real browser date - otherwise every invoice below would always
+  // read as being in the past, and Today/This Week would never show anything.
+  var pminvMockToday = '2026-07-10';
+  var pminvActiveTab = 'invoices'; // 'invoices' | 'consolidated'
+  var pminvActiveStatus = 'awaiting';
+  var pminvDateGranularity = 'all'; // 'all' | 'weekly' | 'monthly' | 'yearly'
+  var pminvPeriodOffset = 0; // 0 = current period at that granularity, 1 = one unit back, etc.
+  var pminvBillingPeriod = null; // { year, month (0-idx), half } when a specific billing period is picked; mutually exclusive with the granularity filter above
+  var pminvPaymentMethod = 'card';
+  /* =========================================================
+     PM INVOICES
+  ========================================================== */
+  var PMINV_SUPPLIER_CO = {
+    'rajat': { company: 'COMMUNIFY ON DEMAND LTD', addr: '77 Shaftesbury Avenue, London, W1D 5DU, United Kingdom', regNo: '15019054', vat: 'GB553557881' },
+    'sorogam': { company: 'GRIFFIN RAIL WHEEL LTD', addr: '14 Kirkstall Road, Leeds, LS4 2AB, United Kingdom', regNo: '14882201', vat: 'GB447229910' },
+    'Liam Greenwood': { company: 'Liam Greenwood Appliance Engineer', addr: '9 Ryder Street, London, SW1A 2BX, United Kingdom', regNo: '\u2014 (Sole Trader)', vat: 'Not VAT registered' },
+    'Nadia Reid': { company: 'Nadia Reid Gardener', addr: 'Flat 3, 113 Newton Street, Manchester, M1 4GH, United Kingdom', regNo: '\u2014 (Sole Trader)', vat: 'Not VAT registered' },
+    'Owen Marsh': { company: 'Owen Marsh Property Services', addr: '22 Park Avenue, Manchester, M1 4GH, United Kingdom', regNo: '\u2014 (Sole Trader)', vat: 'Not VAT registered' }
+  };
+  var PMINV_PM_CO = { company: 'KEY RIDERS LTD', addr: '60 Tottenham Court Road, Suite 3260a, Fitzrovia, London, W1T 2EW, United Kingdom', regNo: '15019055', vat: 'GB868776770' };
+
+  // A statement is "pre-consolidated" while its billing period is still open - the cutoff and
+  // finalisation haven't happened yet, so totals are provisional and neither the breakdown nor
+  // the supplier payouts exist yet. Once the period's finalisation date has passed, it becomes
+  // "post-consolidated": the breakdown and payouts are real, settled records. This PM's cycle
+  // runs 1st-15th then 16th-end of month, finalising on the 12th/27th per Keylr's cycle docs.
+  var PMINV_STATEMENTS = [
+    {
+      key: '1 Jul 2026 \u2013 15 Jul 2026', type: 'pre',
+      suppliers: 3, invoices: 9, cycle: 'fortnightly', ddDate: '15 Jul 2026',
+      totalBilled: 3894.96, paid: 720.02, outstanding: 3174.94, overdue: 0,
+      breakdown: null, payouts: null, disputes: 0
+    },
+    {
+      key: '16 Jun 2026 \u2013 30 Jun 2026', type: 'post',
+      suppliers: 4, invoices: 11, cycle: 'fortnightly', ddDate: '1 Jul 2026',
+      totalBilled: 4216.40, paid: 4216.40, outstanding: 0, overdue: 0,
+      breakdown: [
+        { supplier: 'Liam Greenwood', invoices: 4, amount: 1580.00 },
+        { supplier: 'Nadia Reid', invoices: 3, amount: 972.40 },
+        { supplier: 'sorogam', invoices: 2, amount: 864.00 },
+        { supplier: 'rajat', invoices: 2, amount: 800.00 }
+      ],
+      payouts: [
+        { supplier: 'Liam Greenwood', amount: 1580.00, status: 'paid' },
+        { supplier: 'Nadia Reid', amount: 972.40, status: 'paid' },
+        { supplier: 'sorogam', amount: 864.00, status: 'paid' },
+        { supplier: 'rajat', amount: 800.00, status: 'paid' }
+      ],
+      disputes: 0
+    },
+    {
+      key: '1 Jun 2026 \u2013 15 Jun 2026', type: 'post',
+      suppliers: 3, invoices: 8, cycle: 'fortnightly', ddDate: '15 Jun 2026',
+      totalBilled: 2940.00, paid: 2940.00, outstanding: 0, overdue: 0,
+      breakdown: [
+        { supplier: 'Liam Greenwood', invoices: 3, amount: 1240.00 },
+        { supplier: 'sorogam', invoices: 3, amount: 1100.00 },
+        { supplier: 'Nadia Reid', invoices: 2, amount: 600.00 }
+      ],
+      payouts: [
+        { supplier: 'Liam Greenwood', amount: 1240.00, status: 'paid' },
+        { supplier: 'sorogam', amount: 1100.00, status: 'paid' },
+        { supplier: 'Nadia Reid', amount: 600.00, status: 'paid' }
+      ],
+      disputes: 0
+    }
+  ];
+  var pminvStmtMode = 'pre';
+  var pminvActiveStatementKey = PMINV_STATEMENTS[0].key;
+
+  var PMINV_MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function pminvIsoDate(y, mZeroIdx, d) { return y + '-' + String(mZeroIdx + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0'); }
+  function pminvShortLabel(d) { return d.getDate() + ' ' + PMINV_MONTH_NAMES[d.getMonth()]; }
+  // Every granularity is computed on demand for a single offset, rather than a list generated
+  // upfront - a dropdown of individual periods would keep growing every month this prototype's
+  // "today" moves forward, eventually becoming unusable after a year or two. Stepping one period
+  // at a time scales identically whether there's one month of data behind it or ten years. Each
+  // also supports a direct jump via its picker popover (pminvOpenPicker below), for reaching a
+  // distant period without stepping through everything in between one click at a time.
+  function pminvComputePeriod(granularity, offset) {
+    var today = new Date(pminvMockToday + 'T00:00:00');
+    if (granularity === 'weekly') {
+      var dayOfWeek = today.getDay();
+      var diffToMonday = (dayOfWeek === 0 ? -6 : 1 - dayOfWeek);
+      var monday = new Date(today); monday.setDate(today.getDate() + diffToMonday - offset * 7);
+      var sunday = new Date(monday); sunday.setDate(monday.getDate() + 6);
+      return { label: pminvShortLabel(monday) + '\u2013' + pminvShortLabel(sunday) + ' ' + sunday.getFullYear(), start: pminvIsoDate(monday.getFullYear(), monday.getMonth(), monday.getDate()), end: pminvIsoDate(sunday.getFullYear(), sunday.getMonth(), sunday.getDate()) };
+    }
+    if (granularity === 'monthly') {
+      var m = today.getMonth() - offset, y = today.getFullYear();
+      while (m < 0) { m += 12; y--; }
+      var lastDay = new Date(y, m + 1, 0).getDate();
+      return { label: PMINV_MONTH_NAMES[m] + ' ' + y, start: pminvIsoDate(y, m, 1), end: pminvIsoDate(y, m, lastDay) };
+    }
+    if (granularity === 'yearly') {
+      var yy = today.getFullYear() - offset;
+      return { label: String(yy), start: yy + '-01-01', end: yy + '-12-31' };
+    }
+    return null;
+  }
+  // This PM's own billing cycle runs 1st-15th, then 16th-end of month (a different PM account
+  // might run 25th-10th or a monthly 25th-25th cycle instead, per Keylr's wider cycle options -
+  // this prototype is signed in as the one PM whose cycle is 1-15, so this follows that pattern
+  // specifically rather than a hard-coded date range that would drift out of step).
+  function pminvCycleRangeFor(year, month, half) {
+    if (half === 1) return { label: '1\u201315 ' + PMINV_MONTH_NAMES[month] + ' ' + year, start: pminvIsoDate(year, month, 1), end: pminvIsoDate(year, month, 15) };
+    var lastDay = new Date(year, month + 1, 0).getDate();
+    return { label: '16\u2013' + lastDay + ' ' + PMINV_MONTH_NAMES[month] + ' ' + year, start: pminvIsoDate(year, month, 16), end: pminvIsoDate(year, month, lastDay) };
+  }
+  function pminvWithinDateFilter(iso) {
+    var period = null;
+    if (pminvBillingPeriod) {
+      period = pminvCycleRangeFor(pminvBillingPeriod.year, pminvBillingPeriod.month, pminvBillingPeriod.half);
+    } else if (pminvDateGranularity !== 'all') {
+      period = pminvComputePeriod(pminvDateGranularity, pminvPeriodOffset);
+    } else {
+      return true;
+    }
+    if (!iso) return false;
+    if (!period) return true;
+    var d = new Date(iso + 'T00:00:00');
+    return d >= new Date(period.start + 'T00:00:00') && d <= new Date(period.end + 'T23:59:59');
+  }
+
+  function pminvFilteredInvoices() {
+    return PMINV_INVOICES.filter(function (i) { return (pminvActiveStatus === 'all' || i.status === pminvActiveStatus) && pminvWithinDateFilter(i.date); });
+  }
+  function pminvLongDate(iso) {
+    var d = new Date(iso + 'T00:00:00');
+    return d.getDate() + ' ' + PMINV_MONTH_NAMES[d.getMonth()] + ' ' + d.getFullYear();
+  }
+  function pminvMoney(n) { return '\u00a3' + n.toFixed(2); }
+  function pminvRowHtml(inv) {
+    var canOpenPdf = true;
+    var showPayCol = pminvActiveStatus !== 'paid' && pminvActiveStatus !== 'escrowed' && pminvActiveStatus !== 'disputed';
+    var dueDisplay = inv.due;
+    if (inv.status === 'paid' && inv.due === '\u2014' && inv.date) dueDisplay = pminvLongDate(inv.date);
+    var payCellHtml = '<span class="pminv-dash-cell">\u2014</span>';
+    if (inv.status === 'awaiting') payCellHtml = '<button type="button" class="pminv-approve-btn" data-pminv-approve="' + inv.id + '">Approve and Pay</button>';
+    else if (inv.status === 'failed') payCellHtml = '<button type="button" class="pminv-approve-btn" data-pminv-approve="' + inv.id + '">Pay</button>';
+    return '<tr class="' + (canOpenPdf ? 'clickable' : '') + '" ' + (canOpenPdf ? 'data-pminv-row="' + inv.id + '"' : '') + '>' +
+      '<td><div class="pminv-id-link">' + inv.id + '</div>' + (inv.isDeposit ? '<div class="pminv-id-sub">Deposit receipt</div>' : '') + '</td>' +
+      '<td>' + (inv.jobRef ? '<div class="pminv-jobid-sub">' + pmexEscapeHtml(inv.jobRef) + '</div>' : '') + (inv.job ? pmexEscapeHtml(inv.job) : (inv.jobRef ? '' : '<span class="pminv-dash-cell">\u2014</span>')) + '</td>' +
+      '<td>' + (inv.property ? pmexEscapeHtml(inv.property) : '<span class="pminv-dash-cell">\u2014</span>') + '</td>' +
+      '<td>' + pmexEscapeHtml(inv.supplier) + '</td>' +
+      '<td>' + (dueDisplay === '\u2014' ? '<span class="pminv-dash-cell">\u2014</span>' : dueDisplay) + '</td>' +
+      '<td class="pminv-amount">' + pminvMoney(inv.amount) + '</td>' +
+      (showPayCol ? '<td>' + payCellHtml + '</td>' : '') +
+      '<td><div class="pminv-actions-cell">' +
+        '<button type="button" class="pminv-pdf-btn" data-pminv-pdf="' + inv.id + '" aria-label="Download" data-tooltip="Download"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>' +
+        '<button type="button" class="pminv-pdf-btn" data-pminv-viewjob="' + inv.id + '" aria-label="View job" data-tooltip="View job"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>' +
+        (inv.status === 'disputed' ? '<button type="button" class="pminv-pdf-btn" data-pminv-viewdispute="' + inv.id + '" aria-label="View dispute" data-tooltip="View dispute"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></button>' : '') +
+      '</div></td>' +
+      '</tr>';
+  }
+  function pminvRenderTable() {
+    var list = pminvFilteredInvoices();
+    var tbody = document.getElementById('pminvTableBody');
+    var wrap = document.getElementById('pminvTableWrap');
+    var empty = document.getElementById('pminvEmptyState');
+    var showPayCol = pminvActiveStatus !== 'paid' && pminvActiveStatus !== 'escrowed' && pminvActiveStatus !== 'disputed';
+    var dueOrDateLabel = pminvActiveStatus === 'paid' ? 'Date' : 'Due';
+    document.getElementById('pminvTableHeadRow').innerHTML = '<th>Invoice</th><th>Job</th><th>Property</th><th>Supplier</th><th>' + dueOrDateLabel + '</th><th>Amount</th>' +
+      (showPayCol ? '<th>Pay</th>' : '') + '<th>Actions</th>';
+    if (!list.length) {
+      tbody.innerHTML = '';
+      wrap.querySelector('table').style.display = 'none';
+      empty.style.display = '';
+      empty.innerHTML = 'No per-job invoices on the ' + PMINV_STATUS_LABEL[pminvActiveStatus] + ' tab right now.';
+      return;
+    }
+    wrap.querySelector('table').style.display = '';
+    empty.style.display = 'none';
+    tbody.innerHTML = list.map(pminvRowHtml).join('');
+    tbody.querySelectorAll('[data-pminv-row]').forEach(function (row) {
+      row.addEventListener('click', function () { pminvOpenPdfModal(row.getAttribute('data-pminv-row')); });
+    });
+    tbody.querySelectorAll('[data-pminv-approve]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) { e.stopPropagation(); pminvOpenPayModal(btn.getAttribute('data-pminv-approve')); });
+    });
+    tbody.querySelectorAll('[data-pminv-pdf]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (btn.disabled) return;
+        pminvOpenPdfModal(btn.getAttribute('data-pminv-pdf'));
+      });
+    });
+    tbody.querySelectorAll('[data-pminv-viewjob]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        showToast('Job view isn\u2019t wired up in this prototype yet.');
+      });
+    });
+    tbody.querySelectorAll('[data-pminv-viewdispute]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        showToast('Dispute view isn\u2019t wired up in this prototype yet.');
+      });
+    });
+  }
+  function pminvSwitchStatus(status) {
+    pminvActiveStatus = status;
+    document.querySelectorAll('#pminvStatusTabs .pminv-status-tab').forEach(function (t) { t.classList.toggle('active', t.getAttribute('data-status') === status); });
+    pminvRenderTable();
+  }
+  function pminvSwitchTopTab(tab) {
+    pminvActiveTab = tab;
+    document.querySelectorAll('.pminv-toptab').forEach(function (t) { t.classList.toggle('active', t.getAttribute('data-inv-tab') === tab); });
+    document.getElementById('pminvInvoicesPane').style.display = tab === 'invoices' ? '' : 'none';
+    document.getElementById('pminvConsolidatedPane').style.display = tab === 'consolidated' ? '' : 'none';
+    if (tab === 'consolidated') pminvRenderStatement();
+  }
+  function pminvActiveStatement() {
+    if (!pminvActiveStatementKey) return null;
+    return PMINV_STATEMENTS.filter(function (s) { return s.key === pminvActiveStatementKey; })[0] || null;
+  }
+  function pminvRenderStatement() {
+    var s = pminvActiveStatement();
+    var ddLabel = document.querySelector('[data-dd="pminvPeriod"] .cdd-value');
+
+    if (!s) {
+      ddLabel.textContent = 'Select a period';
+      document.getElementById('pminvStmtHeadInfo').innerHTML =
+        '<div class="pminv-stmt-eyebrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Statement period</div>' +
+        '<div class="pminv-stmt-title">No period selected</div>' +
+        '<div class="pminv-stmt-sub">Choose a post-consolidated period from the dropdown to view its statement.</div>';
+      document.getElementById('pminvStmtStats').innerHTML =
+        '<div class="pminv-stmt-stat"><div class="lbl">Total billed</div><div class="val">\u2014</div></div>' +
+        '<div class="pminv-stmt-stat paid"><div class="lbl">Paid</div><div class="val">\u2014</div></div>' +
+        '<div class="pminv-stmt-stat outstanding"><div class="lbl">Outstanding</div><div class="val">\u2014</div></div>' +
+        '<div class="pminv-stmt-stat overdue"><div class="lbl">Overdue</div><div class="val">\u2014</div></div>';
+      document.getElementById('pminvStatementCards').innerHTML =
+        '<div class="pminv-card"><div class="pminv-card-head"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg>Statement breakdown</div><div class="pminv-card-empty"><div class="t">Select a period</div><div class="s">Choose a post-consolidated period above to view its breakdown.</div></div></div>' +
+        '<div class="pminv-card"><div class="pminv-card-head-row"><span>Payouts to suppliers</span></div><div class="pminv-card-note">Select a period to view supplier payouts.</div></div>' +
+        '<div class="pminv-card"><div class="pminv-card-empty" style="padding:20px 0;"><div class="s"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;"><path d="M20 6L9 17l-5-5"/></svg>No disputed payments \u2014 everything\u2019s clear.</div></div></div>';
+      return;
+    }
+
+    var isPre = s.type === 'pre';
+    var typeBadge = isPre
+      ? '<span class="status-pill amber">Pre-Consolidated</span>'
+      : '<span class="status-pill green">Post-Consolidated</span>';
+    var parts = s.key.split(' \u2013 ');
+
+    ddLabel.textContent = s.key;
+    document.getElementById('pminvStmtHeadInfo').innerHTML =
+      '<div class="pminv-stmt-eyebrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Statement period</div>' +
+      '<div class="pminv-stmt-title">' + parts[0] + ' <span class="pminv-stmt-dash">\u2013</span> ' + parts[1] + ' ' + typeBadge + '</div>' +
+      '<div class="pminv-stmt-sub">' + s.suppliers + ' suppliers \u00b7 ' + s.invoices + ' invoices \u00b7 ' + s.cycle + ' \u00b7 DD ' + s.ddDate + '</div>';
+
+    document.getElementById('pminvStmtStats').innerHTML =
+      '<div class="pminv-stmt-stat"><div class="lbl">Total billed</div><div class="val">' + pminvMoney(s.totalBilled) + '</div></div>' +
+      '<div class="pminv-stmt-stat paid"><div class="lbl">Paid</div><div class="val">' + pminvMoney(s.paid) + '</div></div>' +
+      '<div class="pminv-stmt-stat outstanding"><div class="lbl">Outstanding</div><div class="val">' + pminvMoney(s.outstanding) + '</div></div>' +
+      '<div class="pminv-stmt-stat overdue"><div class="lbl">Overdue</div><div class="val">' + pminvMoney(s.overdue) + '</div></div>';
+
+    var cardsHtml = '<div class="pminv-card"><div class="pminv-card-head"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg>Statement breakdown</div>';
+    if (isPre) {
+      cardsHtml += '<div class="pminv-card-empty"><div class="t">Statement is being generated</div><div class="s">It appears once the billing period is finalised. Check back shortly.</div></div>';
+    } else {
+      cardsHtml += '<table class="pminv-doc-table"><thead><tr><th>Supplier</th><th>Invoices</th><th>Amount</th></tr></thead><tbody>' +
+        s.breakdown.map(function (b) { return '<tr><td>' + pmexEscapeHtml(b.supplier) + '</td><td>' + b.invoices + '</td><td>' + pminvMoney(b.amount) + '</td></tr>'; }).join('') +
+        '</tbody></table>';
+    }
+    cardsHtml += '</div>';
+
+    cardsHtml += '<div class="pminv-card"><div class="pminv-card-head-row"><span>Payouts to suppliers</span></div>';
+    if (isPre) {
+      cardsHtml += '<div class="pminv-card-note">Waiting for the Direct Debit to clear.</div>';
+    } else {
+      cardsHtml += '<table class="pminv-doc-table"><thead><tr><th>Supplier</th><th>Amount</th><th>Status</th></tr></thead><tbody>' +
+        s.payouts.map(function (p) { return '<tr><td>' + pmexEscapeHtml(p.supplier) + '</td><td>' + pminvMoney(p.amount) + '</td><td><span class="status-pill green">Paid</span></td></tr>'; }).join('') +
+        '</tbody></table>';
+    }
+    cardsHtml += '</div>';
+
+    cardsHtml += '<div class="pminv-card"><div class="pminv-card-empty" style="padding:20px 0;"><div class="s"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;"><path d="M20 6L9 17l-5-5"/></svg>No disputed payments \u2014 everything\u2019s clear.</div></div></div>';
+
+    document.getElementById('pminvStatementCards').innerHTML = cardsHtml;
+  }
+  function pminvSwitchStmtMode(mode) {
+    pminvStmtMode = mode;
+    document.querySelectorAll('#pminvStmtTypeSwitch .pm-tab-pill').forEach(function (btn) {
+      btn.classList.toggle('active', btn.getAttribute('data-stmt-type') === mode);
+    });
+    var match = PMINV_STATEMENTS.filter(function (s) { return s.type === mode; })[0];
+    pminvActiveStatementKey = match ? match.key : null;
+    pminvPopulatePeriodMenu();
+    pminvRenderStatement();
+  }
+  function pminvPopulatePeriodMenu() {
+    var menu = document.getElementById('pminvPeriodMenu');
+    var options = PMINV_STATEMENTS.filter(function (s) { return s.type === pminvStmtMode; });
+    menu.innerHTML = options.map(function (s) {
+      return '<div class="cdd-item' + (s.key === pminvActiveStatementKey ? ' selected' : '') + '" data-value="' + s.key + '">' + s.key + '<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>';
+    }).join('');
+    menu.querySelectorAll('.cdd-item').forEach(function (item) {
+      item.addEventListener('click', function () {
+        pminvActiveStatementKey = item.getAttribute('data-value');
+        closeAllCustomDropdowns();
+        pminvRenderStatement();
+      });
+    });
+  }
+  function pminvWireStatementSwitch() {
+    document.querySelectorAll('#pminvStmtTypeSwitch .pm-tab-pill').forEach(function (btn) {
+      btn.addEventListener('click', function () { pminvSwitchStmtMode(btn.getAttribute('data-stmt-type')); });
+    });
+    pminvPopulatePeriodMenu();
+  }
+
+  var pminvActivePayId = null;
+  function pminvOpenPayModal(invId) {
+    var inv = PMINV_INVOICES.find(function (i) { return i.id === invId; });
+    if (!inv) return;
+    pminvActivePayId = invId;
+    document.getElementById('pminvPayModalJobRef').textContent = inv.jobRef || inv.id;
+    document.getElementById('pminvPayModalTotal').textContent = pminvMoney(inv.amount);
+    document.getElementById('pminvPayModalNow').textContent = pminvMoney(inv.amount);
+    pminvPaymentMethod = 'card';
+    document.querySelectorAll('.pminv-paymethod-card').forEach(function (c) { c.classList.toggle('active', c.getAttribute('data-paymethod') === 'card'); });
+    document.getElementById('pminvPayModalOverlay').classList.add('open');
+  }
+  function pminvClosePayModal() {
+    document.getElementById('pminvPayModalOverlay').classList.remove('open');
+    pminvActivePayId = null;
+  }
+  function pminvConfirmPay() {
+    if (!pminvActivePayId) return;
+    var inv = PMINV_INVOICES.find(function (i) { return i.id === pminvActivePayId; });
+    if (inv) inv.status = 'paid';
+    pminvClosePayModal();
+    pminvRenderTable();
+    showRichToast('Payment released', inv ? (inv.id + ' \u2014 ' + pminvMoney(inv.amount) + ' paid to ' + inv.supplier + '.') : '', 'success');
+  }
+
+  function pminvDocHtml(inv) {
+    var co = PMINV_SUPPLIER_CO[inv.supplier] || { company: inv.supplier, addr: 'Address on file', regNo: '\u2014', vat: 'Not VAT registered' };
+    var net = inv.amount / 1.2;
+    var vat = inv.amount - net;
+    var keylrFee = net * 0.2;
+    var keylrVat = keylrFee * 0.2;
+    var supplierSlug = (inv.supplier || 'SUPPLIER').toUpperCase().replace(/[^A-Z]/g, '').substring(0, 9) || 'SUPPLIER';
+    var sbaRef = 'SBA-' + supplierSlug + '-' + inv.id.replace(/[^0-9]/g, '').slice(-4).padStart(4, '0');
+    return '<div class="pminv-doc-top-row">' +
+      '<div><div class="pminv-doc-title">Self-Billed Invoice</div><div class="pminv-doc-issuer">Issued by Keylr Ltd (trading as Keylr) as agent on behalf of the supplier named below.</div></div>' +
+      '</div>' +
+      '<hr class="pminv-doc-divider">' +
+      '<div class="pminv-doc-info-grid">' +
+      '<div class="pminv-doc-info-item"><div class="lbl">Invoice number</div><div class="val">' + inv.id + '</div></div>' +
+      '<div class="pminv-doc-info-item"><div class="lbl">Invoice date</div><div class="val">2026-07-06</div></div>' +
+      '<div class="pminv-doc-info-item"><div class="lbl">Tax point date</div><div class="val">2026-07-06</div></div>' +
+      '<div class="pminv-doc-info-item"><div class="lbl">Currency</div><div class="val">GBP</div></div>' +
+      '<div class="pminv-doc-info-item"><div class="lbl">Status</div><div class="val"><span class="status-pill ' + PMINV_STATUS_TONE[inv.status] + '">' + PMINV_STATUS_LABEL[inv.status] + '</span></div></div>' +
+      '</div>' +
+      '<div class="pminv-doc-parties">' +
+      '<div><div class="pminv-doc-party-label">Supplier</div><div class="pminv-doc-party-name">' + pmexEscapeHtml(co.company) + '</div><div class="pminv-doc-party-addr">' + pmexEscapeHtml(co.addr) + '<br>Company Reg. No.: ' + pmexEscapeHtml(co.regNo) + '<br>VAT No: ' + pmexEscapeHtml(co.vat) + '</div></div>' +
+      '<div><div class="pminv-doc-party-label">Keylr (self-billing agent)</div><div class="pminv-doc-party-name">Keylr Ltd</div><div class="pminv-doc-party-addr">1 Keylr Way, London EC1A 1BB<em>Issued by Keylr Ltd (trading as Keylr) as agent on behalf of the supplier named in this invoice.</em></div></div>' +
+      '<div><div class="pminv-doc-party-label">PM (underlying customer)</div><div class="pminv-doc-party-name">' + pmexEscapeHtml(PMINV_PM_CO.company) + '</div><div class="pminv-doc-party-addr">' + pmexEscapeHtml(PMINV_PM_CO.addr) + '<br>Company Reg. No.: ' + PMINV_PM_CO.regNo + '<br>VAT No: ' + PMINV_PM_CO.vat + '</div></div>' +
+      '</div>' +
+      '<div class="pminv-doc-svc-label">Services supplied on behalf of the supplier:</div>' +
+      '<table class="pminv-doc-table"><thead><tr><th>Job ref</th><th>Job date</th><th>Property address</th><th>Net</th><th>Supplier VAT</th><th>Keylr fee</th><th>Keylr VAT</th><th>Gross</th></tr></thead>' +
+      '<tbody><tr><td>' + pmexEscapeHtml(inv.job || 'Service') + '</td><td>2026-07-06</td><td>' + pmexEscapeHtml(inv.property || '\u2014') + '</td><td>' + net.toFixed(2) + '</td><td>' + vat.toFixed(2) + '</td><td>' + keylrFee.toFixed(2) + '</td><td>' + keylrVat.toFixed(2) + '</td><td>' + inv.amount.toFixed(2) + '</td></tr></tbody></table>' +
+      '<div class="pminv-doc-totals-row"><span class="lbl">Total net</span><span class="val">\u00a3' + net.toFixed(2) + '</span></div>' +
+      '<div class="pminv-doc-totals-row"><span class="lbl">Total VAT</span><span class="val">\u00a3' + vat.toFixed(2) + '</span></div>' +
+      '<div class="pminv-doc-totals-row strong"><span class="lbl">Total gross payable</span><span class="val">\u00a3' + inv.amount.toFixed(2) + '</span></div>' +
+      '<div class="pminv-doc-sba-note">Self-billing agreement ref ' + sbaRef + ', dated 8 Feb 2026, between ' + pmexEscapeHtml(PMINV_PM_CO.company) + ' and ' + pmexEscapeHtml(co.company) + '. Keylr acts as agent for the supplier and, under its agency terms with the property manager, self-bills on the PM\u2019s behalf as the underlying customer. The supplier agrees not to issue their own VAT invoice for supplies covered by this agreement while it remains in force. VAT shown is the supplier\u2019s liability to account for to HMRC. Either party may terminate the self-billing agreement at any time by written notice.</div>';
+  }
+  function pminvOpenPdfModal(invId) {
+    var inv = PMINV_INVOICES.find(function (i) { return i.id === invId; });
+    if (!inv) return;
+    document.getElementById('pminvPdfHeadTitle').textContent = inv.id;
+    document.getElementById('pminvPdfScroll').innerHTML = pminvDocHtml(inv);
+    document.getElementById('pminvPdfModalOverlay').classList.add('open');
+  }
+  function pminvClosePdfModal() {
+    document.getElementById('pminvPdfModalOverlay').classList.remove('open');
+  }
+
+  function initPmInvoicesOnce() {
+    pminvRenderTable();
+    if (pminvInitDone) return;
+    pminvInitDone = true;
+
+    document.querySelectorAll('.pminv-toptab').forEach(function (t) {
+      t.addEventListener('click', function () { pminvSwitchTopTab(t.getAttribute('data-inv-tab')); });
+    });
+    document.querySelectorAll('#pminvStatusTabs .pminv-status-tab').forEach(function (t) {
+      t.addEventListener('click', function () { pminvSwitchStatus(t.getAttribute('data-status')); });
+    });
+    pminvWirePeriodMenu();
+    pminvWireStatementSwitch();
+    document.querySelectorAll('.pminv-paymethod-card').forEach(function (c) {
+      c.addEventListener('click', function () {
+        pminvPaymentMethod = c.getAttribute('data-paymethod');
+        document.querySelectorAll('.pminv-paymethod-card').forEach(function (x) { x.classList.toggle('active', x === c); });
+      });
+    });
+    document.getElementById('pminvPayModalCancelBtn').addEventListener('click', pminvClosePayModal);
+    document.getElementById('pminvPayModalOverlay').addEventListener('click', function (e) { if (e.target === this) pminvClosePayModal(); });
+    document.getElementById('pminvPayModalContinueBtn').addEventListener('click', pminvConfirmPay);
+    document.getElementById('pminvPdfCloseBtn').addEventListener('click', pminvClosePdfModal);
+    document.getElementById('pminvPdfModalOverlay').addEventListener('click', function (e) { if (e.target === this) pminvClosePdfModal(); });
+    document.querySelector('.pminv-pdf-foot .btn-primary').addEventListener('click', function () { showToast('PDF export isn\u2019t wired up in this prototype yet.'); });
+  }
+  var pminvPickerNavYear = null;
+  var pminvPickerNavMonth = null;
+  var pminvYearPickerPageEnd = null;
+  var pminvBillingNavYear = null;
+  var pminvBillingPendingMonth = null;
+  var pminvBillingPendingYear = null;
+
+  function pminvWirePeriodMenu() {
+    document.querySelectorAll('#pminvPeriodFilterMenu .cdd-item').forEach(function (item) {
+      item.addEventListener('click', function () {
+        pminvDateGranularity = item.getAttribute('data-value');
+        pminvPeriodOffset = 0;
+        pminvBillingPeriod = null;
+        document.getElementById('pminvBillingPeriodLabel').textContent = 'Billing Period';
+        document.getElementById('pminvBillingPeriodBtn').classList.remove('filter-active');
+        document.querySelector('[data-dd="pminvPeriodFilter"] .cdd-value').textContent = item.textContent.trim();
+        document.querySelectorAll('#pminvPeriodFilterMenu .cdd-item').forEach(function (i) { i.classList.toggle('selected', i === item); });
+        closeAllCustomDropdowns();
+        pminvClosePickerPopovers();
+        pminvRenderStepper();
+        pminvRenderTable();
+      });
+    });
+    document.getElementById('pminvStepperPrev').addEventListener('click', function () {
+      pminvPeriodOffset++;
+      pminvRenderStepper();
+      pminvRenderTable();
+    });
+    document.getElementById('pminvStepperNext').addEventListener('click', function () {
+      if (pminvPeriodOffset === 0) return;
+      pminvPeriodOffset--;
+      pminvRenderStepper();
+      pminvRenderTable();
+    });
+    document.getElementById('pminvStepperLabelBtn').addEventListener('click', function (e) {
+      e.stopPropagation();
+      pminvOpenPicker();
+    });
+    document.getElementById('pminvBillingPeriodBtn').addEventListener('click', function (e) {
+      e.stopPropagation();
+      pminvOpenBillingPicker();
+    });
+    document.getElementById('pminvClearFilterBtn').addEventListener('click', pminvClearDateFilter);
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.pminv-period-stepper')) document.getElementById('pminvPickerPopover').style.display = 'none';
+      if (!e.target.closest('.pminv-billing-period-wrap')) document.getElementById('pminvBillingPeriodPopover').style.display = 'none';
+    });
+  }
+  function pminvClosePickerPopovers() {
+    document.getElementById('pminvPickerPopover').style.display = 'none';
+    document.getElementById('pminvBillingPeriodPopover').style.display = 'none';
+  }
+  function pminvRenderStepper() {
+    var stepper = document.getElementById('pminvPeriodStepper');
+    if (pminvDateGranularity === 'all') { stepper.style.display = 'none'; } else {
+      stepper.style.display = '';
+      var period = pminvComputePeriod(pminvDateGranularity, pminvPeriodOffset);
+      document.getElementById('pminvStepperLabelBtn').textContent = period.label;
+      document.getElementById('pminvStepperNext').disabled = (pminvPeriodOffset === 0);
+    }
+    document.getElementById('pminvClearFilterBtn').style.display = (pminvDateGranularity !== 'all' || pminvBillingPeriod) ? '' : 'none';
+  }
+  function pminvClearDateFilter() {
+    pminvDateGranularity = 'all';
+    pminvPeriodOffset = 0;
+    pminvBillingPeriod = null;
+    document.querySelector('[data-dd="pminvPeriodFilter"] .cdd-value').textContent = 'All Time';
+    document.querySelectorAll('#pminvPeriodFilterMenu .cdd-item').forEach(function (i) { i.classList.toggle('selected', i.getAttribute('data-value') === 'all'); });
+    document.getElementById('pminvBillingPeriodLabel').textContent = 'Billing Period';
+    document.getElementById('pminvBillingPeriodBtn').classList.remove('filter-active');
+    pminvClosePickerPopovers();
+    pminvRenderStepper();
+    pminvRenderTable();
+  }
+
+  /* ---- Direct-jump picker popover (Weekly / Monthly / Yearly) ---- */
+  function pminvOpenPicker() {
+    var pop = document.getElementById('pminvPickerPopover');
+    var wasOpen = pop.style.display !== 'none';
+    pminvClosePickerPopovers();
+    if (wasOpen) return;
+    var current = pminvComputePeriod(pminvDateGranularity, pminvPeriodOffset);
+    var refDate = new Date(current.start + 'T00:00:00');
+    pminvPickerNavYear = refDate.getFullYear();
+    pminvPickerNavMonth = refDate.getMonth();
+    pminvYearPickerPageEnd = refDate.getFullYear();
+    pop.style.display = '';
+    pminvRenderPicker();
+  }
+  function pminvRenderPicker() {
+    var pop = document.getElementById('pminvPickerPopover');
+    if (pminvDateGranularity === 'yearly') pop.innerHTML = pminvYearPickerHtml();
+    else if (pminvDateGranularity === 'monthly') pop.innerHTML = pminvMonthPickerHtml(pminvPickerNavYear, false);
+    else if (pminvDateGranularity === 'weekly') pop.innerHTML = pminvWeekPickerHtml(pminvPickerNavYear, pminvPickerNavMonth);
+    pminvWirePickerContent(pop, false);
+  }
+  function pminvYearPickerHtml() {
+    var startYear = pminvYearPickerPageEnd - 8;
+    var years = [];
+    for (var y = startYear; y <= pminvYearPickerPageEnd; y++) years.push(y);
+    var todayYear = new Date(pminvMockToday + 'T00:00:00').getFullYear();
+    var html = '<div class="pminv-picker-nav">' +
+      '<button type="button" class="pminv-picker-nav-btn" data-picker-nav="years-prev"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>' +
+      '<span class="pminv-picker-nav-label">' + startYear + '\u2013' + pminvYearPickerPageEnd + '</span>' +
+      '<button type="button" class="pminv-picker-nav-btn" data-picker-nav="years-next" ' + (pminvYearPickerPageEnd >= todayYear ? 'disabled' : '') + '><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>' +
+      '</div><div class="pminv-picker-grid-years">';
+    years.forEach(function (y) {
+      html += '<div class="pminv-picker-cell' + (y === todayYear ? ' current' : '') + '" data-picker-year="' + y + '">' + y + '</div>';
+    });
+    html += '</div>';
+    return html;
+  }
+  function pminvMonthPickerHtml(navYear, forBilling) {
+    var todayD = new Date(pminvMockToday + 'T00:00:00');
+    var html = '<div class="pminv-picker-nav">' +
+      '<button type="button" class="pminv-picker-nav-btn" data-picker-nav="month-year-prev">' +
+      '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>' +
+      '<span class="pminv-picker-nav-label">' + navYear + '</span>' +
+      '<button type="button" class="pminv-picker-nav-btn" data-picker-nav="month-year-next" ' + (navYear >= todayD.getFullYear() ? 'disabled' : '') + '>' +
+      '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>' +
+      '</div><div class="pminv-picker-grid-months">';
+    for (var m = 0; m < 12; m++) {
+      var isFuture = navYear === todayD.getFullYear() && m > todayD.getMonth();
+      var isCurrent = navYear === todayD.getFullYear() && m === todayD.getMonth();
+      if (isFuture) continue;
+      html += '<div class="pminv-picker-cell' + (isCurrent ? ' current' : '') + '" data-picker-month="' + m + '">' + PMINV_MONTH_NAMES[m] + '</div>';
+    }
+    html += '</div>';
+    if (forBilling) html += pminvHalfToggleHtml();
+    return html;
+  }
+  function pminvHalfToggleHtml() {
+    var half = pminvBillingPendingHalf || 1;
+    return '<div class="pminv-picker-half-toggle">' +
+      '<div class="pminv-picker-half-btn' + (half === 1 ? ' selected' : '') + '" data-picker-half="1">1st Half (1\u201315)</div>' +
+      '<div class="pminv-picker-half-btn' + (half === 2 ? ' selected' : '') + '" data-picker-half="2">2nd Half (16\u2013End)</div>' +
+      '</div>';
+  }
+  function pminvWeekPickerHtml(navYear, navMonth) {
+    var todayD = new Date(pminvMockToday + 'T00:00:00');
+    var isCurrentMonth = navYear === todayD.getFullYear() && navMonth === todayD.getMonth();
+    var html = '<div class="pminv-picker-nav">' +
+      '<button type="button" class="pminv-picker-nav-btn" data-picker-nav="week-month-prev"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>' +
+      '<span class="pminv-picker-nav-label">' + PMINV_MONTH_NAMES[navMonth] + ' ' + navYear + '</span>' +
+      '<button type="button" class="pminv-picker-nav-btn" data-picker-nav="week-month-next" ' + (isCurrentMonth ? 'disabled' : '') + '><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>' +
+      '</div><div class="pminv-picker-cal-weekdays">' +
+      ['M', 'T', 'W', 'T', 'F', 'S', 'S'].map(function (d) { return '<div class="pminv-picker-cal-wd">' + d + '</div>'; }).join('') +
+      '</div>';
+    var firstOfMonth = new Date(navYear, navMonth, 1);
+    var firstWeekday = (firstOfMonth.getDay() + 6) % 7; // 0=Mon
+    var gridStart = new Date(navYear, navMonth, 1 - firstWeekday);
+    for (var w = 0; w < 6; w++) {
+      var weekStart = new Date(gridStart); weekStart.setDate(gridStart.getDate() + w * 7);
+      if (w > 0 && weekStart.getMonth() !== navMonth && weekStart > todayD) break;
+      html += '<div class="pminv-picker-cal-week" data-picker-week-start="' + pminvIsoDate(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate()) + '">';
+      for (var d = 0; d < 7; d++) {
+        var day = new Date(weekStart); day.setDate(weekStart.getDate() + d);
+        var isMuted = day.getMonth() !== navMonth;
+        var isToday = pminvIsoDate(day.getFullYear(), day.getMonth(), day.getDate()) === pminvMockToday;
+        html += '<div class="pminv-picker-cal-day' + (isMuted ? ' muted' : '') + (isToday ? ' today' : '') + '">' + day.getDate() + '</div>';
+      }
+      html += '</div>';
+    }
+    return html;
+  }
+  function pminvWirePickerContent(pop, forBilling) {
+    pop.querySelectorAll('[data-picker-nav]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var nav = btn.getAttribute('data-picker-nav');
+        if (nav === 'years-prev') { pminvYearPickerPageEnd -= 9; pop.innerHTML = pminvYearPickerHtml(); pminvWirePickerContent(pop, forBilling); return; }
+        if (nav === 'years-next') { pminvYearPickerPageEnd += 9; pop.innerHTML = pminvYearPickerHtml(); pminvWirePickerContent(pop, forBilling); return; }
+        if (nav === 'month-year-prev' || nav === 'month-year-next') {
+          var yy = forBilling ? pminvBillingNavYear : pminvPickerNavYear;
+          yy += (nav === 'month-year-prev' ? -1 : 1);
+          if (forBilling) { pminvBillingNavYear = yy; pop.innerHTML = pminvMonthPickerHtml(yy, true); } else { pminvPickerNavYear = yy; pop.innerHTML = pminvMonthPickerHtml(yy, false); }
+          pminvWirePickerContent(pop, forBilling);
+          return;
+        }
+        if (nav === 'week-month-prev' || nav === 'week-month-next') {
+          var m = pminvPickerNavMonth + (nav === 'week-month-prev' ? -1 : 1);
+          var y = pminvPickerNavYear;
+          if (m < 0) { m = 11; y--; } if (m > 11) { m = 0; y++; }
+          pminvPickerNavMonth = m; pminvPickerNavYear = y;
+          pop.innerHTML = pminvWeekPickerHtml(y, m);
+          pminvWirePickerContent(pop, forBilling);
+        }
+      });
+    });
+    pop.querySelectorAll('[data-picker-year]').forEach(function (cell) {
+      cell.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var y = parseInt(cell.getAttribute('data-picker-year'), 10);
+        pminvPeriodOffset = new Date(pminvMockToday + 'T00:00:00').getFullYear() - y;
+        pminvClosePickerPopovers();
+        pminvRenderStepper();
+        pminvRenderTable();
+      });
+    });
+    pop.querySelectorAll('[data-picker-month]').forEach(function (cell) {
+      cell.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var m = parseInt(cell.getAttribute('data-picker-month'), 10);
+        if (forBilling) {
+          pminvBillingPendingMonth = m;
+          pminvBillingPendingYear = pminvBillingNavYear;
+          pop.innerHTML = pminvMonthPickerHtml(pminvBillingNavYear, true);
+          pminvWirePickerContent(pop, true);
+          pminvHighlightPendingMonth(pop, m);
+          return;
+        }
+        var today = new Date(pminvMockToday + 'T00:00:00');
+        pminvPeriodOffset = (today.getFullYear() - pminvPickerNavYear) * 12 + (today.getMonth() - m);
+        pminvClosePickerPopovers();
+        pminvRenderStepper();
+        pminvRenderTable();
+      });
+    });
+    pop.querySelectorAll('[data-picker-week-start]').forEach(function (cell) {
+      cell.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var startIso = cell.getAttribute('data-picker-week-start');
+        var startDate = new Date(startIso + 'T00:00:00');
+        var todayMonday = pminvComputePeriod('weekly', 0).start;
+        var diffMs = new Date(todayMonday + 'T00:00:00') - startDate;
+        pminvPeriodOffset = Math.round(diffMs / (7 * 86400000));
+        pminvClosePickerPopovers();
+        pminvRenderStepper();
+        pminvRenderTable();
+      });
+    });
+    pop.querySelectorAll('[data-picker-half]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        pminvBillingPendingHalf = parseInt(btn.getAttribute('data-picker-half'), 10);
+        if (pminvBillingPendingMonth === null) return; // need a month picked first
+        pminvBillingPeriod = { year: pminvBillingPendingYear, month: pminvBillingPendingMonth, half: pminvBillingPendingHalf };
+        pminvDateGranularity = 'all';
+        document.querySelector('[data-dd="pminvPeriodFilter"] .cdd-value').textContent = 'All Time';
+        document.querySelectorAll('#pminvPeriodFilterMenu .cdd-item').forEach(function (i) { i.classList.toggle('selected', i.getAttribute('data-value') === 'all'); });
+        var range = pminvCycleRangeFor(pminvBillingPeriod.year, pminvBillingPeriod.month, pminvBillingPeriod.half);
+        document.getElementById('pminvBillingPeriodLabel').textContent = range.label;
+        document.getElementById('pminvBillingPeriodBtn').classList.add('filter-active');
+        pminvClosePickerPopovers();
+        pminvRenderStepper();
+        pminvRenderTable();
+      });
+    });
+  }
+  function pminvHighlightPendingMonth(pop, m) {
+    pop.querySelectorAll('[data-picker-month]').forEach(function (c) { c.classList.toggle('current', parseInt(c.getAttribute('data-picker-month'), 10) === m); });
+  }
+  var pminvBillingPendingHalf = null;
+
+  /* ---- Billing Period popover (separate control - month grid + half toggle, 2 clicks to any cycle) ---- */
+  function pminvOpenBillingPicker() {
+    var pop = document.getElementById('pminvBillingPeriodPopover');
+    var wasOpen = pop.style.display !== 'none';
+    pminvClosePickerPopovers();
+    if (wasOpen) return;
+    var today = new Date(pminvMockToday + 'T00:00:00');
+    pminvBillingNavYear = pminvBillingPeriod ? pminvBillingPeriod.year : today.getFullYear();
+    pminvBillingPendingMonth = pminvBillingPeriod ? pminvBillingPeriod.month : today.getMonth();
+    pminvBillingPendingYear = pminvBillingNavYear;
+    pminvBillingPendingHalf = pminvBillingPeriod ? pminvBillingPeriod.half : (today.getDate() >= 16 ? 2 : 1);
+    pop.style.display = '';
+    pop.innerHTML = pminvMonthPickerHtml(pminvBillingNavYear, true);
+    pminvWirePickerContent(pop, true);
+    pminvHighlightPendingMonth(pop, pminvBillingPendingMonth);
+  }
+  var pminvInitDone = false;
+
+
+  /* ==================== Ported: Supplier Payouts ==================== */
+  var SUPPO_PAYOUTS = [
+    { ref: 'KLR-PAY-68', terms: 'Fortnightly', job: 'Door Entry / Intercom / Smart Doorbell', prop: 'London, SW1A 2BX', amount: 360.00, date: '2026-07-01', status: 'Pending' },
+    { ref: 'KLR-PAY-67', terms: 'Fortnightly', job: 'Carpet / Stair Carpet Steam Clean', prop: 'London, SW1A 2BX', amount: 240.00, date: '2026-07-06', status: 'Paid' },
+    { ref: 'KLR-PAY-57', terms: 'Fortnightly', job: 'Door Entry / Intercom / Smart Doorbell', prop: 'London, SW1A 2BX', amount: 180.00, date: '2026-07-05', status: 'Paid' },
+    { ref: 'KLR-PAY-54', terms: 'Pay upfront', job: 'Boiler Service (Annual)', prop: 'London, SW1A 2BX', amount: 240.00, date: '2026-07-03', status: 'Upfront' },
+    { ref: 'KLR-PAY-52', terms: 'Pay upfront', job: 'Early payout', prop: 'Single job', amount: 240.00, date: '2026-07-03', status: 'Upfront' },
+    { ref: 'KLR-PAY-51', terms: 'Pay upfront', job: 'Early payout', prop: 'Single job', amount: 192.00, date: '2026-07-02', status: 'Upfront' },
+    { ref: 'KLR-PAY-58', terms: 'On completion', job: 'Billing period', prop: '01/05/2026 \u2013 28/05/2026', amount: 286.00, date: '2026-05-28', status: 'Paid' },
+    { ref: 'KLR-PAY-36', terms: 'Pay upfront', job: 'Early payout', prop: 'Single job', amount: 95.00, date: '2026-06-16', status: 'Upfront' },
+    { ref: 'KLR-PAY-37', terms: 'Pay upfront', job: 'Early payout', prop: 'Single job', amount: 62.00, date: '2026-06-09', status: 'Upfront' },
+    { ref: 'KLR-PAY-59', terms: 'On completion', job: 'Billing period', prop: '01/04/2026 \u2013 28/04/2026', amount: 194.00, date: '2026-04-28', status: 'Paid' },
+    { ref: 'KLR-PAY-49', terms: 'Fortnightly', job: 'Airbnb Turnover Clean', prop: 'London, SW1A 2BX', amount: 1536.00, date: '2026-06-25', status: 'Overdue' },
+    { ref: 'KLR-PAY-48', terms: 'Fortnightly', job: 'Boiler Service (Annual)', prop: 'London, SW1A 2BX', amount: 265.00, date: '2026-06-20', status: 'Overdue' },
+    { ref: 'KLR-PAY-45', terms: 'On completion', job: 'Billing period', prop: '01/03/2026 \u2013 28/03/2026', amount: 312.00, date: '2026-03-28', status: 'Paid' },
+    { ref: 'KLR-PAY-42', terms: 'Pay upfront', job: 'Early payout', prop: 'Single job', amount: 84.00, date: '2026-05-14', status: 'Upfront' },
+    { ref: 'KLR-PAY-40', terms: 'Fortnightly', job: 'EICR \u2014 Electrical Installation Condition Report', prop: 'London, N9 0TW', amount: 146.40, date: '2026-05-06', status: 'Paid' },
+    { ref: 'KLR-PAY-38', terms: 'Pay upfront', job: 'Early payout', prop: 'Single job', amount: 120.00, date: '2026-05-02', status: 'Upfront' },
+    { ref: 'KLR-PAY-33', terms: 'On completion', job: 'Billing period', prop: '01/02/2026 \u2013 28/02/2026', amount: 278.00, date: '2026-02-28', status: 'Paid' },
+    { ref: 'KLR-PAY-29', terms: 'Fortnightly', job: 'PAT Testing', prop: 'Barnsley, S75 2DH', amount: 45.00, date: '2026-01-20', status: 'Paid' },
+    { ref: 'KLR-PAY-25', terms: 'Pay upfront', job: 'Early payout', prop: 'Single job', amount: 210.00, date: '2026-01-14', status: 'Upfront' },
+    { ref: 'KLR-PAY-21', terms: 'On completion', job: 'Billing period', prop: '01/01/2026 \u2013 28/01/2026', amount: 264.00, date: '2026-01-28', status: 'Paid' },
+    { ref: 'KLR-PAY-18', terms: 'Fortnightly', job: 'Legionella Risk Assessment', prop: 'London, SW18 9WR', amount: 1240.00, date: '2025-12-20', status: 'Paid' },
+    { ref: 'KLR-PAY-15', terms: 'Pay upfront', job: 'Early payout', prop: 'Single job', amount: 150.00, date: '2025-12-10', status: 'Upfront' },
+    { ref: 'KLR-PAY-12', terms: 'On completion', job: 'Billing period', prop: '01/11/2025 \u2013 28/11/2025', amount: 296.00, date: '2025-11-28', status: 'Paid' },
+    { ref: 'KLR-PAY-9', terms: 'Fortnightly', job: 'Smart Lock Installation', prop: 'London, SW1A 2BX', amount: 210.00, date: '2025-10-18', status: 'Paid' },
+    { ref: 'KLR-PAY-6', terms: 'On completion', job: 'Billing period', prop: '01/09/2025 \u2013 28/09/2025', amount: 240.00, date: '2025-09-28', status: 'Paid' },
+    { ref: 'KLR-PAY-3', terms: 'Pay upfront', job: 'Early payout', prop: 'Single job', amount: 88.00, date: '2025-08-14', status: 'Upfront' }
+  ];
+  var SUPPO_STATUS_PILL = { Paid: 'green', Upfront: 'purple', Pending: 'amber', Overdue: 'red', Disputed: 'red' };
+  function suppoAmountText(n) { return '\u00a3' + n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function suppoFormatDate(iso) {
+    var d = new Date(iso + 'T00:00:00');
+    var dd = String(d.getDate()).padStart(2, '0'), mm = String(d.getMonth() + 1).padStart(2, '0');
+    return dd + '/' + mm + '/' + d.getFullYear();
+  }
+
+  var suppoActiveTab = 'all';
+  var suppoSearchQuery = '';
+  var suppoTimeFilterValue = 'All Time';
+  var suppoCustomFrom = null;
+  var suppoCustomTo = null;
+  var suppoPage = 1;
+  var suppoRowsPerPage = 10;
+  var SUPPO_TAB_STATUS = { all: null, paid: ['Paid'], upfront: ['Upfront'], pending: ['Pending'], overdue: ['Overdue'], disputed: ['Disputed'] };
+
+  function suppoWithinTimeFilter(iso) {
+    if (suppoTimeFilterValue === 'All Time') return true;
+    var d = new Date(iso + 'T00:00:00');
+    var now = new Date();
+    if (suppoTimeFilterValue === 'This Week') { var weekAgo = new Date(now); weekAgo.setDate(now.getDate() - 7); return d >= weekAgo; }
+    if (suppoTimeFilterValue === 'This Month') return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+    if (suppoTimeFilterValue === 'Last Month') {
+      var lm = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      return d.getMonth() === lm.getMonth() && d.getFullYear() === lm.getFullYear();
+    }
+    if (suppoTimeFilterValue === 'Custom Range') {
+      if (!suppoCustomFrom && !suppoCustomTo) return true; // range not yet applied — don't filter anything out
+      if (suppoCustomFrom && d < new Date(suppoCustomFrom + 'T00:00:00')) return false;
+      if (suppoCustomTo && d > new Date(suppoCustomTo + 'T23:59:59')) return false;
+      return true;
+    }
+    return true;
+  }
+  function suppoFilteredPayouts() {
+    var q = suppoSearchQuery.trim().toLowerCase();
+    var statuses = SUPPO_TAB_STATUS[suppoActiveTab];
+    return SUPPO_PAYOUTS.filter(function (p) {
+      if (statuses && statuses.indexOf(p.status) === -1) return false;
+      if (!suppoWithinTimeFilter(p.date)) return false;
+      if (q) {
+        var hay = (p.ref + ' ' + p.job + ' ' + p.prop).toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+  }
+  function suppoRenderStats() {
+    var paid = SUPPO_PAYOUTS.filter(function (p) { return p.status === 'Paid'; });
+    var totalEarned = paid.reduce(function (s, p) { return s + p.amount; }, 0);
+    var pending = SUPPO_PAYOUTS.filter(function (p) { return p.status === 'Pending'; });
+    var pendingTotal = pending.reduce(function (s, p) { return s + p.amount; }, 0);
+    var overdue = SUPPO_PAYOUTS.filter(function (p) { return p.status === 'Overdue'; });
+    var overdueTotal = overdue.reduce(function (s, p) { return s + p.amount; }, 0);
+    var disputed = SUPPO_PAYOUTS.filter(function (p) { return p.status === 'Disputed'; });
+    var disputedTotal = disputed.reduce(function (s, p) { return s + p.amount; }, 0);
+    document.getElementById('suppoStatTotalEarned').textContent = suppoAmountText(totalEarned);
+    document.getElementById('suppoStatPending').textContent = suppoAmountText(pendingTotal);
+    document.getElementById('suppoStatOverdue').textContent = suppoAmountText(overdueTotal);
+    document.getElementById('suppoStatOverdueSub').textContent = overdue.length + ' late payout' + (overdue.length === 1 ? '' : 's');
+    document.getElementById('suppoStatDisputed').textContent = suppoAmountText(disputedTotal);
+    document.getElementById('suppoStatDisputedSub').textContent = disputed.length + ' under review';
+  }
+  function suppoRenderTabs() {
+    document.getElementById('suppoTabCntAll').textContent = SUPPO_PAYOUTS.length;
+    Object.keys(SUPPO_TAB_STATUS).forEach(function (key) {
+      var statuses = SUPPO_TAB_STATUS[key];
+      if (!statuses) return;
+      var n = SUPPO_PAYOUTS.filter(function (p) { return statuses.indexOf(p.status) !== -1; }).length;
+      var el = document.getElementById('suppoTabCnt' + key.charAt(0).toUpperCase() + key.slice(1));
+      if (el) el.textContent = n;
+    });
+  }
+  function suppoRowHtml(p) {
+    return '<tr class="suppo-row" data-suppo-ref="' + p.ref + '">' +
+      '<td class="suppo-ref">' + p.ref + '</td>' +
+      '<td><span class="suppo-terms-pill">' + p.terms + '</span></td>' +
+      '<td><div class="suppo-job-name">' + p.job + '</div><div class="suppo-job-sub">' + p.prop + '</div></td>' +
+      '<td class="suppo-amount">' + suppoAmountText(p.amount) + '</td>' +
+      '<td>' + suppoFormatDate(p.date) + '</td>' +
+      '<td><span class="status-pill ' + (SUPPO_STATUS_PILL[p.status] || 'gray') + '">' + p.status + '</span></td>' +
+    '</tr>';
+  }
+  function suppoRenderTable() {
+    var list = suppoFilteredPayouts();
+    var totalPages = Math.max(1, Math.ceil(list.length / suppoRowsPerPage));
+    if (suppoPage > totalPages) suppoPage = totalPages;
+    var start = (suppoPage - 1) * suppoRowsPerPage;
+    var pageItems = list.slice(start, start + suppoRowsPerPage);
+    document.getElementById('suppoTableBody').innerHTML = pageItems.length ? pageItems.map(suppoRowHtml).join('') : '<tr><td colspan="6" style="text-align:center;padding:50px 20px;color:var(--text-body-muted);">No payouts match your search.</td></tr>';
+    document.querySelectorAll('.suppo-row').forEach(function (row) {
+      row.addEventListener('click', function () { suppoOpenDrawer(row.getAttribute('data-suppo-ref')); });
+    });
+    document.getElementById('suppoRangeText').textContent = list.length ? ('Showing ' + (start + 1) + '\u2013' + Math.min(start + suppoRowsPerPage, list.length) + ' of ' + list.length + ' payouts') : 'Showing 0 of 0 payouts';
+    var pageNumsWrap = document.getElementById('suppoPageNumbers');
+    var pageBtns = [];
+    for (var i = 1; i <= totalPages; i++) {
+      pageBtns.push('<button type="button" class="suppo-page-btn' + (i === suppoPage ? ' active' : '') + '" data-suppo-page="' + i + '">' + i + '</button>');
+    }
+    pageNumsWrap.innerHTML = pageBtns.join('');
+    pageNumsWrap.querySelectorAll('[data-suppo-page]').forEach(function (btn) {
+      btn.addEventListener('click', function () { suppoPage = parseInt(btn.getAttribute('data-suppo-page'), 10); suppoRenderTable(); });
+    });
+    document.getElementById('suppoPrevBtn').disabled = suppoPage <= 1;
+    document.getElementById('suppoNextBtn').disabled = suppoPage >= totalPages;
+  }
+  function suppoOpenDrawer(ref) {
+    var p = SUPPO_PAYOUTS.find(function (x) { return x.ref === ref; });
+    if (!p) return;
+    document.getElementById('suppoDrawerRef').textContent = p.ref;
+    var statusPill = document.getElementById('suppoDrawerStatusPill');
+    statusPill.textContent = p.status;
+    statusPill.className = 'status-pill ' + (SUPPO_STATUS_PILL[p.status] || 'gray');
+    document.getElementById('suppoDrawerTermsPill').textContent = p.terms;
+    document.getElementById('suppoDrawerNetValue').textContent = suppoAmountText(p.amount);
+    document.getElementById('suppoDrawerDate').textContent = p.status === 'Pending' ? '\u2014' : suppoFormatDate(p.date);
+    document.getElementById('suppoDrawerRefField').textContent = p.ref;
+    document.getElementById('suppoDrawerTermsField').textContent = p.terms;
+    document.getElementById('suppoDrawerStatusField').textContent = p.status;
+    document.getElementById('suppoDrawerJobTitle').textContent = p.job;
+    document.getElementById('suppoDrawerJobProp').textContent = p.prop;
+    var vat = p.terms === 'Fortnightly' ? 0 : 0; // this book of payouts is all net-of-VAT already, matching the reference example (VAT £0.00)
+    document.getElementById('suppoDrawerEarning').textContent = suppoAmountText(p.amount);
+    document.getElementById('suppoDrawerVat').textContent = suppoAmountText(vat);
+    document.getElementById('suppoDrawerNetPayout').textContent = suppoAmountText(p.amount + vat);
+    document.getElementById('suppoDetailOverlay').classList.add('open');
+  }
+
+  var suppoInitDone = false;
+  function initSuppoOnce() {
+    suppoRenderStats();
+    suppoRenderTabs();
+    suppoRenderTable();
+    if (suppoInitDone) return;
+    suppoInitDone = true;
+    document.querySelectorAll('#suppoTabs .supj-tab').forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        suppoActiveTab = tab.getAttribute('data-suppo-tab');
+        suppoPage = 1;
+        document.querySelectorAll('#suppoTabs .supj-tab').forEach(function (t) { t.classList.toggle('active', t === tab); });
+        suppoRenderTable();
+      });
+    });
+    document.getElementById('suppoSearchInput').addEventListener('input', function () { suppoSearchQuery = this.value; suppoPage = 1; suppoRenderTable(); });
+    document.querySelectorAll('.pm-custom-dd-menu[data-dd-menu="suppoTimeFilter"] .cdd-item').forEach(function (item) {
+      item.addEventListener('click', function () {
+        suppoTimeFilterValue = item.getAttribute('data-value');
+        document.getElementById('suppoTimeFilterLabel').textContent = suppoTimeFilterValue;
+        document.querySelectorAll('.pm-custom-dd-menu[data-dd-menu="suppoTimeFilter"] .cdd-item').forEach(function (i) { i.classList.toggle('selected', i === item); });
+        closeAllCustomDropdowns();
+        document.getElementById('suppoCustomRangeRow').style.display = (suppoTimeFilterValue === 'Custom Range') ? 'flex' : 'none';
+        if (suppoTimeFilterValue !== 'Custom Range') { suppoCustomFrom = null; suppoCustomTo = null; }
+        suppoPage = 1;
+        suppoRenderTable();
+      });
+    });
+    document.getElementById('suppoCustomRangeApplyBtn').addEventListener('click', function () {
+      suppoCustomFrom = document.getElementById('suppoCustomRangeFrom').value || null;
+      suppoCustomTo = document.getElementById('suppoCustomRangeTo').value || null;
+      suppoPage = 1;
+      suppoRenderTable();
+    });
+    document.getElementById('suppoRowsPerPage').addEventListener('change', function () { suppoRowsPerPage = parseInt(this.value, 10); suppoPage = 1; suppoRenderTable(); });
+    document.getElementById('suppoPrevBtn').addEventListener('click', function () { if (suppoPage > 1) { suppoPage--; suppoRenderTable(); } });
+    document.getElementById('suppoNextBtn').addEventListener('click', function () { suppoPage++; suppoRenderTable(); });
+    document.getElementById('suppoExpressDashBtn').addEventListener('click', function () { showToast('Stripe Express dashboard isn\u2019t wired up in this prototype yet.'); });
+    document.getElementById('suppoDrawerCloseBtn').addEventListener('click', function () { document.getElementById('suppoDetailOverlay').classList.remove('open'); });
+    document.getElementById('suppoDetailOverlay').addEventListener('click', function (e) { if (e.target === this) this.classList.remove('open'); });
+  }
+
+  /* ==================== Ported: Admin Invoices + Keylr Earnings ==================== */
+
+  /* ==================== ADMIN INVOICES MODULE ==================== */
+  function adminInvRecord(o) { return o; }
+  var ADMIN_INVOICE_SUPPLIER_INFO = {
+    'Nadia Reid': { addr: '116 Church Lane, Warminster', reg: '18330164', vat: 'GB553557881' },
+    'rajat': { addr: '22 Kestrel House, Manchester', reg: '19204471', vat: 'GB772104456' },
+    'Liam Greenwood': { addr: '8 Marlow Road, Reading', reg: '19551203', vat: 'GB664120988' },
+    'tibaf': { addr: '4 Orchard Way, Leeds', reg: '19882234', vat: 'GB559812340' },
+    'sorogam': { addr: '17 Birch Grove, Bristol', reg: '20015567', vat: 'GB681204471' }
+  };
+  var ADMIN_PM_INFO = { name: 'KEY RIDERS LTD', addr: '60 Tottenham Court Road, Suite 3260a, Fitzrovia, London, W1T 2EW', reg: '15019055', vat: 'GB868776770' };
+  var ADMIN_INVOICES_DATA = [
+    adminInvRecord({ invNo: 'SB-2026-000067', type: 'Supplier', party: 'Nadia Reid', email: 'nadia.reid07@gmail.com', ref: 'Period #78', net: 333.33, vat: 66.67, gross: 400.00, status: 'Finalised', createdISO: '2026-07-12', job: 'JB-2655', service: 'Appliance Installation (all white goods)' }),
+    adminInvRecord({ invNo: 'SB-2026-000068', type: 'Supplier', party: 'Nadia Reid', email: 'nadia.reid07@gmail.com', ref: 'Period #78', net: 50.00, vat: 10.00, gross: 60.00, status: 'Finalised', createdISO: '2026-07-12', job: 'JB-2656', service: 'PAT Testing' }),
+    adminInvRecord({ invNo: 'SB-2026-000069', type: 'Supplier', party: 'Nadia Reid', email: 'nadia.reid07@gmail.com', ref: 'Period #78', net: 337.50, vat: 67.50, gross: 405.00, status: 'Finalised', createdISO: '2026-07-12', job: 'JB-2720', service: 'Carpet / Stair Carpet Steam Clean' }),
+    adminInvRecord({ invNo: 'SB-2026-000070', type: 'Supplier', party: 'Nadia Reid', email: 'nadia.reid07@gmail.com', ref: 'Period #78', net: 45.00, vat: 9.00, gross: 54.00, status: 'Finalised', createdISO: '2026-07-12', job: 'JB-2745', service: 'PAT Testing' }),
+    adminInvRecord({ invNo: 'KS-2026-000067', type: 'Keylr Fee', party: 'Keylr service fee', email: '', ref: 'Period #78', net: 66.67, vat: 13.33, gross: 80.00, status: 'Finalised', createdISO: '2026-07-12', job: 'JB-2655', service: 'Keylr handling fee', feeFor: 'SB-2026-000067' }),
+    adminInvRecord({ invNo: 'KS-2026-000068', type: 'Keylr Fee', party: 'Keylr service fee', email: '', ref: 'Period #78', net: 10.00, vat: 2.00, gross: 12.00, status: 'Finalised', createdISO: '2026-07-12', job: 'JB-2656', service: 'Keylr handling fee', feeFor: 'SB-2026-000068' }),
+    adminInvRecord({ invNo: 'KS-2026-000069', type: 'Keylr Fee', party: 'Keylr service fee', email: '', ref: 'Period #78', net: 67.50, vat: 13.50, gross: 81.00, status: 'Finalised', createdISO: '2026-07-12', job: 'JB-2720', service: 'Keylr handling fee', feeFor: 'SB-2026-000069' }),
+    adminInvRecord({ invNo: 'KS-2026-000070', type: 'Keylr Fee', party: 'Keylr service fee', email: '', ref: 'Period #78', net: 9.00, vat: 1.80, gross: 10.80, status: 'Finalised', createdISO: '2026-07-12', job: 'JB-2745', service: 'Keylr handling fee', feeFor: 'SB-2026-000070' }),
+    adminInvRecord({ invNo: 'SB-2026-000066', type: 'Supplier', party: 'rajat', email: 'nopod62636@icotz.com', ref: 'Job #2774', net: 583.33, vat: 116.67, gross: 700.00, afterDeposit: 520.00, status: 'Paid', createdISO: '2026-07-06', job: 'JB-2774', service: 'End of Tenancy / Deep / Regular / Communal' }),
+    adminInvRecord({ invNo: 'KS-2026-000066', type: 'Keylr Fee', party: 'Keylr service fee', email: '', ref: 'Job #2774', net: 116.67, vat: 23.33, gross: 140.00, status: 'Paid', createdISO: '2026-07-06', job: 'JB-2774', service: 'Keylr handling fee', feeFor: 'SB-2026-000066' }),
+    adminInvRecord({ invNo: 'DEP-2026-000019', type: 'Supplier', party: 'rajat', email: 'nopod62636@icotz.com', ref: 'Job #2774', net: 125.00, vat: 25.00, gross: 150.00, status: 'Paid', createdISO: '2026-07-06', job: 'JB-2774', service: 'Deposit' }),
+    adminInvRecord({ invNo: 'DEP-2026-000020', type: 'Keylr Fee', party: 'Keylr service fee', email: '', ref: 'Job #2774', net: 25.00, vat: 5.00, gross: 30.00, status: 'Paid', createdISO: '2026-07-06', job: 'JB-2774', service: 'Keylr handling fee', feeFor: 'DEP-2026-000019' }),
+    adminInvRecord({ invNo: 'SB-2026-000065', type: 'Supplier', party: 'rajat', email: 'nopod62636@icotz.com', ref: 'Job #2773', net: 666.67, vat: 133.33, gross: 800.00, afterDeposit: 560.00, status: 'Paid', createdISO: '2026-07-06', job: 'JB-2773', service: 'End of Tenancy / Deep / Regular / Communal' }),
+    adminInvRecord({ invNo: 'KS-2026-000065', type: 'Keylr Fee', party: 'Keylr service fee', email: '', ref: 'Job #2773', net: 133.33, vat: 26.67, gross: 160.00, status: 'Paid', createdISO: '2026-07-06', job: 'JB-2773', service: 'Keylr handling fee', feeFor: 'SB-2026-000065' }),
+    adminInvRecord({ invNo: 'DEP-2026-000017', type: 'Supplier', party: 'rajat', email: 'nopod62636@icotz.com', ref: 'Job #2773', net: 166.67, vat: 33.33, gross: 200.00, status: 'Paid', createdISO: '2026-07-06', job: 'JB-2773', service: 'Deposit' }),
+    adminInvRecord({ invNo: 'DEP-2026-000018', type: 'Keylr Fee', party: 'Keylr service fee', email: '', ref: 'Job #2773', net: 33.33, vat: 6.67, gross: 40.00, status: 'Paid', createdISO: '2026-07-06', job: 'JB-2773', service: 'Keylr handling fee', feeFor: 'DEP-2026-000017' }),
+    adminInvRecord({ invNo: 'SB-2026-000064', type: 'Supplier', party: 'rajat', email: 'nopod62636@icotz.com', ref: 'Job #2772', net: 130.00, vat: 26.00, gross: 156.00, status: 'Paid', createdISO: '2026-07-06', job: 'JB-2772', service: 'Carpet / Stair Carpet Steam Clean' }),
+    adminInvRecord({ invNo: 'KS-2026-000064', type: 'Keylr Fee', party: 'Keylr service fee', email: '', ref: 'Job #2772', net: 26.00, vat: 5.20, gross: 31.20, status: 'Paid', createdISO: '2026-07-06', job: 'JB-2772', service: 'Keylr handling fee', feeFor: 'SB-2026-000064' }),
+    adminInvRecord({ invNo: 'SB-2026-000063', type: 'Supplier', party: 'rajat', email: 'nopod62636@icotz.com', ref: 'Job #2771', net: 500.00, vat: 100.00, gross: 600.00, status: 'Paid', createdISO: '2026-07-06', job: 'JB-2771', service: 'End of Tenancy / Deep / Regular / Communal' }),
+    adminInvRecord({ invNo: 'KS-2026-000063', type: 'Keylr Fee', party: 'Keylr service fee', email: '', ref: 'Job #2771', net: 100.00, vat: 20.00, gross: 120.00, status: 'Paid', createdISO: '2026-07-06', job: 'JB-2771', service: 'Keylr handling fee', feeFor: 'SB-2026-000063' })
+  ];
+  (function generateRemainingInvoices() {
+    var suppliers = [
+      { name: 'Liam Greenwood', email: 'l.greenwood19@gmail.com' }, { name: 'tibaf', email: 'tibaf221@icotz.com' },
+      { name: 'sorogam', email: 'sorogam88@icotz.com' }, { name: 'Nadia Reid', email: 'nadia.reid07@gmail.com' }, { name: 'rajat', email: 'nopod62636@icotz.com' }
+    ];
+    var services = ['Carpet / Stair Carpet Steam Clean', 'End of Tenancy / Deep / Regular / Communal', 'PAT Testing', 'EICR \u2014 Electrical Installation Condition Report', 'Boiler Repair / No Hot Water / Gas Leak Emergency', 'Airbnb Turnover Clean'];
+    var d = new Date('2026-07-01T00:00:00');
+    var invCounter = 62;
+    var jobCounter = 2770;
+    for (var i = 0; i < 72; i++) {
+      var sup = suppliers[i % suppliers.length];
+      var svc = services[i % services.length];
+      var net = Math.round((40 + (i * 17) % 300) * 100) / 100;
+      var vat = Math.round(net * 0.2 * 100) / 100;
+      var gross = Math.round((net + vat) * 100) / 100;
+      var keylrNet = Math.round(net * 0.2 * 100) / 100;
+      var keylrVat = Math.round(keylrNet * 0.2 * 100) / 100;
+      var keylrGross = Math.round((keylrNet + keylrVat) * 100) / 100;
+      var dISO = new Date(d.getTime() - i * 86400000 * 1.5).toISOString().slice(0, 10);
+      var status = i < 4 ? 'Draft' : (i % 11 === 0 ? 'Credited' : 'Paid');
+      var sbNo = 'SB-2026-' + String(invCounter).padStart(6, '0');
+      var ksNo = 'KS-2026-' + String(invCounter).padStart(6, '0');
+      var jobRef = 'Job #' + (jobCounter--);
+      ADMIN_INVOICES_DATA.push(adminInvRecord({ invNo: sbNo, type: 'Supplier', party: sup.name, email: sup.email, ref: jobRef, net: net, vat: vat, gross: gross, status: status, createdISO: dISO, job: 'JB-' + (2650 - i), service: svc }));
+      ADMIN_INVOICES_DATA.push(adminInvRecord({ invNo: ksNo, type: 'Keylr Fee', party: 'Keylr service fee', email: '', ref: jobRef, net: keylrNet, vat: keylrVat, gross: keylrGross, status: status, createdISO: dISO, job: 'JB-' + (2650 - i), service: 'Keylr handling fee', feeFor: sbNo }));
+      invCounter--;
+    }
+  })();
+  var ADMIN_INV_STATUS_TONE = { 'Draft': 'gray', 'Finalised': 'blue', 'Paid': 'green', 'Credited': 'amber' };
+  var adminInvState = { search: '', type: 'All Invoices', status: 'All Statuses', page: 1, perPage: 20 };
+  var adminInvInitDone = false;
+
+  function adminInvLongDate(iso) {
+    var d = new Date(iso + 'T00:00:00');
+    return d.getDate().toString().padStart(2, '0') + ' ' + ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getMonth()] + ' ' + d.getFullYear();
+  }
+  function adminInvFiltered() {
+    var q = adminInvState.search.trim().toLowerCase();
+    return ADMIN_INVOICES_DATA.filter(function (r) {
+      if (adminInvState.type !== 'All Invoices' && r.type !== adminInvState.type) return false;
+      if (adminInvState.status !== 'All Statuses' && r.status !== adminInvState.status) return false;
+      if (q) {
+        var hay = (r.invNo + ' ' + r.party + ' ' + r.email).toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+  }
+  function adminInvRenderList() {
+    var all = adminInvFiltered();
+    var total = all.length;
+    var totalPages = Math.max(1, Math.ceil(total / adminInvState.perPage));
+    if (adminInvState.page > totalPages) adminInvState.page = totalPages;
+    var start = (adminInvState.page - 1) * adminInvState.perPage;
+    var pageItems = all.slice(start, start + adminInvState.perPage);
+    document.getElementById('adminInvCountText').textContent = total + ' invoices';
+    document.getElementById('adminInvTableBody').innerHTML = pageItems.map(function (r) {
+      var typeTagColor = r.type === 'Supplier' ? { bg: '#f2ecfc', fg: '#7c3aed' } : { bg: '#e2e8f0', fg: '#1e2a44' };
+      return '<tr data-adminv-row="' + r.invNo + '" style="cursor:pointer;">' +
+        '<td><div style="font-weight:800;color:var(--accent-blue);">' + r.invNo + '</div><div style="margin-top:4px;"><span class="pmjd-tag-plain-chip" style="background:' + typeTagColor.bg + ';color:' + typeTagColor.fg + ';">' + r.type + '</span></div><div style="font-size:11px;color:var(--text-body-muted);margin-top:4px;">' + r.ref + '</div></td>' +
+        '<td><div style="font-weight:700;font-size:13px;color:var(--text-heading);">' + pmpropEscapeHtml(r.party) + '</div>' + (r.email ? '<div style="font-size:11.5px;color:var(--accent-blue);">' + r.email + '</div>' : '') + '</td>' +
+        '<td>\u00a3' + r.net.toFixed(2) + '</td>' +
+        '<td>\u00a3' + r.vat.toFixed(2) + '</td>' +
+        '<td><div style="font-weight:800;color:var(--text-heading);">\u00a3' + r.gross.toFixed(2) + '</div>' + (r.afterDeposit ? '<div style="font-size:10.5px;color:var(--text-body-muted);">\u00a3' + r.afterDeposit.toFixed(2) + ' after deposit</div>' : '') + '</td>' +
+        '<td><span class="status-pill ' + ADMIN_INV_STATUS_TONE[r.status] + '">' + r.status + '</span></td>' +
+        '<td style="font-size:12.5px;color:var(--text-body-muted);">' + adminInvLongDate(r.createdISO) + '</td>' +
+        '<td><button type="button" class="ain-refresh-btn" style="width:30px;height:30px;" data-adminv-pdf="' + r.invNo + '" aria-label="Download PDF"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></button></td>' +
+      '</tr>';
+    }).join('');
+    document.querySelectorAll('#adminInvTableBody tr[data-adminv-row]').forEach(function (row) {
+      row.addEventListener('click', function (e) { if (e.target.closest('[data-adminv-pdf]')) return; adminInvOpenModal(row.getAttribute('data-adminv-row')); });
+    });
+    document.querySelectorAll('#adminInvTableBody [data-adminv-pdf]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) { e.stopPropagation(); showToast('Downloading invoice PDF\u2026'); });
+    });
+    document.getElementById('adminInvShowingText').textContent = 'Showing ' + pageItems.length + ' of ' + total + ' invoices';
+    document.getElementById('adminInvPageOfText').textContent = adminInvState.page + ' / ' + totalPages;
+    document.getElementById('adminInvPagePrev').disabled = adminInvState.page <= 1;
+    document.getElementById('adminInvPageNext').disabled = adminInvState.page >= totalPages;
+  }
+  function adminInvOpenModal(invNo) {
+    var r = ADMIN_INVOICES_DATA.filter(function (x) { return x.invNo === invNo; })[0];
+    if (!r) return;
+    var isKeylrFee = r.type === 'Keylr Fee';
+    var sbRecord = isKeylrFee ? ADMIN_INVOICES_DATA.filter(function (x) { return x.invNo === r.feeFor; })[0] : r;
+    var ksRecord = isKeylrFee ? r : ADMIN_INVOICES_DATA.filter(function (x) { return x.feeFor === r.invNo; })[0];
+    var supInfo = ADMIN_INVOICE_SUPPLIER_INFO[sbRecord.party] || { addr: '\u2014', reg: '\u2014', vat: '\u2014' };
+
+    document.getElementById('adminInvModalTitle').textContent = sbRecord.invNo + (ksRecord ? ' \u00b7 ' + ksRecord.invNo : '');
+    document.getElementById('adminInvModalSub').textContent = sbRecord.job ? 'Job #' + sbRecord.job.replace('JB-', '') : sbRecord.ref;
+    document.getElementById('adinvMetaNumber').textContent = sbRecord.job || sbRecord.invNo;
+    document.getElementById('adinvMetaDate').textContent = adminInvNumericDate(sbRecord.createdISO);
+    document.getElementById('adinvMetaTaxPoint').textContent = adminInvNumericDate(sbRecord.createdISO);
+    document.getElementById('adinvMetaCompletion').textContent = adminInvNumericDate(sbRecord.createdISO);
+    document.getElementById('adinvMetaStatus').textContent = sbRecord.status === 'Paid' ? 'PAID' : (sbRecord.status === 'Draft' ? 'DRAFT' : 'UNPAID');
+    document.getElementById('adinvSupplierName').textContent = sbRecord.party;
+    document.getElementById('adinvSupplierAddr').textContent = supInfo.addr;
+    document.getElementById('adinvSupplierRegNo').textContent = 'Company Reg. No.: ' + supInfo.reg;
+    document.getElementById('adinvSupplierVat').textContent = 'VAT No.: ' + supInfo.vat;
+    document.getElementById('adinvPmName').textContent = ADMIN_PM_INFO.name;
+    document.getElementById('adinvPmAddr').textContent = ADMIN_PM_INFO.addr;
+    document.getElementById('adinvPmRegNo').textContent = 'Company Reg. No.: ' + ADMIN_PM_INFO.reg;
+    document.getElementById('adinvPmVat').textContent = 'VAT No.: ' + ADMIN_PM_INFO.vat;
+
+    var rows = '<tr><td>' + (sbRecord.job || '\u2014') + '</td><td>' + sbRecord.createdISO + '</td><td>\u2014</td><td>' + pmpropEscapeHtml(sbRecord.service) + '</td><td>\u00a3' + sbRecord.net.toFixed(2) + '</td><td>20%</td><td>\u00a3' + sbRecord.vat.toFixed(2) + '</td><td>\u00a3' + sbRecord.gross.toFixed(2) + '</td></tr>';
+    if (ksRecord) rows += '<tr><td colspan="4">Keylr handling fee \u00b7 ' + ksRecord.invNo + '</td><td>\u00a3' + ksRecord.net.toFixed(2) + '</td><td>20%</td><td>\u00a3' + ksRecord.vat.toFixed(2) + '</td><td>\u00a3' + ksRecord.gross.toFixed(2) + '</td></tr>';
+    document.getElementById('adinvLineRows').innerHTML = rows;
+    var totalNet = sbRecord.net + (ksRecord ? ksRecord.net : 0);
+    var totalVat = sbRecord.vat + (ksRecord ? ksRecord.vat : 0);
+    document.getElementById('adinvTotalNet').textContent = '\u00a3' + totalNet.toFixed(2);
+    document.getElementById('adinvTotalVat').textContent = '\u00a3' + totalVat.toFixed(2);
+    document.getElementById('adinvTotalGross').textContent = '\u00a3' + (totalNet + totalVat).toFixed(2);
+    document.getElementById('adminInvModalOverlay').classList.add('open');
+  }
+  function adminInvNumericDate(iso) {
+    return iso;
+  }
+  function adminInvPopulateDropdowns() {
+    function wireMenu(menuId, stateKey) {
+      document.querySelectorAll('#' + menuId + ' .cdd-item').forEach(function (item) {
+        item.addEventListener('click', function () { adminInvState[stateKey] = item.getAttribute('data-value'); adminInvState.page = 1; adminInvRenderList(); });
+      });
+    }
+    wireMenu('adminInvTypeFilterMenu', 'type');
+    wireMenu('adminInvStatusFilterMenu', 'status');
+  }
+  function initAdminInvoicesOnce() {
+    if (adminInvInitDone) { adminInvRenderList(); return; }
+    adminInvInitDone = true;
+    adminInvPopulateDropdowns();
+    document.getElementById('adminInvSearchInput').addEventListener('input', function (e) { adminInvState.search = e.target.value; adminInvState.page = 1; adminInvRenderList(); });
+    document.getElementById('adminInvRefreshBtn').addEventListener('click', function () { adminInvState.page = 1; adminInvRenderList(); });
+    document.getElementById('adminInvPagePrev').addEventListener('click', function () { if (adminInvState.page > 1) { adminInvState.page--; adminInvRenderList(); } });
+    document.getElementById('adminInvPageNext').addEventListener('click', function () { adminInvState.page++; adminInvRenderList(); });
+    document.getElementById('adminInvModalCloseBtn').addEventListener('click', function () { document.getElementById('adminInvModalOverlay').classList.remove('open'); });
+    document.getElementById('adminInvModalOverlay').addEventListener('click', function (e) { if (e.target === this) this.classList.remove('open'); });
+    document.getElementById('adminInvPrintBtn').addEventListener('click', function () { showToast('Opening print dialog\u2026'); });
+    document.getElementById('adminInvPdfBtn').addEventListener('click', function () { showToast('Downloading invoice PDF\u2026'); });
+    adminInvRenderList();
+  }
+
+  /* ==================== ADMIN KEYLR EARNINGS MODULE ==================== */
+  var ADMIN_EARNINGS_PMS = [
+    { name: 'fotatap', tier: 'Tier 0', tx: 3, gross: 1867.20, fee: 259.33, vat: 51.87, lastActivity: '2026-07-06' },
+    { name: 'pitejov', tier: 'Tier 0', tx: 3, gross: 2212.80, fee: 150.00, vat: 61.47, lastActivity: '2026-07-02' },
+    { name: 'Thomas Davies', tier: 'Tier 0', tx: 6, gross: 3224.40, fee: 144.67, vat: 89.56, lastActivity: '2026-07-06' },
+    { name: 'Balcinder dhiman', tier: 'Tier 0', tx: 2, gross: 840.00, fee: 116.67, vat: 23.33, lastActivity: '2026-07-02' }
+  ];
+  var ADMIN_EARNINGS_ALL_PM_NAMES = ['Alex Turner', 'Amelia Carter', 'Balcinder dhiman', 'Bethan Hargreaves', 'Chloe Nowak', 'Ciara Stewart', 'comota', 'fernando testing', 'firom', 'fotatap', 'pitejov', 'Thomas Davies'];
+  var adernState = { period: 'month', search: '', pm: 'All PMs', cycle: 'All Cycles', status: 'All Statuses' };
+  var adernInitDone = false;
+
+  function adernMoney(n) {
+    return '\u00a3' + n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function adernFiltered() {
+    var q = adernState.search.trim().toLowerCase();
+    return ADMIN_EARNINGS_PMS.filter(function (p) {
+      if (adernState.pm !== 'All PMs' && p.name !== adernState.pm) return false;
+      if (q && p.name.toLowerCase().indexOf(q) === -1) return false;
+      return true;
+    });
+  }
+  function adernLongDate(iso) {
+    var d = new Date(iso + 'T00:00:00');
+    return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+  }
+  function adernRenderAll() {
+    var rows = adernFiltered();
+    var totalFee = 0, totalVat = 0, totalGross = 0, totalTx = 0;
+    ADMIN_EARNINGS_PMS.forEach(function (p) { totalFee += p.fee; totalVat += p.vat; totalGross += p.gross; totalTx += p.tx; });
+    document.getElementById('adernStatCollected').textContent = adernMoney(totalFee);
+    document.getElementById('adernStatVat').textContent = adernMoney(totalVat);
+    document.getElementById('adernStatGmv').textContent = adernMoney(totalGross);
+    document.getElementById('adernStatTx').textContent = totalTx;
+    document.getElementById('adernStatTxSub').textContent = 'Jobs / KS invoices \u00b7 ' + ADMIN_EARNINGS_PMS.length + ' active PMs';
+    document.getElementById('adernStatRate').textContent = (totalGross ? (totalFee / totalGross * 100).toFixed(1) : '0') + '%';
+
+    document.getElementById('adernTableBody').innerHTML = rows.map(function (p) {
+      return '<tr>' +
+        '<td style="font-weight:700;color:var(--text-heading);">' + pmpropEscapeHtml(p.name) + '</td>' +
+        '<td>' + p.tier + '</td>' +
+        '<td>' + p.tx + '</td>' +
+        '<td>' + adernMoney(p.gross) + '</td>' +
+        '<td style="font-weight:700;color:#1a7a3e;">' + adernMoney(p.fee) + '</td>' +
+        '<td>' + adernMoney(p.vat) + '</td>' +
+        '<td>' + (p.gross ? (p.fee / p.gross * 100).toFixed(1) : '0') + '%</td>' +
+        '<td style="color:var(--text-body-muted);">' + adernLongDate(p.lastActivity) + '</td>' +
+      '</tr>';
+    }).join('') + '<tr style="font-weight:800;background:var(--surface-soft);">' +
+      '<td>Total</td><td>' + ADMIN_EARNINGS_PMS.length + ' PMs</td><td>' + totalTx + '</td><td>' + adernMoney(totalGross) + '</td>' +
+      '<td style="color:#1a7a3e;">' + adernMoney(totalFee) + '</td><td>' + adernMoney(totalVat) + '</td><td></td><td></td></tr>';
+
+    var maxFee = Math.max.apply(null, [totalFee, 1]);
+    document.getElementById('adernChartMount').innerHTML =
+      '<div style="display:flex;align-items:flex-end;gap:14px;height:220px;padding:0 8px;">' +
+        '<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">' +
+          '<div style="font-size:13px;font-weight:700;color:var(--text-heading);">' + adernMoney(totalFee) + '</div>' +
+          '<div style="width:64px;height:' + Math.max(24, (totalFee / maxFee) * 180) + 'px;background:linear-gradient(180deg, #3d5488 0%, #14203a 100%);border-radius:8px 8px 0 0;"></div>' +
+          '<div style="font-size:11.5px;color:var(--text-body-muted);">Jul 26</div>' +
+        '</div>' +
+      '</div>';
+  }
+  function adernPopulatePmDropdown() {
+    var html = '<div class="cdd-item selected" data-value="All PMs">All PMs<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>';
+    ADMIN_EARNINGS_ALL_PM_NAMES.forEach(function (n) {
+      html += '<div class="cdd-item" data-value="' + pmpropEscapeHtml(n) + '">' + pmpropEscapeHtml(n) + '<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>';
+    });
+    document.getElementById('adernPmFilterMenu').innerHTML = html;
+    document.querySelectorAll('#adernPmFilterMenu .cdd-item').forEach(function (item) {
+      item.addEventListener('click', function () { adernState.pm = item.getAttribute('data-value'); adernRenderAll(); });
+    });
+  }
+  function initAdminEarningsOnce() {
+    if (adernInitDone) { adernRenderAll(); return; }
+    adernInitDone = true;
+    adernPopulatePmDropdown();
+    document.getElementById('adernSearchInput').addEventListener('input', function (e) { adernState.search = e.target.value; adernRenderAll(); });
+    document.querySelectorAll('#adernPeriodPills .pm-tab-pill').forEach(function (p) {
+      p.addEventListener('click', function () {
+        document.querySelectorAll('#adernPeriodPills .pm-tab-pill').forEach(function (x) { x.classList.remove('active'); });
+        p.classList.add('active');
+        adernState.period = p.getAttribute('data-ern-period');
+        adernRenderAll();
+      });
+    });
+    document.querySelectorAll('#adernSubTabsRow .pmjr-tab').forEach(function (t) {
+      t.addEventListener('click', function () {
+        document.querySelectorAll('#adernSubTabsRow .pmjr-tab').forEach(function (x) { x.classList.remove('active'); });
+        t.classList.add('active');
+        if (t.getAttribute('data-ern-tab') !== 'bypm') showToast('This view isn\u2019t wired up in this prototype yet.');
+      });
+    });
+    document.querySelectorAll('#adernCycleFilterMenu .cdd-item, #adernStatusFilterMenu .cdd-item').forEach(function (item) {
+      item.addEventListener('click', adernRenderAll);
+    });
+    document.getElementById('adernExportBtn').addEventListener('click', function () { showToast('CSV exported.'); });
+    adernRenderAll();
+  }
 })();
+
 </script>
 
 </body>
