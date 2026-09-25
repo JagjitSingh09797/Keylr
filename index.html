@@ -6136,6 +6136,7 @@
      same reason (#pmsvcTableWrap, #supInvitesTableWrap, .team-table-wrap). */
   .pmprop-table-wrap { min-height: 0; max-height: none; }
   .pmprop-table-wrap .pm-table-scroll { overflow: visible; max-height: none; min-height: 0; scroll-behavior: smooth; }
+  #adernPmDetailTableWrap .pm-table-scroll { overflow: visible; max-height: none; min-height: 0; }
 
   /* Density pass, scoped to Properties specifically (two-class selector, not a change to the
      shared .admin-table base rules other modules also use) \u2014 professional-SaaS-dense rather than
@@ -10947,13 +10948,11 @@
 /* ---- Admin Keylr Earnings ---- */
   .adern-info-banner { display: flex; align-items: center; gap: 10px; background: var(--icon-tint-bg); color: var(--accent-blue); border-radius: 12px; padding: 13px 18px; font-size: 13px; line-height: 1.5; margin-bottom: 18px; }
 .adern-info-banner b { font-weight: 800; }
-.adern-stat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 20px; }
+.adern-stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
   .adern-stat-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 16px 18px; }
-.adern-stat-card.highlight { background: #eafaf0; border-color: #bfe3cc; }
 .adern-stat-card .lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.04em; color: var(--text-body-muted); text-transform: uppercase; display: flex; align-items: center; gap: 5px; margin-bottom: 8px; }
 .adern-stat-card .lbl svg { color: #94a3b8; flex-shrink: 0; }
 .adern-stat-card .val { font-size: 24px; font-weight: 800; color: var(--text-heading); margin-bottom: 6px; }
-.adern-stat-card.highlight .val { color: #17703a; }
 .adern-stat-card .sub { font-size: 11.5px; color: var(--text-body-muted); line-height: 1.4; }
 .adern-chart-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 22px 24px; margin-top: 16px; }
 .adern-chart-title { font-size: 15px; font-weight: 800; color: var(--text-heading); }
@@ -19680,11 +19679,7 @@
           </div>
           <div class="dash-nav-item" data-nav="keylr-earnings">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-            <span class="nav-label">Keylr Earnings</span>
-          </div>
-          <div class="dash-nav-item" data-nav="markup-tiers">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5L5 19M6.5 9a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM17.5 20a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"/></svg>
-            <span class="nav-label">Markup Tiers</span>
+            <span class="nav-label">Earnings &amp; Markup</span>
           </div>
         </div>
 
@@ -21640,20 +21635,26 @@
                 </div>
               </div>
 
-              <div class="pminv-table-wrap" id="adminInvPagerWrap" style="border:none;">
-                <div class="supj-tabs-row" style="padding:14px 0 0;border-top:1px solid var(--border-subtle);margin-bottom:0;">
-                  <span class="dash-content-sub" id="adminInvShowingText">Showing 20 of 164 invoices</span>
-                  <div style="display:flex;align-items:center;gap:14px;">
-                    <span class="dash-content-sub" style="display:flex;align-items:center;gap:8px;">Rows per page:
-                      <select id="adminInvRowsPerPage" style="border:1px solid var(--border-subtle);border-radius:8px;padding:5px 8px;font-family:inherit;font-size:12.5px;color:var(--text-heading);">
-                        <option value="10">10</option><option value="20" selected>20</option><option value="50">50</option>
-                      </select>
-                    </span>
-                    <div class="notif-panel-pager">
-                      <button type="button" id="adminInvPagePrev" aria-label="Previous page"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
-                      <span id="adminInvPageNumbers"></span>
-                      <button type="button" id="adminInvPageNext" aria-label="Next page"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+              <div class="dash-header" style="margin-top:16px;">
+                <span class="pm-count-text" id="adminInvShowingText">Showing 20 of 164 invoices</span>
+                <div class="dash-header-actions" style="align-items:center;gap:14px;">
+                  <span class="pm-count-text" style="display:flex;align-items:center;gap:8px;">Rows per page
+                    <div class="pm-filter-field" style="width:76px;">
+                      <button type="button" class="pm-custom-dd-btn" data-dd="adminInvRowsPerPage" style="padding:6px 10px;">
+                        <span class="cdd-value">20</span>
+                        <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                      </button>
+                      <div class="pm-custom-dd-menu drop-up" data-dd-menu="adminInvRowsPerPage">
+                        <div class="cdd-item" data-value="10">10</div>
+                        <div class="cdd-item selected" data-value="20">20</div>
+                        <div class="cdd-item" data-value="50">50</div>
+                      </div>
                     </div>
+                  </span>
+                  <div style="display:flex;gap:4px;align-items:center;">
+                    <button type="button" class="pm-icon-btn-sq" id="adminInvPagePrev" aria-label="Previous page"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+                    <div style="display:flex;gap:4px;" id="adminInvPageNumbers"></div>
+                    <button type="button" class="pm-icon-btn-sq" id="adminInvPageNext" aria-label="Next page"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
                   </div>
                 </div>
               </div>
@@ -21692,14 +21693,14 @@
           </div>
 
           <div id="adminEarningsView" style="display:none;">
+            <div class="pm-settings-tabs-row" id="adminErnMarkupTabs">
+              <div class="pm-settings-tab-item active" data-ernmk-tab="earnings">Earnings</div>
+              <div class="pm-settings-tab-item" data-ernmk-tab="markup">Markup Tiers</div>
+            </div>
+            <div id="adminErnPanelEarnings">
             <div class="dash-section">
-              <div class="adern-info-banner">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-                <span><b>Collected (net)</b> is what Keylr has actually kept &mdash; collected fees minus credit notes and lost chargebacks. <b>Billed</b> is everything raised; the gap is still pending.</span>
-              </div>
-
               <div class="adern-stat-grid">
-                <div class="adern-stat-card highlight">
+                <div class="adern-stat-card">
                   <div class="lbl">KEYLR FEES &mdash; COLLECTED (NET) <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div>
                   <div class="val" id="adernStatCollected">&#163;0.00</div>
                   <div class="sub">Collected fees, net of credit notes &amp; lost chargebacks</div>
@@ -21719,26 +21720,52 @@
                   <div class="val" id="adernStatTx">0</div>
                   <div class="sub" id="adernStatTxSub">Jobs / KS invoices &middot; 0 active PMs</div>
                 </div>
-                <div class="adern-stat-card">
-                  <div class="lbl">EFFECTIVE TAKE RATE <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div>
-                  <div class="val" id="adernStatRate">0%</div>
-                  <div class="sub">Net fees &divide; gross processed</div>
-                </div>
               </div>
 
               <div class="pmjobs-filter-card">
-                <div class="pm-tab-pills" id="adernPeriodPills" style="padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid var(--border-subtle);">
-                  <div class="pm-tab-pill active" data-ern-period="month">This Month</div>
-                  <div class="pm-tab-pill" data-ern-period="lastmonth">Last Month</div>
-                  <div class="pm-tab-pill" data-ern-period="quarter">This Quarter</div>
-                  <div class="pm-tab-pill" data-ern-period="ytd">YTD</div>
-                  <div class="pm-tab-pill" data-ern-period="custom">Custom</div>
-                </div>
                 <div class="pmjobs-search-filter-row">
                 <div class="pmjr-search-wrap adern-search-wrap">
                   <svg width="15" height="15" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="4.5"/><path d="M10 10l2.5 2.5"/></svg>
                   <input type="text" class="field-input" style="padding-left:38px;" id="adernSearchInput" placeholder="Search job, PM, supplier, invoice..." autocomplete="off">
                 </div>
+                <div class="pminv-period-controls" style="flex-shrink:0;flex-wrap:wrap;position:relative;">
+                  <div class="pminv-status-tabs" id="adernTimeChips" style="gap:6px;">
+                    <div class="pminv-status-tab active" data-ern-time="all">All Time</div>
+                    <div class="pminv-status-tab" data-ern-time="weekly">This Week</div>
+                    <div class="pminv-status-tab" data-ern-time="monthly">This Month</div>
+                    <div class="pminv-status-tab" data-ern-time="quarterly">Quarterly</div>
+                    <div class="pminv-status-tab" data-ern-time="yearly">Yearly</div>
+                    <div class="pminv-status-tab" data-ern-time="custom">Custom</div>
+                  </div>
+                  <div class="pminv-period-stepper" id="adernPeriodStepper" style="display:none;">
+                    <button type="button" class="pminv-stepper-btn" id="adernStepperPrev" aria-label="Previous period"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+                    <button type="button" class="pminv-stepper-label-btn" id="adernStepperLabelBtn" aria-label="Pick a specific period"></button>
+                    <button type="button" class="pminv-stepper-btn" id="adernStepperNext" aria-label="Next period" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+                    <div class="pminv-picker-popover" id="adernPickerPopover" style="display:none;"></div>
+                  </div>
+                  <div class="pminv-picker-popover" id="adernCustomPopover" style="display:none;width:320px;">
+                    <div style="display:flex;gap:6px;margin-bottom:8px;">
+                      <button type="button" class="pm-tab-pill active" data-ern-custom-mode="monthly" style="flex:1;">Month</button>
+                      <button type="button" class="pm-tab-pill" data-ern-custom-mode="weekly" style="flex:1;">Week</button>
+                      <button type="button" class="pm-tab-pill" data-ern-custom-mode="range" style="flex:1;">Range</button>
+                    </div>
+                    <div id="adernCustomPickerBody"></div>
+                    <div id="adernCustomRangeBody" style="display:none;">
+                      <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:10px;">
+                        <label style="font-size:11.5px;font-weight:700;color:var(--text-body-muted);">From</label>
+                        <input type="date" class="field-input" id="adernRangeFrom" style="height:36px;font-size:13px;">
+                      </div>
+                      <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:12px;">
+                        <label style="font-size:11.5px;font-weight:700;color:var(--text-body-muted);">To</label>
+                        <input type="date" class="field-input" id="adernRangeTo" style="height:36px;font-size:13px;">
+                      </div>
+                      <button type="button" class="btn btn-primary" id="adernRangeApplyBtn" style="width:100%;padding:9px;font-size:12.5px;">Apply range</button>
+                    </div>
+                  </div>
+                  <button type="button" class="pminv-clear-filter-btn" id="adernClearFilterBtn" style="display:none;">Clear</button>
+                </div>
+                </div>
+                <div class="pmjobs-search-filter-row" style="margin-top:12px;">
                 <div class="pmjobs-dd-group" style="margin-left:0;">
                   <div class="pm-filter-field">
                     <button type="button" class="pm-custom-dd-btn" data-dd="adernPmFilter"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px;"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg><span class="cdd-value">All PMs</span><svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
@@ -21757,9 +21784,7 @@
                     <div class="pm-custom-dd-menu" data-dd-menu="adernStatusFilter" id="adernStatusFilterMenu">
                       <div class="cdd-item selected" data-value="All Statuses">All Statuses<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
                       <div class="cdd-item" data-value="Collected"><span class="cdd-item-label"><span class="cdd-status-dot" style="background:#1a7a3e;"></span>Collected</span><svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
-                      <div class="cdd-item" data-value="Distributed"><span class="cdd-item-label"><span class="cdd-status-dot" style="background:#284890;"></span>Distributed</span><svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
                       <div class="cdd-item" data-value="Pending"><span class="cdd-item-label"><span class="cdd-status-dot" style="background:#b45309;"></span>Pending</span><svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
-                      <div class="cdd-item" data-value="Reversed"><span class="cdd-item-label"><span class="cdd-status-dot" style="background:#c0392b;"></span>Reversed</span><svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
                       <div class="cdd-item" data-value="Refunded"><span class="cdd-item-label"><span class="cdd-status-dot" style="background:#94a3b8;"></span>Refunded</span><svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
                     </div>
                   </div>
@@ -21768,27 +21793,94 @@
                 </div>
               </div>
 
-              <div class="pmjr-tabs-row" id="adernSubTabsRow" style="margin-bottom:0;">
+              <div class="pmjr-tabs-row" id="adernSubTabsRow" style="margin-bottom:0;gap:20px;">
                 <div class="pmjr-tab active" data-ern-tab="bypm">By PM</div>
-                <div class="pmjr-tab" data-ern-tab="bytx">By Transaction</div>
-                <div class="pmjr-tab" data-ern-tab="byperiod">By Period</div>
+                <div class="pmjr-tab" data-ern-tab="bytx">Per Job</div>
               </div>
 
               <div class="pm-table-wrap" id="adernTableWrap" style="margin-top:0;border-top-left-radius:0;border-top-right-radius:0;">
                 <div class="pm-table-scroll">
                   <table class="admin-table" style="min-width:900px;">
-                    <thead>
-                      <tr><th>PM</th><th>Tier</th><th>Transactions</th><th>Gross Processed</th><th>Keylr Fee (Net) &darr;</th><th>VAT</th><th>Eff. %</th><th>Last Activity</th></tr>
+                    <thead id="adernTableHead">
+                      <tr><th>PM</th><th>Markup Tier</th><th>Transactions</th><th>Gross Processed</th><th>Keylr Fee (Net) &darr;</th><th>VAT</th><th>Eff. %</th><th>Last Activity</th></tr>
                     </thead>
                     <tbody id="adernTableBody"></tbody>
                   </table>
                 </div>
               </div>
 
+              <div class="dash-header" style="margin-top:16px;">
+                <span class="pm-count-text" id="adernShowingText">Showing 4 of 4 PMs</span>
+                <div class="dash-header-actions" style="align-items:center;gap:14px;">
+                  <span class="pm-count-text" style="display:flex;align-items:center;gap:8px;">Rows per page
+                    <div class="pm-filter-field" style="width:76px;">
+                      <button type="button" class="pm-custom-dd-btn" data-dd="adernRowsPerPage" style="padding:6px 10px;">
+                        <span class="cdd-value">10</span>
+                        <svg class="cdd-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                      </button>
+                      <div class="pm-custom-dd-menu drop-up" data-dd-menu="adernRowsPerPage">
+                        <div class="cdd-item selected" data-value="10">10</div>
+                        <div class="cdd-item" data-value="25">25</div>
+                        <div class="cdd-item" data-value="50">50</div>
+                      </div>
+                    </div>
+                  </span>
+                  <div style="display:flex;gap:4px;align-items:center;">
+                    <button type="button" class="pm-icon-btn-sq" id="adernPagePrev" aria-label="Previous page"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+                    <div style="display:flex;gap:4px;" id="adernPageNumbers"></div>
+                    <button type="button" class="pm-icon-btn-sq" id="adernPageNext" aria-label="Next page"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+                  </div>
+                </div>
+              </div>
+
               <div class="adern-chart-card">
-                <div class="adern-chart-title">Net Keylr Revenue &mdash; Monthly</div>
+                <div class="adern-chart-title" id="adernChartTitle">Net Keylr Revenue &mdash; Monthly</div>
                 <div class="adern-chart-sub">Recognised fees over the selected range.</div>
                 <div id="adernChartMount" style="margin-top:24px;"></div>
+              </div>
+            </div>
+            </div>
+
+            <div id="adminErnPmDetailView" style="display:none;">
+              <div class="dash-section">
+                <button type="button" id="adernPmDetailBackBtn" style="display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;color:var(--accent-blue);font-size:13px;font-weight:700;padding:0;margin-bottom:14px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back to Earnings</button>
+                <h2 id="adernPmDetailTitle" style="font-size:19px;font-weight:800;color:var(--text-heading);margin-bottom:16px;">PM name</h2>
+                <div class="pm-table-wrap" id="adernPmDetailTableWrap">
+                  <div class="pm-table-scroll">
+                    <table class="admin-table" style="min-width:1000px;">
+                      <thead>
+                        <tr><th>Invoice</th><th>PM Name</th><th>Job</th><th>Property</th><th>Keylr Fee</th><th>Keylr VAT</th><th>Gross Amount</th><th>Created</th><th>Status</th><th>Actions</th></tr>
+                      </thead>
+                      <tbody id="adernPmDetailTableBody"></tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="dash-header" style="margin-top:16px;">
+                  <span class="pm-count-text" id="adernPmDetailShowingText">Showing 0 of 0</span>
+                  <div class="dash-header-actions" style="align-items:center;gap:14px;">
+                    <div style="display:flex;gap:4px;align-items:center;">
+                      <button type="button" class="pm-icon-btn-sq" id="adernPmDetailPagePrev" aria-label="Previous page"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+                      <div style="display:flex;gap:4px;" id="adernPmDetailPageNumbers"></div>
+                      <button type="button" class="pm-icon-btn-sq" id="adernPmDetailPageNext" aria-label="Next page"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="adminErnPanelMarkup" style="display:none;">
+              <div class="dash-section">
+                <div class="pm-table-wrap" id="adminMarkupTableWrap">
+                  <div class="pm-table-scroll">
+                    <table class="admin-table" style="min-width:760px;">
+                      <thead>
+                        <tr><th>Tier</th><th>Markup Rate</th><th>Monthly Volume Threshold</th><th>PMs on this tier</th><th>Actions</th></tr>
+                      </thead>
+                      <tbody id="adminMarkupTableBody"></tbody>
+                    </table>
+                  </div>
+                  <div class="pminv-empty-state" id="adminMarkupEmptyState" style="display:none;"></div>
+                </div>
               </div>
             </div>
           </div>
@@ -63242,7 +63334,8 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     'Nadia Reid': { company: 'Nadia Reid Gardener', addr: 'Flat 3, 113 Newton Street, Manchester, M1 4GH, United Kingdom', regNo: '\u2014 (Sole Trader)', vat: 'Not VAT registered' },
     'Owen Marsh': { company: 'Owen Marsh Property Services', addr: '22 Park Avenue, Manchester, M1 4GH, United Kingdom', regNo: '\u2014 (Sole Trader)', vat: 'Not VAT registered' }
   };
-  var PMINV_PM_CO = { company: 'KEY RIDERS LTD', addr: '60 Tottenham Court Road, Suite 3260a, Fitzrovia, London, W1T 2EW, United Kingdom', regNo: '15019055', vat: 'GB868776770' };
+  var PMINV_KEYLR_CO = { company: 'Keylr Ltd', addr: '1 Keylr Way, London EC1A 1BB', regNo: '15019055', vat: 'GB466157276' };
+  var PMINV_PM_CO = { company: 'KEY RIDERS LTD', addr: '60 Tottenham Court Road, Suite 3260a, Fitzrovia, London, W1T 2EW, United Kingdom', vat: 'GB868776770' };
 
   // Each statement moves through review -> scheduled -> paid as its billing period closes out
   // (review = still inside the 2-day post-cutoff review window; scheduled = finalised and
@@ -63309,6 +63402,16 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       while (m < 0) { m += 12; y--; }
       var lastDay = new Date(y, m + 1, 0).getDate();
       return { label: PMINV_MONTH_NAMES[m] + ' ' + y, start: pminvIsoDate(y, m, 1), end: pminvIsoDate(y, m, lastDay) };
+    }
+    if (granularity === 'quarterly') {
+      var curQ = Math.floor(today.getMonth() / 3);
+      var qIndex = curQ - offset;
+      var qy = today.getFullYear();
+      while (qIndex < 0) { qIndex += 4; qy--; }
+      while (qIndex > 3) { qIndex -= 4; qy++; }
+      var qStartMonth = qIndex * 3;
+      var qLastDay = new Date(qy, qStartMonth + 3, 0).getDate();
+      return { label: 'Q' + (qIndex + 1) + ' ' + qy, start: pminvIsoDate(qy, qStartMonth, 1), end: pminvIsoDate(qy, qStartMonth + 2, qLastDay) };
     }
     if (granularity === 'yearly') {
       var yy = today.getFullYear() - offset;
@@ -63729,8 +63832,9 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     showRichToast('Payment released', inv ? (inv.id + ' \u2014 ' + pminvMoney(inv.amount) + ' paid to ' + inv.supplier + '.') : '', 'success');
   }
 
-  function pminvDocHtml(inv, forSupplier) {
+  function pminvDocHtml(inv, forSupplier, pmOverride, forceStandardOrder) {
     var co = PMINV_SUPPLIER_CO[inv.supplier] || { company: inv.supplier, addr: 'Address on file', regNo: '\u2014', vat: 'Not VAT registered' };
+    var pmInfo = pmOverride || PMINV_PM_CO;
     var net = inv.amount / 1.2;
     var vat = net * 0.2;
     var keylrFee = net * 0.2;
@@ -63758,10 +63862,10 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       '</div>' +
       '<div class="pminv-doc-parties">' +
       (function () {
-        var supplierBlock = '<div><div class="pminv-doc-party-label">Supplier</div><div class="pminv-doc-party-name">' + pmexEscapeHtml(co.company) + '</div><div class="pminv-doc-party-addr">' + pmexEscapeHtml(co.addr) + '<br>Company Reg. No.: ' + pmexEscapeHtml(co.regNo) + '<br>VAT No: ' + pmexEscapeHtml(co.vat) + '</div></div>';
-        var keylrBlock = '<div><div class="pminv-doc-party-label">Keylr (self-billing agent)</div><div class="pminv-doc-party-name">Keylr Ltd</div><div class="pminv-doc-party-addr">1 Keylr Way, London EC1A 1BB<em>Issued by Keylr Ltd (trading as Keylr) as agent on behalf of the supplier named in this invoice.</em></div></div>';
-        var pmBlock = '<div><div class="pminv-doc-party-label">' + (forSupplier ? 'Property Manager' : 'PM (underlying customer)') + '</div><div class="pminv-doc-party-name">' + pmexEscapeHtml(PMINV_PM_CO.company) + '</div><div class="pminv-doc-party-addr">' + pmexEscapeHtml(PMINV_PM_CO.addr) + '<br>Company Reg. No.: ' + PMINV_PM_CO.regNo + '<br>VAT No: ' + PMINV_PM_CO.vat + '</div></div>';
-        return forSupplier ? (pmBlock + keylrBlock + supplierBlock) : (supplierBlock + keylrBlock + pmBlock);
+        var supplierBlock = '<div><div class="pminv-doc-party-label">Supplier</div><div class="pminv-doc-party-name">' + pmexEscapeHtml(co.company) + '</div><div class="pminv-doc-party-addr">' + pmexEscapeHtml(co.addr) + '<br>VAT: ' + pmexEscapeHtml(co.vat) + '</div></div>';
+        var keylrBlock = '<div><div class="pminv-doc-party-label">Keylr (self-billing agent)</div><div class="pminv-doc-party-name">' + pmexEscapeHtml(PMINV_KEYLR_CO.company) + '</div><div class="pminv-doc-party-addr">' + pmexEscapeHtml(PMINV_KEYLR_CO.addr) + '<br>VAT: ' + PMINV_KEYLR_CO.vat + '<br>Co. reg: ' + PMINV_KEYLR_CO.regNo + '</div></div>';
+        var pmBlock = '<div><div class="pminv-doc-party-label">' + (forSupplier && !forceStandardOrder ? 'Property Manager' : 'Underlying customer (PM)') + '</div><div class="pminv-doc-party-name">' + pmexEscapeHtml(pmInfo.company) + '</div><div class="pminv-doc-party-addr">' + pmexEscapeHtml(pmInfo.addr) + '<br>VAT: ' + pmInfo.vat + '</div></div>';
+        return (forSupplier && !forceStandardOrder) ? (pmBlock + keylrBlock + supplierBlock) : (supplierBlock + keylrBlock + pmBlock);
       })() +
       '</div>' +
       '<div class="pminv-doc-svc-label">Services supplied on behalf of the supplier:</div>' +
@@ -63773,7 +63877,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       '<div class="pminv-doc-totals-row"><span class="lbl">Congestion fees</span><span class="val">\u00a3' + congestionFee.toFixed(2) + '</span></div>' +
       keylrTotalsRows +
       '<div class="pminv-doc-totals-row strong"><span class="lbl">Total gross</span><span class="val">\u00a3' + grossTotal.toFixed(2) + '</span></div>' +
-      '<div class="pminv-doc-sba-note">Self-billing agreement ref ' + sbaRef + ', dated 8 Feb 2026, between ' + pmexEscapeHtml(PMINV_PM_CO.company) + ' and ' + pmexEscapeHtml(co.company) + '. Keylr acts as agent for the supplier and, under its agency terms with the property manager, self-bills on the PM\u2019s behalf as the underlying customer. The supplier agrees not to issue their own VAT invoice for supplies covered by this agreement while it remains in force. VAT shown is the supplier\u2019s liability to account for to HMRC. Either party may terminate the self-billing agreement at any time by written notice.</div>';
+      '<div class="pminv-doc-sba-note">Self-billing agreement ref ' + sbaRef + ', dated 8 Feb 2026, between ' + pmexEscapeHtml(pmInfo.company) + ' and ' + pmexEscapeHtml(co.company) + '. Keylr acts as agent for the supplier and, under its agency terms with the property manager, self-bills on the PM\u2019s behalf as the underlying customer. The supplier agrees not to issue their own VAT invoice for supplies covered by this agreement while it remains in force. VAT shown is the supplier\u2019s liability to account for to HMRC. Either party may terminate the self-billing agreement at any time by written notice.</div>';
   }
   function pminvOpenPdfModal(invId) {
     var inv = PMINV_INVOICES.find(function (i) { return i.id === invId; });
@@ -64841,7 +64945,12 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     'tibaf': { addr: '4 Orchard Way, Leeds', reg: '19882234', vat: 'GB559812340' },
     'sorogam': { addr: '17 Birch Grove, Bristol', reg: '20015567', vat: 'GB681204471' }
   };
-  var ADMIN_PM_INFO = { name: 'KEY RIDERS LTD', addr: '60 Tottenham Court Road, Suite 3260a, Fitzrovia, London, W1T 2EW', reg: '15019055', vat: 'GB868776770' };
+  var ADMIN_PM_DETAILS = {
+    'Westgate Property Group': { addr: '9 Cornwall Terrace, London NW1 4QP', vat: 'GB304551277' },
+    'Hutton & Rose Lettings Ltd': { addr: '142 Camden High Street, London NW1 0LT', vat: 'GB221445908' },
+    'Greenfield Property Management': { addr: '27 Mill Lane, Cambridge CB2 1RX', vat: 'GB447712065' },
+    'Camden Property Partners LLP': { addr: '58 Parkway, London NW1 7AH', vat: 'GB559023841' }
+  };
   var ADMIN_INVOICES_DATA = [
     adminInvRecord({ invNo: 'SB-2026-000067', type: 'Supplier', party: 'Nadia Reid', email: 'nadia.reid07@gmail.com', ref: 'Period #78', net: 333.33, vat: 66.67, gross: 400.00, status: 'Finalised', createdISO: '2026-07-12', job: 'JB-2655', service: 'Appliance Installation (all white goods)' }),
     adminInvRecord({ invNo: 'SB-2026-000068', type: 'Supplier', party: 'Nadia Reid', email: 'nadia.reid07@gmail.com', ref: 'Period #78', net: 50.00, vat: 10.00, gross: 60.00, status: 'Finalised', createdISO: '2026-07-12', job: 'JB-2656', service: 'PAT Testing' }),
@@ -64892,7 +65001,7 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       invCounter--;
     }
   })();
-  var ADMIN_PM_NAMES = ['Key Riders Ltd', 'Hutton & Rose Lettings Ltd', 'Greenfield Property Management', 'Camden Property Partners LLP'];
+  var ADMIN_PM_NAMES = ['Westgate Property Group', 'Hutton & Rose Lettings Ltd', 'Greenfield Property Management', 'Camden Property Partners LLP'];
   var ADMIN_PROP_ADDRS = ['45-47 Whitehall, London, SW1A', 'Q & Q Recovery, West Road, Barnsley', 'Carrington, PO Box 81490, London', '12 Angel Road, London, N9 0TW', '8 Osiers Road, London, SW18 9WR'];
   ADMIN_INVOICES_DATA.forEach(function (r, i) {
     var jobNum = parseInt((r.job || '').replace(/[^0-9]/g, ''), 10) || i;
@@ -64912,12 +65021,21 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var period = pminvComputePeriod(adminInvState.granularity, adminInvState.offset);
     return iso >= period.start && iso <= period.end;
   }
-  var ADMIN_INV_MODAL_STATUS = { 'Draft': 'awaiting', 'Finalised': 'escrowed', 'Paid': 'paid', 'Credited': 'disputed' };
+  function adminInvMappedStatus(r) {
+    if (r.status === 'Draft') return 'awaiting';
+    if (r.status === 'Paid') return 'paid';
+    if (r.status === 'Credited') return 'disputed';
+    if (r.status === 'Finalised') {
+      var num = parseInt(r.invNo.replace(/[^0-9]/g, ''), 10) || 0;
+      return (num % 2 === 0) ? 'escrowed' : 'failed';
+    }
+    return 'awaiting';
+  }
   function adminInvFiltered() {
     var q = adminInvState.search.trim().toLowerCase();
     return ADMIN_INVOICES_DATA.filter(function (r) {
       if (r.type !== 'Supplier') return false;
-      if (adminInvState.statusTab !== 'all' && ADMIN_INV_MODAL_STATUS[r.status] !== adminInvState.statusTab) return false;
+      if (adminInvState.statusTab !== 'all' && adminInvMappedStatus(r) !== adminInvState.statusTab) return false;
       if (!adminInvWithinTimeFilter(r.createdISO)) return false;
       if (adminInvState.pmFilter !== 'All PMs' && r.pm !== adminInvState.pmFilter) return false;
       if (adminInvState.supFilter !== 'All Suppliers' && r.party !== adminInvState.supFilter) return false;
@@ -64931,21 +65049,21 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     });
   }
   function adminInvSyntheticInv(sbRecord, forSupplier) {
-    var ks = ADMIN_INVOICES_DATA.filter(function (x) { return x.feeFor === sbRecord.invNo; })[0];
+    var numPart = sbRecord.invNo.split('-').slice(1).join('-');
     return {
-      id: forSupplier ? sbRecord.invNo : (ks ? ks.invNo : sbRecord.invNo),
+      id: (forSupplier ? 'SP-' : 'PM-') + numPart,
       supplier: sbRecord.party,
       amount: sbRecord.gross,
       job: sbRecord.service,
       property: sbRecord.propAddr,
-      status: ADMIN_INV_MODAL_STATUS[sbRecord.status] || 'awaiting',
+      status: adminInvMappedStatus(sbRecord),
       jobRef: sbRecord.job
     };
   }
   function adminInvRowHtml(r) {
     var ks = ADMIN_INVOICES_DATA.filter(function (x) { return x.feeFor === r.invNo; })[0];
     var combinedGross = r.gross + (ks ? ks.gross : 0);
-    var mappedStatus = ADMIN_INV_MODAL_STATUS[r.status] || 'awaiting';
+    var mappedStatus = adminInvMappedStatus(r);
     return '<tr data-adminv-row="' + r.invNo + '" style="cursor:pointer;">' +
       '<td><div class="pminv-jobid-sub">' + (ks ? ks.invNo : '\u2014') + '</div>' + pmpropEscapeHtml(r.pm) + '</td>' +
       '<td><div class="pminv-jobid-sub">' + r.invNo + '</div>' + pmpropEscapeHtml(r.party) + '</td>' +
@@ -64953,8 +65071,10 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
       '<td><span class="pminv-stmt-status-chip"><span class="dot ' + PMINV_STATUS_TONE[mappedStatus] + '"></span>' + PMINV_STATUS_LABEL[mappedStatus] + '</span></td>' +
       '<td><div style="font-size:12.5px;color:var(--text-heading);font-weight:600;">' + adminInvLongDate(r.createdISO) + '</div><div class="pminv-jobid-sub" style="margin-top:2px;">issued ' + adminInvLongDate(r.createdISO) + '</div></td>' +
       '<td><div class="pminv-actions-cell">' +
+        '<button type="button" class="pminv-pdf-btn" data-adminv-viewjob="' + r.invNo + '" aria-label="View job" data-tooltip="View job"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>' +
         '<button type="button" class="pminv-pdf-btn" data-adminv-view-pm="' + r.invNo + '" aria-label="View PM invoice" data-tooltip="View PM invoice"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v5"/></svg></button>' +
         '<button type="button" class="pminv-pdf-btn" data-adminv-view-sup="' + r.invNo + '" aria-label="View Supplier invoice" data-tooltip="View Supplier invoice"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg></button>' +
+        '<button type="button" class="pminv-pdf-btn" data-adminv-view-admin="' + r.invNo + '" aria-label="View Admin invoice" data-tooltip="View Admin invoice"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></button>' +
       '</div></td>' +
     '</tr>';
   }
@@ -64969,9 +65089,12 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     document.getElementById('adminInvTableBody').innerHTML = pageItems.map(adminInvRowHtml).join('');
     document.querySelectorAll('#adminInvTableBody tr[data-adminv-row]').forEach(function (row) {
       row.addEventListener('click', function (e) {
-        if (e.target.closest('[data-adminv-view-pm], [data-adminv-view-sup]')) return;
+        if (e.target.closest('[data-adminv-view-pm], [data-adminv-view-sup], [data-adminv-view-admin], [data-adminv-viewjob]')) return;
         adminInvOpenPdfModal(row.getAttribute('data-adminv-row'), false);
       });
+    });
+    document.querySelectorAll('#adminInvTableBody [data-adminv-viewjob]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) { e.stopPropagation(); showToast('Job view isn\u2019t wired up in this prototype yet.'); });
     });
     document.querySelectorAll('#adminInvTableBody [data-adminv-view-pm]').forEach(function (btn) {
       btn.addEventListener('click', function (e) { e.stopPropagation(); adminInvOpenPdfModal(btn.getAttribute('data-adminv-view-pm'), false); });
@@ -64979,29 +65102,68 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     document.querySelectorAll('#adminInvTableBody [data-adminv-view-sup]').forEach(function (btn) {
       btn.addEventListener('click', function (e) { e.stopPropagation(); adminInvOpenPdfModal(btn.getAttribute('data-adminv-view-sup'), true); });
     });
-    document.getElementById('adminInvShowingText').textContent = 'Showing ' + pageItems.length + ' of ' + total + ' invoices';
-    var pageNumsWrap = document.getElementById('adminInvPageNumbers');
-    var pageBtns = [];
-    for (var i = 1; i <= totalPages; i++) {
-      pageBtns.push('<button type="button" class="suppo-page-btn' + (i === adminInvState.page ? ' active' : '') + '" data-adminv-page="' + i + '">' + i + '</button>');
-    }
-    pageNumsWrap.innerHTML = pageBtns.join('');
-    pageNumsWrap.querySelectorAll('[data-adminv-page]').forEach(function (btn) {
-      btn.addEventListener('click', function () { adminInvState.page = parseInt(btn.getAttribute('data-adminv-page'), 10); adminInvRenderList(); });
+    document.querySelectorAll('#adminInvTableBody [data-adminv-view-admin]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) { e.stopPropagation(); adminInvOpenAdminModal(btn.getAttribute('data-adminv-view-admin')); });
     });
+    document.getElementById('adminInvShowingText').textContent = 'Showing ' + pageItems.length + ' of ' + total + ' invoices';
+    renderPageNumberButtons('adminInvPageNumbers', adminInvState.page, totalPages, function (p) { adminInvState.page = p; adminInvRenderList(); });
     document.getElementById('adminInvPagePrev').disabled = adminInvState.page <= 1;
     document.getElementById('adminInvPageNext').disabled = adminInvState.page >= totalPages;
   }
   var adminInvModalOpenId = null;
+  function adminKeylrFeeDocHtml(ksRecord, pmOverride) {
+    var pmInfo = pmOverride || PMINV_PM_CO;
+    var mappedStatus = adminInvMappedStatus(ksRecord);
+    var numPart = ksRecord.invNo.split('-').slice(1).join('-');
+    return '<div class="pminv-doc-top-row">' +
+      '<div><div class="pminv-doc-title">Keylr Service Fee Invoice</div><div class="pminv-doc-issuer">Issued by Keylr Ltd (trading as Keylr) to the property manager named below.</div></div>' +
+      '</div>' +
+      '<hr class="pminv-doc-divider">' +
+      '<div class="pminv-doc-info-grid">' +
+      '<div class="pminv-doc-info-item"><div class="lbl">Invoice No.</div><div class="val">AD-' + numPart + '</div></div>' +
+      '<div class="pminv-doc-info-item"><div class="lbl">Invoice date</div><div class="val">' + ksRecord.createdISO + '</div></div>' +
+      '<div class="pminv-doc-info-item"><div class="lbl">Tax point date</div><div class="val">' + ksRecord.createdISO + '</div></div>' +
+      '<div class="pminv-doc-info-item"><div class="lbl">Currency</div><div class="val">GBP</div></div>' +
+      '<div class="pminv-doc-info-item"><div class="lbl">Status</div><div class="val"><span class="pminv-stmt-status-chip"><span class="dot ' + PMINV_STATUS_TONE[mappedStatus] + '"></span>' + PMINV_STATUS_LABEL[mappedStatus] + '</span></div></div>' +
+      '</div>' +
+      '<div class="pminv-doc-header-row">' +
+      '<div><div class="pminv-doc-party-name">' + pmexEscapeHtml(PMINV_KEYLR_CO.company) + '</div><div class="pminv-doc-party-addr">' + pmexEscapeHtml(PMINV_KEYLR_CO.addr) + '<br>VAT: ' + PMINV_KEYLR_CO.vat + '<br>Co. reg: ' + PMINV_KEYLR_CO.regNo + '</div></div>' +
+      '<div><div class="pminv-doc-party-name">' + pmexEscapeHtml(pmInfo.company) + '</div><div class="pminv-doc-party-addr">' + pmexEscapeHtml(pmInfo.addr) + '<br>VAT: ' + pmInfo.vat + '</div></div>' +
+      '</div>' +
+      '<div class="pminv-doc-svc-label">Keylr service fee for the job referenced below:</div>' +
+      '<table class="pminv-doc-table"><thead><tr><th class="pminv-doc-col-wide">Job ref</th><th class="pminv-doc-col-wide">Property address</th><th>Net</th><th>Keylr VAT</th><th>Gross</th></tr></thead>' +
+      '<tbody><tr><td>' + (ksRecord.job ? '<div class="pminv-jobid-sub">' + pmexEscapeHtml(ksRecord.job) + '</div>' : '') + pmexEscapeHtml(ksRecord.service || 'Service') + '</td><td>' + pmexEscapeHtml(ksRecord.propAddr || '\u2014') + '</td><td>' + ksRecord.net.toFixed(2) + '</td><td>' + ksRecord.vat.toFixed(2) + '</td><td>' + ksRecord.gross.toFixed(2) + '</td></tr></tbody></table>' +
+      '<div class="pminv-doc-totals-row"><span class="lbl">Net</span><span class="val">\u00a3' + ksRecord.net.toFixed(2) + '</span></div>' +
+      '<div class="pminv-doc-totals-row"><span class="lbl">Keylr VAT</span><span class="val">\u00a3' + ksRecord.vat.toFixed(2) + '</span></div>' +
+      '<div class="pminv-doc-totals-row strong"><span class="lbl">Total gross</span><span class="val">\u00a3' + ksRecord.gross.toFixed(2) + '</span></div>' +
+      '<div class="pminv-doc-sba-note">This invoice covers Keylr\u2019s service fee for facilitating the job referenced above, billed directly to the property manager as the underlying customer.</div>';
+  }
+  function adminInvOpenAdminModal(invNo) {
+    var r = ADMIN_INVOICES_DATA.filter(function (x) { return x.invNo === invNo; })[0];
+    if (!r) return;
+    var sbRecord = r.type === 'Keylr Fee' ? ADMIN_INVOICES_DATA.filter(function (x) { return x.invNo === r.feeFor; })[0] : r;
+    var ksRecord = r.type === 'Keylr Fee' ? r : ADMIN_INVOICES_DATA.filter(function (x) { return x.feeFor === r.invNo; })[0];
+    if (!sbRecord || !ksRecord) return;
+    var pmDetails = ADMIN_PM_DETAILS[sbRecord.pm];
+    var pmOverride = pmDetails ? { company: sbRecord.pm, addr: pmDetails.addr, vat: pmDetails.vat } : null;
+    adminInvModalOpenId = sbRecord.invNo;
+    var numPart = ksRecord.invNo.split('-').slice(1).join('-');
+    document.getElementById('adminInvPdfHeadTitle').textContent = 'AD-' + numPart;
+    document.getElementById('adminInvPdfScroll').innerHTML = adminKeylrFeeDocHtml(ksRecord, pmOverride);
+    document.getElementById('adminInvPdfModalOverlay').classList.add('open');
+    document.getElementById('adminInvPdfModalOverlay').setAttribute('data-for-supplier', '0');
+  }
   function adminInvOpenPdfModal(invNo, forSupplier) {
     var r = ADMIN_INVOICES_DATA.filter(function (x) { return x.invNo === invNo; })[0];
     if (!r) return;
     var sbRecord = r.type === 'Keylr Fee' ? ADMIN_INVOICES_DATA.filter(function (x) { return x.invNo === r.feeFor; })[0] : r;
     if (!sbRecord) return;
     var inv = adminInvSyntheticInv(sbRecord, forSupplier);
+    var pmDetails = ADMIN_PM_DETAILS[sbRecord.pm];
+    var pmOverride = pmDetails ? { company: sbRecord.pm, addr: pmDetails.addr, vat: pmDetails.vat } : null;
     adminInvModalOpenId = sbRecord.invNo;
     document.getElementById('adminInvPdfHeadTitle').textContent = inv.id;
-    document.getElementById('adminInvPdfScroll').innerHTML = pminvDocHtml(inv, forSupplier);
+    document.getElementById('adminInvPdfScroll').innerHTML = pminvDocHtml(inv, forSupplier, pmOverride, true);
     document.getElementById('adminInvPdfModalOverlay').classList.add('open');
     document.getElementById('adminInvPdfModalOverlay').setAttribute('data-for-supplier', forSupplier ? '1' : '0');
   }
@@ -65222,7 +65384,16 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     adminInvWireSearchableDd('adminInvPropDdBtn', 'adminInvPropDdMenu', 'adminInvPropSearchInput', 'adminInvPropOptionsList', 'adminInvPropDdLabel', 'All Properties', 'propAddr', 'propFilter');
     document.getElementById('adminInvSearchInput').addEventListener('input', function (e) { adminInvState.search = e.target.value; adminInvState.page = 1; adminInvRenderList(); });
     document.getElementById('adminInvRefreshBtn').addEventListener('click', function () { adminInvState.page = 1; adminInvRenderList(); });
-    document.getElementById('adminInvRowsPerPage').addEventListener('change', function () { adminInvState.perPage = parseInt(this.value, 10); adminInvState.page = 1; adminInvRenderList(); });
+    document.querySelectorAll('#adminInvoicesView .pm-custom-dd-menu[data-dd-menu="adminInvRowsPerPage"] .cdd-item').forEach(function (item) {
+      item.addEventListener('click', function () {
+        adminInvState.perPage = parseInt(item.getAttribute('data-value'), 10);
+        document.querySelector('[data-dd="adminInvRowsPerPage"] .cdd-value').textContent = item.textContent.trim();
+        document.querySelectorAll('#adminInvoicesView .pm-custom-dd-menu[data-dd-menu="adminInvRowsPerPage"] .cdd-item').forEach(function (i) { i.classList.toggle('selected', i === item); });
+        closeAllCustomDropdowns();
+        adminInvState.page = 1;
+        adminInvRenderList();
+      });
+    });
     document.getElementById('adminInvPagePrev').addEventListener('click', function () { if (adminInvState.page > 1) { adminInvState.page--; adminInvRenderList(); } });
     document.getElementById('adminInvPageNext').addEventListener('click', function () { adminInvState.page++; adminInvRenderList(); });
     document.getElementById('adminInvPdfCloseBtn').addEventListener('click', adminInvClosePdfModal);
@@ -65236,23 +65407,59 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
   }
 
   /* ==================== ADMIN KEYLR EARNINGS MODULE ==================== */
-  var ADMIN_EARNINGS_PMS = [
-    { name: 'fotatap', tier: 'Tier 0', tx: 3, gross: 1867.20, fee: 259.33, vat: 51.87, lastActivity: '2026-07-06' },
-    { name: 'pitejov', tier: 'Tier 0', tx: 3, gross: 2212.80, fee: 150.00, vat: 61.47, lastActivity: '2026-07-02' },
-    { name: 'Thomas Davies', tier: 'Tier 0', tx: 6, gross: 3224.40, fee: 144.67, vat: 89.56, lastActivity: '2026-07-06' },
-    { name: 'Balcinder dhiman', tier: 'Tier 0', tx: 2, gross: 840.00, fee: 116.67, vat: 23.33, lastActivity: '2026-07-02' }
+  var ADMIN_MARKUP_TIERS = [
+    { tier: 'Tier 0', rate: 20, minGross: 0, threshold: '\u00a30 and above' },
+    { tier: 'Tier 1', rate: 17, minGross: 5000, threshold: '\u00a35,000 and above' },
+    { tier: 'Tier 2', rate: 14, minGross: 15000, threshold: '\u00a315,000 and above' },
+    { tier: 'Tier 3', rate: 10, minGross: 40000, threshold: '\u00a340,000 and above' }
   ];
-  var ADMIN_EARNINGS_ALL_PM_NAMES = ['Alex Turner', 'Amelia Carter', 'Balcinder dhiman', 'Bethan Hargreaves', 'Chloe Nowak', 'Ciara Stewart', 'comota', 'fernando testing', 'firom', 'fotatap', 'pitejov', 'Thomas Davies'];
-  var adernState = { period: 'month', search: '', pm: 'All PMs', cycle: 'All Cycles', status: 'All Statuses' };
+  function adminMarkupTierForGross(gross) {
+    var match = ADMIN_MARKUP_TIERS[0];
+    ADMIN_MARKUP_TIERS.forEach(function (t) { if (gross >= t.minGross) match = t; });
+    return match;
+  }
+  var ADMIN_EARNINGS_ALL_PM_NAMES = ADMIN_PM_NAMES.slice();
+  var ADMIN_EARNINGS_PMS = (function () {
+    var byPm = {};
+    ADMIN_INVOICES_DATA.forEach(function (r) {
+      if (r.type !== 'Supplier') return;
+      var ks = ADMIN_INVOICES_DATA.filter(function (x) { return x.feeFor === r.invNo; })[0];
+      var combinedGross = r.gross + (ks ? ks.gross : 0);
+      var fee = ks ? ks.net : 0;
+      var vat = ks ? ks.vat : 0;
+      if (!byPm[r.pm]) byPm[r.pm] = { name: r.pm, tx: 0, gross: 0, fee: 0, vat: 0, lastActivity: r.createdISO };
+      var entry = byPm[r.pm];
+      entry.tx += 1;
+      entry.gross += combinedGross;
+      entry.fee += fee;
+      entry.vat += vat;
+      if (r.createdISO > entry.lastActivity) entry.lastActivity = r.createdISO;
+    });
+    return Object.keys(byPm).map(function (name) {
+      var entry = byPm[name];
+      entry.tier = adminMarkupTierForGross(entry.gross).tier;
+      return entry;
+    });
+  })();
+  var adernState = { granularity: 'all', offset: 0, search: '', pm: 'All PMs', cycle: 'All Cycles', status: 'All Statuses', page: 1, perPage: 10, viewMode: 'bypm', customRange: null };
   var adernInitDone = false;
 
   function adernMoney(n) {
     return '\u00a3' + n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
+  function adernWithinTimeFilter(iso) {
+    if (adernState.granularity === 'all') return true;
+    if (adernState.granularity === 'range') {
+      return adernState.customRange && iso >= adernState.customRange.start && iso <= adernState.customRange.end;
+    }
+    var period = pminvComputePeriod(adernState.granularity, adernState.offset);
+    return iso >= period.start && iso <= period.end;
+  }
   function adernFiltered() {
     var q = adernState.search.trim().toLowerCase();
     return ADMIN_EARNINGS_PMS.filter(function (p) {
       if (adernState.pm !== 'All PMs' && p.name !== adernState.pm) return false;
+      if (!adernWithinTimeFilter(p.lastActivity)) return false;
       if (q && p.name.toLowerCase().indexOf(q) === -1) return false;
       return true;
     });
@@ -65261,41 +65468,327 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     var d = new Date(iso + 'T00:00:00');
     return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
   }
+  function adernTierRate(tierName) {
+    var t = ADMIN_MARKUP_TIERS.filter(function (x) { return x.tier === tierName; })[0];
+    return t ? t.rate : 0;
+  }
+  function adernFilteredTransactions(pmNameOverride) {
+    var q = adernState.search.trim().toLowerCase();
+    return ADMIN_INVOICES_DATA.filter(function (r) {
+      if (r.type !== 'Supplier') return false;
+      var pmFilter = pmNameOverride || (adernState.pm !== 'All PMs' ? adernState.pm : null);
+      if (pmFilter && r.pm !== pmFilter) return false;
+      if (!adernWithinTimeFilter(r.createdISO)) return false;
+      if (q) {
+        var hay = (r.invNo + ' ' + r.pm + ' ' + r.party + ' ' + r.service).toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+  }
+  function adernTxRowHtml(r) {
+    var ks = ADMIN_INVOICES_DATA.filter(function (x) { return x.feeFor === r.invNo; })[0];
+    var mappedStatus = adminInvMappedStatus(r);
+    var displayId = 'PM-' + r.invNo.split('-').slice(1).join('-');
+    return '<tr data-erntx-row="' + r.invNo + '" style="cursor:pointer;">' +
+      '<td style="font-weight:700;color:var(--accent-blue);">' + displayId + '</td>' +
+      '<td>' + pmpropEscapeHtml(r.pm) + '</td>' +
+      '<td><div class="pminv-jobid-sub">' + pmpropEscapeHtml(r.job || '\u2014') + '</div>' + pmpropEscapeHtml(r.service || 'Service') + '</td>' +
+      '<td>' + pmpropEscapeHtml(r.propAddr || '\u2014') + '</td>' +
+      '<td style="font-weight:700;color:var(--text-heading);">' + (ks ? adernMoney(ks.net) : '\u2014') + '</td>' +
+      '<td>' + (ks ? adernMoney(ks.vat) : '\u2014') + '</td>' +
+      '<td>' + adernMoney(r.gross + (ks ? ks.gross : 0)) + '</td>' +
+      '<td style="color:var(--text-body-muted);">' + adminInvLongDate(r.createdISO) + '</td>' +
+      '<td><span class="pminv-stmt-status-chip"><span class="dot ' + PMINV_STATUS_TONE[mappedStatus] + '"></span>' + PMINV_STATUS_LABEL[mappedStatus] + '</span></td>' +
+      '<td><div class="pminv-actions-cell">' +
+        '<button type="button" class="pminv-pdf-btn" data-erntx-download="' + r.invNo + '" aria-label="Download PDF" data-tooltip="Download PDF"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></button>' +
+        '<button type="button" class="pminv-pdf-btn" data-erntx-view="' + r.invNo + '" aria-label="View PDF" data-tooltip="View PDF"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>' +
+      '</div></td>' +
+    '</tr>';
+  }
+  function adernWireTxRows(scopeSelector) {
+    document.querySelectorAll(scopeSelector + ' [data-erntx-download]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) { e.stopPropagation(); showToast('Download isn\u2019t wired up in this prototype yet.'); });
+    });
+    document.querySelectorAll(scopeSelector + ' [data-erntx-view]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) { e.stopPropagation(); adminInvOpenAdminModal(btn.getAttribute('data-erntx-view')); });
+    });
+    document.querySelectorAll(scopeSelector + ' tr[data-erntx-row]').forEach(function (row) {
+      row.addEventListener('click', function (e) {
+        if (e.target.closest('[data-erntx-download], [data-erntx-view]')) return;
+        adminInvOpenAdminModal(row.getAttribute('data-erntx-row'));
+      });
+    });
+  }
+  var ADERN_TX_HEADER = '<tr><th>Invoice</th><th>PM Name</th><th>Job</th><th>Property</th><th>Keylr Fee</th><th>Keylr VAT</th><th>Gross Amount</th><th>Created</th><th>Status</th><th>Actions</th></tr>';
+  var ADERN_PM_HEADER = '<tr><th>PM</th><th>Markup Tier</th><th>Transactions</th><th>Gross Processed</th><th>Keylr Fee (Net) &darr;</th><th>VAT</th><th>Eff. %</th><th>Last Activity</th></tr>';
+  function adernRenderByTx() {
+    document.getElementById('adernTableHead').innerHTML = ADERN_TX_HEADER;
+    var all = adernFilteredTransactions();
+    var totalPages = Math.max(1, Math.ceil(all.length / adernState.perPage));
+    if (adernState.page > totalPages) adernState.page = totalPages;
+    var start = (adernState.page - 1) * adernState.perPage;
+    var pageItems = all.slice(start, start + adernState.perPage);
+    document.getElementById('adernTableBody').innerHTML = pageItems.map(adernTxRowHtml).join('');
+    adernWireTxRows('#adernTableBody');
+    document.getElementById('adernShowingText').textContent = 'Showing ' + pageItems.length + ' of ' + all.length + ' transactions';
+    renderPageNumberButtons('adernPageNumbers', adernState.page, totalPages, function (p) { adernState.page = p; adernRenderByTx(); });
+    document.getElementById('adernPagePrev').disabled = adernState.page <= 1;
+    document.getElementById('adernPageNext').disabled = adernState.page >= totalPages;
+  }
+  var adernPmDetailState = { pmName: '', page: 1, perPage: 10 };
+  function adernOpenPmDetail(pmName) {
+    adernPmDetailState.pmName = pmName;
+    adernPmDetailState.page = 1;
+    document.getElementById('adminErnPanelEarnings').style.display = 'none';
+    document.getElementById('adminErnPmDetailView').style.display = '';
+    document.getElementById('adernPmDetailTitle').textContent = pmName;
+    adernRenderPmDetail();
+  }
+  function adernClosePmDetail() {
+    document.getElementById('adminErnPmDetailView').style.display = 'none';
+    document.getElementById('adminErnPanelEarnings').style.display = '';
+  }
+  function adernRenderPmDetail() {
+    var all = adernFilteredTransactions(adernPmDetailState.pmName);
+    var totalPages = Math.max(1, Math.ceil(all.length / adernPmDetailState.perPage));
+    if (adernPmDetailState.page > totalPages) adernPmDetailState.page = totalPages;
+    var start = (adernPmDetailState.page - 1) * adernPmDetailState.perPage;
+    var pageItems = all.slice(start, start + adernPmDetailState.perPage);
+    document.getElementById('adernPmDetailTableBody').innerHTML = pageItems.map(adernTxRowHtml).join('');
+    adernWireTxRows('#adernPmDetailTableBody');
+    document.getElementById('adernPmDetailShowingText').textContent = 'Showing ' + pageItems.length + ' of ' + all.length;
+    renderPageNumberButtons('adernPmDetailPageNumbers', adernPmDetailState.page, totalPages, function (p) { adernPmDetailState.page = p; adernRenderPmDetail(); });
+    document.getElementById('adernPmDetailPagePrev').disabled = adernPmDetailState.page <= 1;
+    document.getElementById('adernPmDetailPageNext').disabled = adernPmDetailState.page >= totalPages;
+  }
   function adernRenderAll() {
-    var rows = adernFiltered();
+    if (adernState.viewMode === 'bytx') { adernRenderByTx(); return; }
+    document.getElementById('adernTableHead').innerHTML = ADERN_PM_HEADER;
+    var all = adernFiltered();
     var totalFee = 0, totalVat = 0, totalGross = 0, totalTx = 0;
-    ADMIN_EARNINGS_PMS.forEach(function (p) { totalFee += p.fee; totalVat += p.vat; totalGross += p.gross; totalTx += p.tx; });
+    all.forEach(function (p) { totalFee += p.fee; totalVat += p.vat; totalGross += p.gross; totalTx += p.tx; });
     document.getElementById('adernStatCollected').textContent = adernMoney(totalFee);
     document.getElementById('adernStatVat').textContent = adernMoney(totalVat);
     document.getElementById('adernStatGmv').textContent = adernMoney(totalGross);
     document.getElementById('adernStatTx').textContent = totalTx;
-    document.getElementById('adernStatTxSub').textContent = 'Jobs / KS invoices \u00b7 ' + ADMIN_EARNINGS_PMS.length + ' active PMs';
-    document.getElementById('adernStatRate').textContent = (totalGross ? (totalFee / totalGross * 100).toFixed(1) : '0') + '%';
+    document.getElementById('adernStatTxSub').textContent = 'Jobs / KS invoices \u00b7 ' + all.length + ' active PMs';
 
-    document.getElementById('adernTableBody').innerHTML = rows.map(function (p) {
-      return '<tr>' +
+    var totalPages = Math.max(1, Math.ceil(all.length / adernState.perPage));
+    if (adernState.page > totalPages) adernState.page = totalPages;
+    var start = (adernState.page - 1) * adernState.perPage;
+    var pageItems = all.slice(start, start + adernState.perPage);
+
+    document.getElementById('adernTableBody').innerHTML = pageItems.map(function (p) {
+      return '<tr data-ernpm-row="' + pmpropEscapeHtml(p.name) + '" style="cursor:pointer;">' +
         '<td style="font-weight:700;color:var(--text-heading);">' + pmpropEscapeHtml(p.name) + '</td>' +
-        '<td>' + p.tier + '</td>' +
+        '<td>' + adernTierRate(p.tier) + '%</td>' +
         '<td>' + p.tx + '</td>' +
         '<td>' + adernMoney(p.gross) + '</td>' +
-        '<td style="font-weight:700;color:#1a7a3e;">' + adernMoney(p.fee) + '</td>' +
+        '<td style="font-weight:700;color:var(--text-heading);">' + adernMoney(p.fee) + '</td>' +
         '<td>' + adernMoney(p.vat) + '</td>' +
         '<td>' + (p.gross ? (p.fee / p.gross * 100).toFixed(1) : '0') + '%</td>' +
         '<td style="color:var(--text-body-muted);">' + adernLongDate(p.lastActivity) + '</td>' +
       '</tr>';
-    }).join('') + '<tr style="font-weight:800;background:var(--surface-soft);">' +
-      '<td>Total</td><td>' + ADMIN_EARNINGS_PMS.length + ' PMs</td><td>' + totalTx + '</td><td>' + adernMoney(totalGross) + '</td>' +
-      '<td style="color:#1a7a3e;">' + adernMoney(totalFee) + '</td><td>' + adernMoney(totalVat) + '</td><td></td><td></td></tr>';
+    }).join('');
+    document.querySelectorAll('#adernTableBody tr[data-ernpm-row]').forEach(function (row) {
+      row.addEventListener('click', function () { adernOpenPmDetail(row.getAttribute('data-ernpm-row')); });
+    });
+    document.getElementById('adernShowingText').textContent = 'Showing ' + pageItems.length + ' of ' + all.length + ' PMs';
+    renderPageNumberButtons('adernPageNumbers', adernState.page, totalPages, function (p) { adernState.page = p; adernRenderAll(); });
+    document.getElementById('adernPagePrev').disabled = adernState.page <= 1;
+    document.getElementById('adernPageNext').disabled = adernState.page >= totalPages;
 
-    var maxFee = Math.max.apply(null, [totalFee, 1]);
-    document.getElementById('adernChartMount').innerHTML =
-      '<div style="display:flex;align-items:flex-end;gap:14px;height:220px;padding:0 8px;">' +
-        '<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">' +
-          '<div style="font-size:13px;font-weight:700;color:var(--text-heading);">' + adernMoney(totalFee) + '</div>' +
-          '<div style="width:64px;height:' + Math.max(24, (totalFee / maxFee) * 180) + 'px;background:linear-gradient(180deg, #3d5488 0%, #14203a 100%);border-radius:8px 8px 0 0;"></div>' +
-          '<div style="font-size:11.5px;color:var(--text-body-muted);">Jul 26</div>' +
-        '</div>' +
+    adernRenderChart(all);
+  }
+  function adernSumFeesInRange(startIso, endIso) {
+    var sum = 0;
+    ADMIN_INVOICES_DATA.forEach(function (r) {
+      if (r.type !== 'Supplier') return;
+      if (adernState.pm !== 'All PMs' && r.pm !== adernState.pm) return;
+      if (r.createdISO >= startIso && r.createdISO <= endIso) {
+        var ks = ADMIN_INVOICES_DATA.filter(function (x) { return x.feeFor === r.invNo; })[0];
+        if (ks) sum += ks.net;
+      }
+    });
+    return sum;
+  }
+  function adernChartSeries() {
+    var gran = adernState.granularity;
+    if (gran === 'range' && adernState.customRange) {
+      var rStart = new Date(adernState.customRange.start + 'T00:00:00');
+      var rEnd = new Date(adernState.customRange.end + 'T00:00:00');
+      var out = [];
+      var cursor = new Date(rStart);
+      var weekNum = 1;
+      while (cursor <= rEnd) {
+        var chunkEnd = new Date(cursor); chunkEnd.setDate(chunkEnd.getDate() + 6);
+        if (chunkEnd > rEnd) chunkEnd = new Date(rEnd);
+        var startIso = pminvIsoDate(cursor.getFullYear(), cursor.getMonth(), cursor.getDate());
+        var endIso = pminvIsoDate(chunkEnd.getFullYear(), chunkEnd.getMonth(), chunkEnd.getDate());
+        out.push({ label: 'Week ' + weekNum, value: adernSumFeesInRange(startIso, endIso) });
+        cursor.setDate(cursor.getDate() + 7);
+        weekNum++;
+      }
+      return out;
+    }
+    if (gran === 'weekly') {
+      var out = [];
+      for (var i = 5; i >= 0; i--) {
+        var period = pminvComputePeriod('weekly', adernState.offset + i);
+        out.push({ label: 'Week ' + (6 - i), value: adernSumFeesInRange(period.start, period.end) });
+      }
+      return out;
+    }
+    if (gran === 'monthly') {
+      var period = pminvComputePeriod('monthly', adernState.offset);
+      var monthStart = new Date(period.start + 'T00:00:00');
+      var monthEnd = new Date(period.end + 'T00:00:00');
+      var out = [];
+      var cursor = new Date(monthStart);
+      var weekNum = 1;
+      while (cursor <= monthEnd) {
+        var chunkEnd = new Date(cursor); chunkEnd.setDate(chunkEnd.getDate() + 6);
+        if (chunkEnd > monthEnd) chunkEnd = new Date(monthEnd);
+        var startIso = pminvIsoDate(cursor.getFullYear(), cursor.getMonth(), cursor.getDate());
+        var endIso = pminvIsoDate(chunkEnd.getFullYear(), chunkEnd.getMonth(), chunkEnd.getDate());
+        out.push({ label: 'Week ' + weekNum, value: adernSumFeesInRange(startIso, endIso) });
+        cursor.setDate(cursor.getDate() + 7);
+        weekNum++;
+      }
+      return out;
+    }
+    if (gran === 'quarterly') {
+      var period = pminvComputePeriod('quarterly', adernState.offset);
+      var qStart = new Date(period.start + 'T00:00:00');
+      var out = [];
+      for (var m = 0; m < 3; m++) {
+        var mDate = new Date(qStart.getFullYear(), qStart.getMonth() + m, 1);
+        var mLastDay = new Date(mDate.getFullYear(), mDate.getMonth() + 1, 0).getDate();
+        var startIso = pminvIsoDate(mDate.getFullYear(), mDate.getMonth(), 1);
+        var endIso = pminvIsoDate(mDate.getFullYear(), mDate.getMonth(), mLastDay);
+        out.push({ label: PMINV_MONTH_NAMES[mDate.getMonth()], value: adernSumFeesInRange(startIso, endIso) });
+      }
+      return out;
+    }
+    if (gran === 'yearly') {
+      var period = pminvComputePeriod('yearly', adernState.offset);
+      var yr = parseInt(period.start.slice(0, 4), 10);
+      var out = [];
+      for (var m2 = 0; m2 < 12; m2++) {
+        var mLastDay2 = new Date(yr, m2 + 1, 0).getDate();
+        var startIso2 = pminvIsoDate(yr, m2, 1);
+        var endIso2 = pminvIsoDate(yr, m2, mLastDay2);
+        out.push({ label: PMINV_MONTH_NAMES[m2], value: adernSumFeesInRange(startIso2, endIso2) });
+      }
+      return out;
+    }
+    var byMonth = {};
+    ADMIN_INVOICES_DATA.forEach(function (r) {
+      if (r.type !== 'Supplier') return;
+      if (adernState.pm !== 'All PMs' && r.pm !== adernState.pm) return;
+      var ks = ADMIN_INVOICES_DATA.filter(function (x) { return x.feeFor === r.invNo; })[0];
+      if (!ks) return;
+      var key = r.createdISO.slice(0, 7);
+      byMonth[key] = (byMonth[key] || 0) + ks.net;
+    });
+    var keys = Object.keys(byMonth).sort();
+    return keys.map(function (k) {
+      var parts = k.split('-');
+      var label = PMINV_MONTH_NAMES[parseInt(parts[1], 10) - 1] + ' ' + parts[0].slice(2);
+      return { label: label, value: byMonth[k] };
+    });
+  }
+  var adernChartObserver = null;
+  var ADERN_CHART_TITLE_LABEL = { all: 'Monthly', weekly: 'Weekly', monthly: 'Monthly', quarterly: 'Quarterly', yearly: 'Yearly', range: 'Custom Range' };
+  function adernRenderChart(rows) {
+    document.getElementById('adernChartTitle').textContent = 'Net Keylr Revenue \u2014 ' + (ADERN_CHART_TITLE_LABEL[adernState.granularity] || 'Monthly');
+    var series = adernChartSeries();
+    var mount = document.getElementById('adernChartMount');
+    if (!series.length) { mount.innerHTML = '<div style="text-align:center;padding:40px 0;color:var(--text-body-muted);font-size:13px;">No data for this range.</div>'; return; }
+    var w = 720, h = 220, padL = 50, padR = 20, padT = 16, padB = 30;
+    var maxVal = Math.max.apply(null, series.map(function (s) { return s.value; })) * 1.15 || 1;
+    var innerW = w - padL - padR, innerH = h - padT - padB;
+    var stepX = series.length > 1 ? innerW / (series.length - 1) : 0;
+    function xFor(i) { return padL + i * stepX; }
+    function yFor(v) { return padT + innerH - (v / maxVal) * innerH; }
+    var linePoints = series.map(function (s, i) { return xFor(i) + ',' + yFor(s.value); }).join(' ');
+    var areaPoints = linePoints + ' ' + xFor(series.length - 1) + ',' + (padT + innerH) + ' ' + xFor(0) + ',' + (padT + innerH);
+    var gridLines = '';
+    for (var g = 0; g <= 3; g++) {
+      var gy = padT + (innerH / 3) * g;
+      gridLines += '<line x1="' + padL + '" y1="' + gy + '" x2="' + (w - padR) + '" y2="' + gy + '" stroke="var(--border-subtle)" stroke-width="1"/>';
+      gridLines += '<text x="' + (padL - 8) + '" y="' + (gy + 4) + '" text-anchor="end" font-size="7.5" fill="var(--text-body-muted)">\u00a3' + Math.round(maxVal - (maxVal / 3) * g).toLocaleString('en-GB') + '</text>';
+    }
+    var dots = series.map(function (s, i) {
+      return '<circle class="adern-chart-dot" cx="' + xFor(i) + '" cy="' + yFor(s.value) + '" r="3" fill="#284890" stroke="#fff" stroke-width="1.5"/>';
+    }).join('');
+    var hoverCircles = series.map(function (s, i) {
+      return '<circle class="adern-chart-hover-target" data-chart-label="' + pmexEscapeHtml(s.label) + '" data-chart-value="' + s.value + '" cx="' + xFor(i) + '" cy="' + yFor(s.value) + '" r="12" fill="transparent" style="cursor:pointer;"/>';
+    }).join('');
+    var xLabels = series.map(function (s, i) {
+      return '<text x="' + xFor(i) + '" y="' + (h - 6) + '" text-anchor="middle" font-size="7.5" fill="var(--text-body-muted)">' + s.label + '</text>';
+    }).join('');
+    mount.innerHTML =
+      '<div style="position:relative;">' +
+      '<svg viewBox="0 0 ' + w + ' ' + h + '" style="width:100%;height:auto;overflow:visible;" id="adernChartSvg">' +
+        '<defs><linearGradient id="adernAreaGrad" x1="0" y1="0" x2="0" y2="1">' +
+          '<stop offset="0%" stop-color="#284890" stop-opacity="0.28"/>' +
+          '<stop offset="100%" stop-color="#284890" stop-opacity="0.02"/>' +
+        '</linearGradient></defs>' +
+        gridLines +
+        '<polygon id="adernChartArea" points="' + areaPoints + '" fill="url(#adernAreaGrad)" opacity="0"/>' +
+        '<polyline id="adernChartLine" points="' + linePoints + '" fill="none" stroke="#284890" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '<g id="adernChartDots" opacity="0">' + dots + hoverCircles + '</g>' +
+        xLabels +
+      '</svg>' +
+      '<div id="adernChartTooltip" style="display:none;position:absolute;pointer-events:none;background:var(--text-heading);color:#fff;padding:8px 12px;border-radius:8px;font-size:12px;white-space:nowrap;box-shadow:0 6px 16px rgba(15,23,42,0.2);transform:translate(-50%,-115%);z-index:5;">' +
+        '<div style="font-weight:700;" id="adernChartTooltipAmount"></div>' +
+        '<div style="opacity:0.75;font-size:11px;" id="adernChartTooltipLabel"></div>' +
+      '</div>' +
       '</div>';
+    var tooltip = document.getElementById('adernChartTooltip');
+    var tooltipAmount = document.getElementById('adernChartTooltipAmount');
+    var tooltipLabel = document.getElementById('adernChartTooltipLabel');
+    var chartWrap = mount.querySelector('div');
+    mount.querySelectorAll('.adern-chart-hover-target').forEach(function (circle) {
+      circle.addEventListener('mouseenter', function () {
+        var wrapRect = chartWrap.getBoundingClientRect();
+        var circleRect = circle.getBoundingClientRect();
+        tooltipAmount.textContent = adernMoney(parseFloat(circle.getAttribute('data-chart-value')));
+        tooltipLabel.textContent = circle.getAttribute('data-chart-label');
+        tooltip.style.left = (circleRect.left + circleRect.width / 2 - wrapRect.left) + 'px';
+        tooltip.style.top = (circleRect.top - wrapRect.top) + 'px';
+        tooltip.style.display = '';
+      });
+      circle.addEventListener('mouseleave', function () { tooltip.style.display = 'none'; });
+    });
+    var lineEl = document.getElementById('adernChartLine');
+    var areaEl = document.getElementById('adernChartArea');
+    var dotsEl = document.getElementById('adernChartDots');
+    var length = lineEl.getTotalLength();
+    lineEl.style.strokeDasharray = length;
+    lineEl.style.strokeDashoffset = length;
+    function playAnimation() {
+      lineEl.style.transition = 'none';
+      lineEl.style.strokeDashoffset = length;
+      areaEl.style.transition = 'none';
+      areaEl.style.opacity = 0;
+      dotsEl.style.transition = 'none';
+      dotsEl.style.opacity = 0;
+      void lineEl.getBoundingClientRect();
+      lineEl.style.transition = 'stroke-dashoffset 1.1s cubic-bezier(.4,0,.2,1)';
+      lineEl.style.strokeDashoffset = 0;
+      areaEl.style.transition = 'opacity 1s ease 0.35s';
+      areaEl.style.opacity = 1;
+      dotsEl.style.transition = 'opacity 0.6s ease 0.85s';
+      dotsEl.style.opacity = 1;
+    }
+    if (adernChartObserver) adernChartObserver.disconnect();
+    adernChartObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) { if (entry.isIntersecting) playAnimation(); });
+    }, { threshold: 0.3 });
+    adernChartObserver.observe(mount);
   }
   function adernPopulatePmDropdown() {
     var html = '<div class="cdd-item selected" data-value="All PMs">All PMs<svg class="cdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>';
@@ -65304,33 +65797,265 @@ var SUPSA_REAL_BOUNDARIES = {"E1":[[51.51072,-0.05207],[51.51206,-0.04137],[51.5
     });
     document.getElementById('adernPmFilterMenu').innerHTML = html;
     document.querySelectorAll('#adernPmFilterMenu .cdd-item').forEach(function (item) {
-      item.addEventListener('click', function () { adernState.pm = item.getAttribute('data-value'); adernRenderAll(); });
+      item.addEventListener('click', function () { adernState.pm = item.getAttribute('data-value'); adernState.page = 1; adernRenderAll(); });
     });
   }
-  function initAdminEarningsOnce() {
-    if (adernInitDone) { adernRenderAll(); return; }
-    adernInitDone = true;
-    adernPopulatePmDropdown();
-    document.getElementById('adernSearchInput').addEventListener('input', function (e) { adernState.search = e.target.value; adernRenderAll(); });
-    document.querySelectorAll('#adernPeriodPills .pm-tab-pill').forEach(function (p) {
-      p.addEventListener('click', function () {
-        document.querySelectorAll('#adernPeriodPills .pm-tab-pill').forEach(function (x) { x.classList.remove('active'); });
-        p.classList.add('active');
-        adernState.period = p.getAttribute('data-ern-period');
+  function adminMarkupPmCount(tierName) {
+    return ADMIN_EARNINGS_PMS.filter(function (p) { return p.tier === tierName; }).length;
+  }
+  function adminMarkupRenderTable() {
+    var wrap = document.getElementById('adminMarkupTableWrap');
+    var empty = document.getElementById('adminMarkupEmptyState');
+    document.getElementById('adminMarkupTableBody').innerHTML = '';
+    wrap.querySelector('table').style.display = 'none';
+    empty.style.display = '';
+    empty.innerHTML = 'No markup tiers have been set up yet.';
+  }
+  function adernClosePickerPopovers() {
+    document.getElementById('adernPickerPopover').style.display = 'none';
+  }
+  function adernRenderStepper() {
+    var stepper = document.getElementById('adernPeriodStepper');
+    if (adernState.granularity === 'all') { stepper.style.display = 'none'; } else if (adernState.granularity === 'range') {
+      stepper.style.display = '';
+      var r = adernState.customRange;
+      document.getElementById('adernStepperLabelBtn').textContent = r ? (adernShortDate(r.start) + ' \u2013 ' + adernShortDate(r.end)) : 'Pick a range';
+      document.getElementById('adernStepperPrev').disabled = true;
+      document.getElementById('adernStepperNext').disabled = true;
+    } else {
+      stepper.style.display = '';
+      var period = pminvComputePeriod(adernState.granularity, adernState.offset);
+      document.getElementById('adernStepperLabelBtn').textContent = period.label;
+      document.getElementById('adernStepperPrev').disabled = false;
+      document.getElementById('adernStepperNext').disabled = (adernState.offset === 0);
+    }
+    document.getElementById('adernClearFilterBtn').style.display = (adernState.granularity !== 'all') ? '' : 'none';
+  }
+  function adernShortDate(iso) {
+    var d = new Date(iso + 'T00:00:00');
+    return d.getDate() + ' ' + PMINV_MONTH_NAMES[d.getMonth()].slice(0, 3) + ' ' + d.getFullYear();
+  }
+  function adernSetActiveChip(value) {
+    document.querySelectorAll('#adernTimeChips .pminv-status-tab').forEach(function (t) { t.classList.toggle('active', t.getAttribute('data-ern-time') === value); });
+  }
+  function adernClearDateFilter() {
+    adernState.granularity = 'all';
+    adernState.offset = 0;
+    adernSetActiveChip('all');
+    adernClosePickerPopovers();
+    document.getElementById('adernCustomPopover').style.display = 'none';
+    adernRenderStepper();
+    adernState.page = 1;
+    adernRenderAll();
+  }
+  function adernOpenPicker() {
+    if (adernState.granularity === 'quarterly' || adernState.granularity === 'range') return;
+    var pop = document.getElementById('adernPickerPopover');
+    var wasOpen = pop.style.display !== 'none';
+    adernClosePickerPopovers();
+    if (wasOpen) return;
+    var current = pminvComputePeriod(adernState.granularity, adernState.offset);
+    var refDate = new Date(current.start + 'T00:00:00');
+    pminvPickerNavYear = refDate.getFullYear();
+    pminvPickerNavMonth = refDate.getMonth();
+    pminvYearPickerPageEnd = refDate.getFullYear();
+    pop.style.display = '';
+    adernRenderPicker();
+  }
+  function adernRenderPicker() {
+    var pop = document.getElementById('adernPickerPopover');
+    if (adernState.granularity === 'yearly') pop.innerHTML = pminvYearPickerHtml();
+    else if (adernState.granularity === 'monthly') pop.innerHTML = pminvMonthPickerHtml(pminvPickerNavYear, false);
+    else if (adernState.granularity === 'weekly') pop.innerHTML = pminvWeekPickerHtml(pminvPickerNavYear, pminvPickerNavMonth);
+    adernWirePickerContent(pop, false);
+  }
+  function adernWirePickerContent(pop, isCustom) {
+    pop.querySelectorAll('[data-picker-nav]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var nav = btn.getAttribute('data-picker-nav');
+        if (nav === 'years-prev') { pminvYearPickerPageEnd -= 9; pop.innerHTML = pminvYearPickerHtml(); adernWirePickerContent(pop, isCustom); return; }
+        if (nav === 'years-next') { pminvYearPickerPageEnd += 9; pop.innerHTML = pminvYearPickerHtml(); adernWirePickerContent(pop, isCustom); return; }
+        if (nav === 'month-year-prev' || nav === 'month-year-next') {
+          pminvPickerNavYear += (nav === 'month-year-prev' ? -1 : 1);
+          pop.innerHTML = pminvMonthPickerHtml(pminvPickerNavYear, false);
+          adernWirePickerContent(pop, isCustom);
+          return;
+        }
+        if (nav === 'week-month-prev' || nav === 'week-month-next') {
+          var m = pminvPickerNavMonth + (nav === 'week-month-prev' ? -1 : 1);
+          var y = pminvPickerNavYear;
+          if (m < 0) { m = 11; y--; } if (m > 11) { m = 0; y++; }
+          pminvPickerNavMonth = m; pminvPickerNavYear = y;
+          pop.innerHTML = pminvWeekPickerHtml(y, m);
+          adernWirePickerContent(pop, isCustom);
+        }
+      });
+    });
+    pop.querySelectorAll('[data-picker-year]').forEach(function (cell) {
+      cell.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var y = parseInt(cell.getAttribute('data-picker-year'), 10);
+        adernState.offset = new Date(pminvMockToday + 'T00:00:00').getFullYear() - y;
+        if (isCustom) { adernState.granularity = 'yearly'; adernSetActiveChip('custom'); document.getElementById('adernCustomPopover').style.display = 'none'; }
+        adernClosePickerPopovers();
+        adernRenderStepper();
+        adernState.page = 1;
         adernRenderAll();
       });
     });
+    pop.querySelectorAll('[data-picker-month]').forEach(function (cell) {
+      cell.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var m = parseInt(cell.getAttribute('data-picker-month'), 10);
+        var today = new Date(pminvMockToday + 'T00:00:00');
+        adernState.offset = (today.getFullYear() - pminvPickerNavYear) * 12 + (today.getMonth() - m);
+        if (isCustom) { adernState.granularity = 'monthly'; adernSetActiveChip('custom'); document.getElementById('adernCustomPopover').style.display = 'none'; }
+        adernClosePickerPopovers();
+        adernRenderStepper();
+        adernState.page = 1;
+        adernRenderAll();
+      });
+    });
+    pop.querySelectorAll('[data-picker-week-start]').forEach(function (cell) {
+      cell.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var startIso = cell.getAttribute('data-picker-week-start');
+        var startDate = new Date(startIso + 'T00:00:00');
+        var todayMonday = pminvComputePeriod('weekly', 0).start;
+        var diffMs = new Date(todayMonday + 'T00:00:00') - startDate;
+        adernState.offset = Math.round(diffMs / (7 * 86400000));
+        if (isCustom) { adernState.granularity = 'weekly'; adernSetActiveChip('custom'); document.getElementById('adernCustomPopover').style.display = 'none'; }
+        adernClosePickerPopovers();
+        adernRenderStepper();
+        adernState.page = 1;
+        adernRenderAll();
+      });
+    });
+  }
+  var adernCustomMode = 'monthly';
+  function adernRenderCustomPicker() {
+    var body = document.getElementById('adernCustomPickerBody');
+    var rangeBody = document.getElementById('adernCustomRangeBody');
+    if (adernCustomMode === 'range') {
+      body.style.display = 'none';
+      rangeBody.style.display = '';
+      return;
+    }
+    body.style.display = '';
+    rangeBody.style.display = 'none';
+    var today = new Date(pminvMockToday + 'T00:00:00');
+    pminvPickerNavYear = today.getFullYear();
+    pminvPickerNavMonth = today.getMonth();
+    if (adernCustomMode === 'monthly') body.innerHTML = pminvMonthPickerHtml(pminvPickerNavYear, false);
+    else body.innerHTML = pminvWeekPickerHtml(pminvPickerNavYear, pminvPickerNavMonth);
+    adernWirePickerContent(body, true);
+  }
+  function adernWirePeriodMenu() {
+    document.querySelectorAll('#adernTimeChips .pminv-status-tab').forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        var value = chip.getAttribute('data-ern-time');
+        document.getElementById('adernCustomPopover').style.display = 'none';
+        if (value === 'custom') {
+          adernSetActiveChip('custom');
+          var pop = document.getElementById('adernCustomPopover');
+          var wasOpen = pop.style.display !== 'none';
+          adernClosePickerPopovers();
+          pop.style.display = wasOpen ? 'none' : '';
+          if (!wasOpen) adernRenderCustomPicker();
+          return;
+        }
+        adernState.granularity = value;
+        adernState.offset = 0;
+        adernSetActiveChip(value);
+        adernClosePickerPopovers();
+        adernRenderStepper();
+        adernState.page = 1;
+        adernRenderAll();
+      });
+    });
+    document.querySelectorAll('#adernCustomPopover [data-ern-custom-mode]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        adernCustomMode = btn.getAttribute('data-ern-custom-mode');
+        document.querySelectorAll('#adernCustomPopover [data-ern-custom-mode]').forEach(function (b) { b.classList.toggle('active', b === btn); });
+        adernRenderCustomPicker();
+      });
+    });
+    document.getElementById('adernStepperPrev').addEventListener('click', function () {
+      adernState.offset++;
+      adernRenderStepper();
+      adernState.page = 1;
+      adernRenderAll();
+    });
+    document.getElementById('adernStepperNext').addEventListener('click', function () {
+      if (adernState.offset === 0) return;
+      adernState.offset--;
+      adernRenderStepper();
+      adernState.page = 1;
+      adernRenderAll();
+    });
+    document.getElementById('adernStepperLabelBtn').addEventListener('click', function (e) { e.stopPropagation(); adernOpenPicker(); });
+    document.getElementById('adernClearFilterBtn').addEventListener('click', adernClearDateFilter);
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('#adernPeriodStepper')) document.getElementById('adernPickerPopover').style.display = 'none';
+      if (!e.target.closest('#adernCustomPopover') && !e.target.closest('[data-ern-time="custom"]')) document.getElementById('adernCustomPopover').style.display = 'none';
+    });
+  }
+  function initAdminEarningsOnce() {
+    if (typeof initAdminInvoicesOnce === 'function' && !adminInvInitDone) initAdminInvoicesOnce();
+    if (adernInitDone) { adernRenderAll(); return; }
+    adernInitDone = true;
+    adernPopulatePmDropdown();
+    adernWirePeriodMenu();
+    document.getElementById('adernRangeApplyBtn').addEventListener('click', function () {
+      var from = document.getElementById('adernRangeFrom').value;
+      var to = document.getElementById('adernRangeTo').value;
+      if (!from || !to || from > to) { showToast('Pick a valid from and to date.'); return; }
+      adernState.granularity = 'range';
+      adernState.customRange = { start: from, end: to };
+      adernSetActiveChip('custom');
+      document.getElementById('adernCustomPopover').style.display = 'none';
+      adernRenderStepper();
+      adernState.page = 1;
+      adernRenderAll();
+    });
+    document.getElementById('adernSearchInput').addEventListener('input', function (e) { adernState.search = e.target.value; adernState.page = 1; adernRenderAll(); });
     document.querySelectorAll('#adernSubTabsRow .pmjr-tab').forEach(function (t) {
       t.addEventListener('click', function () {
         document.querySelectorAll('#adernSubTabsRow .pmjr-tab').forEach(function (x) { x.classList.remove('active'); });
         t.classList.add('active');
-        if (t.getAttribute('data-ern-tab') !== 'bypm') showToast('This view isn\u2019t wired up in this prototype yet.');
+        adernState.viewMode = t.getAttribute('data-ern-tab');
+        adernState.page = 1;
+        adernRenderAll();
       });
     });
+    document.getElementById('adernPmDetailBackBtn').addEventListener('click', adernClosePmDetail);
     document.querySelectorAll('#adernCycleFilterMenu .cdd-item, #adernStatusFilterMenu .cdd-item').forEach(function (item) {
       item.addEventListener('click', adernRenderAll);
     });
     document.getElementById('adernExportBtn').addEventListener('click', function () { showToast('CSV exported.'); });
+    document.querySelectorAll('#adminErnMarkupTabs .pm-settings-tab-item').forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        var target = tab.getAttribute('data-ernmk-tab');
+        document.querySelectorAll('#adminErnMarkupTabs .pm-settings-tab-item').forEach(function (t) { t.classList.toggle('active', t === tab); });
+        document.getElementById('adminErnPanelEarnings').style.display = target === 'earnings' ? '' : 'none';
+        document.getElementById('adminErnPanelMarkup').style.display = target === 'markup' ? '' : 'none';
+      });
+    });
+    document.querySelectorAll('#adminEarningsView .pm-custom-dd-menu[data-dd-menu="adernRowsPerPage"] .cdd-item').forEach(function (item) {
+      item.addEventListener('click', function () {
+        adernState.perPage = parseInt(item.getAttribute('data-value'), 10);
+        document.querySelector('[data-dd="adernRowsPerPage"] .cdd-value').textContent = item.textContent.trim();
+        document.querySelectorAll('#adminEarningsView .pm-custom-dd-menu[data-dd-menu="adernRowsPerPage"] .cdd-item').forEach(function (i) { i.classList.toggle('selected', i === item); });
+        closeAllCustomDropdowns();
+        adernState.page = 1;
+        adernRenderAll();
+      });
+    });
+    document.getElementById('adernPagePrev').addEventListener('click', function () { if (adernState.page > 1) { adernState.page--; adernRenderAll(); } });
+    document.getElementById('adernPageNext').addEventListener('click', function () { adernState.page++; adernRenderAll(); });
+    adminMarkupRenderTable();
     adernRenderAll();
   }
 })();
